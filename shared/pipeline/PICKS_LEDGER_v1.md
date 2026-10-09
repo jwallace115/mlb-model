@@ -618,6 +618,34 @@ Verification:
 
 ## P34 — Sim runs before every window; freeze lands on main (2026-10-09)
 
+(P34 content unchanged)
+
+## P35 — select_slate: per-game latest freeze (2026-10-09)
+
+`select_slate(view_rows, sport, now)` replaces `select()` for the Picks page.
+Instead of picking one newest freeze and showing only its games, it unions across
+freezes: for each upcoming event_id, it takes the rows from the newest freeze
+(by logged_utc ≤ now) that contains that event. This means a Thursday adhoc read
+and a Saturday mid read coexist — every game shows its most recent read.
+
+Returns `{events, props, sides, unranked, n_freezes}`. `events` is a list of
+per-game metadata (event_id, away, home, commence_time, freeze_logged_utc,
+window, reader, n_picks). `reader` = the view's `reader` column if present,
+else `os.path.basename(source_file)`. Rows carry their own freeze fields
+(source_file, logged_utc, window).
+
+Per-event cap: at most 20 ranked rows per event per column (applied after
+sorting by `_sort_key` across the whole union). The cap prevents one game from
+dominating the list.
+
+`top_for_selection(ordered_rows, event_ids)` is the server-side twin of the
+browser's JS filter: filter by event, keep server order, renumber 1..n, cap 20.
+
+`select()` stays byte-identical — existing callers and `--print-top` unchanged.
+
+Tests: 5 new in `test_top20_select.py` (multi-freeze, future-leak, null control,
+past-game, per-event cap). All green.
+
 The window order is now: refresh → sim → packet → reader. The Mac's
 `sim_window.sh` runs 30 min before each VM reader window and freezes the sim
 opinions to main via the deploy key. The VM's `run_window.py` now does

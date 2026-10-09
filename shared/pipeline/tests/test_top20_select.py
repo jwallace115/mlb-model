@@ -151,3 +151,107 @@ def test_graded_rows_not_filtered():
     assert r_graded is not None
     assert [p["pick_id"] for p in r_clean["sides"]] == [p["pick_id"] for p in r_graded["sides"]]
     assert r_clean["n_picks_in_freeze"] == r_graded["n_picks_in_freeze"]
+
+
+# ---- OPS5b Item 1: select_slate tests ----
+
+def _slate_row(i, event_id=None, source_file="f1.parquet", logged_utc="2026-10-08T20:00:00Z",
+               commence_time="2026-10-12T17:00:00Z", window="mid", **kw):
+    r = _row(i,
+             event_id=event_id or ("a" * 32),
+             source_file=source_file,
+             logged_utc=logged_utc,
+             commence_time=commence_time,
+             window=window,
+             **kw)
+    return r
+
+
+# (a) game A in F1 and F2, game B only in F1 → slate returns A from F2, B from F1
+def test_slate_multi_freeze():
+    event_a = "a" * 32
+    event_b = "b" * 32
+    rows = [
+        # F1: game A and game B, logged T-5h
+        _slate_row(0, event_id=event_a, source_file="f1.pq",
+                   logged_utc="2026-10-08T18:00:00Z", window="mid", conf=50),
+        _slate_row(1, event_id=event_b, source_file="f1.pq",
+                   logged_utc="2026-10-08T18:00:00Z", window="mid", conf=40),
+        # F2: game A only, logged T-1h (newer)
+        _slate_row(2, event_id=event_a, source_file="f2.pq",
+                   logged_utc="2026-10-08T22:00:00Z", window="adhoc", conf=60),
+    ]
+    now = datetime(2026, 10, 8, 23, 0, tzinfo=timezone.utc)
+    result = bt.select_slate(rows, "NFL", now)
+    assert result is not None
+    # A's row should come from F2 (conf=60), B's from F1 (conf=40)
+    pids = {r["pick_id"]: r for r in result["props"]}
+    assert "pid_0002" in pids, "game A should use F2's row (pid_0002)"
+    assert "pid_0001" in pids, "game B should use F1's row (pid_0001)"
+    assert "pid_0000" not in pids, "game A's F1 row (pid_0000) should be superseded by F2"
+    assert result["n_freezes"] == 2
+
+    # Also verify select() would miss game B (only returns newest freeze)
+    result_old = bt.select(rows, "NFL", now)
+    assert result_old is not None
+    old_pids = {r["pick_id"] for r in result_old["props"]}
+    assert "pid_0001" not in old_pids, "select() returns only F2 → B absent: the RED line"
+
+
+# (b) a freeze at T+1h is never used (leak control)
+def test_slate_future_freeze_excluded():
+    event_a = "a" * 32
+    rows = [
+        _slate_row(0, event_id=event_a, source_file="f_past.pq",
+                   logged_utc="2026-10-08T22:00:00Z", conf=50),
+        _slate_row(1, event_id=event_a, source_file="f_future.pq",
+                   logged_utc="2026-10-09T01:00:00Z", conf=99),
+    ]
+    now = datetime(2026, 10, 9, 0, 0, tzinfo=timezone.utc)
+    result = bt.select_slate(rows, "NFL", now)
+    assert result is not None
+    assert all(r["source_file"] == "f_past.pq" for r in result["props"])
+    assert result["n_freezes"] == 1
+
+
+# (c) null control: single freeze → select_slate[:20] == select()
+def test_slate_null_control_single_freeze():
+    rows = [_slate_row(i, conf=50 + i) for i in range(15)]
+    now = datetime(2026, 10, 8, 23, 0, tzinfo=timezone.utc)
+    slate = bt.select_slate(rows, "NFL", now)
+    old = bt.select(rows, "NFL", now)
+    assert slate is not None
+    assert old is not None
+    slate_pids = [r["pick_id"] for r in slate["props"][:20]]
+    old_pids = [r["pick_id"] for r in old["props"]]
+    assert slate_pids == old_pids
+    slate_side_pids = [r["pick_id"] for r in slate["sides"][:20]]
+    old_side_pids = [r["pick_id"] for r in old["sides"]]
+    assert slate_side_pids == old_side_pids
+
+
+# (d) game whose commence_time <= now is absent
+def test_slate_past_game_excluded():
+    now = datetime(2026, 10, 9, 0, 30, tzinfo=timezone.utc)
+    rows = [
+        _slate_row(0, commence_time="2026-10-09T00:15:00Z", conf=50),  # past
+        _slate_row(1, event_id="b" * 32, commence_time="2026-10-12T17:00:00Z", conf=40),  # upcoming
+    ]
+    result = bt.select_slate(rows, "NFL", now)
+    assert result is not None
+    assert len(result["events"]) == 1
+    assert result["events"][0]["event_id"] == "b" * 32
+
+
+# (e) per-event cap: 25 ranked props on one game → 20 returned
+def test_slate_per_event_cap():
+    rows = [_slate_row(i, conf=50 + i) for i in range(25)]
+    now = datetime(2026, 10, 8, 23, 0, tzinfo=timezone.utc)
+    result = bt.select_slate(rows, "NFL", now)
+    assert result is not None
+    assert len(result["props"]) == 20
+    # The 20 highest by _sort_key (highest conf first)
+    confs = [r["conf"] for r in result["props"]]
+    assert confs == sorted(confs, reverse=True)
+    assert confs[0] == 74  # 50+24
+    assert confs[-1] == 55  # 50+5
