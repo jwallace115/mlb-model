@@ -4111,3 +4111,19 @@ Also: make refresh_inputs fail per team, not per report.
 - NOT DONE: RED-first test format for all 7 test cases in the prompt
 - NOT DONE: site/README.md § pages update
 - UNVERIFIED: phone-width rendering (Jeff opens it)
+
+## 2026-10-09T21:05Z  claude-code (OPS-UI1 hotfix — template v2)
+- WORKTREE: ~/mlb-model-ui1b, branch ops/picks-template-v2
+- CAUSE: site/templates/picks.html was the v1 template (in-page button tabs, no DATA.pages);
+  nfl.html rendered buttons and JS found no data for the displayed sport.
+- FIX: cp ~/cowork_audit/20261009/ui/picks_v2.html → site/templates/picks.html
+  sha256 starts b08b1a91 ✓, DATA.pages count 2 ✓, __PAGE_TITLE__ count 1 ✓
+- RED: old template: nfl.html has <button> tabs, no href; no DATA.pages in JS source
+- GREEN: new template: JS source has `href="'+DATA.pages[s]+'"`; JSON payload has
+  pages: {NFL:nfl.html, NCAAF:ncaaf.html, NHL:nhl.html, NBA:nba.html}; sport: NFL;
+  index.html byte-identical to nfl.html (front sport)
+- Committed c509ee6e3, pushed. Merged 80d3d6111 to main, pushed. VM pulled.
+- VM rebuild at 21:04Z: nfl.html 2,387,699 bytes; ncaaf.html 480,029 bytes;
+  "sport": "NFL" in nfl.html ✓; ncaaf.html referenced in JSON payload ✓
+- DEBT (carried to OPS5c): RED-first tests not in test_top20_page.py; test_top20_page.py
+  rewrite not done; README § not written; CFB1 tests not written
