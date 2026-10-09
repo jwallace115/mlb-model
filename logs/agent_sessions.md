@@ -4030,3 +4030,17 @@ Ending: 99,842
 - Whether the adhoc freeze's 50 rows appear on picks.html after the VM build
 - Whether picks_clv finds closes for the new _mac.parquet rows (market mapping bug still present)
 - VM push_daemon sync timing after merge
+
+## 2026-10-09T00:15Z  claude-code (TNF ops session)
+- RAN: nfl/sim/refresh_inputs.py --week 5 → HALT (official injury parser section 14 BUF/LAR)
+- EDITED: nfl/sim/official_injuries.py (skip unparseable section instead of HALT) on eng/fwd6-parser-fix
+- RAN: refresh again → OK (BUF/LA skipped, TB+DAL ready, fingerprint 3638769c89030de0)
+- RAN: fwd_bootstrap.py harness --week 5 --pilot → converged 1/1, run_id 20261008T232051Z
+- FROZE: adhoc read (claude-fable-5-1, 73 lines, sha256 46f57a0b…), merged as 67f61344c
+- FROZE: pilot sim (nfl_sim_v1_156cd057, 73 lines, sha256 f6b5377…), merged as be5de8f86
+- MOVED: 23 cards aside to layers_aside_20261008 for sim-layer rebuild
+- RETURNED: pick_layers._sim() reads only the latest freeze file by timestamp; the adhoc freeze (23:23:34) is newer than the sim freeze (23:20:51), so _sim() never reaches the sim data. Cards show "no sim rows in freeze".
+- RESTORED: original 23 cards moved back, site rebuilt at 00:15Z
+- NOT DONE: sim layer on cards (needs _sim() to search all freeze files, not just latest)
+- NOT DONE: session log on main (this is in the ops worktree)
+- CREDITS: 10 (props pull only)
