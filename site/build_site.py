@@ -1016,6 +1016,91 @@ def _summarize_sim_enhanced(layer, merged):
     return ". ".join(parts) + "." if parts else None
 
 
+def _summarize_prop_history(layer, merged):
+    """Plain-English prop history sentence — P47."""
+    val = layer.get("value")
+    if not val or not isinstance(val, dict):
+        return None
+    rows = val.get("rows", [])
+    if not rows:
+        return None
+    n = val.get("n_games", len(rows))
+    n_over = val.get("n_over", 0)
+    n_uncaptured = val.get("n_uncaptured", 0)
+    pick_line = val.get("pick_line")
+    market = merged.get("market", "")
+    side = merged.get("side", "")
+    stat_labels = {
+        "prop:rush_att": "Rush attempts", "prop:rush_yds": "Rushing yards",
+        "prop:pass_yds": "Passing yards", "prop:pass_td": "Passing TDs",
+        "prop:pass_att": "Pass attempts", "prop:pass_cmp": "Completions",
+        "prop:int": "Interceptions", "prop:rec": "Receptions",
+        "prop:rec_yds": "Receiving yards", "prop:atd": "Anytime TD",
+    }
+    stat = stat_labels.get(market, market)
+    captured = n - n_uncaptured
+    parts = [f'{stat} this season:']
+    if captured > 0:
+        parts.append(f'{n_over} of {captured} games over Hard Rock\'s closing line')
+    if n_uncaptured:
+        parts.append(f'{n_uncaptured} game{"s" if n_uncaptured > 1 else ""} with no captured line')
+    last = rows[-1]
+    actual_s = f'{int(last["actual"])}' if last["actual"] is not None else "—"
+    opp_s = f'at {last["opponent"]}' if last["home_away"] == "away" else f'vs {last["opponent"]}'
+    line_s = f'vs {last["hr_close_line"]}' if last["hr_close_line"] is not None else "(no line)"
+    parts.append(f'last week {actual_s} {opp_s} {line_s}')
+    if pick_line is not None:
+        parts.append(f'the pick is {E(str(side).capitalize())} {pt(pick_line)}')
+    return "; ".join(parts) + "."
+
+
+def _render_prop_history(val, merged, source_s, as_of_s, summary):
+    """Render prop history layer: sentence + CSS bar chart + table + raw data — P47."""
+    rows = val.get("rows", [])
+    if not rows:
+        return None
+    summary_html = f'<p>{summary}</p>' if summary else ""
+    max_actual = max((r.get("actual") or 0) for r in rows) or 1
+    chart_bars = []
+    for r in rows:
+        actual = r.get("actual") or 0
+        pct_height = max(actual / max_actual * 100, 2)
+        close_line = r.get("hr_close_line")
+        opp = r.get("opponent", "")
+        week = r.get("week", "")
+        rv = r.get("result_vs_close", "—")
+        color = "#4CAF50" if rv == "O" else "#f44336" if rv == "U" else "#999"
+        bar = f'<div style="display:inline-flex;flex-direction:column;align-items:center;margin:0 3px;width:36px">'
+        bar += f'<div style="font-size:10px;color:var(--ink)">{int(actual)}</div>'
+        bar += f'<div style="position:relative;width:20px;height:60px;background:var(--line2);border-radius:2px">'
+        bar += f'<div style="position:absolute;bottom:0;width:100%;height:{pct_height:.0f}%;background:{color};border-radius:2px"></div>'
+        if close_line is not None:
+            line_pct = min(close_line / max_actual * 100, 100)
+            bar += f'<div style="position:absolute;bottom:{line_pct:.0f}%;width:100%;height:1px;background:#000"></div>'
+        bar += '</div>'
+        bar += f'<div style="font-size:9px;color:var(--muted)">wk{week}</div>'
+        bar += f'<div style="font-size:9px;color:var(--muted)">{E(str(opp)[:3])}</div>'
+        bar += '</div>'
+        chart_bars.append(bar)
+    chart_html = f'<div style="display:flex;align-items:flex-end;gap:2px;margin:8px 0;overflow-x:auto">{"".join(chart_bars)}</div>'
+    table_rows = []
+    for r in rows:
+        close_s = f'{r["hr_close_line"]}' if r.get("hr_close_line") is not None else "no line"
+        actual_s = f'{int(r["actual"])}' if r.get("actual") is not None else "—"
+        result_s = r.get("result_vs_close", "—")
+        ha = "@" if r.get("home_away") == "away" else "vs"
+        table_rows.append(
+            f'<tr><td>wk{r["week"]}</td><td>{ha} {E(str(r.get("opponent", "")))}</td>'
+            f'<td class="num">{close_s}</td><td class="num">{actual_s}</td>'
+            f'<td>{result_s}</td></tr>')
+    table_html = (f'<table style="font-size:12px;margin-top:4px"><tr><th>Week</th><th>Opp</th>'
+                  f'<th>HR Line</th><th>Actual</th><th>O/U</th></tr>'
+                  f'{"".join(table_rows)}</table>')
+    raw_items = " · ".join(f"{k}: {E(str(v))}" for k, v in val.items() if k != "rows" and v is not None)
+    raw_html = f'<details><summary class="muted" style="cursor:pointer;font-size:0.85em">Raw data</summary><div class="note" style="margin-top:4px">{raw_items}</div></details>'
+    return f'<div class="card-layer"><b>Prop History</b>{source_s}{as_of_s}{summary_html}{chart_html}{table_html}{raw_html}</div>'
+
+
 def _render_card(card, pick=None):
     """Render a detail card as HTML — plain-English summary above raw data in <details>.
     pick: optional pick row dict to supplement card fields (e.g. book)."""
@@ -1049,6 +1134,14 @@ def _render_card(card, pick=None):
             summary = _summarize_injuries(layer, merged)
         elif layer_name == "reasoning":
             summary = _summarize_reasoning(layer, merged)
+        elif layer_name == "prop_history" and val and isinstance(val, dict):
+            summary = _summarize_prop_history(layer, merged)
+
+        if layer_name == "prop_history" and val and isinstance(val, dict):
+            hist_html = _render_prop_history(val, merged, source_s, as_of_s, summary)
+            if hist_html:
+                parts.append(hist_html)
+            continue
 
         if note and layer_name not in ("injuries",):
             parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}<br>'
@@ -1147,7 +1240,7 @@ def _load_clv(ledger_dir):
 
 def _record_section(rows, embargo_owners, sport, source_info):
     """Build the Record section for a sport tab."""
-    graded = [r for r in rows if r.get("result") in ("W", "L", "P", "VOID") and r.get("sport") == sport]
+    graded = [r for r in rows if r.get("result") in ("W", "L", "P", "V", "VOID") and r.get("sport") == sport]
     if not graded:
         return '<div class="card pad muted">No graded picks yet.</div>'
 

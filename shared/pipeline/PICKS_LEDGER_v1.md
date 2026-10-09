@@ -833,3 +833,69 @@ and sim layers. Existing line-movement and weather summaries unchanged.
 **Decision:** page() uses the same nav markup (.nav/.in/.brand/.links/.health) as
 the picks template, so all pages share one visual header. Google Fonts <link>
 dropped (system font stack; site is behind login, no external calls).
+
+## P45 — nflverse weekly player stats archived (2026-10-09)
+
+**Decision:** `shared/pipeline/pull_nfl_player_stats.py` pulls
+`nflreadpy.load_player_stats([2026], summary_level="week")` and writes
+`data/results_archive/nfl/player_stats_2026_<UTC>.parquet` (append-only,
+timestamped). HALT on empty, <100 rows, missing expected columns, or no
+row with week >= 1. VM cron `35 9 * * *` (after 09:30Z schedules, before
+10:10Z grader). Mac dryrun uses `RESULTS_ARCHIVE_DIR`.
+
+Kept columns: player_id, player_display_name, player_name, team,
+opponent_team, season, week, season_type, completions, attempts,
+passing_yards, passing_tds, passing_interceptions, carries, rushing_yards,
+rushing_tds, receptions, receiving_yards, receiving_tds.
+
+nflverse column for interceptions is `passing_interceptions` (not
+`interceptions`). The `team` column is `team` (not `recent_team`).
+Zero API credits (nflverse is free, GitHub-hosted parquet).
+
+## P46 — Props graded from nflverse weekly stats (2026-10-09)
+
+**Decision:** `picks_grader.py` resolves `prop:*` rows from the newest
+`player_stats_2026_*.parquet`. The pick's game is found in the crosswalk
+(completed only). The player's stats row is matched by: season 2026, the
+game's week (enriched from schedules), team ∈ {home, away}, normalized
+name match (lower-case, strip periods and Jr/Sr/II/III/IV suffixes,
+collapse spaces) against `player_display_name`, with
+`shared/pipeline/player_name_overrides.json` (ledger name → nflverse name)
+consulted first. Exactly one row else UNRESOLVED (zero → V for void/DNP).
+
+Stat mapping: pass_yds→passing_yards, pass_td→passing_tds,
+pass_att→attempts, pass_cmp→completions, int→passing_interceptions,
+rush_yds→rushing_yards, rush_att→carries, rec→receptions,
+rec_yds→receiving_yards, atd→(rushing_tds + receiving_tds) ≥ 1 wins Over
+(atd lines are 0.5).
+
+Over wins if stat > point, Under if stat < point, P if equal.
+DNP (completed game, no stats row) → result "V" (void — the book voids a
+DNP; excluded from W/L/ROI everywhere the record is computed).
+result_source = "player_stats: <filename>".
+
+"V" added to `VALID_RESULTS` in picks_ledger.py. build_site.py
+`_record_section` includes V in the graded-rows filter but `_picks_roi`
+already excludes it (counts only W/L/P).
+
+## P47 — Prop history layer on the card (2026-10-09)
+
+**Decision:** `pick_layers._prop_history(pick, root, logged_dt)` builds a
+prop history for NFL prop picks. For each of the player's 2026 games whose
+kickoff (schedules gameday+gametime, ET → UTC) is BEFORE logged_utc:
+week, opponent, home/away, hr_close_line (newest hardrockbet_fl row in the
+props tape with pull_timestamp < that game's kickoff; None → "line not
+captured"), actual stat, result vs closing line (O/U/P or "—"), and the
+pick's own line for reference.
+
+Layer value: {rows, n_games, n_over, n_under, n_push, n_uncaptured,
+pick_line}. `_render_card` in build_site.py writes: one sentence
+summarizing the history, a CSS bar chart (no JavaScript — one bar per
+week, height proportional to actual, thin marker at closing line), a
+table, and raw data.
+
+`packet.sh`: for sport nfl, `history.csv` = stats history rows for every
+prop line in the sheet.
+
+Leak control: only games whose kickoff < logged_utc are included.
+`--rebuild-layer prop_history` supported via the layer_fn dict.
