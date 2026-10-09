@@ -802,3 +802,34 @@ kalshi.csv, sim.csv (NFL only), packet.md (metadata).
 - sheet: 149 lines (+ header = 150), template: 149, news: 30 items
 - kalshi: 4130 rows, movement: 149 lines
 - sim: not applicable for ncaaf
+
+## P42 — Picks page is a template + JSON (2026-10-09)
+
+**Decision:** The Picks page is rendered from site/templates/picks.html + a JSON
+block. The Python never emits pick markup again. The template is owned by ops/Cowork
+and changed only with a screenshot.
+
+**Architecture:** build_picks returns 5 HTML pages: nfl.html, ncaaf.html, nhl.html,
+nba.html, index.html (= byte-identical copy of the front sport's page, determined
+by soonest upcoming kick). Each page carries a self-contained JSON block inside
+`<script id="picks-data">`. The template's JS renders tabs, slot chips, pick rows
+and cards entirely client-side.
+
+**Test (VM, 2026-10-09 4:01 PM ET):**
+- 11 files built (5 picks + 6 other pages)
+- index.html == ncaaf.html BYTE-IDENTICAL (NCAAF is front tonight)
+- NFL: 321 picks, 14 events (matches live site count)
+- No `prop:` or `.parquet` outside JSON/details
+- No `</script` in JSON block (11472 escaped `<\/`)
+- No `__PICKS_DATA__` or `__PAGE_TITLE__` placeholder remaining
+
+## P43 — Cards say it in English (2026-10-09)
+
+**Decision:** _render_card adds plain-English summaries for injuries, reasoning,
+and sim layers. Existing line-movement and weather summaries unchanged.
+
+## P44 — One header everywhere (2026-10-09)
+
+**Decision:** page() uses the same nav markup (.nav/.in/.brand/.links/.health) as
+the picks template, so all pages share one visual header. Google Fonts <link>
+dropped (system font stack; site is behind login, no external calls).

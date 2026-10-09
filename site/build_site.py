@@ -123,15 +123,19 @@ CSS = """
 --accent:#0B6E69;--ok-bg:#E3F2E7;--ok:#146C2E;--sh-bg:#E3ECF8;--sh:#1E4E8C;--wa-bg:#FBEFD9;--wa:#7A4B00;--bad-bg:#F6E3E3;--bad:#8A1C1C;--pu-bg:#EEE5F6;--pu:#5B2A86;--off-bg:#ECEEF1;--off:#4A5361}
 @media (prefers-color-scheme: dark){:root{--bg:#101318;--card:#171B22;--line:#2B313B;--line2:#232933;--ink:#E8EBEF;--ink2:#C9CFD8;--muted:#9AA3AF;--head:#1E232B;
 --accent:#5CC8C0;--ok-bg:#16301F;--ok:#7FD39A;--sh-bg:#16263D;--sh:#9CC2F2;--wa-bg:#33270F;--wa:#F2C46B;--bad-bg:#3A1A1A;--bad:#F29C9C;--pu-bg:#2A1D38;--pu:#C9A6EE;--off-bg:#232933;--off:#9AA3AF}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15px;line-height:1.45}
-a{color:var(--accent)}header.top{background:#14181F;color:#F5F6F7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.45}
+a{color:var(--accent)}
+.nav{background:var(--nav,#111418);color:var(--nav-ink,#e8eaee);position:sticky;top:0;z-index:20}
+.nav .in{max-width:1180px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:18px;height:52px}
+.brand{font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1}
+.links::-webkit-scrollbar{display:none}
+.links a{color:var(--nav-ink,#e8eaee);opacity:.72;text-decoration:none;padding:6px 10px;border-radius:7px;white-space:nowrap;font-size:14px}
+.links a.on{opacity:1;background:rgba(255,255,255,.1)}
+.health{font-size:12px;opacity:.8;white-space:nowrap;text-decoration:none;color:var(--nav-ink,#e8eaee)}
+.health .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:var(--good,#4CC27A)}
+.health.bad .dot{background:var(--bad,#F05252)}
 .wrap{max-width:1200px;margin:0 auto;padding:0 16px}
-.bar{display:flex;align-items:center;gap:22px;flex-wrap:wrap;padding:12px 0}
-.brand{font-weight:700;font-size:18px;color:#fff;text-decoration:none}
-nav{display:flex;gap:4px;flex-wrap:wrap;flex:1}nav a{color:#C9CFD8;padding:8px 12px;border-radius:6px;text-decoration:none;font-size:14px}
-nav a.on{background:#2A313C;color:#fff;font-weight:600}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;font-size:13px;text-decoration:none}
-.pill.good{background:#12301C;color:#9DE0B2}.pill.warn{background:#3A2A10;color:#F7D9A0}.pill.bad{background:#3D1616;color:#F5B5B5}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 main{padding:24px 0 48px;display:flex;flex-direction:column;gap:24px}
 h1{margin:4px 0 0;font-size:32px;letter-spacing:-.02em}h2{margin:0;font-size:19px}h3{margin:0;font-size:16px}
@@ -158,7 +162,7 @@ td{padding:9px 12px;border-top:1px solid var(--line2);vertical-align:top}
 .legs td:first-child{font-weight:500}.muted{color:var(--muted)}
 footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
 .card-layer{margin:6px 0;padding:6px 0;border-bottom:1px solid var(--line2)}
-@media (max-width:640px){h1{font-size:26px}.bar{gap:10px}nav a{padding:8px 9px}
+@media (max-width:640px){h1{font-size:26px}.nav .in{gap:12px}.health{display:none}
 .tab-panel div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}}
 """
 
@@ -172,18 +176,21 @@ def page(fname, title, body, health, built):
         c = health.get("counts", {})
         bad = sum(c.get(k, 0) for k in ("ERRORING", "SILENT", "NO_JOB"))
         warn = sum(c.get(k, 0) for k in ("LATE", "NOT_PUSHED", "IGNORED"))
-        cls = "bad" if bad else ("warn" if warn else "good")
-        col = {"bad": "#F05252", "warn": "#F0A830", "good": "#4CC27A"}[cls]
         txt = f"{bad} down · {warn} late" if (bad or warn) else "all feeds on time"
-        pill = f'<a class="pill {cls}" href="health.html"><span class="dot" style="background:{col}"></span>{txt} · built {built:%H:%M}Z</a>'
+        health_cls = ' bad' if bad else ''
+        dot_bg = 'var(--bad)' if bad else ('var(--warn,#F0A830)' if warn else 'var(--good,#4CC27A)')
+        health_html = f'<a class="health{health_cls}" href="health.html"><span class="dot" style="background:{dot_bg}"></span>{E(txt)} · built {built:%H:%M}Z</a>'
     else:
-        pill = f'<a class="pill bad" href="health.html"><span class="dot" style="background:#F05252"></span>health file missing · built {built:%H:%M}Z</a>'
+        health_html = f'<a class="health bad" href="health.html"><span class="dot" style="background:var(--bad,#F05252)"></span>health file missing · built {built:%H:%M}Z</a>'
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
 <meta http-equiv="refresh" content="300"><title>{E(title)} · iamnotuncertain</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>{CSS}</style></head><body>
-<header class="top"><div class="wrap bar"><a class="brand" href="index.html">iamnotuncertain</a><nav>{nav}</nav>{pill}</div></header>
+<div class="nav"><div class="in">
+  <span class="brand">iamnotuncertain</span>
+  <nav class="links">{nav}</nav>
+  {health_html}
+</div></div>
 <div class="wrap"><main>{body}
 <footer>Built {fmt_utc(built)} from files on the server. Every number names its source file and that file's time; a missing or stale file shows "no data".</footer>
 </main></div></body></html>"""
@@ -927,6 +934,88 @@ def _summarize_sim(layer, point):
     return " ".join(parts) if parts else None
 
 
+TAG_LABELS = {"injury_news": "injury news", "role_change": "role change", "game_script": "game script",
+              "matchup": "matchup", "weather": "weather", "price_vs_sharp": "price vs sharp consensus",
+              "usage_trend": "usage trend", "line_move": "line move", "no_view": "no view", "sim_v1": "sim",
+              "goalie": "goalie", "lineup": "lineup", "schedule_spot": "schedule spot", "form": "form",
+              "model_layer": "model layer"}
+
+
+def _summarize_injuries(layer, merged):
+    """Plain-English injuries summary — P43."""
+    val = layer.get("value")
+    note = layer.get("note")
+    if note:
+        return E(str(note))
+    if not val or not isinstance(val, dict):
+        return None
+    parts = []
+    player = val.get("player")
+    if player:
+        comment = str(player.get("comment", ""))[:160]
+        parts.append(f'{E(player["name"])}: {E(player["status"])} — {E(comment)}')
+    for team_key, team_label in [("home_team", merged.get("home", "")), ("away_team", merged.get("away", ""))]:
+        entries = val.get(team_key, [])
+        if not entries:
+            parts.append(f'{E(team_label)}: none listed')
+            continue
+        outs = [e for e in entries if e.get("status") == "Out"]
+        doubtful = [e for e in entries if e.get("status") == "Doubtful"]
+        quest = [e for e in entries if e.get("status") == "Questionable"]
+        out_names = ", ".join(e["name"] for e in (outs + doubtful)[:4])
+        line_parts = []
+        if outs or doubtful:
+            line_parts.append(f'{len(outs) + len(doubtful)} out ({out_names})')
+        if quest:
+            line_parts.append(f'{len(quest)} questionable')
+        parts.append(f'{E(team_label)}: {", ".join(line_parts)}' if line_parts else f'{E(team_label)}: none listed')
+    return "<br>".join(parts) if parts else None
+
+
+def _summarize_reasoning(layer, merged):
+    """Plain-English reasoning summary — P43."""
+    val = layer.get("value")
+    if not val or not isinstance(val, dict):
+        return None
+    reason_raw = val.get("reason", "")
+    tag = val.get("tag", "")
+    # Import plain_reason from picks_data
+    import picks_data as pd_mod
+    reason_text = pd_mod.plain_reason(reason_raw)
+    tag_label = TAG_LABELS.get(tag, tag) if tag else ""
+    parts = []
+    if reason_text:
+        parts.append(E(reason_text))
+    if tag_label:
+        parts.append(f'tag: {E(tag_label)}')
+    return "<br>".join(parts) if parts else None
+
+
+def _summarize_sim_enhanced(layer, merged):
+    """Enhanced sim summary with the pick's point comparison — P43."""
+    val = layer.get("value")
+    if not val or not isinstance(val, dict):
+        return None
+    p_first = val.get("p_first")
+    reader_model = val.get("reader_model", "sim")
+    pilot = val.get("pilot", False)
+    pick_point = merged.get("point")
+    sim_line = None
+    parts = []
+    pilot_tag = " (pilot)" if pilot else ""
+    if p_first is not None:
+        parts.append(f'{E(reader_model)}{pilot_tag} makes it {p_first:.0%}')
+        side = merged.get("side", "")
+        if side:
+            parts[-1] += f' for {E(side)}'
+        if pick_point is not None:
+            parts[-1] += f' {pt(pick_point)}'
+    edge = val.get("edge")
+    if edge is not None:
+        parts.append(f'edge: {edge:+.1%}')
+    return ". ".join(parts) + "." if parts else None
+
+
 def _render_card(card, pick=None):
     """Render a detail card as HTML — plain-English summary above raw data in <details>.
     pick: optional pick row dict to supplement card fields (e.g. book)."""
@@ -955,16 +1044,28 @@ def _render_card(card, pick=None):
         elif layer_name == "weather" and val and isinstance(val, dict):
             summary = _summarize_weather(layer)
         elif layer_name == "sim" and val and isinstance(val, dict):
-            summary = _summarize_sim(layer, merged.get("point"))
+            summary = _summarize_sim_enhanced(layer, merged)
+        elif layer_name == "injuries":
+            summary = _summarize_injuries(layer, merged)
+        elif layer_name == "reasoning":
+            summary = _summarize_reasoning(layer, merged)
 
-        if note:
+        if note and layer_name not in ("injuries",):
             parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}<br>'
                          f'<span class="muted">{E(str(note))}</span></div>')
-        elif val is None:
-            continue
+        elif note and layer_name == "injuries":
+            # Injuries note (e.g. "no lineup or injury feed for college football yet")
+            parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}'
+                         f'<p>{E(str(note))}</p></div>')
+        elif val is None and not note:
+            if layer_name == "sim":
+                parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}'
+                             f'<p class="muted">No sim number for this market in the freeze.</p></div>')
+            else:
+                continue
         elif isinstance(val, dict):
             items = " · ".join(f"{k}: {E(str(v))}" for k, v in val.items() if v is not None)
-            summary_html = f'<p>{E(summary)}</p>' if summary else ""
+            summary_html = f'<p>{summary}</p>' if summary else ""
             raw_html = f'<details><summary class="muted" style="cursor:pointer;font-size:0.85em">Raw data</summary><div class="note" style="margin-top:4px">{items}</div></details>'
             parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}{summary_html}{raw_html}</div>')
         elif isinstance(val, list):
@@ -1109,340 +1210,36 @@ def _record_section(rows, embargo_owners, sport, source_info):
 
 
 def build_picks(now, health):
-    import sys as _sys
-    _sys.path.insert(0, str(ROOT / "shared" / "pipeline"))
-    import build_top20 as bt
+    """Build the Picks pages: one per sport + index.html = front sport.
 
-    fs = load_json(ROOT / "site" / "forward_status.json") or {}
-    embargo_owners = set(fs.get("embargo_owners", []))
+    Returns dict {filename: html_string} for all five pages.
+    The template (site/templates/picks.html) is used AS DELIVERED — P42.
+    """
+    import picks_data as pd_mod
+
     rows, sha12, mtime = _load_picks_ledger()
-
     if rows is None:
         inner = f"<p>{NODATA}: picks ledger not found (PICKS_LEDGER_DIR not set or file absent).</p>"
-        return page("index.html", "Picks", f'<div><h1>Picks</h1></div>{inner}', health, now)
+        return {"index.html": page("index.html", "Picks", f'<div><h1>Picks</h1></div>{inner}', health, now)}
 
-    source_info = src(f"picks.jsonl {sha12} {fmt_utc(mtime)}")
     ledger_dir = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
-    layers_dir = ledger_dir / "layers"
+    fs = load_json(ROOT / "site" / "forward_status.json") or {}
+    data = pd_mod.picks_data(rows, now, ledger_dir, health, fs)
+    template = (ROOT / "site" / "templates" / "picks.html").read_text()
 
-    # Build tabs
-    tab_order = ["NFL", "NCAAF", "NHL", "NBA"]
-    tab_links = []
-    tab_bodies = []
+    pages = {}
+    for sport in ["NFL", "NCAAF", "NHL", "NBA"]:
+        one = {k: data[k] for k in ("built_utc", "built_et", "health", "pages", "counts", "front")}
+        one["sport"] = sport
+        one["sports"] = {sport: data["sports"][sport]}
+        payload = json.dumps(one, default=str).replace("</", "<\\/")
+        html = template.replace("__PICKS_DATA__", payload).replace("__PAGE_TITLE__", f"{sport} picks")
+        pages[data["pages"][sport]] = html
 
-    for sport in tab_order:
-        result = bt.select_slate(rows, sport, now)
-        anchor = sport.lower()
-        tab_links.append(f'<a href="#tab-{anchor}" class="tab-link" style="padding:8px 16px;text-decoration:none;'
-                         f'border-bottom:2px solid var(--accent);font-weight:600">{sport}</a>')
-
-        if result is None:
-            tab_bodies.append(f'<div id="tab-{anchor}" class="tab-panel">'
-                              f'<div class="card pad muted">No picks logged yet for {sport}.</div></div>')
-            rec = _record_section(rows, embargo_owners, sport, source_info)
-            tab_bodies[-1] = tab_bodies[-1][:-6] + f'<h3 style="margin-top:24px">Record — {sport}</h3>{rec}</div>'
-            continue
-
-        # Header: "showing N picks on G games from F freezes · newest <window> freeze <ET>"
-        n_total = len(result["props"]) + len(result["sides"])
-        n_games = len(result["events"])
-        n_freezes = result["n_freezes"]
-        newest_ev = max(result["events"], key=lambda e: e.get("freeze_logged_utc", ""))
-        newest_window = newest_ev.get("window", "legacy")
-        newest_et = _utc_to_et(newest_ev.get("freeze_logged_utc"))
-        header_text = (f"showing {n_total} picks on {n_games} games from {n_freezes} freezes "
-                       f"· newest {newest_window} freeze {newest_et}")
-        header_html = f'<div class="picks-header muted" style="margin-bottom:8px">{E(header_text)}</div>'
-
-        # Compute slots for each event
-        import os as _os
-        events_with_slots = []
-        for ev in result["events"]:
-            slot = _slot_for_commence(ev["commence_time"], sport)
-            kick_et = _utc_to_et(ev["commence_time"])
-            events_with_slots.append({**ev, "slot": slot, "kick_et": kick_et})
-
-        # Slot chips
-        from collections import OrderedDict
-        slots = OrderedDict()
-        for ev in events_with_slots:
-            s = ev["slot"]
-            if s not in slots:
-                slots[s] = {"n_games": 0, "first_kick": ev["commence_time"], "event_ids": []}
-            slots[s]["n_games"] += 1
-            slots[s]["event_ids"].append(ev["event_id"])
-            if ev["commence_time"] < slots[s]["first_kick"]:
-                slots[s]["first_kick"] = ev["commence_time"]
-
-        slot_chips_html = []
-        for s, info in slots.items():
-            kick_et = _utc_to_et(info["first_kick"])
-            eids_json = E(json.dumps(info["event_ids"]))
-            slot_chips_html.append(
-                f'<button class="slot-chip" data-slot="{E(s)}" data-events="{eids_json}" '
-                f'data-sport="{E(anchor)}" '
-                f'style="padding:4px 10px;margin:2px;border:1px solid var(--line);border-radius:12px;'
-                f'background:var(--bg2);cursor:pointer;font-size:12px">'
-                f'{E(s)} · {info["n_games"]} game{"s" if info["n_games"] != 1 else ""} · first kick {E(kick_et)}'
-                f'</button>')
-
-        # "Sunday" super-chip for NFL (Sun early + Sun late + SNF, NOT MNF)
-        if sport == "NFL":
-            sun_eids = []
-            for s in ("Sun early", "Sun late", "SNF"):
-                if s in slots:
-                    sun_eids.extend(slots[s]["event_ids"])
-            if sun_eids:
-                sun_eids_json = E(json.dumps(sun_eids))
-                slot_chips_html.append(
-                    f'<button class="slot-chip" data-slot="Sunday" data-events="{sun_eids_json}" '
-                    f'data-sport="{E(anchor)}" '
-                    f'style="padding:4px 10px;margin:2px;border:1px solid var(--line);border-radius:12px;'
-                    f'background:var(--bg2);cursor:pointer;font-size:12px">'
-                    f'Sunday · {len(sun_eids)} games</button>')
-
-        # "All upcoming" chip
-        all_eids = [ev["event_id"] for ev in events_with_slots]
-        all_eids_json = E(json.dumps(all_eids))
-        slot_chips_html.append(
-            f'<button class="slot-chip" data-slot="All upcoming" data-events="{all_eids_json}" '
-            f'data-sport="{E(anchor)}" '
-            f'style="padding:4px 10px;margin:2px;border:1px solid var(--line);border-radius:12px;'
-            f'background:var(--bg2);cursor:pointer;font-size:12px">'
-            f'All upcoming · {len(all_eids)} games</button>')
-
-        slot_row = f'<div class="slot-chips" data-sport="{E(anchor)}" style="margin-bottom:8px;display:flex;flex-wrap:wrap;gap:2px">{"".join(slot_chips_html)}</div>'
-
-        # Game chips
-        game_chips_html = []
-        for ev in events_with_slots:
-            game_chips_html.append(
-                f'<button class="game-chip" data-event="{E(ev["event_id"])}" '
-                f'data-slot="{E(ev["slot"])}" data-kick="{E(str(ev["commence_time"]))}" '
-                f'data-sport="{E(anchor)}" '
-                f'style="padding:3px 8px;margin:2px;border:1px solid var(--line);border-radius:8px;'
-                f'background:var(--bg2);cursor:pointer;font-size:11px">'
-                f'{E(ev["away"])} @ {E(ev["home"])} · {E(ev["kick_et"])}'
-                f'</button>')
-        game_row = f'<div class="game-chips" data-sport="{E(anchor)}" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:2px">{"".join(game_chips_html)}</div>'
-
-        # Build event_id → slot mapping for rows
-        event_slot = {ev["event_id"]: ev["slot"] for ev in events_with_slots}
-        event_reader = {}
-        for ev in events_with_slots:
-            event_reader[ev["event_id"]] = ev.get("reader", "")
-
-        # Load cards
-        def _load_card(pid):
-            p = layers_dir / f"{pid}.json"
-            if p.exists():
-                try:
-                    return json.loads(p.read_text())
-                except Exception:
-                    pass
-            return None
-
-        # Props column with data attributes
-        props_html = []
-        for i, pick in enumerate(result["props"]):
-            card = _load_card(pick.get("pick_id"))
-            eid = pick.get("event_id", "")
-            slot = event_slot.get(eid, "unknown")
-            kick = pick.get("commence_time", "")
-            pick["_reader"] = event_reader.get(eid, "")
-            da = {"data-event": eid, "data-slot": slot,
-                  "data-kick": str(kick), "data-col": "props",
-                  "data-order": str(i)}
-            props_html.append(_render_pick_row(i + 1, pick, card, is_prop=True, data_attrs=da))
-
-        # Sides column with data attributes
-        sides_html = []
-        for i, pick in enumerate(result["sides"]):
-            card = _load_card(pick.get("pick_id"))
-            eid = pick.get("event_id", "")
-            slot = event_slot.get(eid, "unknown")
-            kick = pick.get("commence_time", "")
-            pick["_reader"] = event_reader.get(eid, "")
-            da = {"data-event": eid, "data-slot": slot,
-                  "data-kick": str(kick), "data-col": "sides",
-                  "data-order": str(i)}
-            sides_html.append(_render_pick_row(i + 1, pick, card, is_prop=False, data_attrs=da))
-
-        cols = (f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">'
-                f'<div><h3>Top 20 — player props</h3>{"".join(props_html) if props_html else "<div class=\"muted\">none</div>"}</div>'
-                f'<div><h3>Top 20 — sides / totals / ML</h3>{"".join(sides_html) if sides_html else "<div class=\"muted\">none</div>"}</div></div>')
-
-        # Unranked
-        unranked_html = ""
-        if result["unranked"]:
-            unranked_html = (f'<details style="margin-top:16px"><summary class="muted" style="cursor:pointer">'
-                             f'{len(result["unranked"])} unranked — no confidence recorded</summary>'
-                             f'<div class="note" style="margin-top:8px">'
-                             + ", ".join(f'{E(str(r.get("player_name") or r.get("side", "")))} ({E(str(r.get("market", "")))})'
-                                        for r in result["unranked"][:30])
-                             + ("..." if len(result["unranked"]) > 30 else "")
-                             + '</div></details>')
-
-        # Record section
-        rec = _record_section(rows, embargo_owners, sport, source_info)
-
-        tab_bodies.append(f'<div id="tab-{anchor}" class="tab-panel">'
-                          f'{header_html}{slot_row}{game_row}{cols}{unranked_html}'
-                          f'<h3 style="margin-top:24px">Record — {sport}</h3>{rec}</div>')
-
-    tabs_nav = f'<div style="display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px">{"".join(tab_links)}</div>'
-    tabs_content = "".join(tab_bodies)
-
-    # Inline JS for slot/game filtering
-    filter_js = _picks_filter_js()
-
-    body = (f'<div><h1>Picks</h1><p class="lede">NFL, NCAAF, NHL, NBA — top 20 picks by confidence, '
-            f'ranked from the reader\'s latest freeze. Click a pick to see its detail card. '
-            f'No stakes, slip ids or share links.</p></div>'
-            f'{tabs_nav}{tabs_content}{filter_js}')
-    return page("index.html", "Picks", body, health, now)
-
-
-def _picks_filter_js():
-    """Inline JS for slot/game chip filtering and rank renumbering."""
-    return '''<script>
-(function(){
-var PF={};
-function init(){
-  document.querySelectorAll('.tab-panel').forEach(function(panel){
-    var sport=panel.id.replace('tab-','');
-    var slots=panel.querySelectorAll('.slot-chip');
-    var games=panel.querySelectorAll('.game-chip');
-    var rows=panel.querySelectorAll('details[data-event]');
-    if(!rows.length)return;
-    // Build state: which game event_ids are ticked
-    var ticked={};
-    games.forEach(function(g){ticked[g.getAttribute('data-event')]=false;});
-    // Find next slot to kick
-    var now=Date.now();
-    var slotKick={};
-    games.forEach(function(g){
-      var k=new Date(g.getAttribute('data-kick')).getTime();
-      var s=g.getAttribute('data-slot');
-      if(k>now&&(!slotKick[s]||k<slotKick[s]))slotKick[s]=k;
-    });
-    // Hide past games from chips
-    games.forEach(function(g){
-      var k=new Date(g.getAttribute('data-kick')).getTime();
-      if(k<=now)g.style.display='none';
-    });
-    // Find next slot: smallest first-kick still > now
-    var nextSlot=null,nextKick=Infinity;
-    for(var s in slotKick){if(slotKick[s]<nextKick){nextKick=slotKick[s];nextSlot=s;}}
-    // Default: tick the next slot
-    function tickSlot(slotName){
-      slots.forEach(function(btn){
-        var eids=JSON.parse(btn.getAttribute('data-events').replace(/&quot;/g,\'"\'));
-        if(btn.getAttribute('data-slot')===slotName){
-          btn.style.background='var(--accent)';btn.style.color='#fff';
-          eids.forEach(function(eid){
-            var k=games.length?null:null;
-            // Only tick if game is upcoming
-            var g=panel.querySelector('.game-chip[data-event="'+eid+'"]');
-            if(g&&new Date(g.getAttribute('data-kick')).getTime()>now)ticked[eid]=true;
-          });
-        }
-      });
-      games.forEach(function(g){
-        if(ticked[g.getAttribute('data-event')]){
-          g.style.background='var(--accent)';g.style.color='#fff';
-        }
-      });
-    }
-    if(nextSlot)tickSlot(nextSlot);
-    else{// tick all
-      games.forEach(function(g){
-        var k=new Date(g.getAttribute('data-kick')).getTime();
-        if(k>now){ticked[g.getAttribute('data-event')]=true;g.style.background='var(--accent)';g.style.color='#fff';}
-      });
-    }
-    function applyFilter(){
-      var cols={props:[],sides:[]};
-      rows.forEach(function(r){
-        var eid=r.getAttribute('data-event');
-        var col=r.getAttribute('data-col');
-        var order=parseInt(r.getAttribute('data-order'),10);
-        if(ticked[eid]){r.style.display='';cols[col].push({el:r,order:order});}
-        else{r.style.display='none';}
-      });
-      // Sort by server order, renumber, cap at 20
-      for(var c in cols){
-        cols[c].sort(function(a,b){return a.order-b.order;});
-        var shown=0;
-        cols[c].forEach(function(item,idx){
-          var rankSpan=item.el.querySelector('.rank');
-          if(idx<20){rankSpan.innerHTML='<b>'+(idx+1)+'</b>';item.el.style.display='';shown++;}
-          else{item.el.style.display='none';}
-        });
-        // Show "20 of N" if needed
-        var hdr=panel.querySelector('h3');
-        if(cols[c].length>20&&hdr){
-          var existing=panel.querySelector('.cap-note-'+c);
-          if(!existing){
-            var note=document.createElement('span');
-            note.className='muted cap-note-'+c;
-            note.style.fontSize='11px';note.style.marginLeft='8px';
-            hdr.parentNode.insertBefore(note,hdr.nextSibling);
-            existing=note;
-          }
-          existing.textContent='20 of '+cols[c].length+' shown';
-        }
-      }
-    }
-    applyFilter();
-    // Slot chip click
-    slots.forEach(function(btn){
-      btn.addEventListener('click',function(){
-        var eids=JSON.parse(btn.getAttribute('data-events').replace(/&quot;/g,\'"\'));
-        // Toggle: if all ticked → untick; else tick all
-        var allOn=eids.every(function(eid){return ticked[eid];});
-        // Reset all slots/games visuals
-        slots.forEach(function(b){b.style.background='var(--bg2)';b.style.color='';});
-        if(allOn){eids.forEach(function(eid){ticked[eid]=false;});}
-        else{
-          // Clear all first
-          for(var k in ticked)ticked[k]=false;
-          eids.forEach(function(eid){
-            var g=panel.querySelector('.game-chip[data-event="'+eid+'"]');
-            if(g&&new Date(g.getAttribute('data-kick')).getTime()>now)ticked[eid]=true;
-          });
-          btn.style.background='var(--accent)';btn.style.color='#fff';
-        }
-        games.forEach(function(g){
-          if(ticked[g.getAttribute('data-event')]){g.style.background='var(--accent)';g.style.color='#fff';}
-          else{g.style.background='var(--bg2)';g.style.color='';}
-        });
-        applyFilter();
-      });
-    });
-    // Game chip click
-    games.forEach(function(g){
-      g.addEventListener('click',function(){
-        var eid=g.getAttribute('data-event');
-        ticked[eid]=!ticked[eid];
-        if(ticked[eid]){g.style.background='var(--accent)';g.style.color='#fff';}
-        else{g.style.background='var(--bg2)';g.style.color='';}
-        // Update slot chip visuals
-        slots.forEach(function(btn){
-          var seids=JSON.parse(btn.getAttribute('data-events').replace(/&quot;/g,\'"\'));
-          var allOn=seids.every(function(e){return ticked[e];});
-          if(allOn&&seids.length){btn.style.background='var(--accent)';btn.style.color='#fff';}
-          else{btn.style.background='var(--bg2)';btn.style.color='';}
-        });
-        applyFilter();
-      });
-    });
-  });
-}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
-else init();
-})();
-</script>'''
+    # index.html = byte-identical copy of the front sport's page
+    front = data.get("front", "NFL")
+    pages["index.html"] = pages[data["pages"][front]]
+    return pages
 
 
 def build(out, now=None):
@@ -1451,11 +1248,13 @@ def build(out, now=None):
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = Path(tempfile.mkdtemp(prefix=".site-", dir=out.parent))
-    pages = {"index.html": build_picks(now, health), "today.html": build_today(now, health),
+    picks_pages = build_picks(now, health)  # returns dict of {filename: html}
+    pages = {"today.html": build_today(now, health),
              "health.html": build_health(now, health),
              "tracking.html": build_tracking(now, health, tmp),
              "forward.html": build_forward(now, health),
              "archive.html": build_archive(now, health)}
+    pages.update(picks_pages)
     for name, text in pages.items():
         (tmp / name).write_text(text)
     os.chmod(tmp, 0o755)

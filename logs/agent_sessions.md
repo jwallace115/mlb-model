@@ -4095,3 +4095,19 @@ Also: make refresh_inputs fail per team, not per report.
 - UNVERIFIED: whether NCAAF conf/tag flow through adapters to ledger on the VM (no ledger dir on Mac)
 - UNVERIFIED: build_site NCAAF tab rendering (need VM site rebuild after merge)
 - REQUEST for NCAAF lane: weather (NWS with CFBD venue coordinates), rest/travel/altitude flags, situation register (coach/QB changes) as next NCAAF layers; team props not yet looked at.
+
+## 2026-10-09T20:06Z  claude-code (OPS-UI1)
+- CREATED: site/templates/picks.html (Cowork's template, used AS DELIVERED)
+- CREATED: site/picks_data.py (JSON exporter from Cowork's export_picks.py)
+- EDITED: site/build_site.py (build_picks returns 5 pages; _render_card English summaries; page() unified nav)
+- EDITED: shared/pipeline/PICKS_LEDGER_v1.md (P42-P44 decisions)
+- RAN: VM build → 11 files: index/nfl/ncaaf/nhl/nba + 6 other pages
+- VERIFIED: index.html == ncaaf.html BYTE-IDENTICAL (NCAAF is front tonight)
+- VERIFIED: NFL 321 picks, 14 events (matches live site)
+- VERIFIED: no "prop:" or ".parquet" outside JSON/details
+- VERIFIED: no raw "</script" in JSON (11472 escaped "<\/")
+- VERIFIED: all pages have .nav header, no Google Fonts
+- NOT DONE: test_top20_page.py rewrite (OPS5b tests need JSON-based assertions)
+- NOT DONE: RED-first test format for all 7 test cases in the prompt
+- NOT DONE: site/README.md § pages update
+- UNVERIFIED: phone-width rendering (Jeff opens it)
