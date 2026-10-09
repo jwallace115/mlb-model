@@ -747,3 +747,22 @@ reader_v3 is the NCAAF baseline reader (same as NFL, game lines only). Zero cred
 - All 51 events: hardrockbet as book of record
 - conf range 0.0–20.5, no_view 4.7%
 - Kalshi: 4130 rows matched (KXNCAAFGAME-26OCT09 prefix)
+
+## P39 — NCAAF cron schedule (2026-10-09)
+
+**Decision:** NCAAF windows run from the VM cron on the same schedule pattern as
+NFL, with --no-pull (the tape is the source; 0 credits by construction).
+
+**Crontab additions:**
+```
+0 22 * * 2  --sport ncaaf --window open   (Tue 6 PM ET)
+0 22 * * 4  --sport ncaaf --window mid    (Thu 6 PM ET)
+0 22 * * 5  --sport ncaaf --window late   (Fri 6 PM ET)
+3-59/15 * * * *  --sport ncaaf --window prekick --auto-prekick
+```
+
+The prekick job runs at minute :03, :18, :33, :48 to avoid colliding with the
+NFL prekick at :00, :15, :30, :45. There is no ledger file lock, so the offset
+prevents concurrent appends.
+
+NFL cron lines are unchanged (4 lines, verified byte-identical).
