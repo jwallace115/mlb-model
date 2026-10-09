@@ -722,3 +722,28 @@ Real run (adhoc, 14-game full slate):
 - FROZEN sha256: ee0a7e12...88b9680
 - Commit ccd5a7466 on origin/main (manifest window=adhoc, pilot=true)
 - Run record 324b9870d on eng/fwd6-parser-fix
+
+## P38 — NCAAF book of record and reader baseline (2026-10-09)
+
+**Decision:** NCAAF book of record = Hard Rock where listed, Pinnacle otherwise.
+reader_v3 is the NCAAF baseline reader (same as NFL, game lines only). Zero credits.
+
+**Changes:**
+- `reader_v3.py`: `--sport {nfl,ncaaf}`. For ncaaf: lines from ncaaf tape, no props
+  (HALT if sheet has prop rows), per-event book (hardrockbet if snapshot has it, else
+  pinnacle), NCAAF Kalshi prefix (KXNCAAFGAME-), no NWS/injury/HR-history. NFL path
+  byte-identical (null control: cmp + sha256 1d3d3aba…).
+- `log_ai_opinions.py`: `SPORTS["ncaaf"]["book"]` = "hardrockbet" with pinnacle as
+  per-event fallback (`fallback_book`). Sheet and freeze carry per-event book column.
+- `run_window.py`: `--sport {nfl,ncaaf}`. NCAAF week = CFBD convention (Week 0 =
+  last Sat in August). `--no-pull` required for ncaaf (HALT otherwise). Routes
+  `--sport` to sheet/reader/freeze/verify/build_top20.
+- `pick_sources.py`: `p_ai_opinions` now carries conf/conf_rank in raw dict.
+- `picks_adapters.py`: extracts tag/conf from raw for ai_opinion rows (closes the
+  OPS4a gap where NCAAF freeze conf/tag/window were not reaching the ledger).
+
+**Test run (Mac adhoc, 2026-10-09 12:57 PM ET):**
+- Week 6 (CFBD), 51 games, 149 lines, 48h window
+- All 51 events: hardrockbet as book of record
+- conf range 0.0–20.5, no_view 4.7%
+- Kalshi: 4130 rows matched (KXNCAAFGAME-26OCT09 prefix)

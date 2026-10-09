@@ -321,7 +321,9 @@ def p_ai_opinions(path, rel, sset, lane="ncaaf", league="NCAAF"):
              price=r.get("side_price"), book=r.get("book"),
              reason=r.get("reason"), leg_type="view", commence=r["commence_time"], source_file=rel,
              source_set=sset, raw=dict(side=r["side"], side_name=r["side_name"], tag=r.get("tag"),
-                                       window=r.get("window") if "window" in d.columns else None))
+                                       window=r.get("window") if "window" in d.columns else None,
+                                       conf=float(r["conf"]) if "conf" in d.columns and pd.notna(r.get("conf")) else None,
+                                       conf_rank=int(r["conf_rank"]) if "conf_rank" in d.columns and pd.notna(r.get("conf_rank")) else None))
     return rows
 
 

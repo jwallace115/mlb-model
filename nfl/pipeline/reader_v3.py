@@ -16,6 +16,8 @@ Rules (unchanged from reader_v2):
   HR move - Hard Rock opening vs current for game lines
 
 P24: this is the canonical reader; reader_v2 stays untouched in _to_delete.
+P38: --sport {nfl,ncaaf}. NCAAF: game lines only, per-event book of record
+     (hardrockbet where listed, pinnacle otherwise), no props/NWS/HR-history.
 """
 import argparse
 import hashlib
@@ -59,6 +61,13 @@ def _kalshi_prefix(slate_date):
     2026-10-04 -> KXNFLGAME-26OCT04; 2026-10-11 -> KXNFLGAME-26OCT11."""
     d = datetime.strptime(str(slate_date)[:10], "%Y-%m-%d")
     return f"KXNFLGAME-{d.strftime('%y%b%d').upper()}"
+
+
+def _ncaaf_kalshi_prefix(slate_date):
+    """Derive the NCAAF Kalshi ticker prefix from a slate date.
+    2026-10-09 -> KXNCAAFGAME-26OCT09."""
+    d = datetime.strptime(str(slate_date)[:10], "%Y-%m-%d")
+    return f"KXNCAAFGAME-{d.strftime('%y%b%d').upper()}"
 
 
 def imp(a):
@@ -138,6 +147,37 @@ def _load_inputs(as_of, root):
     return props, lines, KAL, WX, HIST, files_used
 
 
+def _load_inputs_ncaaf(as_of, root):
+    """Select NCAAF input files bounded by as_of. No props, no NWS, no HR history."""
+    files_used = {}
+    props = pd.DataFrame()
+
+    # --- Lines: newest snapshot <= as_of ---
+    lines_dir = root / "data" / "odds_archive" / "ncaaf" / "line_history" / "season=2026"
+    snaps = sorted(lines_dir.glob("snap_*.parquet"))
+    snap_file = _newest_le(snaps, as_of)
+    if snap_file is None:
+        raise SystemExit("HALT: no NCAAF game-line snapshot <= as-of")
+    lines = pd.read_parquet(snap_file)
+    snap_ts = _parse_ts(snap_file)
+    files_used["lines"] = f"{snap_file.name} ({snap_ts.isoformat()})"
+
+    # --- Kalshi: newest snapshot <= as_of ---
+    kal_dir = root / "data" / "odds_archive" / "kalshi" / "ncaaf" / "season=2026"
+    KAL = pd.DataFrame()
+    if kal_dir.exists():
+        kal_snaps = sorted(kal_dir.glob("snap_*.parquet"))
+        kal_file = _newest_le(kal_snaps, as_of)
+        if kal_file is not None:
+            KAL = pd.read_parquet(kal_file)
+            files_used["kalshi"] = f"{kal_file.name} ({_parse_ts(kal_file).isoformat()})"
+
+    WX = pd.DataFrame()
+    HIST = pd.DataFrame()
+
+    return props, lines, KAL, WX, HIST, files_used
+
+
 def _load_news(injury_report_path):
     """Load injury report CSV -> {player_name: note}. Empty dict if path is None or missing."""
     NEWS = {}
@@ -151,10 +191,10 @@ def _load_news(injury_report_path):
     return NEWS
 
 
-def consensus_prop(r, props):
+def consensus_prop(r, props, exclude_book="hardrockbet_fl"):
     pull = props[(props["event_id"] == r.event_id) & (props["market_key"] == r.market_key)
                  & (props["player_name"] == r.player_name) & (props["line"] == float(r.line))
-                 & (props["bookmaker"] != "hardrockbet_fl")]
+                 & (props["bookmaker"] != exclude_book)]
     if pull.empty:
         return None, 0
     newest = pull.groupby("bookmaker")["pull_timestamp"].transform("max")
@@ -178,9 +218,9 @@ def consensus_prop(r, props):
     return float(np.median(vals)), len(vals)
 
 
-def consensus_game(r, lines):
+def consensus_game(r, lines, exclude_book="hardrockbet_fl"):
     g = lines[(lines["event_id"] == r.event_id) & (lines["market"] == r.market_key)
-              & (lines["bookmaker"] != "hardrockbet_fl")]
+              & (lines["bookmaker"] != exclude_book)]
     vals, ws = [], []
     for bk, s in g.groupby("bookmaker"):
         a = s[s["outcome_name"] == r.first_side]
@@ -209,6 +249,8 @@ def kalshi_home(r, KAL):
 
 
 def weather(r, WX):
+    if WX.empty:
+        return None
     w = WX[WX["team"] == r.home_team]
     if w.empty:
         return None
@@ -234,7 +276,17 @@ def line_move(r, HIST):
     return h.iloc[0][col], h.iloc[-1][col]
 
 
-def read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix):
+def _event_book(event_id, lines, sport):
+    """Determine the book of record for an event. NFL: always hardrockbet_fl.
+    NCAAF: hardrockbet if any rows exist for the event, else pinnacle."""
+    if sport == "nfl":
+        return "hardrockbet_fl"
+    hr = lines[(lines["event_id"] == event_id) & (lines["bookmaker"] == "hardrockbet")]
+    return "hardrockbet" if len(hr) > 0 else "pinnacle"
+
+
+def read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix,
+                  sport="nfl"):
     """Core reader logic — returns a DataFrame with columns matching reader_v2 output."""
     if kalshi_prefix and not KAL.empty:
         KAL = KAL[KAL["ticker"].str.startswith(kalshi_prefix)]
@@ -244,9 +296,20 @@ def read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix):
     out = []
     for r in sheet.itertuples(index=False):
         game = r.market_key in ("h2h", "spreads", "totals")
-        c, n = consensus_game(r, lines) if game else consensus_prop(r, props)
+
+        # Determine book of record for this event
+        if sport == "ncaaf":
+            row_book = _event_book(r.event_id, lines, sport)
+            exclude = row_book
+        else:
+            row_book = "hardrockbet_fl"
+            exclude = "hardrockbet_fl"
+
+        c, n = (consensus_game(r, lines, exclude) if game
+                else consensus_prop(r, props, exclude))
         book = r.q_first if r.two_way else imp(r.price_first)
         note = NEWS.get(r.player_name, "")
+        book_label = "HR" if sport == "nfl" else row_book[:3].upper()
         if c is None:
             if game:
                 p, tag, reason = float(np.clip(book, 0.02, 0.98)), "no_view", ""
@@ -284,7 +347,7 @@ def read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix):
             side_first = p > book
             sname = ((r.first_side if side_first else r.second_side) if r.two_way
                      else ("Yes" if side_first else "pass"))
-            reason = (f"{n} books (Pin x3) {c:.3f} vs HR {book:.3f}"
+            reason = (f"{n} books (Pin x3) {c:.3f} vs {book_label} {book:.3f}"
                       + ("; " + "; ".join(extra) if extra else "")
                       + f"; take {sname}.")
         if note:
@@ -301,10 +364,13 @@ def read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix):
                 (edge * 500 + min(n, 9) * 1.0 + (0 if c is not None else -3))
                 * min(1.0, n / 5), 1))
             conf = max(conf, 1.0)
-        out.append({"event_id": r.event_id, "market_key": r.market_key,
-                     "player_name": r.player_name, "line": r.line,
-                     "p_first": round(p, 4), "tag": tag, "reason": reason,
-                     "conf": conf, "_edge": edge, "_kick": r.commence_time})
+        row_out = {"event_id": r.event_id, "market_key": r.market_key,
+                   "player_name": r.player_name, "line": r.line,
+                   "p_first": round(p, 4), "tag": tag, "reason": reason,
+                   "conf": conf, "_edge": edge, "_kick": r.commence_time}
+        if sport == "ncaaf":
+            row_out["book"] = row_book
+        out.append(row_out)
     o = pd.DataFrame(out)
     o = o.sort_values(["conf", "_edge", "_kick"],
                       ascending=[False, False, True]).reset_index(drop=True)
@@ -316,6 +382,8 @@ def main():
     ap = argparse.ArgumentParser(description="reader_v3: parameterised blind-opinion reader")
     ap.add_argument("sheet", help="path to the sheet CSV (from log_ai_opinions.py sheet)")
     ap.add_argument("output", help="path for the output CSV")
+    ap.add_argument("--sport", default="nfl", choices=["nfl", "ncaaf"],
+                    help="sport (default: nfl)")
     ap.add_argument("--as-of", default=None,
                     help="UTC ISO timestamp; inputs are selected <= this time (default: now)")
     ap.add_argument("--injury-report", default=None,
@@ -340,24 +408,43 @@ def main():
     sheet = pd.read_csv(args.sheet)
     sheet["player_name"] = sheet["player_name"].fillna("")
 
+    # NCAAF: HALT if sheet has prop rows
+    if args.sport == "ncaaf":
+        game_markets = {"h2h", "spreads", "totals"}
+        prop_rows = sheet[~sheet["market_key"].isin(game_markets)]
+        if len(prop_rows):
+            raise SystemExit(f"HALT: NCAAF sheet has {len(prop_rows)} prop rows "
+                             f"(markets: {prop_rows['market_key'].unique().tolist()}); "
+                             f"NCAAF has no player props")
+
     # Derive slate date from sheet's commence_time for the Kalshi prefix
     if not sheet.empty:
         first_kick = pd.to_datetime(sheet["commence_time"]).min()
         slate_date = first_kick.strftime("%Y-%m-%d")
-        kalshi_prefix = _kalshi_prefix(slate_date)
+        if args.sport == "ncaaf":
+            kalshi_prefix = _ncaaf_kalshi_prefix(slate_date)
+        else:
+            kalshi_prefix = _kalshi_prefix(slate_date)
     else:
         kalshi_prefix = None
 
     # Load inputs bounded by as-of
-    props, lines, KAL, WX, HIST, files_used = _load_inputs(as_of, root)
+    if args.sport == "ncaaf":
+        props, lines, KAL, WX, HIST, files_used = _load_inputs_ncaaf(as_of, root)
+    else:
+        props, lines, KAL, WX, HIST, files_used = _load_inputs(as_of, root)
 
-    # Load injury report
-    NEWS = _load_news(args.injury_report)
-    if args.injury_report:
-        files_used["injury_report"] = args.injury_report
+    # Load injury report (NFL only)
+    if args.sport == "nfl":
+        NEWS = _load_news(args.injury_report)
+        if args.injury_report:
+            files_used["injury_report"] = args.injury_report
+    else:
+        NEWS = {}
 
     # Print input provenance
     print(f"as-of: {as_of.isoformat()}")
+    print(f"sport: {args.sport}")
     print(f"kalshi prefix: {kalshi_prefix}")
     if NEWS:
         print(f"injury report: {len(NEWS)} players")
@@ -372,13 +459,17 @@ def main():
     print(f"HR history rows: {len(HIST)}")
 
     # Run reader
-    o = read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix)
+    o = read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix,
+                      sport=args.sport)
 
     # Save
-    o.drop(columns=["_edge", "_kick"]).to_csv(args.output, index=False)
+    drop_cols = ["_edge", "_kick"]
+    o.drop(columns=drop_cols).to_csv(args.output, index=False)
     print(f"\n{len(o)} rows; {o.tag.value_counts().to_dict()} | top 10:")
-    print(o.head(10)[["market_key", "player_name", "line", "p_first", "conf",
-                       "reason"]].to_string())
+    show_cols = ["market_key", "player_name", "line", "p_first", "conf", "reason"]
+    if "book" in o.columns:
+        show_cols.insert(5, "book")
+    print(o.head(10)[show_cols].to_string())
 
 
 if __name__ == "__main__":

@@ -46,9 +46,9 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-# N61: one log per sport, tracked separately. NCAAF has no player props on the tape and Hard Rock is absent
-# from 100% of NCAAF snapshots (N01), so the NCAAF book of record is Pinnacle (the CLV benchmark) - its
-# de-vigged number is the reference; units are at PINNACLE's price and are labelled so. Jeff bets Hard Rock.
+# N61: one log per sport, tracked separately. NCAAF has no player props on the tape. The NCAAF book of
+# record is Hard Rock where listed (51/69 events in the 15:00Z 2026-10-09 snapshot), Pinnacle otherwise;
+# the sheet records the per-event book. CLV sidecar is raw-vs-raw at the same book. Jeff bets Hard Rock.
 SPORTS = {
     "nfl": {"book": "hardrockbet_fl", "props": ROOT / "data" / "odds_archive" / "nfl" / "props",
             "lines": ROOT / "data" / "odds_archive" / "nfl" / "line_history",
@@ -56,10 +56,11 @@ SPORTS = {
             "require_side": False, "slate": "week", "drivers_required": False,
             "tags": ("injury_news", "role_change", "game_script", "matchup", "weather",
                      "price_vs_sharp", "usage_trend", "line_move", "no_view", "sim_v1")},
-    "ncaaf": {"book": "pinnacle", "props": None,
+    "ncaaf": {"book": "hardrockbet", "props": None,
               "lines": ROOT / "data" / "odds_archive" / "ncaaf" / "line_history",
               "out": ROOT / "ncaaf" / "data" / "board", "outcomes": "cfbd",
               "require_side": False, "slate": "week", "drivers_required": False,
+              "fallback_book": "pinnacle",
               "tags": ("injury_news", "role_change", "game_script", "matchup", "weather",
                        "price_vs_sharp", "usage_trend", "line_move", "no_view", "sim_v1")},
     "nhl": {"book": "pinnacle", "props": None,
@@ -156,8 +157,21 @@ def build_sheet(props, lines, now, slate_date=None):
                      "first_side": "Over", "second_side": "Under",
                      "price_first": r["over_price"], "price_second": r["under_price"],
                      "source_utc": r["pull_timestamp"]})
-    g = lines[(lines["bookmaker"] == BOOK) & (lines["market"].isin(GAME_MARKETS))
-              & (lines["commence_time"].map(parse_utc) > now)]
+    # Per-event book: for sports with a fallback_book, use BOOK where available, else fallback
+    fallback_book = SPORTS[SPORT].get("fallback_book")
+    upcoming_lines = lines[(lines["market"].isin(GAME_MARKETS))
+                           & (lines["commence_time"].map(parse_utc) > now)]
+    if fallback_book:
+        primary_eids = set(upcoming_lines[upcoming_lines["bookmaker"] == BOOK]["event_id"])
+        g = upcoming_lines[
+            ((upcoming_lines["bookmaker"] == BOOK) & upcoming_lines["event_id"].isin(primary_eids))
+            | ((upcoming_lines["bookmaker"] == fallback_book) & ~upcoming_lines["event_id"].isin(primary_eids))
+        ]
+        event_book = {eid: (BOOK if eid in primary_eids else fallback_book)
+                      for eid in g["event_id"].unique()}
+    else:
+        g = upcoming_lines[upcoming_lines["bookmaker"] == BOOK]
+        event_book = {}
     for (eid, mk), s in g.groupby(["event_id", "market"]):
         h = s.iloc[0]
         first = "Over" if mk == "totals" else h["home_team"]
@@ -166,12 +180,15 @@ def build_sheet(props, lines, now, slate_date=None):
         if len(a) != 1 or len(b) != 1:
             raise SystemExit(f"HALT: {mk} for {h['away_team']} @ {h['home_team']} is not a two-outcome market")
         a, b = a.iloc[0], b.iloc[0]
-        rows.append({"event_id": eid, "commence_time": h["commence_time"], "home_team": h["home_team"],
-                     "away_team": h["away_team"], "market_key": mk, "player_name": "",
-                     "line": 0.0 if pd.isna(a["point"]) else a["point"],
-                     "first_side": first, "second_side": b["outcome_name"],
-                     "price_first": a["price"], "price_second": b["price"],
-                     "source_utc": h["snapshot_utc"]})
+        row = {"event_id": eid, "commence_time": h["commence_time"], "home_team": h["home_team"],
+               "away_team": h["away_team"], "market_key": mk, "player_name": "",
+               "line": 0.0 if pd.isna(a["point"]) else a["point"],
+               "first_side": first, "second_side": b["outcome_name"],
+               "price_first": a["price"], "price_second": b["price"],
+               "source_utc": h["snapshot_utc"]}
+        if event_book:
+            row["book"] = event_book[eid]
+        rows.append(row)
     df = _finish(rows, now)
     if slate_date and not df.empty:
         from datetime import date as _date
@@ -430,7 +447,10 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
         m["slate_date"] = str(slate_date)
     else:
         m["week"] = week
-    m["sport"], m["book"] = SPORT, BOOK
+    m["sport"] = SPORT
+    # Per-event book: if the sheet carried a book column (NCAAF fallback), preserve it; else use BOOK
+    if "book" not in m.columns:
+        m["book"] = BOOK
     m["reader_model"] = str(reader_model).strip()
     m["logged_utc"] = now.isoformat()
     m["window"] = window
