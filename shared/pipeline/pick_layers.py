@@ -259,7 +259,7 @@ def _line_movement(pick, root, logged_dt):
 def _weather(pick, root, logged_dt):
     sport = pick.get("sport", "")
     if sport not in ("NFL",):
-        return _no_data(logged_dt, "no NWS source for this sport")
+        return _no_data(logged_dt, "no forecast source for college yet")
 
     home = pick.get("home", "")
     forecast_dir = root / "data" / "weather_archive" / "nws" / "forecasts"
@@ -341,7 +341,7 @@ def _is_sim_file(p):
 def _sim(pick, root, logged_dt):
     sport = pick.get("sport", "")
     if sport != "NFL":
-        return _no_data(logged_dt, "sim: no number for this sport")
+        return _no_data(logged_dt, "no sim for college football")
 
     # Find the newest sim freeze ≤ logged_dt (only files with nfl_sim rows)
     sim_dir = root / "nfl" / "data" / "board"
@@ -409,7 +409,7 @@ def _injuries(pick, root, logged_dt):
     if sport == "NFL":
         inj_dir = root / "data" / "injury_archive" / "nfl"
     else:
-        return _no_data(logged_dt, "no injury source for this sport")
+        return _no_data(logged_dt, "Lineups: no lineup or injury feed for college football yet; QB and injury notes arrive through the news layer above")
 
     files = []
     for sd in inj_dir.glob("season=*"):
@@ -694,7 +694,10 @@ def main():
         built = 0
         exists = 0
         for sport in bt.SPORTS:
-            result = bt.select(view_rows, sport, now)
+            # P40: use select_slate (per-game latest freeze) so picks from
+            # earlier freezes get cards even when a prekick freeze covers
+            # only a subset of games
+            result = bt.select_slate(view_rows, sport, now)
             if result is None:
                 print(f"{sport}: no upcoming freeze")
                 continue

@@ -46,9 +46,10 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-# N61: one log per sport, tracked separately. NCAAF has no player props on the tape and Hard Rock is absent
-# from 100% of NCAAF snapshots (N01), so the NCAAF book of record is Pinnacle (the CLV benchmark) - its
-# de-vigged number is the reference; units are at PINNACLE's price and are labelled so. Jeff bets Hard Rock.
+# N61: one log per sport, tracked separately. NCAAF has no player props on the tape. The NCAAF book of
+# record is Hard Rock — no Pinnacle fallback; a game with no HR line is unquoted (sidecar, not opinion).
+# CLV is Hard Rock vs Hard Rock (same as NFL). Pinnacle stays the sharp anchor inside consensus (x3).
+# The N61 Pinnacle CLV benchmark is retired for picks (P38). Jeff bets Hard Rock.
 SPORTS = {
     "nfl": {"book": "hardrockbet_fl", "props": ROOT / "data" / "odds_archive" / "nfl" / "props",
             "lines": ROOT / "data" / "odds_archive" / "nfl" / "line_history",
@@ -56,7 +57,7 @@ SPORTS = {
             "require_side": False, "slate": "week", "drivers_required": False,
             "tags": ("injury_news", "role_change", "game_script", "matchup", "weather",
                      "price_vs_sharp", "usage_trend", "line_move", "no_view", "sim_v1")},
-    "ncaaf": {"book": "pinnacle", "props": None,
+    "ncaaf": {"book": "hardrockbet", "props": None,
               "lines": ROOT / "data" / "odds_archive" / "ncaaf" / "line_history",
               "out": ROOT / "ncaaf" / "data" / "board", "outcomes": "cfbd",
               "require_side": False, "slate": "week", "drivers_required": False,
@@ -156,6 +157,7 @@ def build_sheet(props, lines, now, slate_date=None):
                      "first_side": "Over", "second_side": "Under",
                      "price_first": r["over_price"], "price_second": r["under_price"],
                      "source_utc": r["pull_timestamp"]})
+    # Game lines: BOOK only (no fallback). Unquoted events written to sidecar by the caller.
     g = lines[(lines["bookmaker"] == BOOK) & (lines["market"].isin(GAME_MARKETS))
               & (lines["commence_time"].map(parse_utc) > now)]
     for (eid, mk), s in g.groupby(["event_id", "market"]):

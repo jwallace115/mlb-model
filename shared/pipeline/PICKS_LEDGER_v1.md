@@ -722,3 +722,83 @@ Real run (adhoc, 14-game full slate):
 - FROZEN sha256: ee0a7e12...88b9680
 - Commit ccd5a7466 on origin/main (manifest window=adhoc, pilot=true)
 - Run record 324b9870d on eng/fwd6-parser-fix
+
+## P38 — NCAAF book of record and reader baseline (2026-10-09)
+
+**Decision:** NCAAF book of record = Hard Rock ONLY — no Pinnacle fallback.
+A game with no Hard Rock line in the snapshot gets no opinion row; it is listed
+in a sidecar `unquoted_<ts>.csv` (event_id, teams, kick) as "no Hard Rock line
+yet" and is picked up by the next window/prekick in which HR has posted it.
+Pinnacle stays the sharp anchor inside consensus (x3) and is never the book.
+The N61 Pinnacle CLV benchmark is retired for picks — CLV is HR vs HR like NFL.
+reader_v3 is the NCAAF baseline reader (game lines only). Zero credits.
+
+**Changes:**
+- `reader_v3.py`: `--sport {nfl,ncaaf}`. For ncaaf: lines from ncaaf tape, no props
+  (HALT if sheet has prop rows), book = hardrockbet (no fallback), NCAAF Kalshi prefix
+  (KXNCAAFGAME-), no NWS/injury/HR-history. NFL path byte-identical (null control:
+  cmp + sha256 1d3d3aba…).
+- `log_ai_opinions.py`: `SPORTS["ncaaf"]["book"]` = "hardrockbet", no fallback_book.
+  Events without HR line are simply not in the sheet.
+- `run_window.py`: `--sport {nfl,ncaaf}`. CFBD week derivation. --no-pull required.
+  Unquoted sidecar written after freeze for events without HR line.
+- `pick_sources.py`: `p_ai_opinions` carries conf/conf_rank in raw dict.
+- `picks_adapters.py`: extracts tag/conf from raw (closes OPS4a gap).
+
+**Test run (Mac adhoc, 2026-10-09 1:04 PM ET):**
+- Week 6 (CFBD), 51 games (hardrockbet only), 149 lines, 48h window
+- 18 unquoted events (no HR line yet) → sidecar
+- conf range 0.0–20.5, no_view 4.7%
+- Kalshi: 4130 rows matched (KXNCAAFGAME-26OCT09 prefix)
+
+## P39 — NCAAF cron schedule (2026-10-09)
+
+**Decision:** NCAAF windows run from the VM cron on the same schedule pattern as
+NFL, with --no-pull (the tape is the source; 0 credits by construction).
+
+**Crontab additions:**
+```
+0 22 * * 2  --sport ncaaf --window open   (Tue 6 PM ET)
+0 22 * * 4  --sport ncaaf --window mid    (Thu 6 PM ET)
+0 22 * * 5  --sport ncaaf --window late   (Fri 6 PM ET)
+3-59/15 * * * *  --sport ncaaf --window prekick --auto-prekick
+```
+
+The prekick job runs at minute :03, :18, :33, :48 to avoid colliding with the
+NFL prekick at :00, :15, :30, :45. There is no ledger file lock, so the offset
+prevents concurrent appends.
+
+NFL cron lines are unchanged (4 lines, verified byte-identical).
+
+## P40 — NCAAF cards and the page (2026-10-09)
+
+**Decision:** NCAAF cards use explicit, honest layer messages instead of generic
+"unsupported sport" strings.
+
+**Changes:**
+- `pick_layers.py --build-missing`: now uses `select_slate()` (per-game latest freeze)
+  instead of `select()` (single newest freeze). This ensures picks from earlier freezes
+  get cards even when a prekick freeze covers only a subset of games. Null control:
+  with one freeze, the set of pick_ids built is identical to today's.
+- NCAAF card layers:
+  - Line movement: already works (sport_folder mapping handles NCAAF)
+  - News: already works (reads data/news_archive/ncaaf)
+  - Injuries: "no lineup or injury feed for college football yet; QB and injury notes
+    arrive through the news layer above"
+  - Weather: "no forecast source for college yet"
+  - Sim: "no sim for college football"
+- `build_site _slot_for_commence` for NCAAF already handles Fri / Sat early / Sat
+  afternoon / Sat night splits (verified in existing code).
+
+## P41 — Cowork packet script (2026-10-09)
+
+**Decision:** `shared/pipeline/packet.sh <sport> <window-hours> <outdir>` produces
+the input packet for Cowork's full-layer AI read. Zero API credits.
+
+**Outputs:** sheet.csv, template.csv (reader_v3), news.csv (ESPN 72h), movement.csv,
+kalshi.csv, sim.csv (NFL only), packet.md (metadata).
+
+**Test run (ncaaf, 36h, 2026-10-09 1:06 PM ET):**
+- sheet: 149 lines (+ header = 150), template: 149, news: 30 items
+- kalshi: 4130 rows, movement: 149 lines
+- sim: not applicable for ncaaf
