@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Picks · iamnotuncertain</title>
+<title>__PAGE_TITLE__ · iamnotuncertain</title>
 <style>
 :root{
   --bg:#f6f7f9; --panel:#ffffff; --ink:#15181d; --ink2:#4b5563; --muted:#8a919c; --line:#e5e8ec; --line2:#eef0f3;
@@ -31,10 +31,10 @@ h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.02em}
 .lede{color:var(--ink2);margin:0 0 16px;font-size:14px}
 /* sport tabs */
 .tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin:0 0 14px}
-.tabs button{appearance:none;background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;font:inherit;font-weight:600;color:var(--ink2);cursor:pointer}
-.tabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
-.tabs button small{font-weight:500;color:var(--muted);margin-left:6px;white-space:nowrap}
-.tabs{overflow-x:auto;scrollbar-width:none}.tabs button{white-space:nowrap}
+.tabs button,.tabs a{appearance:none;background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;font:inherit;font-weight:600;color:var(--ink2);cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-block}
+.tabs button.on,.tabs a.on{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button small,.tabs a small{font-weight:500;color:var(--muted);margin-left:6px;white-space:nowrap}
+.tabs{overflow-x:auto;scrollbar-width:none}
 /* slate bar */
 .slate{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px}
 .slate .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -155,8 +155,9 @@ h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.02em}
   function sportData(s){return DATA.sports[s]||{events:[],picks:[]};}
 
   function renderTabs(){
-    var h='';SPORTS.forEach(function(s){var d=sportData(s);var n=d.events.filter(upcoming).length;
-      h+='<button data-s="'+s+'" class="'+(s===state.sport?'on':'')+'">'+s+'<small>'+(n?n+' games':'—')+'</small></button>';});
+    var h='';SPORTS.forEach(function(s){var n=(DATA.counts&&DATA.counts[s]!=null)?DATA.counts[s]:sportData(s).events.filter(upcoming).length;var lab=s+'<small>'+(n?n+' games':'—')+'</small>';
+      if(DATA.pages&&DATA.pages[s])h+='<a href="'+DATA.pages[s]+'" data-s="'+s+'" class="'+(s===state.sport?'on':'')+'">'+lab+'</a>';
+      else h+='<button data-s="'+s+'" class="'+(s===state.sport?'on':'')+'">'+lab+'</button>';});
     $('#tabs').innerHTML=h;
     $('#tabs').querySelectorAll('button').forEach(function(b){b.onclick=function(){selectSport(b.getAttribute('data-s'));};});
   }
@@ -170,7 +171,7 @@ h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.02em}
     state.ticked={};
     if(slots.length){slots[0].games.forEach(function(g){state.ticked[g.event_id]=true;});}
     renderTabs();renderSlate();renderLists();renderRecord();
-    try{history.replaceState(null,'','#'+s.toLowerCase());}catch(e){}
+    if(!DATA.pages){try{history.replaceState(null,'','#'+s.toLowerCase());}catch(e){}}
   }
   function renderSlate(){
     var s=state.sport,evs=sportData(s).events.filter(upcoming),slots=slotsOf(evs);
@@ -236,7 +237,7 @@ h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.02em}
   function renderRecord(){var d=sportData(state.sport);$('#record').innerHTML=d.record_html?'<h2>Record — '+state.sport+'</h2>'+d.record_html:'';}
   $('#seg').querySelectorAll('button').forEach(function(b){b.onclick=function(){state.col=b.getAttribute('data-col');$('#seg').querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b);});document.querySelectorAll('.col').forEach(function(c){c.classList.toggle('show',c.getAttribute('data-col')===state.col);});};});
   var h=DATA.health||{};var ht=$('#health-txt');if(ht)ht.textContent=(h.summary||'health')+' · built '+(DATA.built_et||'');if(h.bad)$('#health').classList.add('bad');
-  var want=(location.hash||'').replace('#','').replace('tab-','').toUpperCase();
+  var want=DATA.sport||(location.hash||'').replace('#','').replace('tab-','').toUpperCase();
   selectSport(SPORTS.indexOf(want)>=0?want:SPORTS.filter(function(s){return sportData(s).events.some(upcoming);})[0]||'NFL');
 })();
 </script>
