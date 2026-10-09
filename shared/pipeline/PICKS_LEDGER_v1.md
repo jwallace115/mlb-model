@@ -766,3 +766,23 @@ NFL prekick at :00, :15, :30, :45. There is no ledger file lock, so the offset
 prevents concurrent appends.
 
 NFL cron lines are unchanged (4 lines, verified byte-identical).
+
+## P40 — NCAAF cards and the page (2026-10-09)
+
+**Decision:** NCAAF cards use explicit, honest layer messages instead of generic
+"unsupported sport" strings.
+
+**Changes:**
+- `pick_layers.py --build-missing`: now uses `select_slate()` (per-game latest freeze)
+  instead of `select()` (single newest freeze). This ensures picks from earlier freezes
+  get cards even when a prekick freeze covers only a subset of games. Null control:
+  with one freeze, the set of pick_ids built is identical to today's.
+- NCAAF card layers:
+  - Line movement: already works (sport_folder mapping handles NCAAF)
+  - News: already works (reads data/news_archive/ncaaf)
+  - Injuries: "no lineup or injury feed for college football yet; QB and injury notes
+    arrive through the news layer above"
+  - Weather: "no forecast source for college yet"
+  - Sim: "no sim for college football"
+- `build_site _slot_for_commence` for NCAAF already handles Fri / Sat early / Sat
+  afternoon / Sat night splits (verified in existing code).
