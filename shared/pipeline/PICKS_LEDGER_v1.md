@@ -596,3 +596,22 @@ Tests (RED first, GREEN after):
 
 Dryrun: 1 rebuilt / 0 untouched. Javonte Williams rush attempts: p_first=0.741,
 edge=0.241, reader_model=nfl_sim_v1_156cd057, pilot=true.
+
+## P33 — Mac auto-push via SSH deploy key (2026-10-09)
+
+The Mac's remote was HTTPS (`https://github.com/...`), which requires a
+username/password prompt. In launchd's minimal environment no TTY is available,
+so `push_paths.sh` failed with `could not read Username for 'https://github.com':
+Device not configured` — this had been blocking Mac pushes since at least
+2026-10-09T00:50Z (5 commits stranded locally).
+
+Fix: ed25519 deploy key (`~/.ssh/mlbmodel_deploy`) added to GitHub repo settings
+as a write-enabled deploy key. `~/.ssh/config` Host block `github-mlbmodel` routes
+to the key. Remote changed to `git@github-mlbmodel:jwallace115/mlb-model.git`.
+The VM's remote is unchanged (it uses its own SSH setup).
+
+Verification:
+- `ssh -T git@github-mlbmodel` → "successfully authenticated"
+- `env -i HOME=$HOME PATH=/usr/bin:/bin:/usr/local/bin git fetch origin` → OK
+- Manual push of 5 stranded Mac outputs commits → succeeded (2a1871115 on origin)
+- `push_paths.sh` at :50 with no new changes: "no changes" (correct, no error)
