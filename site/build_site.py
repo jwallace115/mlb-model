@@ -1109,340 +1109,36 @@ def _record_section(rows, embargo_owners, sport, source_info):
 
 
 def build_picks(now, health):
-    import sys as _sys
-    _sys.path.insert(0, str(ROOT / "shared" / "pipeline"))
-    import build_top20 as bt
+    """Build the Picks pages: one per sport + index.html = front sport.
 
-    fs = load_json(ROOT / "site" / "forward_status.json") or {}
-    embargo_owners = set(fs.get("embargo_owners", []))
+    Returns dict {filename: html_string} for all five pages.
+    The template (site/templates/picks.html) is used AS DELIVERED — P42.
+    """
+    import picks_data as pd_mod
+
     rows, sha12, mtime = _load_picks_ledger()
-
     if rows is None:
         inner = f"<p>{NODATA}: picks ledger not found (PICKS_LEDGER_DIR not set or file absent).</p>"
-        return page("index.html", "Picks", f'<div><h1>Picks</h1></div>{inner}', health, now)
+        return {"index.html": page("index.html", "Picks", f'<div><h1>Picks</h1></div>{inner}', health, now)}
 
-    source_info = src(f"picks.jsonl {sha12} {fmt_utc(mtime)}")
     ledger_dir = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
-    layers_dir = ledger_dir / "layers"
+    fs = load_json(ROOT / "site" / "forward_status.json") or {}
+    data = pd_mod.picks_data(rows, now, ledger_dir, health, fs)
+    template = (ROOT / "site" / "templates" / "picks.html").read_text()
 
-    # Build tabs
-    tab_order = ["NFL", "NCAAF", "NHL", "NBA"]
-    tab_links = []
-    tab_bodies = []
+    pages = {}
+    for sport in ["NFL", "NCAAF", "NHL", "NBA"]:
+        one = {k: data[k] for k in ("built_utc", "built_et", "health", "pages", "counts", "front")}
+        one["sport"] = sport
+        one["sports"] = {sport: data["sports"][sport]}
+        payload = json.dumps(one, default=str).replace("</", "<\\/")
+        html = template.replace("__PICKS_DATA__", payload).replace("__PAGE_TITLE__", f"{sport} picks")
+        pages[data["pages"][sport]] = html
 
-    for sport in tab_order:
-        result = bt.select_slate(rows, sport, now)
-        anchor = sport.lower()
-        tab_links.append(f'<a href="#tab-{anchor}" class="tab-link" style="padding:8px 16px;text-decoration:none;'
-                         f'border-bottom:2px solid var(--accent);font-weight:600">{sport}</a>')
-
-        if result is None:
-            tab_bodies.append(f'<div id="tab-{anchor}" class="tab-panel">'
-                              f'<div class="card pad muted">No picks logged yet for {sport}.</div></div>')
-            rec = _record_section(rows, embargo_owners, sport, source_info)
-            tab_bodies[-1] = tab_bodies[-1][:-6] + f'<h3 style="margin-top:24px">Record — {sport}</h3>{rec}</div>'
-            continue
-
-        # Header: "showing N picks on G games from F freezes · newest <window> freeze <ET>"
-        n_total = len(result["props"]) + len(result["sides"])
-        n_games = len(result["events"])
-        n_freezes = result["n_freezes"]
-        newest_ev = max(result["events"], key=lambda e: e.get("freeze_logged_utc", ""))
-        newest_window = newest_ev.get("window", "legacy")
-        newest_et = _utc_to_et(newest_ev.get("freeze_logged_utc"))
-        header_text = (f"showing {n_total} picks on {n_games} games from {n_freezes} freezes "
-                       f"· newest {newest_window} freeze {newest_et}")
-        header_html = f'<div class="picks-header muted" style="margin-bottom:8px">{E(header_text)}</div>'
-
-        # Compute slots for each event
-        import os as _os
-        events_with_slots = []
-        for ev in result["events"]:
-            slot = _slot_for_commence(ev["commence_time"], sport)
-            kick_et = _utc_to_et(ev["commence_time"])
-            events_with_slots.append({**ev, "slot": slot, "kick_et": kick_et})
-
-        # Slot chips
-        from collections import OrderedDict
-        slots = OrderedDict()
-        for ev in events_with_slots:
-            s = ev["slot"]
-            if s not in slots:
-                slots[s] = {"n_games": 0, "first_kick": ev["commence_time"], "event_ids": []}
-            slots[s]["n_games"] += 1
-            slots[s]["event_ids"].append(ev["event_id"])
-            if ev["commence_time"] < slots[s]["first_kick"]:
-                slots[s]["first_kick"] = ev["commence_time"]
-
-        slot_chips_html = []
-        for s, info in slots.items():
-            kick_et = _utc_to_et(info["first_kick"])
-            eids_json = E(json.dumps(info["event_ids"]))
-            slot_chips_html.append(
-                f'<button class="slot-chip" data-slot="{E(s)}" data-events="{eids_json}" '
-                f'data-sport="{E(anchor)}" '
-                f'style="padding:4px 10px;margin:2px;border:1px solid var(--line);border-radius:12px;'
-                f'background:var(--bg2);cursor:pointer;font-size:12px">'
-                f'{E(s)} · {info["n_games"]} game{"s" if info["n_games"] != 1 else ""} · first kick {E(kick_et)}'
-                f'</button>')
-
-        # "Sunday" super-chip for NFL (Sun early + Sun late + SNF, NOT MNF)
-        if sport == "NFL":
-            sun_eids = []
-            for s in ("Sun early", "Sun late", "SNF"):
-                if s in slots:
-                    sun_eids.extend(slots[s]["event_ids"])
-            if sun_eids:
-                sun_eids_json = E(json.dumps(sun_eids))
-                slot_chips_html.append(
-                    f'<button class="slot-chip" data-slot="Sunday" data-events="{sun_eids_json}" '
-                    f'data-sport="{E(anchor)}" '
-                    f'style="padding:4px 10px;margin:2px;border:1px solid var(--line);border-radius:12px;'
-                    f'background:var(--bg2);cursor:pointer;font-size:12px">'
-                    f'Sunday · {len(sun_eids)} games</button>')
-
-        # "All upcoming" chip
-        all_eids = [ev["event_id"] for ev in events_with_slots]
-        all_eids_json = E(json.dumps(all_eids))
-        slot_chips_html.append(
-            f'<button class="slot-chip" data-slot="All upcoming" data-events="{all_eids_json}" '
-            f'data-sport="{E(anchor)}" '
-            f'style="padding:4px 10px;margin:2px;border:1px solid var(--line);border-radius:12px;'
-            f'background:var(--bg2);cursor:pointer;font-size:12px">'
-            f'All upcoming · {len(all_eids)} games</button>')
-
-        slot_row = f'<div class="slot-chips" data-sport="{E(anchor)}" style="margin-bottom:8px;display:flex;flex-wrap:wrap;gap:2px">{"".join(slot_chips_html)}</div>'
-
-        # Game chips
-        game_chips_html = []
-        for ev in events_with_slots:
-            game_chips_html.append(
-                f'<button class="game-chip" data-event="{E(ev["event_id"])}" '
-                f'data-slot="{E(ev["slot"])}" data-kick="{E(str(ev["commence_time"]))}" '
-                f'data-sport="{E(anchor)}" '
-                f'style="padding:3px 8px;margin:2px;border:1px solid var(--line);border-radius:8px;'
-                f'background:var(--bg2);cursor:pointer;font-size:11px">'
-                f'{E(ev["away"])} @ {E(ev["home"])} · {E(ev["kick_et"])}'
-                f'</button>')
-        game_row = f'<div class="game-chips" data-sport="{E(anchor)}" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:2px">{"".join(game_chips_html)}</div>'
-
-        # Build event_id → slot mapping for rows
-        event_slot = {ev["event_id"]: ev["slot"] for ev in events_with_slots}
-        event_reader = {}
-        for ev in events_with_slots:
-            event_reader[ev["event_id"]] = ev.get("reader", "")
-
-        # Load cards
-        def _load_card(pid):
-            p = layers_dir / f"{pid}.json"
-            if p.exists():
-                try:
-                    return json.loads(p.read_text())
-                except Exception:
-                    pass
-            return None
-
-        # Props column with data attributes
-        props_html = []
-        for i, pick in enumerate(result["props"]):
-            card = _load_card(pick.get("pick_id"))
-            eid = pick.get("event_id", "")
-            slot = event_slot.get(eid, "unknown")
-            kick = pick.get("commence_time", "")
-            pick["_reader"] = event_reader.get(eid, "")
-            da = {"data-event": eid, "data-slot": slot,
-                  "data-kick": str(kick), "data-col": "props",
-                  "data-order": str(i)}
-            props_html.append(_render_pick_row(i + 1, pick, card, is_prop=True, data_attrs=da))
-
-        # Sides column with data attributes
-        sides_html = []
-        for i, pick in enumerate(result["sides"]):
-            card = _load_card(pick.get("pick_id"))
-            eid = pick.get("event_id", "")
-            slot = event_slot.get(eid, "unknown")
-            kick = pick.get("commence_time", "")
-            pick["_reader"] = event_reader.get(eid, "")
-            da = {"data-event": eid, "data-slot": slot,
-                  "data-kick": str(kick), "data-col": "sides",
-                  "data-order": str(i)}
-            sides_html.append(_render_pick_row(i + 1, pick, card, is_prop=False, data_attrs=da))
-
-        cols = (f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">'
-                f'<div><h3>Top 20 — player props</h3>{"".join(props_html) if props_html else "<div class=\"muted\">none</div>"}</div>'
-                f'<div><h3>Top 20 — sides / totals / ML</h3>{"".join(sides_html) if sides_html else "<div class=\"muted\">none</div>"}</div></div>')
-
-        # Unranked
-        unranked_html = ""
-        if result["unranked"]:
-            unranked_html = (f'<details style="margin-top:16px"><summary class="muted" style="cursor:pointer">'
-                             f'{len(result["unranked"])} unranked — no confidence recorded</summary>'
-                             f'<div class="note" style="margin-top:8px">'
-                             + ", ".join(f'{E(str(r.get("player_name") or r.get("side", "")))} ({E(str(r.get("market", "")))})'
-                                        for r in result["unranked"][:30])
-                             + ("..." if len(result["unranked"]) > 30 else "")
-                             + '</div></details>')
-
-        # Record section
-        rec = _record_section(rows, embargo_owners, sport, source_info)
-
-        tab_bodies.append(f'<div id="tab-{anchor}" class="tab-panel">'
-                          f'{header_html}{slot_row}{game_row}{cols}{unranked_html}'
-                          f'<h3 style="margin-top:24px">Record — {sport}</h3>{rec}</div>')
-
-    tabs_nav = f'<div style="display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px">{"".join(tab_links)}</div>'
-    tabs_content = "".join(tab_bodies)
-
-    # Inline JS for slot/game filtering
-    filter_js = _picks_filter_js()
-
-    body = (f'<div><h1>Picks</h1><p class="lede">NFL, NCAAF, NHL, NBA — top 20 picks by confidence, '
-            f'ranked from the reader\'s latest freeze. Click a pick to see its detail card. '
-            f'No stakes, slip ids or share links.</p></div>'
-            f'{tabs_nav}{tabs_content}{filter_js}')
-    return page("index.html", "Picks", body, health, now)
-
-
-def _picks_filter_js():
-    """Inline JS for slot/game chip filtering and rank renumbering."""
-    return '''<script>
-(function(){
-var PF={};
-function init(){
-  document.querySelectorAll('.tab-panel').forEach(function(panel){
-    var sport=panel.id.replace('tab-','');
-    var slots=panel.querySelectorAll('.slot-chip');
-    var games=panel.querySelectorAll('.game-chip');
-    var rows=panel.querySelectorAll('details[data-event]');
-    if(!rows.length)return;
-    // Build state: which game event_ids are ticked
-    var ticked={};
-    games.forEach(function(g){ticked[g.getAttribute('data-event')]=false;});
-    // Find next slot to kick
-    var now=Date.now();
-    var slotKick={};
-    games.forEach(function(g){
-      var k=new Date(g.getAttribute('data-kick')).getTime();
-      var s=g.getAttribute('data-slot');
-      if(k>now&&(!slotKick[s]||k<slotKick[s]))slotKick[s]=k;
-    });
-    // Hide past games from chips
-    games.forEach(function(g){
-      var k=new Date(g.getAttribute('data-kick')).getTime();
-      if(k<=now)g.style.display='none';
-    });
-    // Find next slot: smallest first-kick still > now
-    var nextSlot=null,nextKick=Infinity;
-    for(var s in slotKick){if(slotKick[s]<nextKick){nextKick=slotKick[s];nextSlot=s;}}
-    // Default: tick the next slot
-    function tickSlot(slotName){
-      slots.forEach(function(btn){
-        var eids=JSON.parse(btn.getAttribute('data-events').replace(/&quot;/g,\'"\'));
-        if(btn.getAttribute('data-slot')===slotName){
-          btn.style.background='var(--accent)';btn.style.color='#fff';
-          eids.forEach(function(eid){
-            var k=games.length?null:null;
-            // Only tick if game is upcoming
-            var g=panel.querySelector('.game-chip[data-event="'+eid+'"]');
-            if(g&&new Date(g.getAttribute('data-kick')).getTime()>now)ticked[eid]=true;
-          });
-        }
-      });
-      games.forEach(function(g){
-        if(ticked[g.getAttribute('data-event')]){
-          g.style.background='var(--accent)';g.style.color='#fff';
-        }
-      });
-    }
-    if(nextSlot)tickSlot(nextSlot);
-    else{// tick all
-      games.forEach(function(g){
-        var k=new Date(g.getAttribute('data-kick')).getTime();
-        if(k>now){ticked[g.getAttribute('data-event')]=true;g.style.background='var(--accent)';g.style.color='#fff';}
-      });
-    }
-    function applyFilter(){
-      var cols={props:[],sides:[]};
-      rows.forEach(function(r){
-        var eid=r.getAttribute('data-event');
-        var col=r.getAttribute('data-col');
-        var order=parseInt(r.getAttribute('data-order'),10);
-        if(ticked[eid]){r.style.display='';cols[col].push({el:r,order:order});}
-        else{r.style.display='none';}
-      });
-      // Sort by server order, renumber, cap at 20
-      for(var c in cols){
-        cols[c].sort(function(a,b){return a.order-b.order;});
-        var shown=0;
-        cols[c].forEach(function(item,idx){
-          var rankSpan=item.el.querySelector('.rank');
-          if(idx<20){rankSpan.innerHTML='<b>'+(idx+1)+'</b>';item.el.style.display='';shown++;}
-          else{item.el.style.display='none';}
-        });
-        // Show "20 of N" if needed
-        var hdr=panel.querySelector('h3');
-        if(cols[c].length>20&&hdr){
-          var existing=panel.querySelector('.cap-note-'+c);
-          if(!existing){
-            var note=document.createElement('span');
-            note.className='muted cap-note-'+c;
-            note.style.fontSize='11px';note.style.marginLeft='8px';
-            hdr.parentNode.insertBefore(note,hdr.nextSibling);
-            existing=note;
-          }
-          existing.textContent='20 of '+cols[c].length+' shown';
-        }
-      }
-    }
-    applyFilter();
-    // Slot chip click
-    slots.forEach(function(btn){
-      btn.addEventListener('click',function(){
-        var eids=JSON.parse(btn.getAttribute('data-events').replace(/&quot;/g,\'"\'));
-        // Toggle: if all ticked → untick; else tick all
-        var allOn=eids.every(function(eid){return ticked[eid];});
-        // Reset all slots/games visuals
-        slots.forEach(function(b){b.style.background='var(--bg2)';b.style.color='';});
-        if(allOn){eids.forEach(function(eid){ticked[eid]=false;});}
-        else{
-          // Clear all first
-          for(var k in ticked)ticked[k]=false;
-          eids.forEach(function(eid){
-            var g=panel.querySelector('.game-chip[data-event="'+eid+'"]');
-            if(g&&new Date(g.getAttribute('data-kick')).getTime()>now)ticked[eid]=true;
-          });
-          btn.style.background='var(--accent)';btn.style.color='#fff';
-        }
-        games.forEach(function(g){
-          if(ticked[g.getAttribute('data-event')]){g.style.background='var(--accent)';g.style.color='#fff';}
-          else{g.style.background='var(--bg2)';g.style.color='';}
-        });
-        applyFilter();
-      });
-    });
-    // Game chip click
-    games.forEach(function(g){
-      g.addEventListener('click',function(){
-        var eid=g.getAttribute('data-event');
-        ticked[eid]=!ticked[eid];
-        if(ticked[eid]){g.style.background='var(--accent)';g.style.color='#fff';}
-        else{g.style.background='var(--bg2)';g.style.color='';}
-        // Update slot chip visuals
-        slots.forEach(function(btn){
-          var seids=JSON.parse(btn.getAttribute('data-events').replace(/&quot;/g,\'"\'));
-          var allOn=seids.every(function(e){return ticked[e];});
-          if(allOn&&seids.length){btn.style.background='var(--accent)';btn.style.color='#fff';}
-          else{btn.style.background='var(--bg2)';btn.style.color='';}
-        });
-        applyFilter();
-      });
-    });
-  });
-}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
-else init();
-})();
-</script>'''
+    # index.html = byte-identical copy of the front sport's page
+    front = data.get("front", "NFL")
+    pages["index.html"] = pages[data["pages"][front]]
+    return pages
 
 
 def build(out, now=None):
@@ -1451,11 +1147,13 @@ def build(out, now=None):
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = Path(tempfile.mkdtemp(prefix=".site-", dir=out.parent))
-    pages = {"index.html": build_picks(now, health), "today.html": build_today(now, health),
+    picks_pages = build_picks(now, health)  # returns dict of {filename: html}
+    pages = {"today.html": build_today(now, health),
              "health.html": build_health(now, health),
              "tracking.html": build_tracking(now, health, tmp),
              "forward.html": build_forward(now, health),
              "archive.html": build_archive(now, health)}
+    pages.update(picks_pages)
     for name, text in pages.items():
         (tmp / name).write_text(text)
     os.chmod(tmp, 0o755)
