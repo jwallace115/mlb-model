@@ -570,3 +570,29 @@ auto-commit job (`shared/push_paths.sh`, cron at :50) exports `MLB_AUTOCOMMIT=1`
 before its git commands. The VM's `push_daemon.sh` is a different clone and is
 not touched. The hook text is not in the repo (it lives in `.git/hooks/`).
 See `claude/SESSIONS_RULES.md` for the rule this enforces.
+
+## P32 — Sim layer finds the sim file, not the newest file (2026-10-09)
+
+`_sim()` in `pick_layers.py` previously picked the newest `ai_opinions_*.parquet`
+file with timestamp ≤ `logged_utc`, then checked if it contained `nfl_sim` rows.
+When a non-sim reader file (e.g., `claude-fable-5-1`) was timestamped after the
+sim file, it shadowed the sim and the layer returned "no sim rows in freeze."
+This affected all 47 cards from the 2026-10-08T23:23:34Z freeze.
+
+Fix: `_is_sim_file(p)` reads only the `reader_model` column (cached per path) and
+the scan selects only files where `reader_model.str.startswith("nfl_sim")`. The
+newest such file ≤ `logged_utc` is used. Pilot flag is now included in the layer
+output.
+
+New CLI: `--rebuild-layer <name> --freeze <logged_utc>` rebuilds a single layer on
+cards whose sim/layer value is null, scoped to picks from one freeze. Cards with a
+value are untouched (write-once).
+
+Tests (RED first, GREEN after):
+- (q) sim file at T-3h + non-sim reader at T-1h → layer finds sim (was RED: "no sim rows in freeze")
+- (r) sim file at T+1h excluded (leak guard, passed before and after)
+- (s) single sim file → output unchanged (null control, passed before and after)
+- (t) pilot sim → layer includes `pilot: true` (was RED: key absent)
+
+Dryrun: 1 rebuilt / 0 untouched. Javonte Williams rush attempts: p_first=0.741,
+edge=0.241, reader_model=nfl_sim_v1_156cd057, pilot=true.

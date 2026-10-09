@@ -627,3 +627,99 @@ def test_pass_yds_card_unchanged(tmp_path):
     assert lm.get("value") is not None, "pass_yds should have line movement"
     assert card_hash, "card hash should be valid"
     plyr._tape_cache.clear()
+
+
+# ---- OPS5a Item 1: _sim picks the sim file, not just the newest file ----
+
+def _sim_row(event_id="a" * 32, reader_model="nfl_sim_v1_abc", **kw):
+    """Minimal sim-shaped row for ai_opinions parquet."""
+    base = {
+        "event_id": event_id, "commence_time": "2026-09-28T17:00:00Z",
+        "home_team": "Kansas City Chiefs", "away_team": "Buffalo Bills",
+        "market_key": "spreads", "player_name": None, "line": -3.5,
+        "first_side": "KC", "second_side": "BUF",
+        "price_first": -110, "price_second": -110,
+        "source_utc": "2026-09-27T15:00:00Z", "imp_first": 0.5, "imp_second": 0.5,
+        "two_way": True, "q_first": 0.5, "source_age_min": 10,
+        "p_first": 0.55, "book_p_first": 0.52, "edge": 0.03,
+        "tag": "sim_v1", "reason": "sim", "conf": 60, "conf_rank": 5,
+        "gap": 0.03, "side": "first", "side_name": "KC", "side_price": -110,
+        "revision": 1, "season": 2026, "week": 3, "pilot": False,
+        "sport": "NFL", "book": "dk", "reader_model": reader_model,
+        "logged_utc": "2026-09-27T15:00:00Z",
+    }
+    base.update(kw)
+    return base
+
+
+# (q) sim file at T-3h, non-sim reader file at T-1h → layer returns sim number
+def test_sim_shadowed_by_newer_reader(tmp_path):
+    """The bug: a non-sim file newer than the sim file shadows it.
+    Today this returns 'no sim rows in freeze' — RED."""
+    plyr._tape_cache.clear()
+    sim_dir = tmp_path / "nfl" / "data" / "board" / "week=2026_03" / "ai_opinions"
+    sim_dir.mkdir(parents=True, exist_ok=True)
+
+    # Sim file at T-3h (13:00)
+    sim_df = pd.DataFrame([_sim_row(reader_model="nfl_sim_v1_abc")])
+    sim_df.to_parquet(sim_dir / "ai_opinions_20260927T130000Z.parquet", index=False)
+
+    # Non-sim reader file at T-1h (15:00) — newer, shadows the sim
+    reader_df = pd.DataFrame([_sim_row(reader_model="claude-fable-5-1")])
+    reader_df.to_parquet(sim_dir / "ai_opinions_20260927T150000Z.parquet", index=False)
+
+    pick = _pick()  # logged_utc = 2026-09-27T16:00:00Z
+    card = plyr.build_card(pick, tmp_path)
+    sim = card["layers"]["sim"]
+    assert sim["value"] is not None, \
+        f"sim should find the sim file, not be shadowed by a newer reader — got: {sim.get('note')}"
+    assert sim["value"]["p_first"] == 0.55
+    assert sim["value"]["reader_model"] == "nfl_sim_v1_abc"
+    plyr._tape_cache.clear()
+
+
+# (r) sim file at T+1h is never used (leak test)
+def test_sim_future_file_excluded(tmp_path):
+    plyr._tape_cache.clear()
+    sim_dir = tmp_path / "nfl" / "data" / "board" / "week=2026_03" / "ai_opinions"
+    sim_dir.mkdir(parents=True, exist_ok=True)
+
+    # Sim file at T+1h (17:00) — AFTER logged_utc, must be excluded
+    sim_df = pd.DataFrame([_sim_row(reader_model="nfl_sim_v1_abc", p_first=0.99)])
+    sim_df.to_parquet(sim_dir / "ai_opinions_20260927T170000Z.parquet", index=False)
+
+    pick = _pick()  # logged_utc = 2026-09-27T16:00:00Z
+    card = plyr.build_card(pick, tmp_path)
+    sim = card["layers"]["sim"]
+    assert sim["value"] is None, "sim from the future must not be used"
+    plyr._tape_cache.clear()
+
+
+# (s) null control: single sim file → byte-identical to today's output
+def test_sim_single_file_unchanged(tmp_path):
+    plyr._tape_cache.clear()
+    _make_sim_freeze(tmp_path, "20260927T150000Z", [
+        _sim_row(reader_model="nfl_sim_v1_abc"),
+    ])
+    pick = _pick()
+    card = plyr.build_card(pick, tmp_path)
+    sim = card["layers"]["sim"]
+    assert sim["value"]["p_first"] == 0.55
+    assert sim["value"]["reader_model"] == "nfl_sim_v1_abc"
+    plyr._tape_cache.clear()
+
+
+# (t) pilot sim file → layer includes pilot flag
+def test_sim_pilot_flag(tmp_path):
+    plyr._tape_cache.clear()
+    sim_dir = tmp_path / "nfl" / "data" / "board" / "week=2026_03" / "ai_opinions"
+    sim_dir.mkdir(parents=True, exist_ok=True)
+    sim_df = pd.DataFrame([_sim_row(reader_model="nfl_sim_v1_abc", pilot=True)])
+    sim_df.to_parquet(sim_dir / "ai_opinions_20260927T150000Z.parquet", index=False)
+
+    pick = _pick()
+    card = plyr.build_card(pick, tmp_path)
+    sim = card["layers"]["sim"]
+    assert sim["value"] is not None
+    assert sim["value"].get("pilot") is True, "pilot flag should be in the layer"
+    plyr._tape_cache.clear()
