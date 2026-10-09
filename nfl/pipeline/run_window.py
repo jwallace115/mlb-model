@@ -141,6 +141,45 @@ def _newest_snapshot_commence_times(root, sport="nfl"):
         return []
 
 
+def _write_unquoted_sidecar(sheet_path, week, root, sport):
+    """Write a CSV of upcoming events not quoted by the book of record."""
+    import pandas as pd
+    sheet = pd.read_csv(sheet_path)
+    quoted_eids = set(sheet["event_id"]) if not sheet.empty else set()
+
+    sport_folder = "ncaaf" if sport == "ncaaf" else "nfl"
+    tape_dir = root / "data" / "odds_archive" / sport_folder / "line_history" / "season=2026"
+    snaps = sorted(tape_dir.glob("snap_*.parquet"))
+    if not snaps:
+        print("unquoted sidecar: no snapshots")
+        return
+    newest = pd.read_parquet(snaps[-1])
+    now = datetime.now(timezone.utc)
+    upcoming = newest[pd.to_datetime(newest["commence_time"], utc=True) > now]
+    all_eids = set(upcoming["event_id"])
+    unquoted_eids = all_eids - quoted_eids
+    if not unquoted_eids:
+        print("unquoted sidecar: 0 unquoted events")
+        return
+
+    unq = upcoming[upcoming["event_id"].isin(unquoted_eids)].drop_duplicates("event_id")
+    rows = []
+    for _, r in unq.iterrows():
+        rows.append({"event_id": r["event_id"],
+                      "home_team": r["home_team"],
+                      "away_team": r["away_team"],
+                      "commence_time": r["commence_time"]})
+    out = pd.DataFrame(rows).sort_values("commence_time")
+
+    board_dir = "ncaaf" if sport == "ncaaf" else "nfl"
+    freeze_dir = root / board_dir / "data" / "board" / f"week=2026_{week:02d}" / "ai_opinions"
+    freeze_dir.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    dest = freeze_dir / f"unquoted_{ts}.csv"
+    out.to_csv(dest, index=False)
+    print(f"unquoted sidecar: {len(out)} events (no Hard Rock line yet) -> {dest}")
+
+
 def _commit_and_push(commit_mode, window, root, env, sport="nfl"):
     """Commit the frozen file + manifest (+ mac props + snapshot) and push."""
     if commit_mode == "none":
@@ -344,6 +383,10 @@ def main():
         if args.window in ("prekick", "adhoc"):
             freeze_cmd += ["--window-hours", str(window_hours)]
         _run("freeze", freeze_cmd, env=env)
+
+        # ── Unquoted sidecar: events in the tape but not quoted by the book ──
+        if args.sport == "ncaaf":
+            _write_unquoted_sidecar(sheet_path, week, effective_root, args.sport)
 
     # ── Step 3: Verify ──
     _run("verify",

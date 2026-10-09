@@ -725,26 +725,29 @@ Real run (adhoc, 14-game full slate):
 
 ## P38 — NCAAF book of record and reader baseline (2026-10-09)
 
-**Decision:** NCAAF book of record = Hard Rock where listed, Pinnacle otherwise.
-reader_v3 is the NCAAF baseline reader (same as NFL, game lines only). Zero credits.
+**Decision:** NCAAF book of record = Hard Rock ONLY — no Pinnacle fallback.
+A game with no Hard Rock line in the snapshot gets no opinion row; it is listed
+in a sidecar `unquoted_<ts>.csv` (event_id, teams, kick) as "no Hard Rock line
+yet" and is picked up by the next window/prekick in which HR has posted it.
+Pinnacle stays the sharp anchor inside consensus (x3) and is never the book.
+The N61 Pinnacle CLV benchmark is retired for picks — CLV is HR vs HR like NFL.
+reader_v3 is the NCAAF baseline reader (game lines only). Zero credits.
 
 **Changes:**
 - `reader_v3.py`: `--sport {nfl,ncaaf}`. For ncaaf: lines from ncaaf tape, no props
-  (HALT if sheet has prop rows), per-event book (hardrockbet if snapshot has it, else
-  pinnacle), NCAAF Kalshi prefix (KXNCAAFGAME-), no NWS/injury/HR-history. NFL path
-  byte-identical (null control: cmp + sha256 1d3d3aba…).
-- `log_ai_opinions.py`: `SPORTS["ncaaf"]["book"]` = "hardrockbet" with pinnacle as
-  per-event fallback (`fallback_book`). Sheet and freeze carry per-event book column.
-- `run_window.py`: `--sport {nfl,ncaaf}`. NCAAF week = CFBD convention (Week 0 =
-  last Sat in August). `--no-pull` required for ncaaf (HALT otherwise). Routes
-  `--sport` to sheet/reader/freeze/verify/build_top20.
-- `pick_sources.py`: `p_ai_opinions` now carries conf/conf_rank in raw dict.
-- `picks_adapters.py`: extracts tag/conf from raw for ai_opinion rows (closes the
-  OPS4a gap where NCAAF freeze conf/tag/window were not reaching the ledger).
+  (HALT if sheet has prop rows), book = hardrockbet (no fallback), NCAAF Kalshi prefix
+  (KXNCAAFGAME-), no NWS/injury/HR-history. NFL path byte-identical (null control:
+  cmp + sha256 1d3d3aba…).
+- `log_ai_opinions.py`: `SPORTS["ncaaf"]["book"]` = "hardrockbet", no fallback_book.
+  Events without HR line are simply not in the sheet.
+- `run_window.py`: `--sport {nfl,ncaaf}`. CFBD week derivation. --no-pull required.
+  Unquoted sidecar written after freeze for events without HR line.
+- `pick_sources.py`: `p_ai_opinions` carries conf/conf_rank in raw dict.
+- `picks_adapters.py`: extracts tag/conf from raw (closes OPS4a gap).
 
-**Test run (Mac adhoc, 2026-10-09 12:57 PM ET):**
-- Week 6 (CFBD), 51 games, 149 lines, 48h window
-- All 51 events: hardrockbet as book of record
+**Test run (Mac adhoc, 2026-10-09 1:04 PM ET):**
+- Week 6 (CFBD), 51 games (hardrockbet only), 149 lines, 48h window
+- 18 unquoted events (no HR line yet) → sidecar
 - conf range 0.0–20.5, no_view 4.7%
 - Kalshi: 4130 rows matched (KXNCAAFGAME-26OCT09 prefix)
 

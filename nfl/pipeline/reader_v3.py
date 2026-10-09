@@ -277,12 +277,11 @@ def line_move(r, HIST):
 
 
 def _event_book(event_id, lines, sport):
-    """Determine the book of record for an event. NFL: always hardrockbet_fl.
-    NCAAF: hardrockbet if any rows exist for the event, else pinnacle."""
+    """Determine the book of record for an event. NFL: hardrockbet_fl. NCAAF: hardrockbet.
+    No fallback — events without the book are not in the sheet."""
     if sport == "nfl":
         return "hardrockbet_fl"
-    hr = lines[(lines["event_id"] == event_id) & (lines["bookmaker"] == "hardrockbet")]
-    return "hardrockbet" if len(hr) > 0 else "pinnacle"
+    return "hardrockbet"
 
 
 def read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix,
