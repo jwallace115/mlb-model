@@ -822,3 +822,14 @@ and cards entirely client-side.
 - No `prop:` or `.parquet` outside JSON/details
 - No `</script` in JSON block (11472 escaped `<\/`)
 - No `__PICKS_DATA__` or `__PAGE_TITLE__` placeholder remaining
+
+## P43 — Cards say it in English (2026-10-09)
+
+**Decision:** _render_card adds plain-English summaries for injuries, reasoning,
+and sim layers. Existing line-movement and weather summaries unchanged.
+
+## P44 — One header everywhere (2026-10-09)
+
+**Decision:** page() uses the same nav markup (.nav/.in/.brand/.links/.health) as
+the picks template, so all pages share one visual header. Google Fonts <link>
+dropped (system font stack; site is behind login, no external calls).

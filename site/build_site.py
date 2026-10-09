@@ -123,15 +123,19 @@ CSS = """
 --accent:#0B6E69;--ok-bg:#E3F2E7;--ok:#146C2E;--sh-bg:#E3ECF8;--sh:#1E4E8C;--wa-bg:#FBEFD9;--wa:#7A4B00;--bad-bg:#F6E3E3;--bad:#8A1C1C;--pu-bg:#EEE5F6;--pu:#5B2A86;--off-bg:#ECEEF1;--off:#4A5361}
 @media (prefers-color-scheme: dark){:root{--bg:#101318;--card:#171B22;--line:#2B313B;--line2:#232933;--ink:#E8EBEF;--ink2:#C9CFD8;--muted:#9AA3AF;--head:#1E232B;
 --accent:#5CC8C0;--ok-bg:#16301F;--ok:#7FD39A;--sh-bg:#16263D;--sh:#9CC2F2;--wa-bg:#33270F;--wa:#F2C46B;--bad-bg:#3A1A1A;--bad:#F29C9C;--pu-bg:#2A1D38;--pu:#C9A6EE;--off-bg:#232933;--off:#9AA3AF}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15px;line-height:1.45}
-a{color:var(--accent)}header.top{background:#14181F;color:#F5F6F7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.45}
+a{color:var(--accent)}
+.nav{background:var(--nav,#111418);color:var(--nav-ink,#e8eaee);position:sticky;top:0;z-index:20}
+.nav .in{max-width:1180px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:18px;height:52px}
+.brand{font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1}
+.links::-webkit-scrollbar{display:none}
+.links a{color:var(--nav-ink,#e8eaee);opacity:.72;text-decoration:none;padding:6px 10px;border-radius:7px;white-space:nowrap;font-size:14px}
+.links a.on{opacity:1;background:rgba(255,255,255,.1)}
+.health{font-size:12px;opacity:.8;white-space:nowrap;text-decoration:none;color:var(--nav-ink,#e8eaee)}
+.health .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:var(--good,#4CC27A)}
+.health.bad .dot{background:var(--bad,#F05252)}
 .wrap{max-width:1200px;margin:0 auto;padding:0 16px}
-.bar{display:flex;align-items:center;gap:22px;flex-wrap:wrap;padding:12px 0}
-.brand{font-weight:700;font-size:18px;color:#fff;text-decoration:none}
-nav{display:flex;gap:4px;flex-wrap:wrap;flex:1}nav a{color:#C9CFD8;padding:8px 12px;border-radius:6px;text-decoration:none;font-size:14px}
-nav a.on{background:#2A313C;color:#fff;font-weight:600}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;font-size:13px;text-decoration:none}
-.pill.good{background:#12301C;color:#9DE0B2}.pill.warn{background:#3A2A10;color:#F7D9A0}.pill.bad{background:#3D1616;color:#F5B5B5}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 main{padding:24px 0 48px;display:flex;flex-direction:column;gap:24px}
 h1{margin:4px 0 0;font-size:32px;letter-spacing:-.02em}h2{margin:0;font-size:19px}h3{margin:0;font-size:16px}
@@ -158,7 +162,7 @@ td{padding:9px 12px;border-top:1px solid var(--line2);vertical-align:top}
 .legs td:first-child{font-weight:500}.muted{color:var(--muted)}
 footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
 .card-layer{margin:6px 0;padding:6px 0;border-bottom:1px solid var(--line2)}
-@media (max-width:640px){h1{font-size:26px}.bar{gap:10px}nav a{padding:8px 9px}
+@media (max-width:640px){h1{font-size:26px}.nav .in{gap:12px}.health{display:none}
 .tab-panel div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}}
 """
 
@@ -172,18 +176,21 @@ def page(fname, title, body, health, built):
         c = health.get("counts", {})
         bad = sum(c.get(k, 0) for k in ("ERRORING", "SILENT", "NO_JOB"))
         warn = sum(c.get(k, 0) for k in ("LATE", "NOT_PUSHED", "IGNORED"))
-        cls = "bad" if bad else ("warn" if warn else "good")
-        col = {"bad": "#F05252", "warn": "#F0A830", "good": "#4CC27A"}[cls]
         txt = f"{bad} down · {warn} late" if (bad or warn) else "all feeds on time"
-        pill = f'<a class="pill {cls}" href="health.html"><span class="dot" style="background:{col}"></span>{txt} · built {built:%H:%M}Z</a>'
+        health_cls = ' bad' if bad else ''
+        dot_bg = 'var(--bad)' if bad else ('var(--warn,#F0A830)' if warn else 'var(--good,#4CC27A)')
+        health_html = f'<a class="health{health_cls}" href="health.html"><span class="dot" style="background:{dot_bg}"></span>{E(txt)} · built {built:%H:%M}Z</a>'
     else:
-        pill = f'<a class="pill bad" href="health.html"><span class="dot" style="background:#F05252"></span>health file missing · built {built:%H:%M}Z</a>'
+        health_html = f'<a class="health bad" href="health.html"><span class="dot" style="background:var(--bad,#F05252)"></span>health file missing · built {built:%H:%M}Z</a>'
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
 <meta http-equiv="refresh" content="300"><title>{E(title)} · iamnotuncertain</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>{CSS}</style></head><body>
-<header class="top"><div class="wrap bar"><a class="brand" href="index.html">iamnotuncertain</a><nav>{nav}</nav>{pill}</div></header>
+<div class="nav"><div class="in">
+  <span class="brand">iamnotuncertain</span>
+  <nav class="links">{nav}</nav>
+  {health_html}
+</div></div>
 <div class="wrap"><main>{body}
 <footer>Built {fmt_utc(built)} from files on the server. Every number names its source file and that file's time; a missing or stale file shows "no data".</footer>
 </main></div></body></html>"""
