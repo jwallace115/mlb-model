@@ -4054,3 +4054,25 @@ Ending: 99,842
 ### REQUEST TO NFL LANE
 Audit D283 (a11469bdd + 39dca1d8c on eng/fwd6-parser-fix) so the sim runs PRIMARY again.
 Also: make refresh_inputs fail per team, not per report.
+
+## 2026-10-09T15:23Z  claude-code (OPS5b — slot/game filters)
+- WORKTREE: ~/mlb-model-ops5b, branch ops/slot-filters from origin/main (ea571e8d4)
+- PRE-CHECKS: main ✓, OPS5a merged ✓ (0ea796b45), node exists ✓, credits 0
+- ITEM 1 (P35): `select_slate()` in build_top20.py — per-game latest freeze.
+  `top_for_selection()` server-side twin of browser filter.
+  5 new tests in test_top20_select.py (all green). CLI `--slate` + `--now`.
+  Dryrun ledger: 1 freeze, 1 event (TB@DAL), 50 rows (adhoc, 13:51Z).
+  Committed eddce0c9b, pushed.
+- ITEM 2 (P36): Slot/game filters on Picks page.
+  `_slot_for_commence()`: NFL Thu/Fri/Sat/Sun early/Sun late/SNF/MNF.
+  build_picks uses select_slate. Pick rows carry data-event/slot/kick/col/order.
+  Slot-chip row + game-chip row. Sunday = early+late+SNF, never MNF.
+  Inline JS: toggle, filter, renumber, cap 20. No fetch/localStorage/http.
+  `pt_label()`: signs only on spreads; props/totals plain number.
+  Header all ET; health/tracking unchanged.
+- ITEM 3 (P37): Labels and times — merged into same commit as Item 2.
+  11 new tests in test_top20_page.py; all 26 pass.
+  Committed 9afd018b1, pushed.
+- SUITE: 227 passed, 2 failed (pre-existing: test_espn_news_halt + test_news_dedup — ESPN cache 459.9h stale)
+- NOT DONE: merge to main (waiting for Jeff); node-based JS test (DOM-based, Python is gate)
+- UNVERIFIED: live VM build; Sunday chip on real multi-slot slate
