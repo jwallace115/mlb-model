@@ -4111,3 +4111,27 @@ Also: make refresh_inputs fail per team, not per report.
 - NOT DONE: RED-first test format for all 7 test cases in the prompt
 - NOT DONE: site/README.md § pages update
 - UNVERIFIED: phone-width rendering (Jeff opens it)
+
+## 2026-10-09T22:36Z  claude-code (OPS6 — prop history + grading)
+
+### RETURNED
+- Item 1 (9838df6bc, P45): shared/pipeline/pull_nfl_player_stats.py — nflverse weekly stats
+  archived. Mac dryrun: 4517 rows, wk1-5, Javonte Williams wk5 = 12 carries / 45 yds.
+  nflverse interception column = `passing_interceptions`. Tests: column guard + exact list, GREEN.
+- Item 2 (63f213785, P46): picks_grader.py props graded from nflverse weekly stats. DNP = "V".
+  "V" added to VALID_RESULTS. Name normalization + overrides.json. Tests: 4-case (W/W/P/V),
+  name norm, override, null control — GREEN. 7 existing grader tests GREEN.
+- Item 3 (5d3397f49, P47): pick_layers._prop_history + build_site rendering + packet.sh.
+  CSS bar chart, sentence summary, table. Leak control tested. --rebuild-layer prop_history.
+  Tests: 4 new, all GREEN. 10/10 total.
+
+### NOT DONE
+- VM cron line for player_stats (35 9 * * *) — to apply at merge
+- VM dryrun: grader with props, layers --rebuild-layer prop_history, Javonte card
+- Seeding player_name_overrides.json with unmatched names from live run
+- Caddyfile mtime check (deferred to merge)
+
+### UNVERIFIED
+- 8 pre-existing test reds in test_top20_page, test_site_four_sports, etc. confirmed to
+  fail identically at parent commit (13b8681fa) — unrelated to this work
+- Unmatched player names in the live ledger (will surface on first VM grader run)
