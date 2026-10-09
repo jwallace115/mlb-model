@@ -158,7 +158,68 @@ else:
 PYEOF
 fi
 
-# 7. Packet metadata
+# 7. History (NFL prop picks only, P47)
+if [ "$SPORT" = "nfl" ]; then
+    "$PY" - "$OUTDIR/sheet.csv" "$OUTDIR/history.csv" "$ROOT" <<'PYEOF'
+import sys
+from pathlib import Path
+import pandas as pd
+
+sheet_path, out_path, root = sys.argv[1], sys.argv[2], Path(sys.argv[3])
+sheet = pd.read_csv(sheet_path)
+props = sheet[sheet.market_key.str.startswith("player_", na=False)]
+if props.empty:
+    pd.DataFrame().to_csv(out_path, index=False)
+    print("history: 0 prop lines")
+    sys.exit(0)
+
+stats_dir = root / "data" / "results_archive" / "nfl"
+stats_files = sorted(stats_dir.glob("player_stats_2026_*.parquet")) if stats_dir.exists() else []
+if not stats_files:
+    pd.DataFrame().to_csv(out_path, index=False)
+    print("history: no player_stats file")
+    sys.exit(0)
+stats = pd.read_parquet(stats_files[-1])
+
+sys.path.insert(0, str(root / "shared" / "pipeline"))
+from picks_grader import _normalize_name, _PROP_STAT_MAP
+import pick_sources as ps
+
+tape_to_ledger = {v: k for k, v in ps._LEDGER_TO_TAPE.items()}
+
+rows = []
+for _, line in props.iterrows():
+    player = line.get("player_name", "")
+    tape_mk = line.get("market_key", "")
+    ledger_mk = tape_to_ledger.get(tape_mk)
+    if not ledger_mk or not player:
+        continue
+    stat_col = _PROP_STAT_MAP.get(ledger_mk)
+    if not stat_col:
+        continue
+    norm = _normalize_name(player)
+    stats_c = stats.copy()
+    stats_c["_n"] = stats_c.player_display_name.apply(_normalize_name)
+    matched = stats_c[(stats_c._n == norm) & (stats_c.season == 2026)]
+    for _, sr in matched.iterrows():
+        if stat_col == "_anytime_td":
+            val = float(sr.get("rushing_tds", 0) or 0) + float(sr.get("receiving_tds", 0) or 0)
+        elif stat_col in sr.index:
+            val = float(sr[stat_col] or 0)
+        else:
+            continue
+        rows.append({"player": player, "market": ledger_mk, "week": int(sr.week),
+                      "team": sr.team, "opponent": sr.opponent_team, "actual": val,
+                      "pick_line": line.get("line")})
+
+pd.DataFrame(rows).to_csv(out_path, index=False)
+print(f"history: {len(rows)} rows for {props.player_name.nunique()} players")
+PYEOF
+else
+    touch "$OUTDIR/history.csv"
+fi
+
+# 8. Packet metadata
 AS_OF=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 cat > "$OUTDIR/packet.md" <<MD
 # Packet: $SPORT
@@ -177,6 +238,7 @@ cat > "$OUTDIR/packet.md" <<MD
 | movement.csv | $(wc -l < "$OUTDIR/movement.csv" | tr -d ' ') |
 | kalshi.csv | $(wc -l < "$OUTDIR/kalshi.csv" | tr -d ' ') |
 $([ -f "$OUTDIR/sim.csv" ] && echo "| sim.csv | $(wc -l < "$OUTDIR/sim.csv" | tr -d ' ') |" || echo "| sim.csv | (not applicable for $SPORT) |")
+$([ -s "$OUTDIR/history.csv" ] && echo "| history.csv | $(wc -l < "$OUTDIR/history.csv" | tr -d ' ') |" || echo "| history.csv | (empty or not applicable) |")
 MD
 
 echo ""

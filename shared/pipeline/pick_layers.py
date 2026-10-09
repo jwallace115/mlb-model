@@ -519,6 +519,194 @@ def _reasoning(pick):
     }
 
 
+# ---- prop history (P47) ----
+_stats_cache = {}
+_sched_cache = {}
+
+def _prop_history(pick, root, logged_dt):
+    """Build prop history for an NFL prop pick: every game of this player this season
+    whose kickoff is BEFORE logged_utc, with closing line from hardrockbet_fl tape."""
+    sport = pick.get("sport", "")
+    if sport != "NFL":
+        return _no_data(logged_dt, "prop history: NFL only")
+
+    market = pick.get("market", "")
+    player_name = pick.get("player_name")
+    if not market or "prop" not in market or not player_name:
+        return _no_data(logged_dt, "prop history: not a prop pick")
+
+    results_dir = Path(os.environ.get("RESULTS_ARCHIVE_DIR") or (root / "data" / "results_archive"))
+    stats_dir = results_dir / "nfl"
+
+    # Load newest player_stats with file time <= logged_dt
+    stats_files = sorted(stats_dir.glob("player_stats_2026_*.parquet")) if stats_dir.exists() else []
+    stats_file = None
+    for f in stats_files:
+        ts = _file_ts(f)
+        if ts <= logged_dt:
+            stats_file = f
+    if stats_file is None:
+        return _no_data(logged_dt, "prop history: no player_stats file before logged_utc")
+
+    s_key = str(stats_file)
+    if s_key not in _stats_cache:
+        _stats_cache[s_key] = pd.read_parquet(stats_file)
+    stats_df = _stats_cache[s_key]
+
+    # Load newest schedules with file time <= logged_dt
+    sched_files = sorted(stats_dir.glob("schedules_2026_*.parquet")) if stats_dir.exists() else []
+    sched_file = None
+    for f in sched_files:
+        ts = _file_ts(f)
+        if ts <= logged_dt:
+            sched_file = f
+    if sched_file is None:
+        return _no_data(logged_dt, "prop history: no schedules file before logged_utc")
+
+    sc_key = str(sched_file)
+    if sc_key not in _sched_cache:
+        _sched_cache[sc_key] = pd.read_parquet(sched_file)
+    sched_df = _sched_cache[sc_key]
+
+    # Normalize player name for matching
+    from picks_grader import _normalize_name, _PROP_STAT_MAP
+    norm_name = _normalize_name(player_name)
+
+    # Find all stats rows for this player in 2026
+    stats_df = stats_df.copy()
+    stats_df["_norm"] = stats_df.player_display_name.apply(_normalize_name)
+    player_rows = stats_df[(stats_df._norm == norm_name) & (stats_df.season == 2026)]
+
+    if player_rows.empty:
+        return _layer(None, str(stats_file.name), _file_ts(stats_file))
+
+    # Map ledger market to stat column
+    stat_col = _PROP_STAT_MAP.get(market)
+    if stat_col is None:
+        return _no_data(logged_dt, f"prop history: unknown prop market {market}")
+
+    pick_line = pick.get("point")
+
+    # Determine tape market key for props tape lookup
+    tape_market = ps.ledger_to_tape_market(market) if ":" in market else market
+
+    # Build history rows
+    history_rows = []
+    n_over = n_under = n_push = n_uncaptured = 0
+
+    for _, prow in player_rows.iterrows():
+        week = int(prow.week)
+        team = str(prow.team)
+
+        # Find the kickoff time from schedules
+        sched_match = sched_df[
+            (sched_df.week == week) &
+            ((sched_df.home_team == team) | (sched_df.away_team == team))
+        ]
+        if sched_match.empty:
+            continue
+
+        sched_row = sched_match.iloc[0]
+        gameday = str(sched_row.gameday)
+        gametime = str(sched_row.get("gametime", "13:00"))
+        try:
+            from zoneinfo import ZoneInfo
+            ET = ZoneInfo("America/New_York")
+            kick_naive = datetime.strptime(f"{gameday} {gametime}", "%Y-%m-%d %H:%M")
+            kick_et = kick_naive.replace(tzinfo=ET)
+            kick_utc = kick_et.astimezone(timezone.utc)
+        except (ValueError, TypeError):
+            continue
+
+        # Leak control: only include games whose kickoff is BEFORE logged_utc
+        if kick_utc >= logged_dt:
+            continue
+
+        is_home = str(sched_row.home_team) == team
+        opponent = str(sched_row.away_team) if is_home else str(sched_row.home_team)
+
+        # Get stat value
+        if stat_col == "_anytime_td":
+            stat_val = float(prow.get("rushing_tds", 0) or 0) + float(prow.get("receiving_tds", 0) or 0)
+        elif stat_col in prow.index:
+            stat_val = float(prow[stat_col] or 0)
+        else:
+            stat_val = None
+
+        # Find closing line from hardrockbet_fl tape
+        hr_close_line = None
+        tape_dir = root / "data" / "odds_archive" / "nfl" / "props"
+        if tape_dir.exists():
+            for month_dir in tape_dir.glob("season=*/month=*"):
+                for p in month_dir.glob("data_*.parquet"):
+                    df = _load_tape_cached(p)
+                    if "pull_timestamp" not in df.columns:
+                        continue
+                    df_c = df.copy()
+                    df_c["_pt"] = pd.to_datetime(df_c.pull_timestamp, utc=True, errors="coerce")
+                    mask = (
+                        (df_c.bookmaker == "hardrockbet_fl") &
+                        (df_c._pt < kick_utc)
+                    )
+                    if "market_key" in df_c.columns:
+                        mask &= df_c.market_key == tape_market
+                    if "player_name" in df_c.columns:
+                        mask &= df_c.player_name == player_name
+                    matched = df_c[mask].sort_values("_pt")
+                    if not matched.empty:
+                        hr_close_line = float(matched.iloc[-1].get("line", float("nan")))
+                        if pd.isna(hr_close_line):
+                            hr_close_line = None
+
+        # Result vs closing line
+        if hr_close_line is not None and stat_val is not None:
+            if stat_col == "_anytime_td":
+                result_vs_close = "O" if stat_val >= 1 else "U"
+            elif stat_val > hr_close_line:
+                result_vs_close = "O"
+            elif stat_val < hr_close_line:
+                result_vs_close = "U"
+            else:
+                result_vs_close = "P"
+        else:
+            result_vs_close = "—"
+            if hr_close_line is None:
+                n_uncaptured += 1
+
+        if result_vs_close == "O":
+            n_over += 1
+        elif result_vs_close == "U":
+            n_under += 1
+        elif result_vs_close == "P":
+            n_push += 1
+
+        history_rows.append({
+            "week": week,
+            "opponent": opponent,
+            "home_away": "home" if is_home else "away",
+            "hr_close_line": hr_close_line,
+            "actual": stat_val,
+            "result_vs_close": result_vs_close,
+            "pick_line": pick_line,
+        })
+
+    history_rows.sort(key=lambda r: r["week"])
+
+    if not history_rows:
+        return _layer(None, str(stats_file.name), _file_ts(stats_file))
+
+    value = {
+        "rows": history_rows,
+        "n_games": len(history_rows),
+        "n_over": n_over,
+        "n_under": n_under,
+        "n_push": n_push,
+        "n_uncaptured": n_uncaptured,
+        "pick_line": pick_line,
+    }
+    return _layer(value, stats_file.name, _file_ts(stats_file))
+
+
 # ---- card builder ----
 def build_card(pick, root):
     """Build a detail card for a single pick. Returns the card dict."""
@@ -545,6 +733,7 @@ def build_card(pick, root):
             "injuries": _injuries(pick, root, logged_dt),
             "news": _news(pick, root, logged_dt),
             "reasoning": _reasoning(pick),
+            "prop_history": _prop_history(pick, root, logged_dt),
         },
     }
     card["sha256"] = hashlib.sha256(json.dumps(card, sort_keys=True, default=str).encode()).hexdigest()[:16]
@@ -599,7 +788,7 @@ def rebuild_layer(pick, root, layers_dir, layer_name, reason):
     if not logged_dt:
         return "no_logged_utc", path
     layer_fn = {"sim": _sim, "line_movement": _line_movement, "weather": _weather,
-                "injuries": _injuries, "news": _news}
+                "injuries": _injuries, "news": _news, "prop_history": _prop_history}
     fn = layer_fn.get(layer_name)
     if not fn:
         return "unknown_layer", path

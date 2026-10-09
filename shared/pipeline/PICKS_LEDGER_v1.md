@@ -877,3 +877,25 @@ result_source = "player_stats: <filename>".
 "V" added to `VALID_RESULTS` in picks_ledger.py. build_site.py
 `_record_section` includes V in the graded-rows filter but `_picks_roi`
 already excludes it (counts only W/L/P).
+
+## P47 — Prop history layer on the card (2026-10-09)
+
+**Decision:** `pick_layers._prop_history(pick, root, logged_dt)` builds a
+prop history for NFL prop picks. For each of the player's 2026 games whose
+kickoff (schedules gameday+gametime, ET → UTC) is BEFORE logged_utc:
+week, opponent, home/away, hr_close_line (newest hardrockbet_fl row in the
+props tape with pull_timestamp < that game's kickoff; None → "line not
+captured"), actual stat, result vs closing line (O/U/P or "—"), and the
+pick's own line for reference.
+
+Layer value: {rows, n_games, n_over, n_under, n_push, n_uncaptured,
+pick_line}. `_render_card` in build_site.py writes: one sentence
+summarizing the history, a CSS bar chart (no JavaScript — one bar per
+week, height proportional to actual, thin marker at closing line), a
+table, and raw data.
+
+`packet.sh`: for sport nfl, `history.csv` = stats history rows for every
+prop line in the sheet.
+
+Leak control: only games whose kickoff < logged_utc are included.
+`--rebuild-layer prop_history` supported via the layer_fn dict.

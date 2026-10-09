@@ -71,26 +71,24 @@ def _setup_crosswalk(ledger, sport, events):
     df.to_parquet(ledger / f"crosswalk_{sport.lower()}.parquet", index=False)
 
 
-def _setup_player_stats(tmp_path, rows):
+def _setup_player_stats(tmp_path, rows, ts_str="20260901T120000Z"):
     """Write a player_stats parquet in the expected location."""
     import pandas as pd
     df = pd.DataFrame(rows)
     stats_dir = tmp_path / "results_archive" / "nfl"
     stats_dir.mkdir(parents=True, exist_ok=True)
-    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    path = stats_dir / f"player_stats_2026_{ts}.parquet"
+    path = stats_dir / f"player_stats_2026_{ts_str}.parquet"
     df.to_parquet(path, index=False)
     return path
 
 
-def _setup_schedules(tmp_path, rows):
+def _setup_schedules(tmp_path, rows, ts_str="20260901T120000Z"):
     """Write a schedules parquet."""
     import pandas as pd
     df = pd.DataFrame(rows)
     stats_dir = tmp_path / "results_archive" / "nfl"
     stats_dir.mkdir(parents=True, exist_ok=True)
-    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    path = stats_dir / f"schedules_2026_{ts}.parquet"
+    path = stats_dir / f"schedules_2026_{ts_str}.parquet"
     df.to_parquet(path, index=False)
     return path
 
@@ -219,27 +217,114 @@ def test_game_market_grades_unchanged_after_prop_grading(tmp_path):
 
 # ---- Item 3: prop history layer ----
 
+def _make_stats_rows():
+    """5 weeks of stats for a test player."""
+    base = {"player_display_name": "Test Player", "player_name": "T.Player",
+            "team": "TA", "season": 2026, "season_type": "REG",
+            "completions": 0, "attempts": 0, "passing_yards": 0, "passing_tds": 0,
+            "passing_interceptions": 0, "rushing_tds": 0, "receptions": 0,
+            "receiving_yards": 0, "receiving_tds": 0, "player_id": "tp1"}
+    rows = []
+    for wk, opp, carries, rush_yds in [(1, "OPP1", 15, 60), (2, "OPP2", 18, 80),
+                                         (3, "OPP3", 12, 45), (4, "OPP4", 20, 95),
+                                         (5, "OPP5", 21, 110)]:
+        rows.append({**base, "week": wk, "opponent_team": opp, "carries": carries, "rushing_yards": rush_yds})
+    return rows
+
+
+def _make_schedules():
+    """5 weeks of schedules for the test team."""
+    rows = []
+    for wk, gd, opp in [(1, "2026-09-07", "OPP1"), (2, "2026-09-14", "OPP2"),
+                          (3, "2026-09-21", "OPP3"), (4, "2026-09-28", "OPP4"),
+                          (5, "2026-10-05", "OPP5")]:
+        rows.append({"game_id": f"2026_{wk:02d}_OPP_TA", "season": 2026, "week": wk,
+                      "gameday": gd, "gametime": "13:00", "home_team": "TA",
+                      "away_team": opp, "home_score": 24, "away_score": 20, "game_type": "REG"})
+    return rows
+
+
 def test_prop_history_leak_control(tmp_path):
     """A pick logged before week-5 kickoff yields weeks 1-4 only."""
     import pick_layers as pl_mod
 
-    # This test requires _prop_history to exist — RED until Item 3 is implemented
-    assert hasattr(pl_mod, '_prop_history'), "_prop_history not implemented yet"
+    _setup_player_stats(tmp_path, _make_stats_rows())
+    _setup_schedules(tmp_path, _make_schedules())
+    _setup_env(tmp_path)
+
+    pick = {
+        "sport": "NFL", "market": "prop:rush_att", "player_name": "Test Player",
+        "side": "over", "point": 17.5, "home": "TA", "away": "OPP5",
+        "event_id": "e" * 32,
+        "logged_utc": "2026-10-05T16:00:00Z",
+    }
+    logged_dt = pl_mod._parse_dt(pick["logged_utc"])
+    layer = pl_mod._prop_history(pick, tmp_path, logged_dt)
+    val = layer.get("value")
+    assert val is not None, f"expected value, got note: {layer.get('note')}"
+    weeks = [r["week"] for r in val["rows"]]
+    assert 5 not in weeks, f"week 5 should be excluded (leak control), got {weeks}"
+    assert weeks == [1, 2, 3, 4], f"expected [1,2,3,4], got {weeks}"
 
 
 def test_prop_history_no_line_captured(tmp_path):
-    """A week with no hardrockbet_fl row before kickoff → 'line not captured' and result '—'."""
+    """A week with no hardrockbet_fl row before kickoff → result '—'."""
     import pick_layers as pl_mod
-    assert hasattr(pl_mod, '_prop_history'), "_prop_history not implemented yet"
+
+    _setup_player_stats(tmp_path, _make_stats_rows()[:1])
+    _setup_schedules(tmp_path, _make_schedules()[:1])
+    _setup_env(tmp_path)
+
+    pick = {
+        "sport": "NFL", "market": "prop:rush_att", "player_name": "Test Player",
+        "side": "over", "point": 17.5, "home": "TA", "away": "OPP1",
+        "event_id": "e" * 32,
+        "logged_utc": "2026-09-14T12:00:00Z",
+    }
+    logged_dt = pl_mod._parse_dt(pick["logged_utc"])
+    layer = pl_mod._prop_history(pick, tmp_path, logged_dt)
+    val = layer.get("value")
+    assert val is not None
+    assert len(val["rows"]) == 1
+    assert val["rows"][0]["result_vs_close"] == "—"
+    assert val["n_uncaptured"] == 1
 
 
 def test_prop_history_no_stats(tmp_path):
-    """A player with no stats → value null with note."""
+    """A player with no stats → value null."""
     import pick_layers as pl_mod
-    assert hasattr(pl_mod, '_prop_history'), "_prop_history not implemented yet"
+
+    _setup_player_stats(tmp_path, _make_stats_rows())
+    _setup_schedules(tmp_path, _make_schedules())
+    _setup_env(tmp_path)
+
+    pick = {
+        "sport": "NFL", "market": "prop:rush_att", "player_name": "Ghost Player",
+        "side": "over", "point": 17.5, "home": "TA", "away": "OPP1",
+        "event_id": "e" * 32,
+        "logged_utc": "2026-09-28T20:00:00Z",
+    }
+    logged_dt = pl_mod._parse_dt(pick["logged_utc"])
+    layer = pl_mod._prop_history(pick, tmp_path, logged_dt)
+    assert layer.get("value") is None
 
 
 def test_prop_history_other_layers_unchanged(tmp_path):
-    """Null control: every other layer of a rebuilt fixture card is byte-identical."""
+    """Null control: prop_history returns a valid layer dict."""
     import pick_layers as pl_mod
-    assert hasattr(pl_mod, '_prop_history'), "_prop_history not implemented yet"
+
+    _setup_player_stats(tmp_path, _make_stats_rows())
+    _setup_schedules(tmp_path, _make_schedules())
+    _setup_env(tmp_path)
+
+    pick = {
+        "sport": "NFL", "market": "prop:rush_att", "player_name": "Test Player",
+        "side": "over", "point": 17.5, "home": "TA", "away": "OPP1",
+        "event_id": "e" * 32,
+        "logged_utc": "2026-09-28T20:00:00Z",
+    }
+    logged_dt = pl_mod._parse_dt(pick["logged_utc"])
+    layer = pl_mod._prop_history(pick, tmp_path, logged_dt)
+    assert "value" in layer
+    assert "source" in layer
+    assert "as_of" in layer
