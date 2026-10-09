@@ -789,3 +789,16 @@ NFL cron lines are unchanged (4 lines, verified byte-identical).
   - Sim: "no sim for college football"
 - `build_site _slot_for_commence` for NCAAF already handles Fri / Sat early / Sat
   afternoon / Sat night splits (verified in existing code).
+
+## P41 — Cowork packet script (2026-10-09)
+
+**Decision:** `shared/pipeline/packet.sh <sport> <window-hours> <outdir>` produces
+the input packet for Cowork's full-layer AI read. Zero API credits.
+
+**Outputs:** sheet.csv, template.csv (reader_v3), news.csv (ESPN 72h), movement.csv,
+kalshi.csv, sim.csv (NFL only), packet.md (metadata).
+
+**Test run (ncaaf, 36h, 2026-10-09 1:06 PM ET):**
+- sheet: 149 lines (+ header = 150), template: 149, news: 30 items
+- kalshi: 4130 rows, movement: 149 lines
+- sim: not applicable for ncaaf
