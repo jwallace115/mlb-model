@@ -587,6 +587,56 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.575,
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 6
+    },
+    {
+      "game_id": 2026020074,
+      "game_date": "2026-10-10",
+      "home_team": "BUF",
+      "away_team": "UTA",
+      "signal_side": "UNDER",
+      "edge": 0.1244,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.668,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020077,
+      "game_date": "2026-10-10",
+      "home_team": "PIT",
+      "away_team": "DAL",
+      "signal_side": "UNDER",
+      "edge": 0.1783,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.391,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020080,
+      "game_date": "2026-10-10",
+      "home_team": "COL",
+      "away_team": "TOR",
+      "signal_side": "UNDER",
+      "edge": 0.1629,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.659,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020083,
+      "game_date": "2026-10-10",
+      "home_team": "VGK",
+      "away_team": "LAK",
+      "signal_side": "UNDER",
+      "edge": 0.1252,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.536,
       "drift_applied": 0.0
     }
   ]
