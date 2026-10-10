@@ -48,5 +48,22 @@
   "oldest_source_age_min": 18.0,
   "first_kickoff_utc": "2026-10-10T01:00:00Z",
   "reader_sha256": "503775d6d010d795e11c1b7b22db72e372d552ef40972218c765465b35ba5640"
+ },
+ {
+  "file": "ai_opinions_20261010T130307Z.parquet",
+  "sha256": "0ce5eacf27270b8a2648fb33aef293f277988f0ca21a632893f3b50e1b9e9130",
+  "logged_utc": "2026-10-10T13:03:07.787357+00:00",
+  "rows": 35,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "reader_v3",
+  "pilot": false,
+  "window": "prekick",
+  "games": 12,
+  "no_view_share": 0.057,
+  "revised_rows": 0,
+  "oldest_source_age_min": 453.0,
+  "first_kickoff_utc": "2026-10-10T16:00:00Z",
+  "reader_sha256": "503775d6d010d795e11c1b7b22db72e372d552ef40972218c765465b35ba5640"
  }
 ]
