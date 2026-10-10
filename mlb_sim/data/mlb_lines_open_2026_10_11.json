@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "62bf363a77455f7a8b48838e7792f60b",
+    "game_date": "2026-10-11",
+    "sport": "MLB",
+    "home_team": "Cleveland Guardians",
+    "away_team": "Chicago White Sox",
+    "commence_time": "2026-10-11T00:01:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.0,
+    "over_price": -120,
+    "under_price": 100,
+    "book": "draftkings",
+    "capture_timestamp": "2026-10-10T06:05:02.574720+00:00"
+  },
+  {
+    "game_id": "c43e98d4effc9181f21e21225fcbd47a",
+    "game_date": "2026-10-11",
+    "sport": "MLB",
+    "home_team": "Milwaukee Brewers",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-10-12T00:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -107,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-10T06:05:02.574720+00:00"
+  }
+]

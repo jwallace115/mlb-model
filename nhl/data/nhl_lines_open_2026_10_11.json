@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "7ff1567200cc7c7c7d901f32f81ad4d4",
+    "game_date": "2026-10-11",
+    "sport": "NHL",
+    "home_team": "Calgary Flames",
+    "away_team": "Anaheim Ducks",
+    "commence_time": "2026-10-11T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": 101,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-10T06:05:02.923392+00:00"
+  },
+  {
+    "game_id": "d9285582597ee00291a57aaf08f4bd50",
+    "game_date": "2026-10-11",
+    "sport": "NHL",
+    "home_team": "Vegas Golden Knights",
+    "away_team": "Los Angeles Kings",
+    "commence_time": "2026-10-11T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -134,
+    "under_price": 110,
+    "book": "fanduel",
+    "capture_timestamp": "2026-10-10T06:05:02.923392+00:00"
+  }
+]
