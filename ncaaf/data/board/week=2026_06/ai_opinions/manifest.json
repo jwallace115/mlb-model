@@ -1,5 +1,39 @@
 [
  {
+  "file": "ai_opinions_20261009T170849Z.parquet",
+  "sha256": "cceae0ee6d293201567f88abb64c0b7119a4156e47852449714282bb9760c99b",
+  "logged_utc": "2026-10-09T17:08:49.006369+00:00",
+  "rows": 150,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "reader_v3",
+  "pilot": false,
+  "window": "adhoc",
+  "games": 51,
+  "no_view_share": 0.047,
+  "revised_rows": 0,
+  "oldest_source_age_min": 8.7,
+  "first_kickoff_utc": "2026-10-09T23:00:00Z",
+  "reader_sha256": "503775d6d010d795e11c1b7b22db72e372d552ef40972218c765465b35ba5640"
+ },
+ {
+  "file": "ai_opinions_20261009T200307Z.parquet",
+  "sha256": "a3b88d4525840b49e12c9f39d0f9bfed606ed194526c8d56669f8347e8369e0a",
+  "logged_utc": "2026-10-09T20:03:07.331336+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "reader_v3",
+  "pilot": false,
+  "window": "prekick",
+  "games": 1,
+  "no_view_share": 0.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 2.6,
+  "first_kickoff_utc": "2026-10-09T23:00:00Z",
+  "reader_sha256": "503775d6d010d795e11c1b7b22db72e372d552ef40972218c765465b35ba5640"
+ },
+ {
   "file": "ai_opinions_20261009T211700Z.parquet",
   "sha256": "9b6b3d41e3d6be72f21e2fb1d6f470dcd8ed990440d71aed9ac2b6407414f6d7",
   "logged_utc": "2026-10-09T21:17:00.431641+00:00",
@@ -97,6 +131,23 @@
   "no_view_share": 0.057,
   "revised_rows": 35,
   "oldest_source_age_min": 498.0,
+  "first_kickoff_utc": "2026-10-10T16:00:00Z",
+  "reader_sha256": "503775d6d010d795e11c1b7b22db72e372d552ef40972218c765465b35ba5640"
+ },
+ {
+  "file": "ai_opinions_20261010T140307Z.parquet",
+  "sha256": "28bf30ab90617c0e8943ffbe6dea4179cd26e74ff853eaf6a70bc46d46d53f7b",
+  "logged_utc": "2026-10-10T14:03:07.448267+00:00",
+  "rows": 38,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "reader_v3",
+  "pilot": false,
+  "window": "prekick",
+  "games": 13,
+  "no_view_share": 0.079,
+  "revised_rows": 29,
+  "oldest_source_age_min": 2.9,
   "first_kickoff_utc": "2026-10-10T16:00:00Z",
   "reader_sha256": "503775d6d010d795e11c1b7b22db72e372d552ef40972218c765465b35ba5640"
  }
