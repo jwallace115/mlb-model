@@ -65,5 +65,39 @@
   "oldest_source_age_min": 453.0,
   "first_kickoff_utc": "2026-10-10T16:00:00Z",
   "reader_sha256": "503775d6d010d795e11c1b7b22db72e372d552ef40972218c765465b35ba5640"
+ },
+ {
+  "file": "ai_opinions_20261010T133307Z.parquet",
+  "sha256": "2c1af0151c904eac5b6c3939510448681e9b2f2d519197e8d985a4cf7eaa5549",
+  "logged_utc": "2026-10-10T13:33:07.447119+00:00",
+  "rows": 35,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "reader_v3",
+  "pilot": false,
+  "window": "prekick",
+  "games": 12,
+  "no_view_share": 0.057,
+  "revised_rows": 35,
+  "oldest_source_age_min": 483.0,
+  "first_kickoff_utc": "2026-10-10T16:00:00Z",
+  "reader_sha256": "503775d6d010d795e11c1b7b22db72e372d552ef40972218c765465b35ba5640"
+ },
+ {
+  "file": "ai_opinions_20261010T134806Z.parquet",
+  "sha256": "744f6c972ebf5dfdb27d5fb92b308dd9e2f7b4e7273441139c918a363f24b083",
+  "logged_utc": "2026-10-10T13:48:06.780845+00:00",
+  "rows": 35,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "reader_v3",
+  "pilot": false,
+  "window": "prekick",
+  "games": 12,
+  "no_view_share": 0.057,
+  "revised_rows": 35,
+  "oldest_source_age_min": 498.0,
+  "first_kickoff_utc": "2026-10-10T16:00:00Z",
+  "reader_sha256": "503775d6d010d795e11c1b7b22db72e372d552ef40972218c765465b35ba5640"
  }
 ]
