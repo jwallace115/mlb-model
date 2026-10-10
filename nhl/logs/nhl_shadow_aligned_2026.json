@@ -638,6 +638,30 @@
       "closing_total": 6.5,
       "lambda_total": 5.536,
       "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020072,
+      "game_date": "2026-10-10",
+      "home_team": "SJS",
+      "away_team": "EDM",
+      "signal_side": "OVER",
+      "edge": 0.3029,
+      "tier": "HIGH",
+      "closing_total": 5.5,
+      "lambda_total": 6.015,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020073,
+      "game_date": "2026-10-10",
+      "home_team": "FLA",
+      "away_team": "MIN",
+      "signal_side": "UNDER",
+      "edge": 0.1523,
+      "tier": "HIGH",
+      "closing_total": 7.5,
+      "lambda_total": 5.842,
+      "drift_applied": 0.0
     }
   ]
 }
