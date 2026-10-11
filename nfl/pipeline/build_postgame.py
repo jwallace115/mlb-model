@@ -857,11 +857,95 @@ def main():
                 wv = verdicts[verdicts["week"] == week]
                 out = week_dir / "verdicts.parquet"
                 wv.to_parquet(out, index=False)
+
+                # Write why_summary.md for --week mode
+                if args.week:
+                    _write_why_summary(wv, week_dir, week)
             print(f"Verdicts: {len(verdicts)} rows")
         else:
             print("Verdicts: 0 rows (no graded ai_nfl/sim_nfl picks)")
     else:
         print(f"Ledger dir not found: {LEDGER_DIR} — skipping verdicts")
+
+
+def _write_why_summary(verdicts, week_dir, week):
+    """Write why_summary.md for a single week."""
+    lines = [f"# WHY Summary — Week {week}\n"]
+    lines.append(f"Generated: {datetime.now(timezone.utc).isoformat()}\n")
+
+    # Counts by market × owner × result
+    lines.append("\n## Graded rows\n")
+    for (owner, market, result), count in verdicts.groupby(
+            ["owner", "market", "ledger_result"]).size().items():
+        lines.append(f"- {owner} / {market} / {result}: {count}")
+
+    # Why codes
+    if "why_code_auto" in verdicts.columns:
+        lines.append("\n## why_code_auto (losses)\n")
+        losses = verdicts[verdicts["ledger_result"] == "L"]
+        if len(losses):
+            for code, count in losses["why_code_auto"].value_counts().items():
+                lines.append(f"- {code}: {count}")
+        lines.append("\n## why_code_auto (wins)\n")
+        wins = verdicts[verdicts["ledger_result"] == "W"]
+        if len(wins):
+            for code, count in wins["why_code_auto"].value_counts().items():
+                lines.append(f"- {code}: {count}")
+
+    # Thesis held/failed/flat
+    if "thesis" in verdicts.columns:
+        lines.append("\n## Thesis verdicts\n")
+        for src in verdicts["thesis_source"].unique():
+            src_rows = verdicts[verdicts["thesis_source"] == src]
+            lines.append(f"- thesis_source={src}: {len(src_rows)} rows")
+
+    # FLAGGED FOR THE TUESDAY READ
+    lines.append("\n## FLAGGED FOR THE TUESDAY READ\n")
+    flagged = 0
+
+    # Top-20 ranked picks
+    if "conf_rank" in verdicts.columns:
+        top20 = verdicts[verdicts.get("conf_rank", pd.Series(dtype=int)) <= 20]
+    else:
+        top20 = pd.DataFrame()
+    if len(top20):
+        lines.append(f"\n### Top 20 picks ({len(top20)} rows)\n")
+        for _, r in top20.iterrows():
+            lines.append(f"- {r.get('pick_id')}: {r.get('market')} {r.get('player_name', '')} "
+                          f"→ {r.get('ledger_result')}")
+        flagged += len(top20)
+
+    # Largest losses by |ln(A/L)|
+    if "actual_stat" in verdicts.columns and "point" in verdicts.columns:
+        losses = verdicts[verdicts["ledger_result"] == "L"].copy()
+        if len(losses):
+            losses["_abslog"] = losses.apply(
+                lambda r: abs(math.log(max(r["actual_stat"], 0.01) / max(float(r["point"]), 0.01)))
+                if r["actual_stat"] is not None and r["point"] is not None else 0,
+                axis=1)
+            top10_loss = losses.nlargest(10, "_abslog")
+            lines.append(f"\n### 10 largest-|ln(A/L)| losses ({len(top10_loss)} rows)\n")
+            for _, r in top10_loss.iterrows():
+                lines.append(f"- {r.get('pick_id')}: {r.get('market')} {r.get('player_name', '')} "
+                              f"A={r.get('actual_stat')} L={r.get('point')} "
+                              f"|ln|={r['_abslog']:.3f}")
+            flagged += len(top10_loss)
+
+    # AVAILABILITY and ROLE_SHIFT
+    if "why_code_auto" in verdicts.columns:
+        flagged_codes = verdicts[verdicts["why_code_auto"].isin(["AVAILABILITY", "ROLE_SHIFT"])]
+        if len(flagged_codes):
+            lines.append(f"\n### AVAILABILITY / ROLE_SHIFT ({len(flagged_codes)} rows)\n")
+            for _, r in flagged_codes.iterrows():
+                lines.append(f"- {r.get('pick_id')}: {r.get('why_code_auto')} "
+                              f"{r.get('market')} {r.get('player_name', '')}")
+            flagged += len(flagged_codes)
+
+    lines.append(f"\nTotal flagged: {flagged}\n")
+
+    out = week_dir / "why_summary.md"
+    out.write_text("\n".join(lines))
+    print(f"Wrote {out} ({flagged} flagged)")
 
 
 if __name__ == "__main__":

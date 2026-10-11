@@ -1011,3 +1011,28 @@ receives its instructions from the Claude project docs. No change needed.
 
 **build_postgame.py:** when the freeze row has `thesis`, thesis_source = "freeze"
 and it overrides tag_map.
+
+## P51 — Weekly WHY summary, lessons file, VM cron (2026-10-11)
+
+**why_summary.md contents** (per week, written by `--week W`):
+- Graded rows by market × owner × result
+- why_code_auto for losses and wins
+- Thesis verdicts by source
+
+**FLAGGED FOR THE TUESDAY READ** (no cap; count printed):
+- Every graded pick ranked 1–20 in its freeze
+- 10 largest-|ln(A/L)| losses
+- Every thesis-failed WIN and thesis-held LOSS
+- Every AVAILABILITY and ROLE_SHIFT
+- Each with its game-sheet path and frozen reason text
+
+**LESSONS_nfl.md scaffold:** header + format only (id, date_written, claim,
+pick_ids, recurrence, teams, status, first_slate). Cowork writes the lessons.
+
+**VM cron line:** daily 11:00Z (7 AM ET), after the 10:10Z grader and 10:30Z CLV:
+```
+0 11 * * * cd /root/mlb-model && venv/bin/python3 shared/pipeline/pull_nfl_postgame_data.py && venv/bin/python3 nfl/pipeline/build_postgame.py --all-final >> /root/logs/postgame_nfl.log 2>&1
+```
+
+**Log path:** `/root/logs/postgame_nfl.log`.
+and it overrides tag_map.
