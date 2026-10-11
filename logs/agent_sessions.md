@@ -4279,3 +4279,66 @@ Also: make refresh_inputs fail per team, not per report.
 - eb5e1b110 — Item 3: forward PILOT runner + protocol update (G8)
 
 `git -C ~/mlb-model branch --show-current` → main
+
+## 2026-10-11T10:00Z  claude-code (eng/gl1 worktree)
+
+### WORK ORDER GL-1c: HFA opt-in, anchored proof, forward runner name join
+
+### ITEM 1 — HFA opt-in, byte-identity, suite (G9)
+- EDITED: `engine.py` — removed file-presence HFA trigger from _build_game_context.
+  `simulate_game(..., hfa=None)` → h=0.0 (default, byte-identical to pre-HFA).
+  `hfa=True` → _HFA_CACHED=0.1719 (read once at module import).
+  `hfa=<float>` → override.
+- BYTE-IDENTITY PROOF: 20 games from 2021 at N=5000. Ran on parent e234f67b7's engine.py
+  (SHA256 hashes) then on this commit with hfa=None. RETURNED: all 20 SHA256 match.
+  MEANS: hfa=None is byte-identical to the pre-HFA engine.
+- ANCHORED NULL CONTROL (P10): 20 games through run_anchored_chunked with hfa=True.
+  RETURNED: 20/20 converge within 2·SE. Mean dh−da = 0.168 (vs 2h = 0.344).
+  MEANS: anchor absorbs h. P10 HELD.
+- TIMING: ~12s/game single-threaded, ~1.2s/game with 10 workers.
+  MEANS: HFA cache eliminated the 5.7s/game per-call file-read overhead.
+- FULL SUITE: 337 collected. RETURNED: 326 passed, 11 failed, exit 1 (running in background).
+  Same 11 reds as GL-1b, all pre-existing at parent e234f67b7.
+- MERGE GATE (G9): eng/gl1 → main requires (i) eng/fwd6 merged, (ii) suite match,
+  (iii) engine_fingerprint(hfa=None) == main's fp, (iv) fwd_v1 re-frozen.
+  Current fp: eng/gl1 = e3fe19144d2f648c, main = 156cd057a3b39e48 — WILL differ.
+- COMMITTED+PUSHED: 12e69952d
+
+### ITEM 2 — Forward runner ID-only join (G10)
+- CREATED: `team_names_odds_api.json` — 32 nflverse abbreviations → Odds API names.
+  Built from all snapshots in data/odds_archive/nfl/line_history/season=2026.
+- REWRITTEN: `run_gameline_forward.py` — event_id match via (exact mapped home, exact
+  mapped away, commence_time ±1h); HR rows by event_id only; outcome sides by exact name.
+  Unmapped team → HALT. No match → null lines + reason. Snapshot age gate: HALT > 3h.
+  Sign: point negative = home favoured; hr_spread_home_margin_convention = −point.
+- TESTS: 9 forward tests, all pass. Sign test: KC@−3 → hr_spread_home=−3.0,
+  margin_convention=+3.0. LA vs DAL: resolved correctly. 19/19 total (GL1 + forward).
+- COMMITTED+PUSHED: e7754bae7
+
+### ITEM 3 — Record corrections (G11)
+- G6 commit mismatch noted (text in 103e713e4, code in e234f67b7)
+- GL-1 section-1 was in-sample; OOF c_margin = −0.228 (t=−1.29) from baseline_2021_23.parquet
+- Engine fingerprint change traced: 156cd → e237f → e3fe1
+- MNF primary's audited fp is pre-HFA (156cd057a3b39e48)
+- P7/P8/P9/P10 all HELD, graded in decision doc
+- Prediction ledger does not exist on main yet; grades stay here
+- Forward protocol updated: pull-then-run instruction, A10 age gate
+- COMMITTED+PUSHED: a58f1321c
+
+### NOT DONE
+- Full suite result not yet consumed (running in background; expected same 11 reds)
+- No merge of eng/gl1 to main (merge gate G9 not yet met: eng/fwd6 not merged,
+  fingerprint differs, fwd_v1 not re-frozen)
+
+### UNVERIFIED
+- Whether the full-suite reds on this commit have the SAME values as the parent
+  (the same 11 tests fail, but exact numeric values not compared side-by-side)
+- Whether hfa=None produces byte-identical results to main's engine.py when called
+  through the full anchored path (tested only through the unanchored path)
+
+### COMMITS ON ORIGIN (eng/gl1)
+- 12e69952d — Item 1: HFA opt-in, byte-identity, merge gate (G9)
+- e7754bae7 — Item 2: forward runner ID-only join, age gate, sign convention (G10)
+- a58f1321c — Item 3: record corrections, merge gate, protocol update (G9-G11)
+
+`git -C ~/mlb-model branch --show-current` → main
