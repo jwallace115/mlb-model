@@ -1,8 +1,0 @@
-retrieved 2026-10-11 ~13:00-14:10Z by Cowork (claude-fable-5-1) for the Sunday NFL read (week 5; 11 games: 8 x 1 PM ET, LAC-DEN 4:05, DET-ARI and SF-SEA 4:25)
-- game lines: VM tape snap_20261011T130006Z (Hard Rock now vs Pinnacle now, 10-book medians); opens from the earliest snapshot of the week
-- props: Mac pull data_2026_10_mac.parquet (pull 2026-10-11T00:31Z; Hard Rock = hardrockbet_fl, 6-book consensus at the same line) — the VM props tape had no Hard Rock receptions rows after 10-10 02:00Z for these players
-- sim rows: nfl/data/board/week=2026_05/ai_opinions/ai_opinions_20261011T003954Z.parquet (sim adhoc Sat 8:46 PM ET; cal_p where TRUSTED / TRUSTED-FLAGGED)
-- injuries: data/injury_archive/nfl/season=2026/injuries_20261011T1230Z.json.gz (Harrison Jr. OUT pending trade; Addison and Jefferson pregame workouts; Slayton/Dulin OUT; Hollins IR; Dell IR; Pittman IR; Mariota and Diggs OUT; McLaurin GTD; Dowdle unlikely; Jeanty pregame; Hall OUT)
-- news: data/news_archive/nfl/season=2026/news_20261011T{0010,0610,1210}Z (MHJ trade, Hollins IR, Pittman IR, OBJ elevated MIN)
-- Kalshi: not used in this read (no NFL Kalshi snapshot in the sheet)
-- method: fair = Pinnacle no-vig adjusted for HR line gap (3%/pt spreads, 2.5%/pt totals); props fair = no-vig median of other books at the exact line (>=2 books, else within 0.5 with per-unit adjustments), blended 25% sim where TRUSTED and same line; play = fair beats HR's vig price. Game lines: every side inside the vig -> all 33 passes. 6 prop plays/leans, 725 passes.
