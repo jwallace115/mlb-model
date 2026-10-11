@@ -42,3 +42,20 @@ and `tape/lm_cell_bets_2026.parquet`.
 **Ambiguity readings (stricter):** C2's cross-point CLV was reported as NOT
 interpretable rather than treating negative CLV as a verdict. C5's N = 40 is
 reported as INSUFFICIENT N rather than PASS, despite exceeding the t-bar.
+
+### LM-D3 — Ledger grades (2026-10-11)
+
+**Action:** Graded LM-C1, C2, C3, C5 (interim) and LM-0 (interim note) in
+`research/cross_ai/claude_prediction_ledger.md`. Left C4 and C6 pending.
+
+**Key assessments of Cowork's priors:**
+- LM-C1 (30% CLV at bar): consistent with data — CLV positive but not significant.
+- LM-C2 (85% positive CLV): cannot be graded — the CLV definition breaks for C2.
+- LM-C3 (10% CLV at bar): consistent so far — CLV positive but not significant.
+- LM-C5 (60% shade exists, 30% CLV): **prior UNDERESTIMATED this cell.** Both
+  sports exceed t ≥ 2.5. The 60% was too low; shade appears real.
+- LM-0 (at most one passes, C2 or C5): C5 is the leading candidate, consistent
+  with "C2 or C5" but Cowork assigned C2 higher probability than C5.
+
+**Added to "what did Claude dismiss":** C2 cross-point CLV design gap; C5 spreads
+vs totals breakdown (spreads stronger, N=56 +1.10pp vs totals N=24 +0.65pp).

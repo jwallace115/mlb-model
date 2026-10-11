@@ -34,13 +34,13 @@ in that session). A rejection Claude made that was later overturned by data is l
 | P7 | 2026-10-11 | HFA via J_FWD h0 = 0.172 lands mean margin within ±0.3 of 2.13 on first run | A | pending | GL-1b |
 | P8 | 2026-10-11 | c_margin changes < 0.05 after HFA | A | pending | GL-1b |
 | P9 | 2026-10-11 | p_home_win mean within ±0.02 of actual home-win rate after HFA | A | pending | GL-1b |
-| LM-C1 | 2026-10-11 | Key-number crossing: 30% positive CLV at bar; 10% ATS | A | pending | LM-1 interim / season end |
-| LM-C2 | 2026-10-11 | Hard Rock lag: 85% positive CLV; 50% ATS | A | pending | LM-1 |
-| LM-C3 | 2026-10-11 | Early-week over-correction: 25% reverts measurably; 10% CLV; 5% ATS | A | pending | LM-1 |
-| LM-C4 | 2026-10-11 | Reversal / fake steam: 15% CLV | A | pending | season end |
-| LM-C5 | 2026-10-11 | Hard Rock shade: 60% directional shade exists; 30% CLV; 15% ATS | A | pending | LM-1 |
-| LM-C6 | 2026-10-11 | Weather totals over-reaction: 35% CLV | A | pending | season end / 2027 |
-| LM-0 | 2026-10-11 | Of the six, at most ONE passes the full bar at season end (and it is C2 or C5) | A | pending | season end |
+| LM-C1 | 2026-10-11 | Key-number crossing: 30% positive CLV at bar; 10% ATS | A | INTERIM: CLV positive but not at bar (NFL t=2.10, NCAAF t=0.79). The 30% prior said unlikely; data agrees — CLV is not significant. Consistent with prior. | graded by: Claude Code LM-1, 2026-10-11 |
+| LM-C2 | 2026-10-11 | Hard Rock lag: 85% positive CLV; 50% ATS | A | INTERIM: CLV measurement invalid — C2 fires at different points, making de-vigged prob CLV compare different bets (cross-point artifact). Same-point CLV weakly positive (+0.42pp NFL, +0.05pp NCAAF) but N too small. NFL ATS 62.6% (57-34, N=91). The 85% prior cannot be graded — the registry's CLV definition breaks for C2. | graded by: Claude Code LM-1, 2026-10-11 |
+| LM-C3 | 2026-10-11 | Early-week over-correction: 25% reverts measurably; 10% CLV; 5% ATS | A | INTERIM: CLV directionally positive (NFL +0.49pp t=1.96, NCAAF +0.20pp t=1.54) but fails bar. NFL ATS 39.4% (13-20) — worse than break-even. The 10% prior said very unlikely; consistent so far. | graded by: Claude Code LM-1, 2026-10-11 |
+| LM-C4 | 2026-10-11 | Reversal / fake steam: 15% CLV | A | pending (N=2 NFL, N=19 NCAAF — too rare) | season end |
+| LM-C5 | 2026-10-11 | Hard Rock shade: 60% directional shade exists; 30% CLV; 15% ATS | A | INTERIM: directional shade EXISTS — CLV +0.91pp (NFL, t=2.97) and +1.01pp (NCAAF, t=3.95), both exceeding t≥2.5 bar, both in expected direction. NFL ATS 65.0% (26-14). The 60% prior on shade existing appears CORRECT (shade is real). The 30% CLV prior said unlikely; the data says likely (both sports exceed bar). **The prior UNDERESTIMATED this cell.** N=40 per sport, below 100 minimum for full PASS. | graded by: Claude Code LM-1, 2026-10-11 |
+| LM-C6 | 2026-10-11 | Weather totals over-reaction: 35% CLV | A | pending (0 fires; no spec found on disk) | season end / 2027 |
+| LM-0 | 2026-10-11 | Of the six, at most ONE passes the full bar at season end (and it is C2 or C5) | A | INTERIM NOTE: C5 is the leading candidate, consistent with the "C2 or C5" prediction. But the prior said "at most ONE" at 100% confidence — C5 already exceeds the t-bar in both sports, and if it reaches N≥100 it passes. The prior also gave C2 higher probability than C5 (85% vs 60% on shade existing); C2's CLV turned out unmeasurable. Final grade at season end. | graded by: Claude Code LM-1, 2026-10-11 |
 
 ## Scoring
 
@@ -60,3 +60,11 @@ could test them for free. Reviewed by Jeff or the auditor; any of them can be pr
   free: yes, but it consumes the look; Jeff can override.
 - 2026-10-11: cells keyed on team / coach / primetime / revenge — dismissed as narrative with infinite cells.
   Testable for free: partially (the tape exists); not registered by Claude's choice.
+- 2026-10-11 (LM-1 grading): C5 fires on both spreads (N=56, +1.10pp) and totals (N=24, +0.65pp).
+  The totals-Over subset (N=14, +1.06pp) is small but directionally consistent. A "totals-only
+  shade" sub-cell was not registered and is not added here. Testable for free: yes, the tape
+  exists.
+- 2026-10-11 (LM-1 grading): The C2 cross-point CLV issue — Cowork did not anticipate that C2
+  fires at different points by definition, making de-vigged prob CLV an invalid measure. A
+  point-based CLV metric was not registered. This is a registry design gap that affects the
+  final grade of C2.
