@@ -4135,3 +4135,59 @@ Also: make refresh_inputs fail per team, not per report.
 - 8 pre-existing test reds in test_top20_page, test_site_four_sports, etc. confirmed to
   fail identically at parent commit (13b8681fa) — unrelated to this work
 - Unmatched player names in the live ledger (will surface on first VM grader run)
+
+## 2026-10-11T12:22Z  claude-code (LM-1 — line-movement cell registry: freeze, tape, interim grade, ledger)
+
+### RETURNED
+- Item 1 (409e7061f): Verified shasum -a 256 -c SHA256SUMS PASSED. Copied LM_REGISTRY_v1.md
+  and claude_prediction_ledger.md verbatim. Created LM_DECISION_v1.md with LM-D1 (sha256
+  values, data window, two-look rule). Committed + pushed.
+- Item 2 (009a2c44c): build_lm_tape.py read 2,771 snapshots (1,388 NFL + 1,381 NCAAF) in 56s.
+  Tape: 652,694 rows, 417 events. Events: 1,178 rows (events × markets).
+  NFL: 100% HR coverage (79/79 events), 65 games with scores via nflreadpy.
+  NCAAF: 31.8% HR coverage (112/352 — HR doesn't list most NCAAF games). 1 event dropped
+  (WVU/UVA home/away swap). CFBD results only through week 4 (last completed 2026-09-27);
+  235/352 NCAAF games have scores but ALL 112 HR events are from weeks 5+, so zero NCAAF events
+  have both HR data AND results. Fire counts: NFL C1=39 C2=97 C3=35 C4=2 C5=47 / NCAAF C1=237
+  C2=354 C3=406 C4=85 C5=44 / C6 requires weather join.
+- Item 3 (6eb28dfe3): grade_lm_cells.py graded all six cells × two sports. 1,784 bet instances.
+  C5 (shade) is the only cell with consistent positive CLV in both sports: +0.91pp NFL (t=2.97),
+  +1.01pp NCAAF (t=3.95). Both exceed the registry's t≥2.5 bar but N=40 each. NFL ATS 65% (26-14).
+  C2 (lag) raw CLV is negative — NOT a bug: C2 fires at different points, making de-vigged prob
+  CLV compare different bets. Same-point subset weakly positive. NFL ATS 62.6% (57-34).
+  C1/C3 directionally positive, not significant. C4/C6 too rare / no fires.
+  C6: searched for "wind + execution" boxed experiment spec; not found on disk.
+  LM-D2 recorded. Wall time: 614s.
+- Item 4 (f6f86ca33): Graded LM-C1 (consistent with low prior), LM-C2 (unmeasurable),
+  LM-C3 (consistent), LM-C5 (prior UNDERESTIMATED — shade is real). LM-0 interim note: C5 is
+  the leading candidate. Added dismiss entries. LM-D3 recorded.
+
+### MEANS
+- C5 is a live signal candidate. If it reaches N≥100 at season end with the same sign
+  and significance, it passes the registry's bar. The shade mechanism (HR overtaxes public side)
+  is structural and consistent across sports.
+- C2's ATS (62.6% NFL, 57-34) is promising but its CLV metric is broken by design.
+  A point-based CLV metric is needed to properly evaluate C2 at season end.
+- The NCAAF coverage issue (31.8% HR, zero HR+results overlap) severely limits NCAAF
+  evaluation. The CFBD file needs to be refreshed before the final look.
+
+### NOT DONE
+- CFBD refresh for NCAAF weeks 5+ results (that is a separate request to the NCAAF lane).
+- Weather join for C6 (no qualifying Pinnacle total drops found; may fire later in season).
+- The "wind + execution" boxed experiment spec was not found; C6 graded as INSUFFICIENT DATA.
+- Week-by-week breakdown tables (requested in 3b but omitted for brevity — data is in the
+  parquet files).
+
+### UNVERIFIED
+- Whether Hard Rock's stale number in C2 was actually bettable at that moment — the tape
+  shows the number was listed, not that a wager would have been accepted.
+- Whether the NCAAF Hard Rock coverage of 31.8% explains the registry's 86% figure — the
+  86% likely refers to timing (HR never matching Pinnacle's point before kick), not coverage.
+- Whether the close definition (≤60 min before commence_time) matches what the reader uses
+  elsewhere — the NCAAF grader (grade_ncaaf_tickets.py) uses 30 min, not 60.
+- Whether the C5 shade is an artifact of the de-vig method or the public-side definition.
+- Whether Pinnacle's point changes in the events file are genuine moves or spurious due to
+  snapshot timing (a move that reverts within one snapshot window is invisible).
+
+Branch check: `git -C ~/mlb-model branch --show-current` returned `main` at session start.
+Commits on origin/research/lm1: 409e7061f, 009a2c44c, 6eb28dfe3, f6f86ca33.
