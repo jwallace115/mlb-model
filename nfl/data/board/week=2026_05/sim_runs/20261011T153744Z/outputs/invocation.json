@@ -1,0 +1,66 @@
+{
+ "bundle_dir": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261011T153744Z",
+ "cutoff_T": "2026-10-11T15:37:44.902984+00:00",
+ "games": [
+  "CHI@GB",
+  "CIN@MIA",
+  "CLE@NYJ",
+  "DEN@LAC",
+  "DET@ARI",
+  "HOU@TEN",
+  "IND@PIT",
+  "LV@NE",
+  "MIN@NO",
+  "NYG@WAS",
+  "SF@SEA"
+ ],
+ "lines": {
+  "CHI@GB": {
+   "spread": -1.5,
+   "total": 46.5
+  },
+  "CIN@MIA": {
+   "spread": -6.5,
+   "total": 44.5
+  },
+  "CLE@NYJ": {
+   "spread": 2.5,
+   "total": 38.5
+  },
+  "DEN@LAC": {
+   "spread": -3.5,
+   "total": 41.5
+  },
+  "DET@ARI": {
+   "spread": -5.5,
+   "total": 54.5
+  },
+  "HOU@TEN": {
+   "spread": -6.5,
+   "total": 37.5
+  },
+  "IND@PIT": {
+   "spread": 2.5,
+   "total": 42.5
+  },
+  "LV@NE": {
+   "spread": 3.5,
+   "total": 45.5
+  },
+  "MIN@NO": {
+   "spread": -2.5,
+   "total": 41.5
+  },
+  "NYG@WAS": {
+   "spread": 3.5,
+   "total": 41.5
+  },
+  "SF@SEA": {
+   "spread": 3.5,
+   "total": 46.5
+  }
+ },
+ "run_id": "20261011T153744Z",
+ "season": 2026,
+ "week": 5
+}
