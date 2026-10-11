@@ -939,3 +939,52 @@ writes to the same tree; files reach origin within 30 min.
 
 **Env overrides:** `MLB_REPO_ROOT`, `RESULTS_ARCHIVE_DIR` (same pattern as
 `pull_nfl_player_stats.py`, P45).
+
+## P49 — Post-game builder: game sheets + pick verdicts (2026-10-11)
+
+**Outputs** (per week, under `nfl/data/postgame/week=2026_WW/`):
+- `game_<game_id>.json` — game sheet (final score, script, volume, turnovers,
+  red zone, injuries, absences, FTN drops)
+- `verdicts.parquet` — one row per graded ai_nfl/sim_nfl ledger pick
+
+**Output root:** `POSTGAME_OUT_DIR` env override; default `nfl/data/postgame`.
+
+**Chain definitions** (market → link product):
+- receptions: plays × pass_rate × share(targets/dropbacks) × catch_rate
+- receiving_yards: plays × pass_rate × share × yards_per_target
+- rush attempts: plays × run_rate × carry_share
+- rush yards: plays × run_rate × carry_share × yards_per_carry
+- pass attempts: plays × pass_rate × qb_share
+- completions: plays × pass_rate × qb_share × completion_rate
+- pass yards: plays × pass_rate × qb_share × yards_per_attempt
+- Other markets: chain "none" (game-sheet context only).
+
+**Decomposition identity:** ln(A/L) = ln(E/L) + Σ ln(link_actual/link_prior),
+asserted to 1e-9 on every row where all terms are finite. Tested in fixture.
+
+**primary_link:** link term with largest |value|.
+
+**why_code_auto (props):** first rule that fires:
+AVAILABILITY → ROLE_SHIFT → SCRIPT → EFFICIENCY → SHARE_OTHER → BOOK_VS_PRIOR → UNDEFINED.
+
+**why_code_auto (game lines):** first rule that fires:
+TURNOVERS (margin ≥ 2) → NON_OFFENSIVE_TD → GARBAGE → OT → SCRIPT (|Δ| ≥ 1 SD) → NOISE.
+SDs from `link_sd_2025.json` (2025 regular season, generator committed).
+
+**Garbage-time definition:** Q4 plays with |score_differential| ≥ 17 (stated choice).
+
+**Thesis tag_map (P49):** role_change/usage_trend/injury_news → share;
+game_script → pass_rate (pass), run_rate (rush), points (totals), script (spread/ML);
+weather/matchup → efficiency (props), points (totals);
+price_vs_sharp/line_move → price; sim_v1/no_view → none.
+Direction: Over/first side → up, Under → down.
+
+**Thesis z-score threshold:** 0.5 (stated choice, not tuned).
+held if z ≥ +0.5 in claimed direction, failed if ≤ −0.5, flat otherwise.
+price → held if CLV > 0 at Hard Rock.
+
+**Owners in scope:** ai_nfl and sim_nfl only. jeff/member rows never enter output.
+
+**Known overlap with `eng/fwd6-parser-fix`:** that branch adds 19 lines to
+`log_ai_opinions.py`. This build touches only `validate()` (item 3) and one
+SPORTS key. The later merge should be small.
