@@ -192,3 +192,69 @@ Whether it generalises beyond 2021-23 is UNVERIFIED; it will be judged forward o
 
 Protocol updated: run instructions (Thursday before TNF / Sunday morning),
 grading spec (CLV, mixed c, log-loss).
+
+### G9 — HFA opt-in, byte-identity, merge gate (2026-10-11)
+
+**HFA is now opt-in:** `simulate_game(..., hfa=None)` (default) produces h=0.0 and
+the code path is byte-identical to the pre-HFA engine (parent e234f67b7). Proven by
+SHA256 comparison of margin vectors on 20 games at N=5,000: all match.
+`hfa=True` uses _HFA_CACHED (0.1719, read once at module import).
+`hfa=<float>` overrides. Only `run_gameline_gl1.py` and `run_gameline_forward.py`
+pass `hfa=True`; nothing else passes anything.
+
+**Anchored null control (P10):** 20/20 converge within 2·SE with hfa=True.
+Mean dh−da shift: 0.168 (anchor absorbs h). PRE-REGISTERED: 20/20 converge. **HELD.**
+
+**Timing:** ~12s/game single-threaded, ~1.2s/game with 10 workers (HFA cache
+eliminated the 5.7s/game per-call file-read overhead from GL-1b).
+
+**Full suite:** 337 collected, 326 passed, 11 failed (exit 1). Same 11 pre-existing
+reds as GL-1b, verified at the parent of 103e713e4 (e234f67b7). No new failures.
+
+**MERGE GATE — eng/gl1 merges to main only after ALL of:**
+(i) eng/fwd6 has merged to main
+(ii) The full test suite on the merge candidate shows the same reds as main with
+     the same values (no new reds, no value changes in existing reds)
+(iii) `engine_fingerprint()` with `hfa=None` equals main's fingerprint at merge time.
+      Currently: eng/gl1 fp = `e3fe19144d2f648c`, main fp = `156cd057a3b39e48`.
+      These WILL differ because engine.py content changed (HFA code added). The
+      fingerprint gates on file content, not runtime behaviour. This means merging
+      eng/gl1 to main requires a re-freeze of the fwd_v1 primary (condition iv).
+(iv) The fwd_v1 primary is re-frozen by its own order after the engine fingerprint
+     changes from the HFA merge.
+
+### G10 — Forward runner ID-only join, age gate, sign convention (2026-10-11)
+
+- `team_names_odds_api.json`: all 32 nflverse abbreviations → exact Odds API names
+- Forward runner rewritten: event_id match via (exact mapped home, exact mapped away,
+  commence_time ±1h); Hard Rock rows by event_id only; outcome sides by exact name
+- Unmapped team → HALT; no event match → null lines with reason
+- Snapshot age gate: HALT if > 3h (A10), tells operator to `git pull`
+- Sign convention: Odds API `point` on home spreads row negative = home favoured;
+  `hr_spread_home_margin_convention = -point` (comparable with raw_m)
+- Tests: KC@−3 → hr_spread_home=−3.0, margin_convention=+3.0; LA vs DAL resolved correctly
+
+### G11 — Record corrections (2026-10-11)
+
+**G6 commit mismatch:** G6 was recorded in the decision doc in commit 103e713e4
+(Item 2: HFA), but the code changes for G6 were in e234f67b7 (Item 1: generators).
+The decision text is correct; the commit it landed in was wrong because G6 was
+appended to the file that was also modified by the subsequent Item 2 commit.
+
+**GL-1 section-1 baseline numbers were in-sample.** GL-1 called `fit_baseline()` on
+all 815 games and predicted on all 815 — in-sample. The OOF c_margin from
+`baseline_2021_23.parquet` (leave-one-season-out predictions) is **−0.228 (t = −1.29)**,
+vs the in-sample −0.093 (t = −0.53). Still not significant, but the OOF value is
+larger and the correct one for reporting. The P1 conclusion (baseline adds nothing
+over the close) is unchanged.
+
+**Engine fingerprint change:** GL-1b's engine edit (HFA block) changed the fingerprint
+from `156cd057a3b39e48` (pre-HFA, main) to `e237f8a7204c2af9` (GL-1b 103e713e4),
+then to `e3fe19144d2f648c` (GL-1c, after opt-in refactor). The MNF primary's audited
+fingerprint is the pre-HFA value (`156cd057a3b39e48`). The merge gate (G9 condition
+iii) addresses this: merging requires a re-freeze.
+
+**Prediction ledger:** `research/cross_ai/claude_prediction_ledger.md` does not exist
+on origin/main as of this commit. P7 (HELD, raw_m 1.988 vs 2.125), P8 (HELD, delta
+0.008), P9 (HELD, 0.553 vs 0.542), P10 (HELD, 20/20 converge) are graded here in
+the decision doc. If and when LM-1 creates the ledger, these should be transcribed.

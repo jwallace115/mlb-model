@@ -100,13 +100,22 @@ the reader's opinion formation, under N54).
 Jeff runs `run_gameline_forward.py` on the Mac:
 
 ```bash
-# Thursday before TNF (captures TNF game + rest of week):
+# ALWAYS pull first — the VM captures line snapshots; the Mac reads them.
+# The runner HALTs if the latest snapshot is older than 3 hours (A10 age gate).
 cd ~/mlb-model
+git pull
+
+# Thursday before TNF (captures TNF game + rest of week):
 python3 nfl/sim/run_gameline_forward.py --season 2026 --week N
 
 # Sunday morning before the early window (if not run Thursday):
 python3 nfl/sim/run_gameline_forward.py --season 2026 --week N
 ```
+
+**Age gate (A10):** The runner checks the latest snapshot's timestamp against
+the current time. If the snapshot is older than 3 hours, it HALTs with a message
+telling the operator to `git pull` first. This prevents capturing stale lines.
+The snapshot age is recorded in every output row.
 
 The runner:
 - HALTs if the week file already exists (revision 0 only)
