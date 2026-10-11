@@ -38,7 +38,8 @@ def _worker_init():
     global _WORKER_KW
     _load_tables()
     team_r, tend, sit, kicker, league = _load_ratings()
-    _WORKER_KW = dict(team_r=team_r, tend=tend, sit=sit, kicker=kicker, league=league)
+    _WORKER_KW = dict(team_r=team_r, tend=tend, sit=sit, kicker=kicker, league=league,
+                      hfa=True)
 
 
 def _run_one_game(args):

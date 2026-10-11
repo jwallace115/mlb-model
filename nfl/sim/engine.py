@@ -46,6 +46,16 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 TABLES_DIR = ROOT / "nfl" / "data" / "sim" / "tables"
 RATINGS_DIR = ROOT / "nfl" / "data" / "sim" / "ratings"
 
+# GL-1c G9: HFA cached at import. hfa=True in simulate_game uses this value.
+_HFA_CACHED = 0.0
+_hfa_path = Path(__file__).resolve().parent / "hfa_v1.json"
+if _hfa_path.exists():
+    import json as _json_hfa
+    with open(_hfa_path) as _hf:
+        _HFA_CACHED = _json_hfa.load(_hf).get("h", 0.0)
+    del _json_hfa, _hf
+del _hfa_path
+
 class _DriveLog(pd.DataFrame):
     """5A-11 (D41): the drive log lives in `team_df.attrs`. pandas decides whether to keep
     attrs on `pd.concat` by comparing the attrs dicts with `==`, which compares the two
@@ -677,21 +687,6 @@ def _build_game_context(home, away, season, week, team_r, tend, sit, kicker, lea
         ctx[prefix + "pass_epa_shift"] = (off_pass_epa + def_pass_epa - lb.get("pass_epa", 0.0)) * S_EPA
         ctx[prefix + "rush_epa_shift"] = (off_rush_epa + def_rush_epa - lb.get("rush_epa", 0.0)) * S_EPA
 
-    # Home-field advantage: symmetric EPA offset (GL-1b G7)
-    # h > 0 boosts home offense and penalises away offense.
-    # Default 0.0 when hfa_v1.json absent — all existing tests byte-identical.
-    _hfa_path = Path(__file__).resolve().parent / "hfa_v1.json"
-    _hfa_h = 0.0
-    if _hfa_path.exists():
-        import json as _json
-        with open(_hfa_path) as _hf:
-            _hfa_h = _json.load(_hf).get("h", 0.0)
-    if _hfa_h != 0.0:
-        ctx["t0_pass_epa_shift"] += _hfa_h
-        ctx["t0_rush_epa_shift"] += _hfa_h
-        ctx["t1_pass_epa_shift"] -= _hfa_h
-        ctx["t1_rush_epa_shift"] -= _hfa_h
-
     # Tendencies
     for ti, t in enumerate(teams):
         tr = tend[(tend["season"] == season) & (tend["week"] == week) & (tend["team"] == t)]
@@ -760,13 +755,26 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                   _dummy_draw=False,
                   player_usage=None, active_uni=None, qb_ratings=None,
                   epa_home_offset=0.0, epa_away_offset=0.0,
-                  season_type="REG", drive_log=False):
+                  season_type="REG", drive_log=False,
+                  hfa=None):
     _load_tables()
     if team_r is None:
         team_r, tend, sit, kicker, league = _load_ratings()
 
     rng = np.random.default_rng(seed)
     ctx = _build_game_context(home, away, season, week, team_r, tend, sit, kicker, league)
+
+    # GL-1b G7 / GL-1c G9: home-field advantage (symmetric EPA offset)
+    # hfa=None → h=0.0 (byte-identical to pre-HFA engine)
+    # hfa=True → h from hfa_v1.json (cached at import as _HFA_CACHED)
+    # hfa=<float> → h=that value
+    if hfa is not None:
+        h = _HFA_CACHED if hfa is True else float(hfa)
+        if h != 0.0:
+            ctx["t0_pass_epa_shift"] += h
+            ctx["t0_rush_epa_shift"] += h
+            ctx["t1_pass_epa_shift"] -= h
+            ctx["t1_rush_epa_shift"] -= h
 
     # D7 anchoring offsets: added to the D6 EPA shift channel (same mechanism)
     if epa_home_offset != 0.0:
