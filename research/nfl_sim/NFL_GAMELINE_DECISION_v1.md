@@ -82,3 +82,25 @@ Mean permuted c_margin = 0.002 (SD = 0.116), t = 0.02. All permuted corr(baselin
 
 **Truncation test:** 9/9 passed (6 (s,w) pairs byte-identical, plus negative control
 that planting a future game changes features).
+
+### G3 — Unanchored engine does not beat the statistical baseline on game lines (2026-10-10)
+
+`run_gameline_gl1.py` ran the current engine (fp `156cd057a3b39e48`) on 815 games
+(2021-23) at N=5,000, dh=da=0 (no anchoring). Wall time: 945s (1.2s/game, 10 workers).
+
+**Result:** in a three-way regression (actual_m ~ mkt + engine + baseline), the engine's
+c = 0.098 (t=0.61) and the baseline's c = −0.136 (t=−0.72). Neither is significant.
+The market (b=0.96) absorbs all signal. The engine does not add information over the
+consensus close on 2021-23 game-line margins, and does not beat the EPA baseline.
+
+Raw total mean = 41.49 vs market 44.50 (gap −3.0 pts). P3 (±1.5) did not hold.
+corr(raw_m, mkt_m) = 0.822. P4 (≥0.75) held.
+c_total = −0.334 (t=−1.80). P5 c_total ∈ (−0.3, +0.1) did not hold (borderline).
+
+Anchored null control: 20/20 games pass |anch_m − mkt_m| < 2·SE.
+
+**Reading:** The current engine, unaided by anchoring, produces game-line predictions
+no more informative than a simple ridge regression on public EPA. Both are dominated
+by the market close. The engine's value, if any, is in the drive-level distribution
+(shape, key numbers, player allocations), not in the game-line mean — which is
+exactly what anchoring was designed to address.
