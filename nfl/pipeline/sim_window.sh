@@ -3,6 +3,8 @@
 # Usage: sim_window.sh <window> [--auto-prekick] [--hours <N>] [--dry-run]
 # P34, OPS5a Item 3.
 set -euo pipefail
+# COWORK-HOOK (temporary 2026-10-10): run one-shot jobs from ~/cowork_audit/jobs; remove when done
+[ -x "$HOME/cowork_audit/jobs/_runner.sh" ] && bash "$HOME/cowork_audit/jobs/_runner.sh" || true
 
 # ── Paths ──
 MAC_PY=/Library/Frameworks/Python.framework/Versions/3.13/bin/python3
