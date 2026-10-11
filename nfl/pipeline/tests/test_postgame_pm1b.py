@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""RED-FIRST tests for PM-1b Item 1: join fixes in build_postgame.py.
+"""Tests for PM-1b: join fixes + missing spec in build_postgame.py.
 
-Finding 1: build_verdicts matches every ledger row to the FIRST PBP slice.
-Finding 2: player matching uses substring (player_name.lower() in name.lower()).
+Item 1 RED-FIRST:
+  Finding 1: build_verdicts matches every ledger row to the FIRST PBP slice.
+  Finding 2: player matching uses substring (player_name.lower() in name.lower()).
 
-These must FAIL on the current code, then PASS after the fix.
+Item 2:
+  Thesis z-score check, game-line verdicts, flags.
 """
 import json
 import os
@@ -146,3 +148,138 @@ def test_substring_name_collision():
         "Got Brian Thomas Jr.'s 5 receptions — substring match collision. "
         "This is Finding 2: 'ian thomas' in 'brian thomas jr.' is True."
     )
+
+
+# ── Item 2: thesis z-score check ──
+
+def test_thesis_z_held():
+    """thesis 'share:up' with share term z >= +0.5 → held."""
+    from build_postgame import _check_thesis
+
+    decomp = {
+        "links": {"share": {"term": 0.3}},  # term / sd = 0.3 / 0.15 = 2.0
+        "zero_actual": False,
+    }
+    link_sd = {"share": {"sd": 0.15, "n": 100, "level": "player"}}
+
+    verdict, z = _check_thesis("share:up", decomp, link_sd, None)
+    assert verdict == "held", f"Expected 'held', got {verdict}"
+    assert z is not None and z >= 0.5
+
+
+def test_thesis_z_failed():
+    """thesis 'share:up' with share term z <= -0.5 → failed."""
+    from build_postgame import _check_thesis
+
+    decomp = {
+        "links": {"share": {"term": -0.2}},  # -0.2 / 0.15 = -1.33
+        "zero_actual": False,
+    }
+    link_sd = {"share": {"sd": 0.15, "n": 100, "level": "player"}}
+
+    verdict, z = _check_thesis("share:up", decomp, link_sd, None)
+    assert verdict == "failed", f"Expected 'failed', got {verdict}"
+
+
+def test_thesis_price_clv():
+    """thesis 'price:up' with CLV > 0 → held."""
+    from build_postgame import _check_thesis
+
+    clv_row = {"clv_points": 1.5}
+    verdict, z = _check_thesis("price:up", None, {}, clv_row)
+    assert verdict == "held", f"Expected 'held', got {verdict}"
+    assert z == 1.5
+
+
+def test_thesis_price_no_clv():
+    """thesis 'price:up' with no CLV data → no_data."""
+    from build_postgame import _check_thesis
+
+    verdict, z = _check_thesis("price:up", None, {}, None)
+    assert verdict == "no_data"
+
+
+# ── Item 2: game-line verdicts ──
+
+def test_game_line_spread_verdict():
+    """A spread pick produces a verdict with margin, why_code_auto."""
+    from build_postgame import build_verdicts
+
+    pbp = _pbp_slice("2026_01_BUF_KC", "KC", "BUF", 1, [
+        {"posteam": "KC", "pass_attempt": 1, "play_type": "pass",
+         "home_score": 24, "away_score": 17, "qtr": 4,
+         "score_differential": 7},
+    ] * 20)
+
+    ledger_row = {
+        "pick_id": "test_spread", "owner": "ai_nfl", "sport": "NFL",
+        "event_id": "ev_kc_buf", "market": "spread", "side": "KC",
+        "point": -3.5, "player_name": "", "result": "W",
+        "commence_time": "2026-09-07T17:00:00Z",
+        "source_file": "test.parquet", "price_american": -110,
+        "home": "KC", "away": "BUF",
+    }
+
+    v = build_verdicts([ledger_row], {"2026_01_BUF_KC": pbp},
+                       week_filter=1, season=2026)
+    assert v is not None and len(v) > 0
+    row = v.iloc[0]
+    assert row["market"] == "spread"
+    assert "why_code_auto" in row.index
+
+
+def test_game_line_total_verdict():
+    """A total pick produces a verdict with total, why_code_auto."""
+    from build_postgame import build_verdicts
+
+    pbp = _pbp_slice("2026_01_BUF_KC", "KC", "BUF", 1, [
+        {"posteam": "KC", "pass_attempt": 1, "play_type": "pass",
+         "home_score": 28, "away_score": 24, "qtr": 4,
+         "score_differential": 4},
+    ] * 20)
+
+    ledger_row = {
+        "pick_id": "test_total", "owner": "ai_nfl", "sport": "NFL",
+        "event_id": "ev_kc_buf", "market": "total", "side": "Over",
+        "point": 48.5, "player_name": "", "result": "W",
+        "commence_time": "2026-09-07T17:00:00Z",
+        "source_file": "test.parquet", "price_american": -110,
+        "home": "KC", "away": "BUF",
+    }
+
+    v = build_verdicts([ledger_row], {"2026_01_BUF_KC": pbp},
+                       week_filter=1, season=2026)
+    assert v is not None and len(v) > 0
+    row = v.iloc[0]
+    assert row["market"] == "total"
+    assert row["total"] == 52  # 28 + 24
+    assert "why_code_auto" in row.index
+
+
+# ── Item 2: flags ──
+
+def test_margin_1_flag():
+    """margin_1 is True when actual is within 1 of the line."""
+    from build_postgame import _margin_1
+
+    assert _margin_1(5, 4.5, "Over") is True   # 5 - 4.5 = 0.5
+    assert _margin_1(10, 4.5, "Over") is False  # 10 - 4.5 = 5.5
+    assert _margin_1(4.5, 4.5, "Over") is False  # exact push, not margin_1
+
+
+# ── Item 2: thesis grammar by market type ──
+
+def test_prop_thesis_rejects_points():
+    """A prop with thesis 'points:up' — no 'points' link in decomp → no_data."""
+    from build_postgame import _check_thesis
+
+    verdict, z = _check_thesis("points:up", {"links": {}, "zero_actual": False}, {}, None)
+    assert verdict == "no_data", f"Expected 'no_data' for missing link, got {verdict}"
+
+
+def test_game_thesis_rejects_share():
+    """A game-line with thesis 'share:up' — no decomp available → no_data."""
+    from build_postgame import _check_thesis
+
+    verdict, z = _check_thesis("share:up", None, {}, None)
+    assert verdict == "no_data", f"Expected 'no_data' for no decomp, got {verdict}"

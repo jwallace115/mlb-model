@@ -606,6 +606,167 @@ def _thesis_from_tag(tag, market, side):
     return f"{link}:{direction}", "tag_map"
 
 
+# ── Thesis z-score check ──
+
+_link_sd_cache = {}
+
+
+def _load_link_sd(root):
+    """Load link_sd_2025.json. Returns dict or {}."""
+    if "data" not in _link_sd_cache:
+        p = root / "nfl" / "data" / "postgame" / "link_sd_2025.json"
+        if p.exists():
+            _link_sd_cache["data"] = json.loads(p.read_text())
+        else:
+            _link_sd_cache["data"] = {}
+    return _link_sd_cache["data"]
+
+
+def _check_thesis(thesis, decomp, link_sd, clv_row):
+    """Check thesis: z = link_term / SD_link.
+
+    held >= +0.5, failed <= -0.5, flat otherwise.
+    For price thesis: CLV > 0 from clv_row.
+    Returns (verdict_str, z_value).
+    """
+    if not thesis:
+        return None, None
+
+    claims = [c.strip() for c in thesis.split(";")]
+    results = []
+
+    for claim in claims:
+        parts = claim.split(":")
+        if len(parts) != 2:
+            results.append(("invalid", None))
+            continue
+        link, direction = parts[0].strip(), parts[1].strip()
+
+        if link == "price":
+            # Price thesis: CLV > 0 → held
+            if clv_row and clv_row.get("clv_points") is not None:
+                clv = float(clv_row["clv_points"])
+                if clv > 0:
+                    results.append(("held", clv))
+                elif clv < 0:
+                    results.append(("failed", clv))
+                else:
+                    results.append(("flat", clv))
+            else:
+                results.append(("no_data", None))
+            continue
+
+        # Non-price: z = link_term / SD_link
+        if decomp is None or decomp.get("zero_actual"):
+            results.append(("no_decomp", None))
+            continue
+
+        links = decomp.get("links", {})
+        if link not in links:
+            results.append(("no_link", None))
+            continue
+
+        term = links[link].get("term", 0)
+        sd_entry = link_sd.get(link, {})
+        sd = sd_entry.get("sd")
+        if sd is None or sd == 0:
+            results.append(("no_sd", None))
+            continue
+
+        z = term / sd
+        # Direction: "up" means positive is good, "down" means negative is good
+        signed_z = z if direction == "up" else -z
+        if signed_z >= 0.5:
+            results.append(("held", round(signed_z, 3)))
+        elif signed_z <= -0.5:
+            results.append(("failed", round(signed_z, 3)))
+        else:
+            results.append(("flat", round(signed_z, 3)))
+
+    if not results:
+        return None, None
+
+    # Aggregate: all claims must hold for "held"; any failed → "failed"; else "flat"
+    verdicts = [r[0] for r in results]
+    z_vals = [r[1] for r in results if r[1] is not None]
+    z_primary = z_vals[0] if z_vals else None
+
+    if all(v == "held" for v in verdicts):
+        return "held", z_primary
+    if any(v == "failed" for v in verdicts):
+        return "failed", z_primary
+    if any(v in ("no_data", "no_decomp", "no_link", "no_sd", "invalid") for v in verdicts):
+        return "no_data", z_primary
+    return "flat", z_primary
+
+
+# ── CLV loading ──
+
+_clv_cache = {}
+
+
+def _load_clv(ledger_dir):
+    """Load clv.jsonl from ledger dir. Returns {pick_id: row}."""
+    if "data" not in _clv_cache:
+        clv_path = Path(ledger_dir) / "clv.jsonl"
+        clv = {}
+        if clv_path.exists():
+            with open(clv_path) as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        try:
+                            r = json.loads(line)
+                            clv[r["pick_id"]] = r
+                        except (json.JSONDecodeError, KeyError):
+                            pass
+        _clv_cache["data"] = clv
+    return _clv_cache["data"]
+
+
+# ── Flags ──
+
+def _one_play_decided(player_stats, market, side, point, A):
+    """Check if removing the player's longest single play flips the result.
+
+    Only meaningful for yardage props.
+    """
+    if market not in ("prop:rec_yds", "prop:rush_yds", "prop:pass_yds"):
+        return False
+    if point is None or A is None:
+        return False
+
+    L = float(point)
+    # Determine if the pick hit
+    side_lower = str(side).lower()
+    hit = (A > L) if side_lower == "over" else (A < L)
+
+    # Find the longest play
+    stat_key = {"prop:rec_yds": "receiving_yards",
+                "prop:rush_yds": "rushing_yards",
+                "prop:pass_yds": "passing_yards"}.get(market)
+    if stat_key not in player_stats:
+        return False
+
+    plays = player_stats.get("_plays", [])
+    if not plays:
+        return False
+
+    longest = max(plays) if plays else 0
+    A_without = A - longest
+    hit_without = (A_without > L) if side_lower == "over" else (A_without < L)
+
+    return hit != hit_without
+
+
+def _margin_1(A, point, side):
+    """Result decided by exactly 1 unit (stat == point ± 1)."""
+    if point is None or A is None:
+        return False
+    L = float(point)
+    return abs(A - L) <= 1.0 and A != L
+
+
 # ── Build verdicts ──
 
 def _match_game(row, pbp_slices, week_filter):
@@ -827,6 +988,71 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
                     decomp if actual and prior else None,
                     None, False, True, [])
 
+                # Flags
+                verdict["margin_1"] = _margin_1(A, point, side)
+
+        # ── Game-line verdicts (spread/total/moneyline) ──
+        elif market in ("spread", "total", "moneyline"):
+            final_home = int(game_pbp["home_score"].max())
+            final_away = int(game_pbp["away_score"].max())
+            margin = final_home - final_away
+            total = final_home + final_away
+
+            verdict["final_home"] = final_home
+            verdict["final_away"] = final_away
+            verdict["margin"] = margin
+            verdict["total"] = total
+
+            # Hard Rock close via CLV
+            clv_data = _load_clv(LEDGER_DIR)
+            clv_row = clv_data.get(pick_id)
+            if clv_row:
+                verdict["close_point"] = clv_row.get("close_point")
+                verdict["close_price"] = clv_row.get("close_price")
+                close_pt = clv_row.get("close_point")
+                if close_pt is not None:
+                    if market == "spread":
+                        verdict["margin_vs_close"] = margin + float(close_pt)
+                    elif market == "total":
+                        verdict["total_vs_close"] = total - float(close_pt)
+
+            # Game script
+            script = _game_script(game_pbp, home, away)
+            turnovers = _turnovers(game_pbp, home, away)
+            non_off = _non_offensive_tds(game_pbp)
+            is_ot = script.get("overtime", False)
+            garbage_plays = (script.get("home", {}).get("garbage_time_plays", 0) +
+                             script.get("away", {}).get("garbage_time_plays", 0))
+
+            # Why code for game lines
+            link_sd = _load_link_sd(ROOT)
+            margin_sd = link_sd.get("margin_vs_spread", {}).get("sd")
+            total_sd = link_sd.get("total_vs_line", {}).get("sd")
+
+            # Turnover margin from perspective of the side
+            home_to = turnovers.get("home", {}).get("total", 0)
+            away_to = turnovers.get("away", {}).get("total", 0)
+            to_margin = abs(home_to - away_to)
+
+            # Non-offensive TDs that flip: simplified check
+            non_off_flips = non_off > 0
+            garbage_flips = garbage_plays >= 10
+
+            if market == "spread":
+                margin_vs = verdict.get("margin_vs_close")
+                verdict["why_code_auto"] = _why_code_auto_game(
+                    to_margin if to_margin >= 2 else None,
+                    non_off_flips, garbage_flips, is_ot,
+                    margin_vs, margin_sd)
+            elif market == "total":
+                total_vs = verdict.get("total_vs_close")
+                verdict["why_code_auto"] = _why_code_auto_game(
+                    to_margin if to_margin >= 2 else None,
+                    non_off_flips, garbage_flips, is_ot,
+                    total_vs, total_sd)
+            else:
+                verdict["why_code_auto"] = "NOISE"
+
         # ── Thesis: freeze thesis overrides tag_map ──
         freeze_thesis = freeze.get("thesis") if freeze else None
         if freeze_thesis:
@@ -839,6 +1065,23 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
         else:
             verdict["thesis"] = None
             verdict["thesis_source"] = "none"
+
+        # ── Thesis z-score check ──
+        thesis_str = verdict.get("thesis")
+        if thesis_str:
+            link_sd = _load_link_sd(ROOT)
+            clv_data = _load_clv(LEDGER_DIR)
+            clv_row = clv_data.get(pick_id)
+            decomp_for_thesis = None
+            if "chain" in verdict and verdict.get("chain"):
+                try:
+                    decomp_for_thesis = json.loads(verdict["chain"])
+                except (json.JSONDecodeError, TypeError):
+                    pass
+            thesis_verdict, thesis_z = _check_thesis(
+                thesis_str, decomp_for_thesis, link_sd, clv_row)
+            verdict["thesis_held"] = thesis_verdict
+            verdict["thesis_z"] = thesis_z
 
         verdicts.append(verdict)
 
