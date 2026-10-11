@@ -59,3 +59,42 @@ reported as INSUFFICIENT N rather than PASS, despite exceeding the t-bar.
 
 **Added to "what did Claude dismiss":** C2 cross-point CLV design gap; C5 spreads
 vs totals breakdown (spreads stronger, N=56 +1.10pp vs totals N=24 +0.65pp).
+
+### LM-D4 — Price scale, comparability gate, registered-direction fix (2026-10-11)
+
+**Problem:** LM-1 compared HR de-vigged price with Pinnacle de-vigged close. Both sides
+were de-vigged, so the comparison measured fair-vs-fair drift, not CLV. True CLV must
+compare the PAID price (raw implied, with vig) against the fair close.
+
+**Changes to grade_lm_cells.py:**
+1. `clv_pp` = Pinnacle de-vigged close − HR RAW implied (includes vig). This is the
+   actual edge a bettor captures relative to fair value.
+2. `drift_pp` = Pinnacle de-vigged close − HR de-vigged (the old `clv_pp`). Kept as
+   a diagnostic: measures whether the close moved toward your bet.
+3. `clv_cents` = (fair_close × decimal_payout − 1) × 100. Expected profit per dollar.
+4. `clv_valid` = True when close point == bet point (spreads/totals) or market is h2h.
+   Rows with point mismatch are excluded from all means/t/null.
+5. C5 fires only when the public side is overtaxed (gap > 0 for favourite/Over).
+   The bidirectional variant is reported as "C5-bidir" separately.
+
+**Result:** All cells show negative paid-price CLV. HR's vig (~2.3 pp) dominates any
+directional edge. C5 drift is positive (+1.5 pp both sports) — the shade is real but
+does not overcome the vig.
+
+**Pre-registrations:** P-LM1b-1, P-LM1b-2, P-LM1b-3 all HELD.
+
+### LM-D5 — Retraction and ledger corrections (2026-10-11)
+
+**Retracted:** LM-1's C5 CLV figures (+0.91 pp NFL, +1.01 pp NCAAF) and the
+"underestimated" assessment. LM-1's C2 "not a bug" narrative.
+
+**Corrected in ledger:**
+- LM-C2 graded as **MISS for Cowork** (type A): the 85% prior on positive CLV was
+  wrong at the paid price. The vig absorbs the lag edge.
+- LM-C5 grade reversed: "underestimated" → FAIL/INSUFFICIENT METHOD on honest metric.
+  Consistent with Cowork's 30% CLV prior, not contradicting it.
+- LM-0 on track: no cell passes on paid-price CLV.
+
+**NCAAF coverage note:** the 31.8% HALT should have fired in LM-1 item 2. It was
+overridden to a warning without authorization. The override did not affect corrected
+results (NCAAF C5 has only 3 valid rows) but is noted as a process error.
