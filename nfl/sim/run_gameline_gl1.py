@@ -20,14 +20,16 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-PBP_DIR = ROOT / "nfl" / "data" / "pbp"
-OUT_DIR = ROOT / "nfl" / "data" / "sim" / "outputs" / "gl1"
-GAMES_DIR = OUT_DIR / "games"
+PBP_DIR = Path(os.environ.get("NFL_PBP_DIR", str(ROOT / "nfl" / "data" / "pbp")))
 PARAMS_PATH = ROOT / "nfl" / "sim" / "params_v1.json"
 
 N_SIMS = 5000
 CHUNK_SIZE = 2500
 ALLOWED_SEASONS = [2021, 2022, 2023]
+
+# Set from --out-dir or default
+OUT_DIR = ROOT / "nfl" / "data" / "sim" / "outputs" / "gl1"
+GAMES_DIR = OUT_DIR / "games"
 
 
 def _worker_init():
@@ -41,9 +43,10 @@ def _worker_init():
 
 def _run_one_game(args):
     """Run unanchored sim for one game. Returns row dict."""
-    game_id, home, away, season, week, spread, total_line, actual_m, actual_t = args
+    game_id, home, away, season, week, spread, total_line, actual_m, actual_t, games_dir = args
 
-    checkpoint = GAMES_DIR / f"{game_id}.parquet"
+    games_dir = Path(games_dir)
+    checkpoint = games_dir / f"{game_id}.parquet"
     if checkpoint.exists():
         return None  # skip
 
@@ -93,6 +96,18 @@ def _run_one_game(args):
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--out-dir", default="gl1",
+                        help="Output subdirectory under nfl/data/sim/outputs/")
+    parser.add_argument("--out-name", default="unanchored_2021_23.parquet",
+                        help="Output parquet filename")
+    args = parser.parse_args()
+
+    global OUT_DIR, GAMES_DIR
+    OUT_DIR = ROOT / "nfl" / "data" / "sim" / "outputs" / args.out_dir
+    GAMES_DIR = OUT_DIR / "games"
+
     GAMES_DIR.mkdir(parents=True, exist_ok=True)
 
     # Engine fingerprint
@@ -120,9 +135,10 @@ def main():
                 float(row["spread_line"]), float(row["total_line"]),
                 float(row["home_score"] - row["away_score"]),
                 float(row["home_score"] + row["away_score"]),
+                str(GAMES_DIR),
             ))
 
-    done = sum(1 for gid, *_ in all_games if (GAMES_DIR / f"{gid}.parquet").exists())
+    done = sum(1 for g in all_games if (Path(g[-1]) / f"{g[0]}.parquet").exists())
     todo = len(all_games) - done
     print(f"Games: {len(all_games)} total, {done} done, {todo} to run")
 
@@ -162,8 +178,8 @@ def main():
 
     # Build combined output from all checkpoints + game list
     rows = []
-    for gid, home, away, season, week, spread, total_line, actual_m, actual_t in all_games:
-        cp = GAMES_DIR / f"{gid}.parquet"
+    for gid, home, away, season, week, spread, total_line, actual_m, actual_t, gdir in all_games:
+        cp = Path(gdir) / f"{gid}.parquet"
         if not cp.exists():
             continue
         sim_df = pd.read_parquet(cp)
@@ -189,7 +205,7 @@ def main():
     bad_seasons = set(result_df["season"].unique()) - set(ALLOWED_SEASONS)
     assert not bad_seasons, f"Disallowed seasons: {bad_seasons}"
 
-    out_path = OUT_DIR / "unanchored_2021_23.parquet"
+    out_path = OUT_DIR / args.out_name
     result_df.to_parquet(out_path, index=False)
     print(f"\nOutput: {out_path} ({len(result_df)} games)")
     print(f"Engine fingerprint: {eng_fp}")

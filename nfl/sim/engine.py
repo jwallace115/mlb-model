@@ -677,6 +677,21 @@ def _build_game_context(home, away, season, week, team_r, tend, sit, kicker, lea
         ctx[prefix + "pass_epa_shift"] = (off_pass_epa + def_pass_epa - lb.get("pass_epa", 0.0)) * S_EPA
         ctx[prefix + "rush_epa_shift"] = (off_rush_epa + def_rush_epa - lb.get("rush_epa", 0.0)) * S_EPA
 
+    # Home-field advantage: symmetric EPA offset (GL-1b G7)
+    # h > 0 boosts home offense and penalises away offense.
+    # Default 0.0 when hfa_v1.json absent — all existing tests byte-identical.
+    _hfa_path = Path(__file__).resolve().parent / "hfa_v1.json"
+    _hfa_h = 0.0
+    if _hfa_path.exists():
+        import json as _json
+        with open(_hfa_path) as _hf:
+            _hfa_h = _json.load(_hf).get("h", 0.0)
+    if _hfa_h != 0.0:
+        ctx["t0_pass_epa_shift"] += _hfa_h
+        ctx["t0_rush_epa_shift"] += _hfa_h
+        ctx["t1_pass_epa_shift"] -= _hfa_h
+        ctx["t1_rush_epa_shift"] -= _hfa_h
+
     # Tendencies
     for ti, t in enumerate(teams):
         tr = tend[(tend["season"] == season) & (tend["week"] == week) & (tend["team"] == t)]

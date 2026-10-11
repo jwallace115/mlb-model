@@ -141,3 +141,41 @@ pinned to commit `aad7f9699`. Requests ALL findings in 5 classes:
 3. Ledger honesty
 4. Research object == live object
 5. Forward protocol gamability
+
+### G6 — Generators, halt-on-missing, record corrections (2026-10-11)
+
+- `run_gameline_gl1_analysis.py`: regenerates all report tables from committed artifacts
+- `baseline_2021_23.parquet`: OOF + in-sample predictions; GL-1 used in-sample (stated)
+- `margin_hist_2021_23.parquet`: compact per-game histograms for shape test
+- `gameline_baseline._load_pbp`: now HALTs on missing PBP (FileNotFoundError)
+- PBP_DIR resolved from NFL_PBP_DIR env var (no hardcoded path)
+- Section-3 null control: DID NOT HOLD (0.015 vs 0.01; discrete scoring)
+- P3 failure: K1 pts/team 21.06 vs 22.39, not a runner defect
+- 2021 c = −0.775: OPEN (COVID priors or noise; not resolved)
+- pytest: 333 collected, 322 passed, 11 failed; all 11 pre-existing
+
+### G7 — Home-field advantage: h=0.172, league-level calibration (2026-10-11)
+
+**Measurement (build_hfa.py, 2021-23 REG):**
+- Mean home margin: 2.125 (by season: 1.71 / 1.98 / 2.68)
+- Home-win rate: 0.542
+- Scrimmage EPA diff: 0.006/play (negligible — HFA is NOT in per-play EPA)
+- HFA lives in FG/XP, turnovers, penalties, field position — channels the engine
+  models but did not tilt by home/away
+
+**Implementation:** Symmetric EPA offset in `engine._build_game_context`:
+home +h, away −h on pass and rush EPA shift. Read from `hfa_v1.json`, default 0.0
+when absent (all existing tests byte-identical at h=0).
+
+**Derivation:** h0 = 2.125 / (6.88 + 5.48) = 0.1719 from J_FWD.
+
+**Run (815 games, N=5,000, 4622s, 5.7s/game):**
+- raw_m mean: 1.988 (gap −0.137 from target 2.125; P7 HOLDS: |gap| < 0.3)
+- No Newton correction needed
+- p_home_win: 0.553 vs actual 0.542 (P9 HOLDS: |diff| = 0.011 < 0.02)
+- c_margin changed by 0.008 (P8 HOLDS: < 0.05)
+- Total: 41.52 vs 41.49 (delta 0.034; null control PASSES: < 0.3)
+
+**h = h0 = 0.1719 is the final value.** Fitted on consumed seasons, stated as such.
+This is a league-level calibration constant, not a per-game or per-team effect.
+Whether it generalises beyond 2021-23 is UNVERIFIED; it will be judged forward only.
