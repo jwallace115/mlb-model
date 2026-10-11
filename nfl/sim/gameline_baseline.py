@@ -20,7 +20,7 @@ totals model on the sums.
 Decision: G2 (structure + hl_games value + why).
 """
 
-import json, sys
+import json, os, sys
 from pathlib import Path
 
 import numpy as np
@@ -29,7 +29,7 @@ from sklearn.linear_model import Ridge
 from scipy.special import expit  # for log-loss
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-PBP_DIR = ROOT / "nfl" / "data" / "pbp"
+PBP_DIR = Path(os.environ.get("NFL_PBP_DIR", str(ROOT / "nfl" / "data" / "pbp")))
 PARAMS_PATH = ROOT / "nfl" / "sim" / "params_v1.json"
 
 ALLOWED_SEASONS = [2021, 2022, 2023]  # GL1 standing rule
@@ -45,13 +45,20 @@ def _shrink(x, n, k, mu):
 
 
 def _load_pbp(seasons):
-    """Load PBP and game schedule for the requested seasons + prior season."""
+    """Load PBP and game schedule for the requested seasons + prior season.
+
+    HALTs (raises FileNotFoundError) if any required PBP file is missing.
+    """
     all_seasons = sorted(set([s - 1 for s in seasons] + list(seasons)))
     frames = []
     for s in all_seasons:
         p = PBP_DIR / f"pbp_{s}.parquet"
-        if p.exists():
-            frames.append(pd.read_parquet(p))
+        if not p.exists():
+            raise FileNotFoundError(
+                f"HALT: required PBP file missing: {p}\n"
+                f"Set NFL_PBP_DIR env var or ensure the file exists."
+            )
+        frames.append(pd.read_parquet(p))
     plays = pd.concat(frames, ignore_index=True)
     return plays
 

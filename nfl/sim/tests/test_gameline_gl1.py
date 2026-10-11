@@ -10,7 +10,7 @@ Tests:
    a DIFFERENT feature row (proving the as-of filter is real).
 """
 
-import sys
+import os, sys
 from pathlib import Path
 
 import numpy as np
@@ -19,7 +19,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent))
 
-PBP_DIR = Path("/Users/jw115/mlb-model/nfl/data/pbp")
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+PBP_DIR = Path(os.environ.get("NFL_PBP_DIR", str(ROOT / "nfl" / "data" / "pbp")))
 ALLOWED_SEASONS = {2021, 2022, 2023}
 
 
@@ -195,3 +196,19 @@ class TestTruncationEquivalence:
         diffs = [abs(mf_clean[key] - mf_fake[key]) for key in mf_clean]
         assert max(diffs) > 1e-6, \
             "Negative control FAILED: planting a future game did not change features"
+
+
+class TestMissingPBPHalts:
+    """_load_pbp must HALT (raise FileNotFoundError) when a PBP file is missing."""
+
+    def test_missing_pbp_halts(self, tmp_path):
+        from nfl.sim.gameline_baseline import _load_pbp
+        import nfl.sim.gameline_baseline as bl
+
+        orig = bl.PBP_DIR
+        bl.PBP_DIR = tmp_path  # empty directory — no PBP files
+        try:
+            with pytest.raises(FileNotFoundError, match="HALT.*missing"):
+                _load_pbp([2021])
+        finally:
+            bl.PBP_DIR = orig
