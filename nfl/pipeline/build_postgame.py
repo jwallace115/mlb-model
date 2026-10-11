@@ -28,6 +28,7 @@ import pandas as pd
 ROOT = Path(os.environ.get("MLB_REPO_ROOT") or Path(__file__).resolve().parent.parent.parent)
 sys.path.insert(0, str(ROOT / "shared" / "pipeline"))
 import pick_sources as ps
+import picks_grader as pg
 import picks_ledger as pl
 
 RESULTS_DIR = Path(os.environ.get("RESULTS_ARCHIVE_DIR") or (ROOT / "data" / "results_archive"))
@@ -607,6 +608,108 @@ def _thesis_from_tag(tag, market, side):
 
 # ── Build verdicts ──
 
+def _match_game(row, pbp_slices, week_filter):
+    """Match a ledger row to a PBP slice via home/away team names.
+
+    Uses ps.nfl_team() for exact normalization — no substring matching.
+    Returns (game_id, game_pbp) or (None, None).
+    """
+    ledger_home = ps.nfl_team(row.get("home", ""))
+    ledger_away = ps.nfl_team(row.get("away", ""))
+    if not ledger_home or not ledger_away:
+        return None, None
+
+    for gid, g in pbp_slices.items():
+        if week_filter is not None and int(g["week"].iloc[0]) != week_filter:
+            continue
+        pbp_home = ps.nfl_team(str(g["home_team"].iloc[0]))
+        pbp_away = ps.nfl_team(str(g["away_team"].iloc[0]))
+        if pbp_home == ledger_home and pbp_away == ledger_away:
+            return gid, g
+    return None, None
+
+
+def _resolve_player_id(player_name, game_pbp, team):
+    """Resolve a ledger player name to a PBP gsis player_id.
+
+    Uses picks_grader._normalize_name for exact normalized matching —
+    NO substring or startswith matching.  Returns player_id or None.
+    """
+    overrides = pg._load_name_overrides()
+    resolved = pg._resolve_player_name(player_name, overrides)
+
+    p_stats = _player_stats_from_pbp(game_pbp, team)
+    for pid, ps_row in p_stats.items():
+        pbp_norm = pg._normalize_name(ps_row.get("name", ""))
+        if pbp_norm == resolved:
+            return pid
+    return None
+
+
+def _parse_raw(row):
+    """Parse the ledger row's raw JSON field. Returns dict or {}."""
+    raw = row.get("raw")
+    if not raw:
+        return {}
+    try:
+        return json.loads(raw) if isinstance(raw, str) else (raw if isinstance(raw, dict) else {})
+    except (json.JSONDecodeError, TypeError):
+        return {}
+
+
+def _load_freeze_row(row, root):
+    """Load the freeze parquet row matching this ledger row.
+
+    Join key: source_file + (event_id, market_key, player_name, side).
+    Returns dict with freeze columns or {}.
+    """
+    sf = row.get("source_file")
+    if not sf:
+        return {}
+
+    freeze_path = root / sf
+    if not freeze_path.exists():
+        return {}
+
+    try:
+        df = pd.read_parquet(freeze_path)
+    except Exception:
+        return {}
+
+    eid = row.get("event_id", "")
+    # Ledger market → freeze market_key
+    market = row.get("market", "")
+    try:
+        freeze_mk = ps.ledger_to_tape_market(market) if market.startswith("prop:") else \
+            {"spread": "spreads", "moneyline": "h2h", "total": "totals"}.get(market, market)
+    except KeyError:
+        freeze_mk = market
+
+    mask = df["event_id"] == eid
+    if "market_key" in df.columns:
+        mask = mask & (df["market_key"] == freeze_mk)
+    if "player_name" in df.columns and row.get("player_name"):
+        mask = mask & (df["player_name"] == row["player_name"])
+
+    matched = df[mask]
+    if matched.empty:
+        return {}
+
+    # If multiple, take the one matching side
+    if len(matched) > 1 and "side_name" in matched.columns:
+        side = row.get("side", "")
+        side_matched = matched[matched["side_name"] == side]
+        if not side_matched.empty:
+            matched = side_matched
+
+    fr = matched.iloc[0]
+    result = {}
+    for col in ("tag", "conf", "conf_rank", "window", "thesis"):
+        if col in fr.index and pd.notna(fr[col]):
+            result[col] = fr[col]
+    return result
+
+
 def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
     """Build verdict rows for graded ai_nfl/sim_nfl picks.
 
@@ -614,7 +717,6 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
     pbp_slices: dict of {game_id: DataFrame}
     week_filter: only process games in this week (None = all)
     """
-    # Filter to allowed owners
     rows = [r for r in ledger_rows if r.get("owner") in ALLOWED_OWNERS]
     if not rows:
         return None
@@ -631,25 +733,29 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
         if not ledger_result or ledger_result not in ("W", "L", "P", "V"):
             continue
 
-        # Find the game's PBP
-        # We need to match ledger event_id to a game_id in pbp_slices
-        # For now, match by team names in the event
-        game_id = None
-        game_pbp = None
-        for gid, g in pbp_slices.items():
-            week = int(g["week"].iloc[0])
-            if week_filter is not None and week != week_filter:
-                continue
-            game_id = gid
-            game_pbp = g
-            break  # simplified matching
-
+        # ── Game matching via nfl_team normalization (Finding 1 fix) ──
+        game_id, game_pbp = _match_game(row, pbp_slices, week_filter)
         if game_pbp is None:
             continue
 
         week = int(game_pbp["week"].iloc[0])
         home = str(game_pbp["home_team"].iloc[0])
         away = str(game_pbp["away_team"].iloc[0])
+
+        # ── Freeze join: tag, conf, conf_rank, window, thesis ──
+        raw_d = _parse_raw(row)
+        tag = row.get("tag") or raw_d.get("tag")
+        conf = row.get("conf") or raw_d.get("conf")
+        conf_rank = raw_d.get("conf_rank")
+        window = row.get("window") or raw_d.get("window")
+
+        # Load freeze file for thesis and any missing fields
+        freeze = _load_freeze_row(row, ROOT)
+        if freeze:
+            tag = freeze.get("tag", tag)
+            conf = freeze.get("conf", conf)
+            conf_rank = freeze.get("conf_rank", conf_rank)
+            window = freeze.get("window", window)
 
         verdict = {
             "pick_id": pick_id,
@@ -661,28 +767,28 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
             "ledger_result": ledger_result,
             "week": week,
             "game_id": game_id,
+            "tag": tag,
+            "conf": conf,
+            "conf_rank": conf_rank,
+            "window": window,
         }
 
-        # Prop chain decomposition
+        # ── Prop chain decomposition ──
         if market in CHAIN_DEF:
-            # Determine which team the player is on
-            # Simplified: check which team has the player in PBP
+            # Player matching via normalized name (Finding 2 fix)
+            player_id = None
             team = None
             for t in (home, away):
-                p_stats = _player_stats_from_pbp(game_pbp, t)
-                for pid, ps_row in p_stats.items():
-                    if player_name and player_name.lower() in ps_row.get("name", "").lower():
-                        team = t
-                        player_id = pid
-                        break
-                if team:
+                pid = _resolve_player_id(player_name, game_pbp, t)
+                if pid is not None:
+                    team = t
+                    player_id = pid
                     break
 
             if team and player_id:
                 actual, prior, prior_source = _compute_chain_actual_prior(
                     market, player_id, team, game_pbp, pbp_slices, week, point)
 
-                # Get actual stat value
                 p_stats = _player_stats_from_pbp(game_pbp, team)
                 ps_row = p_stats.get(player_id, {})
                 stat_map = {
@@ -709,7 +815,6 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
                 verdict["actual_stat"] = A
                 verdict["prior_source"] = prior_source if prior else "none"
 
-                # Compute builder's W/L
                 if L is not None:
                     if side.lower() == "over":
                         computed_result = "W" if A > L else ("L" if A < L else "P")
@@ -718,22 +823,12 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
                     verdict["computed_result"] = computed_result
                     verdict["wl_mismatch"] = computed_result != ledger_result
 
-                # Why code
                 verdict["why_code_auto"] = _why_code_auto_prop(
                     decomp if actual and prior else None,
                     None, False, True, [])
 
-        # Thesis from tag
-        tag = None
-        raw = row.get("raw")
-        if raw:
-            try:
-                raw_d = json.loads(raw) if isinstance(raw, str) else raw
-                tag = raw_d.get("tag")
-            except (json.JSONDecodeError, TypeError):
-                pass
-
-        freeze_thesis = row.get("thesis")
+        # ── Thesis: freeze thesis overrides tag_map ──
+        freeze_thesis = freeze.get("thesis") if freeze else None
         if freeze_thesis:
             verdict["thesis"] = freeze_thesis
             verdict["thesis_source"] = "freeze"
