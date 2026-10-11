@@ -179,3 +179,16 @@ when absent (all existing tests byte-identical at h=0).
 **h = h0 = 0.1719 is the final value.** Fitted on consumed seasons, stated as such.
 This is a league-level calibration constant, not a per-game or per-team effect.
 Whether it generalises beyond 2021-23 is UNVERIFIED; it will be judged forward only.
+
+### G8 — Forward PILOT runner + protocol update (2026-10-11)
+
+`nfl/sim/run_gameline_forward.py --season 2026 --week N`:
+- Writes one append-only parquet per week with sim + baseline + Hard Rock lines
+- HALTs on existing file, past kickoff, non-2026 season
+- Reads Hard Rock from line snapshots; null fields with reason when absent
+- Engine with h=0.172 from hfa_v1.json; baseline from gameline_baseline
+- pbp_2025 read ONLY as s-1 prior for 2026 ratings
+- MODE=PILOT; grading after ~125 games (separate order)
+
+Protocol updated: run instructions (Thursday before TNF / Sunday morning),
+grading spec (CLV, mixed c, log-loss).

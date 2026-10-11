@@ -94,3 +94,42 @@ the reader's opinion formation, under N54).
   and the baseline coefficients are deterministic from the PBP data + params. A
   re-freeze after seeing forward data requires a new freeze entry with a new timestamp
   and resets the forward count.
+
+## Run Instructions
+
+Jeff runs `run_gameline_forward.py` on the Mac:
+
+```bash
+# Thursday before TNF (captures TNF game + rest of week):
+cd ~/mlb-model
+python3 nfl/sim/run_gameline_forward.py --season 2026 --week N
+
+# Sunday morning before the early window (if not run Thursday):
+python3 nfl/sim/run_gameline_forward.py --season 2026 --week N
+```
+
+The runner:
+- HALTs if the week file already exists (revision 0 only)
+- HALTs if any game's kickoff is in the past at run time
+- Reads Hard Rock lines from the latest `data/odds_archive/nfl/line_history/season=2026/`
+  snapshot; writes null fields with a reason when no Hard Rock row exists
+- Writes one parquet per week: `nfl/data/sim/outputs/gl_forward/week=2026_NN.parquet`
+- Never touches 2024/2025 game rows (2026 only)
+- pbp_2025 is read ONLY as the s-1 prior for 2026 ratings
+
+## Grading Script (spec, not yet implemented)
+
+After ~125 games exist (~8 weeks), a grading script will:
+
+1. **CLV vs Hard Rock close:** for each game with a pre-kickoff Hard Rock line,
+   compare the sim's implied probability at the close vs at the snapshot. Positive
+   CLV = the sim was ahead of the market move.
+
+2. **Mixed-regression c:** actual = a + b·mkt + c·sim on the forward sample.
+   Same form as G2/G3's in-sample test.
+
+3. **Log-loss vs de-vigged market:** each object's P(home cover) and P(over)
+   at the market number, scored against outcomes. Compare: sim, baseline,
+   de-vigged market.
+
+Grading is a later order — this protocol only specifies the capture.
