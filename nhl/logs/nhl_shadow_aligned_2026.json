@@ -601,7 +601,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 5.668,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 5
     },
     {
       "game_id": 2026020077,
@@ -613,7 +615,9 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.391,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 3
     },
     {
       "game_id": 2026020080,
@@ -625,7 +629,9 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.659,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 9
     },
     {
       "game_id": 2026020083,
@@ -637,7 +643,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 5.536,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 3
     },
     {
       "game_id": 2026020072,
@@ -649,7 +657,9 @@
       "tier": "HIGH",
       "closing_total": 5.5,
       "lambda_total": 6.015,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 4
     },
     {
       "game_id": 2026020073,
@@ -661,7 +671,9 @@
       "tier": "HIGH",
       "closing_total": 7.5,
       "lambda_total": 5.842,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 5
     }
   ]
 }
