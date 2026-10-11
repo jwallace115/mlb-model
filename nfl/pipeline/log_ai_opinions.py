@@ -55,6 +55,7 @@ SPORTS = {
             "lines": ROOT / "data" / "odds_archive" / "nfl" / "line_history",
             "out": ROOT / "nfl" / "data" / "board", "outcomes": "pbp",
             "require_side": False, "slate": "week", "drivers_required": False,
+            "thesis_required": True,
             "tags": ("injury_news", "role_change", "game_script", "matchup", "weather",
                      "price_vs_sharp", "usage_trend", "line_move", "no_view", "sim_v1")},
     "ncaaf": {"book": "hardrockbet", "props": None,
@@ -240,6 +241,9 @@ def validate(sheet, filled):
     if f.duplicated(KEY).any():
         raise SystemExit("HALT: filled sheet has duplicate lines")
     merge_cols = KEY + ["p_first", "tag", "reason", "conf", "conf_rank"]
+    # P50: carry thesis through if present
+    if "thesis" in f.columns:
+        merge_cols.append("thesis")
     # D246(b): carry digests through if present
     for dcol in ("bundle_digest", "experiment_digest"):
         if dcol in f.columns:
@@ -258,6 +262,33 @@ def validate(sheet, filled):
     bad = sorted(set(m["tag"]) - set(tags))
     if bad:
         raise SystemExit(f"HALT: unknown tag(s) {bad}; allowed {tags}")
+    # ── P50: thesis validation (NFL only) ──
+    _THESIS_LINKS = {"plays", "pass_rate", "run_rate", "share", "efficiency",
+                      "availability", "script", "points", "turnovers", "price"}
+    _THESIS_DIRS = {"up", "down"}
+    if SPORTS[SPORT].get("thesis_required", False):
+        nv = m["tag"] == "no_view"
+        for i, row in m.iterrows():
+            if nv.loc[i]:
+                continue  # no_view lines may omit thesis
+            thesis = str(row.get("thesis", "")).strip() if "thesis" in m.columns else ""
+            if not thesis:
+                raise SystemExit(
+                    f"HALT: NFL view line missing thesis "
+                    f"(event_id={row['event_id']}, market_key={row['market_key']}, "
+                    f"player_name={row.get('player_name', '')})")
+            claims = [c.strip() for c in thesis.split(";")]
+            if len(claims) < 1 or len(claims) > 3:
+                raise SystemExit(
+                    f"HALT: thesis must have 1-3 claims (got {len(claims)}) on "
+                    f"event_id={row['event_id']}, market_key={row['market_key']}")
+            for claim in claims:
+                parts = claim.split(":")
+                if len(parts) != 2 or parts[0].strip() not in _THESIS_LINKS or parts[1].strip() not in _THESIS_DIRS:
+                    raise SystemExit(
+                        f"HALT: invalid thesis claim '{claim}' on "
+                        f"event_id={row['event_id']}, market_key={row['market_key']}; "
+                        f"must be link:dir with link in {sorted(_THESIS_LINKS)} and dir in {sorted(_THESIS_DIRS)}")
     # ── conf / conf_rank validation ──
     m["conf"] = pd.to_numeric(m["conf"], errors="coerce")
     m["conf_rank"] = pd.to_numeric(m["conf_rank"], errors="coerce").astype("Int64")

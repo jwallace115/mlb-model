@@ -988,3 +988,26 @@ price → held if CLV > 0 at Hard Rock.
 **Known overlap with `eng/fwd6-parser-fix`:** that branch adds 19 lines to
 `log_ai_opinions.py`. This build touches only `validate()` (item 3) and one
 SPORTS key. The later merge should be small.
+
+## P50 — Thesis on every NFL freeze (2026-10-11)
+
+**Grammar:** 1–3 claims `link:dir` joined by `;`.
+Links: plays, pass_rate, run_rate, share, efficiency, availability, script,
+points, turnovers, price. Directions: up, down.
+
+**Requirement:** `SPORTS["nfl"]["thesis_required"] = True`. Every NFL view line
+on a new freeze must carry a valid thesis. `no_view` lines may leave it empty.
+NCAAF: False (unchanged). NHL: False (unchanged).
+
+**reader_v3 constant:** `thesis: "price:up"` on every view line. Its only claim
+is price vs sharp. reader_sha256: `c1abf61a72ab20cc...` (changes from v1).
+
+**reader_method_v2.md:** v1 + one new section "7. Thesis" (grammar, examples,
+enforcement, post-game grading). v2 starts from the date of this commit. Judged
+only on slates after its date per N62.
+
+**packet.sh:** does not reference reader_method directly; the Cowork reader
+receives its instructions from the Claude project docs. No change needed.
+
+**build_postgame.py:** when the freeze row has `thesis`, thesis_source = "freeze"
+and it overrides tag_map.

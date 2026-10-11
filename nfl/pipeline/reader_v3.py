@@ -363,10 +363,13 @@ def read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix,
                 (edge * 500 + min(n, 9) * 1.0 + (0 if c is not None else -3))
                 * min(1.0, n / 5), 1))
             conf = max(conf, 1.0)
+        # P50: reader_v3 writes thesis "price:up" on every view line
+        thesis = "price:up" if tag != "no_view" else ""
         row_out = {"event_id": r.event_id, "market_key": r.market_key,
                    "player_name": r.player_name, "line": r.line,
                    "p_first": round(p, 4), "tag": tag, "reason": reason,
-                   "conf": conf, "_edge": edge, "_kick": r.commence_time}
+                   "conf": conf, "thesis": thesis,
+                   "_edge": edge, "_kick": r.commence_time}
         if sport == "ncaaf":
             row_out["book"] = row_book
         out.append(row_out)
