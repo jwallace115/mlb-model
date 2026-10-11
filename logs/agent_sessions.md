@@ -4191,3 +4191,53 @@ Also: make refresh_inputs fail per team, not per report.
 
 Branch check: `git -C ~/mlb-model branch --show-current` returned `main` at session start.
 Commits on origin/research/lm1: 409e7061f, 009a2c44c, 6eb28dfe3, f6f86ca33.
+
+## 2026-10-11T13:06Z  claude-code (LM-1b — fix grader price scale, re-grade, correct ledger)
+
+### RETURNED
+- Item 1 (6259d6f00): Rewrote grade_lm_cells.py with three changes:
+  (a) CLV scale: clv_pp = Pinnacle de-vigged close − HR RAW implied (paid price, with vig).
+      Old metric kept as drift_pp = close_devig − bet_devig (fair-vs-fair drift).
+      clv_cents = (fair_close × decimal_payout − 1) × 100 (expected profit per dollar).
+  (b) Comparability gate: clv_valid = True only when close_point == bet_point or h2h.
+      Invalid rows excluded from all stats. Exclusion counts reported per cell × sport.
+  (c) C5 direction: fires only when public side overtaxed (gap > 0). C5-bidir reported
+      separately, not graded against bar.
+  All cells negative paid-price CLV. C5 drift confirms shade is real (+1.59 NFL, +1.01 NCAAF)
+  but vig absorbs it. Pre-registrations all HELD.
+  Exclusion rates: C1 NFL 23/38, C2 NFL 79/93, C3 NFL 32/35, C5 NFL 11/29.
+  Wall time: 798s.
+
+- Item 2 (da6dd69de): Retraction block prepended to LM_INTERIM. LM-1's C5 +0.91/+1.01 pp
+  figures withdrawn — compared de-vigged on both sides (drift, not CLV). Ledger corrected:
+  LM-C2 graded MISS (type A, 85% prior wrong), LM-C5 "underestimated" reversed (FAIL on
+  honest metric, consistent with 30% prior), LM-0 on track (no cell passes).
+  LM-D4 (scale rule) and LM-D5 (retraction) recorded.
+
+### MEANS
+- The directional shade in C5 is real (drift_pp ~+1.5 pp in both sports) but does not
+  overcome HR's vig (~2.3 pp per side). A shade of +1.5 pp minus vig of 2.3 pp = −0.8 pp CLV.
+  This is exactly what the numbers show. The shade is information, not an edge.
+- C2's ATS (62.6% NFL) remains suggestive but CLV is negative on both scales. The ATS
+  could be real (point edge matters for game outcomes) but is not evidence of +EV.
+- The comparability gate makes most cells INSUFFICIENT METHOD. At season end, many NFL
+  cells will still have too few same-point rows for a CLV verdict. ATS will be the only
+  metric with adequate N for C2.
+
+### NOT DONE
+- No point-value conversion attempted (work order explicitly says "do NOT add").
+- No weekly breakdowns (same as LM-1).
+- NCAAF CFBD refresh still needed for ATS grading.
+
+### UNVERIFIED
+- Whether HR's price in a snapshot was actually available at that moment (the tape shows
+  the price was listed; it may have been pulled or limited by the time a bettor acts).
+- Whether a point-value conversion would rescue the cross-point rows — not attempted.
+  In principle, converting +2.5 points of spread edge to a probability edge (~7-8 pp for
+  key-number territory) could make C2's cross-point CLV positive, but this was not authorized.
+- Whether the ~2.3 pp vig estimate is stable across markets and sports. It was computed as
+  the mean gap between raw implied and de-vigged for all HR bets in the tape, not verified
+  against an independent source.
+
+Branch check: `git -C ~/mlb-model branch --show-current` returned `main` at session start.
+Commits on origin/research/lm1: 6259d6f00, da6dd69de.
