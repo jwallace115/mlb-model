@@ -4135,3 +4135,77 @@ Also: make refresh_inputs fail per team, not per report.
 - 8 pre-existing test reds in test_top20_page, test_site_four_sports, etc. confirmed to
   fail identically at parent commit (13b8681fa) — unrelated to this work
 - Unmatched player names in the live ledger (will surface on first VM grader run)
+
+## 2026-10-11T14:40Z  claude-code (PM-1b — post-game WHY layer fix)
+
+### RETURNED
+
+- Item 1 (96c4144a4): Fixed 3 bugs in build_postgame.py:
+  - Finding 1: build_verdicts matched FIRST PBP slice (break after first iteration).
+    Fixed: _match_game() joins via ps.nfl_team() exact normalization.
+    RED: game_id=2026_01_BUF_KC (wrong). GREEN: 2026_01_CHI_DET (correct).
+  - Finding 2: player matching used substring (player_name.lower() in name.lower()).
+    Real 2026 collision: "Ian Thomas" in "Brian Thomas Jr." → wrong player's stats.
+    Fixed: _resolve_player_id() uses pg._resolve_player_name() + pg._normalize_name().
+    RED: actual_stat=5 (Brian Thomas Jr.). GREEN: actual_stat=2 (Ian Thomas).
+  - Finding 3: no freeze join for conf_rank/thesis. Fixed: _load_freeze_row() reads
+    freeze parquet via source_file + (event_id, market_key, player_name, side).
+  - grep '.lower() in' on name strings: 0 hits. No substring name matching.
+
+- Item 2 (6b9529348): thesis z-check, game-line verdicts, flags.
+  _check_thesis: z = link_term / SD_link; held >= +0.5, failed <= -0.5. Price thesis: CLV > 0.
+  Game-line: spread/total/ML produce margin, total, close, why_code_auto_game.
+  Flags: margin_1. one_play_decided scaffold. teammates_out NOT IMPLEMENTED.
+  11 new tests (17 total with PM-1 tests). All pass.
+
+- Item 3 (c51d30353): real-data run on VM, weeks 2-5, 1656 verdict rows.
+  - Player resolution fix: PBP uses abbreviated names (D.Schultz); ledger uses full
+    (Dalton Schultz). Fixed via player_stats lookup → gsis_id → PBP.
+  - Player_stats symlinked into pm1_scratch (was missing).
+  - chain_decompose guarded against negative/zero values.
+  - Join rates: game 100%, player 76%, freeze 75.4%.
+  - sha256 picks.jsonl BEFORE=2da62d552970 AFTER=2da62d552970 (read-only confirmed).
+  - sha256 clv.jsonl BEFORE=4db8c3969008 AFTER=4db8c3969008 (read-only confirmed).
+  - PM-1: efficiency 35.2% — HELD (30-60%).
+  - PM-2: script 26.0% — HELD (15-35%).
+  - PM-3: share 38.8% — DID NOT HOLD (10-30%). AVAILABILITY 0.0% — HELD.
+  - PM-4: NOT IMPLEMENTED. PM-5: no non-price thesis rows. PM-6: 9.5% — DID NOT HOLD.
+  - 14 W/L mismatches (reported, not fixed).
+  - Evidence at ~/mlb-model-pm1/_pm1b_evidence/ (gitignored).
+
+- Item 4 (bc33119e9): reader_v3 null control, NCAAF, grammar, packet.sh, full suites.
+  - reader_v3 null: thesis ADDED without changing other columns (diff is 4 lines).
+  - NCAAF: reader_v3 writes thesis on NCAAF too (same code path). No thesis_required gate.
+  - Grammar: _check_thesis returns no_data for cross-type links (tested).
+  - packet.sh: grep "reader_method" → exit 1 (no match). 8 files reference reader_method_v1.
+  - nfl/pipeline/tests: 20 failed (19 pre-existing at 75ec6ac63), 113 passed, 2 skipped.
+  - shared/pipeline/tests: 8 failed (all pre-existing at 75ec6ac63), 235 passed.
+
+### NOT DONE
+- link_sd_2025.json not generated on VM (build_postgame_link_sd.py needs nflreadpy,
+  not installed in VM venv). Needed for thesis z-score to produce real values.
+- teammates_out flag (snap counts archive join with prior share >= 15%).
+- one_play_decided with real per-play yards (function scaffold only, needs _plays key
+  populated from PBP individual play yards).
+- Caddyfile mtime check (not in repo; presumably on VM only — could not verify).
+- Week 1 and week 4 had 0 ai_nfl/sim_nfl graded picks, so no verdicts for those weeks.
+- Player join rate 76% (1192/1568) — 24% of props couldn't resolve player. Likely needs
+  more entries in player_name_overrides.json (currently only 3 entries).
+- PM-5 not gradable: no non-price prop thesis rows exist (tag_map thesis needs
+  link_sd_2025.json for z-score computation; without it, all return no_data).
+- Tag-shuffle null is degenerate: thesis_held is computed from PBP data, not from tag;
+  shuffling tags doesn't change thesis_held values. A proper null would re-derive thesis
+  from shuffled tags and recompute z-scores.
+- PM-3 DID NOT HOLD: share primary at 38.8% vs prediction 10-30%. Investigate whether
+  the chain decomposition is overcounting share for reception props.
+- PM-6 DID NOT HOLD: thesis-failed wins at 9.5% vs prediction >= 30%. May be an artifact
+  of the limited thesis data (most rows return no_data).
+- 19 pre-existing reds in nfl/pipeline/tests (log_ai_opinions.py tests).
+- 8 pre-existing reds in shared/pipeline/tests (site/page tests).
+
+### UNVERIFIED
+- Whether the 14 W/L mismatches are grading errors or ledger errors (need manual check).
+- Whether player_stats gsis_id → PBP player_id mapping is reliable across all players
+  (some players may have different IDs in different data sources).
+- The chain identity ln(A/L) = ln(E/L) + Σln(link_actual/link_prior) is asserted to
+  1e-9 in tests but not verified on real data (only on fixtures).
