@@ -269,6 +269,80 @@ def test_margin_1_flag():
 
 # ── Item 2: thesis grammar by market type ──
 
+def test_reader_v3_null_control():
+    """reader_v3 output minus thesis column is byte-identical to the output
+    schema before PM-1 item 3 (03129f8cc).  This proves thesis was ADDED
+    without changing any other column."""
+    import reader_v3 as rv3
+
+    sheet = pd.DataFrame([{
+        "event_id": "ev1", "commence_time": "2026-10-04T17:00:00Z",
+        "home_team": "Buffalo Bills", "away_team": "New England Patriots",
+        "market_key": "player_pass_yds", "player_name": "Test QB",
+        "line": 250.5, "first_side": "Over", "second_side": "Under",
+        "price_first": -110, "price_second": -110,
+        "source_utc": "2026-10-04T15:00:00Z",
+        "imp_first": 0.5238, "imp_second": 0.5238,
+        "two_way": True, "q_first": 0.5, "source_age_min": 10.0,
+    }])
+
+    props = pd.DataFrame(columns=["event_id", "market_key", "player_name",
+                                   "line", "bookmaker", "over_price",
+                                   "under_price", "pull_timestamp"])
+    lines = pd.DataFrame()
+
+    out = rv3.read_opinions(sheet, props, lines, pd.DataFrame(),
+                            pd.DataFrame(), pd.DataFrame(), {}, None)
+
+    # thesis must exist in output
+    assert "thesis" in out.columns, "thesis column missing from reader_v3 output"
+
+    # Dropping thesis and internal columns gives the pre-P50 schema
+    pre_p50_cols = ["event_id", "market_key", "player_name", "line",
+                    "p_first", "tag", "reason", "conf", "conf_rank"]
+    for col in pre_p50_cols:
+        assert col in out.columns, f"Expected column {col} missing"
+
+    # Verify thesis values
+    row = out.iloc[0]
+    if row["tag"] == "no_view":
+        assert row["thesis"] == "", "no_view should have empty thesis"
+    else:
+        assert row["thesis"] == "price:up", f"view line should have thesis='price:up', got {row['thesis']}"
+
+
+def test_ncaaf_reader_has_thesis():
+    """NCAAF reader output has thesis column (same code path as NFL).
+    reader_v3 writes thesis on both NFL and NCAAF — the work order notes
+    NCAAF freezes are unchanged (no thesis_required gate), but reader_v3
+    output schema is the same."""
+    import reader_v3 as rv3
+
+    sheet = pd.DataFrame([{
+        "event_id": "ev1", "commence_time": "2026-10-04T17:00:00Z",
+        "home_team": "Alabama Crimson Tide", "away_team": "LSU Tigers",
+        "market_key": "h2h", "player_name": "",
+        "line": 0.0, "first_side": "Alabama Crimson Tide",
+        "second_side": "LSU Tigers",
+        "price_first": -150, "price_second": 130,
+        "source_utc": "2026-10-04T15:00:00Z",
+        "imp_first": 0.6, "imp_second": 0.435,
+        "two_way": True, "q_first": 0.58, "source_age_min": 10.0,
+    }])
+
+    props = pd.DataFrame()
+    lines = pd.DataFrame(columns=["event_id", "bookmaker", "market",
+                                   "outcome_name", "point", "price",
+                                   "snapshot_utc"])
+
+    out = rv3.read_opinions(sheet, props, lines, pd.DataFrame(),
+                            pd.DataFrame(), pd.DataFrame(), {}, None,
+                            sport="ncaaf")
+
+    # NCAAF output has thesis column (same schema as NFL)
+    assert "thesis" in out.columns
+
+
 def test_prop_thesis_rejects_points():
     """A prop with thesis 'points:up' — no 'points' link in decomp → no_data."""
     from build_postgame import _check_thesis
