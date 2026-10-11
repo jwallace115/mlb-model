@@ -123,3 +123,21 @@ a known artifact of integer margins, not a code error.
 (normal + market mean). This is consistent with G3: the engine does not beat the
 market on either mean or shape. Its value is in the drive-level structure
 (player allocations, drive outcomes) that the game-line aggregate discards.
+
+### G5 — Forward protocol spec + ChatGPT audit brief (2026-10-10)
+
+**Forward protocol:** `research/nfl_sim/GL_FORWARD_PROTOCOL_v1.md` specifies:
+- Freeze = engine fingerprint + baseline params + hl_games pinned
+- Weekly capture: sim + baseline + Hard Rock snapshot, pre-kickoff, append-only
+- Grading: CLV vs HR close, mixed-regression c, log-loss vs de-vigged market
+- Mode PILOT until: (1) 2024 clean look, (2) ChatGPT audit, (3) 125 forward games
+- Sim is a layer under N54; never the picker
+
+**Audit brief:** `research/cross_ai/chatgpt_audit_brief_gameline_v1_2026-10-10.md`
+pinned to commit `aad7f9699`. Requests ALL findings in 5 classes:
+1a. Feature provenance (live signal pre-first-pitch)
+1b. Feature provenance (point-in-time training)
+2. Week-level as-of sufficiency
+3. Ledger honesty
+4. Research object == live object
+5. Forward protocol gamability
