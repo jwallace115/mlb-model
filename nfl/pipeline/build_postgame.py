@@ -297,8 +297,11 @@ def _chain_decompose(actual, prior, L, A, market):
             return None  # missing prior
         E *= prior[link]
 
-    if E == 0:
+    if E <= 0:
         return None
+
+    if L <= 0:
+        return {"zero_actual": True, "A": A, "L": L, "chain": "none"}
 
     book_vs_prior = math.log(E / L)
 
@@ -306,7 +309,7 @@ def _chain_decompose(actual, prior, L, A, market):
     for link in chain:
         a_val = actual.get(link, 0)
         p_val = prior.get(link, 0)
-        if a_val == 0 or p_val == 0:
+        if a_val <= 0 or p_val <= 0:
             links[link] = {"actual": a_val, "prior": p_val, "term": 0.0}
         else:
             links[link] = {
