@@ -899,3 +899,43 @@ prop line in the sheet.
 
 Leak control: only games whose kickoff < logged_utc are included.
 `--rebuild-layer prop_history` supported via the layer_fn dict.
+
+## P48 — Post-game data archive: nflverse PBP, snap counts, FTN charting (2026-10-11)
+
+**Feeds and paths** (all under `data/results_archive/nfl/`):
+- PBP: one file per FINAL game, all 372 columns.
+  `pbp/season=2026/pbp_<game_id>_<UTC>.parquet`
+- Snap counts: `snap_counts_2026_<UTC>.parquet`
+- FTN charting: `ftn_charting_2026_<UTC>.parquet` (graceful if unavailable)
+- Pull log: `_postgame_pulls.jsonl` (one line per feed per run)
+
+**Final-game test:** a game is final if its last play (sorted by play_id) has `desc`
+containing "END GAME" (case-insensitive). Confirmed: all 65 completed 2026 games
+(weeks 1–5, 1 game in week 5) pass this test on nflverse PBP.
+
+**Hash-skip rule:** sha256 of the parquet bytes. If the newest existing file for a
+game matches, the game is logged as "unchanged" and not written. A changed slice
+(stat correction) writes a NEW file with a fresh timestamp; old files are kept.
+Never overwrite. Confirmed: idempotent second run writes 0 files.
+
+**Builder column list** (HALT if any are missing from nflverse PBP):
+game_id, home_team, away_team, week, season, play_id, play_type, desc, qtr,
+score_differential, home_score, away_score, posteam, defteam, pass_attempt,
+rush_attempt, sack, complete_pass, yards_gained, passing_yards, receiving_yards,
+rushing_yards, interception, fumble, fumble_lost, touchdown, passer_player_id,
+passer_player_name, receiver_player_id, receiver_player_name, rusher_player_id,
+rusher_player_name, yardline_100, result.
+
+**Measured sizes** (VM run, 2026 weeks 1–5, 65 final games):
+- Per-game PBP: 289 KB – 308 KB (all well under 2 MB limit)
+- Total PBP: 19.0 MB
+- Snap counts: 85 KB (6,064 rows)
+- FTN charting: 150 KB (10,996 rows)
+- Max resident: 331 MB, wall time: 6.8 s
+
+**Push path:** `push_daemon.sh` (cron `*/30 * * * *`) runs `git add -A` on
+`/root/mlb-model/` → commits → pushes to origin/main. Item 4's postgame cron
+writes to the same tree; files reach origin within 30 min.
+
+**Env overrides:** `MLB_REPO_ROOT`, `RESULTS_ARCHIVE_DIR` (same pattern as
+`pull_nfl_player_stats.py`, P45).
