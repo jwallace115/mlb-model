@@ -1007,8 +1007,10 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
             clv_data = _load_clv(LEDGER_DIR)
             clv_row = clv_data.get(pick_id)
             if clv_row:
-                verdict["close_point"] = clv_row.get("close_point")
-                verdict["close_price"] = clv_row.get("close_price")
+                cpt = clv_row.get("close_point")
+                verdict["close_point"] = float(cpt) if cpt is not None else None
+                cp = clv_row.get("close_price")
+                verdict["close_price"] = int(float(cp)) if cp is not None else None
                 close_pt = clv_row.get("close_point")
                 if close_pt is not None:
                     if market == "spread":
