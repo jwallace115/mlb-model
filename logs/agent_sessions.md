@@ -4135,3 +4135,42 @@ Also: make refresh_inputs fail per team, not per report.
 - 8 pre-existing test reds in test_top20_page, test_site_four_sports, etc. confirmed to
   fail identically at parent commit (13b8681fa) — unrelated to this work
 - Unmatched player names in the live ledger (will surface on first VM grader run)
+
+## 2026-10-11T13:00Z  claude-code (PM-1 — post-game WHY layer, build 1)
+
+### RETURNED
+- Preflight: branch=main ✓, Caddyfile mtime=2026-10-09T01:25:04Z ✓, nflreadpy=0.1.5 ✓
+- Worktree ~/mlb-model-pm1 on ops/pm1 created from origin/main
+- Item 1 (75ec6ac63 + e2e277f9c, P48): shared/pipeline/pull_nfl_postgame_data.py
+  VM run: 65 final games (wk 1–5), 19.0 MB PBP, 85K snap counts, 150K FTN, 6.8s/331MB.
+  Idempotent 2nd run: 0 written, 65 unchanged. 4 tests GREEN.
+  Push path: push_daemon.sh (*/30 cron) → git add -A → push origin/main.
+- Item 2 (7cc3ca981, P49): nfl/pipeline/build_postgame.py, build_postgame_link_sd.py
+  Game sheets + pick verdicts. Chain identity asserted to 1e-9. 6 tests GREEN.
+  **BUG (found by Cowork verification):** build_verdicts() matches every ledger row
+  to the FIRST PBP slice (`break  # simplified matching`). The game-matching logic is
+  a stub that does not join on event_id/teams. NOT MERGEABLE as-is.
+- Item 3 (03129f8cc, P50): SPORTS["nfl"]["thesis_required"]=True,
+  validate() enforces thesis grammar, reader_v3 writes "price:up", reader_method_v2.md.
+  NCAAF/NHL unchanged. 6 tests GREEN. Existing reader_v3 tests (8) GREEN.
+- Item 4 (0fc37ca87, P51): why_summary.md writer, LESSONS_nfl.md scaffold,
+  claude_prediction_ledger.md (PM-1..PM-6 pre-registered, NOT YET GRADED).
+
+### NOT DONE
+- **Merge to main** — STOPPED by Jeff. build_verdicts() game-matching bug blocks it.
+  PM-1b fix order will run in a fresh session on the same branch.
+- VM cron line for postgame (0 11 * * *)
+- Real backfill run weeks 1–5 from main
+- PM-1..PM-6 grading against real data
+- Null controls (truncation equivalence, ledger sha, tag-shuffle null)
+- link_sd_2025.json generation on VM
+- VM worktree cleanup (~/mlb-model-pm1 on Mac, /root/mlb-model-pm1 on VM)
+
+### UNVERIFIED
+- build_verdicts() game matching — known broken (stub), flagged by Cowork
+- PBP-derived player stats vs official nflverse player_stats mismatch counts
+- reader_v3 byte-level null control on real fixture data (existing tests pass but
+  not a full column-by-column comparison)
+- Whether thesis validation interacts correctly with the live prekick freeze pipeline
+  (item 3 adds a column requirement; tested in isolation but not against a real freeze)
+- Odds API credits: 0 used (grep confirmed), but no runtime verification on VM
