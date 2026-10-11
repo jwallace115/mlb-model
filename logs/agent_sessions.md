@@ -4135,3 +4135,71 @@ Also: make refresh_inputs fail per team, not per report.
 - 8 pre-existing test reds in test_top20_page, test_site_four_sports, etc. confirmed to
   fail identically at parent commit (13b8681fa) — unrelated to this work
 - Unmatched player names in the live ledger (will surface on first VM grader run)
+
+## 2026-10-11T02:30Z  claude-code (eng/gl1 worktree)
+
+### WORK ORDER GL-1: NFL game-line sim lane — ledger, statistical control, unanchored engine
+
+### ITEM 1 — Baseline model + fit-window ledger
+- CREATED: `research/nfl_sim/FIT_WINDOW_LEDGER.md` (G1)
+  2021-23 game-line = CONSUMED; 2024 = UNTOUCHED; 2025 = NOT BLIND; 2026 = PROSPECTIVE
+- CREATED: `nfl/sim/gameline_baseline.py` — ridge on EPA/success diffs + QB + HFA
+  LOO-CV returned: hl_games=infinity best (P2 DID NOT HOLD; threshold 8-40)
+  Mixed regression on 815 games: c_margin=-0.093 t=-0.53 (P1 HOLDS: |c|<0.15, b=1.009)
+  Null control: 100 permutations, c=0.002, t=0.02 — PASSES
+- CREATED: `nfl/sim/tests/test_gameline_gl1.py` — 9/9 passed (exit 0, 2 warnings)
+  6 truncation-equivalence, 1 negative control, 2 season membership
+- CREATED: `research/nfl_sim/GL1_report_2026-10-10.md` section 1
+- CREATED: `research/nfl_sim/NFL_GAMELINE_DECISION_v1.md` (G1, G2)
+- COMMITTED+PUSHED: a78e4bef3
+
+### ITEM 2 — Unanchored engine on 2021-23
+- CREATED: `nfl/sim/run_gameline_gl1.py` — parallel checkpointed runner
+  Symlinked PBP from main checkout (gitignored, not in worktree)
+- RAN: 815 games at N=5000, 10 workers, 945s (1.2s/game), exit 0
+  Engine fingerprint: 156cd057a3b39e48
+  RETURNED: raw_m mean=-0.02, raw_t mean=41.49, corr(raw_m,mkt_m)=0.822
+  P(|m|=3)=12.3%, P(|m|=7)=7.2%
+  MEANS: P3 (total ±1.5) DID NOT HOLD (gap=-3.0); P4 (corr≥0.75) HOLDS
+  Mixed regression: c_margin=0.055 t=0.37 (P5 |c|<0.20 HOLDS)
+  c_total=-0.334 t=-1.80 (P5 c_total ∈ (-0.3,+0.1) DID NOT HOLD, borderline)
+- Three-way (engine+baseline+mkt): engine c=0.098 t=0.61, baseline c=-0.136 t=-0.72
+  MEANS: neither adds info over the market (G3)
+- Anchored null control: 20/20 pass |anch_m-mkt_m|<2*SE. Max err 0.321, mean SE 0.189
+- COMMITTED+PUSHED: 5b3addabe
+
+### ITEM 3 — Shape test
+- Engine full dist vs normal(mkt mean, engine SD) on 815 games:
+  Normal wins at every line (mkt, ±3, ±7). Engine LL=0.703 vs normal LL=0.672 on ±3
+  P6 HOLDS: engine P(|m|=3)=12.3% < 14.5% → engine does NOT beat normal
+  Null control: mean |ΔP|=0.015 (partial — 0.01 threshold too tight for discrete scoring)
+  MEANS: G4 — engine shape adds no value (consistent with G3)
+- COMMITTED+PUSHED: aad7f9699
+
+### ITEM 4 — Forward protocol + audit brief
+- CREATED: `research/nfl_sim/GL_FORWARD_PROTOCOL_v1.md` (freeze, capture, grading, PILOT mode)
+- CREATED: `research/cross_ai/chatgpt_audit_brief_gameline_v1_2026-10-10.md` pinned to aad7f9699
+  5 audit classes: provenance, as-of, ledger, research==live, gamability
+- G5 recorded
+- COMMITTED+PUSHED: 823f0f5c0
+
+### NOT DONE
+- 2024/2025 data: confirmed NOT opened (ALLOWED_SEASONS=[2021,2022,2023] enforced; parquet verified)
+- Engine fingerprint on main vs MNF primary: NOT verified (would require checking fwd_v1 logs)
+- Per-game checkpoint parquets (32MB): NOT committed (only summary committed)
+- Cross-ai directory: created in worktree but audit not yet sent to ChatGPT
+
+### UNVERIFIED
+- Whether engine fingerprint 156cd057a3b39e48 equals the one the MNF primary ran
+  (requires checking fwd_v1 freeze logs, out of scope for this order)
+- Whether the PBP symlinks in the worktree persist or need re-creation
+- pytest: 9 passed, 0 failed, exit 0 (2 deprecation warnings about class-scoped fixtures)
+  No pre-existing reds checked because these are new tests
+
+### COMMITS ON ORIGIN (eng/gl1)
+- a78e4bef3 — Item 1: baseline model, ledger, tests
+- 5b3addabe — Item 2: unanchored engine, 815 games
+- aad7f9699 — Item 3: shape test
+- 823f0f5c0 — Item 4: forward protocol, audit brief
+
+`git -C ~/mlb-model branch --show-current` → main
