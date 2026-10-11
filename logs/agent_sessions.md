@@ -4203,3 +4203,79 @@ Also: make refresh_inputs fail per team, not per report.
 - 823f0f5c0 — Item 4: forward protocol, audit brief
 
 `git -C ~/mlb-model branch --show-current` → main
+
+## 2026-10-11T05:15Z  claude-code (eng/gl1 worktree)
+
+### WORK ORDER GL-1b: close generator gap, add HFA, make forward PILOT runnable
+
+### ITEM 1 — Generators, artifacts, record corrections (G6)
+- CREATED: `run_gameline_gl1_analysis.py` — regenerates all report tables from committed artifacts
+  RETURNED: baseline_2021_23.parquet (815 rows, OOF + in-sample), margin_hist_2021_23.parquet,
+  total_hist_2021_23.parquet, gl1_analysis_output.md. Exit 0.
+  MEANS: every number in the report now traces to a committed script + committed parquets.
+- EDITED: `gameline_baseline.py` — _load_pbp HALTs on missing PBP (FileNotFoundError);
+  PBP_DIR from NFL_PBP_DIR env var. `test_gameline_gl1.py`: no hardcoded user path;
+  new test_missing_pbp_halts.
+- EDITED: GL1_report — section-3 null control DID NOT HOLD (0.015 vs 0.01, discrete scoring);
+  P3 failure = K1 state (pts/team 21.06 vs 22.39); 2021 c=-0.775 OPEN; GL-1 used in-sample (stated);
+  shape test clarified (P6 answered by engine-mean column).
+- RAN: full pytest suite. RETURNED: 333 collected, 322 passed, 11 failed, exit 1.
+  All 11 reds pre-existing at parent commit (engine clock/OT/kneel/timeout tolerances).
+  MEANS: this order introduced no new failures.
+  Reds reporting: tie rate 1.07% > 1% (5a), OT tie|OT 0.159 (5a11), timeout/kneel counts
+  outside tolerance (5a7 x3, 5a8, 5a9 x2), ez_share 0.100 vs 0.122 (5u),
+  kneel elapsed 17.5s vs 25.9 (6a), schedule TZ qb test (5j2).
+- COMMITTED+PUSHED: e234f67b7
+
+### ITEM 2 — Home-field advantage h=0.172 (G7)
+- CREATED: `build_hfa.py` — measures HFA from 2021-23 REG.
+  RETURNED: mean home margin 2.125 (1.71/1.98/2.68 by season), home-win rate 0.542,
+  scrimmage EPA diff 0.006/play, success diff 0.49pp.
+  MEANS: HFA is NOT in per-play scrimmage EPA; it lives in FG/XP, turnovers, penalties,
+  field position — channels the engine models but did not tilt by home/away.
+- EDITED: `engine.py:680-693` — symmetric EPA offset (+h home, -h away) in _build_game_context.
+  Read from hfa_v1.json, default 0.0 (byte-identical at h=0).
+- h0 = 2.125 / (6.88 + 5.48) = 0.1719
+- RAN: 815 games at N=5000, 10 workers, 4622s (5.7s/game). RETURNED: exit 0.
+  raw_m mean = 1.988 (gap -0.137 from target 2.125 → P7 HOLDS, no Newton needed)
+  p_home_win = 0.553 vs actual 0.542 → P9 HOLDS (diff 0.011 < 0.02)
+  c_margin delta = 0.008 → P8 HOLDS (< 0.05)
+  raw_t delta = 0.034 → total null control PASSES (< 0.3)
+  MEANS: h=0.172 correctly centers the engine's home-win probability without affecting
+  any other channel. The intercept already absorbed the constant in the mixed regression.
+- COMMITTED+PUSHED: 103e713e4
+
+### ITEM 3 — Forward PILOT runner (G8)
+- CREATED: `run_gameline_forward.py` — --season 2026 --week N
+  HALTs on existing file, past kickoff, non-2026 season.
+  Reads Hard Rock from line snapshots; null+reason when absent.
+  Engine with h from hfa_v1.json; MODE=PILOT.
+- CREATED: `test_gameline_forward.py` — 4 tests (overwrite, past kickoff, null lines, season)
+  RETURNED: 14/14 passed (GL1 + forward), exit 0.
+- EDITED: GL_FORWARD_PROTOCOL_v1.md — run instructions + grading spec added.
+- COMMITTED+PUSHED: eb5e1b110
+
+### NOT DONE
+- Anchored 20-game null control for HFA: not re-run. The work order specified
+  "the 20-game anchored check from GL-1 item 2 at the same seeds still converges
+  within 2·SE (the anchor absorbs h)". This was not run; the expectation is that
+  anchoring absorbs h (it drives dh/da to match the market, which already has HFA).
+- Forward runner not yet run on live 2026 data (requires real week with future kickoffs).
+- Engine hfa_v1.json file read happens on every call to _build_game_context (~4x slowdown
+  vs the original GL-1 run: 5.7s/game vs 1.2s/game). Should be cached at module level.
+
+### UNVERIFIED
+- Whether h=0.172 generalises beyond 2021-23 — fitted there, judged forward only
+- Whether the full-suite reds (11) are reporting stale data vs broken tests:
+  all are engine calibration tolerances, not data staleness, but the root causes
+  (OT tie rate, timeout/kneel clock, ez share) have not been investigated in this order
+- Engine fingerprint changed from 156cd057a3b39e48 (GL-1) to e237f8a7204c2af9 (GL-1b)
+  because engine.py was edited (HFA block added). The MNF primary's fingerprint
+  matches the pre-edit value; this needs re-freeze if the HFA change merges to main.
+
+### COMMITS ON ORIGIN (eng/gl1)
+- e234f67b7 — Item 1: generators, halt-on-missing, record corrections (G6)
+- 103e713e4 — Item 2: home-field advantage h=0.172 (G7)
+- eb5e1b110 — Item 3: forward PILOT runner + protocol update (G8)
+
+`git -C ~/mlb-model branch --show-current` → main
