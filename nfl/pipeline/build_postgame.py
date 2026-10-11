@@ -790,15 +790,44 @@ def _match_game(row, pbp_slices, week_filter):
     return None, None
 
 
+_player_stats_df = None
+
+
+def _load_player_stats():
+    """Load the newest nflverse player_stats_2026 parquet (cached)."""
+    global _player_stats_df
+    if _player_stats_df is None:
+        stats_df, _ = pg._load_newest_player_stats(ROOT)
+        _player_stats_df = stats_df
+    return _player_stats_df
+
+
 def _resolve_player_id(player_name, game_pbp, team):
     """Resolve a ledger player name to a PBP gsis player_id.
 
-    Uses picks_grader._normalize_name for exact normalized matching —
+    Path: ledger name → picks_grader._resolve_player_name →
+    normalized name → match against player_stats player_display_name →
+    gsis player_id → look up in PBP by receiver/rusher/passer_player_id.
+
     NO substring or startswith matching.  Returns player_id or None.
     """
     overrides = pg._load_name_overrides()
     resolved = pg._resolve_player_name(player_name, overrides)
 
+    # Step 1: Find gsis_id from player_stats (full display names)
+    stats_df = _load_player_stats()
+    if stats_df is not None and not stats_df.empty:
+        candidates = stats_df[stats_df.season == 2026].copy()
+        candidates["_norm"] = candidates.player_display_name.apply(pg._normalize_name)
+        matched = candidates[candidates._norm == resolved]
+        if not matched.empty:
+            gsis_id = str(matched.iloc[0].player_id)
+            # Step 2: Verify this player_id exists in the PBP for this team
+            p_stats = _player_stats_from_pbp(game_pbp, team)
+            if gsis_id in p_stats:
+                return gsis_id
+
+    # Fallback: direct PBP name match (for players not in weekly stats)
     p_stats = _player_stats_from_pbp(game_pbp, team)
     for pid, ps_row in p_stats.items():
         pbp_norm = pg._normalize_name(ps_row.get("name", ""))
