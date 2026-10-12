@@ -64,3 +64,19 @@ Seasons: 2021, 2022, 2023. No 2024+ target data read.
 **Truncation-equivalence test:** 6/6 (season, week) pairs PASSED.
 Negative control: 4/4 PASSED (future-week data correctly excluded or detected).
 Target season assertion: verified {2021, 2022, 2023}, no duplicates.
+
+## IE-D6 — Discovery fit, pre-registered, frozen (2026-10-12)
+
+All four pre-registrations FALSIFIED — stronger signal than expected:
+
+- P-IE1-1 FALSIFIED: F2 t=4.9, F4 t=4.2, F5 t=3.5, F3 t=3.1 on margin (predicted < 2.5)
+- P-IE1-2 FALSIFIED: F7 t=1.96, F9 t=0.47 on totals (predicted >= 2; neither reached)
+- P-IE1-3 FALSIFIED: F8 margin t=2.4, total t=-2.5 (predicted |t| < 1; the N-1 signal persists)
+- P-IE1-4 FALSIFIED: log-loss improvement = 0.019 (predicted < 0.003; 6x higher than expected)
+
+Frozen spec: 21 features, alpha=100 (margin), alpha=1000 (totals). See IE_FROZEN_SPEC_v1.md.
+
+**Caution:** this is discovery on 2021-23 with LOSO, not true OOS. The 2024 clean look
+(IE-2) is the real test. The strength of the discovery signal makes the OOS test higher-stakes:
+if it replicates, the information layer has genuine value; if it doesn't, the discovery was
+overfit. Do NOT tune anything to rescue a failed OOS.
