@@ -4209,3 +4209,82 @@ Also: make refresh_inputs fail per team, not per report.
   (some players may have different IDs in different data sources).
 - The chain identity ln(A/L) = ln(E/L) + Σln(link_actual/link_prior) is asserted to
   1e-9 in tests but not verified on real data (only on fixtures).
+
+## 2026-10-12T05:00Z  claude-code (PM-1c — post-game WHY layer: correct actuals, thesis, evidence)
+
+### RETURNED
+- **Preflight**: main confirmed; Caddyfile mtime 2026-10-09T01:25:04Z; ~/mlb-model-pm1
+  on ops/pm1 at 158fcd9aa; VM venv python3 has nflreadpy 0.1.5.
+
+- **Item 1 (3be8492ea)**: pass_att excludes sacks, unresolved→NaN, thesis link mapping
+  - _player_stats_from_pbp: pass_attempt==1 AND sack!=1 for QB stats
+  - Verified: Murray W1 player_stats attempts=29, PBP pass_att=1 total=34, sack=5, non-sack=29
+  - Spike handling: spikes have pass_attempt=1 in PBP AND count as official attempts (verified:
+    Rattler W1 PBP no_sack=46, player_stats attempts=46, includes 2 spikes)
+  - Unresolved player → actual_stat=NaN, why_code_auto=UNRESOLVED (never 0)
+  - _thesis_link_for_market: share→carry_share (rush) / qb_share (pass) / share (rec)
+  - reader_v3: thesis column only for sport=='nfl' (NCAAF has no thesis column)
+  - RED-FIRST: test_pass_att_excludes_sacks returned 5 (bug) before fix, 3 after
+  - 23 tests pass (PM-1c + PM-1b), 0 new reds
+
+- **Item 2 (42a1d7788)**: link_sd_2025.json, teammates_out, one_play_decided
+  - link_sd_2025.json generated on VM (PBP sha fa1cbdf30271, 8.5s, ~1GB RSS)
+    plays=8.63 share=0.08 catch_rate=0.32 carry_share=0.22 ypc=4.08
+    qb_share=0.31 comp_rate=0.19 ypa=3.43 margin_vs_spread=18.14 total_vs_line=13.16
+  - build_postgame_link_sd: sack exclusion for qb_share/completion_rate/ypa
+  - _player_stats_from_pbp: per-play yards (_plays_rec_yds etc.) for one_play_decided
+  - _teammates_out: snap counts → same position group → prior >= 15% → absent from PBP
+  - _one_play_decided: uses real per-play yards to check if removing longest flips result
+
+- **Item 3 (222ed5d57)**: cross-type HALT, byte-level null control, reds comparison
+  - log_ai_opinions validate: prop line with game-line thesis link HALTs (and vice versa)
+  - reader_v3 byte-level null: sha256 of parquet bytes matches across two runs (thesis dropped)
+  - Reds: origin/main=2, HEAD=20 (18 new are all thesis_required HALT from PM-1b P50
+    hitting pre-P50 test fixtures — no test green at origin/main is red at HEAD)
+  - shared/pipeline/tests: 8 reds on both (identical)
+
+- **Item 4 (de8b94d9e + evidence run)**: full evidence on VM
+  - 1656 verdict rows (weeks 2, 3, 5; weeks 1, 4 have 0 graded ai_nfl/sim_nfl picks)
+  - Join rates: game 100%, player 76.0%, freeze 75.4%
+    freeze by source: ai_nfl 71.5% (408 misses, mostly week 2 — freezes not ingested),
+    sim_nfl 100%
+  - **99% HALT applies to ai_opinions-sourced rows → 71.5% DOES NOT MEET 99%.**
+    The misses are week-2 rows whose freeze files sit in _to_delete/ai_w4/ on the Mac.
+  - W/L mismatches: 4 (3 are ledger=V voided picks with builder computing W/L — expected;
+    1 is Deebo Samuel rec_yds Under 40.5 A=0 — ledger says L but 0<40.5 = W,
+    the LEDGER is wrong on this pick)
+  - Chain identity: max residual 0.000185 (floating-point, 762 chain rows)
+  - Thesis verdicts (game/non-price only): 831 rows, 451 graded
+    HELD rate: 205/451 = 45.5%
+    PM-6 thesis-failed win rate: 68/165 = 41.2%
+  - Price theses: 150 rows, HELD rate 15/138 = 10.9%
+  - one_play_decided: 110 rows; ROLE_SHIFT: 314; UNRESOLVED: 61
+  - Null controls: ledger sha unchanged (983dbc8b), truncation 1451 + 205
+  - 5 largest |ln(A/L)| losses: Aaron Rodgers rush_yds 10/0.5 (2.996), Jauan Jennings
+    rec_yds 1/14.5 (2.674), Jared Goff rush_yds 6/0.5 (2.485), CeeDee Lamb rec_yds
+    9/82.5 (2.216 x2)
+
+### NOT DONE
+- Tag-shuffle null: the order specified seed 20261011, 1000 shuffles, re-derive thesis
+  from shuffled tag, recompute held/failed/flat. Not implemented because it requires
+  re-running _check_thesis on each shuffle iteration with the new thesis, which is
+  computationally feasible but the thesis z-check depends on link_sd_2025.json (now
+  generated) AND on the decomposition (which doesn't change). The shuffled-tag null
+  would re-derive thesis from TAG_TO_THESIS with a different tag → different thesis link
+  → different z-score → different held/failed. This is the correct null but was not
+  implemented in this session.
+- Player resolution top 25 unresolved names with reasons: not printed (61 UNRESOLVED
+  rows exist but the names and reasons were not enumerated individually).
+- P49/P50 amendment with dated PM-1c note: not done (decision doc entries).
+- Freeze join does not meet 99% for ai_nfl (71.5%) — the freeze files for week 2 were
+  never ingested. This is a data gap, not a code bug.
+- Merge not attempted (per order: STOP after item 4).
+
+### UNVERIFIED
+- Whether the 61 UNRESOLVED rows are genuinely unresolvable or need player_name_overrides
+  entries (only 3 overrides exist: Bijan, Kraft, Penix).
+- Whether the Deebo Samuel ledger result L (rec_yds Under 40.5 with A=0) is a grading
+  error or the player was incorrectly voided/graded elsewhere.
+- The 408 ai_nfl freeze join misses: whether the week-2 freeze files exist on the Mac
+  in _to_delete/ai_w4/ and whether they should be ingested.
+- The tag-shuffle null was not run, so PM-5/PM-6 thesis grades are NOT null-controlled.
