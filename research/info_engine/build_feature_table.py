@@ -62,7 +62,8 @@ games = (schedules
         (pl.col("home_score") + pl.col("away_score")).alias("total"),
     ])
     .with_columns([
-        (pl.col("margin") - (-pl.col("spread_line"))).alias("margin_resid"),
+        # margin_resid = margin - spread_line (IE-D8: corrected from margin+spread_line)
+        (pl.col("margin") - pl.col("spread_line")).alias("margin_resid"),
         (pl.col("total") - pl.col("total_line")).alias("total_resid"),
     ])
     .select(["game_id", "season", "week", "home_team", "away_team",
@@ -77,6 +78,24 @@ print(f"Target games: {games.shape}")
 target_seasons_in_data = sorted(games["season"].unique().to_list())
 assert target_seasons_in_data == TARGET_SEASONS, \
     f"HALT: target seasons {target_seasons_in_data} != {TARGET_SEASONS}"
+
+# ─── KNOWN-GAME ASSERTIONS (IE-D8) ──────────────────────────────────
+import numpy as np
+g_ari = games.filter(pl.col("game_id") == "2021_01_ARI_TEN")
+assert len(g_ari) == 1, "HALT: 2021_01_ARI_TEN not found"
+assert g_ari["margin"][0] == -25, f"HALT: ARI_TEN margin {g_ari['margin'][0]} != -25"
+assert g_ari["spread_line"][0] == 2.5, f"HALT: ARI_TEN spread_line {g_ari['spread_line'][0]} != 2.5"
+assert g_ari["margin_resid"][0] == -27.5, f"HALT: ARI_TEN margin_resid {g_ari['margin_resid'][0]} != -27.5"
+print("  PASS: 2021_01_ARI_TEN → margin -25, spread_line +2.5, margin_resid -27.5")
+
+# Home underdog that won: 2021_01_DAL_TB (TB home, spread_line=10, margin=2 → TB won as dog)
+g_tb = games.filter(pl.col("game_id") == "2021_01_DAL_TB")
+assert len(g_tb) == 1
+assert g_tb["margin"][0] > 0, "HALT: TB didn't win"
+assert g_tb["spread_line"][0] > 0, "HALT: TB wasn't underdog"
+# Home cover under corrected formula: margin > spread_line → 2 > 10 → False (TB won but didn't cover 10pt spread)
+assert g_tb["margin_resid"][0] < 0, f"HALT: TB should NOT cover 10pt spread with 2pt win"
+print("  PASS: 2021_01_DAL_TB → home underdog won (margin=2, sl=10), margin_resid=-8 (did NOT cover)")
 
 # ─── LINE MOVEMENT (F10) ────────────────────────────────────────────
 import pandas as pd
@@ -306,7 +325,8 @@ def build_f6(season, week, team):
     shares = (curr["offense_snaps"] / total_snaps).to_list()
     hhi = sum(s**2 for s in shares)
 
-    # Snap shift: how many players changed >= 10pp in snap share from avg
+    # Snap shift: mean absolute deviation of week N-1 snap shares from season avg
+    # (IE-D9: redefined from count>10pp to MAD, proven to vary)
     hist_avg = (hist.group_by("player").agg(
         pl.col("offense_snaps").mean().alias("avg_snaps")
     ))
@@ -326,8 +346,8 @@ def build_f6(season, week, team):
         (pl.col("avg_snaps") / total_avg).alias("avg_share"),
     ])
     shifts = (merged["curr_share"] - merged["avg_share"]).abs()
-    big_shifts = (shifts > 0.10).sum()
-    return {"snap_shift": float(big_shifts), "snap_concentration": hhi}
+    snap_shift_mad = float(shifts.mean())  # continuous, always varies
+    return {"snap_shift": snap_shift_mad, "snap_concentration": hhi}
 
 
 # ─── F7: REFEREE CREW SCORING ───────────────────────────────────────
@@ -558,6 +578,32 @@ assert ft_seasons == TARGET_SEASONS, f"HALT: seasons in feature table: {ft_seaso
 
 # Assert no duplicates
 assert ft["game_id"].n_unique() == len(ft), "HALT: duplicate game_ids"
+
+# ─── CORRELATION GATES (IE-D8) ──────────────────────────────────────
+ft_pd_check = ft.to_pandas()
+corr_mr_sl = np.corrcoef(
+    ft_pd_check["margin_resid"].values,
+    ft_pd_check["spread_line"].values
+)[0, 1]
+print(f"\n|corr(margin_resid, spread_line)| = {abs(corr_mr_sl):.4f}")
+assert abs(corr_mr_sl) < 0.05, \
+    f"HALT: |corr(margin_resid, spread_line)| = {abs(corr_mr_sl):.4f} >= 0.05"
+
+corr_tr_tl = np.corrcoef(
+    ft_pd_check["total_resid"].values,
+    ft_pd_check["total_line"].values
+)[0, 1]
+print(f"|corr(total_resid, total_line)| = {abs(corr_tr_tl):.4f}")
+assert abs(corr_tr_tl) < 0.05, \
+    f"HALT: |corr(total_resid, total_line)| = {abs(corr_tr_tl):.4f} >= 0.05"
+
+# ─── ZERO-VARIANCE CHECK (IE-D8) ────────────────────────────────────
+feat_cols = [c for c in ft.columns if c.startswith("f")]
+for c in feat_cols:
+    series = ft_pd_check[c].dropna()
+    if len(series) > 0 and series.std() == 0:
+        raise ValueError(f"HALT: zero-variance feature column: {c}")
+print(f"Zero-variance check: PASS ({len(feat_cols)} feature columns)")
 
 # Report coverage per family per season
 print("\n=== COVERAGE REPORT ===")

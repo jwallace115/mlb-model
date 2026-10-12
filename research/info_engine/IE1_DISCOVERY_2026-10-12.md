@@ -1,5 +1,35 @@
 # IE-1 Discovery Report — 2026-10-12
 
+## RETRACTION (IE-D8, 2026-10-12)
+
+**All results below the line are RETRACTED.** The margin residual formula was wrong:
+`margin_resid = margin - (-spread_line)` = `margin + spread_line`, which has
+**r = 0.69** with `spread_line`. This is not a residual — it retains the spread's
+information. The families that appeared to predict "margin residual" (F2 t=4.9,
+F4 t=4.2, F5 t=3.5, F3 t=3.1) were proxying for team quality through their
+correlation with spread_line, not beating the close.
+
+The "home cover" label was also wrong: `margin > -spread_line` has **r = 0.56**
+with `spread_line` and a 55.95% True rate (should be ~50%). The 0.019 log-loss
+improvement was an artifact of predicting the spread, not the cover.
+
+Corrected formula: `margin_resid = margin - spread_line` (|r| = 0.015 with spread_line).
+Corrected home cover: `margin > spread_line` (|r| = 0.03, rate 47.4%/49.0% ex-pushes).
+
+The corrected results are in IE-D10 (below). The pre-registrations are unchanged
+and re-run on the corrected table.
+
+---
+
+~~## RETRACTED RESULTS (do not cite)~~
+
+~~Per-family margin t-stats (F2 4.9, F4 4.2, F5 3.5, F3 3.1, F8 2.4) — INVALID.~~
+~~All-family ridge log-loss improvement 0.019 — INVALID.~~
+~~All four pre-registration outcomes (all FALSIFIED) — INVALID.~~
+~~Frozen spec IE_FROZEN_SPEC_v1.md — SUPERSEDED by v2.~~
+
+---
+
 ## Pre-registrations (written BEFORE any fit is run)
 
 | ID | Prediction | Reasoning |

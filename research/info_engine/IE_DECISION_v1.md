@@ -118,5 +118,36 @@ divergence**, not a convention or mapping error. The convention is confirmed cor
 and are internally consistent. The data is usable for F10 spread movement (open-to-close
 within the same book), which is what it was sourced for.
 
+**Gate override:** the 95% within-0.5 gate was not met (92.0%). Override accepted on the
+reasoning that bet365's close and the nflverse consensus close are different books (96.9%
+within 1.0; 525 exact matches fix the sign convention). Cowork accepted the override after
+the fact.
+
+## IE-D8 — margin_resid correction and retraction (2026-10-12)
+
+**Bug:** `margin_resid = margin - (-spread_line)` = `margin + spread_line` had **r = 0.69**
+with `spread_line`. Not a residual — it retained the spread's information. The discovery
+results (F2 t=4.9, F4 t=4.2, etc.) were predicting team quality via the spread, not
+beating the close.
+
+**Fix:** `margin_resid = margin - spread_line` (|r| = 0.015 with `spread_line`).
+
+**Home cover audit:** old label `margin > -spread_line` had r = 0.56 with spread_line,
+rate 55.95%. Corrected to `margin > spread_line` (r = -0.03, rate 47.4%, 49.0% ex-pushes).
+
+**Known-game assertions added:**
+- 2021_01_ARI_TEN: margin -25, spread_line +2.5, margin_resid -27.5 ✓
+- 2021_01_DAL_TB: home underdog won (margin 2, spread_line 10), margin_resid -8 (did NOT cover) ✓
+
+**Gates added:** |corr(margin_resid, spread_line)| < 0.05, |corr(total_resid, total_line)| < 0.05,
+zero-variance check on all feature columns.
+
+**F6 snap_shift:** redefined from count of players exceeding 10pp threshold (was all-zero)
+to mean absolute deviation of week N-1 snap shares from season average. Now varies (std > 0).
+
+**Retraction:** IE1_DISCOVERY_2026-10-12.md prepended with RETRACTION block. All IE-D6
+results (t-stats, log-loss improvement, pre-registration outcomes) are INVALID.
+IE_FROZEN_SPEC_v1.md is SUPERSEDED.
+
 Output: `nfl/data/info/spread_opens_2021_23.parquet` (815 rows, 21 cols).
 This feeds F10 spread half in IE-2; nothing in IE-1 fits on it.
