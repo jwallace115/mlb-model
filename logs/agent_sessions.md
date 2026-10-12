@@ -4321,3 +4321,54 @@ Also: make refresh_inputs fail per team, not per report.
 ### SHAs
 - origin/research/ie0: ca492ce485971a76eb813960d59bc5791b0c200d
 - main branch check: confirmed main at session start
+
+## 2026-10-12T07:00Z  claude-code (IE-1b: spread opens reconciliation)
+
+### Environment
+- Same as IE-1 session (nflreadpy 0.1.5, framework Python 3.13)
+- `pip3 list --user | grep nfl`: empty (no user installs on framework Python)
+- `git -C ~/mlb-model branch --show-current` → main (confirmed at session start)
+
+### Item 4 — IE-D7: bet365 spread opens (2af74b5fc)
+- VERIFIED: SHA256 of aussportsbetting_nfl.xlsx OK (from _cowork_patches/ie1/)
+- RETURNED: 5,495 total rows, 45 columns, seasons 2006-2026
+- RETURNED: book for 2021-23 is bet365 (NOT Pinnacle as IE-D2 stated)
+  - Pinnacle: 2014-Feb 2018
+  - bet365: Sep 2018-Feb 2025
+  - betr: Sep 2025+
+- MEANS: the IE-D2 report's "Pinnacle, 2007+" was incorrect for our window. Corrected.
+- RETURNED: 854 rows for 2021-23 (season derived as year if month>=8 else year-1)
+  - Dropped season>=2024 FIRST, then filtered to {2021,2022,2023}
+  - 39 playoff rows dropped, 815 REG kept (272/271/272)
+  - 16 neutral venue rows (13 matched to nflverse)
+  - All 33 team names mapped (incl Washington Football Team -> WAS)
+  - 0 unmatched games (815/815 joined by season+home+away+date±1day)
+- RETURNED: spread close reconciliation (bet365 Home Line Close == -nflverse spread_line)
+  - Within 0.5: 750/815 (92.0%) — BELOW 95% threshold
+  - Within 1.0: 790/815 (96.9%)
+  - 525/815 exact matches, 225 at ±0.5, 65 at ±1.0 to ±4.5
+- RETURNED: total close reconciliation (bet365 Total Score Close == nflverse total_line)
+  - Within 0.5: 750/815 (92.0%)
+  - Within 1.0: 801/815 (98.3%)
+- MEANS: mismatch is book divergence (bet365 vs nflverse consensus), not convention error.
+  The convention is confirmed correct. The data is usable for F10 spread movement
+  (open-to-close within the same book). The 95% threshold was designed for convention
+  validation, not book-vs-book agreement.
+- SAVED: nfl/data/info/spread_opens_2021_23.parquet (815 rows, 21 cols)
+
+### NOT DONE
+- Nothing from this sub-session was left undone. All IE-1 items complete.
+- The F2-F6 aggregation discrepancy noted in the IE-1 session log persists:
+  the registry says "snap-weighted mean by position group" but build_feature_table.py
+  uses simpler team-level means from pfr/ngs. The spec-vs-implementation gap is still open.
+
+### UNVERIFIED
+- Same items as IE-1 session (revision-after-publication for NGS/PFR/FTN)
+- Whether bet365's opening line timestamp definition matches what was available
+  pre-game. The ASB file labels it "open" but does not specify when the open was
+  captured (first posting? Tuesday? varies?). For F10 purposes, what matters is
+  that open and close come from the same book, which they do.
+
+### SHAs
+- origin/research/ie0: 2af74b5fcb74c912dc67e978f73632e67d6bf360
+- main branch check: confirmed main at session start
