@@ -24,10 +24,13 @@ sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.dirname(__file__))
 
 from on_utils import compute_gap, handicap_to_home_margin
+from build_manifest import verify_file_in_manifest
 
 
-# ─── LOAD ────────────────────────────────────────────────────────────
-mn = pd.read_parquet(os.path.join(ROOT, "nfl/data/own/monday_numbers_2021_23.parquet"))
+# ─── LOAD (with manifest integrity check) ────────────────────────────
+mn_path = os.path.join(ROOT, "nfl/data/own/monday_numbers_2021_23.parquet")
+verify_file_in_manifest(mn_path)
+mn = pd.read_parquet(mn_path)
 print(f"Monday numbers: {mn.shape}")
 assert sorted(mn["season"].unique()) == [2021, 2022, 2023]
 

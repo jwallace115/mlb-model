@@ -232,3 +232,33 @@ within the SE of the estimate. Stated plainly as "did not hold" per the work ord
     The engine's margin over trivial comparators (70.8% vs ~56%) is the one thing
     worth testing forward. In-sample mechanics remain a possible channel — only
     forward can distinguish.
+
+## ON-D9 — Data commit omission fix (2026-10-12)
+
+**Omission:** Item 2's commit (f41140449, ON-D6) did not `git add` the rebuilt
+parquet files. The committed `monday_numbers_2021_23.parquet` remained the ON-1
+(leaky) file — SHA `c0aadb4f...` — which scores 139 selected / 125 moving / 73.6%,
+not the 126 / 113 / 70.8% recorded in ON-D6. The code changes were correct; only
+the data was missing.
+
+**SHAs:**
+- Before (leaky, ON-1): `c0aadb4f65f0b862dc96a230fcea45ba35b2c76a07e829f8d2672173213323b5`
+- After (rebuilt, ON-D6): `d2b46220ea39578014b23bd06bb588467391c6ce565e3eb0101b10896f0b15f1`
+
+**Verification:** `score_monday_numbers.py` run on the worktree file reproduces
+the ON-D6 table exactly: 126 / 113 / 80 of 113 / +1.528 / 65W-60L-1P / 56W-63L-7P.
+
+**ON-D8 re-check:** `comparator_prior_close.py` re-run against the rebuilt file
+reproduces the same numbers (prior-close 56.8%, ridge 55.7%, engine 70.8%, paired
+60.2%/60.2%). No re-statement needed.
+
+**Manifest integrity gate:** `FROZEN_MANIFEST_v2.json` now includes all files
+under `nfl/data/own/`. `score_monday_numbers.py` and `run_monday.py` HALT when
+the parquet they read is not in the manifest with a matching SHA. Tested: altered
+file → SHA mismatch HALT; unregistered file → not-in-manifest HALT.
+
+**Known residual:** the MNF team ratings correction uses standard (non-filtered)
+tendencies, situational PROE, and kicker tables. These still include the prior
+Monday Night game. The effect of removing one game from ~15 per week on
+league-level tendency/kicker tables is negligible but not measured. Plan: close
+this in ON-1c by verifying the magnitude.
