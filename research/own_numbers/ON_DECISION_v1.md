@@ -202,3 +202,33 @@ within the SE of the estimate. Stated plainly as "did not hold" per the work ord
     for confirmatory read; no efficacy-based early stop; every look logged.
 
     2021-23: DEVELOPMENT. 2024: "used in engine development; not a holdout".
+
+## ON-D8 — Earlier-close comparator and ridge comparison (2026-10-12)
+
+4a. **Prior-close ratings** (`comparator_prior_close.py`): team ratings by least
+    squares on home-minus-away indicators + home intercept, fitted ONLY on closes
+    of games with kickoff + 4h < the same prediction_cutoff (prior season + current
+    prior weeks; ≥ 32 training games or no prediction). 767 eligible games.
+
+    Pre-registered: ~55% direction (audit measured 55.0 / 54.4).
+
+    | Method | Threshold | Selected | Moved | Direction | Mean move |
+    |---|---|---|---|---|---|
+    | Prior-close | common (engine err_m) | 146 | 125 | **56.8%** | +0.462 |
+    | Prior-close | own (|gap| ≥ 1) | 574 | 492 | 53.0% | +0.159 |
+    | Engine | common | 126 | 113 | **70.8%** | +1.528 |
+    | Ridge OOF | common | 169 | 149 | 55.7% | +0.604 |
+
+    **Pre-registration: HELD** (56.8% within the ~55% expectation).
+
+    Paired on engine-selected games (N=126, 113 movers):
+    Engine 70.8%, Ridge 60.2%, Prior-close 60.2%. The engine retains all its
+    selected games within the common eligible population.
+
+4b. **Ridge baseline** copied from `origin/eng/gl1:nfl/data/sim/outputs/gl1/
+    baseline_2021_23.parquet`. Training: LOSO 2021-23 — NOT strictly as-of across
+    seasons (stated). Common threshold used (engine's err_m); labelled.
+
+    The engine's margin over trivial comparators (70.8% vs ~56%) is the one thing
+    worth testing forward. In-sample mechanics remain a possible channel — only
+    forward can distinguish.
