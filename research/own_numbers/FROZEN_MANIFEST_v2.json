@@ -9,17 +9,19 @@
   },
   "files": {
     "research/own_numbers/build_2026_interim.py": "d4aae21e260b5cdc68144f1a647c49e3920ee4549599b0e66e35263628aaddc3",
-    "research/own_numbers/build_manifest.py": "3746f4c2c1c6648e818e6202704b8f189e85af79954193f98550677d510dbf3c",
-    "research/own_numbers/build_monday_number.py": "2bd6e1959fa85c40f39bcd8c749cc49d633e609c43624d3fca614416038e5b0d",
-    "research/own_numbers/on_utils.py": "75a1baaace20476bfe56f820236afa3e4a0168808f01ed72fc9982d24ce28b95",
-    "research/own_numbers/run_monday.py": "5e7598049aaeb1d6c4d63458e9ba24062581d00c7a9940f466736cf9c1a8eada",
+    "research/own_numbers/build_manifest.py": "ead34ad14f1c7b2f221312452fe09a8a75383efebed5d9aed57bc022e4ba6167",
+    "research/own_numbers/build_monday_number.py": "eb3d8fb389b8d8d9b1817b863a3be119748f7cdddf2228b4b87ba92af38b9c26",
+    "research/own_numbers/comparator_prior_close.py": "b4ebb2d5b2df2f51670d0530fb130fed721337109f7198f69f08b2f13576ef2b",
+    "research/own_numbers/on_utils.py": "8afd543afe2bbd57bef1a30e94c95a5ef067569d463b33656d6c270d03019578",
+    "research/own_numbers/run_monday.py": "64db38589a8a00dde75467eb7027fe11f1b0fe2d7efff9f5cedba5ecba96ae4c",
     "research/own_numbers/run_sims.py": "db1cb5ef108c6062bc76878935da89f1b388ae44446ca732065103da7e0b2838",
-    "research/own_numbers/score_monday_numbers.py": "f204500e7429db1cf4d339bea3a0c81857f8672fc8df503ecbfa66acdc0e7705",
-    "research/own_numbers/test_on_utils.py": "7f5abc51cdf4bd52ca6316ed8d9c8012a55f151318bcc5e22090448c29f9e541",
+    "research/own_numbers/score_monday_numbers.py": "3eb76fccfcaed72c30ed18f834d577145837f1db93e337693d3625de1ac52fc9",
+    "research/own_numbers/test_on_utils.py": "140d7a4e84085c38a978519cc4c45a1cd11c7d17bee1c2185791ec5fef9917a5",
     "research/own_numbers/test_run_monday.py": "96168376c56b1c8e0f980b6d1c998a12e11c2b7b75f47e20008ff375e98d4fe2",
     "research/own_numbers/ON2_PREREGISTRATION.md": "75e9f8361c3fb3007a2b41a16e001ef6252b0054b53c46c47006c7c0995ed9a1",
-    "research/own_numbers/ON_DECISION_v1.md": "bed9a5ffec004e64d4348db7c122699d8541243e86a32d3e69d1d1af0631c24a",
+    "research/own_numbers/ON_DECISION_v1.md": "02a5921718100c30ef1303b224a305587cafb765e11bdb40c467000c552a6cea",
     "research/own_numbers/ON_SPEC_v1.md": "186a256c6697e767393dfc6fd3f1e9c5b19f6fa460a751f0689e22ba6fdb2e3c",
+    "research/own_numbers/ON_SPEC_v2.md": "f938a0d2297e5df8187a026a20f8c6c8b72b3303b84fbe4b36071a1d6e08ad6c",
     "nfl/sim/engine.py": "dde3aba3066ee2405b589f89c252eab50b3dbe0f24d916aad8731f5b86e0adcb",
     "nfl/sim/ratings.py": "0bf691fa996ae12734ec258382e49426464aa7b448d946eab58b3095d108b80c",
     "nfl/sim/params_v1.json": "25f1db08d6478a30237cf74a3ced255b3f7a120e8fa41f5082db7c73923a78e4",
@@ -54,7 +56,9 @@
     "nfl/data/sim/tables/timeout_policy.parquet": "e37db221b97933c0f6d18aa365f74ee463dabc73c2422b25bbef38329b088bd7",
     "nfl/data/sim/tables/turnover_returns.json": "3ee79b2b0d51151e13c29be05923d08641b5c756eacbb0b2f3b18cf266c869cd",
     "nfl/data/sim/tables/twopt_decision.parquet": "0130ceb457814f0d9bbe0374302c8b755a75378c6cdc5ed3742116d2ef52590e",
-    "nfl/data/own/calibration_table.parquet": "44a2fb947d525f9c7784a1497d9cc67831992b5520360d8cae7b39f623e93daa"
+    "nfl/data/own/calibration_table.parquet": "44a2fb947d525f9c7784a1497d9cc67831992b5520360d8cae7b39f623e93daa",
+    "nfl/data/own/monday_numbers_2021_23.parquet": "d2b46220ea39578014b23bd06bb588467391c6ce565e3eb0101b10896f0b15f1",
+    "nfl/data/own/monday_numbers_2026.parquet": "b54b0c6948c9f8a162788aa209e89f967cbb733b98f3a5ce3186a1293570cdac"
   },
   "engine_fingerprint": "156cd057a3b39e48"
 }

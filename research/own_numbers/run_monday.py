@@ -38,6 +38,7 @@ from on_utils import (
     compute_prediction_cutoff,
     guard_2024,
 )
+from build_manifest import verify_file_in_manifest
 
 ROOT = os.path.join(os.path.dirname(__file__), "../..")
 ET = ZoneInfo("America/New_York")
@@ -45,8 +46,10 @@ ET = ZoneInfo("America/New_York")
 with open(os.path.join(ROOT, "nfl/sim/hfa_v1.json")) as f:
     H = json.load(f)["h"]
 
-# Calibration (use 2023 14+ bucket as the forward proxy)
-cal = pd.read_parquet(os.path.join(ROOT, "nfl/data/own/calibration_table.parquet"))
+# Calibration (use 2023 14+ bucket as the forward proxy) — manifest check
+cal_path = os.path.join(ROOT, "nfl/data/own/calibration_table.parquet")
+verify_file_in_manifest(cal_path)
+cal = pd.read_parquet(cal_path)
 cal_row = cal[(cal["target_season"] == 2023) & (cal["bucket"] == "14+")]
 CAL_VAR_M = cal_row["cal_var_m"].values[0]
 CAL_VAR_T = cal_row["cal_var_t"].values[0]

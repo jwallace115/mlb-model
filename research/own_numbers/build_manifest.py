@@ -70,10 +70,13 @@ def build_manifest():
             key = f"nfl/data/sim/tables/{p.name}"
             manifest["files"][key] = sha256_file(p)
 
-    # 4. Calibration table
-    cal_path = ROOT / "nfl" / "data" / "own" / "calibration_table.parquet"
-    if cal_path.exists():
-        manifest["files"]["nfl/data/own/calibration_table.parquet"] = sha256_file(cal_path)
+    # 4. All files under nfl/data/own/
+    own_dir = ROOT / "nfl" / "data" / "own"
+    if own_dir.is_dir():
+        for p in sorted(own_dir.iterdir()):
+            if p.is_file() and not p.name.startswith("_"):
+                key = f"nfl/data/own/{p.name}"
+                manifest["files"][key] = sha256_file(p)
 
     # 5. Engine fingerprint
     try:
@@ -83,6 +86,37 @@ def build_manifest():
         manifest["engine_fingerprint"] = f"ERROR: {e}"
 
     return manifest
+
+
+def verify_file_in_manifest(file_path, manifest_path=None):
+    """HALT if file_path is not in the manifest with a matching SHA256."""
+    if manifest_path is None:
+        manifest_path = ROOT / "research" / "own_numbers" / "FROZEN_MANIFEST_v2.json"
+    with open(manifest_path) as f:
+        manifest = json.load(f)
+
+    # Compute relative key
+    abs_path = Path(file_path).resolve()
+    try:
+        rel = str(abs_path.relative_to(ROOT))
+    except ValueError:
+        raise RuntimeError(f"HALT: {file_path} is not under ROOT {ROOT}")
+
+    if rel not in manifest.get("files", {}):
+        raise RuntimeError(
+            f"HALT: {rel} not found in FROZEN_MANIFEST_v2.json. "
+            f"The file must be registered in the manifest before use."
+        )
+
+    expected = manifest["files"][rel]
+    actual = sha256_file(abs_path)
+    if actual != expected:
+        raise RuntimeError(
+            f"HALT: {rel} SHA256 mismatch.\n"
+            f"  manifest: {expected}\n"
+            f"  actual:   {actual}\n"
+            f"The file has been modified since the manifest was frozen."
+        )
 
 
 if __name__ == "__main__":

@@ -4394,3 +4394,22 @@ Also: make refresh_inputs fail per team, not per report.
 
 Main branch: main (verified at start and end).
 SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
+
+## 2026-10-12T15:45Z  claude-code (ON-1b FIX — commit rebuilt data + manifest gate)
+
+### RETURNED
+- ON-D9: Rebuilt parquet files (monday_numbers_2021_23.parquet,
+  calibration_table.parquet) committed — they were missing from item 2's
+  commit (f41140449). Before: c0aadb4f... (leaky ON-1 file, 139/125/73.6%).
+  After: d2b46220... (rebuilt ON-D6 file, 126/113/70.8%). Scorer confirms
+  exact ON-D6 numbers. Comparator re-run confirms ON-D8 numbers unchanged.
+- Manifest integrity gate: FROZEN_MANIFEST_v2.json now covers nfl/data/own/*.
+  score_monday_numbers.py and run_monday.py HALT on SHA mismatch or
+  unregistered file. Tested: altered byte → HALT; unregistered → HALT.
+
+### NOT DONE
+- Tendency/sit/kicker MNF residual measurement (ON-1c)
+
+### UNVERIFIED
+- Same items as ON-1b session
+
