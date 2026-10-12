@@ -1,0 +1,7 @@
+retrieved 2026-10-12 ~23:32Z by Cowork (claude-fable-5-1) for the MNF read: Bills @ Rams, kick 00:15Z (8:15 PM ET)
+- game lines: VM tape snap_20261012T220009Z (Hard Rock: Rams -3.5 -105 / Bills +3.5 -115, total 54.5 -115/-105, ML -175/+150; Pinnacle -3.5 +104/-114, total 55.5)
+- props: Mac pull data_2026_10_mac.parquet, pull 2026-10-12T23:30:05Z (job 36: pull_hardrock_props --window-hours 2 --tag close, 10 credits; 9 books); other-book no-vig medians within ~1.5% of Hard Rock on every two-way line
+- injuries: data/injury_archive/nfl/season=2026/injuries_20261012T1830Z.json.gz — BUF: Ed Oliver OUT, Joshua Palmer OUT, DJ Moore questionable, Alford questionable, Couch hurt; LA: Myles Garrett IR (not back), Lake questionable
+- last week (ESPN comments): Stafford 32/51 317; Kyren 16-80-2 + 10/13 67; Nacua 9/12 125; Higbee 5/6 67; Allen 23/33 253; Coleman 6/7 116; Shakir 7/8 82; Cook 12-75-1
+- news archive: ESPN MNF betting guide headline only
+- view: two high-volume passing offenses against defenses missing their best interior/edge players (Oliver, Garrett) and a banged Bills secondary; the Bills are short two outside receivers so Coleman/Shakir/Allen's legs carry more. Picks: Kyren O3.5 rec (16), Stafford O37.5 att (14), Nacua O96.5 yds / Over 54.5 / Coleman O3.5 rec / Shakir O4.5 rec (12), Allen O7.5 rush att (10), Cook U16.5 carries / Bills +3.5 (8), Higbee O2.5 rec (6). p_first = no-vig +- conf/250; no_view p = book. Next week's Bills-Raiders lines in the snapshot are outside the 2 h window.
