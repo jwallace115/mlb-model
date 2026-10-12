@@ -30,13 +30,14 @@ from nfl.sim.ratings import (
 )
 from on_utils import (
     stable_seed, compute_prediction_cutoff, game_is_admitted,
-    kickoff_utc_from_nflverse,
+    kickoff_utc_from_nflverse, guard_2024,
 )
 
 ROOT = os.path.join(os.path.dirname(__file__), "../..")
 ET = ZoneInfo("America/New_York")
 
 TARGET_SEASONS = [2021, 2022, 2023]
+guard_2024(TARGET_SEASONS, context="build")
 N_SIMS = 5000
 CHUNK_SIZE = 2500
 N_CHUNKS = 2

@@ -23,6 +23,7 @@ from on_utils import (
     kickoff_utc_from_nflverse,
     compute_prediction_cutoff,
     game_is_admitted,
+    guard_2024,
 )
 
 ET = ZoneInfo("America/New_York")
@@ -311,6 +312,30 @@ class TestMondayCutoff:
         # the function doesn't crash on valid inputs
         cutoff = compute_prediction_cutoff("2026-10-13")
         assert cutoff is not None
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 3b. 2024 GUARD
+# ═══════════════════════════════════════════════════════════════════════════
+
+class TestGuard2024:
+
+    def test_halts_on_2024(self):
+        with pytest.raises(RuntimeError, match="2024"):
+            guard_2024(2024)
+
+    def test_halts_on_2024_in_list(self):
+        with pytest.raises(RuntimeError, match="2024"):
+            guard_2024([2021, 2022, 2024])
+
+    def test_allows_2021_2023(self):
+        guard_2024(2021)
+        guard_2024(2023)
+        guard_2024([2021, 2022, 2023])
+
+    def test_allows_2025_2026(self):
+        guard_2024(2025)
+        guard_2024(2026)
 
 
 class TestKickoffConstruction:
