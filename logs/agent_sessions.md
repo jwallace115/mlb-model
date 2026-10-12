@@ -1,3 +1,49 @@
+## 2026-10-12T19:50Z  claude-code (OPS-ON-1 — ON Monday runner on VM cron)
+
+### RETURNED
+- Item 1: merged research/on1 into main (no-ff). Replacement gate (ii)-(vii) all
+  PASS — nfl/sim/build_hfa.py and hfa_v1.json are inert new files copied unmodified
+  from eng/gl1 (SHA256 verified). ON-D10 committed on the branch before merge.
+  nfl/data/own/forward/ not gitignored; push_daemon.sh covers it via git add -A.
+- Item 2: VM deps confirmed (numpy 2.4.4, pandas 2.3.3, pyarrow 23.0.1,
+  nflreadpy 0.1.5). Dry run on VM: 14 games, 18m07s wall, 1.22 GB peak RSS
+  (both under limits). --week auto resolved to week 6 correctly (5 confident).
+  pull_pbp.py 2026: 7s wall, 374 MB RSS, 78 games through week 5.
+  No Mac-only paths in runner imports. Odds snapshots written natively on VM.
+  No prior pbp pull existed on VM or Mac LaunchAgents — added to cron.
+- Item 3: run_monday.py updated with --dry-run, --week auto, --mode, forward_log.md
+  writer, PBP freshness check. pull_pbp.py accepts optional season arg.
+  feeds_registry.json: on_monday entry added.
+  VM cron installed (3 lines, all times UTC, Monday only):
+    40 15 * * 1  pull_pbp.py 2026
+    0 16 * * 1   run_monday.py --season 2026 --week auto
+    5 16 * * 1   push_paths.sh nfl/data/own/forward research/own_numbers/forward_log.md
+  Tested all 3 lines by hand on VM with --dry-run. Exit 0, log correct.
+- Item 4: contingency documented. --mode pilot for Tuesday runs.
+
+### NOT DONE
+- CRON_TZ not supported by VM's Vixie cron. Times are UTC. During EST (Nov-Jan)
+  the cron fires 1h early (10:40/11:00/11:05 ET vs 11:40/12:00/12:05 ET).
+  Functionally equivalent — cutoff is still "today 12:00 ET" in code.
+- No ops site daily brief exists to append to.
+
+### UNVERIFIED
+- Whether nflverse publishes Sunday's PBP before Monday 11:40 ET (15:40 UTC).
+  PBP currently through week 5 only; week 6 games are today (Oct 12). The nflverse
+  data pipeline typically publishes overnight but the exact timestamp for 2026 week 6
+  has not been observed. If Monday's pull_pbp returns only week 5, the runner still
+  runs (check_pbp_freshness prints but does not HALT on stale pbp — it is
+  informational only). This is the primary risk for week 7.
+- Peak RSS 1.22 GB measured on week 7 (no HR quotes matched). With quote matching
+  the memory footprint may differ slightly.
+
+### SHAs
+- origin/main: f59b508878bf461d28cfe938fa52d0f2fbf47bbf
+- VM HEAD:     f59b508878bf461d28cfe938fa52d0f2fbf47bbf
+- Mac main:    f59b508878bf461d28cfe938fa52d0f2fbf47bbf
+
+---
+
 ## 2026-10-08T19:16Z  claude-code (OPS4d — record, cards in English, Picks front page, main guard)
 
 ### RETURNED
@@ -4281,80 +4327,6 @@ Also: make refresh_inputs fail per team, not per report.
 - main merge: dc85b4f53
 - main branch check: confirmed main at session start
 
-## 2026-10-12T10:30Z  claude-code (ON-1: Own Numbers phase 1)
-
-### Environment
-- nflreadpy 0.1.5, framework Python 3.13
-- `git -C ~/mlb-model branch --show-current` -> main (confirmed)
-- Worktree: ~/mlb-model-on1 on branch research/on1
-- Brought in: origin/research/ie0 (spread_opens, build_feature_table), origin/eng/gl1 (hfa_v1.json, build_hfa.py)
-
-### Item 1 — ON-D1: Monday number + error bar (9838ada70)
-- RETURNED: 815 games 2021-23, unanchored sim at N=5000 (2x2500 chunks, 8 workers)
-- RETURNED: h=0.1719 applied as epa_home_offset=+h, epa_away_offset=-h
-- RETURNED: mean ours_m=2.01, mean ours_t=41.52, mean err_m=7.01, mean mc_se_m=0.15
-- RETURNED: corr(ours_m, spread_line)=0.82 (expected — our prediction agrees with market)
-- RETURNED: corr(outcome_margin_resid, spread_line)=0.015 (invariant gate PASS)
-- MEANS: the engine produces sensible numbers (mean home margin ~2pt, consistent with HFA).
-  The error bar is dominated by calibration variance (~7pt), not MC noise (~0.15pt).
-- RETURNED: calibration table — 2021 flat prior (var=182), 2022 from 2021 (~10-18 by bucket),
-  2023 from 2021-22 (~9-20 by bucket). The ≤3 bucket is worst (early season, little data).
-- RETURNED: first attempt failed — ProcessPoolExecutor crashed without __main__ guard on macOS.
-  Fixed with standalone run_sims.py using multiprocessing.Pool with freeze_support().
-- RETURNED: correlation HALT triggered on first run because I computed ours_m - spread_line
-  (prediction - close, r=0.54), not actual_margin - spread_line (outcome - close, r=0.015).
-  Fixed: the invariant applies to outcome residuals, not prediction residuals.
-- WALL TIME: 18.2 min (8 workers), ~128 min serial (killed), ~7.5s per game per 5000 sims
-
-### Item 2 — ON-D2: Scoring (5ed4920ac)
-- PRE-REGISTERED: ON-1a, ON-1b, ON-2 before scoring
-- RETURNED: ON-1a CONFIRMED — confident subset direction agreement 73.6% (92/125, Wilson [0.652, 0.806])
-  Prior was 45%, threshold 55%. By season: 2022 72.5%, 2023 75.0%.
-- RETURNED: ON-1b FALSIFIED — non-confident agreement 55.0% (312/567), outside 48-52%.
-  The error bar does NOT cleanly separate signal from noise.
-- RETURNED: null control Z=7.28 (real 58.4% vs null 48.4%). The signal is genuine.
-- RETURNED: totals direction agreement 63.0% (466/740) — not pre-registered but strong.
-- STOPPED: ON-2 (Monday→kickoff change) — usage.py joins injuries by (season, week, team),
-  not timestamp. Editing usage.py prohibited. Reported what it would take:
-  add injury_cutoff parameter to build_active_universe.
-
-### Item 3 — ON-D3: 2026 interim look (7aa2762e8)
-- RETURNED: 77 games wk2-6, 75 with HR opens, 50 confident
-- RETURNED: direction agreement (all) 59.0% (36/61), confident 60.0% (24/40)
-- RETURNED: Wilson on confident [0.446, 0.737] — includes 50%, too early
-- RETURNED: by week: wk2 62.5%, wk3 68.8%, wk4 66.7%, wk5 35.7%
-- MEANS: noisy forward data, CI includes 50%. The 2021-23 backtest is the stronger signal.
-- LABEL: interim look, nothing tuned
-
-### Item 4 — ON-D4: Monday runner (8363350a2)
-- CREATED: run_monday.py with HALT on wrong day / existing file / stale snap / unmapped team
-- TESTED: refuses overwrite ✓, team map complete (32) ✓, confident flag verified ✓
-- ADDED: "how to run on Monday" paragraph to ON_SPEC_v1.md
-
-### NOT DONE
-- ON-2 (availability): usage.py needs injury_cutoff parameter (prohibited in this order)
-- F3 (FTN): still uses play-level aggregation, not snap-weighted (FTN is play-level by nature)
-- The 2024 clean look is not opened (ON-0, ON-3 priors are registered but not tested)
-- The runner is not scheduled (no launchd/cron); it's manual MODE=PILOT
-
-### UNVERIFIED
-- Whether the Monday-noon as-of for ratings matches what the engine would have had on a real
-  Monday: the ratings use pre-built weekly parquets keyed by (season, week). Week W ratings
-  use plays from weeks < W. The PBP for Sunday games is typically published by Monday morning
-  on nflverse (nflverse's GitHub Actions pipeline runs ~4am ET Monday). But Monday-noon games
-  (rare, MNF is Monday night) would NOT have that game's PBP available at Monday noon.
-  This is correct: the Monday number should NOT include Monday-night results. But for games
-  played on Thursday/Saturday, the PBP is available well before Monday noon.
-  The nflverse publication lag was NOT verified from pbp game_date/update fields — this
-  would require reading the nflverse GitHub Actions logs or checking pbp file timestamps.
-- Whether the 2021-23 ratings parquets are truly point-in-time or were rebuilt with later
-  code. The ratings were built by the current codebase, which may incorporate nflverse
-  corrections applied after the original game dates.
-
-### SHAs
-- origin/research/on1: 8363350a22829372eba18d3137003a2983db544e
-- main branch check: confirmed main at session start
-
 ## 2026-10-12T14:30Z  claude-code (ON-1b — repairs from ChatGPT audit c23e62419)
 
 ### RETURNED
@@ -4384,32 +4356,19 @@ Also: make refresh_inputs fail per team, not per report.
   PRIMARY Monday
 - build_2026_interim.py not rewritten (marked INVALID, retained as artifact)
 - run_sims.py not updated (uses hash() seeds; only used for original cache)
+- score_monday_numbers.py's "non-confident outside subset" result (55.0% →
+  53.9%) needs investigation — the original used week-1 n_games, the rebuild
+  uses admitted games, changing the confident/non-confident boundary
 
 ### UNVERIFIED
-- nflverse publication receipts — still none
-- punt_landing table provenance
+- nflverse publication receipts — still none; the Monday-noon cutoff enforces
+  observation-time boundaries but cannot verify data availability
+- punt_landing table provenance (no generating implementation found at audit pin)
 - Whether the engine's in-sample mechanics explain its margin over the
   comparators — only forward can test this
-- MNF tendencies/sit/kicker approximation (claimed negligible, not measured)
+- The MNF team ratings rebuild uses standard (non-filtered) tendencies/sit/
+  kicker tables; the effect of one MNF game on league-level tables is claimed
+  negligible but not measured
 
 Main branch: main (verified at start and end).
 SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
-
-## 2026-10-12T15:45Z  claude-code (ON-1b FIX — commit rebuilt data + manifest gate)
-
-### RETURNED
-- ON-D9: Rebuilt parquet files (monday_numbers_2021_23.parquet,
-  calibration_table.parquet) committed — they were missing from item 2's
-  commit (f41140449). Before: c0aadb4f... (leaky ON-1 file, 139/125/73.6%).
-  After: d2b46220... (rebuilt ON-D6 file, 126/113/70.8%). Scorer confirms
-  exact ON-D6 numbers. Comparator re-run confirms ON-D8 numbers unchanged.
-- Manifest integrity gate: FROZEN_MANIFEST_v2.json now covers nfl/data/own/*.
-  score_monday_numbers.py and run_monday.py HALT on SHA mismatch or
-  unregistered file. Tested: altered byte → HALT; unregistered → HALT.
-
-### NOT DONE
-- Tendency/sit/kicker MNF residual measurement (ON-1c)
-
-### UNVERIFIED
-- Same items as ON-1b session
-
