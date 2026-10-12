@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_05_BAL_ATL",
+  "week": 5,
+  "home": "ATL",
+  "away": "BAL",
+  "final_score": {
+    "home": 23,
+    "away": 30
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 194,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 30
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 194,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 30
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": true
+  },
+  "volume": {
+    "home": {
+      "plays": 64,
+      "dropbacks": 38,
+      "rush_attempts": 26,
+      "pass_rate": 0.59375,
+      "run_rate": 0.40625,
+      "pass_oe": -1.7331916140392423
+    },
+    "away": {
+      "plays": 73,
+      "dropbacks": 37,
+      "rush_attempts": 36,
+      "pass_rate": 0.5068493150684932,
+      "run_rate": 0.4931506849315068,
+      "pass_oe": -4.577800100796844
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 1,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "D.Henry",
+      "team": "BAL",
+      "quarter": 1,
+      "play_id": 589,
+      "desc": "(7:30) (Shotgun) Direct snap to 22-D.Henry. 22-D.Henry right tackle to BAL 44 for no gain (94-L.London). BAL-70-R.Rosengarten was injured during the play."
+    },
+    {
+      "player": "Bi.Robinson",
+      "team": "ATL",
+      "quarter": 3,
+      "play_id": 2535,
+      "desc": "(6:45) 7-Bi.Robinson left tackle to ATL 42 for no gain (14-K.Hamilton). BAL-14-K.Hamilton was injured during the play."
+    },
+    {
+      "player": "Bi.Robinson",
+      "team": "ATL",
+      "quarter": 4,
+      "play_id": 3544,
+      "desc": "(3:27) 7-Bi.Robinson right guard to BAL 32 for 3 yards (98-T.Jones). BAL-98-T.Jones was injured during the play."
+    },
+    {
+      "player": "R.Bateman",
+      "team": "BAL",
+      "quarter": 4,
+      "play_id": 3847,
+      "desc": "(:52) (No Huddle, Shotgun) 5-T.Huntley pass short left to 7-R.Bateman to ATL 7 for 20 yards (31-X.Watts; 56-H.Perkins). ATL-21-M.Hughes was injured during the play."
+    },
+    {
+      "player": "M.Penix",
+      "team": "ATL",
+      "quarter": 4,
+      "play_id": 3979,
+      "desc": "(:27) (Shotgun) 9-M.Penix sacked at ATL 31 for -10 yards (95-T.Robinson). FUMBLES (95-T.Robinson) [95-T.Robinson], recovered by ATL-64-R.Neuzil at ATL 31. ATL-9-M.Penix was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}
