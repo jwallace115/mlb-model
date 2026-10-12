@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-ON forward Monday runner (ON-D5 repairs applied).
-Usage: python3 run_monday.py --season 2026 --week N
-       python3 run_monday.py --season 2026 --week auto
+ON forward Monday runner (ON-D5 repairs applied, OPS-ON-1b hardening).
+Usage: python3 run_monday.py --season 2026 --week auto
        python3 run_monday.py --season 2026 --week 7 --dry-run
        python3 run_monday.py --season 2026 --week 7 --mode pilot
+       python3 run_monday.py --season 2026 --week auto --check-pbp-only
 
 HALTs:
 - Not Monday-Tuesday ET (unless --dry-run or --force-day)
@@ -13,7 +13,11 @@ HALTs:
 - Unmapped team name
 - Ambiguous event match
 - --week auto: ambiguous week resolution
-- PBP missing Sunday's games
+- PBP missing admitted games (kickoff + 4h < cutoff)
+
+Mode:
+- PRIMARY: all conditions met (see derive_mode)
+- PILOT: any condition violated; pilot_reason recorded
 
 Output: nfl/data/own/forward/week=2026_NN.parquet (append-only)
         research/own_numbers/forward_log.md (appended)
@@ -29,7 +33,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
 from nfl.sim.engine import simulate_game
 from nfl.sim.names import FULL_TO_ABBR
-import nflreadpy as nfl
+import nflreadpy as nflr
 
 from on_utils import (
     handicap_to_home_margin,
@@ -41,6 +45,7 @@ from on_utils import (
     stable_seed,
     kickoff_utc_from_nflverse,
     compute_prediction_cutoff,
+    game_is_admitted,
     guard_2024,
 )
 from build_manifest import verify_file_in_manifest
@@ -60,13 +65,24 @@ CAL_VAR_M = cal_row["cal_var_m"].values[0]
 CAL_VAR_T = cal_row["cal_var_t"].values[0]
 
 
+def monday_of_week(now_et):
+    """Return the Monday of the current Mon-Sun week in ET.
+
+    If now_et is Monday, returns today. If Tuesday-Sunday, returns the
+    preceding Monday. This ensures a Tuesday run keeps the Monday-noon cutoff.
+    """
+    dow = now_et.weekday()  # 0=Mon
+    monday = now_et.date() - timedelta(days=dow)
+    return monday
+
+
 def resolve_week_auto(season, now_utc):
     """Derive the target week: first REG week whose earliest kickoff is still ahead.
 
     HALTs if no valid week found or if ambiguous (multiple weeks have all
     kickoffs in the future AND the gap between them is < 3 days).
     """
-    sched = nfl.load_schedules([season]).to_pandas()
+    sched = nflr.load_schedules([season]).to_pandas()
     reg = sched[sched["game_type"] == "REG"]
     if reg.empty:
         print(f"HALT: no REG games in schedule for {season}")
@@ -87,11 +103,8 @@ def resolve_week_auto(season, now_utc):
         print("HALT: --week auto found no upcoming REG week")
         sys.exit(1)
 
-    # Take the first candidate (earliest upcoming week)
     target_wk = candidates[0][0]
 
-    # Ambiguity check: if the second candidate starts < 3 days after the first,
-    # something is off (e.g., mid-week run between Thu and Mon games)
     if len(candidates) >= 2:
         gap_days = (candidates[1][1] - candidates[0][1]).total_seconds() / 86400
         if gap_days < 3:
@@ -105,32 +118,105 @@ def resolve_week_auto(season, now_utc):
     return target_wk
 
 
-def check_pbp_freshness(season, now_utc):
-    """HALT if pbp file is missing or doesn't contain Sunday's games.
+def check_pbp_freshness(season, prediction_cutoff, pbp_path=None):
+    """Check that every admitted game is present in the PBP file.
 
-    On Monday noon, the prior Sunday's games should be in the PBP file.
-    The runner uses PBP for ratings, so stale data = stale ratings.
+    An admitted game has kickoff + 4h < prediction_cutoff (see game_is_admitted).
+    Returns (ok: bool, missing: list[str], max_gameday: str).
     """
-    pbp_path = os.path.join(ROOT, f"nfl/data/pbp/pbp_{season}.parquet")
+    if pbp_path is None:
+        pbp_path = os.path.join(ROOT, f"nfl/data/pbp/pbp_{season}.parquet")
     if not os.path.exists(pbp_path):
-        print(f"HALT: PBP file missing: {pbp_path}")
-        sys.exit(1)
+        return False, [f"PBP file missing: {pbp_path}"], "N/A"
 
     pbp = pd.read_parquet(pbp_path, columns=["game_id", "season", "week"])
-    max_week = pbp["week"].max()
-    n_games = pbp["game_id"].nunique()
+    pbp_ids = set(pbp["game_id"].unique())
+    max_week = int(pbp["week"].max())
 
-    # Find the most recent Sunday before now
-    today_et = now_utc.astimezone(ET).date()
-    days_since_sunday = (today_et.weekday() + 1) % 7  # Mon=0 -> 1
-    last_sunday = today_et - timedelta(days=days_since_sunday)
+    sched = nflr.load_schedules([season]).to_pandas()
+    reg = sched[sched["game_type"] == "REG"]
 
-    print(f"pbp through week {max_week}, {n_games} games, "
-          f"file mtime {datetime.fromtimestamp(os.path.getmtime(pbp_path), tz=timezone.utc).isoformat()}")
-    print(f"Last Sunday: {last_sunday}")
+    missing = []
+    for _, g in reg.iterrows():
+        kick = kickoff_utc_from_nflverse(g["gameday"], g["gametime"])
+        if game_is_admitted(kick, prediction_cutoff):
+            if g["game_id"] not in pbp_ids:
+                missing.append(g["game_id"])
+
+    # Find max gameday among admitted games in pbp
+    admitted_in_pbp = []
+    for _, g in reg.iterrows():
+        kick = kickoff_utc_from_nflverse(g["gameday"], g["gametime"])
+        if game_is_admitted(kick, prediction_cutoff) and g["game_id"] in pbp_ids:
+            admitted_in_pbp.append(g["gameday"])
+    max_gameday = max(admitted_in_pbp) if admitted_in_pbp else "none"
+
+    n_admitted = sum(1 for _, g in reg.iterrows()
+                     if game_is_admitted(kickoff_utc_from_nflverse(g["gameday"], g["gametime"]),
+                                        prediction_cutoff))
+    print(f"pbp: {len(pbp_ids)} game_ids, max_week={max_week}, "
+          f"admitted={n_admitted}, missing={len(missing)}, max_gameday={max_gameday}")
+
+    if missing:
+        print(f"HALT: PBP missing admitted games: {missing[:10]}"
+              f"{'...' if len(missing) > 10 else ''}")
+        return False, missing, max_gameday
+
+    return True, [], max_gameday
 
 
-def write_forward_log(out_df, season, week, mode, halts, manifest_sha, dry_run):
+def derive_mode(now_et, pbp_ok, out_path_exists, selected_df, prediction_cutoff,
+                force_pilot=False):
+    """Derive PRIMARY or PILOT mode with reasons.
+
+    PRIMARY requires ALL of:
+    - Monday ET (weekday 0)
+    - Start time 12:00-12:30 ET
+    - PBP freshness passed
+    - Every selected game's decision quote <= 60 min before cutoff
+    - File is revision 0 (not exists)
+
+    Returns (mode: str, pilot_reason: str or None).
+    """
+    if force_pilot:
+        return "PILOT", "forced via --mode pilot"
+
+    reasons = []
+
+    if now_et.weekday() != 0:
+        reasons.append(f"not Monday ET ({now_et.strftime('%A')})")
+
+    hour_min = now_et.hour * 60 + now_et.minute
+    if not (720 <= hour_min <= 750):  # 12:00 to 12:30
+        reasons.append(f"start time {now_et.strftime('%H:%M')} ET not in 12:00-12:30")
+
+    if not pbp_ok:
+        reasons.append("pbp freshness check failed")
+
+    if out_path_exists:
+        reasons.append("revision-0 file already exists")
+
+    # Decision quote freshness: every selected game needs hr_decision_ts
+    # within 60 min before cutoff
+    if len(selected_df) > 0:
+        cutoff_ts = pd.Timestamp(prediction_cutoff).tz_convert("UTC")
+        window_start = cutoff_ts - pd.Timedelta(minutes=60)
+        for _, r in selected_df.iterrows():
+            ts_str = r.get("hr_decision_ts")
+            if ts_str is None or (isinstance(ts_str, float) and np.isnan(ts_str)):
+                reasons.append(f"{r['game_id']}: no HR decision quote")
+                break
+            ts = pd.to_datetime(ts_str, utc=True)
+            if ts < window_start:
+                reasons.append(f"{r['game_id']}: HR quote {ts} > 60min before cutoff")
+                break
+
+    if reasons:
+        return "PILOT", "; ".join(reasons)
+    return "PRIMARY", None
+
+
+def write_forward_log(out_df, season, week, mode, pilot_reason, manifest_sha, dry_run):
     """Append a block to research/own_numbers/forward_log.md."""
     log_path = os.path.join(ROOT, "research/own_numbers/forward_log.md")
     run_utc = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -141,6 +227,8 @@ def write_forward_log(out_df, season, week, mode, halts, manifest_sha, dry_run):
     lines.append(f"Run: {run_utc}  |  Manifest SHA: {manifest_sha[:16]}...")
     if dry_run:
         lines.append("**DRY RUN** -- not the revision-0 file")
+    if pilot_reason:
+        lines.append(f"Pilot reason: {pilot_reason}")
     lines.append(f"Games: {len(out_df)}  |  Confident: {len(confident)}")
     lines.append("")
 
@@ -157,13 +245,8 @@ def write_forward_log(out_df, season, week, mode, halts, manifest_sha, dry_run):
             lines.append(f"| {game} | {side} | {ours} | {hr_q} | {hr_p} | {gap} |")
         lines.append("")
 
-    if halts:
-        lines.append("**HALT reasons:** " + "; ".join(halts))
-        lines.append("")
-
     block = "\n".join(lines) + "\n"
 
-    # Create file with header if it doesn't exist
     if not os.path.exists(log_path):
         with open(log_path, "w") as f:
             f.write("# ON Forward Log\n\nAppend-only record of Monday runner outputs.\n")
@@ -183,16 +266,26 @@ def main():
                         help="Skip day-of-week check (testing)")
     parser.add_argument("--dry-run", action="store_true",
                         help="Write DRYRUN_ prefix, skip day/exists checks")
-    parser.add_argument("--mode", default="PILOT", choices=["PILOT", "pilot"],
-                        help="Mode label (default: PILOT)")
+    parser.add_argument("--mode", default=None, choices=["pilot", "PILOT"],
+                        help="Force PILOT mode (default: derived)")
+    parser.add_argument("--check-pbp-only", action="store_true",
+                        help="Run PBP freshness check only, exit 0 if ok, 1 if stale")
     args = parser.parse_args()
 
     season = args.season
-    mode = args.mode.upper()
+    force_pilot = args.mode is not None
     guard_2024(season, context="forward runner")
     now_et = datetime.now(ET)
     now_utc = datetime.now(timezone.utc)
-    halts = []
+
+    # ─── Cutoff: Monday of the current Mon-Sun week ───────────────
+    cutoff_monday = monday_of_week(now_et)
+    prediction_cutoff = compute_prediction_cutoff(cutoff_monday.strftime("%Y-%m-%d"))
+
+    # ─── --check-pbp-only mode ────────────────────────────────────
+    if args.check_pbp_only:
+        ok, missing, max_gd = check_pbp_freshness(season, prediction_cutoff)
+        sys.exit(0 if ok else 1)
 
     # ─── Resolve week ─────────────────────────────────────────────
     if args.week == "auto":
@@ -216,13 +309,19 @@ def main():
         out_path = os.path.join(ROOT, f"nfl/data/own/forward/DRYRUN_week={season}_{week:02d}.parquet")
     else:
         out_path = os.path.join(ROOT, f"nfl/data/own/forward/week={season}_{week:02d}.parquet")
-        # HALT: Week file exists (revision 0 only)
-        if os.path.exists(out_path):
-            print(f"HALT: {out_path} already exists (revision 0 only)")
-            sys.exit(1)
 
-    # ─── PBP freshness check ─────────────────────────────────────
-    check_pbp_freshness(season, now_utc)
+    out_path_exists = os.path.exists(out_path)
+    if not args.dry_run and out_path_exists:
+        print(f"HALT: {out_path} already exists (revision 0 only)")
+        sys.exit(1)
+
+    # ─── PBP freshness check (HALT on failure) ────────────────────
+    pbp_ok, pbp_missing, max_gameday = check_pbp_freshness(season, prediction_cutoff)
+    if not pbp_ok:
+        sys.exit(1)
+
+    print(f"Prediction cutoff: {prediction_cutoff.isoformat()}")
+    print(f"Cutoff Monday: {cutoff_monday}")
 
     # ─── HALT: Latest snapshot > 3h old ───────────────────────────
     snap_files = sorted(glob.glob(
@@ -238,19 +337,13 @@ def main():
         sys.exit(1)
     print(f"Latest snapshot: {latest_ts} ({snap_age_hours:.1f}h ago)")
 
-    # ─── Prediction cutoff (Monday 12:00 ET) ──────────────────────
-    cutoff_date = now_et.strftime("%Y-%m-%d")
-    prediction_cutoff = compute_prediction_cutoff(cutoff_date)
-    print(f"Prediction cutoff: {prediction_cutoff.isoformat()}")
-
     # ─── LOAD SCHEDULE ────────────────────────────────────────────
-    sched = nfl.load_schedules([season]).to_pandas()
+    sched = nflr.load_schedules([season]).to_pandas()
     games = sched[(sched["game_type"] == "REG") & (sched["week"] == week)]
     if len(games) == 0:
         print(f"HALT: no REG games for {season} week {week}")
         sys.exit(1)
 
-    # Ensure all requested games are still upcoming
     for _, g in games.iterrows():
         kick = kickoff_utc_from_nflverse(g["gameday"], g["gametime"])
         if kick < now_utc:
@@ -263,15 +356,12 @@ def main():
     tape["snapshot_utc"] = pd.to_datetime(tape["snapshot_utc"], utc=True)
     tape["commence_time"] = pd.to_datetime(tape["commence_time"], utc=True)
     spreads = tape[tape["market"] == "spreads"].copy()
-    totals = tape[tape["market"] == "totals"].copy()
 
     spreads["team_abbr"] = spreads["outcome_name"].map(FULL_TO_ABBR)
     unmapped = spreads[spreads["team_abbr"].isna()]["outcome_name"].unique()
     if len(unmapped) > 0:
         print(f"HALT: unmapped teams: {unmapped}")
         sys.exit(1)
-
-    ABBR_TO_FULL = {v: k for k, v in FULL_TO_ABBR.items()}
 
     # ─── Manifest SHA for the log ─────────────────────────────────
     manifest_path = os.path.join(ROOT, "research/own_numbers/FROZEN_MANIFEST_v2.json")
@@ -287,7 +377,6 @@ def main():
 
         event_id = match_game_to_event(home, away, kick_utc, season, spreads)
 
-        # Get decision and close quotes for HR and Pinnacle
         hr_decision_h = hr_close_h = pin_decision_h = pin_close_h = None
         hr_decision_ts = hr_close_ts = pin_decision_ts = pin_close_ts = None
         hr_decision_price = hr_close_price = None
@@ -299,9 +388,7 @@ def main():
                              (spreads["bookmaker"] == book) &
                              (spreads["team_abbr"] == home)]
                 if len(sp) > 0:
-                    # Decision quote: last before prediction cutoff
                     dq = select_decision_quote(sp, prediction_cutoff)
-                    # Close quote: last before kickoff (ON-D5 1c)
                     cq, cflag = select_close_quote(sp, kick_utc)
 
                     if prefix == "hr":
@@ -342,11 +429,9 @@ def main():
         err_m = np.sqrt(mc_se_m**2 + CAL_VAR_M)
         err_t = np.sqrt(mc_se_t**2 + CAL_VAR_T)
 
-        # Confident flag vs HR decision quote (ON-D5 1a: q = -h)
         confident = is_confident(ours_m, hr_decision_h, err_m)
         gap = compute_gap(ours_m, hr_decision_h)
 
-        # Direction side, recorded at decision time (immutable)
         side = None
         if gap is not None and gap != 0:
             q = handicap_to_home_margin(hr_decision_h)
@@ -364,45 +449,49 @@ def main():
             "ours_t": round(ours_t, 4),
             "err_m": round(err_m, 4),
             "err_t": round(err_t, 4),
-            # HR decision quote (at cutoff)
             "hr_decision_handicap": hr_decision_h,
             "hr_decision_margin": handicap_to_home_margin(hr_decision_h),
             "hr_decision_price": hr_decision_price,
             "hr_decision_ts": hr_decision_ts,
-            # HR close quote (last pre-kick)
             "hr_close_handicap": hr_close_h,
             "hr_close_margin": handicap_to_home_margin(hr_close_h),
             "hr_close_price": hr_close_price,
             "hr_close_ts": hr_close_ts,
             "hr_close_flag": close_flag_hr,
-            # Pinnacle decision quote
             "pin_decision_handicap": pin_decision_h,
             "pin_decision_margin": handicap_to_home_margin(pin_decision_h),
             "pin_decision_ts": pin_decision_ts,
-            # Pinnacle close quote
             "pin_close_handicap": pin_close_h,
             "pin_close_margin": handicap_to_home_margin(pin_close_h),
             "pin_close_ts": pin_close_ts,
             "pin_close_flag": close_flag_pin,
-            # Selection
             "gap_vs_hr": round(gap, 4) if gap is not None else None,
             "confident": confident,
             "side": side,
             "event_id": event_id,
-            "mode": mode,
             "run_utc": now_utc.isoformat(),
         })
 
     out_df = pd.DataFrame(results)
+
+    # ─── Derive mode ──────────────────────────────────────────────
+    selected_df = out_df[out_df["confident"]]
+    mode, pilot_reason = derive_mode(
+        now_et, pbp_ok, out_path_exists, selected_df, prediction_cutoff,
+        force_pilot=force_pilot,
+    )
+    out_df["mode"] = mode
+    out_df["pilot_reason"] = pilot_reason
+
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     out_df.to_parquet(out_path, index=False)
     print(f"\nSaved: {out_path}")
+    print(f"Mode: {mode}" + (f" ({pilot_reason})" if pilot_reason else ""))
     print(f"Games: {len(out_df)}, Confident: {out_df['confident'].sum()}")
     cols = ["game_id", "ours_m", "hr_decision_handicap", "hr_decision_margin", "gap_vs_hr", "err_m", "confident"]
     print(out_df[[c for c in cols if c in out_df.columns]].to_string(index=False))
 
-    # Write forward log
-    write_forward_log(out_df, season, week, mode, halts, manifest_sha, args.dry_run)
+    write_forward_log(out_df, season, week, mode, pilot_reason, manifest_sha, args.dry_run)
 
 
 if __name__ == "__main__":
