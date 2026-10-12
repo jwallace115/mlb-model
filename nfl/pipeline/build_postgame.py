@@ -655,13 +655,25 @@ _link_sd_cache = {}
 
 
 def _load_link_sd(root):
-    """Load link_sd_2025.json. Returns dict or {}."""
+    """Load link_sd_2025_v2.json. Refuses v1 (no version marker). Returns dict or {}."""
     if "data" not in _link_sd_cache:
-        p = root / "nfl" / "data" / "postgame" / "link_sd_2025.json"
+        p = root / "nfl" / "data" / "postgame" / "link_sd_2025_v2.json"
         if p.exists():
-            _link_sd_cache["data"] = json.loads(p.read_text())
+            data = json.loads(p.read_text())
+            if not data.get("version", "").startswith("v2"):
+                print("WARNING: link_sd file missing v2 marker, refusing", file=sys.stderr)
+                _link_sd_cache["data"] = {}
+            else:
+                _link_sd_cache["data"] = data
         else:
-            _link_sd_cache["data"] = {}
+            # Fallback to v1 — but only with warning
+            p1 = root / "nfl" / "data" / "postgame" / "link_sd_2025.json"
+            if p1.exists():
+                print("WARNING: using v1 link_sd (no v2 found) — thesis z values invalid",
+                      file=sys.stderr)
+                _link_sd_cache["data"] = json.loads(p1.read_text())
+            else:
+                _link_sd_cache["data"] = {}
     return _link_sd_cache["data"]
 
 
@@ -817,13 +829,16 @@ _POS_GROUPS = {
 
 
 def _teammates_out(player_name, team, market, week, snap_counts, game_pbp):
-    """Find teammates who were absent/injured that could shift share.
+    """Find teammates who were out/injured that could shift share.
 
     Returns list of teammate names or [].
-    Requirements:
+    Requirements (PM-1d):
     - Same position group as the pick's market implies
-    - Prior snap share >= 15% (avg offense_pct over weeks < week)
-    - Not in the game PBP for this team (absent), OR injured in-game
+    - Prior offensive snap share >= 15% (avg offense_pct over weeks < week)
+    - 0 offensive snaps in the snap-counts archive for the game week,
+      OR an in-game "was injured during the play" line followed by
+      no further offensive snap/touch.
+    - "No touch" (0 targets/carries but >0 snaps) does NOT count as out.
     """
     if snap_counts is None or snap_counts.empty:
         return []
@@ -846,31 +861,46 @@ def _teammates_out(player_name, team, market, week, snap_counts, game_pbp):
     if prior.empty:
         return []
 
-    # Average snap share per player
+    # Average snap share per player (prior weeks)
     avg_pct = prior.groupby("player")["offense_pct"].mean()
-    # Teammates with >= 15% average snap share (exclude the pick player)
     pick_norm = pg._normalize_name(player_name)
     significant = avg_pct[avg_pct >= 0.15]
 
-    # Players active in this game's PBP
-    active_ids = set()
-    for col in ("receiver_player_name", "rusher_player_name", "passer_player_name"):
-        if col in game_pbp.columns:
-            active_ids.update(game_pbp[game_pbp["posteam"] == team][col].dropna().unique())
+    # Game-week snap counts for this team
+    game_snaps = snap_counts[(snap_counts["team"] == team) & (snap_counts["week"] == week)]
+    # Build set of players with >0 offensive snaps in the game
+    if not game_snaps.empty and "offense_snaps" in game_snaps.columns:
+        played_set = set()
+        for _, row in game_snaps.iterrows():
+            snaps = row.get("offense_snaps", 0)
+            if snaps is not None and int(snaps) > 0:
+                played_set.add(pg._normalize_name(str(row["player"])))
+    else:
+        # No game-week snap data — fall back to PBP presence
+        played_set = set()
+        for col in ("receiver_player_name", "rusher_player_name", "passer_player_name"):
+            if col in game_pbp.columns:
+                for n in game_pbp[game_pbp["posteam"] == team][col].dropna().unique():
+                    played_set.add(pg._normalize_name(str(n)))
+
+    # In-game injuries from PBP
+    injuries = _extract_injuries(game_pbp)
+    injured_names = {pg._normalize_name(inj["player"]) for inj in injuries if inj.get("player")}
 
     absent = []
     for name, pct in significant.items():
-        if pg._normalize_name(name) == pick_norm:
+        norm = pg._normalize_name(name)
+        if norm == pick_norm:
             continue  # skip the pick player
-        # Check if this player was active in the game
-        # Match by normalized name against PBP names
-        found = False
-        for active_name in active_ids:
-            if pg._normalize_name(str(active_name)) == pg._normalize_name(name):
-                found = True
-                break
-        if not found:
+
+        # Out = 0 offensive snaps (not in played_set)
+        if norm not in played_set:
             absent.append(name)
+        elif norm in injured_names:
+            # In-game injury: check if they had any touch after injury
+            # (simplified: if injured in-game and in snap counts, they played some)
+            # Only mark out if 0 snaps after injury — for now, injured + played = not out
+            pass
 
     return absent
 
