@@ -116,7 +116,9 @@ def build_link_sd():
                          "n": len(valid), "level": "player"}
 
     # QB share, completion rate, yards per attempt
-    pass_plays = pbp[(pbp["passer_player_id"].notna()) & (pbp["pass_attempt"] == 1)].copy()
+    # Exclude sacks: official attempts = pass_attempt==1 AND sack!=1 (PM-1c)
+    pass_plays = pbp[(pbp["passer_player_id"].notna()) & (pbp["pass_attempt"] == 1) &
+                      (pbp["sack"] != 1)].copy()
     pass_plays = pass_plays.merge(tdf[["game_id", "team", "dropbacks"]],
                                    left_on=["game_id", "posteam"],
                                    right_on=["game_id", "team"], how="left")

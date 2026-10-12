@@ -311,11 +311,9 @@ def test_reader_v3_null_control():
         assert row["thesis"] == "price:up", f"view line should have thesis='price:up', got {row['thesis']}"
 
 
-def test_ncaaf_reader_has_thesis():
-    """NCAAF reader output has thesis column (same code path as NFL).
-    reader_v3 writes thesis on both NFL and NCAAF — the work order notes
-    NCAAF freezes are unchanged (no thesis_required gate), but reader_v3
-    output schema is the same."""
+def test_ncaaf_reader_no_thesis():
+    """PM-1c: NCAAF reader output must NOT have thesis column.
+    reader_v3 writes thesis only when sport == 'nfl'."""
     import reader_v3 as rv3
 
     sheet = pd.DataFrame([{
@@ -339,8 +337,8 @@ def test_ncaaf_reader_has_thesis():
                             pd.DataFrame(), pd.DataFrame(), {}, None,
                             sport="ncaaf")
 
-    # NCAAF output has thesis column (same schema as NFL)
-    assert "thesis" in out.columns
+    # NCAAF output must NOT have thesis column (PM-1c contract)
+    assert "thesis" not in out.columns
 
 
 def test_prop_thesis_rejects_points():

@@ -142,9 +142,12 @@ def _player_stats_from_pbp(pbp, team):
             "carries": carries, "rushing_yards": rush_yards,
         })
 
-    # Passers
-    pass_plays = team_plays[team_plays["passer_player_id"].notna() &
-                             (team_plays["pass_attempt"] == 1)]
+    # Passers — official attempts exclude sacks (PM-1c Item 1)
+    # dropbacks = pass_attempt==1 (includes sacks) — used for team volume/share
+    # pass_attempts = pass_attempt==1 AND sack!=1 — matches nflverse player_stats 'attempts'
+    all_passer_plays = team_plays[team_plays["passer_player_id"].notna() &
+                                  (team_plays["pass_attempt"] == 1)]
+    pass_plays = all_passer_plays[all_passer_plays["sack"] != 1]
     for pid, grp in pass_plays.groupby("passer_player_id"):
         name = str(grp["passer_player_name"].iloc[0])
         attempts = len(grp)
@@ -609,6 +612,37 @@ def _thesis_from_tag(tag, market, side):
     return f"{link}:{direction}", "tag_map"
 
 
+# ── Thesis link name resolution per market (PM-1c Item 2) ──
+
+_THESIS_EFFICIENCY_MAP = {
+    "prop:rec":      "catch_rate",
+    "prop:rec_yds":  "yards_per_target",
+    "prop:rush_att": None,
+    "prop:rush_yds": "yards_per_carry",
+    "prop:pass_att": None,
+    "prop:pass_cmp": "completion_rate",
+    "prop:pass_yds": "yards_per_attempt",
+}
+
+
+def _thesis_link_for_market(thesis_link, market):
+    """Map abstract thesis link to concrete chain link for this market.
+
+    share       → share (rec) / carry_share (rush) / qb_share (pass)
+    efficiency  → catch_rate / yards_per_target / yards_per_carry / ...
+    plays, pass_rate, run_rate, price → unchanged
+    """
+    if thesis_link == "share":
+        if market.startswith("prop:rush"):
+            return "carry_share"
+        if market.startswith("prop:pass"):
+            return "qb_share"
+        return "share"
+    if thesis_link == "efficiency":
+        return _THESIS_EFFICIENCY_MAP.get(market, thesis_link)
+    return thesis_link
+
+
 # ── Thesis z-score check ──
 
 _link_sd_cache = {}
@@ -625,11 +659,12 @@ def _load_link_sd(root):
     return _link_sd_cache["data"]
 
 
-def _check_thesis(thesis, decomp, link_sd, clv_row):
+def _check_thesis(thesis, decomp, link_sd, clv_row, market=None):
     """Check thesis: z = link_term / SD_link.
 
     held >= +0.5, failed <= -0.5, flat otherwise.
     For price thesis: CLV > 0 from clv_row.
+    market: used to resolve abstract thesis links (share → carry_share etc.)
     Returns (verdict_str, z_value).
     """
     if not thesis:
@@ -643,9 +678,9 @@ def _check_thesis(thesis, decomp, link_sd, clv_row):
         if len(parts) != 2:
             results.append(("invalid", None))
             continue
-        link, direction = parts[0].strip(), parts[1].strip()
+        raw_link, direction = parts[0].strip(), parts[1].strip()
 
-        if link == "price":
+        if raw_link == "price":
             # Price thesis: CLV > 0 → held
             if clv_row and clv_row.get("clv_points") is not None:
                 clv = float(clv_row["clv_points"])
@@ -657,6 +692,14 @@ def _check_thesis(thesis, decomp, link_sd, clv_row):
                     results.append(("flat", clv))
             else:
                 results.append(("no_data", None))
+            continue
+
+        # Resolve abstract link to concrete chain link (PM-1c)
+        link = _thesis_link_for_market(raw_link, market) if market else raw_link
+
+        # If resolved link is None (e.g. efficiency on rush_att), n/a
+        if link is None:
+            results.append(("n/a", None))
             continue
 
         # Non-price: z = link_term / SD_link
@@ -698,7 +741,7 @@ def _check_thesis(thesis, decomp, link_sd, clv_row):
         return "held", z_primary
     if any(v == "failed" for v in verdicts):
         return "failed", z_primary
-    if any(v in ("no_data", "no_decomp", "no_link", "no_sd", "invalid") for v in verdicts):
+    if any(v in ("no_data", "no_decomp", "no_link", "no_sd", "invalid", "n/a") for v in verdicts):
         return "no_data", z_primary
     return "flat", z_primary
 
@@ -978,6 +1021,14 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
                     player_id = pid
                     break
 
+            if not team or not player_id:
+                # Unresolved player → NaN actual, UNRESOLVED why_code (PM-1c)
+                verdict["actual_stat"] = float("nan")
+                verdict["why_code_auto"] = "UNRESOLVED"
+                verdict["prior_source"] = "none"
+                verdicts.append(verdict)
+                continue
+
             if team and player_id:
                 actual, prior, prior_source = _compute_chain_actual_prior(
                     market, player_id, team, game_pbp, pbp_slices, week, point)
@@ -1113,7 +1164,7 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
                 except (json.JSONDecodeError, TypeError):
                     pass
             thesis_verdict, thesis_z = _check_thesis(
-                thesis_str, decomp_for_thesis, link_sd, clv_row)
+                thesis_str, decomp_for_thesis, link_sd, clv_row, market=market)
             verdict["thesis_held"] = thesis_verdict
             verdict["thesis_z"] = thesis_z
 
