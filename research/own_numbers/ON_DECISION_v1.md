@@ -132,3 +132,49 @@ adjudication items 4, 5 in Cowork's reply). Filed to `research/cross_ai/`.
 no-match), quote selection (in-play rejected, stale flagged, preferred, empty),
 stable seeds (deterministic across PYTHONHASHSEED), Monday cutoff (MNF excluded).
 Each test FAILS when the audited defect is reintroduced.
+
+## ON-D6 — Monday-noon cutoff, honest counts, stable seeds; 2021-23 rescore (2026-10-12)
+
+**Source:** ChatGPT audit findings #1, #6, #7, #9, #11; adjudication items 1, 6, 11.
+
+**Repairs (ON-1b item 2):**
+
+2a. **prediction_cutoff** = Monday 12:00 America/New_York of each game week (UTC
+    recorded). Prior game admitted only if kickoff + 4h < cutoff. Week 1's MNF
+    (same-day as week 2's Monday noon cutoff) is excluded from week 2 ratings.
+    49 of 54 weeks had MNF exclusions. Team ratings rebuilt with excluded games
+    removed; tendencies/sit/kicker use the standard tables (one MNF game has
+    negligible effect on league-level tables). League shrink targets: prior season
+    only; HALT on missing. Ratings built with FROZEN params (params_v1.json).
+
+2b. **n_games_into_ratings** = actual admitted completed games per team (byes,
+    cancellations, cutoff exclusions respected). 502/815 games changed from the old
+    week-1 proxy; 100 changed calibration bucket.
+
+2c. **Seeds** via `zlib.crc32(game_id:chunk_index:season:week)` — deterministic
+    across PYTHONHASHSEED. Cross-process test passes.
+
+2d. **Rebuild 2021-23.** 815 games at N=5,000, wall time 93 min (sims) + 2.6 min
+    (ratings). All games produced exactly one result. Cache validated on seed scheme
+    and game count.
+
+**LABEL: DEVELOPMENT RESULT — mechanics fitted on 2021-24; not out-of-sample.**
+
+Pre-registered predictions (from Cowork's no-leak recompute, stated before running):
+
+| Metric | Pre-registered | Actual | Held? |
+|---|---|---|---|
+| Direction (moving confident) | 65-75% (Cowork: 71.8%) | 70.8% (80/113) | HELD |
+| Mean signed movement (all selected) | +1.0 to +1.5 (Cowork: +1.37) | +1.528 | DID NOT HOLD (marginally above) |
+| ATS at open (same side, excl pushes) | 47-55% (Cowork: 50.8%) | 52.0% (65W-60L-1P) | HELD |
+
+Full population (unchanged lines included): 126 selected, 113 moved, 13 unchanged.
+ATS at close: 47.1% (56W-63L-7P) — does not beat the close.
+2021: 0 confident games (flat prior). 2022: 66.7% direction (66 games). 2023: 76.6% (47 games).
+Non-confident direction: 53.9% (312/579) — signal exists outside the confident subset.
+
+Null control: permutation rebuilds confident subset per shuffle (audit P6 fix).
+Real 70.8%, null mean 48.1%, SD 2.1%, Z = 10.76. Null denominator: mean 282 games.
+
+Mean movement did not hold: +1.528 vs upper bound +1.5. The excess is 0.028 pts,
+within the SE of the estimate. Stated plainly as "did not hold" per the work order.
