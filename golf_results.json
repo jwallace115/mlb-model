@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-12T11:02:33.256549",
+  "generated_at": "2026-10-12T12:01:19.866353",
   "sport": "golf",
   "event_name": "Baycurrent Classic",
   "event_id": 527,
@@ -671,27 +671,19 @@
   ],
   "season_stats": {
     "make_cut": {
-      "n": 7771,
-      "hit_rate": 51.9,
-      "roi": 12.6,
+      "n": 7831,
+      "hit_rate": 51.8,
+      "roi": 12.8,
       "clv": -13.7
     },
     "top_20": {
-      "n": 4465,
-      "hit_rate": 40.3,
-      "roi": 29.4,
-      "clv": -9.4
+      "n": 4864,
+      "hit_rate": 39.4,
+      "roi": 23.9,
+      "clv": -9.0
     }
   },
   "recent_results": [
-    {
-      "event_name": "3M Open",
-      "event_id": 525,
-      "year": 2026,
-      "n_candidates": 846,
-      "hit_rate": 46.5,
-      "roi": 8.2
-    },
     {
       "event_name": "Genesis Scottish Open",
       "event_id": 541,
@@ -707,6 +699,14 @@
       "n_candidates": 120,
       "hit_rate": 47.5,
       "roi": 4.5
+    },
+    {
+      "event_name": "Bank of Utah Championship",
+      "event_id": 554,
+      "year": 2026,
+      "n_candidates": 244,
+      "hit_rate": 33.6,
+      "roi": 2.6
     },
     {
       "event_name": "Cadillac Championship",
