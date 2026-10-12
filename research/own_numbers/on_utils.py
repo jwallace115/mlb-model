@@ -151,6 +151,26 @@ def select_decision_quote(quotes_df, cutoff_utc, snapshot_col="snapshot_utc"):
     return pre_cutoff.iloc[-1]
 
 
+# ─── 3b. 2024 GUARD ───────────────────────────────────────────────────
+
+def guard_2024(season, context="build"):
+    """HALT if any ON build/score entry point is given season 2024.
+
+    2024 was used in engine development (mechanics tables, Jacobian, param tuning).
+    It can never be a "clean holdout" for this engine. ON-D7.
+    """
+    if isinstance(season, (list, tuple, set)):
+        for s in season:
+            guard_2024(s, context)
+        return
+    if season == 2024:
+        raise RuntimeError(
+            f"HALT: ON {context} called with season=2024. "
+            f"2024 is closed to ON permanently — used in engine development "
+            f"(mechanics tables, Jacobian, param tuning). See ON-D7."
+        )
+
+
 # ─── 2c. STABLE SEEDS ────────────────────────────────────────────────────
 
 def stable_seed(game_id, chunk_index, season=None, week=None):

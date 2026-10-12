@@ -178,3 +178,27 @@ Real 70.8%, null mean 48.1%, SD 2.1%, Z = 10.76. Null denominator: mean 282 game
 
 Mean movement did not hold: +1.528 vs upper bound +1.5. The excess is 0.028 pts,
 within the SE of the estimate. Stated plainly as "did not hold" per the work order.
+
+## ON-D7 — Freeze manifest, 2024 guard, ON_SPEC_v2 (2026-10-12)
+
+3a. **FROZEN_MANIFEST_v2.json:** SHA256 of 47 files — every .py and .md in
+    research/own_numbers/, engine.py, ratings.py, params_v1.json, hfa_v1.json,
+    all 29 tables under nfl/data/sim/tables, calibration_table.parquet, and
+    engine_fingerprint() = `156cd057a3b39e48`. Fit windows recorded: mechanics
+    2021-2024, ratings params 2021-2024, calibration 2021-2023, HFA 2021-2023.
+
+3b. **2024 guard:** `guard_2024()` in on_utils.py. Any ON build/score entry point
+    given season=2024 HALTs before loading outcomes. Added to build_monday_number.py
+    (TARGET_SEASONS guard) and run_monday.py (forward runner). Test: test_on_utils.py
+    `TestGuard2024` — halts on 2024, allows 2021-23 and 2025-26.
+
+3c. **ON_SPEC_v2.md:** forward protocol adopted from the audit's "valid forward test"
+    section. SHA256: `f938a0d2297e5df8187a026a20f8c6c8b72b3303b84fbe4b36071a1d6e08ad6c`.
+    Scope: team-level player-off, Monday 12:00 ET cutoff (UTC recorded), only
+    still-upcoming fixtures, immutable snapshots with manifest, benchmark = HR quote
+    at cutoff normalised to home margin. Selection: |ours − q| ≥ err_m AND ≥ 1 pt,
+    side fixed at decision. PRIMARY = mean signed decision-to-close movement (all
+    selected), paired vs prior-close comparator. ≥ 60 games and ≥ 12 weekly clusters
+    for confirmatory read; no efficacy-based early stop; every look logged.
+
+    2021-23: DEVELOPMENT. 2024: "used in engine development; not a holdout".

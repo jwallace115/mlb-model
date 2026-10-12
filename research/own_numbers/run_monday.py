@@ -36,6 +36,7 @@ from on_utils import (
     stable_seed,
     kickoff_utc_from_nflverse,
     compute_prediction_cutoff,
+    guard_2024,
 )
 
 ROOT = os.path.join(os.path.dirname(__file__), "../..")
@@ -60,6 +61,7 @@ def main():
 
     season = args.season
     week = args.week
+    guard_2024(season, context="forward runner")
     now_et = datetime.now(ET)
 
     # ─── HALT: Not Monday-Tuesday ET ────────────────────────────────
