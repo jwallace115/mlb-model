@@ -8,7 +8,7 @@
 |------|---------|-------|----------------|-------------------|----------|
 | `nfl/data/nfl_line_movement.parquet` | 2021-2024 | 775 | UNKNOWN — no book column | `snapshot_date` ~5 days pre-game (early-week capture) | **NO** |
 | `nfl/data/opening_lines_raw.parquet` | 2021-2024 (+16 games 2025) | 1,329 | Odds API consensus of `n_books` (median 13-18 books) | Earliest Odds API snapshot for each event | **NO** |
-| `data/odds_archive/nfl/line_history/season=2026/` | 2026 wk1-3 | 1,418 snapshots | 10 books (DK, FD, Pinnacle, BetMGM, etc.) | Earliest snapshot per event per book | YES |
+| `data/odds_archive/nfl/line_history/season=2026/` | 2026 wk1-6 | 1,418 snapshots | 10 books (DK, FD, Pinnacle, BetMGM, etc.) | Earliest snapshot per event per book | YES |
 
 ### Closing lines (for reference)
 
