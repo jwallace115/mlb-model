@@ -62,3 +62,19 @@ to `build_active_universe`. When set, filter `injuries` to rows with
 `date_modified < injury_cutoff` before the merge. Then call it twice per game:
 once with Monday 12:00 ET, once with kickoff time. Estimated 2-hour implementation
 + the same ~18 min sim run for the kickoff-state numbers.
+
+## ON-D3 — 2026 interim look, weeks 2-6 (2026-10-12)
+
+**LABEL: interim look at forward data. Nothing is tuned on it. The registry of
+priors is not changed by it.**
+
+77 games, 75 with Hard Rock opens, 50 confident (|ours - HR| >= err_m AND >= 1pt).
+
+HR spread open→close movement present in 61 games.
+- Direction agreement (all): 59.0% (36/61)
+- Direction agreement (confident): 60.0% (24/40), Wilson [0.446, 0.737]
+- By week: wk2 62.5% (10/16), wk3 68.8% (11/16), wk4 66.7% (10/15), wk5 35.7% (5/14)
+
+**Assessment:** too early to draw conclusions. The Wilson CI on the confident subset
+includes 50%. Week 5 pulled the overall down hard (5/14). The 2021-23 backtest
+(73.6%, N=125) is the stronger signal; this is 5 weeks of noisy forward data.
