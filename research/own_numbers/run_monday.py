@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ON-1 ITEM 4: Monday runner for forward Own Numbers.
+ON forward Monday runner (ON-D5 repairs applied).
 Usage: python3 run_monday.py --season 2026 --week N
 
 HALTs:
@@ -8,6 +8,7 @@ HALTs:
 - Week file already exists (revision 0 only)
 - Latest snapshot is > 3 h old
 - Unmapped team name
+- Ambiguous event match
 
 Output: nfl/data/own/forward/week=2026_NN.parquet (append-only)
 MODE=PILOT
@@ -24,6 +25,18 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 from nfl.sim.engine import simulate_game
 from nfl.sim.names import FULL_TO_ABBR
 import nflreadpy as nfl
+
+from on_utils import (
+    handicap_to_home_margin,
+    compute_gap,
+    is_confident,
+    match_game_to_event,
+    select_close_quote,
+    select_decision_quote,
+    stable_seed,
+    kickoff_utc_from_nflverse,
+    compute_prediction_cutoff,
+)
 
 ROOT = os.path.join(os.path.dirname(__file__), "../..")
 ET = ZoneInfo("America/New_York")
@@ -77,17 +90,30 @@ def main():
         sys.exit(1)
     print(f"Latest snapshot: {latest_ts} ({snap_age_hours:.1f}h ago)")
 
+    # ─── Prediction cutoff (Monday 12:00 ET) ─────────────────────────
+    cutoff_date = now_et.strftime("%Y-%m-%d")
+    prediction_cutoff = compute_prediction_cutoff(cutoff_date)
+    print(f"Prediction cutoff: {prediction_cutoff.isoformat()}")
+
     # ─── LOAD SCHEDULE ──────────────────────────────────────────────
     sched = nfl.load_schedules([season]).to_pandas()
     games = sched[(sched["game_type"] == "REG") & (sched["week"] == week)]
     if len(games) == 0:
         print(f"HALT: no REG games for {season} week {week}")
         sys.exit(1)
+
+    # Ensure all requested games are still upcoming
+    for _, g in games.iterrows():
+        kick = kickoff_utc_from_nflverse(g["gameday"], g["gametime"])
+        if kick < now_utc:
+            print(f"WARNING: {g['game_id']} kicked off at {kick}, before now ({now_utc})")
+
     print(f"Games: {len(games)}")
 
     # ─── LOAD TAPE FOR THIS WEEK ────────────────────────────────────
     tape = pd.concat([pd.read_parquet(f) for f in snap_files], ignore_index=True)
-    tape["snapshot_utc"] = pd.to_datetime(tape["snapshot_utc"])
+    tape["snapshot_utc"] = pd.to_datetime(tape["snapshot_utc"], utc=True)
+    tape["commence_time"] = pd.to_datetime(tape["commence_time"], utc=True)
     spreads = tape[tape["market"] == "spreads"].copy()
     totals = tape[tape["market"] == "totals"].copy()
 
@@ -99,48 +125,55 @@ def main():
 
     ABBR_TO_FULL = {v: k for k, v in FULL_TO_ABBR.items()}
 
-    # ─── MATCH GAMES TO EVENTS ──────────────────────────────────────
+    # ─── MATCH GAMES TO EVENTS (ON-D5 1b) ───────────────────────────
     results = []
     for _, g in games.iterrows():
         home = g["home_team"]
         away = g["away_team"]
-        home_full = ABBR_TO_FULL.get(home, home)
-        away_full = ABBR_TO_FULL.get(away, away)
+        kick_utc = kickoff_utc_from_nflverse(g["gameday"], g["gametime"])
 
-        candidates = spreads[spreads["outcome_name"].isin([home_full, away_full])]["event_id"].unique()
-        event_id = None
-        for eid in candidates:
-            evt = spreads[spreads["event_id"] == eid]
-            if set(evt["team_abbr"].unique()) >= {home, away}:
-                event_id = eid
-                break
+        event_id = match_game_to_event(home, away, kick_utc, season, spreads)
 
-        # Get HR and Pinnacle openers
-        hr_open_sp = hr_open_tot = pin_open_sp = pin_open_tot = None
+        # Get decision and close quotes for HR and Pinnacle
+        hr_decision_h = hr_close_h = pin_decision_h = pin_close_h = None
+        hr_decision_ts = hr_close_ts = pin_decision_ts = pin_close_ts = None
+        hr_decision_price = hr_close_price = None
+        close_flag_hr = close_flag_pin = None
+
         if event_id:
             for book, prefix in [("hardrockbet_fl", "hr"), ("pinnacle", "pin")]:
                 sp = spreads[(spreads["event_id"] == event_id) &
                              (spreads["bookmaker"] == book) &
-                             (spreads["team_abbr"] == home)].sort_values("snapshot_utc")
+                             (spreads["team_abbr"] == home)]
                 if len(sp) > 0:
-                    if prefix == "hr":
-                        hr_open_sp = sp.iloc[0]["point"]
-                    else:
-                        pin_open_sp = sp.iloc[0]["point"]
+                    # Decision quote: last before prediction cutoff
+                    dq = select_decision_quote(sp, prediction_cutoff)
+                    # Close quote: last before kickoff (ON-D5 1c)
+                    cq, cflag = select_close_quote(sp, kick_utc)
 
-                tot = totals[(totals["event_id"] == event_id) &
-                             (totals["bookmaker"] == book) &
-                             (totals["outcome_name"] == "Over")].sort_values("snapshot_utc")
-                if len(tot) > 0:
                     if prefix == "hr":
-                        hr_open_tot = tot.iloc[0]["point"]
+                        if dq is not None:
+                            hr_decision_h = dq["point"]
+                            hr_decision_ts = str(dq["snapshot_utc"])
+                            hr_decision_price = dq["price"]
+                        if cq is not None:
+                            hr_close_h = cq["point"]
+                            hr_close_ts = str(cq["snapshot_utc"])
+                            hr_close_price = cq["price"]
+                            close_flag_hr = cflag
                     else:
-                        pin_open_tot = tot.iloc[0]["point"]
+                        if dq is not None:
+                            pin_decision_h = dq["point"]
+                            pin_decision_ts = str(dq["snapshot_utc"])
+                        if cq is not None:
+                            pin_close_h = cq["point"]
+                            pin_close_ts = str(cq["snapshot_utc"])
+                            close_flag_pin = cflag
 
-        # Run sim
+        # Run sim with stable seeds (ON-D5/D6 2c)
         chunk_m, chunk_t = [], []
         for ci in range(2):
-            seed = hash((g["game_id"], ci)) % (2**31)
+            seed = stable_seed(g["game_id"], ci, season, week)
             result = simulate_game(home, away, season, week,
                                     n_sims=2500, seed=seed,
                                     epa_home_offset=H, epa_away_offset=-H)
@@ -156,11 +189,15 @@ def main():
         err_m = np.sqrt(mc_se_m**2 + CAL_VAR_M)
         err_t = np.sqrt(mc_se_t**2 + CAL_VAR_T)
 
-        # Confident flag vs HR open
-        confident = False
-        if hr_open_sp is not None:
-            gap = abs(ours_m - hr_open_sp)
-            confident = gap >= err_m and gap >= 1.0
+        # Confident flag vs HR decision quote (ON-D5 1a: q = −h)
+        confident = is_confident(ours_m, hr_decision_h, err_m)
+        gap = compute_gap(ours_m, hr_decision_h)
+
+        # Direction side, recorded at decision time (immutable)
+        side = None
+        if gap is not None and gap != 0:
+            q = handicap_to_home_margin(hr_decision_h)
+            side = "home" if ours_m > q else "away"
 
         results.append({
             "game_id": g["game_id"],
@@ -168,15 +205,37 @@ def main():
             "week": week,
             "home_team": home,
             "away_team": away,
-            "ours_m": round(ours_m, 2),
-            "ours_t": round(ours_t, 2),
-            "err_m": round(err_m, 2),
-            "err_t": round(err_t, 2),
-            "hr_spread_open": hr_open_sp,
-            "hr_total_open": hr_open_tot,
-            "pin_spread_open": pin_open_sp,
-            "pin_total_open": pin_open_tot,
+            "kickoff_utc": kick_utc.isoformat(),
+            "prediction_cutoff_utc": prediction_cutoff.isoformat(),
+            "ours_m": round(ours_m, 4),
+            "ours_t": round(ours_t, 4),
+            "err_m": round(err_m, 4),
+            "err_t": round(err_t, 4),
+            # HR decision quote (at cutoff)
+            "hr_decision_handicap": hr_decision_h,
+            "hr_decision_margin": handicap_to_home_margin(hr_decision_h),
+            "hr_decision_price": hr_decision_price,
+            "hr_decision_ts": hr_decision_ts,
+            # HR close quote (last pre-kick)
+            "hr_close_handicap": hr_close_h,
+            "hr_close_margin": handicap_to_home_margin(hr_close_h),
+            "hr_close_price": hr_close_price,
+            "hr_close_ts": hr_close_ts,
+            "hr_close_flag": close_flag_hr,
+            # Pinnacle decision quote
+            "pin_decision_handicap": pin_decision_h,
+            "pin_decision_margin": handicap_to_home_margin(pin_decision_h),
+            "pin_decision_ts": pin_decision_ts,
+            # Pinnacle close quote
+            "pin_close_handicap": pin_close_h,
+            "pin_close_margin": handicap_to_home_margin(pin_close_h),
+            "pin_close_ts": pin_close_ts,
+            "pin_close_flag": close_flag_pin,
+            # Selection
+            "gap_vs_hr": round(gap, 4) if gap is not None else None,
             "confident": confident,
+            "side": side,
+            "event_id": event_id,
             "mode": "PILOT",
             "run_utc": now_utc.isoformat(),
         })
@@ -186,7 +245,8 @@ def main():
     out_df.to_parquet(out_path, index=False)
     print(f"\nSaved: {out_path}")
     print(f"Games: {len(out_df)}, Confident: {out_df['confident'].sum()}")
-    print(out_df[["game_id", "ours_m", "hr_spread_open", "err_m", "confident"]].to_string(index=False))
+    cols = ["game_id", "ours_m", "hr_decision_handicap", "hr_decision_margin", "gap_vs_hr", "err_m", "confident"]
+    print(out_df[[c for c in cols if c in out_df.columns]].to_string(index=False))
 
 
 if __name__ == "__main__":
