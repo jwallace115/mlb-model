@@ -4280,3 +4280,77 @@ Also: make refresh_inputs fail per team, not per report.
 - ops/pm1 Item 1: 7167a2df8
 - main merge: dc85b4f53
 - main branch check: confirmed main at session start
+
+## 2026-10-12T10:30Z  claude-code (ON-1: Own Numbers phase 1)
+
+### Environment
+- nflreadpy 0.1.5, framework Python 3.13
+- `git -C ~/mlb-model branch --show-current` -> main (confirmed)
+- Worktree: ~/mlb-model-on1 on branch research/on1
+- Brought in: origin/research/ie0 (spread_opens, build_feature_table), origin/eng/gl1 (hfa_v1.json, build_hfa.py)
+
+### Item 1 — ON-D1: Monday number + error bar (9838ada70)
+- RETURNED: 815 games 2021-23, unanchored sim at N=5000 (2x2500 chunks, 8 workers)
+- RETURNED: h=0.1719 applied as epa_home_offset=+h, epa_away_offset=-h
+- RETURNED: mean ours_m=2.01, mean ours_t=41.52, mean err_m=7.01, mean mc_se_m=0.15
+- RETURNED: corr(ours_m, spread_line)=0.82 (expected — our prediction agrees with market)
+- RETURNED: corr(outcome_margin_resid, spread_line)=0.015 (invariant gate PASS)
+- MEANS: the engine produces sensible numbers (mean home margin ~2pt, consistent with HFA).
+  The error bar is dominated by calibration variance (~7pt), not MC noise (~0.15pt).
+- RETURNED: calibration table — 2021 flat prior (var=182), 2022 from 2021 (~10-18 by bucket),
+  2023 from 2021-22 (~9-20 by bucket). The ≤3 bucket is worst (early season, little data).
+- RETURNED: first attempt failed — ProcessPoolExecutor crashed without __main__ guard on macOS.
+  Fixed with standalone run_sims.py using multiprocessing.Pool with freeze_support().
+- RETURNED: correlation HALT triggered on first run because I computed ours_m - spread_line
+  (prediction - close, r=0.54), not actual_margin - spread_line (outcome - close, r=0.015).
+  Fixed: the invariant applies to outcome residuals, not prediction residuals.
+- WALL TIME: 18.2 min (8 workers), ~128 min serial (killed), ~7.5s per game per 5000 sims
+
+### Item 2 — ON-D2: Scoring (5ed4920ac)
+- PRE-REGISTERED: ON-1a, ON-1b, ON-2 before scoring
+- RETURNED: ON-1a CONFIRMED — confident subset direction agreement 73.6% (92/125, Wilson [0.652, 0.806])
+  Prior was 45%, threshold 55%. By season: 2022 72.5%, 2023 75.0%.
+- RETURNED: ON-1b FALSIFIED — non-confident agreement 55.0% (312/567), outside 48-52%.
+  The error bar does NOT cleanly separate signal from noise.
+- RETURNED: null control Z=7.28 (real 58.4% vs null 48.4%). The signal is genuine.
+- RETURNED: totals direction agreement 63.0% (466/740) — not pre-registered but strong.
+- STOPPED: ON-2 (Monday→kickoff change) — usage.py joins injuries by (season, week, team),
+  not timestamp. Editing usage.py prohibited. Reported what it would take:
+  add injury_cutoff parameter to build_active_universe.
+
+### Item 3 — ON-D3: 2026 interim look (7aa2762e8)
+- RETURNED: 77 games wk2-6, 75 with HR opens, 50 confident
+- RETURNED: direction agreement (all) 59.0% (36/61), confident 60.0% (24/40)
+- RETURNED: Wilson on confident [0.446, 0.737] — includes 50%, too early
+- RETURNED: by week: wk2 62.5%, wk3 68.8%, wk4 66.7%, wk5 35.7%
+- MEANS: noisy forward data, CI includes 50%. The 2021-23 backtest is the stronger signal.
+- LABEL: interim look, nothing tuned
+
+### Item 4 — ON-D4: Monday runner (8363350a2)
+- CREATED: run_monday.py with HALT on wrong day / existing file / stale snap / unmapped team
+- TESTED: refuses overwrite ✓, team map complete (32) ✓, confident flag verified ✓
+- ADDED: "how to run on Monday" paragraph to ON_SPEC_v1.md
+
+### NOT DONE
+- ON-2 (availability): usage.py needs injury_cutoff parameter (prohibited in this order)
+- F3 (FTN): still uses play-level aggregation, not snap-weighted (FTN is play-level by nature)
+- The 2024 clean look is not opened (ON-0, ON-3 priors are registered but not tested)
+- The runner is not scheduled (no launchd/cron); it's manual MODE=PILOT
+
+### UNVERIFIED
+- Whether the Monday-noon as-of for ratings matches what the engine would have had on a real
+  Monday: the ratings use pre-built weekly parquets keyed by (season, week). Week W ratings
+  use plays from weeks < W. The PBP for Sunday games is typically published by Monday morning
+  on nflverse (nflverse's GitHub Actions pipeline runs ~4am ET Monday). But Monday-noon games
+  (rare, MNF is Monday night) would NOT have that game's PBP available at Monday noon.
+  This is correct: the Monday number should NOT include Monday-night results. But for games
+  played on Thursday/Saturday, the PBP is available well before Monday noon.
+  The nflverse publication lag was NOT verified from pbp game_date/update fields — this
+  would require reading the nflverse GitHub Actions logs or checking pbp file timestamps.
+- Whether the 2021-23 ratings parquets are truly point-in-time or were rebuilt with later
+  code. The ratings were built by the current codebase, which may incorporate nflverse
+  corrections applied after the original game dates.
+
+### SHAs
+- origin/research/on1: 8363350a22829372eba18d3137003a2983db544e
+- main branch check: confirmed main at session start
