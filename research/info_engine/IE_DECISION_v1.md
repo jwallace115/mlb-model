@@ -149,5 +149,28 @@ to mean absolute deviation of week N-1 snap shares from season average. Now vari
 results (t-stats, log-loss improvement, pre-registration outcomes) are INVALID.
 IE_FROZEN_SPEC_v1.md is SUPERSEDED.
 
+## IE-D9 — F2-F6 snap-weighted, F6 redefined, F3 2022-23 only (2026-10-12)
+
+**F2 (pass protection):** snap-weighted version added, joining PFR to snap_counts by
+`pfr_player_id + game_id`, filtering to >= 20 offensive snaps. 100% join rate.
+`_simple` columns kept beside.
+
+**F4 (RYOE):** snap-weighted version added, joining NGS to snap_counts by
+`player_display_name + week`, filtering >= 20 snaps. ~94% join rate by name.
+`_simple` columns kept beside.
+
+**F5 (receiving separation):** same approach as F4. `_simple` columns kept.
+
+**F3 (scheme tendency):** NOT snap-weighted. FTN charting is play-level data (each row
+is a play, not a player). Aggregation is play-rate within the team, not player-weighted.
+**F3 covers 2022-23 only** (FTN starts 2022; 0/272 coverage for 2021).
+
+**F6 (snap-count shift):** redefined from count of players exceeding 10pp threshold
+(was all-zero, zero-variance) to mean absolute deviation (MAD) of week N-1 snap shares
+from cumulative season average. Proven to vary: std > 0 across all seasons.
+
+Table rebuilt: 815 rows, 66 columns. All gates pass (correlation, zero-variance,
+known-game assertions, truncation 6/6, negative control 4/4).
+
 Output: `nfl/data/info/spread_opens_2021_23.parquet` (815 rows, 21 cols).
 This feeds F10 spread half in IE-2; nothing in IE-1 fits on it.

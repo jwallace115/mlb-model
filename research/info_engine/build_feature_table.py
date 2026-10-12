@@ -228,15 +228,41 @@ def build_f1(game_row):
 print("Building F2: Pass protection...")
 
 def build_f2(season, week, team):
-    """Cumulative pressure_pct and bad_throw_pct through week N-1."""
+    """Cumulative pressure_pct and bad_throw_pct through week N-1.
+    Returns both _simple (team mean) and snap-weighted versions (IE-D9)."""
     prior = prior_weeks(pfr, season, week)
     team_prior = prior.filter(pl.col("team") == team)
     if len(team_prior) == 0:
-        return {"pressure_pct": None, "bad_throw_pct": None}
-    return {
-        "pressure_pct": team_prior["times_pressured_pct"].mean(),
-        "bad_throw_pct": team_prior["passing_bad_throw_pct"].mean(),
+        return {"pressure_pct_simple": None, "bad_throw_pct_simple": None,
+                "pressure_pct": None, "bad_throw_pct": None}
+
+    # Simple: team mean (original)
+    result = {
+        "pressure_pct_simple": team_prior["times_pressured_pct"].mean(),
+        "bad_throw_pct_simple": team_prior["passing_bad_throw_pct"].mean(),
     }
+
+    # Snap-weighted: join to snap_counts by pfr_player_id + game_id, filter >=20 snaps
+    prior_snaps = prior_weeks(snaps, season, week).filter(
+        (pl.col("team") == team) & (pl.col("offense_snaps") >= 20)
+    )
+    if len(prior_snaps) == 0:
+        result["pressure_pct"] = result["pressure_pct_simple"]
+        result["bad_throw_pct"] = result["bad_throw_pct_simple"]
+        return result
+
+    merged = team_prior.join(prior_snaps.select(["pfr_player_id", "game_id", "offense_snaps"]),
+                              on=["pfr_player_id", "game_id"], how="inner")
+    if len(merged) == 0:
+        result["pressure_pct"] = result["pressure_pct_simple"]
+        result["bad_throw_pct"] = result["bad_throw_pct_simple"]
+        return result
+
+    total_snaps = merged["offense_snaps"].sum()
+    weights = merged["offense_snaps"] / total_snaps
+    result["pressure_pct"] = (merged["times_pressured_pct"] * weights).sum()
+    result["bad_throw_pct"] = (merged["passing_bad_throw_pct"] * weights).sum()
+    return result
 
 
 # ─── F3: SCHEME TENDENCY SHIFT ──────────────────────────────────────
@@ -270,15 +296,35 @@ def build_f3(season, week, team):
 print("Building F4: Rushing RYOE...")
 
 def build_f4(season, week, team):
-    """Cumulative RYOE/att through week N-1."""
+    """Cumulative RYOE/att through week N-1. Simple + snap-weighted (IE-D9)."""
     prior = prior_weeks(ngs_rush, season, week)
     team_prior = prior.filter(
         (pl.col("team_abbr") == team) & (pl.col("season_type") == "REG")
     )
     if len(team_prior) == 0:
-        return {"ryoe_per_att": None}
+        return {"ryoe_per_att_simple": None, "ryoe_per_att": None}
+
+    simple = team_prior["rush_yards_over_expected_per_att"].mean()
+
+    # Snap-weighted: join NGS to snaps by player name + team + week
+    prior_snaps = prior_weeks(snaps, season, week).filter(
+        (pl.col("team") == team) & (pl.col("offense_snaps") >= 20)
+    )
+    if len(prior_snaps) == 0:
+        return {"ryoe_per_att_simple": simple, "ryoe_per_att": simple}
+
+    merged = team_prior.join(
+        prior_snaps.select(["player", "week", "offense_snaps"]).rename({"player": "player_display_name"}),
+        on=["player_display_name", "week"], how="inner"
+    )
+    if len(merged) == 0:
+        return {"ryoe_per_att_simple": simple, "ryoe_per_att": simple}
+
+    total_snaps = merged["offense_snaps"].sum()
+    weights = merged["offense_snaps"] / total_snaps
     return {
-        "ryoe_per_att": team_prior["rush_yards_over_expected_per_att"].mean(),
+        "ryoe_per_att_simple": simple,
+        "ryoe_per_att": (merged["rush_yards_over_expected_per_att"] * weights).sum(),
     }
 
 
@@ -286,16 +332,41 @@ def build_f4(season, week, team):
 print("Building F5: Receiving separation...")
 
 def build_f5(season, week, team):
-    """Cumulative avg_separation and avg_cushion through week N-1."""
+    """Cumulative avg_separation and avg_cushion through week N-1.
+    Simple + snap-weighted (IE-D9)."""
     prior = prior_weeks(ngs_recv, season, week)
     team_prior = prior.filter(
         (pl.col("team_abbr") == team) & (pl.col("season_type") == "REG")
     )
     if len(team_prior) == 0:
-        return {"avg_separation": None, "avg_cushion": None}
+        return {"avg_separation_simple": None, "avg_cushion_simple": None,
+                "avg_separation": None, "avg_cushion": None}
+
+    simple_sep = team_prior["avg_separation"].mean()
+    simple_cush = team_prior["avg_cushion"].mean()
+
+    prior_snaps = prior_weeks(snaps, season, week).filter(
+        (pl.col("team") == team) & (pl.col("offense_snaps") >= 20)
+    )
+    if len(prior_snaps) == 0:
+        return {"avg_separation_simple": simple_sep, "avg_cushion_simple": simple_cush,
+                "avg_separation": simple_sep, "avg_cushion": simple_cush}
+
+    merged = team_prior.join(
+        prior_snaps.select(["player", "week", "offense_snaps"]).rename({"player": "player_display_name"}),
+        on=["player_display_name", "week"], how="inner"
+    )
+    if len(merged) == 0:
+        return {"avg_separation_simple": simple_sep, "avg_cushion_simple": simple_cush,
+                "avg_separation": simple_sep, "avg_cushion": simple_cush}
+
+    total_snaps = merged["offense_snaps"].sum()
+    weights = merged["offense_snaps"] / total_snaps
     return {
-        "avg_separation": team_prior["avg_separation"].mean(),
-        "avg_cushion": team_prior["avg_cushion"].mean(),
+        "avg_separation_simple": simple_sep,
+        "avg_cushion_simple": simple_cush,
+        "avg_separation": (merged["avg_separation"] * weights).sum(),
+        "avg_cushion": (merged["avg_cushion"] * weights).sum(),
     }
 
 
@@ -501,13 +572,17 @@ for i, g in enumerate(game_rows):
     f1 = build_f1(g)
     row.update(f1)
 
-    # F2
+    # F2 (snap-weighted + _simple, IE-D9)
     f2_h = build_f2(g["season"], g["week"], g["home_team"])
     f2_a = build_f2(g["season"], g["week"], g["away_team"])
     row["f2_home_pressure_pct"] = f2_h["pressure_pct"]
     row["f2_away_pressure_pct"] = f2_a["pressure_pct"]
+    row["f2_home_pressure_pct_simple"] = f2_h["pressure_pct_simple"]
+    row["f2_away_pressure_pct_simple"] = f2_a["pressure_pct_simple"]
     row["f2_home_bad_throw_pct"] = f2_h["bad_throw_pct"]
     row["f2_away_bad_throw_pct"] = f2_a["bad_throw_pct"]
+    row["f2_home_bad_throw_pct_simple"] = f2_h["bad_throw_pct_simple"]
+    row["f2_away_bad_throw_pct_simple"] = f2_a["bad_throw_pct_simple"]
     row["f2_pressure_diff"] = (
         (f2_h["pressure_pct"] or 0) - (f2_a["pressure_pct"] or 0)
     ) if f2_h["pressure_pct"] is not None and f2_a["pressure_pct"] is not None else None
@@ -519,22 +594,28 @@ for i, g in enumerate(game_rows):
         row[f"f3_home_{feat}"] = f3_h[feat]
         row[f"f3_away_{feat}"] = f3_a[feat]
 
-    # F4
+    # F4 (snap-weighted + _simple, IE-D9)
     f4_h = build_f4(g["season"], g["week"], g["home_team"])
     f4_a = build_f4(g["season"], g["week"], g["away_team"])
     row["f4_home_ryoe"] = f4_h["ryoe_per_att"]
     row["f4_away_ryoe"] = f4_a["ryoe_per_att"]
+    row["f4_home_ryoe_simple"] = f4_h["ryoe_per_att_simple"]
+    row["f4_away_ryoe_simple"] = f4_a["ryoe_per_att_simple"]
     row["f4_ryoe_diff"] = (
         (f4_h["ryoe_per_att"] or 0) - (f4_a["ryoe_per_att"] or 0)
     ) if f4_h["ryoe_per_att"] is not None and f4_a["ryoe_per_att"] is not None else None
 
-    # F5
+    # F5 (snap-weighted + _simple, IE-D9)
     f5_h = build_f5(g["season"], g["week"], g["home_team"])
     f5_a = build_f5(g["season"], g["week"], g["away_team"])
     row["f5_home_separation"] = f5_h["avg_separation"]
     row["f5_away_separation"] = f5_a["avg_separation"]
+    row["f5_home_separation_simple"] = f5_h["avg_separation_simple"]
+    row["f5_away_separation_simple"] = f5_a["avg_separation_simple"]
     row["f5_home_cushion"] = f5_h["avg_cushion"]
     row["f5_away_cushion"] = f5_a["avg_cushion"]
+    row["f5_home_cushion_simple"] = f5_h["avg_cushion_simple"]
+    row["f5_away_cushion_simple"] = f5_a["avg_cushion_simple"]
 
     # F6
     f6_h = build_f6(g["season"], g["week"], g["home_team"])
