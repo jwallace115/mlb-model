@@ -4174,3 +4174,60 @@ Also: make refresh_inputs fail per team, not per report.
 - Whether thesis validation interacts correctly with the live prekick freeze pipeline
   (item 3 adds a column requirement; tested in isolation but not against a real freeze)
 - Odds API credits: 0 used (grep confirmed), but no runtime verification on VM
+
+## 2026-10-12T03:30Z  claude-code (IE-0: information-layer inventory)
+- CHECKED: `git -C ~/mlb-model branch --show-current` → main ✓
+- CREATED: worktree ~/mlb-model-ie0 on branch research/ie0 from origin/main
+
+### IE-D1 — Source inventory
+- PULLED: 11 nfl_data_py sources for 2023 into nfl/data/info/<source>_2023.parquet
+  (ftn_charting, ngs_passing/rushing/receiving, snap_counts, pfr_weekly_pass,
+  officials, injuries, rosters_weekly, depth_charts, schedules)
+- PROBED: season availability 2016-2026 for all 11 sources
+- SSL_CERT_FILE workaround required — Mac Python 3.13 missing system certs
+- CATALOGUED: 7 on-disk files (line_movement, opening_lines_raw, wind_archive,
+  wind_forecast_pit_2024, pbp 2020-2025, ref_crew_aggregates, 2026 line_history)
+- RETURNED: schedules spread_line/total_line == CLOSING (201/201 match closing_total_line)
+- RETURNED: injuries has UTC timestamp (date_modified) — cleanest PIT source
+- RETURNED: depth_charts has NO timestamp — PIT trap (week-keyed, snapshot timing unknown)
+- RETURNED: ftn_charting date_pulled is a batch timestamp (all 2023 = 2024-09-06), not per-play
+- RETURNED: ref_crew_aggregates is END-OF-SEASON aggregate → excluded by construction
+- COMMITTED+PUSHED: 741baa431
+
+### IE-D2 — Opening-line coverage
+- RETURNED: totals opens on disk for 2021-2024 (775 games in line_movement + 1329 in opening_lines_raw)
+- RETURNED: spread opens exist ONLY in 2026 line_history (1418 snapshots). NO pre-2026 spread opens anywhere.
+- SEARCHED: repo-wide grep for spread.*open across .py/.parquet — no data hits
+- RETURNED: nfl_data_py import_sc_lines → 0 rows (defunct)
+- COMPUTED: Odds API historical cost for 5yr spread opens = 14,240 credits (~1.6% of est ~870k balance)
+- FREE ALTERNATIVE: Australian Sports Betting CSV (Pinnacle open/close, 2007+, free download)
+- COMMITTED+PUSHED: dbaa1e49e
+
+### IE-D3 — Feature families registry
+- WROTE: 10 families from TIMESTAMPED/WEEK-KEYED sources only
+- Prior column left empty for Cowork to fill BEFORE IE-1 opens data
+- Discovery window: 2021-2023. Clean look: 2024 (UNTOUCHED).
+- COMMITTED+PUSHED: 9a801c7b8
+
+### NOT DONE
+- No data was pulled for 2024 or later targets (by design — read-only)
+- Raw 2023 parquets saved to nfl/data/info/ but gitignored (not committed)
+- Did NOT verify whether NGS (ngs_passing/rushing/receiving) revises within-season
+  data after publication — no prior weekly pull exists to diff against
+- Did NOT verify whether PFR weekly stats are revised post-season
+- Did NOT fetch the Australian Sports Betting CSV — named as cheapest route, not executed
+- Odds API balance NOT queried (0 credits used; last known ~876,102 from NBA-D1)
+
+### UNVERIFIED
+- **Which sources are revised after publication:** injuries (YES, by definition —
+  reports update Wed-Sat), depth_charts (YES — updated multiple times/week),
+  rosters_weekly (YES — status changes within week), PBP (YES — EPA corrections).
+  NGS and PFR revision status is UNVERIFIABLE from this Mac (no prior copy to diff).
+  ftn_charting date_pulled is batch, actual FTN grading revision unknown.
+  This is the thing that silently breaks PIT: a feature built from a source that
+  revises after publication will look cleaner in backtest than in live.
+- Whether the 2026 line_history daemon cost estimate (141 credits/day) is accurate
+
+### SHAs
+- origin/research/ie0: 9a801c7b84fa8f810ac37e87de92227ab0000390
+- main branch check: confirmed main at session start
