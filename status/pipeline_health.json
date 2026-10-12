@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-12T18:17:01.249212+00:00",
+ "generated_utc": "2026-10-12T18:47:01.199012+00:00",
  "counts": {
   "ERRORING": 1,
   "SILENT": 1,
@@ -34,10 +34,10 @@
    "schedule": [
     "every 1440 min"
    ],
-   "last_due_utc": "2026-10-12T14:17:01.249212+00:00",
+   "last_due_utc": "2026-10-12T14:47:01.199012+00:00",
    "newest_file": "nba_results.json",
    "newest_utc": "2026-10-11T01:00:10.945634+00:00",
-   "age_min": 2477,
+   "age_min": 2507,
    "log": null,
    "log_last_line": null,
    "push": "OK",
@@ -57,7 +57,7 @@
    "newest_utc": null,
    "age_min": null,
    "log": "/root/mlb-model/logs/capture_health.log",
-   "log_last_line": "FAIL: 1 stale feed(s): kalshi_ncaaf",
+   "log_last_line": "OK: all feeds fresh",
    "push": null,
    "status": "QUIET",
    "note": ""
@@ -106,7 +106,7 @@
    "schedule": [
     "0  18 * * *"
    ],
-   "last_due_utc": "2026-10-11T18:00:00+00:00",
+   "last_due_utc": "2026-10-12T18:00:00+00:00",
    "newest_file": null,
    "newest_utc": null,
    "age_min": null,
@@ -272,7 +272,7 @@
     "0 22 * * 5",
     "3-59/15 * * * *"
    ],
-   "last_due_utc": "2026-10-12T17:48:00+00:00",
+   "last_due_utc": "2026-10-12T18:18:00+00:00",
    "newest_file": null,
    "newest_utc": null,
    "age_min": null,
@@ -293,7 +293,7 @@
     "0 22 * * 6",
     "*/15 * * * *"
    ],
-   "last_due_utc": "2026-10-12T17:45:00+00:00",
+   "last_due_utc": "2026-10-12T18:15:00+00:00",
    "newest_file": null,
    "newest_utc": null,
    "age_min": null,
@@ -371,7 +371,7 @@
    "last_due_utc": "2026-10-12T11:00:00+00:00",
    "newest_file": "nhl/logs/nhl_shadow_aligned_2026.json",
    "newest_utc": "2026-10-11T11:00:10.066025+00:00",
-   "age_min": 1877,
+   "age_min": 1907,
    "log": "/root/logs/nhl_morning.log",
    "log_last_line": "No qualified signals \u2014 nhl_decisions.parquet unchanged",
    "push": "OK",
@@ -386,7 +386,7 @@
    "schedule": [
     "25 * * * *"
    ],
-   "last_due_utc": "2026-10-12T17:25:00+00:00",
+   "last_due_utc": "2026-10-12T18:25:00+00:00",
    "newest_file": null,
    "newest_utc": null,
    "age_min": null,
@@ -404,10 +404,10 @@
    "schedule": [
     "20 * * * *"
    ],
-   "last_due_utc": "2026-10-12T17:20:00+00:00",
+   "last_due_utc": "2026-10-12T18:20:00+00:00",
    "newest_file": "/root/private/ledger/picks.jsonl",
    "newest_utc": "2026-10-12T10:17:31.703976+00:00",
-   "age_min": 479,
+   "age_min": 509,
    "log": "/root/logs/picks_adapters.log",
    "log_last_line": "files read: 39 pick_source files, 19 NFL AI opinion files, 0 site ticket files",
    "push": null,
@@ -443,7 +443,7 @@
    "last_due_utc": "2026-10-12T06:10:00+00:00",
    "newest_file": "status/history_spender.json",
    "newest_utc": "2026-10-12T06:15:51.500648+00:00",
-   "age_min": 721,
+   "age_min": 751,
    "log": "/root/logs/history_spender.log",
    "log_last_line": "done: reserve reached (remaining 209902 <= reserve 210000) | spent 5,850 in 195 calls",
    "push": "OK",
@@ -458,10 +458,10 @@
    "schedule": [
     "0 */3 * * *"
    ],
-   "last_due_utc": "2026-10-12T15:00:00+00:00",
+   "last_due_utc": "2026-10-12T18:00:00+00:00",
    "newest_file": "data/weather_archive/nws/forecasts/season=2026/snap_20261012T180011Z.parquet",
    "newest_utc": "2026-10-12T18:00:11+00:00",
-   "age_min": 17,
+   "age_min": 47,
    "log": "/root/logs/nws_capture.log",
    "log_last_line": "2026-10-12 18:02:05,845 [INFO] APPEND-ONLY: this snapshot is part of the tape. Never overwrite it.",
    "push": "OK",
@@ -479,7 +479,7 @@
    "last_due_utc": "2026-10-12T15:00:00+00:00",
    "newest_file": "data/odds_archive/baseball_mlb/event_markets/season=2026/snap_20261012T150013Z.parquet",
    "newest_utc": "2026-10-12T15:00:13+00:00",
-   "age_min": 197,
+   "age_min": 227,
    "log": "/root/mlb-model/logs/mlb_event_markets.log",
    "log_last_line": "credits used: 86  tag: mid  events: 2",
    "push": "OK",
@@ -494,12 +494,12 @@
    "schedule": [
     "*/15 14-23,0-3 * * *"
    ],
-   "last_due_utc": "2026-10-12T17:45:00+00:00",
-   "newest_file": "data/odds_archive/baseball_mlb/line_history/season=2026/snap_20261012T181504Z.parquet",
-   "newest_utc": "2026-10-12T18:15:04+00:00",
+   "last_due_utc": "2026-10-12T18:15:00+00:00",
+   "newest_file": "data/odds_archive/baseball_mlb/line_history/season=2026/snap_20261012T184506Z.parquet",
+   "newest_utc": "2026-10-12T18:45:06+00:00",
    "age_min": 2,
    "log": "/root/logs/capture_mlb.log",
-   "log_last_line": "2026-10-12 18:15:04,831 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
+   "log_last_line": "2026-10-12 18:45:06,793 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
    "push": "OK",
    "status": "FIRING",
    "note": "data capture only; no MLB signals until 2027"
@@ -512,10 +512,10 @@
    "schedule": [
     "every 15 min"
    ],
-   "last_due_utc": "2026-10-12T17:02:01.249212+00:00",
+   "last_due_utc": "2026-10-12T17:32:01.199012+00:00",
    "newest_file": "data/injury_archive/nba/season=2026/espn/injuries_20261012T174510Z.json.gz",
    "newest_utc": "2026-10-12T17:45:10+00:00",
-   "age_min": 32,
+   "age_min": 62,
    "log": null,
    "log_last_line": null,
    "push": "OK",
@@ -532,12 +532,12 @@
     "30 15 * * *",
     "0 22 * * *"
    ],
-   "last_due_utc": "2026-10-12T17:30:00+00:00",
-   "newest_file": "data/odds_archive/nba/line_history/season=2026/snap_20261012T180011Z.parquet",
-   "newest_utc": "2026-10-12T18:00:11+00:00",
+   "last_due_utc": "2026-10-12T18:00:00+00:00",
+   "newest_file": "data/odds_archive/nba/line_history/season=2026/snap_20261012T183009Z.parquet",
+   "newest_utc": "2026-10-12T18:30:09+00:00",
    "age_min": 17,
    "log": "/root/logs/capture_football.log",
-   "log_last_line": "2026-10-12 18:00:14,483 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
+   "log_last_line": "2026-10-12 18:30:13,673 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
    "push": "OK",
    "status": "FIRING",
    "note": ""
@@ -550,12 +550,12 @@
    "schedule": [
     "20 0,6,12,18 * * *"
    ],
-   "last_due_utc": "2026-10-12T12:20:00+00:00",
-   "newest_file": "data/news_archive/ncaaf/season=2026/news_20261012T1220Z.json.gz",
-   "newest_utc": "2026-10-12T12:20:00+00:00",
-   "age_min": 357,
+   "last_due_utc": "2026-10-12T18:20:00+00:00",
+   "newest_file": "data/news_archive/ncaaf/season=2026/news_20261012T1820Z.json.gz",
+   "newest_utc": "2026-10-12T18:20:00+00:00",
+   "age_min": 27,
    "log": "/root/mlb-model/logs/espn_ncaaf_news.log",
-   "log_last_line": "elapsed: 113.8s",
+   "log_last_line": "elapsed: 110.5s",
    "push": "OK",
    "status": "FIRING",
    "note": ""
@@ -573,10 +573,10 @@
     "7 6,9,12,15,18,21 * * 0",
     "7 0,3,6,9,12,15,18,21 * * 1-4"
    ],
-   "last_due_utc": "2026-10-12T15:07:00+00:00",
+   "last_due_utc": "2026-10-12T18:07:00+00:00",
    "newest_file": "data/odds_archive/kalshi/ncaaf/season=2026/snap_20261012T1807Z.parquet",
    "newest_utc": "2026-10-12T18:07:00+00:00",
-   "age_min": 10,
+   "age_min": 40,
    "log": "/root/mlb-model/logs/kalshi_ncaaf.log",
    "log_last_line": "elapsed: 0.8s",
    "push": "OK",
@@ -596,7 +596,7 @@
    "last_due_utc": "2026-10-10T13:00:00+00:00",
    "newest_file": "data/odds_archive/ncaaf/event_markets/season=2026/snap_20261010T130007Z.parquet",
    "newest_utc": "2026-10-10T13:00:07+00:00",
-   "age_min": 3197,
+   "age_min": 3227,
    "log": "/root/mlb-model/logs/ncaaf_event_markets.log",
    "log_last_line": "credits used: 989  tag: close  events: 46",
    "push": "OK",
@@ -612,12 +612,12 @@
     "*/30 14-23,0-5 * * *",
     "0 12,13 * * 0"
    ],
-   "last_due_utc": "2026-10-12T17:30:00+00:00",
-   "newest_file": "data/odds_archive/ncaaf/line_history/season=2026/snap_20261012T180011Z.parquet",
-   "newest_utc": "2026-10-12T18:00:11+00:00",
+   "last_due_utc": "2026-10-12T18:00:00+00:00",
+   "newest_file": "data/odds_archive/ncaaf/line_history/season=2026/snap_20261012T183009Z.parquet",
+   "newest_utc": "2026-10-12T18:30:09+00:00",
    "age_min": 17,
    "log": "/root/logs/capture_football.log",
-   "log_last_line": "2026-10-12 18:00:14,483 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
+   "log_last_line": "2026-10-12 18:30:13,673 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
    "push": "OK",
    "status": "FIRING",
    "note": ""
@@ -632,11 +632,11 @@
     "40 16 * * 0"
    ],
    "last_due_utc": "2026-10-12T12:30:00+00:00",
-   "newest_file": "data/injury_archive/nfl/season=2026/injuries_20261012T1230Z.json.gz",
-   "newest_utc": "2026-10-12T12:30:00+00:00",
-   "age_min": 347,
+   "newest_file": "data/injury_archive/nfl/season=2026/injuries_20261012T1830Z.json.gz",
+   "newest_utc": "2026-10-12T18:30:00+00:00",
+   "age_min": 17,
    "log": "/root/mlb-model/logs/espn_nfl_status.log",
-   "log_last_line": "elapsed: 30.2s",
+   "log_last_line": "elapsed: 33.0s",
    "push": "OK",
    "status": "FIRING",
    "note": ""
@@ -649,10 +649,10 @@
    "schedule": [
     "10 0,6,12,18 * * *"
    ],
-   "last_due_utc": "2026-10-12T12:10:00+00:00",
+   "last_due_utc": "2026-10-12T18:10:00+00:00",
    "newest_file": "data/news_archive/nfl/season=2026/news_20261012T1810Z.json.gz",
    "newest_utc": "2026-10-12T18:10:00+00:00",
-   "age_min": 7,
+   "age_min": 37,
    "log": "/root/mlb-model/logs/espn_nfl_news.log",
    "log_last_line": "elapsed: 20.7s",
    "push": "OK",
@@ -667,12 +667,12 @@
    "schedule": [
     "5,35 0-5,14-23 * * *"
    ],
-   "last_due_utc": "2026-10-12T17:35:00+00:00",
-   "newest_file": "data/odds_archive/kalshi/nfl/season=2026/snap_20261012T1805Z.parquet",
-   "newest_utc": "2026-10-12T18:05:00+00:00",
+   "last_due_utc": "2026-10-12T18:05:00+00:00",
+   "newest_file": "data/odds_archive/kalshi/nfl/season=2026/snap_20261012T1835Z.parquet",
+   "newest_utc": "2026-10-12T18:35:00+00:00",
    "age_min": 12,
    "log": "/root/mlb-model/logs/kalshi_nfl.log",
-   "log_last_line": "elapsed: 0.4s",
+   "log_last_line": "elapsed: 0.5s",
    "push": "OK",
    "status": "FIRING",
    "note": ""
@@ -698,7 +698,7 @@
    "last_due_utc": "2026-10-11T23:15:00+00:00",
    "newest_file": "data/odds_archive/nfl/event_markets/season=2026/snap_20261011T231507Z.parquet",
    "newest_utc": "2026-10-11T23:15:07+00:00",
-   "age_min": 1142,
+   "age_min": 1172,
    "log": "/root/mlb-model/logs/nfl_event_markets.log",
    "log_last_line": "credits used: 43  tag: close  events: 1",
    "push": "OK",
@@ -726,7 +726,7 @@
    "last_due_utc": "2026-10-11T23:15:00+00:00",
    "newest_file": "data/odds_archive/nfl/props/season=2026/month=10/data_2026_10.parquet",
    "newest_utc": "2026-10-11T23:15:09.608392+00:00",
-   "age_min": 1142,
+   "age_min": 1172,
    "log": "/root/mlb-model/logs/props_capture.log",
    "log_last_line": "credits used: 10  tag: close  events: 1",
    "push": "OK",
@@ -744,7 +744,7 @@
    "last_due_utc": "2026-10-12T09:30:00+00:00",
    "newest_file": "data/results_archive/nfl/schedules_2026_20261012T093009Z.parquet",
    "newest_utc": "2026-10-12T09:30:09+00:00",
-   "age_min": 527,
+   "age_min": 557,
    "log": "/root/logs/nfl_results.log",
    "log_last_line": "wrote /root/mlb-model/data/results_archive/nfl/schedules_2026_20261012T093009Z.parquet (272 rows, 78 completed)",
    "push": "OK",
@@ -760,12 +760,12 @@
     "*/30 14-23,0-5 * * *",
     "0 12,13 * * 0"
    ],
-   "last_due_utc": "2026-10-12T17:30:00+00:00",
-   "newest_file": "data/odds_archive/nfl/line_history/season=2026/snap_20261012T180011Z.parquet",
-   "newest_utc": "2026-10-12T18:00:11+00:00",
+   "last_due_utc": "2026-10-12T18:00:00+00:00",
+   "newest_file": "data/odds_archive/nfl/line_history/season=2026/snap_20261012T183009Z.parquet",
+   "newest_utc": "2026-10-12T18:30:09+00:00",
    "age_min": 17,
    "log": "/root/logs/capture_football.log",
-   "log_last_line": "2026-10-12 18:00:14,483 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
+   "log_last_line": "2026-10-12 18:30:13,673 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
    "push": "OK",
    "status": "FIRING",
    "note": ""
@@ -781,7 +781,7 @@
    "last_due_utc": "2026-10-12T09:00:00+00:00",
    "newest_file": "data/depth_archive/nfl/season=2026/nflverse_rosters_weekly_20261012T0900Z.parquet",
    "newest_utc": "2026-10-12T09:00:00+00:00",
-   "age_min": 557,
+   "age_min": 587,
    "log": "/root/mlb-model/logs/nflverse_refresh.log",
    "log_last_line": "archived: nflverse_rosters_weekly_20261012T0900Z.parquet (4147483 bytes)",
    "push": "OK",
@@ -797,12 +797,12 @@
     "*/30 14-23,0-5 * * *",
     "0 12,13 * * 0"
    ],
-   "last_due_utc": "2026-10-12T17:30:00+00:00",
-   "newest_file": "data/odds_archive/nfl/line_history/season=2026/snap_20261012T180011Z.parquet",
-   "newest_utc": "2026-10-12T18:00:11+00:00",
+   "last_due_utc": "2026-10-12T18:00:00+00:00",
+   "newest_file": "data/odds_archive/nfl/line_history/season=2026/snap_20261012T183009Z.parquet",
+   "newest_utc": "2026-10-12T18:30:09+00:00",
    "age_min": 17,
    "log": "/root/logs/capture_football.log",
-   "log_last_line": "2026-10-12 18:00:14,483 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
+   "log_last_line": "2026-10-12 18:30:13,673 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
    "push": "OK",
    "status": "FIRING",
    "note": ""
@@ -821,7 +821,7 @@
    "last_due_utc": "2026-10-12T15:00:00+00:00",
    "newest_file": "data/odds_archive/nhl/event_markets/season=2026/snap_20261012T150013Z.parquet",
    "newest_utc": "2026-10-12T15:00:13+00:00",
-   "age_min": 197,
+   "age_min": 227,
    "log": "/root/mlb-model/logs/nhl_event_markets.log",
    "log_last_line": "credits used: 117  tag: open  events: 3",
    "push": "OK",
@@ -837,12 +837,12 @@
     "*/30 14-23,0-5 * * *",
     "0 12,13 * * 0"
    ],
-   "last_due_utc": "2026-10-12T17:30:00+00:00",
-   "newest_file": "data/odds_archive/nhl/line_history/season=2026/snap_20261012T180011Z.parquet",
-   "newest_utc": "2026-10-12T18:00:11+00:00",
+   "last_due_utc": "2026-10-12T18:00:00+00:00",
+   "newest_file": "data/odds_archive/nhl/line_history/season=2026/snap_20261012T183009Z.parquet",
+   "newest_utc": "2026-10-12T18:30:09+00:00",
    "age_min": 17,
    "log": "/root/logs/capture_football.log",
-   "log_last_line": "2026-10-12 18:00:14,483 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
+   "log_last_line": "2026-10-12 18:30:13,673 [INFO] Run 2x/day. The open is ~5-6 days before kickoff \u2014 that is where the edge is.",
    "push": "OK",
    "status": "FIRING",
    "note": ""
@@ -858,7 +858,7 @@
    "last_due_utc": "2026-10-12T05:35:00+00:00",
    "newest_file": "/root/private/ledger_backup/picks_20261012T053501Z.jsonl.gz",
    "newest_utc": "2026-10-12T05:35:01.836279+00:00",
-   "age_min": 762,
+   "age_min": 792,
    "log": "/root/logs/picks_backup.log",
    "log_last_line": "backed up picks.jsonl -> picks_20261012T053501Z.jsonl.gz (8 kept)",
    "push": null,
@@ -876,7 +876,7 @@
    "last_due_utc": "2026-10-12T10:10:00+00:00",
    "newest_file": "/root/private/ledger/picks.jsonl",
    "newest_utc": "2026-10-12T10:17:31.703976+00:00",
-   "age_min": 479,
+   "age_min": 509,
    "log": "/root/logs/picks_grader.log",
    "log_last_line": "W         213",
    "push": null,
@@ -891,12 +891,12 @@
    "schedule": [
     "2-59/15 * * * *"
    ],
-   "last_due_utc": "2026-10-12T17:47:00+00:00",
+   "last_due_utc": "2026-10-12T18:17:00+00:00",
    "newest_file": "status/pipeline_health.json",
-   "newest_utc": "2026-10-12T18:02:05.593682+00:00",
+   "newest_utc": "2026-10-12T18:32:04.951310+00:00",
    "age_min": 15,
    "log": "/root/logs/pipeline_health.log",
-   "log_last_line": "pipeline_health 2026-10-12T18:02:01.600902+00:00  {'ERRORING': 1, 'SILENT': 1, 'QUIET': 21, 'FIRING': 25}  problems={'ERRORING': 1, 'SILENT': 1}",
+   "log_last_line": "pipeline_health 2026-10-12T18:32:01.435764+00:00  {'ERRORING': 1, 'SILENT': 1, 'QUIET': 21, 'FIRING': 25}  problems={'ERRORING': 1, 'SILENT': 1}",
    "push": "OK",
    "status": "FIRING",
    "note": ""
@@ -909,12 +909,12 @@
    "schedule": [
     "4-59/5 * * * *"
    ],
-   "last_due_utc": "2026-10-12T17:54:00+00:00",
+   "last_due_utc": "2026-10-12T18:24:00+00:00",
    "newest_file": "/var/www/iamnotuncertain/index.html",
-   "newest_utc": "2026-10-12T18:14:08.927309+00:00",
+   "newest_utc": "2026-10-12T18:44:07.968834+00:00",
    "age_min": 3,
    "log": "/root/logs/site_build.log",
-   "log_last_line": "site built 2026-10-12 18:14Z -> /var/www/iamnotuncertain: archive.html, forward.html, health.html, index.html, nba.html, ncaaf.html, nfl.html, nhl.html, signal-nhl_aligned.html, today.html, tracking.h",
+   "log_last_line": "site built 2026-10-12 18:44Z -> /var/www/iamnotuncertain: archive.html, forward.html, health.html, index.html, nba.html, ncaaf.html, nfl.html, nhl.html, signal-nhl_aligned.html, today.html, tracking.h",
    "push": "LOCAL_ONLY",
    "status": "FIRING",
    "note": ""
@@ -1008,20 +1008,20 @@
  ],
  "vm": {
   "ram_total_mb": 1967,
-  "ram_available_mb": 1494,
+  "ram_available_mb": 1470,
   "swap_used_mb": 281,
   "disk_used_gb": 25.3,
   "disk_total_gb": 50.9
  },
  "push_daemon": {
-  "last_ok_utc": "2026-10-12T18:00:01+00:00",
+  "last_ok_utc": "2026-10-12T18:30:01+00:00",
   "failures_24h": 1
  },
  "credits": {
-  "remaining": 209516,
-  "used": 4790484,
+  "remaining": 209498,
+  "used": 4790502,
   "plan": 5000000,
-  "as_of_utc": "2026-10-12T18:15:04+00:00",
+  "as_of_utc": "2026-10-12T18:45:06+00:00",
   "source": "/root/logs/capture_mlb.log"
  }
 }
