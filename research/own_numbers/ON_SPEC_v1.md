@@ -54,3 +54,19 @@ Credits: 0. Scoring of the Monday number on 2026 weeks 2-5 is an interim look at
 | ON-3 | The confident subset beats the CLOSE on outcome (actual − close has the sign of ours − close) > 53 % on 2024 | 15 % |
 
 ON-0 and ON-3 are the two that matter; everything else is plumbing that can be true while they are false.
+
+## How to run on Monday (ON-D4)
+
+Every Monday 12:00 ET (or Tuesday if Monday was missed):
+
+```bash
+cd ~/mlb-model-on1
+SSL_CERT_FILE=$(python3 -c "import certifi; print(certifi.where())") \
+  python3 research/own_numbers/run_monday.py --season 2026 --week N
+```
+
+The script HALTs if: (a) it's not Monday or Tuesday ET, (b) the week file already
+exists (no revisions), (c) the latest odds snapshot is > 3 hours old, or (d) any
+team name in the tape is unmapped. On success it writes one parquet to
+`nfl/data/own/forward/week=2026_NN.parquet` with our number, error bar, HR and
+Pinnacle openers, and the confident flag. MODE=PILOT — no bets, log-and-grade only.

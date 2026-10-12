@@ -78,3 +78,19 @@ HR spread open→close movement present in 61 games.
 **Assessment:** too early to draw conclusions. The Wilson CI on the confident subset
 includes 50%. Week 5 pulled the overall down hard (5/14). The 2021-23 backtest
 (73.6%, N=125) is the stronger signal; this is 5 weeks of noisy forward data.
+
+## ON-D4 — Monday runner (2026-10-12)
+
+`research/own_numbers/run_monday.py --season 2026 --week N`
+
+HALTs: (a) not Monday/Tuesday ET, (b) week file exists, (c) snapshot > 3h old,
+(d) unmapped team name.
+
+Output: `nfl/data/own/forward/week=2026_NN.parquet` — our number + err, HR and
+Pinnacle openers by event_id, confident flag, MODE=PILOT.
+
+Tests: refuses overwrite ✓, refuses stale snapshot ✓ (code path verified),
+refuses unmapped team ✓ (32 teams in FULL_TO_ABBR), confident flag verified
+against 2026 data (50 confident, 25 not) ✓.
+
+"How to run on Monday" paragraph appended to ON_SPEC_v1.md.
