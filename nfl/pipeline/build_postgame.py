@@ -105,8 +105,8 @@ def _team_volume(pbp, team):
         "plays": n_plays,
         "dropbacks": dropbacks,
         "rush_attempts": rush_att,
-        "pass_rate": round(pass_rate, 4),
-        "run_rate": round(run_rate, 4),
+        "pass_rate": pass_rate,
+        "run_rate": run_rate,
         "pass_oe": pass_oe,
     }
 
