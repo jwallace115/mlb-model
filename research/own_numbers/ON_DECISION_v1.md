@@ -262,3 +262,28 @@ tendencies, situational PROE, and kicker tables. These still include the prior
 Monday Night game. The effect of removing one game from ~15 per week on
 league-level tendency/kicker tables is negligible but not measured. Plan: close
 this in ON-1c by verifying the magnitude.
+
+## ON-D10 — Inert HFA files land on main (2026-10-12)
+
+`nfl/sim/hfa_v1.json` and `nfl/sim/build_hfa.py` land on main as inert new files
+copied unmodified from `origin/eng/gl1` (commit `103e713e4`).
+
+**Why inert:** main's `engine.py` has no `hfa=` parameter. Nothing on main imports
+`build_hfa.py`. The files are consumed only by `research/own_numbers/run_monday.py`,
+which reads `h=0.1719` from `hfa_v1.json` and applies it through the existing
+`epa_home_offset` / `epa_away_offset` columns.
+
+**eng/gl1 unaffected:** eng/gl1's G9 gate is unaffected and eng/gl1 still does not
+merge to main.
+
+**SHA256 (verified identical across branches):**
+- `hfa_v1.json`: `012a389b6ba918f5045628889a1d628e15e1ec0ae327dde2351979648f947fe1`
+- `build_hfa.py`: `bd2878c5af4353484fd4783a550d3ddb86b931c77746ab8917bb126c80da49ff`
+
+**Replacement gate results (all PASS):**
+- (ii) No modified files under nfl/sim — PASS
+- (iii) No deleted files under nfl/sim — PASS
+- (iv) Exactly 2 added files (build_hfa.py, hfa_v1.json) — PASS
+- (v) All 7 core engine files IDENTICAL — PASS
+- (vi) SHA256 match eng/gl1 for both files — PASS
+- (vii) No caller outside research/own_numbers/ and nfl/sim/build_hfa.py itself — PASS
