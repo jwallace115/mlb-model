@@ -24,3 +24,41 @@ mean home margin 2.125).
 **Targets:** open = -bet365_spread_open (negated to nflverse home-margin convention,
 labelled "bet365 open"); close = nflverse spread_line. Residuals with the invariant
 (|corr(residual, close)| < 0.05; known-game assertions; zero-variance HALT).
+
+**Invariant note:** the correlation gate applies to the OUTCOME residual
+(actual_margin - spread_line), not the prediction residual (ours_m - spread_line).
+Our prediction naturally correlates with the close (r=0.82) because both capture
+team quality. The outcome residual is uncorrelated (r=0.015).
+
+## ON-D2 — Scoring on 2021-23 (2026-10-12)
+
+**ON-1a (prior 45%): CONFIRMED.** Confident subset direction agreement = 73.6%
+(92/125), well above 55%. Wilson [0.652, 0.806]. By season: 2021 N/A (no confident
+games — 2021 uses flat prior with huge err_m), 2022 72.5% (50/69), 2023 75.0% (42/56).
+
+**ON-1b (prior 60%): FALSIFIED.** Non-confident direction agreement = 55.0% (312/567),
+outside 48-52%. The error bar does NOT cleanly separate signal from noise — there is
+signal outside the confident subset too.
+
+**Null control:** real direction agreement 58.4%, null mean 48.4%, null SD 1.4%,
+Z = 7.28. The null sits at ~50% as expected. The real signal is genuine.
+
+**Totals:** 63.0% direction agreement (466/740) — not pre-registered but reported.
+
+**Breakdowns:**
+- By week tercile: early 55.0%, mid 59.1%, late 61.4% (improves as ratings deepen)
+- Confident by week: early 70.2%, mid 81.2%, late 66.7%
+- By err_m tercile: low_err 61.9%, mid 57.8%, high 55.4% (lower error → better agreement)
+- By fav/dog: home_fav 56.5%, away_fav 59.4%
+
+**ON-2: STOPPED.** `build_active_universe` in usage.py joins injuries by
+`(season, week, team, player_id)` — it uses the FINAL week-level `report_status`,
+not a timestamped version. To implement Monday-noon-vs-kickoff comparison, usage.py
+would need a `date_cutoff` parameter to filter `injuries.date_modified < cutoff`
+before the join. This requires editing usage.py, which this order prohibits.
+
+**What it would take:** Add an optional `injury_cutoff: datetime | None` parameter
+to `build_active_universe`. When set, filter `injuries` to rows with
+`date_modified < injury_cutoff` before the merge. Then call it twice per game:
+once with Monday 12:00 ET, once with kickoff time. Estimated 2-hour implementation
++ the same ~18 min sim run for the kickoff-state numbers.
