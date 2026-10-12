@@ -1,3 +1,52 @@
+## 2026-10-12T21:00Z  claude-code (OPS-ON-1b — week 6 pilot, freshness HALT, PRIMARY mode, DST cron)
+
+### RETURNED
+- Item 1: Week 6 PILOT run on VM. 14 games, 5 confident. All hr_decision_ts =
+  2026-10-12T15:30:10Z (< cutoff 16:00Z). Mode PILOT (late run, ~20:40 UTC).
+  Parquet SHA256: 6b2992e7e242...  PBP max_week=5, 78 games.
+  Push from VM confirmed. origin/main=43a3e3d47 after push.
+  Selected: TEN@IND away, NYJ@NE away, CAR@PHI away, ARI@LA away, BUF@LV home.
+- Item 2: run_monday.py rewritten with 3 repairs + 13 new tests (21 total, all pass):
+  2a: check_pbp_freshness loads schedule, finds admitted games (kick+4h < cutoff),
+      verifies game_ids in pbp. HALT if missing. Exposed as --check-pbp-only.
+  2b: cutoff_date = Monday of current Mon-Sun ET week. Tuesday keeps Monday cutoff.
+  2c: Mode derived: PRIMARY requires (Mon ET, 12:00-12:30 start, pbp fresh, all
+      selected quotes <=60min before cutoff, revision 0). Otherwise PILOT with
+      pilot_reason in parquet and forward_log.md. --mode pilot forces PILOT.
+  Branch research/on1-ops1b merged to main. Gate trivial (no nfl/sim/ changes).
+- Item 3: shared/on_monday.sh — single sequential wrapper. DST-safe: in EST waits
+  from 10:40 to 11:40 ET via sleep loop. PBP retry (5min, 4 attempts, 11:58 ET
+  deadline). ON_SKIP_WAITS=1 for testing. VM cron: one line replaces three:
+    40 15 * * 1  bash /root/mlb-model/shared/on_monday.sh
+  Tested with ON_SKIP_WAITS=1: pbp pull OK, freshness passed (78 admitted, 0 missing),
+  runner correctly HALTed on existing week 6 file, exit 1 propagated.
+  feeds_registry note updated (file expected by 12:25 ET).
+
+### MEANS
+- Week 6 = PILOT (late run, after noon ET). This is correct per ON_SPEC_v2.
+- First PRIMARY candidate = Monday 2026-10-19 week 7.
+- PBP freshness check will catch stale nflverse data before it contaminates ratings.
+- DST transition (Nov 1 2026) is handled: wrapper waits until 11:40 ET regardless
+  of UTC offset.
+
+### NOT DONE
+- No cron/ directory recording the VM crontab found in the repo. Cron state is only
+  in the VM's crontab -l output (logged above).
+
+### UNVERIFIED
+- nflverse PBP publication timing: pbp max_gameday was 2026-10-11 (Saturday) at
+  20:55 UTC on Sunday Oct 12. Week 6 Sunday games (Oct 12) not yet in pbp.
+  Whether Monday's pull at 15:40 UTC picks up Sunday's games remains unverified
+  until a Monday pull is observed. Log the pull's pbp max_gameday every week.
+- The wrapper's EST wait loop has not been tested in November (DST transition).
+
+### SHAs
+- origin/main: d22261fee (after on_monday.sh commit)
+- Mac main:    d22261fee
+- Branch check: main
+
+---
+
 ## 2026-10-12T19:50Z  claude-code (OPS-ON-1 — ON Monday runner on VM cron)
 
 ### RETURNED
