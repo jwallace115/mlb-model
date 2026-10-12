@@ -1,0 +1,86 @@
+{
+  "game_id": "2026_05_DEN_LAC",
+  "week": 5,
+  "home": "LAC",
+  "away": "DEN",
+  "final_score": {
+    "home": 17,
+    "away": 23
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 17,
+        "away": 23
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 17,
+        "away": 23
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 63,
+      "dropbacks": 29,
+      "rush_attempts": 34,
+      "pass_rate": 0.4603174603174603,
+      "run_rate": 0.5396825396825398,
+      "pass_oe": -18.410561482111614
+    },
+    "away": {
+      "plays": 57,
+      "dropbacks": 28,
+      "rush_attempts": 29,
+      "pass_rate": 0.49122807017543857,
+      "run_rate": 0.5087719298245614,
+      "pass_oe": -4.899058154513759
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 2,
+      "total": 3
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 2,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "O.Hampton",
+      "team": "LAC",
+      "quarter": 3,
+      "play_id": 2817,
+      "desc": "(3:19) 8-O.Hampton up the middle to LAC 11 for -2 yards (9-T.Hufanga, 93-D.Jones). DEN-9-T.Hufanga was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

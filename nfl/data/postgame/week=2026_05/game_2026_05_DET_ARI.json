@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_05_DET_ARI",
+  "week": 5,
+  "home": "ARI",
+  "away": "DET",
+  "final_score": {
+    "home": 21,
+    "away": 45
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 182,
+      "plays_trailing_14": 182,
+      "halftime_score": {
+        "home": 21,
+        "away": 45
+      },
+      "garbage_time_plays": 44
+    },
+    "away": {
+      "plays_leading_7": 182,
+      "plays_leading_14": 182,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 21,
+        "away": 45
+      },
+      "garbage_time_plays": 44
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 71,
+      "dropbacks": 53,
+      "rush_attempts": 18,
+      "pass_rate": 0.7464788732394366,
+      "run_rate": 0.2535211267605634,
+      "pass_oe": 7.123967674043444
+    },
+    "away": {
+      "plays": 65,
+      "dropbacks": 33,
+      "rush_attempts": 32,
+      "pass_rate": 0.5076923076923077,
+      "run_rate": 0.49230769230769234,
+      "pass_oe": -0.5603566878672802
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 6,
+      "touchdowns": 4
+    }
+  },
+  "injuries": [
+    {
+      "player": "B.Gillikin",
+      "team": "ARI",
+      "quarter": 2,
+      "play_id": 1037,
+      "desc": "(14:30) 12-B.Gillikin punts 54 yards to DET 35, Center-59-C.Kreiter. 85-T.Kennedy to DET 46 for 11 yards (80-S.Fehoko; 42-D.Taylor-Demerson). DET-85-T.Kennedy was injured during the play."
+    },
+    {
+      "player": "A.St. Brown",
+      "team": "DET",
+      "quarter": 2,
+      "play_id": 1422,
+      "desc": "(10:51) 16-J.Goff pass incomplete deep middle to 14-A.St. Brown. ARI-3-B.Baker was injured during the play."
+    },
+    {
+      "player": "J.Gibbs",
+      "team": "DET",
+      "quarter": 2,
+      "play_id": 1729,
+      "desc": "(8:29) 16-J.Goff pass short left to 0-J.Gibbs to DET 48 for 23 yards (51-R.Lopez; 91-L.Collier). ARI-31-W.Williams was injured during the play."
+    },
+    {
+      "player": "J.Williams",
+      "team": "DET",
+      "quarter": 3,
+      "play_id": 2833,
+      "desc": "(9:50) (Shotgun) 16-J.Goff pass deep right to 1-J.Williams for 39 yards, TOUCHDOWN. ARI-97-W.Nolen was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

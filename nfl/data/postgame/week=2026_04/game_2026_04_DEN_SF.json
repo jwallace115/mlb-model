@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_04_DEN_SF",
+  "week": 4,
+  "home": "SF",
+  "away": "DEN",
+  "final_score": {
+    "home": 24,
+    "away": 14
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 176,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 24,
+        "away": 14
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 176,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 24,
+        "away": 14
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 65,
+      "dropbacks": 30,
+      "rush_attempts": 35,
+      "pass_rate": 0.46153846153846156,
+      "run_rate": 0.5384615384615384,
+      "pass_oe": -1.2520714648186215
+    },
+    "away": {
+      "plays": 65,
+      "dropbacks": 42,
+      "rush_attempts": 23,
+      "pass_rate": 0.6461538461538462,
+      "run_rate": 0.3538461538461538,
+      "pass_oe": -5.682901518814491
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 1,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "M.Evans",
+      "team": "SF",
+      "quarter": 2,
+      "play_id": 2037,
+      "desc": "(:38) (Shotgun) 13-B.Purdy pass deep middle to 5-M.Evans to SF 42 for 24 yards (22-B.Jones). DEN-2-P.Surtain was injured during the play."
+    },
+    {
+      "player": "J.Dobbins",
+      "team": "DEN",
+      "quarter": 3,
+      "play_id": 2434,
+      "desc": "(13:56) 27-J.Dobbins up the middle to DEN 25 for 2 yards (36-M.Sigle). SF-36-M.Sigle was injured during the play."
+    },
+    {
+      "player": "P.Bryant",
+      "team": "DEN",
+      "quarter": 3,
+      "play_id": 3101,
+      "desc": "(2:48) (Shotgun) 10-B.Nix pass deep right to 13-P.Bryant to DEN 49 for 30 yards (27-J.Brown; 2-D.Lenoir). DEN-13-P.Bryant was injured during the play."
+    },
+    {
+      "player": "K.Juszczyk",
+      "team": "SF",
+      "quarter": 4,
+      "play_id": 3371,
+      "desc": "(14:03) 13-B.Purdy pass short left to 44-K.Juszczyk to SF 42 for 16 yards (23-J.Barron) [99-Z.Allen]. SF-44-K.Juszczyk was injured during the play."
+    },
+    {
+      "player": "E.Pineiro",
+      "team": "DEN",
+      "quarter": 4,
+      "play_id": 4068,
+      "desc": "18-E.Pineiro kicks 60 yards from SF 35 to DEN 5. 12-R.Harvey MUFFS catch, and recovers at DEN 5. 12-R.Harvey to DEN 42 for 37 yards (51-L.Gifford). SF-36-M.Sigle was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

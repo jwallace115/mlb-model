@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_03_ATL_GB",
+  "week": 3,
+  "home": "GB",
+  "away": "ATL",
+  "final_score": {
+    "home": 14,
+    "away": 35
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 173,
+      "plays_trailing_14": 173,
+      "halftime_score": {
+        "home": 14,
+        "away": 35
+      },
+      "garbage_time_plays": 36
+    },
+    "away": {
+      "plays_leading_7": 173,
+      "plays_leading_14": 173,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 14,
+        "away": 35
+      },
+      "garbage_time_plays": 36
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 63,
+      "dropbacks": 54,
+      "rush_attempts": 9,
+      "pass_rate": 0.8571428571428571,
+      "run_rate": 0.1428571428571429,
+      "pass_oe": 11.592962412220059
+    },
+    "away": {
+      "plays": 67,
+      "dropbacks": 26,
+      "rush_attempts": 41,
+      "pass_rate": 0.3880597014925373,
+      "run_rate": 0.6119402985074627,
+      "pass_oe": -5.320645956432118
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 4
+    }
+  },
+  "injuries": [
+    {
+      "player": "S.Moore",
+      "team": "GB",
+      "quarter": 3,
+      "play_id": 2505,
+      "desc": "(12:26) (Shotgun) 10-J.Love pass short left to 23-S.Moore to ATL 16 for 12 yards (3-J.Bates; 21-M.Hughes). ATL-3-J.Bates was injured during the play."
+    },
+    {
+      "player": "C.Brooks",
+      "team": "GB",
+      "quarter": 4,
+      "play_id": 4171,
+      "desc": "(2:10) (Shotgun) 10-J.Love pass short right to 30-C.Brooks to ATL 40 for 4 yards (56-H.Perkins). GB-62-J.Monk was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

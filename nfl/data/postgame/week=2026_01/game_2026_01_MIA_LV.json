@@ -1,0 +1,86 @@
+{
+  "game_id": "2026_01_MIA_LV",
+  "week": 1,
+  "home": "LV",
+  "away": "MIA",
+  "final_score": {
+    "home": 27,
+    "away": 13
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 169,
+      "plays_leading_14": 169,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 27,
+        "away": 13
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 169,
+      "plays_trailing_14": 169,
+      "halftime_score": {
+        "home": 27,
+        "away": 13
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 67,
+      "dropbacks": 30,
+      "rush_attempts": 37,
+      "pass_rate": 0.44776119402985076,
+      "run_rate": 0.5522388059701493,
+      "pass_oe": -5.593264515583332
+    },
+    "away": {
+      "plays": 50,
+      "dropbacks": 32,
+      "rush_attempts": 18,
+      "pass_rate": 0.64,
+      "run_rate": 0.36,
+      "pass_oe": -2.666430852629922
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 2,
+      "fumbles_lost": 0,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "M.Washington",
+      "team": "MIA",
+      "quarter": 4,
+      "play_id": 3667,
+      "desc": "(5:21) (Shotgun) 2-M.Willis pass deep middle to 6-M.Washington to LV 44 for 30 yards (31-T.Stukes). LV-26-D.Porter was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

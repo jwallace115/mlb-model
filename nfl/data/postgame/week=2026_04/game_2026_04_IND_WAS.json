@@ -1,0 +1,128 @@
+{
+  "game_id": "2026_04_IND_WAS",
+  "week": 4,
+  "home": "WAS",
+  "away": "IND",
+  "final_score": {
+    "home": 13,
+    "away": 30
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 171,
+      "plays_trailing_14": 171,
+      "halftime_score": {
+        "home": 13,
+        "away": 30
+      },
+      "garbage_time_plays": 15
+    },
+    "away": {
+      "plays_leading_7": 171,
+      "plays_leading_14": 171,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 13,
+        "away": 30
+      },
+      "garbage_time_plays": 15
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 61,
+      "dropbacks": 39,
+      "rush_attempts": 22,
+      "pass_rate": 0.639344262295082,
+      "run_rate": 0.360655737704918,
+      "pass_oe": -1.5097902622073889
+    },
+    "away": {
+      "plays": 66,
+      "dropbacks": 36,
+      "rush_attempts": 30,
+      "pass_rate": 0.5454545454545454,
+      "run_rate": 0.4545454545454546,
+      "pass_oe": -2.0827856846153736
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 0
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "M.Mariota",
+      "team": "WAS",
+      "quarter": 1,
+      "play_id": 495,
+      "desc": "(7:05) (No Huddle, Shotgun) 8-M.Mariota sacked at IND 11 for -6 yards (sack split by 95-A.Adebawore and 97-L.Latu). WAS-8-M.Mariota was injured during the play."
+    },
+    {
+      "player": "S.McGowan",
+      "team": "IND",
+      "quarter": 2,
+      "play_id": 1281,
+      "desc": "(10:35) 67-L.Tenuta reported in as eligible. 20-S.McGowan left guard to WAS 44 for 8 yards (2-A.Robertson; 45-K.Chaisson). WAS-2-A.Robertson was injured during the play."
+    },
+    {
+      "player": "A.Williams",
+      "team": "WAS",
+      "quarter": 3,
+      "play_id": 2210,
+      "desc": "(14:19) 16-A.Kaliakmanis pass incomplete short left to 14-A.Williams. IND-27-J.Walley was injured during the play."
+    },
+    {
+      "player": "R.Sanchez",
+      "team": "WAS",
+      "quarter": 3,
+      "play_id": 2424,
+      "desc": "8-R.Sanchez kicks 62 yards from IND 35 to WAS 3. 83-J.Lane to WAS 30 for 27 yards (55-C.Curry). WAS-83-J.Lane was injured during the play."
+    },
+    {
+      "player": "D.Stevens",
+      "team": "IND",
+      "quarter": 3,
+      "play_id": 2605,
+      "desc": "19-D.Stevens kicks 56 yards from WAS 35 to IND 9. 20-S.McGowan to IND 34 for 25 yards (35-P.Butler; 39-J.Reaves). WAS-39-J.Reaves was injured during the play."
+    },
+    {
+      "player": "J.Taylor",
+      "team": "IND",
+      "quarter": 3,
+      "play_id": 2665,
+      "desc": "(9:58) (Shotgun) 28-J.Taylor right end to IND 45 for 1 yard (94-D.Payne; 56-K.Medrano). IND-79-B.Raimann was injured during the play."
+    },
+    {
+      "player": "B.Coleman",
+      "team": "WAS",
+      "quarter": 4,
+      "play_id": 3957,
+      "desc": "(5:42) (Shotgun) 16-A.Kaliakmanis pass short middle to 74-B.Coleman to IND 48 for 13 yards (90-G.Stewart; 50-B.Boettcher). WAS-74-B.Coleman was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

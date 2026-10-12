@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_03_TEN_NYG",
+  "week": 3,
+  "home": "NYG",
+  "away": "TEN",
+  "final_score": {
+    "home": 12,
+    "away": 7
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 12,
+        "away": 7
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 12,
+        "away": 7
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 58,
+      "dropbacks": 25,
+      "rush_attempts": 33,
+      "pass_rate": 0.43103448275862066,
+      "run_rate": 0.5689655172413793,
+      "pass_oe": -19.39526285443987
+    },
+    "away": {
+      "plays": 57,
+      "dropbacks": 36,
+      "rush_attempts": 21,
+      "pass_rate": 0.631578947368421,
+      "run_rate": 0.368421052631579,
+      "pass_oe": -12.088668445746103
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 2,
+      "touchdowns": 0
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "T.Pollard",
+      "team": "TEN",
+      "quarter": 1,
+      "play_id": 249,
+      "desc": "(12:13) 20-T.Pollard up the middle to TEN 16 for 5 yards (49-T.Edmunds; 8-J.Holland). TEN-66-F.Carmona was injured during the play."
+    },
+    {
+      "player": "M.Nabers",
+      "team": "NYG",
+      "quarter": 2,
+      "play_id": 1959,
+      "desc": "(:32) (Shotgun) 19-J.Winston pass short right to 1-M.Nabers to TEN 41 for 10 yards (24-A.Taylor). TEN-24-A.Taylor was injured during the play."
+    },
+    {
+      "player": "T.Pollard",
+      "team": "TEN",
+      "quarter": 4,
+      "play_id": 3133,
+      "desc": "(11:08) 1-C.Ward pass short right to 20-T.Pollard pushed ob at TEN 47 for 1 yard (22-A.Phillips). NYG-0-B.Burns was injured during the play."
+    },
+    {
+      "player": "W.Robinson",
+      "team": "TEN",
+      "quarter": 4,
+      "play_id": 3412,
+      "desc": "(5:39) (Shotgun) 1-C.Ward pass short right to 4-W.Robinson for 4 yards, TOUCHDOWN. NYG-12-C.Hood was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

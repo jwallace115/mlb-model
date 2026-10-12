@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_04_KC_LV",
+  "week": 4,
+  "home": "LV",
+  "away": "KC",
+  "final_score": {
+    "home": 27,
+    "away": 30
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 27,
+        "away": 30
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 27,
+        "away": 30
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 79,
+      "dropbacks": 53,
+      "rush_attempts": 26,
+      "pass_rate": 0.6708860759493671,
+      "run_rate": 0.3291139240506329,
+      "pass_oe": -4.002770874649286
+    },
+    "away": {
+      "plays": 59,
+      "dropbacks": 33,
+      "rush_attempts": 26,
+      "pass_rate": 0.559322033898305,
+      "run_rate": 0.44067796610169496,
+      "pass_oe": -0.909969463186749
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "K.Cousins",
+      "team": "LV",
+      "quarter": 2,
+      "play_id": 1411,
+      "desc": "(5:30) (Shotgun) 8-K.Cousins pass incomplete deep middle to 9-J.Nailor. LV-9-J.Nailor was injured during the play. PENALTY on KC-20-N.Williams, Unnecessary Roughness, 14 yards, enforced at KC 28 - No "
+    },
+    {
+      "player": "A.Jeanty",
+      "team": "LV",
+      "quarter": 3,
+      "play_id": 2884,
+      "desc": "(3:08) (No Huddle) 2-A.Jeanty right tackle to LV 22 for -1 yards (91-F.Anudike-Uzomah, 32-N.Bolton). LV-2-A.Jeanty was injured during the play."
+    },
+    {
+      "player": "T.Thornton",
+      "team": "KC",
+      "quarter": 4,
+      "play_id": 3768,
+      "desc": "(3:35) (Shotgun) 15-P.Mahomes pass deep left to 2-T.Thornton to LV 5 for 55 yards (31-T.Stukes). KC-2-T.Thornton was injured during the play. PENALTY on LV-7-Q.Walker, Unnecessary Roughness, 3 yards, "
+    }
+  ],
+  "ftn": "covered"
+}

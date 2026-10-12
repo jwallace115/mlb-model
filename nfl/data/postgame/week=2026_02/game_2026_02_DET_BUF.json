@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_02_DET_BUF",
+  "week": 2,
+  "home": "BUF",
+  "away": "DET",
+  "final_score": {
+    "home": 41,
+    "away": 31
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 184,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 41,
+        "away": 31
+      },
+      "garbage_time_plays": 20
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 184,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 41,
+        "away": 31
+      },
+      "garbage_time_plays": 20
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 69,
+      "dropbacks": 33,
+      "rush_attempts": 36,
+      "pass_rate": 0.4782608695652174,
+      "run_rate": 0.5217391304347826,
+      "pass_oe": 8.794300819576627
+    },
+    "away": {
+      "plays": 62,
+      "dropbacks": 42,
+      "rush_attempts": 20,
+      "pass_rate": 0.6774193548387096,
+      "run_rate": 0.32258064516129037,
+      "pass_oe": -2.1524850680277896
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 7,
+      "touchdowns": 5
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Allen",
+      "team": "BUF",
+      "quarter": 2,
+      "play_id": 1083,
+      "desc": "(12:48) 17-J.Allen sacked at DET 11 for -7 yards (45-D.White). DET-29-A.Maddox was injured during the play. PENALTY on DET-46-J.Campbell, Defensive Holding, 2 yards, enforced at DET 4 - No Play."
+    },
+    {
+      "player": "J.Allen",
+      "team": "BUF",
+      "quarter": 2,
+      "play_id": 1675,
+      "desc": "(3:01) 17-J.Allen pass incomplete short right to 2-D.Moore. BUF-2-D.Moore was injured during the play. PENALTY on BUF-88-D.Knox, Offensive Holding, 10 yards, enforced at DET 6 - No Play."
+    },
+    {
+      "player": "D.Kincaid",
+      "team": "BUF",
+      "quarter": 2,
+      "play_id": 1957,
+      "desc": "(1:36) (Shotgun) 17-J.Allen pass short left to 86-D.Kincaid to BUF 24 for 6 yards (36-C.Clark). BUF-0-K.Coleman was injured during the play."
+    },
+    {
+      "player": "K.Coleman",
+      "team": "BUF",
+      "quarter": 4,
+      "play_id": 3954,
+      "desc": "(6:05) (Shotgun) 17-J.Allen pass short left to 0-K.Coleman to DET 49 for 9 yards (23-R.Ya-Sin). DET-23-R.Ya-Sin was injured during the play."
+    },
+    {
+      "player": "J.Williams",
+      "team": "DET",
+      "quarter": 4,
+      "play_id": 4295,
+      "desc": "(2:00) (Shotgun) 16-J.Goff pass deep left to 1-J.Williams to BUF 27 for 17 yards (8-T.Bernard; 3-D.Hamlin). BUF-56-J.Solomon was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

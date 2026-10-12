@@ -1,0 +1,128 @@
+{
+  "game_id": "2026_04_LA_PHI",
+  "week": 4,
+  "home": "PHI",
+  "away": "LA",
+  "final_score": {
+    "home": 20,
+    "away": 24
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 20,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 20,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 58,
+      "dropbacks": 31,
+      "rush_attempts": 27,
+      "pass_rate": 0.5344827586206896,
+      "run_rate": 0.4655172413793104,
+      "pass_oe": -6.155423380312373
+    },
+    "away": {
+      "plays": 77,
+      "dropbacks": 52,
+      "rush_attempts": 25,
+      "pass_rate": 0.6753246753246753,
+      "run_rate": 0.3246753246753247,
+      "pass_oe": 4.198315685772034
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 2,
+      "fumbles_lost": 0,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "S.Barkley",
+      "team": "PHI",
+      "quarter": 1,
+      "play_id": 277,
+      "desc": "(11:48) 26-S.Barkley left end to LA 22 for 6 yards. FUMBLES, ball out of bounds at LA 22. PHI-26-S.Barkley was injured during the play."
+    },
+    {
+      "player": "T.Bigsby",
+      "team": "PHI",
+      "quarter": 1,
+      "play_id": 385,
+      "desc": "(9:18) (Shotgun) 8-T.Bigsby left end to LA 11 for -5 yards (97-P.Ford, 0-B.Young). LA-97-P.Ford was injured during the play."
+    },
+    {
+      "player": "K.Mumpfield",
+      "team": "LA",
+      "quarter": 2,
+      "play_id": 1526,
+      "desc": "(6:48) (Shotgun) 9-M.Stafford pass incomplete deep left to 4-K.Mumpfield (35-M.Carter). LA-4-K.Mumpfield was injured during the play."
+    },
+    {
+      "player": "B.Mann",
+      "team": "PHI",
+      "quarter": 2,
+      "play_id": 2062,
+      "desc": "(1:17) 10-B.Mann punts 48 yards to LA 17, Center-41-R.Underwood. 11-A.Bachman to LA 18 for 1 yard (7-K.Ringo). LA-1-E.Forbes was injured during the play. PENALTY on PHI-7-K.Ringo, Player Out of Bounds"
+    },
+    {
+      "player": "B.Corum",
+      "team": "LA",
+      "quarter": 3,
+      "play_id": 2393,
+      "desc": "(14:52) 24-B.Corum left end to LA 24 for 3 yards (27-Q.Mitchell). PHI-27-Q.Mitchell was injured during the play."
+    },
+    {
+      "player": "K.Williams",
+      "team": "LA",
+      "quarter": 3,
+      "play_id": 3054,
+      "desc": "(5:01) 23-K.Williams left tackle to LA 47 for 23 yards (54-J.Trotter). PHI-33-C.DeJean was injured during the play. PENALTY on LA, Unsportsmanlike Conduct, 15 yards, enforced at LA 47."
+    },
+    {
+      "player": "T.Bigsby",
+      "team": "PHI",
+      "quarter": 4,
+      "play_id": 4155,
+      "desc": "(3:59) (Shotgun) 8-T.Bigsby right end to PHI 41 for 1 yard (0-B.Young). PHI-8-T.Bigsby was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

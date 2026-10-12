@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_04_DET_CAR",
+  "week": 4,
+  "home": "CAR",
+  "away": "DET",
+  "final_score": {
+    "home": 32,
+    "away": 26
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 32,
+        "away": 26
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 32,
+        "away": 26
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 72,
+      "dropbacks": 44,
+      "rush_attempts": 28,
+      "pass_rate": 0.6111111111111112,
+      "run_rate": 0.38888888888888884,
+      "pass_oe": 10.674098521879275
+    },
+    "away": {
+      "plays": 68,
+      "dropbacks": 53,
+      "rush_attempts": 15,
+      "pass_rate": 0.7794117647058824,
+      "run_rate": 0.22058823529411764,
+      "pass_oe": 2.5827627576572794
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "C.Hubbard",
+      "team": "CAR",
+      "quarter": 3,
+      "play_id": 3034,
+      "desc": "(4:28) 30-C.Hubbard right guard to DET 45 for 1 yard (97-A.Hutchinson). CAR-57-M.Freeling was injured during the play."
+    },
+    {
+      "player": "J.Gibbs",
+      "team": "DET",
+      "quarter": 4,
+      "play_id": 3842,
+      "desc": "(8:32) (No Huddle, Shotgun) 16-J.Goff pass short middle to 0-J.Gibbs to CAR 43 for 8 yards (58-B.Okereke). CAR-5-J.Phillips was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

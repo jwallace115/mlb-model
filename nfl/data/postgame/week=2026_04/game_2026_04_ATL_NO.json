@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_04_ATL_NO",
+  "week": 4,
+  "home": "NO",
+  "away": "ATL",
+  "final_score": {
+    "home": 24,
+    "away": 45
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 176,
+      "plays_trailing_14": 176,
+      "halftime_score": {
+        "home": 24,
+        "away": 45
+      },
+      "garbage_time_plays": 37
+    },
+    "away": {
+      "plays_leading_7": 176,
+      "plays_leading_14": 176,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 24,
+        "away": 45
+      },
+      "garbage_time_plays": 37
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 69,
+      "dropbacks": 50,
+      "rush_attempts": 19,
+      "pass_rate": 0.7246376811594203,
+      "run_rate": 0.2753623188405797,
+      "pass_oe": 1.7749905586242676
+    },
+    "away": {
+      "plays": 56,
+      "dropbacks": 21,
+      "rush_attempts": 35,
+      "pass_rate": 0.375,
+      "run_rate": 0.625,
+      "pass_oe": -7.727117524905638
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 7,
+      "touchdowns": 4
+    }
+  },
+  "injuries": [
+    {
+      "player": "C.Olave",
+      "team": "NO",
+      "quarter": 1,
+      "play_id": 178,
+      "desc": "(13:27) (Shotgun) 6-T.Shough pass incomplete short right to 12-C.Olave (26-C.Henderson). ATL-26-C.Henderson was injured during the play."
+    },
+    {
+      "player": "B.Lance",
+      "team": "NO",
+      "quarter": 1,
+      "play_id": 253,
+      "desc": "(13:03) (Shotgun) 6-T.Shough pass incomplete deep left to 18-B.Lance [54-B.Dorlus]. ATL-55-Z.Smith was injured during the play. ** Injury Update: ATL-26-C.Henderson has returned to the game."
+    }
+  ],
+  "ftn": "covered"
+}

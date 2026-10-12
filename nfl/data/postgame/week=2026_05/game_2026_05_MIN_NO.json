@@ -1,0 +1,86 @@
+{
+  "game_id": "2026_05_MIN_NO",
+  "week": 5,
+  "home": "NO",
+  "away": "MIN",
+  "final_score": {
+    "home": 13,
+    "away": 23
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 155,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 13,
+        "away": 23
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 155,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 13,
+        "away": 23
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 43,
+      "dropbacks": 26,
+      "rush_attempts": 17,
+      "pass_rate": 0.6046511627906976,
+      "run_rate": 0.39534883720930236,
+      "pass_oe": -12.462718751695421
+    },
+    "away": {
+      "plays": 68,
+      "dropbacks": 32,
+      "rush_attempts": 36,
+      "pass_rate": 0.47058823529411764,
+      "run_rate": 0.5294117647058824,
+      "pass_oe": 1.7645753753274234
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 2,
+      "fumbles_lost": 1,
+      "total": 3
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 2,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 1,
+  "red_zone": {
+    "home": {
+      "trips": 1,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "T.Hockenson",
+      "team": "MIN",
+      "quarter": 1,
+      "play_id": 85,
+      "desc": "(14:22) (Shotgun) 1-K.Murray pass short middle to 87-T.Hockenson to MIN 41 for 7 yards (20-P.Werner). MIN-87-T.Hockenson was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

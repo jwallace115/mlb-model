@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_03_LA_DEN",
+  "week": 3,
+  "home": "DEN",
+  "away": "LA",
+  "final_score": {
+    "home": 30,
+    "away": 26
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 30,
+        "away": 26
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 30,
+        "away": 26
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 62,
+      "dropbacks": 37,
+      "rush_attempts": 25,
+      "pass_rate": 0.5967741935483871,
+      "run_rate": 0.4032258064516129,
+      "pass_oe": -3.727987614961771
+    },
+    "away": {
+      "plays": 82,
+      "dropbacks": 59,
+      "rush_attempts": 23,
+      "pass_rate": 0.7195121951219512,
+      "run_rate": 0.2804878048780488,
+      "pass_oe": 5.879646433251245
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 2,
+      "fumbles_lost": 0,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 1,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 6,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "T.Ferguson",
+      "team": "LA",
+      "quarter": 1,
+      "play_id": 418,
+      "desc": "(7:35) (Shotgun) 9-M.Stafford pass incomplete short left to 18-T.Ferguson (9-T.Hufanga). LA-18-T.Ferguson was injured during the play."
+    },
+    {
+      "player": "J.Waddle",
+      "team": "DEN",
+      "quarter": 2,
+      "play_id": 1908,
+      "desc": "(3:04) (Shotgun) 10-B.Nix pass short left to 17-J.Waddle ran ob at DEN 49 for 9 yards. LA-35-J.Watson was injured during the play."
+    },
+    {
+      "player": "R.Harvey",
+      "team": "DEN",
+      "quarter": 3,
+      "play_id": 2862,
+      "desc": "(8:22) (Shotgun) 10-B.Nix pass short right to 12-R.Harvey to LA 5 for no gain (37-Q.Lake). DEN-12-R.Harvey was injured during the play."
+    },
+    {
+      "player": "K.Williams",
+      "team": "LA",
+      "quarter": 3,
+      "play_id": 2981,
+      "desc": "(7:01) 23-K.Williams right end to LA 34 for 4 yards (21-R.Moss). LA-69-K.Dotson was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_01_NYJ_TEN",
+  "week": 1,
+  "home": "TEN",
+  "away": "NYJ",
+  "final_score": {
+    "home": 10,
+    "away": 23
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 162,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 10,
+        "away": 23
+      },
+      "garbage_time_plays": 33
+    },
+    "away": {
+      "plays_leading_7": 162,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 10,
+        "away": 23
+      },
+      "garbage_time_plays": 33
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 49,
+      "dropbacks": 35,
+      "rush_attempts": 14,
+      "pass_rate": 0.7142857142857143,
+      "run_rate": 0.2857142857142857,
+      "pass_oe": 5.779526770114899
+    },
+    "away": {
+      "plays": 63,
+      "dropbacks": 24,
+      "rush_attempts": 39,
+      "pass_rate": 0.38095238095238093,
+      "run_rate": 0.6190476190476191,
+      "pass_oe": -8.887297299224883
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 1,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "C.Ward",
+      "team": "TEN",
+      "quarter": 1,
+      "play_id": 491,
+      "desc": "(8:27) (Shotgun) 1-C.Ward scrambles left tackle to NYJ 42 for 5 yards (44-J.Sherwood). NYJ-29-M.Fitzpatrick was injured during the play."
+    },
+    {
+      "player": "A.McNamara",
+      "team": "NYJ",
+      "quarter": 1,
+      "play_id": 945,
+      "desc": "(3:29) 14-A.McNamara punts 45 yards to TEN 37, Center-42-T.Hennessy, downed by NYJ-51-F.Mauigoa. TEN-17-C.Dike was injured during the play."
+    },
+    {
+      "player": "T.Pollard",
+      "team": "TEN",
+      "quarter": 2,
+      "play_id": 1695,
+      "desc": "(2:41) 20-T.Pollard up the middle to TEN 46 for 2 yards (2-J.Brownlee). NYJ-2-J.Brownlee was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

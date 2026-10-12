@@ -1,0 +1,128 @@
+{
+  "game_id": "2026_01_CHI_CAR",
+  "week": 1,
+  "home": "CAR",
+  "away": "CHI",
+  "final_score": {
+    "home": 37,
+    "away": 59
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 196,
+      "plays_trailing_14": 196,
+      "halftime_score": {
+        "home": 37,
+        "away": 59
+      },
+      "garbage_time_plays": 23
+    },
+    "away": {
+      "plays_leading_7": 196,
+      "plays_leading_14": 196,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 37,
+        "away": 59
+      },
+      "garbage_time_plays": 23
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 62,
+      "dropbacks": 40,
+      "rush_attempts": 22,
+      "pass_rate": 0.6451612903225806,
+      "run_rate": 0.3548387096774194,
+      "pass_oe": 3.0798255082438972
+    },
+    "away": {
+      "plays": 70,
+      "dropbacks": 31,
+      "rush_attempts": 39,
+      "pass_rate": 0.44285714285714284,
+      "run_rate": 0.5571428571428572,
+      "pass_oe": -1.7077317039171855
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 2,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 4
+    },
+    "away": {
+      "trips": 8,
+      "touchdowns": 4
+    }
+  },
+  "injuries": [
+    {
+      "player": "R.Odunze",
+      "team": "CHI",
+      "quarter": 1,
+      "play_id": 910,
+      "desc": "(3:01) (Shotgun) 18-C.Williams pass deep right to 15-R.Odunze pushed ob at CAR 6 for 47 yards (24-W.Lee). CAR-97-B.Brown was injured during the play."
+    },
+    {
+      "player": "C.Santos",
+      "team": "CHI",
+      "quarter": 2,
+      "play_id": 1273,
+      "desc": "8-C.Santos extra point is GOOD, Center-45-B.Gardner, Holder-19-T.Taylor. CAR-95-D.Brown was injured during the play."
+    },
+    {
+      "player": "J.Coker",
+      "team": "CAR",
+      "quarter": 2,
+      "play_id": 2460,
+      "desc": "(:11) (Shotgun) 9-B.Young pass deep left intended for 18-J.Coker INTERCEPTED by 24-M.Muhammad at CHI 38. 24-M.Muhammad to CHI 38 for no gain. CHI-24-M.Muhammad was injured during the play."
+    },
+    {
+      "player": "T.Tremble",
+      "team": "CAR",
+      "quarter": 3,
+      "play_id": 2852,
+      "desc": "(10:25) (Shotgun) 9-B.Young pass short middle to 82-T.Tremble to CHI 22 for 11 yards (31-D.Thieneman) [50-G.Jarrett]. CAR-68-D.Lewis was injured during the play."
+    },
+    {
+      "player": "M.Evans",
+      "team": "CAR",
+      "quarter": 3,
+      "play_id": 2914,
+      "desc": "(9:26) (Shotgun) 9-B.Young pass short left to 84-M.Evans to CHI 2 for 9 yards (29-T.Stevenson). CHI-29-T.Stevenson was injured during the play."
+    },
+    {
+      "player": "C.Williams",
+      "team": "CHI",
+      "quarter": 3,
+      "play_id": 3129,
+      "desc": "(6:28) 18-C.Williams scrambles left end ran ob at CAR 23 for 6 yards (3-P.Umanmielen). CAR-97-B.Brown was injured during the play."
+    },
+    {
+      "player": "K.Raymond",
+      "team": "CHI",
+      "quarter": 3,
+      "play_id": 3207,
+      "desc": "(5:23) (Shotgun) 18-C.Williams pass short left to 14-K.Raymond pushed ob at CAR 11 for 7 yards (24-W.Lee). CHI-70-B.Jones was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

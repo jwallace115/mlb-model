@@ -1,0 +1,86 @@
+{
+  "game_id": "2026_05_CHI_GB",
+  "week": 5,
+  "home": "GB",
+  "away": "CHI",
+  "final_score": {
+    "home": 31,
+    "away": 7
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 170,
+      "plays_leading_14": 170,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 31,
+        "away": 7
+      },
+      "garbage_time_plays": 44
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 170,
+      "plays_trailing_14": 170,
+      "halftime_score": {
+        "home": 31,
+        "away": 7
+      },
+      "garbage_time_plays": 44
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 60,
+      "dropbacks": 34,
+      "rush_attempts": 26,
+      "pass_rate": 0.5666666666666667,
+      "run_rate": 0.43333333333333335,
+      "pass_oe": 5.81550247083276
+    },
+    "away": {
+      "plays": 68,
+      "dropbacks": 44,
+      "rush_attempts": 24,
+      "pass_rate": 0.6470588235294118,
+      "run_rate": 0.3529411764705882,
+      "pass_oe": 1.9872091818546904
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 3,
+      "fumbles_lost": 2,
+      "total": 5
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "R.Johnson",
+      "team": "CHI",
+      "quarter": 4,
+      "play_id": 4008,
+      "desc": "(2:00) (Shotgun) 11-C.Keenum pass short left to 23-R.Johnson pushed ob at CHI 32 for 7 yards (2-B.Cisse). GB-98-J.Hargrave was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

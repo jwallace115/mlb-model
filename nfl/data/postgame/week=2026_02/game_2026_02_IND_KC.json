@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_02_IND_KC",
+  "week": 2,
+  "home": "KC",
+  "away": "IND",
+  "final_score": {
+    "home": 33,
+    "away": 30
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 33,
+        "away": 30
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 33,
+        "away": 30
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": true
+  },
+  "volume": {
+    "home": {
+      "plays": 78,
+      "dropbacks": 49,
+      "rush_attempts": 29,
+      "pass_rate": 0.6282051282051282,
+      "run_rate": 0.3717948717948718,
+      "pass_oe": 5.243697669357061
+    },
+    "away": {
+      "plays": 63,
+      "dropbacks": 31,
+      "rush_attempts": 32,
+      "pass_rate": 0.49206349206349204,
+      "run_rate": 0.5079365079365079,
+      "pass_oe": -9.174294746839083
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "K.Walker",
+      "team": "KC",
+      "quarter": 3,
+      "play_id": 2558,
+      "desc": "(8:36) 64-H.Nourzad and 92-K.Tonga reported in as eligible. 9-K.Walker right guard to IND 1 for no gain (51-A.Davis-Gaither; 97-L.Latu). KC-77-J.Moore was injured during the play."
+    },
+    {
+      "player": "T.Kelce",
+      "team": "KC",
+      "quarter": 3,
+      "play_id": 3001,
+      "desc": "(2:00) (Shotgun) 15-P.Mahomes pass short right to 87-T.Kelce to IND 14 for 18 yards (1-A.Gardner; 0-C.Bynum). IND-1-A.Gardner was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

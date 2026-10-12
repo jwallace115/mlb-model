@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_05_HOU_TEN",
+  "week": 5,
+  "home": "TEN",
+  "away": "HOU",
+  "final_score": {
+    "home": 3,
+    "away": 26
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 164,
+      "plays_trailing_14": 164,
+      "halftime_score": {
+        "home": 3,
+        "away": 26
+      },
+      "garbage_time_plays": 39
+    },
+    "away": {
+      "plays_leading_7": 164,
+      "plays_leading_14": 164,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 3,
+        "away": 26
+      },
+      "garbage_time_plays": 39
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 58,
+      "dropbacks": 40,
+      "rush_attempts": 18,
+      "pass_rate": 0.6896551724137931,
+      "run_rate": 0.31034482758620685,
+      "pass_oe": 0.6113300720850626
+    },
+    "away": {
+      "plays": 63,
+      "dropbacks": 36,
+      "rush_attempts": 27,
+      "pass_rate": 0.5714285714285714,
+      "run_rate": 0.4285714285714286,
+      "pass_oe": 4.439207771793008
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 1,
+      "touchdowns": 0
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "D.Schultz",
+      "team": "HOU",
+      "quarter": 2,
+      "play_id": 1380,
+      "desc": "(7:47) (Shotgun) 7-C.Stroud pass incomplete deep middle to 86-D.Schultz. TEN-18-C.Flott was injured during the play."
+    },
+    {
+      "player": "T.Spears",
+      "team": "TEN",
+      "quarter": 4,
+      "play_id": 3364,
+      "desc": "(12:21) (Shotgun) 1-C.Ward pass short left to 2-T.Spears pushed ob at HOU 8 for 35 yards (6-R.Blankenship). HOU-5-J.Pitre was injured during the play. PENALTY on TEN-51-A.Schlottmann, Offensive Holdin"
+    },
+    {
+      "player": "C.Ward",
+      "team": "TEN",
+      "quarter": 4,
+      "play_id": 3408,
+      "desc": "(12:06) (Shotgun) 1-C.Ward pass incomplete deep left to 14-C.Tate [55-D.Hunter]. HOU-24-D.Stingley was injured during the play. PENALTY on HOU-3-K.Lassiter, Defensive Holding, 5 yards, enforced at TEN"
+    }
+  ],
+  "ftn": "not covered"
+}

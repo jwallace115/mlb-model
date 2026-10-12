@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_02_MIA_SF",
+  "week": 2,
+  "home": "SF",
+  "away": "MIA",
+  "final_score": {
+    "home": 35,
+    "away": 13
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 151,
+      "plays_leading_14": 151,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 35,
+        "away": 13
+      },
+      "garbage_time_plays": 33
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 151,
+      "plays_trailing_14": 151,
+      "halftime_score": {
+        "home": 35,
+        "away": 13
+      },
+      "garbage_time_plays": 33
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 49,
+      "dropbacks": 22,
+      "rush_attempts": 27,
+      "pass_rate": 0.4489795918367347,
+      "run_rate": 0.5510204081632653,
+      "pass_oe": 3.866744928061962
+    },
+    "away": {
+      "plays": 56,
+      "dropbacks": 27,
+      "rush_attempts": 29,
+      "pass_rate": 0.48214285714285715,
+      "run_rate": 0.5178571428571428,
+      "pass_oe": -16.656428227821987
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 5
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 0
+    }
+  },
+  "injuries": [
+    {
+      "player": "M.Washington",
+      "team": "MIA",
+      "quarter": 2,
+      "play_id": 882,
+      "desc": "(15:00) (Shotgun) 2-M.Willis pass short right to 6-M.Washington to SF 29 for 5 yards (57-D.Greenlaw). MIA-6-M.Washington was injured during the play."
+    },
+    {
+      "player": "D.Robinson",
+      "team": "SF",
+      "quarter": 2,
+      "play_id": 1312,
+      "desc": "(6:46) (Shotgun) 13-B.Purdy pass deep left to 11-D.Robinson to MIA 4 for 19 yards (4-J.Marshall) [10-J.Rodriguez]. SF-11-D.Robinson was injured during the play."
+    },
+    {
+      "player": "C.McCaffrey",
+      "team": "SF",
+      "quarter": 3,
+      "play_id": 2151,
+      "desc": "(10:49) 23-C.McCaffrey left tackle to SF 32 for 3 yards (20-J.Brooks). MIA-92-Z.Sieler was injured during the play."
+    },
+    {
+      "player": "D.Achane",
+      "team": "MIA",
+      "quarter": 3,
+      "play_id": 2461,
+      "desc": "(5:07) 28-D.Achane right guard to SF 47 for 9 yards (2-D.Lenoir; 27-J.Brown). SF-96-J.Thompson was injured during the play. PENALTY on MIA-73-A.Jackson, Offensive Holding, 10 yards, enforced at MIA 46"
+    },
+    {
+      "player": "G.Dulcich",
+      "team": "MIA",
+      "quarter": 4,
+      "play_id": 3311,
+      "desc": "(8:03) (Shotgun) 2-M.Willis pass short left to 85-G.Dulcich to MIA 28 for 6 yards (47-K.Kareem). MIA-7-C.Douglas was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

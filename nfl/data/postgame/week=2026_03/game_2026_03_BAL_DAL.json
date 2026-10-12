@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_03_BAL_DAL",
+  "week": 3,
+  "home": "DAL",
+  "away": "BAL",
+  "final_score": {
+    "home": 31,
+    "away": 34
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 31,
+        "away": 34
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 31,
+        "away": 34
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 72,
+      "dropbacks": 42,
+      "rush_attempts": 30,
+      "pass_rate": 0.5833333333333334,
+      "run_rate": 0.41666666666666663,
+      "pass_oe": -0.4013775350296334
+    },
+    "away": {
+      "plays": 58,
+      "dropbacks": 20,
+      "rush_attempts": 38,
+      "pass_rate": 0.3448275862068966,
+      "run_rate": 0.6551724137931034,
+      "pass_oe": -14.225127547979355
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 6,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 6,
+      "touchdowns": 4
+    }
+  },
+  "injuries": [
+    {
+      "player": "D.Henry",
+      "team": "BAL",
+      "quarter": 2,
+      "play_id": 1609,
+      "desc": "(7:23) 22-D.Henry left tackle to DAL 27 for 4 yards (91-O.Ogbonnia). DAL-34-J.Thompson was injured during the play."
+    },
+    {
+      "player": "J.Williams",
+      "team": "DAL",
+      "quarter": 3,
+      "play_id": 2179,
+      "desc": "(14:20) 33-J.Williams left tackle to DAL 46 for -1 yards (98-T.Jones). BAL-14-K.Hamilton was injured during the play."
+    },
+    {
+      "player": "Z.Flowers",
+      "team": "BAL",
+      "quarter": 4,
+      "play_id": 3221,
+      "desc": "(15:00) 4-Z.Flowers left end to DAL 3 for 20 yards (28-S.Revel). DAL-28-S.Revel was injured during the play."
+    },
+    {
+      "player": "D.Henry",
+      "team": "BAL",
+      "quarter": 4,
+      "play_id": 3931,
+      "desc": "(3:11) 22-D.Henry left end to DAL 30 for 3 yards (91-O.Ogbonnia). DAL-6-D.Ezeiruaku was injured during the play. BAL-77-E.Pocic was injured during the play."
+    },
+    {
+      "player": "D.Prescott",
+      "team": "DAL",
+      "quarter": 4,
+      "play_id": 4467,
+      "desc": "(:20) (Shotgun) 4-D.Prescott scrambles up the middle to BAL 5 for 2 yards (0-R.Smith). DAL-78-T.Steele was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

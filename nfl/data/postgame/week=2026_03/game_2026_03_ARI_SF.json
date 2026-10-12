@@ -1,0 +1,121 @@
+{
+  "game_id": "2026_03_ARI_SF",
+  "week": 3,
+  "home": "SF",
+  "away": "ARI",
+  "final_score": {
+    "home": 36,
+    "away": 30
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 36,
+        "away": 30
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 36,
+        "away": 30
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 50,
+      "dropbacks": 27,
+      "rush_attempts": 23,
+      "pass_rate": 0.54,
+      "run_rate": 0.45999999999999996,
+      "pass_oe": 5.239733452645113
+    },
+    "away": {
+      "plays": 81,
+      "dropbacks": 54,
+      "rush_attempts": 27,
+      "pass_rate": 0.6666666666666666,
+      "run_rate": 0.33333333333333337,
+      "pass_oe": -0.7876079748658573
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Brissett",
+      "team": "ARI",
+      "quarter": 2,
+      "play_id": 1558,
+      "desc": "(7:51) (Shotgun) 7-J.Brissett pass short left to 14-Mi.Wilson to SF 32 for 6 yards (54-F.Warner; 2-D.Lenoir). SF-2-D.Lenoir was injured during the play. PENALTY on ARI, Illegal Shift, 5 yards, enforce"
+    },
+    {
+      "player": "M.Evans",
+      "team": "SF",
+      "quarter": 2,
+      "play_id": 1999,
+      "desc": "(1:45) (Shotgun) 13-B.Purdy pass incomplete short middle to 5-M.Evans. SF-5-M.Evans was injured during the play."
+    },
+    {
+      "player": "C.McCaffrey",
+      "team": "SF",
+      "quarter": 3,
+      "play_id": 2550,
+      "desc": "(12:15) (Shotgun) 13-B.Purdy pass short right to 23-C.McCaffrey to ARI 7 for 12 yards (28-A.Wingard; 1-Ma.Wilson). ARI-1-Ma.Wilson was injured during the play."
+    },
+    {
+      "player": "J.Love",
+      "team": "ARI",
+      "quarter": 3,
+      "play_id": 2776,
+      "desc": "(8:39) 4-J.Love left tackle to SF 34 for 4 yards (54-F.Warner). ARI-89-H.Long was injured during the play."
+    },
+    {
+      "player": "C.Ryland",
+      "team": "ARI",
+      "quarter": 3,
+      "play_id": 3028,
+      "desc": "38-C.Ryland extra point is GOOD, Center-59-C.Kreiter, Holder-12-B.Gillikin. SF-93-G.Halton was injured during the play."
+    },
+    {
+      "player": "J.Brissett",
+      "team": "ARI",
+      "quarter": 4,
+      "play_id": 3474,
+      "desc": "(13:38) 7-J.Brissett pass incomplete deep left to 85-T.McBride. SF-57-D.Greenlaw was injured during the play. PENALTY on SF-2-D.Lenoir, Defensive Pass Interference, 19 yards, enforced at SF 20 - No Pl"
+    }
+  ],
+  "ftn": "covered"
+}

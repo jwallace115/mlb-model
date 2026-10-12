@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_03_MIN_TB",
+  "week": 3,
+  "home": "TB",
+  "away": "MIN",
+  "final_score": {
+    "home": 16,
+    "away": 23
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 179,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 16,
+        "away": 23
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 179,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 16,
+        "away": 23
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 64,
+      "dropbacks": 43,
+      "rush_attempts": 21,
+      "pass_rate": 0.671875,
+      "run_rate": 0.328125,
+      "pass_oe": -1.3375931891842165
+    },
+    "away": {
+      "plays": 55,
+      "dropbacks": 32,
+      "rush_attempts": 23,
+      "pass_rate": 0.5818181818181818,
+      "run_rate": 0.4181818181818182,
+      "pass_oe": -1.5619163417210014
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 2,
+      "fumbles_lost": 0,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 1,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 0
+    },
+    "away": {
+      "trips": 1,
+      "touchdowns": 0
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.McMillan",
+      "team": "TB",
+      "quarter": 1,
+      "play_id": 328,
+      "desc": "(9:05) (No Huddle, Shotgun) 6-B.Mayfield pass incomplete short left to 11-J.McMillan (44-J.Metellus). TB-11-J.McMillan was injured during the play. Penalty on TB-78-T.Wirfs, Illegal Formation, decline"
+    },
+    {
+      "player": "A.Jones",
+      "team": "MIN",
+      "quarter": 1,
+      "play_id": 662,
+      "desc": "(5:50) 33-A.Jones left end to MIN 36 for 1 yard (91-A.Robinson). TB-0-Y.Diaby was injured during the play. PENALTY on MIN-84-J.Oliver, Offensive Holding, 11 yards, enforced at MIN 35 - No Play."
+    },
+    {
+      "player": "K.Gainwell",
+      "team": "TB",
+      "quarter": 4,
+      "play_id": 4171,
+      "desc": "(1:54) (Shotgun) 6-B.Mayfield pass short right intended for 1-K.Gainwell INTERCEPTED by 43-A.Van Ginkel [51-B.Cashman] at TB 41. 43-A.Van Ginkel to TB 41 for no gain (1-K.Gainwell). TB-6-B.Mayfield wa"
+    }
+  ],
+  "ftn": "covered"
+}

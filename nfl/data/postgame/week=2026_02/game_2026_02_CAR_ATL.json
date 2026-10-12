@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_02_CAR_ATL",
+  "week": 2,
+  "home": "ATL",
+  "away": "CAR",
+  "final_score": {
+    "home": 3,
+    "away": 34
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 171,
+      "plays_trailing_14": 171,
+      "halftime_score": {
+        "home": 3,
+        "away": 34
+      },
+      "garbage_time_plays": 37
+    },
+    "away": {
+      "plays_leading_7": 171,
+      "plays_leading_14": 171,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 3,
+        "away": 34
+      },
+      "garbage_time_plays": 37
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 67,
+      "dropbacks": 35,
+      "rush_attempts": 32,
+      "pass_rate": 0.5223880597014925,
+      "run_rate": 0.4776119402985075,
+      "pass_oe": -11.230158784251282
+    },
+    "away": {
+      "plays": 60,
+      "dropbacks": 38,
+      "rush_attempts": 22,
+      "pass_rate": 0.6333333333333333,
+      "run_rate": 0.3666666666666667,
+      "pass_oe": 3.5586992364663343
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 3,
+      "fumbles_lost": 2,
+      "total": 5
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 1,
+  "red_zone": {
+    "home": {
+      "trips": 0,
+      "touchdowns": 0
+    },
+    "away": {
+      "trips": 6,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "T.McMillan",
+      "team": "CAR",
+      "quarter": 1,
+      "play_id": 309,
+      "desc": "(11:39) (Shotgun) 9-B.Young pass incomplete short right to 4-T.McMillan (24-Aj.Terrell). ATL-24-Aj.Terrell was injured during the play."
+    },
+    {
+      "player": "R.Fitzgerald",
+      "team": "ATL",
+      "quarter": 1,
+      "play_id": 979,
+      "desc": "10-R.Fitzgerald kicks 56 yards from CAR 35 to ATL 9. 14-O.Zaccheaus to ATL 30 for 21 yards (87-B.Tremayne). CAR-53-C.Cherelus was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

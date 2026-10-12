@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_01_BUF_HOU",
+  "week": 1,
+  "home": "HOU",
+  "away": "BUF",
+  "final_score": {
+    "home": 31,
+    "away": 36
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 31,
+        "away": 36
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 31,
+        "away": 36
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 73,
+      "dropbacks": 41,
+      "rush_attempts": 32,
+      "pass_rate": 0.5616438356164384,
+      "run_rate": 0.4383561643835616,
+      "pass_oe": -4.761015529496761
+    },
+    "away": {
+      "plays": 53,
+      "dropbacks": 32,
+      "rush_attempts": 21,
+      "pass_rate": 0.6037735849056604,
+      "run_rate": 0.39622641509433965,
+      "pass_oe": 3.6587931351228193
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 2,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 4
+    },
+    "away": {
+      "trips": 6,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "D.Montgomery",
+      "team": "HOU",
+      "quarter": 2,
+      "play_id": 1728,
+      "desc": "(3:33) 32-D.Montgomery up the middle to HOU 36 for 5 yards (99-T.Parker; 24-C.Bishop). BUF-24-C.Bishop was injured during the play."
+    },
+    {
+      "player": "D.Schultz",
+      "team": "HOU",
+      "quarter": 3,
+      "play_id": 2339,
+      "desc": "(13:24) (Shotgun) 7-C.Stroud pass incomplete short left to 86-D.Schultz [9-B.Chubb]. HOU-63-E.Brown was injured during the play."
+    },
+    {
+      "player": "W.Marks",
+      "team": "HOU",
+      "quarter": 3,
+      "play_id": 2682,
+      "desc": "(8:42) (Shotgun) 4-W.Marks right guard to HOU 9 for 7 yards (3-D.Hamlin; 91-E.Oliver). BUF-8-T.Bernard was injured during the play."
+    },
+    {
+      "player": "K.Kroeger",
+      "team": "HOU",
+      "quarter": 3,
+      "play_id": 2704,
+      "desc": "(8:10) 38-K.Kroeger punts 44 yards to BUF 47, Center-40-A.Brinkman. 19-G.Dortch to HOU 43 for 10 yards (6-R.Blankenship; 35-J.Hansen). HOU-33-J.Hummel was injured during the play."
+    },
+    {
+      "player": "D.Knox",
+      "team": "BUF",
+      "quarter": 4,
+      "play_id": 3998,
+      "desc": "(2:34) 17-J.Allen pass short left to 88-D.Knox to BUF 26 for 7 yards (3-K.Lassiter; 39-H.To'oTo'o). HOU-39-H.To'oTo'o was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

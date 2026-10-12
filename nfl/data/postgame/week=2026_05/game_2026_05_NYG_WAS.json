@@ -1,0 +1,121 @@
+{
+  "game_id": "2026_05_NYG_WAS",
+  "week": 5,
+  "home": "WAS",
+  "away": "NYG",
+  "final_score": {
+    "home": 27,
+    "away": 27
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 27,
+        "away": 27
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 27,
+        "away": 27
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": true
+  },
+  "volume": {
+    "home": {
+      "plays": 61,
+      "dropbacks": 31,
+      "rush_attempts": 30,
+      "pass_rate": 0.5081967213114754,
+      "run_rate": 0.4918032786885246,
+      "pass_oe": -2.000793144106865
+    },
+    "away": {
+      "plays": 84,
+      "dropbacks": 56,
+      "rush_attempts": 28,
+      "pass_rate": 0.6666666666666666,
+      "run_rate": 0.33333333333333337,
+      "pass_oe": 4.570603336800229
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 2,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 0
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.McCarthy",
+      "team": "NYG",
+      "quarter": 1,
+      "play_id": 344,
+      "desc": "(9:47) 18-J.McCarthy pass short middle to 17-D.Mooney to 50 for -5 yards (97-T.Settle). NYG-17-D.Mooney was injured during the play. PENALTY on WAS-92-D.Armstrong, Face Mask, 15 yards, enforced at WAS"
+    },
+    {
+      "player": "J.Winston",
+      "team": "NYG",
+      "quarter": 2,
+      "play_id": 1571,
+      "desc": "(5:55) (Shotgun) 19-J.Winston sacked at NYG 25 for -13 yards (94-D.Payne). WAS-39-J.Reaves was injured during the play."
+    },
+    {
+      "player": "J.McCarthy",
+      "team": "NYG",
+      "quarter": 3,
+      "play_id": 2756,
+      "desc": "(6:42) (Shotgun) 18-J.McCarthy right end pushed ob at WAS 47 for 2 yards (4-F.Luvu). NYG-72-J.Eluemunor was injured during the play."
+    },
+    {
+      "player": "D.Zvada",
+      "team": "WAS",
+      "quarter": 3,
+      "play_id": 3120,
+      "desc": "34-D.Zvada kicks 64 yards from NYG 35 to WAS 1. 11-L.McCaffrey to WAS 19 for 18 yards (12-C.Hood). NYG-12-C.Hood was injured during the play."
+    },
+    {
+      "player": "A.Williams",
+      "team": "WAS",
+      "quarter": 4,
+      "play_id": 3292,
+      "desc": "(13:00) (Shotgun) 5-J.Daniels pass short right to 14-A.Williams to NYG 34 for 8 yards (52-A.Reese) [22-A.Phillips]. NYG-27-T.Nubin was injured during the play."
+    },
+    {
+      "player": "T.Johnson",
+      "team": "NYG",
+      "quarter": 4,
+      "play_id": 4059,
+      "desc": "(1:56) (Shotgun) 19-J.Winston pass short left to 84-T.Johnson to WAS 17 for 14 yards (20-Q.Martin). WAS-99-J.Kinlaw was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

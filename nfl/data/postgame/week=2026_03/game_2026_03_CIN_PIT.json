@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_03_CIN_PIT",
+  "week": 3,
+  "home": "PIT",
+  "away": "CIN",
+  "final_score": {
+    "home": 30,
+    "away": 27
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 30,
+        "away": 27
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 30,
+        "away": 27
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 59,
+      "dropbacks": 36,
+      "rush_attempts": 23,
+      "pass_rate": 0.6101694915254238,
+      "run_rate": 0.38983050847457623,
+      "pass_oe": 6.207424553774171
+    },
+    "away": {
+      "plays": 56,
+      "dropbacks": 38,
+      "rush_attempts": 18,
+      "pass_rate": 0.6785714285714286,
+      "run_rate": 0.3214285714285714,
+      "pass_oe": 5.090953383529396
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Warren",
+      "team": "PIT",
+      "quarter": 1,
+      "play_id": 754,
+      "desc": "(2:55) (No Huddle, Shotgun) 30-J.Warren up the middle to CIN 31 for 4 yards (93-J.Allen; 44-D.Knight). CIN-44-D.Knight was injured during the play."
+    },
+    {
+      "player": "M.Gesicki",
+      "team": "CIN",
+      "quarter": 2,
+      "play_id": 1078,
+      "desc": "(12:13) (Shotgun) 9-J.Burrow pass short left to 88-M.Gesicki to PIT 32 for 6 yards (35-J.Dean; 6-P.Queen). CIN-88-M.Gesicki was injured during the play."
+    },
+    {
+      "player": "C.Boswell",
+      "team": "CIN",
+      "quarter": 3,
+      "play_id": 2836,
+      "desc": "9-C.Boswell kicks 56 yards from PIT 35 to CIN 9. 12-K.Williams to CIN 36 for 27 yards (28-R.Spears-Jennings; 44-C.Bruener). CIN-34-S.Perine was injured during the play."
+    },
+    {
+      "player": "C.Johnston",
+      "team": "PIT",
+      "quarter": 4,
+      "play_id": 3280,
+      "desc": "(11:04) 19-C.Johnston punts 51 yards to CIN 13, Center-46-C.Kuntz. 12-K.Williams MUFFS catch, touched at CIN 16, RECOVERED by PIT-15-B.Skowronek at CIN 14. PIT-26-B.Echols was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

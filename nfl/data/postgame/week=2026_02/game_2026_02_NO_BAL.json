@@ -1,0 +1,86 @@
+{
+  "game_id": "2026_02_NO_BAL",
+  "week": 2,
+  "home": "BAL",
+  "away": "NO",
+  "final_score": {
+    "home": 17,
+    "away": 24
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 163,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 17,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 163,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 17,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 56,
+      "dropbacks": 34,
+      "rush_attempts": 22,
+      "pass_rate": 0.6071428571428571,
+      "run_rate": 0.3928571428571429,
+      "pass_oe": 4.7727787180950765
+    },
+    "away": {
+      "plays": 65,
+      "dropbacks": 37,
+      "rush_attempts": 28,
+      "pass_rate": 0.5692307692307692,
+      "run_rate": 0.4307692307692308,
+      "pass_oe": 1.8060528085781977
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "T.Shough",
+      "team": "NO",
+      "quarter": 3,
+      "play_id": 2828,
+      "desc": "(2:20) (Shotgun) 6-T.Shough sacked at NO 9 for -8 yards (15-M.Green). NO-71-K.Banks was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

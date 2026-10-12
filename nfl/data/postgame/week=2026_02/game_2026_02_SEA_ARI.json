@@ -1,0 +1,78 @@
+{
+  "game_id": "2026_02_SEA_ARI",
+  "week": 2,
+  "home": "ARI",
+  "away": "SEA",
+  "final_score": {
+    "home": 7,
+    "away": 31
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 157,
+      "plays_trailing_14": 157,
+      "halftime_score": {
+        "home": 7,
+        "away": 31
+      },
+      "garbage_time_plays": 27
+    },
+    "away": {
+      "plays_leading_7": 157,
+      "plays_leading_14": 157,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 7,
+        "away": 31
+      },
+      "garbage_time_plays": 27
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 47,
+      "dropbacks": 30,
+      "rush_attempts": 17,
+      "pass_rate": 0.6382978723404256,
+      "run_rate": 0.36170212765957444,
+      "pass_oe": 6.179121404886246
+    },
+    "away": {
+      "plays": 67,
+      "dropbacks": 27,
+      "rush_attempts": 40,
+      "pass_rate": 0.40298507462686567,
+      "run_rate": 0.5970149253731343,
+      "pass_oe": -10.034678503870964
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 1,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 6,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [],
+  "ftn": "covered"
+}

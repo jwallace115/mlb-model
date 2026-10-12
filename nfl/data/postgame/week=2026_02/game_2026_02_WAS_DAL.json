@@ -1,0 +1,142 @@
+{
+  "game_id": "2026_02_WAS_DAL",
+  "week": 2,
+  "home": "DAL",
+  "away": "WAS",
+  "final_score": {
+    "home": 37,
+    "away": 20
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 166,
+      "plays_leading_14": 166,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 37,
+        "away": 20
+      },
+      "garbage_time_plays": 18
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 166,
+      "plays_trailing_14": 166,
+      "halftime_score": {
+        "home": 37,
+        "away": 20
+      },
+      "garbage_time_plays": 18
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 54,
+      "dropbacks": 33,
+      "rush_attempts": 21,
+      "pass_rate": 0.6111111111111112,
+      "run_rate": 0.38888888888888884,
+      "pass_oe": 15.491787032647567
+    },
+    "away": {
+      "plays": 67,
+      "dropbacks": 35,
+      "rush_attempts": 32,
+      "pass_rate": 0.5223880597014925,
+      "run_rate": 0.4776119402985075,
+      "pass_oe": -2.637550822446044
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "R.White",
+      "team": "WAS",
+      "quarter": 1,
+      "play_id": 398,
+      "desc": "(8:48) (Shotgun) 5-J.Daniels pass short right to 1-R.White to WAS 26 for 2 yards (55-J.Barham). DAL-1-P.Locke was injured during the play."
+    },
+    {
+      "player": "R.White",
+      "team": "WAS",
+      "quarter": 2,
+      "play_id": 1082,
+      "desc": "(13:40) (Shotgun) 5-J.Daniels pass short left to 1-R.White to DAL 9 for 13 yards (53-D.Winters; 55-J.Barham). DAL-53-D.Winters was injured during the play."
+    },
+    {
+      "player": "T.McLaurin",
+      "team": "WAS",
+      "quarter": 2,
+      "play_id": 2145,
+      "desc": "(:12) (Shotgun) 5-J.Daniels pass incomplete short middle to 17-T.McLaurin (2-C.Durant). DAL-2-C.Durant was injured during the play."
+    },
+    {
+      "player": "J.Daniels",
+      "team": "WAS",
+      "quarter": 2,
+      "play_id": 2215,
+      "desc": "(:03) 5-J.Daniels pass incomplete short right [90-J.Bullard]. WAS-5-J.Daniels was injured during the play."
+    },
+    {
+      "player": "R.White",
+      "team": "WAS",
+      "quarter": 4,
+      "play_id": 3535,
+      "desc": "(11:32) (Shotgun) 8-M.Mariota pass short middle to 1-R.White to DAL 43 for 6 yards (53-D.Winters). WAS-74-B.Coleman was injured during the play."
+    },
+    {
+      "player": "D.Prescott",
+      "team": "DAL",
+      "quarter": 4,
+      "play_id": 3810,
+      "desc": "(7:41) 4-D.Prescott up the middle to DAL 29 for 3 yards (97-T.Settle). DAL-87-J.Ferguson was injured during the play."
+    },
+    {
+      "player": "J.Williams",
+      "team": "DAL",
+      "quarter": 4,
+      "play_id": 3835,
+      "desc": "(7:23) 33-J.Williams right end to WAS 46 for 25 yards (25-N.Cross). WAS-99-J.Kinlaw was injured during the play. PENALTY on DAL-3-G.Pickens, Offensive Holding, 10 yards, enforced at DAL 31."
+    },
+    {
+      "player": "J.Williams",
+      "team": "DAL",
+      "quarter": 4,
+      "play_id": 3930,
+      "desc": "(5:40) 33-J.Williams left guard to WAS 29 for 9 yards (54-L.Chenal; 39-J.Reaves). WAS-99-J.Kinlaw was injured during the play. ** Injury Update: WAS-99-J.Kinlaw has returned to the game."
+    },
+    {
+      "player": "K.Allen",
+      "team": "WAS",
+      "quarter": 4,
+      "play_id": 4117,
+      "desc": "(2:23) 31-K.Allen left tackle to DAL 41 for 9 yards (53-D.Winters). WAS-76-S.Cosmi was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

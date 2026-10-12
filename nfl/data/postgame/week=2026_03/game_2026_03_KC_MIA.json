@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_03_KC_MIA",
+  "week": 3,
+  "home": "MIA",
+  "away": "KC",
+  "final_score": {
+    "home": 10,
+    "away": 24
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 158,
+      "plays_trailing_14": 158,
+      "halftime_score": {
+        "home": 10,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 158,
+      "plays_leading_14": 158,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 10,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 67,
+      "dropbacks": 36,
+      "rush_attempts": 31,
+      "pass_rate": 0.5373134328358209,
+      "run_rate": 0.4626865671641791,
+      "pass_oe": -5.56446762934123
+    },
+    "away": {
+      "plays": 49,
+      "dropbacks": 24,
+      "rush_attempts": 25,
+      "pass_rate": 0.4897959183673469,
+      "run_rate": 0.5102040816326531,
+      "pass_oe": 6.408558678455078
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 2,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "D.Achane",
+      "team": "MIA",
+      "quarter": 1,
+      "play_id": 317,
+      "desc": "(10:42) (Shotgun) 28-D.Achane left end to MIA 33 for 11 yards (17-A.Gilman). MIA-28-D.Achane was injured during the play."
+    },
+    {
+      "player": "O.Gordon",
+      "team": "MIA",
+      "quarter": 2,
+      "play_id": 1812,
+      "desc": "(1:08) (Shotgun) 2-M.Willis pass short left to 0-O.Gordon to KC 47 for -5 yards (5-M.Delane). MIA-0-O.Gordon was injured during the play."
+    },
+    {
+      "player": "O.Gordon",
+      "team": "MIA",
+      "quarter": 3,
+      "play_id": 2576,
+      "desc": "(5:22) 0-O.Gordon right guard to MIA 45 for 1 yard (23-D.Tranquill). KC-38-L.Sneed was injured during the play."
+    },
+    {
+      "player": "O.Gordon",
+      "team": "MIA",
+      "quarter": 3,
+      "play_id": 2656,
+      "desc": "(3:51) (Shotgun) 0-O.Gordon up the middle to KC 42 for 1 yard (99-P.Woods; 21-J.Hicks). MIA-0-O.Gordon was injured during the play. ** Injury Update: KC-38-L.Sneed has returned to the game."
+    }
+  ],
+  "ftn": "covered"
+}

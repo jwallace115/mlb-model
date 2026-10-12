@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_02_PIT_NE",
+  "week": 2,
+  "home": "NE",
+  "away": "PIT",
+  "final_score": {
+    "home": 20,
+    "away": 3
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 165,
+      "plays_leading_14": 165,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 20,
+        "away": 3
+      },
+      "garbage_time_plays": 36
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 165,
+      "plays_trailing_14": 165,
+      "halftime_score": {
+        "home": 20,
+        "away": 3
+      },
+      "garbage_time_plays": 36
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 53,
+      "dropbacks": 25,
+      "rush_attempts": 28,
+      "pass_rate": 0.4716981132075472,
+      "run_rate": 0.5283018867924528,
+      "pass_oe": 5.737824073799376
+    },
+    "away": {
+      "plays": 67,
+      "dropbacks": 44,
+      "rush_attempts": 23,
+      "pass_rate": 0.6567164179104478,
+      "run_rate": 0.34328358208955223,
+      "pass_oe": -1.1877390210117613
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 1,
+  "red_zone": {
+    "home": {
+      "trips": 2,
+      "touchdowns": 0
+    },
+    "away": {
+      "trips": 1,
+      "touchdowns": 0
+    }
+  },
+  "injuries": [
+    {
+      "player": "R.Stevenson",
+      "team": "NE",
+      "quarter": 1,
+      "play_id": 818,
+      "desc": "(3:03) 38-R.Stevenson left tackle to PIT 42 for 2 yards (3-J.Brisker; 97-C.Heyward). PIT-3-J.Brisker was injured during the play."
+    },
+    {
+      "player": "D.Maye",
+      "team": "NE",
+      "quarter": 1,
+      "play_id": 931,
+      "desc": "(1:08) (Shotgun) 10-D.Maye sacked at PIT 14 for -3 yards (sack split by 99-D.Harmon and 90-T.Watt). NE-71-M.Onwenu was injured during the play."
+    },
+    {
+      "player": "P.Freiermuth",
+      "team": "PIT",
+      "quarter": 2,
+      "play_id": 2005,
+      "desc": "(:18) (No Huddle, Shotgun) 8-A.Rodgers pass short left to 88-P.Freiermuth to NE 47 for 9 yards (4-C.Woodson). NE-25-M.Jones was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

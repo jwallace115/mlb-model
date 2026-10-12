@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_01_DAL_NYG",
+  "week": 1,
+  "home": "NYG",
+  "away": "DAL",
+  "final_score": {
+    "home": 28,
+    "away": 20
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 165,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 28,
+        "away": 20
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 165,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 28,
+        "away": 20
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 68,
+      "dropbacks": 31,
+      "rush_attempts": 37,
+      "pass_rate": 0.45588235294117646,
+      "run_rate": 0.5441176470588236,
+      "pass_oe": -4.335326848156525
+    },
+    "away": {
+      "plays": 52,
+      "dropbacks": 34,
+      "rush_attempts": 18,
+      "pass_rate": 0.6538461538461539,
+      "run_rate": 0.34615384615384615,
+      "pass_oe": 2.2889000588449937
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 4
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Dart",
+      "team": "NYG",
+      "quarter": 3,
+      "play_id": 3018,
+      "desc": "(:37) 6-J.Dart scrambles right end ran ob at NYG 37 for 2 yards (55-J.Barham). DAL-24-M.Hooker was injured during the play."
+    },
+    {
+      "player": "C.Skattebo",
+      "team": "NYG",
+      "quarter": 4,
+      "play_id": 3200,
+      "desc": "(12:04) 44-C.Skattebo left end to DAL 31 for 7 yards (2-C.Durant). FUMBLES (2-C.Durant), and recovers at DAL 29. 44-C.Skattebo to DAL 28 for 1 yard (6-D.Ezeiruaku). DAL-0-D.Overshown was injured durin"
+    },
+    {
+      "player": "J.Williams",
+      "team": "DAL",
+      "quarter": 4,
+      "play_id": 3498,
+      "desc": "(7:15) (No Huddle, Shotgun) 4-D.Prescott pass short right to 33-J.Williams pushed ob at DAL 31 for 5 yards (20-G.Newsome). NYG-20-G.Newsome was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_02_CLE_TB",
+  "week": 2,
+  "home": "TB",
+  "away": "CLE",
+  "final_score": {
+    "home": 19,
+    "away": 23
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 19,
+        "away": 23
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 19,
+        "away": 23
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 62,
+      "dropbacks": 37,
+      "rush_attempts": 25,
+      "pass_rate": 0.5967741935483871,
+      "run_rate": 0.4032258064516129,
+      "pass_oe": -0.94560818030284
+    },
+    "away": {
+      "plays": 55,
+      "dropbacks": 32,
+      "rush_attempts": 23,
+      "pass_rate": 0.5818181818181818,
+      "run_rate": 0.4181818181818182,
+      "pass_oe": 3.970789377178465
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "T.Hurst",
+      "team": "TB",
+      "quarter": 4,
+      "play_id": 3449,
+      "desc": "(10:08) (Shotgun) 6-B.Mayfield pass incomplete short right to 17-T.Hurst (26-M.Harden) [8-J.Verse]. CLE-7-T.Campbell was injured during the play."
+    },
+    {
+      "player": "C.Otton",
+      "team": "TB",
+      "quarter": 4,
+      "play_id": 3931,
+      "desc": "(3:44) 6-B.Mayfield pass short right to 88-C.Otton to CLE 47 for 4 yards (5-Q.Williams). CLE-33-R.Hickman was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

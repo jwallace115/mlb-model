@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_03_HOU_IND",
+  "week": 3,
+  "home": "IND",
+  "away": "HOU",
+  "final_score": {
+    "home": 19,
+    "away": 17
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 19,
+        "away": 17
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 19,
+        "away": 17
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 71,
+      "dropbacks": 40,
+      "rush_attempts": 31,
+      "pass_rate": 0.5633802816901409,
+      "run_rate": 0.43661971830985913,
+      "pass_oe": 0.7923477972057503
+    },
+    "away": {
+      "plays": 51,
+      "dropbacks": 30,
+      "rush_attempts": 21,
+      "pass_rate": 0.5882352941176471,
+      "run_rate": 0.4117647058823529,
+      "pass_oe": -5.726329954685988
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 2,
+      "total": 3
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "F.Moreau",
+      "team": "HOU",
+      "quarter": 1,
+      "play_id": 293,
+      "desc": "(11:17) 7-C.Stroud pass incomplete short right to 87-F.Moreau [97-L.Latu]. IND-97-L.Latu was injured during the play."
+    },
+    {
+      "player": "T.Warren",
+      "team": "IND",
+      "quarter": 3,
+      "play_id": 2761,
+      "desc": "(6:16) (Shotgun) 17-D.Jones pass short middle to 84-T.Warren to IND 38 for 8 yards (6-R.Blankenship; 0-A.Al-Shaair). HOU-0-A.Al-Shaair was injured during the play."
+    },
+    {
+      "player": "J.Wayne",
+      "team": "HOU",
+      "quarter": 4,
+      "play_id": 3317,
+      "desc": "(9:48) (Shotgun) 7-C.Stroud pass deep middle to 17-J.Wayne to IND 12 for 20 yards (1-A.Gardner). IND-1-A.Gardner was injured during the play."
+    },
+    {
+      "player": "J.Taylor",
+      "team": "IND",
+      "quarter": 4,
+      "play_id": 3530,
+      "desc": "(5:22) 28-J.Taylor right tackle to HOU 39 for no gain (72-T.Togiai). HOU-97-M.Edwards was injured during the play."
+    },
+    {
+      "player": "X.Hutchinson",
+      "team": "HOU",
+      "quarter": 4,
+      "play_id": 3634,
+      "desc": "(3:21) (Shotgun) 7-C.Stroud pass deep right to 19-X.Hutchinson to IND 27 for 17 yards (7-C.Ward). HOU-19-X.Hutchinson was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

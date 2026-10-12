@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_02_PHI_TEN",
+  "week": 2,
+  "home": "TEN",
+  "away": "PHI",
+  "final_score": {
+    "home": 20,
+    "away": 24
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 20,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 20,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 51,
+      "dropbacks": 22,
+      "rush_attempts": 29,
+      "pass_rate": 0.43137254901960786,
+      "run_rate": 0.5686274509803921,
+      "pass_oe": -19.752450990227032
+    },
+    "away": {
+      "plays": 72,
+      "dropbacks": 40,
+      "rush_attempts": 32,
+      "pass_rate": 0.5555555555555556,
+      "run_rate": 0.4444444444444444,
+      "pass_oe": -11.235799601203517
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 2,
+      "fumbles_lost": 0,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "S.Barkley",
+      "team": "PHI",
+      "quarter": 1,
+      "play_id": 164,
+      "desc": "(13:35) 26-S.Barkley left guard to PHI 28 for no gain (98-J.Simmons). PHI-26-S.Barkley was injured during the play."
+    },
+    {
+      "player": "T.Spears",
+      "team": "TEN",
+      "quarter": 4,
+      "play_id": 3676,
+      "desc": "(2:44) (Shotgun) 2-T.Spears left end pushed ob at PHI 9 for 27 yards (58-J.Hunt). PHI-58-J.Hunt was injured during the play."
+    },
+    {
+      "player": "J.Slye",
+      "team": "TEN",
+      "quarter": 4,
+      "play_id": 3793,
+      "desc": "(2:00) 6-J.Slye 33 yard field goal is GOOD, Center-46-M.Cox, Holder-3-T.Townsend. PHI-98-J.Carter was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

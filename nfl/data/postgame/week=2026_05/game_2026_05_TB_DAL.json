@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_05_TB_DAL",
+  "week": 5,
+  "home": "DAL",
+  "away": "TB",
+  "final_score": {
+    "home": 16,
+    "away": 24
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 172,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 16,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 172,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 16,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 56,
+      "dropbacks": 43,
+      "rush_attempts": 13,
+      "pass_rate": 0.7678571428571429,
+      "run_rate": 0.2321428571428571,
+      "pass_oe": 2.786434909044686
+    },
+    "away": {
+      "plays": 65,
+      "dropbacks": 26,
+      "rush_attempts": 39,
+      "pass_rate": 0.4,
+      "run_rate": 0.6,
+      "pass_oe": -4.4403941343937605
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 2,
+      "fumbles_lost": 1,
+      "total": 3
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 2,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "C.Otton",
+      "team": "TB",
+      "quarter": 3,
+      "play_id": 2784,
+      "desc": "(6:01) 10-J.Daniels pass short right to 88-C.Otton to DAL 16 for 11 yards (50-S.James; 28-S.Revel). DAL-28-S.Revel was injured during the play."
+    },
+    {
+      "player": "B.Irving",
+      "team": "TB",
+      "quarter": 4,
+      "play_id": 3829,
+      "desc": "(5:26) 7-B.Irving up the middle to TB 31 for 1 yard (92-Q.Williams; 23-A.Speed). DAL-55-J.Barham was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

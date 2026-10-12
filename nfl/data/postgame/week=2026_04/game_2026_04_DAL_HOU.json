@@ -1,0 +1,86 @@
+{
+  "game_id": "2026_04_DAL_HOU",
+  "week": 4,
+  "home": "HOU",
+  "away": "DAL",
+  "final_score": {
+    "home": 30,
+    "away": 34
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 30,
+        "away": 34
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 30,
+        "away": 34
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 52,
+      "dropbacks": 33,
+      "rush_attempts": 19,
+      "pass_rate": 0.6346153846153846,
+      "run_rate": 0.3653846153846154,
+      "pass_oe": -1.2198727648213226
+    },
+    "away": {
+      "plays": 73,
+      "dropbacks": 48,
+      "rush_attempts": 25,
+      "pass_rate": 0.6575342465753424,
+      "run_rate": 0.34246575342465757,
+      "pass_oe": 1.5033361048270495
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 4
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Williams",
+      "team": "DAL",
+      "quarter": 3,
+      "play_id": 2711,
+      "desc": "(6:54) 33-J.Williams up the middle for 1 yard, TOUCHDOWN. HOU-95-J.Crumedy was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

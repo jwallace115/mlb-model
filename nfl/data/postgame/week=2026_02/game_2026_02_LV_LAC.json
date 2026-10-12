@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_02_LV_LAC",
+  "week": 2,
+  "home": "LAC",
+  "away": "LV",
+  "final_score": {
+    "home": 14,
+    "away": 26
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 177,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 14,
+        "away": 26
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 177,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 14,
+        "away": 26
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 62,
+      "dropbacks": 30,
+      "rush_attempts": 32,
+      "pass_rate": 0.4838709677419355,
+      "run_rate": 0.5161290322580645,
+      "pass_oe": -18.673626300114304
+    },
+    "away": {
+      "plays": 60,
+      "dropbacks": 31,
+      "rush_attempts": 29,
+      "pass_rate": 0.5166666666666667,
+      "run_rate": 0.4833333333333333,
+      "pass_oe": -3.2082890967528024
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 2,
+      "fumbles_lost": 1,
+      "total": 3
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 2,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "O.Hampton",
+      "team": "LAC",
+      "quarter": 2,
+      "play_id": 989,
+      "desc": "(15:00) (Shotgun) 8-O.Hampton up the middle to LAC 6 for 3 yards (7-Q.Walker). LAC-83-D.Njoku was injured during the play."
+    },
+    {
+      "player": "M.Mayer",
+      "team": "LV",
+      "quarter": 3,
+      "play_id": 2953,
+      "desc": "(1:29) (Shotgun) 8-K.Cousins pass short right to 87-M.Mayer to LV 36 for 5 yards (43-T.Dye; 3-D.James). LAC-94-D.Tomlinson was injured during the play."
+    },
+    {
+      "player": "A.Jeanty",
+      "team": "LV",
+      "quarter": 4,
+      "play_id": 3819,
+      "desc": "(3:42) 2-A.Jeanty right guard to LAC 13 for 3 yards (3-D.James; 93-T.Tart). LV-2-A.Jeanty was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

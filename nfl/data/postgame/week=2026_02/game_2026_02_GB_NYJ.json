@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_02_GB_NYJ",
+  "week": 2,
+  "home": "NYJ",
+  "away": "GB",
+  "final_score": {
+    "home": 17,
+    "away": 20
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 17,
+        "away": 20
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 17,
+        "away": 20
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": true
+  },
+  "volume": {
+    "home": {
+      "plays": 72,
+      "dropbacks": 45,
+      "rush_attempts": 27,
+      "pass_rate": 0.625,
+      "run_rate": 0.375,
+      "pass_oe": 4.453241008601776
+    },
+    "away": {
+      "plays": 50,
+      "dropbacks": 32,
+      "rush_attempts": 18,
+      "pass_rate": 0.64,
+      "run_rate": 0.36,
+      "pass_oe": -2.2317618889323736
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Reed",
+      "team": "GB",
+      "quarter": 1,
+      "play_id": 92,
+      "desc": "(14:09) (Shotgun) 10-J.Love pass short left to 11-J.Reed to GB 32 for 4 yards (56-D.Davis). GB-11-J.Reed was injured during the play."
+    },
+    {
+      "player": "M.Golden",
+      "team": "GB",
+      "quarter": 1,
+      "play_id": 124,
+      "desc": "(13:37) (Shotgun) 10-J.Love pass incomplete short middle to 0-M.Golden. GB-50-Z.Bako-Bewele was injured during the play."
+    },
+    {
+      "player": "J.Sherwood",
+      "team": "NYJ",
+      "quarter": 5,
+      "play_id": 4596,
+      "desc": "(7:41) 44-J.Sherwood reported in as eligible. 14-A.McNamara punts 56 yards to GB 22, Center-42-T.Hennessy. 23-S.Moore to GB 34 for 12 yards (42-T.Hennessy; 50-T.Reeder). NYJ-82-A.Smith was injured dur"
+    }
+  ],
+  "ftn": "covered"
+}
