@@ -118,3 +118,78 @@ This inverts the prior expectation (Cowork gave higher priors for totals effects
    If it replicates on 2024, it is genuine. If not, it is overfit to 2021-23.
 
 **Do NOT run anything on 2024.** That is IE-2, after review.
+
+---
+
+## CORRECTED RESULTS (IE-D10, 2026-10-12)
+
+Corrected formula: `margin_resid = margin - spread_line` (|r| = 0.015).
+Corrected home cover: `margin > spread_line` (|r| = 0.03).
+Same four pre-registrations, unchanged.
+
+### Per-family LOSO t-statistics (200-draw null control)
+
+| Family | Margin t | Margin null (mean +/- sd) | Total t | Total null (mean +/- sd) | n | Per-season sign (margin) |
+|--------|----------|---------------------------|---------|--------------------------|---|--------------------------|
+| F1 Injury trajectory | -0.518 | -0.506 +/- 0.930 | -0.083 | -0.710 +/- 1.009 | 815 | +/-/+ |
+| F2 Pass protection | -1.225 | -0.900 +/- 1.015 | 0.915 | -0.756 +/- 1.042 | 767 | +/-/- |
+| F3 Scheme tendency | 0.523 | -0.278 +/- 1.183 | 1.188 | -0.036 +/- 1.269 | 511 | N/A/+/- |
+| F4 Rushing RYOE | 0.202 | -0.645 +/- 1.098 | 0.937 | -0.628 +/- 1.115 | 761 | +/+/+ |
+| F5 Receiving separation | -0.486 | -0.503 +/- 1.162 | -1.814 | -0.280 +/- 1.370 | 764 | -/+/- |
+| F6 Snap-count shift | -1.130 | -0.567 +/- 1.177 | -0.127 | -0.434 +/- 1.241 | 632 | -/+/- |
+| F7 Referee crew | -0.860 | 0.118 +/- 0.840 | 1.956 | 0.473 +/- 0.972 | 718 | +/-/- |
+| F8 Depth chart | 0.125 | -0.624 +/- 1.302 | **-2.507** | -0.290 +/- 1.354 | 719 | +/-/+ |
+| **F9 Rest/surface/weather** | **-3.041** | -0.490 +/- 1.297 | 0.466 | -0.474 +/- 1.307 | 815 | +/+/- |
+| F10 Line movement | -1.573 | -0.649 +/- 1.039 | -1.113 | -0.580 +/- 1.032 | 568 | -/-/+ |
+
+**Bold** = |t| >= 2.5.
+
+### All-family ridge (corrected)
+
+| Model | LOSO log-loss (home-cover) | Best alpha |
+|-------|---------------------------|------------|
+| Close-only (predict 0.5) | 0.693147 | N/A |
+| All-family ridge | 0.700075 | 1000 |
+| **Improvement** | **-0.006928** (WORSE) | |
+
+The all-family ridge is WORSE than the 50% baseline on home-cover prediction.
+The families add no value for predicting ATS outcomes.
+
+| Model (totals MSE) | LOSO MSE | Best alpha |
+|---------------------|----------|------------|
+| Baseline (predict close) | 174.59 | N/A |
+| All-family ridge | **155.42** | 1000 |
+| **Improvement** | **19.17** | |
+
+The totals ridge improvement is real and unchanged (totals didn't use margin_resid).
+
+Margin ridge by season (alpha=1000):
+- 2021: r=-0.016, p=0.798 (no signal)
+- 2022: r=-0.050, p=0.414 (no signal)
+- 2023: r=+0.044, p=0.466 (no signal)
+
+### Pre-registration outcomes (IE-D10)
+
+| ID | Prediction | Result | Comment |
+|----|-----------|--------|---------|
+| P-IE1-1 | No family |t| >= 2.5 on margin | **FALSIFIED** | F9 t=-3.041. But only ONE family exceeds 2.5, not five. The old "strong margin signal" (F2/F4/F5) was entirely the spread proxy — all collapse to |t| < 1.3. F9 (rest/surface/weather) is the sole survivor, and its per-season signs flip (+/+/-), which is not robust. |
+| P-IE1-2 | F7 or F9 reaches t >= 2 on totals | **FALSIFIED** | F7 t=1.956, F9 t=0.466. Same as before — totals were not affected by the margin bug. |
+| P-IE1-3 | F8 |t| < 1 on both | **FALSIFIED** (partial) | F8 margin t=0.125 (< 1, confirmed). F8 total t=-2.507 (> 1, falsified). On margin, the leak IS gone. On totals, F8 persists — this was not caused by the margin bug. |
+| P-IE1-4 | Ridge log-loss improvement < 0.003 | **CONFIRMED** | Improvement = -0.007 (negative — the ridge is WORSE than the baseline). The old 0.019 improvement was entirely the spread proxy. |
+
+### Interpretation (corrected)
+
+The margin signal is DEAD. No family predicts margin residual after the formula correction.
+The old results (F2 t=4.9, F4 t=4.2) were entirely spurious — caused by regressing on
+`margin + spread_line`, which is 69% correlated with spread_line. The families that
+appeared strong were simply correlated with team quality.
+
+On totals, there are two signals that survived the correction:
+1. F8 (depth chart) t=-2.507: roster instability predicts lower totals. Per-season signs
+   are inconsistent (+/-/+). This needs the 2024 OOS test.
+2. F7 (referee) t=1.956: just below 2. Consistent with the Cowork prior (25% on totals).
+
+F9 (rest/surface/weather) shows t=-3.04 on margin but the sign flips in 2023 and this
+family has high dimensionality (5 features) — likely overfitting. Not trustworthy.
+
+**Do NOT run anything on 2024.** That is IE-2, after review.

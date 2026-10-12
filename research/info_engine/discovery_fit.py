@@ -211,9 +211,9 @@ for alpha in alphas:
         if len(train) < 20 or len(test) < 10:
             continue
         X_train = train[all_cols].fillna(0).values
-        y_train = (train["margin"] > -train["spread_line"]).astype(int).values
+        y_train = (train["margin"] > train["spread_line"]).astype(int).values  # IE-D8: corrected
         X_test = test[all_cols].fillna(0).values
-        y_test = (test["margin"] > -test["spread_line"]).astype(int).values
+        y_test = (test["margin"] > test["spread_line"]).astype(int).values  # IE-D8: corrected
 
         # LogReg with all family features
         lr = LogisticRegression(C=1/alpha, max_iter=1000, solver="lbfgs")
@@ -239,7 +239,7 @@ for held_out in SEASONS:
     test = ft[ft["season"] == held_out].dropna(subset=["margin_resid"])
     if len(test) < 10:
         continue
-    y_test = (test["margin"] > -test["spread_line"]).astype(int).values
+    y_test = (test["margin"] > test["spread_line"]).astype(int).values  # IE-D8: corrected
     # Close-only model: predict 0.5 for everyone (no information beyond close)
     close_losses.append(log_loss(y_test, np.full(len(y_test), 0.5)))
 

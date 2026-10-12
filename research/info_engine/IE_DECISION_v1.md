@@ -172,5 +172,25 @@ from cumulative season average. Proven to vary: std > 0 across all seasons.
 Table rebuilt: 815 rows, 66 columns. All gates pass (correlation, zero-variance,
 known-game assertions, truncation 6/6, negative control 4/4).
 
+## IE-D10 — Corrected discovery fit (2026-10-12)
+
+Same four pre-registrations re-run on the corrected table.
+
+**MARGIN: NO SIGNAL.** The old F2 t=4.9 → t=-1.2. F4 t=4.2 → t=0.2. F5 t=3.5 → t=-0.5.
+All were spread proxies. Only F9 (rest/weather) exceeds |t|=2.5 (t=-3.04), but its
+per-season sign flips (+/+/-) and it has 5 features — likely overfitting.
+
+All-family ridge on home-cover: log-loss 0.700 vs 0.693 baseline (**WORSE by 0.007**).
+The families add negative value for ATS prediction.
+
+**TOTALS: weak signal preserved.** F8 t=-2.507, F7 t=1.956. Ridge MSE 155.4 vs 174.6
+(+19.2 improvement). These targets didn't use margin_resid, so they're unaffected.
+
+Pre-registration outcomes: P-IE1-1 FALSIFIED (F9 only), P-IE1-2 FALSIFIED (unchanged),
+P-IE1-3 partially confirmed (margin OK, total not), P-IE1-4 **CONFIRMED** (improvement
+is -0.007, well below 0.003).
+
+Frozen spec v2 written. v1 superseded.
+
 Output: `nfl/data/info/spread_opens_2021_23.parquet` (815 rows, 21 cols).
 This feeds F10 spread half in IE-2; nothing in IE-1 fits on it.
