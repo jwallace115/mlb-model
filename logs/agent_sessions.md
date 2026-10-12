@@ -4231,3 +4231,93 @@ Also: make refresh_inputs fail per team, not per report.
 ### SHAs
 - origin/research/ie0: 9a801c7b84fa8f810ac37e87de92227ab0000390
 - main branch check: confirmed main at session start
+
+## 2026-10-12T05:00Z  claude-code (IE-1: register priors, feature table, discovery fit, spread opens)
+
+### Environment
+- `which python3`: `/Library/Frameworks/Python.framework/Versions/3.13/bin/python3`
+- `nflreadpy.__version__`: 0.1.5 (site-packages, NOT --user install)
+- `nfl_data_py`: 0.3.3 present but NOT used per standing rule
+- `pip3 list --user | grep nfl`: empty — no packages installed on framework Python by IE-0 or IE-1
+- SSL_CERT_FILE workaround required (same as IE-0)
+- `git -C ~/mlb-model branch --show-current` → main (confirmed at session start)
+- nflreadpy returns Polars DataFrames (not pandas)
+
+### Item 1 — IE-D4: register priors, tighten families (833d95da4)
+- RETURNED: Cowork priors SHA256 verified OK (6598caa...baee10)
+- PASTED: 10 family priors + IE-0/IE-0b/IE-0c verbatim into FEATURE_FAMILIES_v1.md
+- EDITED: F8 as-of → "week N-1 only; week N never read" (A2 usage leak)
+- EDITED: F2-F6 aggregation fixed: snap-weighted mean, >=20 snaps, by position group
+- EDITED: F7 scored on totals primary, margin secondary
+- CREATED: research/cross_ai/claude_prediction_ledger.md (IE-0b, IE-0c entries)
+- FIXED: wk1-3 → wk1-6 in OPENING_LINE_COVERAGE_v1.md
+
+### Item 2 — IE-D5: feature table + truncation test (f446b13db)
+- RETURNED: 815 games, 56 columns, seasons {2021, 2022, 2023}
+- RETURNED: F3 (FTN) has 0/272 coverage for 2021 (source starts 2022). All other families 82-100%.
+- RETURNED: F10 (line movement) 67-74% coverage per season
+- RETURNED: officials game_id format (old NFL) differs from nflverse game_id — fixed by matching via season+week+referee_name
+- RETURNED: truncation-equivalence test 6/6 PASS
+- RETURNED: negative control 4/4 PASS (future data correctly excluded)
+- MEANS: as-of filters are working correctly; no future-week leakage detected
+
+### Item 3 — IE-D6: discovery fit, pre-registered (615d88bff)
+- PRE-REGISTERED: P-IE1-1 through P-IE1-4 written BEFORE fitting
+- RETURNED: all 4 pre-registrations FALSIFIED (stronger signal than expected)
+  - P-IE1-1: F2 t=4.9, F4 t=4.2, F5 t=3.5 on margin (predicted none > 2.5)
+  - P-IE1-2: F7 t=2.0, F9 t=0.5 on totals (predicted >= 2; F7 barely misses)
+  - P-IE1-3: F8 margin t=2.4, total t=-2.5 (predicted |t| < 1)
+  - P-IE1-4: log-loss improvement 0.019 (predicted < 0.003)
+- MEANS: discovery signal is strong on margin and weak on totals — inverts priors.
+  But this is 2021-23 LOSO, not OOS. The 2024 clean look is the actual test.
+- RETURNED: null control (200 draws, shuffle within week) — F6 null mean systematically
+  negative (-0.905), indicating the LOSO structure creates correlated errors for low-variance
+  features. Real signals (F2/F4/F5) are 4-5 SD above their null means.
+- FROZEN: 21 features, alpha=100 (margin), alpha=1000 (totals). SHA256 hashes recorded.
+
+### Item 4 — IE-D7: spread opens (ca492ce48) — BLOCKED
+- ATTEMPTED: curl download of aussportsbetting.com/historical_data/nfl.xlsx
+- RETURNED: 403 Forbidden (Cloudflare blocks programmatic access)
+- MEANS: Jeff must download manually in browser to ~/mlb-model-ie0/nfl/data/info/aussportsbetting_nfl.xlsx
+- NOT DONE: reconciliation, spread_opens_2021_23.parquet, coverage report
+
+### NOT DONE
+- Spread opens download (Item 4): blocked by Cloudflare
+- Reconciliation of closing spread/total with nflverse (depends on Item 4)
+- F2-F6 snap-weighted aggregation: the build_feature_table.py uses simple team-level means
+  (not the snap-weighted positional aggregation specified in IE-D4). The registry says
+  "snap-weighted mean over players with >= 20 snaps by position group" but the code uses
+  pfr/ngs team-level averages directly. This is a DISCREPANCY between spec and implementation.
+  The code is simpler and defensible but does not match the registered spec exactly.
+- No code was run on 2024 data (correct per standing rules)
+
+### UNVERIFIED
+- **Which sources are revised after publication** (the thing that silently breaks PIT):
+  - injuries: YES, by definition (reports update Wed-Sat). date_modified tracks this.
+    The as-of filter uses date_modified, so PIT is correctly handled.
+  - depth_charts: YES (updated multiple times/week). No timestamp. The N-1-only rule
+    mitigates but does not eliminate — even week N-1 may be revised within that week.
+    This is UNVERIFIABLE from this Mac: no prior weekly pull exists to diff against.
+  - rosters_weekly: YES (status changes within week). Same issue as depth_charts.
+  - PBP: YES (EPA corrections post-season). Not used directly in families.
+  - NGS (F4, F5): UNVERIFIABLE. NGS may revise within-season data. No prior pull to diff.
+    For each family, this means the 2021-23 features may have been computed from revised
+    data that was not available at game time. The discovery signal could be inflated.
+  - PFR (F2): UNVERIFIABLE. PFR corrects sack/pressure attribution. Same concern.
+  - FTN (F3): date_pulled is a batch timestamp (2024-09-06 for all 2023 data). The actual
+    charting revision timeline is unknown. Same concern as NGS/PFR.
+  - officials (F7): assignment data is unlikely to be revised post-game.
+  - schedules (F9, targets): scores are filled post-game; pre-game fields (rest, surface,
+    roof, referee) should be stable after Tuesday. Spread_line/total_line are CLOSING
+    (verified in IE-D1). These are used as targets, not features, so revision timing
+    does not affect the feature PIT — it affects whether the target is the real close.
+
+- **Whether the 2021-23 pulls today differ from what was available in-week:** This is the
+  core question for every WEEK-KEYED source. For F2/F4/F5/F6, the nflverse data pulled
+  today for week 5 of 2022 may incorporate corrections that were not available at game time
+  in week 6 of 2022. This makes the discovery signal look cleaner than it would be live.
+  The magnitude of this effect is unknown and UNVERIFIABLE without a contemporaneous archive.
+
+### SHAs
+- origin/research/ie0: ca492ce485971a76eb813960d59bc5791b0c200d
+- main branch check: confirmed main at session start
