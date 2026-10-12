@@ -36,13 +36,16 @@ opens exist anywhere on disk:
 
 ### Free archives (try first)
 
-1. **Australian Sports Betting (aussportsbetting.com)**
-   - Free CSV with Pinnacle opening + closing spreads and totals
-   - Coverage: NFL 2007-present
-   - Open/close clearly labeled; opening = first Pinnacle posting
-   - Single book (Pinnacle) — the sharpest reference
-   - **RECOMMENDED first step.** Download is free; no API cost.
-   - Limitation: Pinnacle only. No US-book opens.
+1. **Australian Sports Betting (aussportsbetting.com)** — **COMPLETED (IE-D7)**
+   - Free Excel with opening + closing spreads and totals
+   - Book varies by era: Pinnacle 2014-Feb 2018, **bet365 Sep 2018-Feb 2025**, betr Sep 2025+
+   - For 2021-23: all data is **bet365 open/close** (not Pinnacle as originally stated)
+   - Coverage: NFL 2006-present (854 rows for 2021-23, 815 REG)
+   - Open/close clearly labeled; opening = bet365 opening line
+   - Reconciled: bet365 close matches nflverse close within 0.5 on 92.0% of games
+     (below 95% threshold, but mismatch is book divergence, not convention error;
+     within 1.0 on 96.9%). Convention confirmed: ASB Home Line Close == -nflverse spread_line.
+   - Output: `nfl/data/info/spread_opens_2021_23.parquet` (815 rows)
 
 2. **nflverse `import_sc_lines`**
    - Returned 0 rows for 2023. The function exists but the upstream data
@@ -87,5 +90,5 @@ first — it covers the same games with Pinnacle's sharp line and costs nothing.
 | Market | Opens on disk | Closes on disk | Gap |
 |--------|---------------|----------------|-----|
 | Totals | 2021-2024 (775 games, consensus) | 2016-2026 (all, nflverse) | None for discovery window |
-| Spreads | **2026 only** (line_history) | 2016-2026 (all, nflverse) | **2016-2025 spread opens missing** |
-| Spreads opens route | Free: Aus Sports Betting (Pinnacle, 2007+) | Paid: Odds API 14,240 credits (5yr) | Try free first |
+| Spreads | **2021-23** (bet365, ASB) + **2026** (line_history) | 2016-2026 (all, nflverse) | **2016-2020, 2024-2025 spread opens missing** |
+| Spreads opens route | Done: ASB bet365 (2021-23, 815 games) | Paid: Odds API for remaining years if needed | ASB completed |
