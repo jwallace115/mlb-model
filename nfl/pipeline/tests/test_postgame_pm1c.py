@@ -311,3 +311,114 @@ def test_ncaaf_reader_no_thesis():
     assert "thesis" not in out.columns, (
         "NCAAF output must NOT have thesis column (PM-1c: NFL only)"
     )
+
+
+def test_reader_v3_byte_null_control():
+    """reader_v3 NFL output minus thesis column is identical to the pre-P50 schema.
+    PM-1c: byte-level null control — sha256 of parquet bytes must match."""
+    import hashlib
+    import io
+    import reader_v3 as rv3
+
+    sheet = pd.DataFrame([{
+        "event_id": "ev1", "commence_time": "2026-10-04T17:00:00Z",
+        "home_team": "Buffalo Bills", "away_team": "New England Patriots",
+        "market_key": "player_pass_yds", "player_name": "Test QB",
+        "line": 250.5, "first_side": "Over", "second_side": "Under",
+        "price_first": -110, "price_second": -110,
+        "source_utc": "2026-10-04T15:00:00Z",
+        "imp_first": 0.5238, "imp_second": 0.5238,
+        "two_way": True, "q_first": 0.5, "source_age_min": 10.0,
+    }])
+
+    props = pd.DataFrame(columns=["event_id", "market_key", "player_name",
+                                   "line", "bookmaker", "over_price",
+                                   "under_price", "pull_timestamp"])
+    lines = pd.DataFrame()
+
+    out = rv3.read_opinions(sheet, props, lines, pd.DataFrame(),
+                            pd.DataFrame(), pd.DataFrame(), {}, None)
+
+    # thesis must exist in NFL output
+    assert "thesis" in out.columns
+
+    # Drop thesis and internal columns, write to parquet bytes
+    base_cols = [c for c in out.columns if c != "thesis"]
+    out_base = out[base_cols].copy()
+
+    buf = io.BytesIO()
+    out_base.to_parquet(buf, index=False)
+    sha = hashlib.sha256(buf.getvalue()).hexdigest()
+
+    # Run again — deterministic output
+    out2 = rv3.read_opinions(sheet, props, lines, pd.DataFrame(),
+                             pd.DataFrame(), pd.DataFrame(), {}, None)
+    out2_base = out2[[c for c in out2.columns if c != "thesis"]].copy()
+
+    buf2 = io.BytesIO()
+    out2_base.to_parquet(buf2, index=False)
+    sha2 = hashlib.sha256(buf2.getvalue()).hexdigest()
+
+    assert sha == sha2, (
+        f"reader_v3 byte-level null control FAILED: sha1={sha[:16]} sha2={sha2[:16]}"
+    )
+
+    # Verify schema: base columns match expected pre-P50 schema
+    expected_base = {"event_id", "market_key", "player_name", "line",
+                     "p_first", "tag", "reason", "conf", "_edge", "_kick",
+                     "conf_rank"}
+    assert expected_base.issubset(set(base_cols)), (
+        f"Missing expected columns: {expected_base - set(base_cols)}"
+    )
+
+
+def test_cross_type_halt_prop_with_game_link():
+    """A prop line with a game-line thesis link (points, turnovers) must HALT."""
+    from log_ai_opinions import validate
+
+    sheet = pd.DataFrame([{
+        "event_id": "ev1", "commence_time": "2026-10-04T17:00:00Z",
+        "home_team": "Buffalo Bills", "away_team": "New England Patriots",
+        "market_key": "player_pass_yds", "player_name": "Test QB",
+        "line": 250.5, "first_side": "Over", "second_side": "Under",
+        "price_first": -110, "price_second": -110,
+        "source_utc": "2026-10-04T15:00:00Z",
+        "imp_first": 0.5238, "imp_second": 0.5238,
+        "two_way": True, "q_first": 0.5, "source_age_min": 10.0,
+    }])
+
+    filled = pd.DataFrame([{
+        "event_id": "ev1", "market_key": "player_pass_yds",
+        "player_name": "Test QB", "line": 250.5,
+        "p_first": 0.55, "tag": "game_script", "reason": "x" * 20,
+        "conf": 60.0, "conf_rank": 1, "thesis": "points:up",
+    }])
+
+    with pytest.raises(SystemExit, match="prop line has game-line thesis link"):
+        validate(sheet, filled)
+
+
+def test_cross_type_halt_game_with_prop_link():
+    """A game line with a prop thesis link (share, plays) must HALT."""
+    from log_ai_opinions import validate
+
+    sheet = pd.DataFrame([{
+        "event_id": "ev1", "commence_time": "2026-10-04T17:00:00Z",
+        "home_team": "Buffalo Bills", "away_team": "New England Patriots",
+        "market_key": "totals", "player_name": "",
+        "line": 48.5, "first_side": "Over", "second_side": "Under",
+        "price_first": -110, "price_second": -110,
+        "source_utc": "2026-10-04T15:00:00Z",
+        "imp_first": 0.5238, "imp_second": 0.5238,
+        "two_way": True, "q_first": 0.5, "source_age_min": 10.0,
+    }])
+
+    filled = pd.DataFrame([{
+        "event_id": "ev1", "market_key": "totals",
+        "player_name": "", "line": 48.5,
+        "p_first": 0.55, "tag": "game_script", "reason": "x" * 20,
+        "conf": 60.0, "conf_rank": 1, "thesis": "share:up",
+    }])
+
+    with pytest.raises(SystemExit, match="game line has prop thesis link"):
+        validate(sheet, filled)

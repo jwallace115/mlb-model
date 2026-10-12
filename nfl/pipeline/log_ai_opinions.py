@@ -289,6 +289,25 @@ def validate(sheet, filled):
                         f"HALT: invalid thesis claim '{claim}' on "
                         f"event_id={row['event_id']}, market_key={row['market_key']}; "
                         f"must be link:dir with link in {sorted(_THESIS_LINKS)} and dir in {sorted(_THESIS_DIRS)}")
+            # PM-1c: cross-type HALT — prop line with game link or game line with prop link
+            _PROP_LINKS = {"plays", "pass_rate", "run_rate", "share", "efficiency", "availability"}
+            _GAME_LINKS = {"points", "turnovers"}
+            mk = row["market_key"]
+            is_prop = mk.startswith("player_")
+            is_game = mk in ("h2h", "spreads", "totals")
+            for claim in claims:
+                link = claim.split(":")[0].strip()
+                if link == "price" or link == "script":
+                    continue  # script and price are valid on both
+                if is_prop and link in _GAME_LINKS:
+                    raise SystemExit(
+                        f"HALT: prop line has game-line thesis link '{link}' "
+                        f"(event_id={row['event_id']}, market_key={mk}, "
+                        f"player_name={row.get('player_name', '')})")
+                if is_game and link in _PROP_LINKS:
+                    raise SystemExit(
+                        f"HALT: game line has prop thesis link '{link}' "
+                        f"(event_id={row['event_id']}, market_key={mk})")
     # ── conf / conf_rank validation ──
     m["conf"] = pd.to_numeric(m["conf"], errors="coerce")
     m["conf_rank"] = pd.to_numeric(m["conf_rank"], errors="coerce").astype("Int64")
