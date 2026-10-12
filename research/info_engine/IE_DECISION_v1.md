@@ -32,3 +32,35 @@ Cowork priors pasted verbatim from `~/mlb-model/_cowork_patches/ie1/COWORK_PRIOR
 (SHA256: 6598caa27fe792b5782d1df5cef03018761d2822a72af1561a0edb5535baee10, verified OK).
 IE-0b and IE-0c appended to `research/cross_ai/claude_prediction_ledger.md`.
 "wk1-3" typo in OPENING_LINE_COVERAGE_v1.md corrected to "wk1-6".
+
+## IE-D5 — As-of feature table, 2021-23 (2026-10-12)
+
+**Feature table:** 815 games (REG only), 56 columns (12 core + 44 family features).
+Seasons: 2021, 2022, 2023. No 2024+ target data read.
+
+**Row counts per family per season:**
+
+| Family | Key column | 2021 | 2022 | 2023 | Notes |
+|--------|-----------|------|------|------|-------|
+| F1 Injury trajectory | f1_inj_trajectory_diff | 272/272 | 271/271 | 272/272 | Full coverage |
+| F2 Pass protection | f2_pressure_diff | 256/272 | 255/271 | 256/272 | Missing wk1 (no prior) |
+| F3 Scheme tendency | f3_home_motion_rate | **0/272** | 255/271 | 256/272 | **FTN starts 2022; 2021 entirely missing** |
+| F4 Rushing RYOE | f4_ryoe_diff | 252/272 | 254/271 | 255/272 | NGS weekly, missing early weeks |
+| F5 Receiving separation | f5_home_separation | 264/272 | 262/271 | 264/272 | Similar |
+| F6 Snap-count shift | f6_home_snap_shift | 224/272 | 217/271 | 223/272 | Requires 2+ prior weeks |
+| F7 Referee crew | f7_ref_avg_total | 239/272 | 239/271 | 240/272 | Missing wk1-2 + rare refs |
+| F8 Depth chart | f8_home_dc_changes | 240/272 | 239/271 | 240/272 | Needs wk N-1 and N-2 |
+| F9 Rest/surface/weather | f9_wind | 272/272 | 271/271 | 272/272 | Full (wind=0 for dome) |
+| F10 Line movement | f10_line_move | 182/272 | 185/271 | 201/272 | Line movement coverage varies |
+
+**Coverage holes:**
+- F3 (FTN charting) has zero coverage for 2021. FTN data starts 2022. F3 discovery
+  uses only 2022-23 (2 seasons instead of 3). Noted, not dropped — the source exists
+  and the as-of rule is clean.
+- F10 coverage is 67-74% because `nfl_line_movement.parquet` doesn't cover all games.
+
+**Sources dropped:** None. All 10 families have at least partial coverage.
+
+**Truncation-equivalence test:** 6/6 (season, week) pairs PASSED.
+Negative control: 4/4 PASSED (future-week data correctly excluded or detected).
+Target season assertion: verified {2021, 2022, 2023}, no duplicates.
