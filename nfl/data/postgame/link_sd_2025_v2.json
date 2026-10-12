@@ -1,0 +1,125 @@
+{
+  "version": "v2",
+  "generator_sha": "c11f4e5aa4f3",
+  "pbp_sha": "fa1cbdf30271",
+  "plays": {
+    "sd": 0.1513,
+    "n": 480,
+    "dropped": 0,
+    "level": "team"
+  },
+  "pass_rate": {
+    "sd": 0.1999,
+    "n": 480,
+    "dropped": 0,
+    "level": "team"
+  },
+  "run_rate": {
+    "sd": 0.2607,
+    "n": 480,
+    "dropped": 0,
+    "level": "team"
+  },
+  "share": {
+    "sd": 0.595,
+    "n": 3387,
+    "dropped": 0,
+    "level": "player"
+  },
+  "catch_rate": {
+    "sd": 0.3655,
+    "n": 2983,
+    "dropped": 294,
+    "level": "player"
+  },
+  "yards_per_target": {
+    "sd": 0.7509,
+    "n": 2877,
+    "dropped": 360,
+    "level": "player"
+  },
+  "carry_share": {
+    "sd": 0.6054,
+    "n": 1650,
+    "dropped": 0,
+    "level": "player"
+  },
+  "yards_per_carry": {
+    "sd": 0.7168,
+    "n": 1484,
+    "dropped": 108,
+    "level": "player"
+  },
+  "qb_share": {
+    "sd": 0.616,
+    "n": 486,
+    "dropped": 0,
+    "level": "player"
+  },
+  "completion_rate": {
+    "sd": 0.1863,
+    "n": 470,
+    "dropped": 5,
+    "level": "player"
+  },
+  "yards_per_attempt": {
+    "sd": 0.3119,
+    "n": 469,
+    "dropped": 5,
+    "level": "player"
+  },
+  "margin_vs_spread": {
+    "sd": 12.2804,
+    "n": 272
+  },
+  "total_vs_line": {
+    "sd": 13.1604,
+    "n": 272
+  },
+  "_raw_sd": {
+    "plays": {
+      "sd": 8.6307,
+      "n": 544
+    },
+    "pass_rate": {
+      "sd": 0.1044,
+      "n": 544
+    },
+    "run_rate": {
+      "sd": 0.1044,
+      "n": 544
+    },
+    "share": {
+      "sd": 0.0811,
+      "n": 4320
+    },
+    "catch_rate": {
+      "sd": 0.3185,
+      "n": 4320
+    },
+    "yards_per_target": {
+      "sd": 6.1428,
+      "n": 4320
+    },
+    "carry_share": {
+      "sd": 0.2178,
+      "n": 2254
+    },
+    "yards_per_carry": {
+      "sd": 4.0816,
+      "n": 2254
+    },
+    "qb_share": {
+      "sd": 0.31,
+      "n": 656
+    },
+    "completion_rate": {
+      "sd": 0.1879,
+      "n": 656
+    },
+    "yards_per_attempt": {
+      "sd": 3.4329,
+      "n": 656
+    }
+  }
+}

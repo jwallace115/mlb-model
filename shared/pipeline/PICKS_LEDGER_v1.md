@@ -899,3 +899,190 @@ prop line in the sheet.
 
 Leak control: only games whose kickoff < logged_utc are included.
 `--rebuild-layer prop_history` supported via the layer_fn dict.
+
+## P48 — Post-game data archive: nflverse PBP, snap counts, FTN charting (2026-10-11)
+
+**Feeds and paths** (all under `data/results_archive/nfl/`):
+- PBP: one file per FINAL game, all 372 columns.
+  `pbp/season=2026/pbp_<game_id>_<UTC>.parquet`
+- Snap counts: `snap_counts_2026_<UTC>.parquet`
+- FTN charting: `ftn_charting_2026_<UTC>.parquet` (graceful if unavailable)
+- Pull log: `_postgame_pulls.jsonl` (one line per feed per run)
+
+**Final-game test:** a game is final if its last play (sorted by play_id) has `desc`
+containing "END GAME" (case-insensitive). Confirmed: all 65 completed 2026 games
+(weeks 1–5, 1 game in week 5) pass this test on nflverse PBP.
+
+**Hash-skip rule:** sha256 of the parquet bytes. If the newest existing file for a
+game matches, the game is logged as "unchanged" and not written. A changed slice
+(stat correction) writes a NEW file with a fresh timestamp; old files are kept.
+Never overwrite. Confirmed: idempotent second run writes 0 files.
+
+**Builder column list** (HALT if any are missing from nflverse PBP):
+game_id, home_team, away_team, week, season, play_id, play_type, desc, qtr,
+score_differential, home_score, away_score, posteam, defteam, pass_attempt,
+rush_attempt, sack, complete_pass, yards_gained, passing_yards, receiving_yards,
+rushing_yards, interception, fumble, fumble_lost, touchdown, passer_player_id,
+passer_player_name, receiver_player_id, receiver_player_name, rusher_player_id,
+rusher_player_name, yardline_100, result.
+
+**Measured sizes** (VM run, 2026 weeks 1–5, 65 final games):
+- Per-game PBP: 289 KB – 308 KB (all well under 2 MB limit)
+- Total PBP: 19.0 MB
+- Snap counts: 85 KB (6,064 rows)
+- FTN charting: 150 KB (10,996 rows)
+- Max resident: 331 MB, wall time: 6.8 s
+
+**Push path:** `push_daemon.sh` (cron `*/30 * * * *`) runs `git add -A` on
+`/root/mlb-model/` → commits → pushes to origin/main. Item 4's postgame cron
+writes to the same tree; files reach origin within 30 min.
+
+**Env overrides:** `MLB_REPO_ROOT`, `RESULTS_ARCHIVE_DIR` (same pattern as
+`pull_nfl_player_stats.py`, P45).
+
+## P49 — Post-game builder: game sheets + pick verdicts (2026-10-11)
+
+**Outputs** (per week, under `nfl/data/postgame/week=2026_WW/`):
+- `game_<game_id>.json` — game sheet (final score, script, volume, turnovers,
+  red zone, injuries, absences, FTN drops)
+- `verdicts.parquet` — one row per graded ai_nfl/sim_nfl ledger pick
+
+**Output root:** `POSTGAME_OUT_DIR` env override; default `nfl/data/postgame`.
+
+**Chain definitions** (market → link product):
+- receptions: plays × pass_rate × share(targets/dropbacks) × catch_rate
+- receiving_yards: plays × pass_rate × share × yards_per_target
+- rush attempts: plays × run_rate × carry_share
+- rush yards: plays × run_rate × carry_share × yards_per_carry
+- pass attempts: plays × pass_rate × qb_share
+- completions: plays × pass_rate × qb_share × completion_rate
+- pass yards: plays × pass_rate × qb_share × yards_per_attempt
+- Other markets: chain "none" (game-sheet context only).
+
+**Decomposition identity:** ln(A/L) = ln(E/L) + Σ ln(link_actual/link_prior),
+asserted to 1e-9 on every row where all terms are finite. Tested in fixture.
+
+**primary_link:** link term with largest |value|.
+
+**why_code_auto (props):** first rule that fires:
+AVAILABILITY → ROLE_SHIFT → SCRIPT → EFFICIENCY → SHARE_OTHER → BOOK_VS_PRIOR → UNDEFINED.
+
+**why_code_auto (game lines):** first rule that fires:
+TURNOVERS (margin ≥ 2) → NON_OFFENSIVE_TD → GARBAGE → OT → SCRIPT (|Δ| ≥ 1 SD) → NOISE.
+SDs from `link_sd_2025.json` (2025 regular season, generator committed).
+
+**Garbage-time definition:** Q4 plays with |score_differential| ≥ 17 (stated choice).
+
+**Thesis tag_map (P49):** role_change/usage_trend/injury_news → share;
+game_script → pass_rate (pass), run_rate (rush), points (totals), script (spread/ML);
+weather/matchup → efficiency (props), points (totals);
+price_vs_sharp/line_move → price; sim_v1/no_view → none.
+Direction: Over/first side → up, Under → down.
+
+**Thesis z-score threshold:** 0.5 (stated choice, not tuned).
+held if z ≥ +0.5 in claimed direction, failed if ≤ −0.5, flat otherwise.
+price → held if CLV > 0 at Hard Rock.
+
+**Owners in scope:** ai_nfl and sim_nfl only. jeff/member rows never enter output.
+
+**Known overlap with `eng/fwd6-parser-fix`:** that branch adds 19 lines to
+`log_ai_opinions.py`. This build touches only `validate()` (item 3) and one
+SPORTS key. The later merge should be small.
+
+## P50 — Thesis on every NFL freeze (2026-10-11)
+
+**Grammar:** 1–3 claims `link:dir` joined by `;`.
+Links: plays, pass_rate, run_rate, share, efficiency, availability, script,
+points, turnovers, price. Directions: up, down.
+
+**Requirement:** `SPORTS["nfl"]["thesis_required"] = True`. Every NFL view line
+on a new freeze must carry a valid thesis. `no_view` lines may leave it empty.
+NCAAF: False (unchanged). NHL: False (unchanged).
+
+**reader_v3 constant:** `thesis: "price:up"` on every view line. Its only claim
+is price vs sharp. reader_sha256: `c1abf61a72ab20cc...` (changes from v1).
+
+**reader_method_v2.md:** v1 + one new section "7. Thesis" (grammar, examples,
+enforcement, post-game grading). v2 starts from the date of this commit. Judged
+only on slates after its date per N62.
+
+**packet.sh:** does not reference reader_method directly; the Cowork reader
+receives its instructions from the Claude project docs. No change needed.
+
+**build_postgame.py:** when the freeze row has `thesis`, thesis_source = "freeze"
+and it overrides tag_map.
+
+## P51 — Weekly WHY summary, lessons file, VM cron (2026-10-11)
+
+**why_summary.md contents** (per week, written by `--week W`):
+- Graded rows by market × owner × result
+- why_code_auto for losses and wins
+- Thesis verdicts by source
+
+**FLAGGED FOR THE TUESDAY READ** (no cap; count printed):
+- Every graded pick ranked 1–20 in its freeze
+- 10 largest-|ln(A/L)| losses
+- Every thesis-failed WIN and thesis-held LOSS
+- Every AVAILABILITY and ROLE_SHIFT
+- Each with its game-sheet path and frozen reason text
+
+**LESSONS_nfl.md scaffold:** header + format only (id, date_written, claim,
+pick_ids, recurrence, teams, status, first_slate). Cowork writes the lessons.
+
+**VM cron line:** daily 11:00Z (7 AM ET), after the 10:10Z grader and 10:30Z CLV:
+```
+0 11 * * * cd /root/mlb-model && venv/bin/python3 shared/pipeline/pull_nfl_postgame_data.py && venv/bin/python3 nfl/pipeline/build_postgame.py --all-final >> /root/logs/postgame_nfl.log 2>&1
+```
+
+**Log path:** `/root/logs/postgame_nfl.log`.
+
+---
+
+### PM-1d amendments to P48–P51 (2026-10-12)
+
+**P49 amended — thesis z-score SD (PM-1d Item 1):**
+The thesis z used `term / raw_SD`, which mixed units: a plays thesis
+term of 0.08 divided by raw plays SD 8.63 gave z=0.009 (functionally
+zero), while a share thesis term of 0.21 / raw share SD 0.081 = 2.6
+(huge). Every held/failed/flat — including the PM-1c game-thesis held
+rate 45.5% and PM-6 41.2% — was computed on invalid z values.
+Fixed: `link_sd_2025_v2.json` holds SD of `ln(actual/prior)`, the same
+unitless log-ratio as the chain term. share SD: 0.0811 → 0.5950.
+
+**P49 amended — spread sign (PM-1d Item 1):**
+`build_postgame_link_sd.py` computed `margin + spread_line` (SD=18.14).
+nflverse `spread_line` is the home team's line (negative = favoured).
+`corr(margin, spread_line)` is +0.504, confirming the correct residual
+is `margin − spread_line` (SD=12.28). Same sign class as P16.
+
+**P49 amended — teammates_out (PM-1d Item 2):**
+Old: "absent from PBP" (no target/carry) → out. A WR with 40 snaps
+and 0 targets was marked out, causing ROLE_SHIFT to fire 314 times.
+Fixed: 0 offensive snaps in game-week snap-counts archive = out.
+A receiver who plays but is not targeted is NOT out.
+
+**P49 amended — official actuals (PM-1d Item 2):**
+A = the official nflverse player_stats value, joined by gsis_id and
+week. PBP is used only for chain links. If PBP and official differ
+(laterals, stat corrections), both are carried and flagged
+pbp_vs_official; PBP never decides W/L.
+
+**PM-1c Deebo claim retracted (PM-1d Item 2):**
+PM-1c session log claimed "the ledger is wrong on Deebo". False.
+Week 3 SF PBP: "B.Purdy pass short left to M.Evans for 2 yards.
+Lateral to D.Samuel for 80 yards, TOUCHDOWN." nflverse player_stats
+week 3: Deebo Samuel Sr. 0 receptions, 80 receiving yards. The
+ledger's L on Under 40.5 rec_yds is CORRECT (80 > 40.5 → Over wins).
+
+**P50 amended — thesis-required fixture update (PM-1d Item 3):**
+Pre-P50 test fixtures in test_ai_opinions_conf_l2.py, test_ai_opinions_n59.py,
+and test_log_ai_opinions_fwd1c.py lacked a `thesis` column. With
+`thesis_required=True`, these 17 tests HALTed before reaching their
+assertions. Fixed: `_filled()` helpers now set `thesis="price:up"` on
+view lines. thesis_required enforcement still fires on missing thesis
+(verified by test_nfl_view_line_without_thesis_halts).
+
+**P49 amended — chain identity residual (PM-1d Item 1):**
+Defect 7: link values were rounded before terms were computed, causing
+identity residual of 1.85e-4. Fixed: unrounded values used throughout.
+Test asserts residual ≤ 1e-9.
