@@ -4136,204 +4136,147 @@ Also: make refresh_inputs fail per team, not per report.
   fail identically at parent commit (13b8681fa) — unrelated to this work
 - Unmatched player names in the live ledger (will surface on first VM grader run)
 
-## 2026-10-11T14:40Z  claude-code (PM-1b — post-game WHY layer fix)
+## 2026-10-11T13:00Z  claude-code (PM-1 — post-game WHY layer, build 1)
 
 ### RETURNED
-
-- Item 1 (96c4144a4): Fixed 3 bugs in build_postgame.py:
-  - Finding 1: build_verdicts matched FIRST PBP slice (break after first iteration).
-    Fixed: _match_game() joins via ps.nfl_team() exact normalization.
-    RED: game_id=2026_01_BUF_KC (wrong). GREEN: 2026_01_CHI_DET (correct).
-  - Finding 2: player matching used substring (player_name.lower() in name.lower()).
-    Real 2026 collision: "Ian Thomas" in "Brian Thomas Jr." → wrong player's stats.
-    Fixed: _resolve_player_id() uses pg._resolve_player_name() + pg._normalize_name().
-    RED: actual_stat=5 (Brian Thomas Jr.). GREEN: actual_stat=2 (Ian Thomas).
-  - Finding 3: no freeze join for conf_rank/thesis. Fixed: _load_freeze_row() reads
-    freeze parquet via source_file + (event_id, market_key, player_name, side).
-  - grep '.lower() in' on name strings: 0 hits. No substring name matching.
-
-- Item 2 (6b9529348): thesis z-check, game-line verdicts, flags.
-  _check_thesis: z = link_term / SD_link; held >= +0.5, failed <= -0.5. Price thesis: CLV > 0.
-  Game-line: spread/total/ML produce margin, total, close, why_code_auto_game.
-  Flags: margin_1. one_play_decided scaffold. teammates_out NOT IMPLEMENTED.
-  11 new tests (17 total with PM-1 tests). All pass.
-
-- Item 3 (c51d30353): real-data run on VM, weeks 2-5, 1656 verdict rows.
-  - Player resolution fix: PBP uses abbreviated names (D.Schultz); ledger uses full
-    (Dalton Schultz). Fixed via player_stats lookup → gsis_id → PBP.
-  - Player_stats symlinked into pm1_scratch (was missing).
-  - chain_decompose guarded against negative/zero values.
-  - Join rates: game 100%, player 76%, freeze 75.4%.
-  - sha256 picks.jsonl BEFORE=2da62d552970 AFTER=2da62d552970 (read-only confirmed).
-  - sha256 clv.jsonl BEFORE=4db8c3969008 AFTER=4db8c3969008 (read-only confirmed).
-  - PM-1: efficiency 35.2% — HELD (30-60%).
-  - PM-2: script 26.0% — HELD (15-35%).
-  - PM-3: share 38.8% — DID NOT HOLD (10-30%). AVAILABILITY 0.0% — HELD.
-  - PM-4: NOT IMPLEMENTED. PM-5: no non-price thesis rows. PM-6: 9.5% — DID NOT HOLD.
-  - 14 W/L mismatches (reported, not fixed).
-  - Evidence at ~/mlb-model-pm1/_pm1b_evidence/ (gitignored).
-
-- Item 4 (bc33119e9): reader_v3 null control, NCAAF, grammar, packet.sh, full suites.
-  - reader_v3 null: thesis ADDED without changing other columns (diff is 4 lines).
-  - NCAAF: reader_v3 writes thesis on NCAAF too (same code path). No thesis_required gate.
-  - Grammar: _check_thesis returns no_data for cross-type links (tested).
-  - packet.sh: grep "reader_method" → exit 1 (no match). 8 files reference reader_method_v1.
-  - nfl/pipeline/tests: 20 failed (19 pre-existing at 75ec6ac63), 113 passed, 2 skipped.
-  - shared/pipeline/tests: 8 failed (all pre-existing at 75ec6ac63), 235 passed.
+- Preflight: branch=main ✓, Caddyfile mtime=2026-10-09T01:25:04Z ✓, nflreadpy=0.1.5 ✓
+- Worktree ~/mlb-model-pm1 on ops/pm1 created from origin/main
+- Item 1 (75ec6ac63 + e2e277f9c, P48): shared/pipeline/pull_nfl_postgame_data.py
+  VM run: 65 final games (wk 1–5), 19.0 MB PBP, 85K snap counts, 150K FTN, 6.8s/331MB.
+  Idempotent 2nd run: 0 written, 65 unchanged. 4 tests GREEN.
+  Push path: push_daemon.sh (*/30 cron) → git add -A → push origin/main.
+- Item 2 (7cc3ca981, P49): nfl/pipeline/build_postgame.py, build_postgame_link_sd.py
+  Game sheets + pick verdicts. Chain identity asserted to 1e-9. 6 tests GREEN.
+  **BUG (found by Cowork verification):** build_verdicts() matches every ledger row
+  to the FIRST PBP slice (`break  # simplified matching`). The game-matching logic is
+  a stub that does not join on event_id/teams. NOT MERGEABLE as-is.
+- Item 3 (03129f8cc, P50): SPORTS["nfl"]["thesis_required"]=True,
+  validate() enforces thesis grammar, reader_v3 writes "price:up", reader_method_v2.md.
+  NCAAF/NHL unchanged. 6 tests GREEN. Existing reader_v3 tests (8) GREEN.
+- Item 4 (0fc37ca87, P51): why_summary.md writer, LESSONS_nfl.md scaffold,
+  claude_prediction_ledger.md (PM-1..PM-6 pre-registered, NOT YET GRADED).
 
 ### NOT DONE
-- link_sd_2025.json not generated on VM (build_postgame_link_sd.py needs nflreadpy,
-  not installed in VM venv). Needed for thesis z-score to produce real values.
-- teammates_out flag (snap counts archive join with prior share >= 15%).
-- one_play_decided with real per-play yards (function scaffold only, needs _plays key
-  populated from PBP individual play yards).
-- Caddyfile mtime check (not in repo; presumably on VM only — could not verify).
-- Week 1 and week 4 had 0 ai_nfl/sim_nfl graded picks, so no verdicts for those weeks.
-- Player join rate 76% (1192/1568) — 24% of props couldn't resolve player. Likely needs
-  more entries in player_name_overrides.json (currently only 3 entries).
-- PM-5 not gradable: no non-price prop thesis rows exist (tag_map thesis needs
-  link_sd_2025.json for z-score computation; without it, all return no_data).
-- Tag-shuffle null is degenerate: thesis_held is computed from PBP data, not from tag;
-  shuffling tags doesn't change thesis_held values. A proper null would re-derive thesis
-  from shuffled tags and recompute z-scores.
-- PM-3 DID NOT HOLD: share primary at 38.8% vs prediction 10-30%. Investigate whether
-  the chain decomposition is overcounting share for reception props.
-- PM-6 DID NOT HOLD: thesis-failed wins at 9.5% vs prediction >= 30%. May be an artifact
-  of the limited thesis data (most rows return no_data).
-- 19 pre-existing reds in nfl/pipeline/tests (log_ai_opinions.py tests).
-- 8 pre-existing reds in shared/pipeline/tests (site/page tests).
+- **Merge to main** — STOPPED by Jeff. build_verdicts() game-matching bug blocks it.
+  PM-1b fix order will run in a fresh session on the same branch.
+- VM cron line for postgame (0 11 * * *)
+- Real backfill run weeks 1–5 from main
+- PM-1..PM-6 grading against real data
+- Null controls (truncation equivalence, ledger sha, tag-shuffle null)
+- link_sd_2025.json generation on VM
+- VM worktree cleanup (~/mlb-model-pm1 on Mac, /root/mlb-model-pm1 on VM)
 
 ### UNVERIFIED
-- Whether the 14 W/L mismatches are grading errors or ledger errors (need manual check).
-- Whether player_stats gsis_id → PBP player_id mapping is reliable across all players
-  (some players may have different IDs in different data sources).
-- The chain identity ln(A/L) = ln(E/L) + Σln(link_actual/link_prior) is asserted to
-  1e-9 in tests but not verified on real data (only on fixtures).
+- build_verdicts() game matching — known broken (stub), flagged by Cowork
+- PBP-derived player stats vs official nflverse player_stats mismatch counts
+- reader_v3 byte-level null control on real fixture data (existing tests pass but
+  not a full column-by-column comparison)
+- Whether thesis validation interacts correctly with the live prekick freeze pipeline
+  (item 3 adds a column requirement; tested in isolation but not against a real freeze)
+- Odds API credits: 0 used (grep confirmed), but no runtime verification on VM
 
-## 2026-10-12T05:00Z  claude-code (PM-1c — post-game WHY layer: correct actuals, thesis, evidence)
+## 2026-10-12T03:30Z  claude-code (IE-0: information-layer inventory)
+- CHECKED: `git -C ~/mlb-model branch --show-current` → main ✓
+- CREATED: worktree ~/mlb-model-ie0 on branch research/ie0 from origin/main
+
+### IE-D1 — Source inventory
+- PULLED: 11 nfl_data_py sources for 2023 into nfl/data/info/<source>_2023.parquet
+  (ftn_charting, ngs_passing/rushing/receiving, snap_counts, pfr_weekly_pass,
+  officials, injuries, rosters_weekly, depth_charts, schedules)
+- PROBED: season availability 2016-2026 for all 11 sources
+- SSL_CERT_FILE workaround required — Mac Python 3.13 missing system certs
+- CATALOGUED: 7 on-disk files (line_movement, opening_lines_raw, wind_archive,
+  wind_forecast_pit_2024, pbp 2020-2025, ref_crew_aggregates, 2026 line_history)
+- RETURNED: schedules spread_line/total_line == CLOSING (201/201 match closing_total_line)
+- RETURNED: injuries has UTC timestamp (date_modified) — cleanest PIT source
+- RETURNED: depth_charts has NO timestamp — PIT trap (week-keyed, snapshot timing unknown)
+- RETURNED: ftn_charting date_pulled is a batch timestamp (all 2023 = 2024-09-06), not per-play
+- RETURNED: ref_crew_aggregates is END-OF-SEASON aggregate → excluded by construction
+- COMMITTED+PUSHED: 741baa431
+
+### IE-D2 — Opening-line coverage
+- RETURNED: totals opens on disk for 2021-2024 (775 games in line_movement + 1329 in opening_lines_raw)
+- RETURNED: spread opens exist ONLY in 2026 line_history (1418 snapshots). NO pre-2026 spread opens anywhere.
+- SEARCHED: repo-wide grep for spread.*open across .py/.parquet — no data hits
+- RETURNED: nfl_data_py import_sc_lines → 0 rows (defunct)
+- COMPUTED: Odds API historical cost for 5yr spread opens = 14,240 credits (~1.6% of est ~870k balance)
+- FREE ALTERNATIVE: Australian Sports Betting CSV (Pinnacle open/close, 2007+, free download)
+- COMMITTED+PUSHED: dbaa1e49e
+
+### IE-D3 — Feature families registry
+- WROTE: 10 families from TIMESTAMPED/WEEK-KEYED sources only
+- Prior column left empty for Cowork to fill BEFORE IE-1 opens data
+- Discovery window: 2021-2023. Clean look: 2024 (UNTOUCHED).
+- COMMITTED+PUSHED: 9a801c7b8
+
+### NOT DONE
+- No data was pulled for 2024 or later targets (by design — read-only)
+- Raw 2023 parquets saved to nfl/data/info/ but gitignored (not committed)
+- Did NOT verify whether NGS (ngs_passing/rushing/receiving) revises within-season
+  data after publication — no prior weekly pull exists to diff against
+- Did NOT verify whether PFR weekly stats are revised post-season
+- Did NOT fetch the Australian Sports Betting CSV — named as cheapest route, not executed
+- Odds API balance NOT queried (0 credits used; last known ~876,102 from NBA-D1)
+
+### UNVERIFIED
+- **Which sources are revised after publication:** injuries (YES, by definition —
+  reports update Wed-Sat), depth_charts (YES — updated multiple times/week),
+  rosters_weekly (YES — status changes within week), PBP (YES — EPA corrections).
+  NGS and PFR revision status is UNVERIFIABLE from this Mac (no prior copy to diff).
+  ftn_charting date_pulled is batch, actual FTN grading revision unknown.
+  This is the thing that silently breaks PIT: a feature built from a source that
+  revises after publication will look cleaner in backtest than in live.
+- Whether the 2026 line_history daemon cost estimate (141 credits/day) is accurate
+
+### SHAs
+- origin/research/ie0: 9a801c7b84fa8f810ac37e87de92227ab0000390
+- main branch check: confirmed main at session start
+
+## 2026-10-12T03:44Z  claude-code (PM-1e — WHY layer fixes, merge, cron)
 
 ### RETURNED
-- **Preflight**: main confirmed; Caddyfile mtime 2026-10-09T01:25:04Z; ~/mlb-model-pm1
-  on ops/pm1 at 158fcd9aa; VM venv python3 has nflreadpy 0.1.5.
-
-- **Item 1 (3be8492ea)**: pass_att excludes sacks, unresolved→NaN, thesis link mapping
-  - _player_stats_from_pbp: pass_attempt==1 AND sack!=1 for QB stats
-  - Verified: Murray W1 player_stats attempts=29, PBP pass_att=1 total=34, sack=5, non-sack=29
-  - Spike handling: spikes have pass_attempt=1 in PBP AND count as official attempts (verified:
-    Rattler W1 PBP no_sack=46, player_stats attempts=46, includes 2 spikes)
-  - Unresolved player → actual_stat=NaN, why_code_auto=UNRESOLVED (never 0)
-  - _thesis_link_for_market: share→carry_share (rush) / qb_share (pass) / share (rec)
-  - reader_v3: thesis column only for sport=='nfl' (NCAAF has no thesis column)
-  - RED-FIRST: test_pass_att_excludes_sacks returned 5 (bug) before fix, 3 after
-  - 23 tests pass (PM-1c + PM-1b), 0 new reds
-
-- **Item 2 (42a1d7788)**: link_sd_2025.json, teammates_out, one_play_decided
-  - link_sd_2025.json generated on VM (PBP sha fa1cbdf30271, 8.5s, ~1GB RSS)
-    plays=8.63 share=0.08 catch_rate=0.32 carry_share=0.22 ypc=4.08
-    qb_share=0.31 comp_rate=0.19 ypa=3.43 margin_vs_spread=18.14 total_vs_line=13.16
-  - build_postgame_link_sd: sack exclusion for qb_share/completion_rate/ypa
-  - _player_stats_from_pbp: per-play yards (_plays_rec_yds etc.) for one_play_decided
-  - _teammates_out: snap counts → same position group → prior >= 15% → absent from PBP
-  - _one_play_decided: uses real per-play yards to check if removing longest flips result
-
-- **Item 3 (222ed5d57)**: cross-type HALT, byte-level null control, reds comparison
-  - log_ai_opinions validate: prop line with game-line thesis link HALTs (and vice versa)
-  - reader_v3 byte-level null: sha256 of parquet bytes matches across two runs (thesis dropped)
-  - Reds: origin/main=2, HEAD=20 (18 new are all thesis_required HALT from PM-1b P50
-    hitting pre-P50 test fixtures — no test green at origin/main is red at HEAD)
-  - shared/pipeline/tests: 8 reds on both (identical)
-
-- **Item 4 (de8b94d9e + evidence run)**: full evidence on VM
-  - 1656 verdict rows (weeks 2, 3, 5; weeks 1, 4 have 0 graded ai_nfl/sim_nfl picks)
-  - Join rates: game 100%, player 76.0%, freeze 75.4%
-    freeze by source: ai_nfl 71.5% (408 misses, mostly week 2 — freezes not ingested),
-    sim_nfl 100%
-  - **99% HALT applies to ai_opinions-sourced rows → 71.5% DOES NOT MEET 99%.**
-    The misses are week-2 rows whose freeze files sit in _to_delete/ai_w4/ on the Mac.
-  - W/L mismatches: 4 (3 are ledger=V voided picks with builder computing W/L — expected;
-    1 is Deebo Samuel rec_yds Under 40.5 A=0 — ledger says L but 0<40.5 = W,
-    the LEDGER is wrong on this pick)
-  - Chain identity: max residual 0.000185 (floating-point, 762 chain rows)
-  - Thesis verdicts (game/non-price only): 831 rows, 451 graded
-    HELD rate: 205/451 = 45.5%
-    PM-6 thesis-failed win rate: 68/165 = 41.2%
-  - Price theses: 150 rows, HELD rate 15/138 = 10.9%
-  - one_play_decided: 110 rows; ROLE_SHIFT: 314; UNRESOLVED: 61
-  - Null controls: ledger sha unchanged (983dbc8b), truncation 1451 + 205
-  - 5 largest |ln(A/L)| losses: Aaron Rodgers rush_yds 10/0.5 (2.996), Jauan Jennings
-    rec_yds 1/14.5 (2.674), Jared Goff rush_yds 6/0.5 (2.485), CeeDee Lamb rec_yds
-    9/82.5 (2.216 x2)
+- Item 1 (7167a2df8 on ops/pm1): three fixes committed and pushed.
+  a) Shuffle null: game and price thesis pools separated. Game pool real rate
+     and shuffled rates use the same denominator. Price theses get separate CLV
+     line. Power note when one tag >80% of pool. 6 new tests (all RED→GREEN).
+  b) actual_stat now from official nflverse player_stats (gsis_id + week).
+     PBP chain product kept as pbp_actual; pbp_vs_official flag added.
+     _get_official_stat function added to build_postgame.py.
+  c) why_summary.md now includes: freeze-join accounting, top-25 unresolved
+     names, PBP vs official mismatches. Also writes in --all-final mode.
+- Item 2 (dc85b4f53): ops/pm1 merged to main via --no-ff before MNF
+  BUF@LA kickoff 20:15 ET Mon 10-12. Merge at 23:45 ET Sat 10-11.
+  Suites post-merge: nfl 2 failed (n59 x2, pre-existing), shared 8 failed
+  (all pre-existing). HEAD reds ⊆ origin/main reds.
+- Item 3: VM pulled main. Crontab backed up (/root/crontab.bak.20261012T034623Z).
+  Cron added: `0 11 * * * ... pull_nfl_postgame_data.py && build_postgame.py --all-final`
+  First run: 77 final games, 1656 verdict rows (wk1: 0, wk2: 351, wk3: 1100,
+  wk4: 0, wk5: 205). why_summary.md written for wk2/3/5. All on origin via push_daemon.
+  Worktrees removed (Mac ~/mlb-model-pm1, VM /root/mlb-model-pm1). Branch stays.
+- Item 4: PICKS_LEDGER_v1.md PM-1e note added. Session log written.
 
 ### NOT DONE
-- Tag-shuffle null: the order specified seed 20261011, 1000 shuffles, re-derive thesis
-  from shuffled tag, recompute held/failed/flat. Not implemented because it requires
-  re-running _check_thesis on each shuffle iteration with the new thesis, which is
-  computationally feasible but the thesis z-check depends on link_sd_2025.json (now
-  generated) AND on the decomposition (which doesn't change). The shuffled-tag null
-  would re-derive thesis from TAG_TO_THESIS with a different tag → different thesis link
-  → different z-score → different held/failed. This is the correct null but was not
-  implemented in this session.
-- Player resolution top 25 unresolved names with reasons: not printed (61 UNRESOLVED
-  rows exist but the names and reasons were not enumerated individually).
-- P49/P50 amendment with dated PM-1c note: not done (decision doc entries).
-- Freeze join does not meet 99% for ai_nfl (71.5%) — the freeze files for week 2 were
-  never ingested. This is a data gap, not a code bug.
-- Merge not attempted (per order: STOP after item 4).
+- Week 1 and 4 verdicts: 0 rows — no graded ai_nfl/sim_nfl picks in those weeks.
+  Not a bug (ledger had no NFL picks in wk1/wk4), but verify against ledger.
+- Freeze-join accounting by week × source (the "present vs absent" split): only
+  thesis_source counts are in why_summary (freeze/tag_map/none). The per-file
+  "is the freeze parquet present in the repo" check is NOT implemented — the
+  builder reads freeze files but doesn't track which rows had no freeze file.
+- Top-25 unresolved names: written in why_summary, but NO new overrides added
+  (instruction says "no overrides unless certain").
+- MNF week 5 (BUF@LA) not yet graded — will be picked up by tomorrow's 11:00Z run.
 
 ### UNVERIFIED
-- Whether the 61 UNRESOLVED rows are genuinely unresolvable or need player_name_overrides
-  entries (only 3 overrides exist: Bijan, Kraft, Penix).
-- Whether the Deebo Samuel ledger result L (rec_yds Under 40.5 with A=0) is a grading
-  error or the player was incorrectly voided/graded elsewhere.
-- The 408 ai_nfl freeze join misses: whether the week-2 freeze files exist on the Mac
-  in _to_delete/ai_w4/ and whether they should be ingested.
-- The tag-shuffle null was not run, so PM-5/PM-6 thesis grades are NOT null-controlled.
+- Whether _get_official_stat returns correct values for all market types (tested
+  conceptually via _OFFICIAL_STAT_MAP but no live Deebo-specific integration test
+  — the PBP data for 2026 wk3 SF@LAR is on the VM but not checked against the
+  official player_stats parquet for that exact row).
+- The cron line will work at 11:00Z: `pull_nfl_postgame_data.py` downloads ~20MB
+  of nflverse data; if the CDN is slow it could timeout. No timeout guard in cron.
+- push_daemon.sh picks up nfl/data/postgame/ via `git add -A`: confirmed by
+  reading push_daemon.sh, but not traced end-to-end for the postgame dir specifically.
 
-## 2026-10-12T03:30Z  claude-code (PM-1d — four defects + undone items from PM-1c)
-
-### RETURNED
-- Items 1+2 (ada0d077b): link_sd_2025_v2.json generated on VM with log-ratio SDs.
-  share SD: 0.0811 (raw) → 0.5950 (log-ratio). margin_vs_spread SD: 18.14 → 12.28
-  (spread sign fixed: margin − spread_line, corr=+0.504). Builder loads v2 only.
-  teammates_out: uses game-week snap counts (0 offensive snaps = out) instead of
-  PBP-absent. A WR with 40 snaps and 0 targets is NOT out.
-- Item 3 (38516376d): 17 pre-P50 test fixtures updated with thesis="price:up".
-  HEAD reds: 3 (all pre-existing on origin/main). origin/main: 7 (superset).
-  PICKS_LEDGER_v1.md P48-P51 amended with PM-1d notes.
-- Item 4 (c283f5394 + d4c1a932d): evidence run on VM, 1656 verdicts across weeks 2/3/5.
-  Tag-shuffle null (1000 shuffles, seed=20261011): real held rate 26.1%, shuffle 95%
-  band [33.6%, 38.0%]. Real rate BELOW band — thesis assignment is anti-predictive,
-  no signal detected. Chain identity max residual: 5.55e-16 (was 1.85e-4 before
-  rounding fix). ROLE_SHIFT count: 97 (reduced from PM-1c). UNRESOLVED: 61.
-  W/L mismatches: 4 (3 voided picks, 1 Deebo lateral).
-  Evidence copied to ~/mlb-model-pm1/_pm1d_evidence/ (71 files: 3 verdicts parquets,
-  65 game JSONs, link_sd_2025_v2.json, shuffle_null.json, evidence_report.txt).
-
-### CORRECTION — PM-1c Deebo claim
-PM-1c session log stated "the ledger is wrong on Deebo" (rec_yds Under 40.5).
-This is FALSE. nflverse player_stats week 3: Deebo Samuel Sr. 0 receptions,
-80 receiving yards (lateral from M.Evans). 80 > 40.5 → Over wins → Under loses.
-The ledger's L is CORRECT. The builder's A=0 is the PBP value (0 targets as
-receiver), not the official stat. The mismatch is a builder defect (PBP actuals
-vs official), not a ledger error.
-
-### NOT DONE
-- Official player_stats actuals (A = nflverse player_stats joined by gsis_id, not
-  PBP). The builder still uses PBP for actuals. The 4 mismatches (3 voided + 1 Deebo)
-  are from this gap. PICKS_LEDGER amendment documents the requirement.
-- Top 25 unresolved names with reasons: not enumerated (61 UNRESOLVED rows exist).
-- Freeze join rule with file-present/absent accounting and 99% HALT.
-- P49/P50 decision doc entries (work order did not specify a decision doc for PM-1d).
-- Merge not attempted (per order: STOP after item 4).
-
-### UNVERIFIED
-- Whether the 61 UNRESOLVED rows need player_name_overrides or are genuinely
-  unresolvable players (e.g. ATD markets with inactive players).
-- Whether the thesis anti-predictiveness (26.1% < 33.6% null floor) is a real
-  finding or an artifact of the tag_map → thesis mapping being poorly calibrated.
-  The null shuffles the TAG, not the thesis directly — different tags map to
-  different chain links, so the null tests whether the TAG assignment matters,
-  not whether any thesis would hold.
-- The 4 W/L mismatches: 3 are voided picks (Penix, Bijan) where the builder
-  computes W/L but the grader assigned V. The Deebo mismatch (A=0 PBP vs A=80
-  official) is the lateral-yards gap documented above.
+### SHAs
+- ops/pm1 Item 1: 7167a2df8
+- main merge: dc85b4f53
+- main branch check: confirmed main at session start

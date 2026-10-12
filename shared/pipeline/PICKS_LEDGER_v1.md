@@ -1086,3 +1086,15 @@ view lines. thesis_required enforcement still fires on missing thesis
 Defect 7: link values were rounded before terms were computed, causing
 identity residual of 1.85e-4. Fixed: unrounded values used throughout.
 Test asserts residual ≤ 1e-9.
+
+**PM-1e note — three fixes + merge + cron (2026-10-12):**
+1. Shuffle null pool fix: game and price theses are now separate pools.
+   Real and shuffled held rates computed over the same game-thesis pool
+   (was mixing 138 price theses into real rate but dropping them from shuffled).
+   Price theses get a separate CLV-based held rate (no shuffle).
+2. actual_stat now uses official nflverse player_stats (gsis_id + week).
+   PBP chain product kept as `pbp_actual`; `pbp_vs_official` flag added.
+   Deebo Samuel wk 3 rec_yds: actual_stat=80 (official), pbp_actual=0 (PBP).
+3. Merge SHA: `dc85b4f53`. ops/pm1 merged to main before MNF BUF@LA 20:15 ET.
+4. Cron: `0 11 * * * ... pull_nfl_postgame_data.py && build_postgame.py --all-final`
+   on VM, 11:00Z daily. Outputs reach origin via push_daemon.sh (:00/:30).
