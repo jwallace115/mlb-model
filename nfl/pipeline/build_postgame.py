@@ -982,6 +982,47 @@ def _resolve_player_id(player_name, game_pbp, team):
     return None
 
 
+# Official stat column map: ledger market → nflverse player_stats column
+_OFFICIAL_STAT_MAP = {
+    "prop:rec": "receptions", "prop:rec_yds": "receiving_yards",
+    "prop:rush_att": "carries", "prop:rush_yds": "rushing_yards",
+    "prop:pass_att": "attempts", "prop:pass_cmp": "completions",
+    "prop:pass_yds": "passing_yards",
+}
+
+
+def _get_official_stat(player_id, week, market):
+    """Look up official nflverse player_stats value by gsis_id + week.
+
+    Returns (stat_value, True) if found, (None, False) otherwise.
+    The stat column is determined by _OFFICIAL_STAT_MAP.
+    """
+    stat_col = _OFFICIAL_STAT_MAP.get(market)
+    if stat_col is None:
+        return None, False
+
+    stats_df = _load_player_stats()
+    if stats_df is None or stats_df.empty:
+        return None, False
+
+    matched = stats_df[
+        (stats_df["player_id"] == player_id) &
+        (stats_df["week"] == week) &
+        (stats_df["season"] == 2026)
+    ]
+    if matched.empty:
+        return None, False
+
+    if stat_col not in matched.columns:
+        return None, False
+
+    val = matched.iloc[0][stat_col]
+    if pd.isna(val):
+        return None, False
+
+    return int(val), True
+
+
 def _parse_raw(row):
     """Parse the ledger row's raw JSON field. Returns dict or {}."""
     raw = row.get("raw")
@@ -1137,18 +1178,22 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026,
 
                 p_stats = _player_stats_from_pbp(game_pbp, team)
                 ps_row = p_stats.get(player_id, {})
-                stat_map = {
+                pbp_stat_map = {
                     "prop:rec": "receptions", "prop:rec_yds": "receiving_yards",
                     "prop:rush_att": "carries", "prop:rush_yds": "rushing_yards",
                     "prop:pass_att": "pass_attempts", "prop:pass_cmp": "completions",
                     "prop:pass_yds": "passing_yards",
                 }
-                stat_key = stat_map.get(market, "")
-                A = ps_row.get(stat_key, 0)
+                pbp_stat_key = pbp_stat_map.get(market, "")
+                pbp_A = ps_row.get(pbp_stat_key, 0)
+
+                # PM-1e: actual_stat = official player_stats; pbp_actual = PBP chain product
+                official_A, has_official = _get_official_stat(player_id, week, market)
+                A = official_A if has_official else pbp_A
                 L = float(point) if point is not None else None
 
-                if actual and prior and L and L > 0 and A > 0:
-                    decomp = _chain_decompose(actual, prior, L, A, market)
+                if actual and prior and L and L > 0 and pbp_A > 0:
+                    decomp = _chain_decompose(actual, prior, L, pbp_A, market)
                     if decomp and not decomp.get("zero_actual"):
                         verdict["chain"] = json.dumps(decomp, default=str)
                         verdict["primary_link"] = decomp.get("primary_link")
@@ -1159,6 +1204,8 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026,
                     verdict["primary_link"] = None
 
                 verdict["actual_stat"] = A
+                verdict["pbp_actual"] = pbp_A
+                verdict["pbp_vs_official"] = (pbp_A != A) if has_official else None
                 verdict["prior_source"] = prior_source if prior else "none"
 
                 if L is not None:
@@ -1391,8 +1438,8 @@ def main():
                 out = week_dir / "verdicts.parquet"
                 wv.to_parquet(out, index=False)
 
-                # Write why_summary.md for --week mode
-                if args.week:
+                # Write why_summary.md for --week or --all-final mode
+                if args.week or args.all_final:
                     _write_why_summary(wv, week_dir, week)
             print(f"Verdicts: {len(verdicts)} rows")
         else:
@@ -1431,6 +1478,38 @@ def _write_why_summary(verdicts, week_dir, week):
         for src in verdicts["thesis_source"].unique():
             src_rows = verdicts[verdicts["thesis_source"] == src]
             lines.append(f"- thesis_source={src}: {len(src_rows)} rows")
+
+    # Freeze-join accounting (PM-1e Item 1c)
+    lines.append("\n## Freeze-join accounting\n")
+    if "thesis_source" in verdicts.columns:
+        n_freeze = (verdicts["thesis_source"] == "freeze").sum()
+        n_tag_map = (verdicts["thesis_source"] == "tag_map").sum()
+        n_none = (verdicts["thesis_source"] == "none").sum()
+        lines.append(f"- Freeze-sourced thesis: {n_freeze}")
+        lines.append(f"- Tag-map thesis: {n_tag_map}")
+        lines.append(f"- No thesis: {n_none}")
+
+    # Unresolved player names (PM-1e Item 1c)
+    if "why_code_auto" in verdicts.columns:
+        unresolved = verdicts[verdicts["why_code_auto"] == "UNRESOLVED"]
+        if len(unresolved):
+            lines.append(f"\n## Unresolved player names ({len(unresolved)} rows)\n")
+            name_counts = unresolved["player_name"].value_counts().head(25)
+            for name, count in name_counts.items():
+                markets = unresolved[unresolved["player_name"] == name]["market"].unique()
+                lines.append(f"- {name} ({count}x): markets={list(markets)}")
+        else:
+            lines.append("\n## Unresolved player names: 0\n")
+
+    # PBP vs official mismatches (PM-1e Item 1b)
+    if "pbp_vs_official" in verdicts.columns:
+        mismatches = verdicts[verdicts["pbp_vs_official"] == True]
+        if len(mismatches):
+            lines.append(f"\n## PBP vs official stat mismatches ({len(mismatches)} rows)\n")
+            for _, r in mismatches.head(25).iterrows():
+                lines.append(
+                    f"- {r.get('player_name', '')}: {r.get('market')} "
+                    f"official={r.get('actual_stat')} pbp={r.get('pbp_actual')}")
 
     # FLAGGED FOR THE TUESDAY READ
     lines.append("\n## FLAGGED FOR THE TUESDAY READ\n")

@@ -66,11 +66,19 @@ def build_all_verdicts(pbp_slices, snap_counts, graded):
     return verdicts
 
 
+_PRICE_TAGS = {"price_vs_sharp", "line_move"}
+
+
 def tag_shuffle_null(verdicts, n_shuffles=1000, seed=20261011):
     """Within each market, shuffle tags and recompute thesis held rate.
 
-    Returns dict with real_rate, shuffle_mean, shuffle_p025, shuffle_p975,
-    and the full array of shuffled rates.
+    PM-1e fix: separate game (non-price) and price (CLV) thesis pools.
+    The shuffle null runs ONLY on game theses — both real and shuffled
+    rates are computed over the same pool. Price theses get a separate
+    held-rate line (no shuffle, since price theses depend on CLV not tags).
+
+    Returns dict with game_held_rate, shuffle stats, price_held_rate,
+    tag counts, and power note when one tag dominates.
     """
     if verdicts is None or verdicts.empty:
         return {"error": "no verdicts"}
@@ -83,21 +91,41 @@ def tag_shuffle_null(verdicts, n_shuffles=1000, seed=20261011):
     if len(has_thesis) < 5:
         return {"error": f"only {len(has_thesis)} rows with thesis verdict"}
 
-    # Real held rate
-    real_held = (has_thesis["thesis_held"] == "held").mean()
+    # Split into game (non-price) and price pools
+    is_price = has_thesis["tag"].isin(_PRICE_TAGS)
+    game_pool = has_thesis[~is_price].copy()
+    price_pool = has_thesis[is_price].copy()
 
-    # Prepare: for each row, we need tag, market, thesis_source, thesis
-    # Only shuffle tag-map-derived theses (not freeze theses)
-    tag_rows = has_thesis[has_thesis["thesis_source"] == "tag_map"].copy()
+    # Game-thesis held rate
+    game_held_rate = float((game_pool["thesis_held"] == "held").mean()) if len(game_pool) else 0.0
+
+    # Price-thesis held rate (no shuffle — depends on CLV, not tag assignment)
+    price_held_rate = float((price_pool["thesis_held"] == "held").mean()) if len(price_pool) else None
+
+    # Tag counts in the game pool
+    tag_counts = game_pool["tag"].value_counts().to_dict() if len(game_pool) else {}
+
+    # Power note: warn when one tag is >80% of the pool
+    power_note = None
+    if len(game_pool) > 0:
+        for tag_name, count in tag_counts.items():
+            frac = count / len(game_pool)
+            if frac > 0.80:
+                power_note = (
+                    f"{tag_name} is {frac:.0%} of the game pool ({count}/{len(game_pool)}); "
+                    f"shuffle has little power to distinguish tag-specific signal"
+                )
+                break
+
+    # Shuffle null over game pool only
+    tag_rows = game_pool[game_pool["thesis_source"] == "tag_map"].copy()
     if len(tag_rows) < 5:
-        # Fall back to all rows
-        tag_rows = has_thesis.copy()
+        tag_rows = game_pool.copy()
 
     rng = np.random.RandomState(seed)
     shuffled_rates = []
 
     for i in range(n_shuffles):
-        # Within each market, shuffle tags
         shuffled = tag_rows.copy()
         for market in shuffled["market"].unique():
             mask = shuffled["market"] == market
@@ -106,7 +134,6 @@ def tag_shuffle_null(verdicts, n_shuffles=1000, seed=20261011):
             rng.shuffle(tags)
             shuffled.loc[idx, "tag"] = tags
 
-        # Re-derive thesis from shuffled tag
         held_count = 0
         total_count = 0
         for _, row in shuffled.iterrows():
@@ -117,7 +144,6 @@ def tag_shuffle_null(verdicts, n_shuffles=1000, seed=20261011):
             if not thesis:
                 continue
 
-            # Get decomp
             chain_str = row.get("chain")
             decomp = None
             if chain_str and isinstance(chain_str, str):
@@ -127,7 +153,7 @@ def tag_shuffle_null(verdicts, n_shuffles=1000, seed=20261011):
                     pass
 
             link_sd = bp._load_link_sd(ROOT)
-            clv_row = None  # no CLV for shuffled
+            clv_row = None
             verdict, z = bp._check_thesis(thesis, decomp, link_sd, clv_row, market=market)
             if verdict == "held":
                 held_count += 1
@@ -139,8 +165,11 @@ def tag_shuffle_null(verdicts, n_shuffles=1000, seed=20261011):
 
     arr = np.array(shuffled_rates)
     result = {
-        "real_held_rate": round(float(real_held), 4),
-        "n_real": int(len(has_thesis)),
+        "game_held_rate": round(float(game_held_rate), 4),
+        "n_game": int(len(game_pool)),
+        "price_held_rate": round(float(price_held_rate), 4) if price_held_rate is not None else None,
+        "n_price": int(len(price_pool)),
+        "tag_counts": tag_counts,
         "n_tag_rows": int(len(tag_rows)),
         "shuffle_mean": round(float(arr.mean()), 4),
         "shuffle_std": round(float(arr.std()), 4),
@@ -150,6 +179,8 @@ def tag_shuffle_null(verdicts, n_shuffles=1000, seed=20261011):
         "seed": seed,
         "shuffled_rates": [round(float(x), 4) for x in arr.tolist()],
     }
+    if power_note:
+        result["power_note"] = power_note
     return result
 
 
@@ -225,22 +256,27 @@ def evidence_report(verdicts, shuffle_result, pbp_slices):
         else:
             lines.append(f"\n  Game-thesis: INSUFFICIENT N ({n_game} < 30)")
 
-    # PM-6: tag-shuffle null
+    # PM-6: tag-shuffle null (PM-1e: separate game/price pools)
     lines.append("\n## PM-6: Tag-shuffle null control")
     if "error" in shuffle_result:
         lines.append(f"  ERROR: {shuffle_result['error']}")
     else:
-        lines.append(f"  Real held rate: {shuffle_result['real_held_rate']}")
-        lines.append(f"  N (real): {shuffle_result['n_real']}")
+        lines.append(f"  Game-thesis held rate: {shuffle_result['game_held_rate']} (N={shuffle_result['n_game']})")
+        if shuffle_result.get("price_held_rate") is not None:
+            lines.append(f"  Price-thesis held rate: {shuffle_result['price_held_rate']} (N={shuffle_result['n_price']}, CLV-based, no shuffle)")
+        if shuffle_result.get("tag_counts"):
+            lines.append(f"  Tag counts in game pool: {shuffle_result['tag_counts']}")
+        if shuffle_result.get("power_note"):
+            lines.append(f"  POWER NOTE: {shuffle_result['power_note']}")
         lines.append(f"  Shuffle mean: {shuffle_result['shuffle_mean']}")
         lines.append(f"  Shuffle 95% band: [{shuffle_result['shuffle_p025']}, {shuffle_result['shuffle_p975']}]")
         lines.append(f"  N shuffles: {shuffle_result['n_shuffles']}, seed: {shuffle_result['seed']}")
-        if shuffle_result['real_held_rate'] > shuffle_result['shuffle_p975']:
-            lines.append("  VERDICT: Real rate ABOVE 95% band — signal present")
-        elif shuffle_result['real_held_rate'] < shuffle_result['shuffle_p025']:
-            lines.append("  VERDICT: Real rate BELOW 95% band")
+        if shuffle_result['game_held_rate'] > shuffle_result['shuffle_p975']:
+            lines.append("  VERDICT: Game rate ABOVE 95% band — signal present")
+        elif shuffle_result['game_held_rate'] < shuffle_result['shuffle_p025']:
+            lines.append("  VERDICT: Game rate BELOW 95% band")
         else:
-            lines.append("  VERDICT: Real rate WITHIN 95% band — no signal detected")
+            lines.append("  VERDICT: Game rate WITHIN 95% band — no signal detected")
 
     # Chain identity max residual
     if "chain" in verdicts.columns:
