@@ -4354,3 +4354,43 @@ Also: make refresh_inputs fail per team, not per report.
 ### SHAs
 - origin/research/on1: 8363350a22829372eba18d3137003a2983db544e
 - main branch check: confirmed main at session start
+
+## 2026-10-12T14:30Z  claude-code (ON-1b — repairs from ChatGPT audit c23e62419)
+
+### RETURNED
+- Item 1 (0af2f1f18, ON-D5): Market signs fixed (q = −h), event matching by
+  (season, teams, kickoff ±1h, event_id), close = last pre-kick quote with
+  3h preferred/stale flag. 2026 interim parquet marked INVALID. Audit files
+  committed verbatim to research/cross_ai/ (SHA256 verified). 33 behavioral
+  tests in test_on_utils.py.
+- Item 2 (f41140449, ON-D6): Rebuilt 2021-23 Monday numbers with Monday-noon
+  cutoff (49 weeks MNF-excluded, team ratings rebuilt per affected week),
+  honest n_games (502/815 changed, 100 changed bucket), crc32 seeds, frozen
+  params. Wall time: 93 min sims + 2.6 min ratings. Direction 70.8% (HELD,
+  pre-reg 65-75%), mean move +1.528 (DID NOT HOLD, pre-reg +1.0-1.5, margin
+  +0.028 above), ATS at open 52.0% (HELD, pre-reg 47-55%). Null Z=10.76
+  (rebuilds confident per shuffle per audit P6). 45 tests total.
+- Item 3 (a20d2e807, ON-D7): FROZEN_MANIFEST_v2.json (47 files, engine
+  fingerprint 156cd057a3b39e48). guard_2024 HALTs any ON entry with
+  season=2024. ON_SPEC_v2.md (forward protocol from audit).
+- Item 4 (f1ec588bc, ON-D8): Prior-close comparator 56.8% direction (HELD,
+  pre-reg ~55%). Ridge OOF 55.7%. Engine 70.8%. Paired on engine-selected
+  games: engine 70.8% vs ridge 60.2% vs prior-close 60.2%. Ridge baseline
+  from origin/eng/gl1 copied with training windows documented (LOSO, not
+  strictly as-of).
+
+### NOT DONE
+- ON-1c (next order): replace decorative tests per audit P7, then first
+  PRIMARY Monday
+- build_2026_interim.py not rewritten (marked INVALID, retained as artifact)
+- run_sims.py not updated (uses hash() seeds; only used for original cache)
+
+### UNVERIFIED
+- nflverse publication receipts — still none
+- punt_landing table provenance
+- Whether the engine's in-sample mechanics explain its margin over the
+  comparators — only forward can test this
+- MNF tendencies/sit/kicker approximation (claimed negligible, not measured)
+
+Main branch: main (verified at start and end).
+SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
