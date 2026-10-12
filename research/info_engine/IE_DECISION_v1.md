@@ -80,3 +80,21 @@ Frozen spec: 21 features, alpha=100 (margin), alpha=1000 (totals). See IE_FROZEN
 (IE-2) is the real test. The strength of the discovery signal makes the OOS test higher-stakes:
 if it replicates, the information layer has genuine value; if it doesn't, the discovery was
 overfit. Do NOT tune anything to rescue a failed OOS.
+
+## IE-D7 — Free historical spread opens (2026-10-12) — BLOCKED
+
+**Attempted:** `curl` download of `https://www.aussportsbetting.com/historical_data/nfl.xlsx`
+(with and without browser User-Agent). Both returned 403 Forbidden / Cloudflare HTML.
+
+**BLOCKED.** The Mac's egress cannot reach this file programmatically. Jeff needs to
+download it manually in a browser to:
+```
+~/mlb-model-ie0/nfl/data/info/aussportsbetting_nfl.xlsx
+```
+
+Then the reconciliation script (to be written) will:
+1. Admit: schema, seasons, book (Pinnacle), open/close labels
+2. Reconcile closing spread/total vs nflverse for 2021-23 (>= 95% within 0.5pt)
+3. Write `nfl/data/info/spread_opens_2021_23.parquet`
+
+This feeds the F10 spread half in IE-2; nothing in this order fits on it.
