@@ -94,3 +94,41 @@ refuses unmapped team ✓ (32 teams in FULL_TO_ABBR), confident flag verified
 against 2026 data (50 confident, 25 not) ✓.
 
 "How to run on Monday" paragraph appended to ON_SPEC_v1.md.
+
+## ON-D5 — Market signs, event identity, quote timing (2026-10-12)
+
+**Source:** ChatGPT audit of c23e62419 (findings #4, #5, #7 in the audit;
+adjudication items 4, 5 in Cowork's reply). Filed to `research/cross_ai/`.
+
+**Repairs (ON-1b item 1):**
+
+1a. **Sign normalisation.** Raw home handicap h → expected home margin q = −h.
+    gap = ours_m − q. The OLD code used gap = ours_m − h, producing the wrong sign
+    for home favourites. Audit fixture: raw home −3, ours_m 2, err_m 2 → gap −1,
+    NOT confident. Old code gave +5, confident. run_monday.py and build_2026_interim.py
+    both corrected. All code now uses `on_utils.compute_gap()` and `is_confident()`.
+
+1b. **Event identity.** Match by (season, mapped home, mapped away,
+    kickoff within ±1h, event_id). Ambiguous match HALTs. A rematch later in the
+    season cannot be selected for the earlier meeting (±1h window enforces this).
+
+1c. **Quote timing.** Close = last quote strictly BEFORE kickoff with a 3h
+    max-age preference; flagged "stale" if older. In-play quotes (snapshot_utc ≥
+    kickoff) are never usable as a close. Decision quote = last quote before the
+    prediction cutoff. Both carry timestamps and ids. Future-dated quotes rejected.
+
+1d. **2026 interim artifact INVALID.** `monday_numbers_2026.parquet` produced by
+    `build_2026_interim.py` at c23e62419 is INVALID on two grounds:
+    - Sign error: gap computed as ours_m − h instead of ours_m − (−h); 46 of 75
+      confidence flags wrong (audit recompute: 50 → 30 confident, 24/40 → 11/25
+      moving-confident direction agreement).
+    - In-play close: `get_first_and_last_line()` accepted post-kickoff quotes as
+      closes (CAR–ATL moved from +1 to +30.5 in-play).
+    The file is retained as an audit artifact; it must not be overwritten. A corrected
+    rebuild, if any, gets a new file name and experiment id.
+
+**Tests:** `test_on_utils.py` — 33 behavioral fixtures covering sign normalisation
+(home fav, home dog, pick'em), event matching (single, rematch, ambiguous HALT,
+no-match), quote selection (in-play rejected, stale flagged, preferred, empty),
+stable seeds (deterministic across PYTHONHASHSEED), Monday cutoff (MNF excluded).
+Each test FAILS when the audited defect is reintroduced.
