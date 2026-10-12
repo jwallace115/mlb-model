@@ -719,6 +719,19 @@
    "sport": "Ops",
    "cron_match": "picks_clv.py",
    "quiet_ok": true
+  },
+  {
+   "id": "on_monday",
+   "label": "Own Numbers Monday runner",
+   "sport": "NFL",
+   "cron_match": "run_monday.py",
+   "outputs": [
+    "nfl/data/own/forward/week=*_*.parquet"
+   ],
+   "ts": "filename",
+   "active_months": [9, 10, 11, 12, 1],
+   "cadence_min": 10080,
+   "note": "Runs Monday noon ET. File missing by 12:30 ET = red."
   }
  ]
 }

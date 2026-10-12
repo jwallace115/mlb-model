@@ -134,13 +134,20 @@ def sanity_checks(dfs: dict[int, pd.DataFrame]):
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("seasons", nargs="*", type=int,
+                        help="Seasons to pull (default: all)")
+    args = parser.parse_args()
+    seasons = args.seasons if args.seasons else SEASONS
+
     print("NFL Sim Phase 0: nflverse PBP pull")
-    print(f"Seasons: {SEASONS}")
+    print(f"Seasons: {seasons}")
     print(f"Output:  {PBP_DIR}/")
     print()
 
     dfs = {}
-    for season in SEASONS:
+    for season in seasons:
         print(f"  Pulling {season}...", end=" ", flush=True)
         df = pull_season(season)
         out = PBP_DIR / f"pbp_{season}.parquet"
