@@ -4288,3 +4288,52 @@ Also: make refresh_inputs fail per team, not per report.
 - The 408 ai_nfl freeze join misses: whether the week-2 freeze files exist on the Mac
   in _to_delete/ai_w4/ and whether they should be ingested.
 - The tag-shuffle null was not run, so PM-5/PM-6 thesis grades are NOT null-controlled.
+
+## 2026-10-12T03:30Z  claude-code (PM-1d — four defects + undone items from PM-1c)
+
+### RETURNED
+- Items 1+2 (ada0d077b): link_sd_2025_v2.json generated on VM with log-ratio SDs.
+  share SD: 0.0811 (raw) → 0.5950 (log-ratio). margin_vs_spread SD: 18.14 → 12.28
+  (spread sign fixed: margin − spread_line, corr=+0.504). Builder loads v2 only.
+  teammates_out: uses game-week snap counts (0 offensive snaps = out) instead of
+  PBP-absent. A WR with 40 snaps and 0 targets is NOT out.
+- Item 3 (38516376d): 17 pre-P50 test fixtures updated with thesis="price:up".
+  HEAD reds: 3 (all pre-existing on origin/main). origin/main: 7 (superset).
+  PICKS_LEDGER_v1.md P48-P51 amended with PM-1d notes.
+- Item 4 (c283f5394 + d4c1a932d): evidence run on VM, 1656 verdicts across weeks 2/3/5.
+  Tag-shuffle null (1000 shuffles, seed=20261011): real held rate 26.1%, shuffle 95%
+  band [33.6%, 38.0%]. Real rate BELOW band — thesis assignment is anti-predictive,
+  no signal detected. Chain identity max residual: 5.55e-16 (was 1.85e-4 before
+  rounding fix). ROLE_SHIFT count: 97 (reduced from PM-1c). UNRESOLVED: 61.
+  W/L mismatches: 4 (3 voided picks, 1 Deebo lateral).
+  Evidence copied to ~/mlb-model-pm1/_pm1d_evidence/ (71 files: 3 verdicts parquets,
+  65 game JSONs, link_sd_2025_v2.json, shuffle_null.json, evidence_report.txt).
+
+### CORRECTION — PM-1c Deebo claim
+PM-1c session log stated "the ledger is wrong on Deebo" (rec_yds Under 40.5).
+This is FALSE. nflverse player_stats week 3: Deebo Samuel Sr. 0 receptions,
+80 receiving yards (lateral from M.Evans). 80 > 40.5 → Over wins → Under loses.
+The ledger's L is CORRECT. The builder's A=0 is the PBP value (0 targets as
+receiver), not the official stat. The mismatch is a builder defect (PBP actuals
+vs official), not a ledger error.
+
+### NOT DONE
+- Official player_stats actuals (A = nflverse player_stats joined by gsis_id, not
+  PBP). The builder still uses PBP for actuals. The 4 mismatches (3 voided + 1 Deebo)
+  are from this gap. PICKS_LEDGER amendment documents the requirement.
+- Top 25 unresolved names with reasons: not enumerated (61 UNRESOLVED rows exist).
+- Freeze join rule with file-present/absent accounting and 99% HALT.
+- P49/P50 decision doc entries (work order did not specify a decision doc for PM-1d).
+- Merge not attempted (per order: STOP after item 4).
+
+### UNVERIFIED
+- Whether the 61 UNRESOLVED rows need player_name_overrides or are genuinely
+  unresolvable players (e.g. ATD markets with inactive players).
+- Whether the thesis anti-predictiveness (26.1% < 33.6% null floor) is a real
+  finding or an artifact of the tag_map → thesis mapping being poorly calibrated.
+  The null shuffles the TAG, not the thesis directly — different tags map to
+  different chain links, so the null tests whether the TAG assignment matters,
+  not whether any thesis would hold.
+- The 4 W/L mismatches: 3 are voided picks (Penix, Bijan) where the builder
+  computes W/L but the grader assigned V. The Deebo mismatch (A=0 PBP vs A=80
+  official) is the lateral-yards gap documented above.
