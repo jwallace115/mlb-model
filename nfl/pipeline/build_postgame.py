@@ -116,30 +116,34 @@ def _player_stats_from_pbp(pbp, team):
     team_plays = pbp[pbp["posteam"] == team]
     players = {}
 
-    # Receivers
+    # Receivers — per-play yards for one_play_decided (PM-1c Item 2)
     rec_plays = team_plays[team_plays["receiver_player_id"].notna()]
     for pid, grp in rec_plays.groupby("receiver_player_id"):
         name = str(grp["receiver_player_name"].iloc[0])
         targets = len(grp)
         receptions = int(grp["complete_pass"].sum())
         rec_yards = int(grp["receiving_yards"].fillna(0).sum())
+        per_play = grp["receiving_yards"].fillna(0).astype(int).tolist()
         players[pid] = players.get(pid, {"name": name, "id": pid})
         players[pid].update({
             "targets": targets, "receptions": receptions,
             "receiving_yards": rec_yards,
+            "_plays_rec_yds": per_play,
         })
 
-    # Rushers
+    # Rushers — per-play yards for one_play_decided
     rush_plays = team_plays[team_plays["rusher_player_id"].notna() &
                              (team_plays["rush_attempt"] == 1)]
     for pid, grp in rush_plays.groupby("rusher_player_id"):
         name = str(grp["rusher_player_name"].iloc[0])
         carries = len(grp)
         rush_yards = int(grp["rushing_yards"].fillna(0).sum())
+        per_play = grp["rushing_yards"].fillna(0).astype(int).tolist()
         if pid not in players:
             players[pid] = {"name": name, "id": pid}
         players[pid].update({
             "carries": carries, "rushing_yards": rush_yards,
+            "_plays_rush_yds": per_play,
         })
 
     # Passers — official attempts exclude sacks (PM-1c Item 1)
@@ -153,11 +157,13 @@ def _player_stats_from_pbp(pbp, team):
         attempts = len(grp)
         completions = int(grp["complete_pass"].sum())
         pass_yards = int(grp["passing_yards"].fillna(0).sum())
+        per_play = grp["passing_yards"].fillna(0).astype(int).tolist()
         if pid not in players:
             players[pid] = {"name": name, "id": pid}
         players[pid].update({
             "pass_attempts": attempts, "completions": completions,
             "passing_yards": pass_yards,
+            "_plays_pass_yds": per_play,
         })
 
     return players
@@ -775,6 +781,7 @@ def _load_clv(ledger_dir):
 def _one_play_decided(player_stats, market, side, point, A):
     """Check if removing the player's longest single play flips the result.
 
+    Uses real PBP per-play yards (PM-1c Item 2).
     Only meaningful for yardage props.
     """
     if market not in ("prop:rec_yds", "prop:rush_yds", "prop:pass_yds"):
@@ -783,26 +790,89 @@ def _one_play_decided(player_stats, market, side, point, A):
         return False
 
     L = float(point)
-    # Determine if the pick hit
     side_lower = str(side).lower()
     hit = (A > L) if side_lower == "over" else (A < L)
 
-    # Find the longest play
-    stat_key = {"prop:rec_yds": "receiving_yards",
-                "prop:rush_yds": "rushing_yards",
-                "prop:pass_yds": "passing_yards"}.get(market)
-    if stat_key not in player_stats:
-        return False
-
-    plays = player_stats.get("_plays", [])
+    # Per-play yards from PBP (populated in _player_stats_from_pbp)
+    plays_key = {"prop:rec_yds": "_plays_rec_yds",
+                 "prop:rush_yds": "_plays_rush_yds",
+                 "prop:pass_yds": "_plays_pass_yds"}.get(market)
+    plays = player_stats.get(plays_key, [])
     if not plays:
         return False
 
-    longest = max(plays) if plays else 0
+    longest = max(plays)
     A_without = A - longest
     hit_without = (A_without > L) if side_lower == "over" else (A_without < L)
 
     return hit != hit_without
+
+
+# Position groups for teammates_out (PM-1c Item 2)
+_POS_GROUPS = {
+    "WR": "pass_catcher", "TE": "pass_catcher",
+    "RB": "rusher", "FB": "rusher",
+    "QB": "qb",
+}
+
+
+def _teammates_out(player_name, team, market, week, snap_counts, game_pbp):
+    """Find teammates who were absent/injured that could shift share.
+
+    Returns list of teammate names or [].
+    Requirements:
+    - Same position group as the pick's market implies
+    - Prior snap share >= 15% (avg offense_pct over weeks < week)
+    - Not in the game PBP for this team (absent), OR injured in-game
+    """
+    if snap_counts is None or snap_counts.empty:
+        return []
+
+    # Determine the relevant position group from the market
+    if market.startswith("prop:rec") or market in ("prop:pass_att", "prop:pass_cmp", "prop:pass_yds"):
+        target_group = "pass_catcher"
+    elif market.startswith("prop:rush"):
+        target_group = "rusher"
+    else:
+        return []
+
+    # Prior weeks snap data for this team
+    prior = snap_counts[(snap_counts["team"] == team) & (snap_counts["week"] < week)]
+    if prior.empty:
+        return []
+
+    # Filter to relevant positions
+    prior = prior[prior["position"].map(_POS_GROUPS).eq(target_group)]
+    if prior.empty:
+        return []
+
+    # Average snap share per player
+    avg_pct = prior.groupby("player")["offense_pct"].mean()
+    # Teammates with >= 15% average snap share (exclude the pick player)
+    pick_norm = pg._normalize_name(player_name)
+    significant = avg_pct[avg_pct >= 0.15]
+
+    # Players active in this game's PBP
+    active_ids = set()
+    for col in ("receiver_player_name", "rusher_player_name", "passer_player_name"):
+        if col in game_pbp.columns:
+            active_ids.update(game_pbp[game_pbp["posteam"] == team][col].dropna().unique())
+
+    absent = []
+    for name, pct in significant.items():
+        if pg._normalize_name(name) == pick_norm:
+            continue  # skip the pick player
+        # Check if this player was active in the game
+        # Match by normalized name against PBP names
+        found = False
+        for active_name in active_ids:
+            if pg._normalize_name(str(active_name)) == pg._normalize_name(name):
+                found = True
+                break
+        if not found:
+            absent.append(name)
+
+    return absent
 
 
 def _margin_1(A, point, side):
@@ -946,12 +1016,14 @@ def _load_freeze_row(row, root):
     return result
 
 
-def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
+def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026,
+                    snap_counts=None):
     """Build verdict rows for graded ai_nfl/sim_nfl picks.
 
     ledger_rows: list of dicts (from picks_ledger.view)
     pbp_slices: dict of {game_id: DataFrame}
     week_filter: only process games in this week (None = all)
+    snap_counts: DataFrame from nflverse snap_counts (for teammates_out)
     """
     rows = [r for r in ledger_rows if r.get("owner") in ALLOWED_OWNERS]
     if not rows:
@@ -1067,12 +1139,19 @@ def build_verdicts(ledger_rows, pbp_slices, week_filter=None, season=2026):
                     verdict["computed_result"] = computed_result
                     verdict["wl_mismatch"] = computed_result != ledger_result
 
+                # teammates_out from snap counts (PM-1c Item 2)
+                tm_out = _teammates_out(player_name, team, market, week,
+                                        snap_counts, game_pbp)
+
                 verdict["why_code_auto"] = _why_code_auto_prop(
                     decomp if actual and prior else None,
-                    None, False, True, [])
+                    None, False, True, tm_out)
+                verdict["teammates_out"] = json.dumps(tm_out) if tm_out else None
 
                 # Flags
                 verdict["margin_1"] = _margin_1(A, point, side)
+                verdict["one_play_decided"] = _one_play_decided(
+                    ps_row, market, side, point, A)
 
         # ── Game-line verdicts (spread/total/moneyline) ──
         elif market in ("spread", "total", "moneyline"):
@@ -1272,6 +1351,7 @@ def main():
         view = pl.view(LEDGER_DIR)
         graded = [r for r in view if r.get("result") and r.get("sport") == "NFL"]
         verdicts = build_verdicts(graded, pbp_slices, week_filter=args.week,
+                                  snap_counts=snap_counts,
                                   season=2026)
         if verdicts is not None and len(verdicts) > 0:
             for week in verdicts["week"].unique():

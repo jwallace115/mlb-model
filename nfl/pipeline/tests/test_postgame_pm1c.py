@@ -254,7 +254,7 @@ def test_one_play_decided_flips_result():
 
     # Player had 85 yards over 5 catches: [10, 15, 45, 8, 7] = 85
     # Line is 75.5, side Over → W. Without the 45-yarder: 40 → L. Flipped.
-    ps = {"receiving_yards": 85, "_plays": [10, 15, 45, 8, 7]}
+    ps = {"receiving_yards": 85, "_plays_rec_yds": [10, 15, 45, 8, 7]}
     assert _one_play_decided(ps, "prop:rec_yds", "Over", 75.5, 85) is True
 
     # Without: line 39.5 → still W (40 > 39.5). NOT flipped.
