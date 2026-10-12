@@ -4372,3 +4372,77 @@ Also: make refresh_inputs fail per team, not per report.
 ### SHAs
 - origin/research/ie0: 2af74b5fcb74c912dc67e978f73632e67d6bf360
 - main branch check: confirmed main at session start
+
+## 2026-10-12T09:00Z  claude-code (IE-1b items 1-3: margin fix, snap-weighted, corrected fit)
+
+### Environment
+- nflreadpy 0.1.5, framework Python 3.13 (same as prior sessions)
+- `pip3 list --user | grep nfl`: empty (confirmed, no installs)
+- `git -C ~/mlb-model branch --show-current` → main (confirmed)
+
+### Item 1 — IE-D8: margin_resid correction and retraction (aba88807e)
+- RETURNED: old `margin_resid = margin + spread_line` had r=0.69 with spread_line
+- MEANS: the entire IE-D6 discovery (F2 t=4.9, F4 t=4.2, F5 t=3.5) was predicting
+  team quality through spread correlation, not beating the close. All retracted.
+- RETURNED: old `home_cover = margin > -spread_line` had r=0.56 with spread_line, rate 55.95%
+- MEANS: the 0.019 log-loss improvement was an artifact. The model predicted the spread, not
+  whether the home team covered.
+- FIX: `margin_resid = margin - spread_line` (r=0.015), `home_cover = margin > spread_line`
+  (r=-0.03, rate 47.4%)
+- ADDED: known-game assertions (2021_01_ARI_TEN, 2021_01_DAL_TB), correlation gates
+  (|r| < 0.05), zero-variance check
+- RETURNED: F6 snap_shift was all-zero (count > 10pp threshold too high). Redefined to MAD.
+- RETRACTED: IE1_DISCOVERY prepended with RETRACTION block
+
+### Item 2 — IE-D9: snap-weighted F2/F4/F5 (25b0c55d5)
+- RETURNED: F2 joined PFR to snap_counts by pfr_player_id+game_id, 100% join rate
+- RETURNED: F4/F5 joined NGS to snap_counts by player_display_name+week, ~94% join rate
+- RETURNED: F3 NOT snap-weighted (play-level data, not player-level). 2022-23 only.
+- RETURNED: F6 snap_shift MAD now varies (std > 0). Proven non-zero-variance.
+- RETURNED: _simple columns kept beside snap-weighted versions
+- RETURNED: table rebuilt 815 rows, 66 columns. All gates pass.
+- RETURNED: truncation test 6/6 PASS, negative control 4/4 PASS
+
+### Item 3 — IE-D10: corrected discovery fit (014b04b97)
+- RETURNED: MARGIN IS DEAD. All old signals collapse:
+  - F2 t: 4.897 → -1.225
+  - F4 t: 4.166 → 0.202
+  - F5 t: 3.502 → -0.486
+  - F3 t: 3.143 → 0.523
+  - F8 margin t: 2.386 → 0.125
+- MEANS: every family that "predicted margin" was proxying for spread_line.
+  With the spread removed from the residual, none of them have signal.
+- RETURNED: all-family ridge on home-cover: log-loss 0.700 vs 0.693 baseline
+  (WORSE by 0.007). Old: 0.674 vs 0.693 (+0.019 improvement — all spurious).
+- RETURNED: F9 t=-3.04 on margin is the sole |t| > 2.5, but per-season sign flips
+  (+/+/-). Not robust.
+- RETURNED: totals results UNCHANGED (didn't use margin_resid):
+  F8 t=-2.507, F7 t=1.956. Ridge MSE 155.4 vs 174.6 (+19.2).
+- PRE-REGISTRATION OUTCOMES: P-IE1-1 FALSIFIED (F9 only), P-IE1-2 FALSIFIED,
+  P-IE1-3 partial, P-IE1-4 CONFIRMED (improvement -0.007 < 0.003)
+- FROZEN: spec v2 written, v1 superseded
+
+### IE-D7 gate override
+- Added one line to IE-D7: "Gate override: 95% within-0.5 not met (92.0%). Override
+  accepted [...] Cowork accepted the override after the fact."
+
+### NOT DONE
+- 2024 data not opened (correct per standing rules)
+- Position-group breakdown within snap-weighted aggregation (registered spec says
+  "by position group QB/OL/WR-TE/RB; DL/LB/DB" but implementation uses all positions
+  pooled with >=20 snap filter). The position-group split is a refinement that can be
+  added in IE-2 if warranted.
+
+### UNVERIFIED
+- Same revision-after-publication concerns as prior sessions (NGS/PFR/FTN)
+- Whether the corrected margin_resid is the canonical definition. The |r| < 0.05
+  gate passed, which is the structural requirement. But `margin - spread_line` may
+  not be the standard NFL ATS residual convention — it just happens to be uncorrelated.
+  The "home cover" label `margin > spread_line` gives 47.4% True (49.0% ex-pushes),
+  which is consistent with the known ~50% ATS hit rate.
+- Whether F9's t=-3.04 on margin is genuine or an overfitting artifact from 5 features
+  on 815 games. The per-season sign flip is a warning but not proof of overfit.
+
+### SHAs
+- origin/research/ie0: 014b04b97eeb4cf3df555122f7ac1ede85132056
+- main branch check: confirmed main at session start
