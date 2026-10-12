@@ -1,0 +1,24 @@
+{
+  "measured_on": "2021-2023 REG",
+  "n_games": 815,
+  "mean_home_margin": 2.1252,
+  "by_season": {
+    "2021": 1.7132,
+    "2022": 1.9779,
+    "2023": 2.6838
+  },
+  "home_win_rate": 0.5423,
+  "scrimmage_epa_diff": 0.00587,
+  "scrimmage_success_diff": 0.00492,
+  "h": 0.1719,
+  "h_note": "h0=0.1719 from J_FWD. First run: raw_m=1.988 (gap -0.137 from target 2.125). No Newton correction needed (|gap|<0.3). h=h0=0.1719 is the final value.",
+  "h0": 0.1719,
+  "run_results": {
+    "raw_m_mean": 1.988,
+    "raw_t_mean": 41.524,
+    "p_home_win_mean": 0.5534,
+    "target_margin": 2.125,
+    "gap": -0.137,
+    "newton_correction": false
+  }
+}
