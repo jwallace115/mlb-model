@@ -39,6 +39,7 @@ def _filled(sheet, **over):
     f["p_first"], f["tag"], f["reason"] = book + 0.05, "matchup", "a reason long enough to pass"
     f["conf"] = [80 - i * 10 for i in range(len(f))]
     f["conf_rank"] = list(range(1, len(f) + 1))
+    f["thesis"] = "price:up"
     for k, v in over.items():
         f[k] = v
     return f

@@ -43,9 +43,13 @@ def _make_filled(sheet, overrides=None):
     f["reason"] = ""
     f["conf"] = 0.0
     f["conf_rank"] = list(range(1, len(f) + 1))
+    f["thesis"] = ""  # empty for no_view; overrides must set for view tags
     if overrides:
         for k, v in overrides.items():
             f[k] = v
+        # Auto-set thesis for view tags if not explicitly overridden
+        if "tag" in (overrides or {}) and overrides["tag"] != "no_view" and "thesis" not in (overrides or {}):
+            f["thesis"] = "price:up"
     return f
 
 

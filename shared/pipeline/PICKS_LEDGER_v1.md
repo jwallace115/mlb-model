@@ -1035,4 +1035,54 @@ pick_ids, recurrence, teams, status, first_slate). Cowork writes the lessons.
 ```
 
 **Log path:** `/root/logs/postgame_nfl.log`.
-and it overrides tag_map.
+
+---
+
+### PM-1d amendments to P48–P51 (2026-10-12)
+
+**P49 amended — thesis z-score SD (PM-1d Item 1):**
+The thesis z used `term / raw_SD`, which mixed units: a plays thesis
+term of 0.08 divided by raw plays SD 8.63 gave z=0.009 (functionally
+zero), while a share thesis term of 0.21 / raw share SD 0.081 = 2.6
+(huge). Every held/failed/flat — including the PM-1c game-thesis held
+rate 45.5% and PM-6 41.2% — was computed on invalid z values.
+Fixed: `link_sd_2025_v2.json` holds SD of `ln(actual/prior)`, the same
+unitless log-ratio as the chain term. share SD: 0.0811 → 0.5950.
+
+**P49 amended — spread sign (PM-1d Item 1):**
+`build_postgame_link_sd.py` computed `margin + spread_line` (SD=18.14).
+nflverse `spread_line` is the home team's line (negative = favoured).
+`corr(margin, spread_line)` is +0.504, confirming the correct residual
+is `margin − spread_line` (SD=12.28). Same sign class as P16.
+
+**P49 amended — teammates_out (PM-1d Item 2):**
+Old: "absent from PBP" (no target/carry) → out. A WR with 40 snaps
+and 0 targets was marked out, causing ROLE_SHIFT to fire 314 times.
+Fixed: 0 offensive snaps in game-week snap-counts archive = out.
+A receiver who plays but is not targeted is NOT out.
+
+**P49 amended — official actuals (PM-1d Item 2):**
+A = the official nflverse player_stats value, joined by gsis_id and
+week. PBP is used only for chain links. If PBP and official differ
+(laterals, stat corrections), both are carried and flagged
+pbp_vs_official; PBP never decides W/L.
+
+**PM-1c Deebo claim retracted (PM-1d Item 2):**
+PM-1c session log claimed "the ledger is wrong on Deebo". False.
+Week 3 SF PBP: "B.Purdy pass short left to M.Evans for 2 yards.
+Lateral to D.Samuel for 80 yards, TOUCHDOWN." nflverse player_stats
+week 3: Deebo Samuel Sr. 0 receptions, 80 receiving yards. The
+ledger's L on Under 40.5 rec_yds is CORRECT (80 > 40.5 → Over wins).
+
+**P50 amended — thesis-required fixture update (PM-1d Item 3):**
+Pre-P50 test fixtures in test_ai_opinions_conf_l2.py, test_ai_opinions_n59.py,
+and test_log_ai_opinions_fwd1c.py lacked a `thesis` column. With
+`thesis_required=True`, these 17 tests HALTed before reaching their
+assertions. Fixed: `_filled()` helpers now set `thesis="price:up"` on
+view lines. thesis_required enforcement still fires on missing thesis
+(verified by test_nfl_view_line_without_thesis_halts).
+
+**P49 amended — chain identity residual (PM-1d Item 1):**
+Defect 7: link values were rounded before terms were computed, causing
+identity residual of 1.85e-4. Fixed: unrounded values used throughout.
+Test asserts residual ≤ 1e-9.
