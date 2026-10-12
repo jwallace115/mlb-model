@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "e85cb8fcbbddd2332b24db4bfe564345",
+    "game_date": "2026-10-12",
+    "sport": "NHL",
+    "home_team": "Buffalo Sabres",
+    "away_team": "Florida Panthers",
+    "commence_time": "2026-10-12T17:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.0,
+    "over_price": 103,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-12T13:25:03.078695+00:00"
+  },
+  {
+    "game_id": "bddca6412454c40a2860b4e2e3e85968",
+    "game_date": "2026-10-12",
+    "sport": "NHL",
+    "home_team": "New Jersey Devils",
+    "away_team": "Ottawa Senators",
+    "commence_time": "2026-10-12T23:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.0,
+    "over_price": -101,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-12T13:25:03.078695+00:00"
+  },
+  {
+    "game_id": "fcf3af0dc532d226597dc5a8a2d55f78",
+    "game_date": "2026-10-12",
+    "sport": "NHL",
+    "home_team": "Minnesota Wild",
+    "away_team": "Vegas Golden Knights",
+    "commence_time": "2026-10-13T00:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.0,
+    "over_price": -107,
+    "under_price": -105,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-12T13:25:03.078695+00:00"
+  }
+]
