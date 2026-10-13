@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_05_BUF_LA",
+  "week": 5,
+  "home": "LA",
+  "away": "BUF",
+  "final_score": {
+    "home": 34,
+    "away": 37
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 34,
+        "away": 37
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 34,
+        "away": 37
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": true
+  },
+  "volume": {
+    "home": {
+      "plays": 79,
+      "dropbacks": 56,
+      "rush_attempts": 23,
+      "pass_rate": 0.7088607594936709,
+      "run_rate": 0.2911392405063291,
+      "pass_oe": 6.866185440693372
+    },
+    "away": {
+      "plays": 58,
+      "dropbacks": 21,
+      "rush_attempts": 37,
+      "pass_rate": 0.3620689655172414,
+      "run_rate": 0.6379310344827587,
+      "pass_oe": -5.700565009347854
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 5
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 4
+    }
+  },
+  "injuries": [
+    {
+      "player": "K.Shakir",
+      "team": "BUF",
+      "quarter": 2,
+      "play_id": 1384,
+      "desc": "(6:22) (Shotgun) 17-J.Allen pass short right to 10-K.Shakir to BUF 43 for 6 yards (53-N.Landman). BUF-79-S.Brown was injured during the play."
+    },
+    {
+      "player": "K.Coleman",
+      "team": "BUF",
+      "quarter": 3,
+      "play_id": 3039,
+      "desc": "(2:49) (Shotgun) 17-J.Allen pass short right to 0-K.Coleman for 7 yards, TOUCHDOWN. LA-35-J.Watson was injured during the play."
+    },
+    {
+      "player": "B.Corum",
+      "team": "LA",
+      "quarter": 3,
+      "play_id": 3205,
+      "desc": "(1:14) 9-M.Stafford pass short left to 24-B.Corum to BUF 15 for 34 yards (22-C.Gardner-Johnson). BUF-22-C.Gardner-Johnson was injured during the play."
+    },
+    {
+      "player": "K.Williams",
+      "team": "LA",
+      "quarter": 4,
+      "play_id": 3600,
+      "desc": "(10:46) 9-M.Stafford pass incomplete short right to 23-K.Williams. BUF-8-T.Bernard was injured during the play."
+    },
+    {
+      "player": "P.Nacua",
+      "team": "LA",
+      "quarter": 4,
+      "play_id": 3654,
+      "desc": "(10:03) (Shotgun) 9-M.Stafford pass short left to 12-P.Nacua to BUF 48 for 4 yards (47-C.Benford). BUF-47-C.Benford was injured during the play. ** Injury Update: BUF-8-T.Bernard has returned to the g"
+    }
+  ],
+  "ftn": "covered"
+}

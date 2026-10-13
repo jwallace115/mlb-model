@@ -674,6 +674,54 @@
       "drift_applied": 0.0,
       "result": "WIN",
       "actual_total": 5
+    },
+    {
+      "game_id": 2026020093,
+      "game_date": "2026-10-13",
+      "home_team": "CAR",
+      "away_team": "WSH",
+      "signal_side": "UNDER",
+      "edge": 0.1396,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.553,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020098,
+      "game_date": "2026-10-13",
+      "home_team": "CHI",
+      "away_team": "PIT",
+      "signal_side": "UNDER",
+      "edge": 0.1241,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.759,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020102,
+      "game_date": "2026-10-13",
+      "home_team": "UTA",
+      "away_team": "TOR",
+      "signal_side": "UNDER",
+      "edge": 0.1215,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.9,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020103,
+      "game_date": "2026-10-13",
+      "home_team": "ANA",
+      "away_team": "CGY",
+      "signal_side": "UNDER",
+      "edge": 0.1231,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.625,
+      "drift_applied": 0.0
     }
   ]
 }
