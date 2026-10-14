@@ -217302,5 +217302,209 @@
       }
     ],
     "snapshot_time": "2026-10-13T11:05:02.022005+00:00"
+  },
+  {
+    "game_date": "2026-10-15",
+    "event_id": "622fd31d2c8178b025455656e0d2fb89",
+    "game_pk": 849811,
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Milwaukee Brewers",
+    "home_team_abbr": "LAD",
+    "away_team_abbr": "MIL",
+    "commence_time": "2026-10-15T00:00:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 3.5,
+    "n_books": 8,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -154,
+        "under_price": 120
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 120,
+        "under_price": -154
+      },
+      {
+        "book": "betmgm",
+        "line": 4.5,
+        "over_price": 115,
+        "under_price": -150
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": 113,
+        "under_price": -145
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": 115,
+        "under_price": -150
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -141,
+        "under_price": -159
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 205,
+        "under_price": -159
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 123,
+        "under_price": -159
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": 122,
+        "under_price": -156
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": 110,
+        "under_price": -140
+      },
+      {
+        "book": "betmgm",
+        "line": 3.5,
+        "over_price": 110,
+        "under_price": -145
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": 113,
+        "under_price": -145
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": 115,
+        "under_price": -150
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 215,
+        "under_price": -162
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -143,
+        "under_price": -162
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 128,
+        "under_price": -162
+      }
+    ],
+    "snapshot_time": "2026-10-14T11:05:02.294993+00:00"
+  },
+  {
+    "game_date": "2026-10-15",
+    "event_id": "2572cf9b86ae24b8bec2778e9a6fdfcb",
+    "game_pk": null,
+    "home_team": "Cleveland Guardians",
+    "away_team": "Tampa Bay Rays",
+    "home_team_abbr": "CLE",
+    "away_team_abbr": "TBR",
+    "commence_time": "2026-10-15T22:00:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 3.5,
+    "n_books": 6,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": 108,
+        "under_price": -138
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": 105,
+        "under_price": -135
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": 105,
+        "under_price": -135
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -182,
+        "under_price": -245
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 105,
+        "under_price": -245
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 185,
+        "under_price": -245
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 2.5,
+        "over_price": -154,
+        "under_price": 120
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": 120,
+        "under_price": -154
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": 120,
+        "under_price": -160
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 125,
+        "under_price": -286
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -148,
+        "under_price": -286
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 215,
+        "under_price": -286
+      }
+    ],
+    "snapshot_time": "2026-10-14T11:05:02.294993+00:00"
   }
 ]
