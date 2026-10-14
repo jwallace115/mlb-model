@@ -180,3 +180,4 @@
 {"utc":"20261014T0900Z","feed":"nflverse_injuries","file":"injuries.parquet","sha256":"e88543545fa870ae19736619b3e624722f34d6a904c3806986387bbbf810f8bb","status":"written"}
 {"utc":"20261014T0900Z","feed":"nflverse_rosters","file":"rosters_weekly.parquet","sha256":"6eb583253763077c536c4314a42fd6f525f984f337089e848d91d20a1b8685d2","status":"written"}
 {"utc": "20261014T1230Z", "feed": "espn_depth", "sha256": "262e02bbd9a794c3de75ccdc11c400b1c79b9aa383f2f0f22fa1fd13adbeefcc", "status": "written"}
+{"utc": "20261014T1830Z", "feed": "espn_depth", "sha256": "87e8c10c89146a2071e510d053e178405e4e628396a7107a32e1c59e4e7f3c87", "status": "written"}
