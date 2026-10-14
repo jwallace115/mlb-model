@@ -730,6 +730,18 @@
       "drift_applied": 0.0,
       "result": "WIN",
       "actual_total": 6
+    },
+    {
+      "game_id": 2026020107,
+      "game_date": "2026-10-14",
+      "home_team": "COL",
+      "away_team": "DAL",
+      "signal_side": "UNDER",
+      "edge": 0.1619,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.333,
+      "drift_applied": 0.0
     }
   ]
 }
