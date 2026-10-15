@@ -108,18 +108,27 @@ class TestMondayCutoff:
         assert game_is_admitted(sun_kick, cutoff)
 
 
-class TestNGamesHonest:
-    """n_games must count admitted games, not week-1."""
+class TestRunnerCloseColumnsNull:
+    """ON-D12: run_monday.py must write NULL in every close column."""
 
-    def test_bye_week_zero(self):
-        """A team on bye should have n_games < week-1 for that week."""
-        # This is verified by inspection: the builder counts actual admitted
-        # completed games, not week-1. A team on bye has no game that week,
-        # so their n_games at week W+1 = n_games at week W (not W).
-        from on_utils import compute_prediction_cutoff
-        # Just verify the cutoff function works
-        cutoff = compute_prediction_cutoff("2021-10-11")
-        assert cutoff is not None
+    def test_close_columns_are_null_in_output(self):
+        """A fresh run output's close columns must all be None.
+        Defect: runner writes actual close values from the tape."""
+        # Parse the results dict construction from run_monday.py
+        # by verifying the code path sets None for close columns
+        import ast, inspect
+        from run_monday import main
+        source = inspect.getsource(main)
+        # Check the literal None assignments for close columns
+        for col in ["hr_close_handicap", "hr_close_margin", "hr_close_price",
+                     "hr_close_ts", "hr_close_flag",
+                     "pin_close_handicap", "pin_close_margin",
+                     "pin_close_ts", "pin_close_flag"]:
+            assert f'"{col}": None' in source, (
+                f"run_monday.py must write None for {col}, but the literal "
+                f"'None' assignment not found in main(). Defect: close values "
+                f"are being written from the tape instead of NULL."
+            )
 
 
 class TestQuoteTimingFixture:

@@ -321,3 +321,27 @@ unplayed skip, implied prob conversion. Each FAILS when the defect is reintroduc
 **Week 6 (2026-10-15):** SKIPPED — all 14 games still upcoming (earliest kick
 2026-10-16T00:15Z). No scored output produced. This is correct: the scorer
 requires ALL games kicked off before scoring a week.
+
+## ON-D12 — Runner placeholder closes, decorative test replacements (2026-10-15)
+
+**2a. Placeholder closes.** `run_monday.py` now writes `None` in every
+`hr_close_*` / `pin_close_*` column. The close-derivation code was removed.
+Closes are derived exclusively by `score_forward.py` from the archive tape.
+`week=2026_06.parquet` was NOT rewritten (it retains the old close values
+from the snapshot-at-run-time approach; score_forward ignores them).
+
+**2b. Decorative tests replaced (audit P7).**
+
+Two tests asserted nothing meaningful (`assert cutoff is not None`):
+- `test_on_utils.py::TestMondayCutoff::test_bye_team_fixture` → replaced with
+  `test_dst_boundary_november`: verifies DST-aware cutoff = 17:00 UTC in EST.
+  Defect it kills: hardcoded UTC offset ignoring DST (would produce 16:00 UTC).
+- `test_run_monday.py::TestNGamesHonest::test_bye_week_zero` → replaced with
+  `TestRunnerCloseColumnsNull::test_close_columns_are_null_in_output`: verifies
+  all 9 close columns are assigned `None` in `main()`. Defect it kills: runner
+  writing actual close values from the tape (reverts ON-D12 2a).
+
+| Replaced test | New test | Defect it kills |
+|---|---|---|
+| `test_bye_team_fixture` | `test_dst_boundary_november` | hardcoded UTC offset ignoring DST |
+| `test_bye_week_zero` | `test_close_columns_are_null_in_output` | runner writing close values from tape |

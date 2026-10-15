@@ -305,13 +305,13 @@ class TestMondayCutoff:
         sun_kick = datetime(2026, 10, 12, 17, 0, tzinfo=timezone.utc)  # 13:00 ET
         assert game_is_admitted(sun_kick, cutoff)
 
-    def test_bye_team_fixture(self):
-        """A team on bye has no kickoff to test — the game_is_admitted filter
-        simply doesn't include any game for them, which is correct."""
-        # This is a documentation test — no assertion needed beyond confirming
-        # the function doesn't crash on valid inputs
-        cutoff = compute_prediction_cutoff("2026-10-13")
-        assert cutoff is not None
+    def test_dst_boundary_november(self):
+        """DST ends first Sunday in November. Monday Nov 2 2026 = EST (UTC-5).
+        Cutoff = 12:00 EST = 17:00 UTC, NOT 16:00 UTC."""
+        cutoff = compute_prediction_cutoff("2026-11-02")
+        # Nov 2 2026 is a Monday. Clocks fall back Nov 1.
+        assert cutoff.hour == 17, f"Expected 17 UTC (EST), got {cutoff.hour}"
+        assert cutoff.minute == 0
 
 
 # ═══════════════════════════════════════════════════════════════════════════

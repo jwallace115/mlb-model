@@ -40,7 +40,6 @@ from on_utils import (
     compute_gap,
     is_confident,
     match_game_to_event,
-    select_close_quote,
     select_decision_quote,
     stable_seed,
     kickoff_utc_from_nflverse,
@@ -377,10 +376,9 @@ def main():
 
         event_id = match_game_to_event(home, away, kick_utc, season, spreads)
 
-        hr_decision_h = hr_close_h = pin_decision_h = pin_close_h = None
-        hr_decision_ts = hr_close_ts = pin_decision_ts = pin_close_ts = None
-        hr_decision_price = hr_close_price = None
-        close_flag_hr = close_flag_pin = None
+        hr_decision_h = pin_decision_h = None
+        hr_decision_ts = pin_decision_ts = None
+        hr_decision_price = None
 
         if event_id:
             for book, prefix in [("hardrockbet_fl", "hr"), ("pinnacle", "pin")]:
@@ -389,26 +387,16 @@ def main():
                              (spreads["team_abbr"] == home)]
                 if len(sp) > 0:
                     dq = select_decision_quote(sp, prediction_cutoff)
-                    cq, cflag = select_close_quote(sp, kick_utc)
 
                     if prefix == "hr":
                         if dq is not None:
                             hr_decision_h = dq["point"]
                             hr_decision_ts = str(dq["snapshot_utc"])
                             hr_decision_price = dq["price"]
-                        if cq is not None:
-                            hr_close_h = cq["point"]
-                            hr_close_ts = str(cq["snapshot_utc"])
-                            hr_close_price = cq["price"]
-                            close_flag_hr = cflag
                     else:
                         if dq is not None:
                             pin_decision_h = dq["point"]
                             pin_decision_ts = str(dq["snapshot_utc"])
-                        if cq is not None:
-                            pin_close_h = cq["point"]
-                            pin_close_ts = str(cq["snapshot_utc"])
-                            close_flag_pin = cflag
 
         # Run sim with stable seeds (ON-D5/D6 2c)
         chunk_m, chunk_t = [], []
@@ -453,18 +441,20 @@ def main():
             "hr_decision_margin": handicap_to_home_margin(hr_decision_h),
             "hr_decision_price": hr_decision_price,
             "hr_decision_ts": hr_decision_ts,
-            "hr_close_handicap": hr_close_h,
-            "hr_close_margin": handicap_to_home_margin(hr_close_h),
-            "hr_close_price": hr_close_price,
-            "hr_close_ts": hr_close_ts,
-            "hr_close_flag": close_flag_hr,
+            # Close columns: NULL by design (ON-D12). Closes are derived
+            # by score_forward.py from the archive tape, not embedded here.
+            "hr_close_handicap": None,
+            "hr_close_margin": None,
+            "hr_close_price": None,
+            "hr_close_ts": None,
+            "hr_close_flag": None,
             "pin_decision_handicap": pin_decision_h,
             "pin_decision_margin": handicap_to_home_margin(pin_decision_h),
             "pin_decision_ts": pin_decision_ts,
-            "pin_close_handicap": pin_close_h,
-            "pin_close_margin": handicap_to_home_margin(pin_close_h),
-            "pin_close_ts": pin_close_ts,
-            "pin_close_flag": close_flag_pin,
+            "pin_close_handicap": None,
+            "pin_close_margin": None,
+            "pin_close_ts": None,
+            "pin_close_flag": None,
             "gap_vs_hr": round(gap, 4) if gap is not None else None,
             "confident": confident,
             "side": side,
