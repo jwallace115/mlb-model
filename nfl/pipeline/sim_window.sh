@@ -56,7 +56,9 @@ if [[ $AUTO_PREKICK -eq 1 ]]; then
     GATE_START=$((NOW_EPOCH + 10800))  # +3h
     GATE_END=$((NOW_EPOCH + 12600))    # +3h30m
     HAS_GAME=0
-    SCHED_FILE="$MAIN_REPO/nfl/data/pbp/schedules_2026.parquet"
+    # fix 2026-10-11: the pbp path never existed on the Mac (gate always 0); use the newest archived nflverse schedule
+    SCHED_FILE=$(ls -t "$MAIN_REPO"/data/results_archive/nfl/schedules_2026_*.parquet 2>/dev/null | head -1)
+    [[ -z "$SCHED_FILE" ]] && SCHED_FILE="$MAIN_REPO/nfl/data/pbp/schedules_2026.parquet"
     if [[ -f "$SCHED_FILE" ]]; then
         HAS_GAME=$($MAC_PY -c "
 import pandas as pd, sys
@@ -72,7 +74,8 @@ for _, r in week_df.iterrows():
         if 'T' in gt:
             dt = datetime.fromisoformat(gt.replace('Z','+00:00'))
         else:
-            dt = datetime.strptime(f'{gd} {gt}', '%Y-%m-%d %H:%M').replace(tzinfo=timezone.utc)
+            from zoneinfo import ZoneInfo
+            dt = datetime.strptime(f'{gd} {gt}', '%Y-%m-%d %H:%M').replace(tzinfo=ZoneInfo('America/New_York'))  # nflverse gametime is ET (fix 2026-10-11)
         e = int(dt.timestamp())
         if $GATE_START <= e <= $GATE_END:
             print(1); sys.exit()

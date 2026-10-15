@@ -7,6 +7,8 @@
 set -u
 # COWORK-HOOK (temporary 2026-10-10): run one-shot jobs from ~/cowork_audit/jobs; remove when done
 [ -x "$HOME/cowork_audit/jobs/_runner.sh" ] && bash "$HOME/cowork_audit/jobs/_runner.sh" || true
+# 2026-10-10: shared/last_updated.json is written by both the VM and Mac jobs and conflicts on every autostash; the VM copy wins here
+git -C "$(dirname "$0")/.." checkout -- shared/last_updated.json 2>/dev/null || true
 export GIT_EDITOR=true EDITOR=true VISUAL=true
 export MLB_AUTOCOMMIT=1  # bypass .git/hooks/pre-commit guard (P31)
 
