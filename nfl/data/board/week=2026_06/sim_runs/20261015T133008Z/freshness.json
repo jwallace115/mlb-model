@@ -1,0 +1,41 @@
+{
+ "cutoff_T": "2026-10-15T13:30:08.006995+00:00",
+ "run_id": "20261015T133008Z",
+ "schedule_source": "local schedules_2026.parquet",
+ "per_team": {
+  "DEN": {
+   "last_played_week": 5,
+   "team_ratings": 6,
+   "tendencies": 6,
+   "tendencies_situational": 6,
+   "usage": 6,
+   "active_universe": 6,
+   "kickers": 6,
+   "qb_ratings": 6,
+   "active_universe_current": 16,
+   "injury_game_statuses": 3,
+   "official_rows": 6,
+   "official_game_statuses": 3,
+   "official_fetched_utc": "2026-10-15T13:15:18.150404+00:00",
+   "final_report_deadline_utc": "2026-10-14T20:00:00+00:00",
+   "official_verified": true
+  },
+  "SEA": {
+   "last_played_week": 5,
+   "team_ratings": 6,
+   "tendencies": 6,
+   "tendencies_situational": 6,
+   "usage": 6,
+   "active_universe": 6,
+   "kickers": 6,
+   "qb_ratings": 6,
+   "active_universe_current": 17,
+   "injury_game_statuses": 3,
+   "official_rows": 9,
+   "official_game_statuses": 3,
+   "official_fetched_utc": "2026-10-15T13:15:18.150404+00:00",
+   "final_report_deadline_utc": "2026-10-14T20:00:00+00:00",
+   "official_verified": true
+  }
+ }
+}
