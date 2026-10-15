@@ -4421,3 +4421,55 @@ Also: make refresh_inputs fail per team, not per report.
 
 Main branch: main (verified at start and end).
 SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
+
+## 2026-10-15T18:15Z  claude-code (ON-1c — forward scorer, placeholder closes, comparator)
+
+### RETURNED
+- ITEM 1 (ON-D11): `score_forward.py` created. Scores forward weeks against archive
+  closes (matched by event_id, last pre-kick quote, ≤3h preferred). Forward file's
+  close columns NEVER read (asserted by test). Per-game: signed movement, direction,
+  CLV, ATS placeholders. Output: `scored/week=SSSS_NN.parquet` + `forward_scorecard.md`.
+  10 behavioral tests all pass. Week 6: SKIPPED (all 14 games unplayed, earliest kick
+  2026-10-16T00:15Z). Commit 2b30b86d3.
+
+- ITEM 2 (ON-D12): `run_monday.py` now writes NULL in all 9 `hr_close_*/pin_close_*`
+  columns. Close derivation code removed. `week=2026_06.parquet` NOT rewritten. Two
+  decorative tests replaced: `test_bye_team_fixture` → `test_dst_boundary_november`
+  (kills hardcoded UTC offset), `test_bye_week_zero` → `test_close_columns_are_null_in_output`
+  (kills runner writing close values from tape). Commit 64fa7bef2.
+
+- ITEM 3 (ON-D13): Forward comparator integrated into `score_forward.py`. Fits
+  prior-close team ratings on (prior season nflverse closes + 2026 prior-week archive
+  Pinnacle closes), same `prediction_cutoff_utc`. Reports paired engine-vs-comparator
+  signed movement per week and cumulative. Pre-registered: comp dir ~55%, engine-comp
+  paired > 0 on PRIMARY at 35%. No weeks eligible yet. Commit 075c7391f.
+
+- ITEM 4: `shared/on_monday.sh` wired: score_forward runs after git pull, before PBP
+  pull. Exit code logged, never blocks runner. Push paths include `scored/` and
+  `forward_scorecard.md`. Shell syntax verified. Commit dedd35507.
+
+- Merge: research/on1c → main (rebased). Gate: 0 modified/deleted/new under nfl/sim.
+  68 tests pass. Pushed to origin/main.
+
+### MEANS
+- The scorer is wired but has no scored output yet — week 6 hasn't kicked off.
+  First actual scored output will appear when week 6 games complete and the
+  Monday runner fires for week 7.
+- The comparator pre-registration is written but untested on forward data.
+  The 35% confidence in engine > comparator reflects genuine uncertainty.
+
+### NOT DONE
+- No VM test with ON_SKIP_WAITS=1 (requires SSH to VM; syntax-checked only).
+- No forward_scorecard.md content produced (no eligible weeks).
+- ATS scoring remains a placeholder (needs pbp_2026 final scores).
+- FROZEN_MANIFEST_v2 not rebuilt (score_forward.py and test files are new;
+  the manifest only covers frozen inputs, not the scorer itself).
+
+### UNVERIFIED
+- Whether the archive tape contains sufficient Pinnacle data for all week-6
+  games to produce closes (will be known after kickoffs).
+- Whether the VM's cron picks up the new on_monday.sh cleanly next Monday.
+
+### FINAL
+- origin/main SHA: dedd355077a4487fd0b350d4cc38c55d6b127ca8
+- Main-branch check: `main`
