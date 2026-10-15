@@ -287,3 +287,37 @@ merge to main.
 - (v) All 7 core engine files IDENTICAL — PASS
 - (vi) SHA256 match eng/gl1 for both files — PASS
 - (vii) No caller outside research/own_numbers/ and nfl/sim/build_hfa.py itself — PASS
+
+## ON-D11 — Forward scorer (2026-10-15)
+
+`research/own_numbers/score_forward.py --season 2026`: scores every forward week
+whose games have ALL kicked off. Weeks with unplayed games are skipped and named.
+
+**Close provenance:** Closes come ONLY from `data/odds_archive/nfl/line_history/
+season=SSSS/snap_*.parquet`, matched by `event_id`. HR (hardrockbet_fl) and Pinnacle
+spreads; close = last quote strictly before `kickoff_utc`; ≤3h preferred, else
+flagged `old_close`; quotes at or after kick rejected; future-dated rejected. The
+forward file's `hr_close_*` / `pin_close_*` columns are NEVER read — asserted by
+test (`TestBannedCloseColumns`).
+
+**Per-game scoring:**
+- Side, decision handicap/price/ts from the forward file (unchanged)
+- Close handicap/price/ts derived from archive tape (prefixed `scored_`)
+- Signed movement toward our side in points (HR and Pinnacle)
+- Direction: `moved_our_way`, `moved_against`, `unchanged`
+- Paid-price CLV = Pinnacle de-vigged close prob − HR RAW decision implied prob
+  (same-point rows only; others flagged `incomparable`)
+- ATS at decision and close: placeholder until pbp_2026 results available
+
+**Output:** `nfl/data/own/forward/scored/week=SSSS_NN.parquet` (revision 0 only;
+HALT if exists). `research/own_numbers/forward_scorecard.md` appended with per-week
+and cumulative tables, PRIMARY and PILOT reported separately, split by dog/favorite
+and by week bucket (1-6 / 7-12 / 13+).
+
+**Tests:** `test_score_forward.py` — 10 fixtures covering: banned-column enforcement,
+quote timing (in-play rejected), movement sign (home and away sides), overwrite HALT,
+unplayed skip, implied prob conversion. Each FAILS when the defect is reintroduced.
+
+**Week 6 (2026-10-15):** SKIPPED — all 14 games still upcoming (earliest kick
+2026-10-16T00:15Z). No scored output produced. This is correct: the scorer
+requires ALL games kicked off before scoring a week.
