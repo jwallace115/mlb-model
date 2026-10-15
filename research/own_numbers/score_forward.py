@@ -19,9 +19,12 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 sys.path.insert(0, os.path.dirname(__file__))
 
 from nfl.sim.names import FULL_TO_ABBR
+import nflreadpy as nflr
 from on_utils import (
     handicap_to_home_margin,
     select_close_quote,
+    game_is_admitted,
+    kickoff_utc_from_nflverse,
 )
 
 ROOT = os.path.join(os.path.dirname(__file__), "../..")
@@ -35,6 +38,178 @@ BANNED_CLOSE_COLS = [
     "pin_close_handicap", "pin_close_margin",
     "pin_close_ts", "pin_close_flag",
 ]
+
+
+def fit_prior_close_ratings_forward(season, week, cutoff_utc, tape, min_games=32):
+    """Fit prior-close team ratings for a forward week (ON-D13).
+
+    Training data:
+    - Prior season (nflverse closes = spread_line), all REG games
+    - Current season prior weeks from archive tape closes,
+      only games with kickoff + 4h < cutoff_utc
+
+    Same algorithm as comparator_prior_close.py fit_prior_close_ratings.
+    """
+    # Prior season from nflverse
+    prior_season = season - 1
+    prior_sched = nflr.load_schedules([prior_season]).to_pandas()
+    prior_games = prior_sched[
+        (prior_sched["game_type"] == "REG") &
+        prior_sched["spread_line"].notna()
+    ].copy()
+
+    # Current season prior weeks from archive tape
+    # Need to find closes for each game in the archive
+    curr_sched = nflr.load_schedules([season]).to_pandas()
+    curr_games = curr_sched[
+        (curr_sched["game_type"] == "REG") &
+        (curr_sched["week"] < week)
+    ].copy()
+
+    if len(curr_games) > 0:
+        curr_games["kickoff_utc"] = curr_games.apply(
+            lambda r: kickoff_utc_from_nflverse(r["gameday"], r["gametime"]), axis=1
+        )
+        mask = curr_games["kickoff_utc"].apply(
+            lambda k: game_is_admitted(k, cutoff_utc)
+        )
+        curr_games = curr_games[mask].copy()
+
+        # Get closes from archive for current season games
+        if len(curr_games) > 0 and tape is not None:
+            spreads = tape[tape["market"] == "spreads"].copy()
+            spreads["team_abbr"] = spreads["outcome_name"].map(FULL_TO_ABBR)
+            spreads = spreads[spreads["team_abbr"].notna()]
+
+            close_lines = []
+            for _, g in curr_games.iterrows():
+                home = g["home_team"]
+                kick = g["kickoff_utc"]
+                # Find Pinnacle close for this game (best proxy for "market close")
+                pin_sp = spreads[
+                    (spreads["team_abbr"] == home) &
+                    (spreads["bookmaker"] == "pinnacle")
+                ]
+                # Match by commence_time proximity (±1h)
+                if len(pin_sp) > 0:
+                    pin_sp = pin_sp.copy()
+                    ct_diff = (pin_sp["commence_time"] - pd.Timestamp(kick)).abs()
+                    pin_sp = pin_sp[ct_diff <= pd.Timedelta(hours=1)]
+                    if len(pin_sp) > 0:
+                        cq, _ = select_close_quote(pin_sp, kick)
+                        if cq is not None:
+                            close_lines.append({
+                                "game_id": g["game_id"],
+                                "archive_close": handicap_to_home_margin(cq["point"]),
+                            })
+
+            if close_lines:
+                close_df = pd.DataFrame(close_lines)
+                curr_games = curr_games.merge(close_df, on="game_id", how="left")
+                curr_games["spread_line"] = curr_games["archive_close"]
+                curr_games = curr_games[curr_games["spread_line"].notna()]
+
+    # Combine training data
+    train_frames = [prior_games[["home_team", "away_team", "spread_line"]]]
+    if len(curr_games) > 0 and "spread_line" in curr_games.columns:
+        train_frames.append(curr_games[["home_team", "away_team", "spread_line"]])
+    train = pd.concat(train_frames, ignore_index=True)
+    train = train[train["spread_line"].notna()]
+
+    if len(train) < min_games:
+        return None
+
+    # Ridge least-squares: team indicators + intercept
+    teams = sorted(set(train["home_team"].unique()) | set(train["away_team"].unique()))
+    team_idx = {t: i for i, t in enumerate(teams)}
+    n = len(train)
+    p = len(teams) + 1
+
+    X = np.zeros((n, p))
+    y = train["spread_line"].values
+
+    for i, (_, g) in enumerate(train.iterrows()):
+        X[i, team_idx[g["home_team"]]] = 1
+        X[i, team_idx[g["away_team"]]] = -1
+        X[i, -1] = 1  # HFA intercept
+
+    lam = 0.01
+    XtX = X.T @ X + lam * np.eye(p)
+    Xty = X.T @ y
+    beta = np.linalg.solve(XtX, Xty)
+
+    ratings = {t: beta[team_idx[t]] for t in teams}
+    hfa = beta[-1]
+    return {"ratings": ratings, "hfa": hfa, "n_train": len(train)}
+
+
+def run_comparator_for_week(scored_df, season, week, cutoff_utc, tape):
+    """Run prior-close comparator on the same games as score_forward (ON-D13).
+
+    Returns a dict with comparator results per game and summary.
+    """
+    model = fit_prior_close_ratings_forward(season, week, cutoff_utc, tape)
+    if model is None:
+        return None
+
+    comp_results = []
+    for _, g in scored_df.iterrows():
+        home = g["home_team"]
+        away = g["away_team"]
+        ratings = model["ratings"]
+        hr = ratings.get(home, 0)
+        ar = ratings.get(away, 0)
+        pc_pred_m = hr - ar + model["hfa"]
+
+        # Gap vs HR decision (same benchmark as engine)
+        hr_dec_h = g["hr_decision_handicap"]
+        hr_dec_margin = g.get("hr_decision_margin")
+        if hr_dec_margin is None and hr_dec_h is not None:
+            hr_dec_margin = handicap_to_home_margin(hr_dec_h)
+
+        pc_gap = None
+        pc_side = None
+        pc_confident = False
+        if hr_dec_margin is not None and not (isinstance(hr_dec_margin, float) and np.isnan(hr_dec_margin)):
+            pc_gap = pc_pred_m - hr_dec_margin
+            if pc_gap != 0:
+                pc_side = "home" if pc_pred_m > hr_dec_margin else "away"
+            # Use engine's err_m as common threshold (ON-D8 design)
+            err_m = g["err_m"]
+            pc_confident = abs(pc_gap) >= err_m and abs(pc_gap) >= 1.0
+
+        # Compute movement (same close as engine)
+        hr_close_margin = g.get("scored_hr_close_margin")
+        pc_movement = None
+        pc_direction = None
+        if pc_side and hr_dec_margin is not None and hr_close_margin is not None:
+            raw_move = hr_close_margin - hr_dec_margin
+            if pc_side == "home":
+                pc_movement = raw_move
+            elif pc_side == "away":
+                pc_movement = -raw_move
+            if pc_movement is not None:
+                if pc_movement > 0:
+                    pc_direction = "moved_our_way"
+                elif pc_movement < 0:
+                    pc_direction = "moved_against"
+                else:
+                    pc_direction = "unchanged"
+
+        comp_results.append({
+            "game_id": g["game_id"],
+            "pc_pred_m": pc_pred_m,
+            "pc_gap": pc_gap,
+            "pc_side": pc_side,
+            "pc_confident": pc_confident,
+            "pc_movement": pc_movement,
+            "pc_direction": pc_direction,
+        })
+
+    return {
+        "results": pd.DataFrame(comp_results),
+        "n_train": model["n_train"],
+    }
 
 
 def load_archive_tape(season):
@@ -270,7 +445,89 @@ def week_bucket(week):
         return "13+"
 
 
-def format_scorecard(scored_dfs, season):
+def format_comparator_section(scored_dfs, comp_dfs, season):
+    """Format comparator paired-difference section for the scorecard."""
+    lines = []
+    if not comp_dfs:
+        return ""
+
+    lines.append("\n### Comparator paired difference (ON-D13)\n")
+    lines.append("Pre-registered (Cowork, ON-FWD):")
+    lines.append("- Comparator direction ~ 55%")
+    lines.append("- Engine - comparator paired movement on PRIMARY weeks > 0 at season-end: 35%\n")
+
+    all_comp = pd.concat(comp_dfs, ignore_index=True)
+    all_scored = pd.concat(scored_dfs, ignore_index=True)
+
+    for mode_label in ["PRIMARY", "PILOT"]:
+        mode_comp = all_comp[all_comp["mode"] == mode_label]
+        mode_scored = all_scored[all_scored["mode"] == mode_label]
+        if mode_comp.empty:
+            continue
+
+        lines.append(f"#### {mode_label}\n")
+
+        # Per-week table
+        lines.append("| Week | Engine N | Engine Dir% | Engine Mean | Comp N | Comp Dir% | Comp Mean | Diff |")
+        lines.append("|------|----------|-------------|-------------|--------|-----------|-----------|------|")
+
+        for wk in sorted(mode_comp["week"].unique()):
+            wk_scored = mode_scored[(mode_scored["week"] == wk) & (mode_scored["confident"])]
+            wk_comp = mode_comp[(mode_comp["week"] == wk) & (mode_comp["pc_confident"])]
+
+            # Engine stats
+            en = len(wk_scored)
+            e_moved = wk_scored["hr_direction"].isin(["moved_our_way", "moved_against"]).sum()
+            e_dir = (wk_scored["hr_direction"] == "moved_our_way").sum()
+            e_dp = f"{e_dir/e_moved:.1%}" if e_moved > 0 else "N/A"
+            e_mean = f"{wk_scored['hr_movement'].mean():+.3f}" if en > 0 and wk_scored["hr_movement"].notna().any() else "N/A"
+
+            # Comparator stats
+            cn = len(wk_comp)
+            c_moved = wk_comp["pc_direction"].isin(["moved_our_way", "moved_against"]).sum()
+            c_dir = (wk_comp["pc_direction"] == "moved_our_way").sum()
+            c_dp = f"{c_dir/c_moved:.1%}" if c_moved > 0 else "N/A"
+            c_mean = f"{wk_comp['pc_movement'].mean():+.3f}" if cn > 0 and wk_comp["pc_movement"].notna().any() else "N/A"
+
+            # Paired diff (on engine-selected games)
+            paired = wk_scored.merge(wk_comp[["game_id", "pc_movement"]], on="game_id", how="inner")
+            if len(paired) > 0 and paired["hr_movement"].notna().any() and paired["pc_movement"].notna().any():
+                diff = paired["hr_movement"].mean() - paired["pc_movement"].mean()
+                diff_str = f"{diff:+.3f}"
+            else:
+                diff_str = "N/A"
+
+            lines.append(f"| {wk} | {en} | {e_dp} | {e_mean} | {cn} | {c_dp} | {c_mean} | {diff_str} |")
+
+        # Cumulative
+        e_conf = mode_scored[mode_scored["confident"]]
+        c_conf = mode_comp[mode_comp["pc_confident"]]
+        lines.append("")
+        lines.append(f"Cumulative engine: N={len(e_conf)}")
+        lines.append(f"Cumulative comparator: N={len(c_conf)}")
+        if len(c_conf) > 0:
+            c_moved_all = c_conf["pc_direction"].isin(["moved_our_way", "moved_against"]).sum()
+            c_dir_all = (c_conf["pc_direction"] == "moved_our_way").sum()
+            lines.append(f"Comparator direction: {c_dir_all}/{c_moved_all} "
+                         f"({c_dir_all/c_moved_all:.1%})" if c_moved_all > 0 else "Comparator direction: N/A")
+
+        # Paired cumulative
+        paired_all = e_conf.merge(
+            c_conf[["game_id", "pc_movement"]], on="game_id", how="inner"
+        )
+        if len(paired_all) > 0:
+            e_mean_all = paired_all["hr_movement"].mean()
+            c_mean_all = paired_all["pc_movement"].mean()
+            diff_all = e_mean_all - c_mean_all
+            lines.append(f"Paired on engine-selected (N={len(paired_all)}): "
+                         f"engine {e_mean_all:+.3f}, comp {c_mean_all:+.3f}, diff {diff_all:+.3f}")
+
+        lines.append("")
+
+    return "\n".join(lines) + "\n"
+
+
+def format_scorecard(scored_dfs, season, comp_dfs=None):
     """Build forward_scorecard.md content from scored DataFrames."""
     lines = []
     run_ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -368,6 +625,10 @@ def format_scorecard(scored_dfs, season):
 
         lines.append("")
 
+    # Append comparator section if available
+    if comp_dfs:
+        lines.append(format_comparator_section(scored_dfs, comp_dfs, season))
+
     return "\n".join(lines) + "\n"
 
 
@@ -401,6 +662,7 @@ def main():
 
     now_utc = datetime.now(timezone.utc)
     scored_dfs = []
+    comp_results_all = []
     skipped = []
 
     for fwd_path in fwd_files:
@@ -452,10 +714,26 @@ def main():
         print(f"  Confident: {n_conf}, Moved: {moved}, Direction: "
               f"{dir_our}/{moved} ({dir_our/moved:.1%})" if moved > 0 else f"  Confident: {n_conf}")
 
+        # Run comparator (ON-D13)
+        cutoff_utc = pd.to_datetime(fwd_df["prediction_cutoff_utc"].iloc[0])
+        if cutoff_utc.tzinfo is None:
+            cutoff_utc = cutoff_utc.tz_localize("UTC")
+        comp = run_comparator_for_week(scored, season, wk, cutoff_utc, tape)
+        if comp is not None:
+            comp_df = comp["results"]
+            comp_df["week"] = wk
+            comp_df["mode"] = scored["mode"].iloc[0]
+            comp_results_all.append(comp_df)
+            print(f"  Comparator: n_train={comp['n_train']}, "
+                  f"confident={comp_df['pc_confident'].sum()}")
+        else:
+            print(f"  Comparator: not enough training data")
+
     # Write scorecard
     if scored_dfs:
         scorecard_path = os.path.join(ROOT, "research/own_numbers/forward_scorecard.md")
-        content = format_scorecard(scored_dfs, season)
+        content = format_scorecard(scored_dfs, season,
+                                   comp_dfs=comp_results_all if comp_results_all else None)
 
         if not os.path.exists(scorecard_path):
             with open(scorecard_path, "w") as f:

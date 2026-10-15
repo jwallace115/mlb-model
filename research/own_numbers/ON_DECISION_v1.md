@@ -345,3 +345,30 @@ Two tests asserted nothing meaningful (`assert cutoff is not None`):
 |---|---|---|
 | `test_bye_team_fixture` | `test_dst_boundary_november` | hardcoded UTC offset ignoring DST |
 | `test_bye_week_zero` | `test_close_columns_are_null_in_output` | runner writing close values from tape |
+
+## ON-D13 — Forward comparator on the same games (2026-10-15)
+
+`score_forward.py` now runs `fit_prior_close_ratings_forward` for each scored week
+with the SAME `prediction_cutoff_utc` from the week file.
+
+**Comparator training data:**
+- Prior season (2025) nflverse closes (`spread_line`) — all REG games
+- 2026 prior weeks from the archive tape (Pinnacle closes of games with
+  kickoff + 4h < cutoff)
+- Ridge with λ=0.01 for stability (same as ON-D8)
+
+**Two filter paths (same as ON-D8):**
+- Common threshold = engine's err_m + |gap| ≥ 1
+- Own calibration: same threshold applied to the comparator's gap
+
+**Reporting:** Per-week and cumulative paired difference in mean signed
+movement on (a) the engine-selected games and (b) the comparator's own
+selections. Appended to `forward_scorecard.md`.
+
+**Pre-registration (Cowork, ON-FWD):**
+- Comparator direction ≈ 55%
+- Engine − comparator paired movement on PRIMARY weeks > 0 at the
+  season-end read — 35% (i.e., 35% chance of this outcome)
+
+**First run:** No weeks eligible (week 6 unplayed). Comparator will run
+once week 7+ forward files exist and games have kicked off.
