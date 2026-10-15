@@ -16,6 +16,12 @@ echo "=== ON Monday runner started $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
 cd "$REPO" || exit 1
 git pull --ff-only || { echo "HALT: git pull failed"; exit 1; }
 
+# ─── Score any prior forward weeks (ON-D11) ────────────────────────
+echo "--- score_forward.py --season $SEASON ---"
+$VENV research/own_numbers/score_forward.py --season "$SEASON"
+SCORER_RC=$?
+echo "score_forward.py exited $SCORER_RC"
+
 # ─── Wait until 11:40 ET (DST-safe) ──────────────────────────────
 if [ "${ON_SKIP_WAITS:-}" != "1" ]; then
     while true; do
@@ -74,7 +80,7 @@ RUNNER_RC=$?
 
 # ─── Push results ────────────────────────────────────────────────
 echo "--- push_paths.sh ---"
-bash shared/push_paths.sh "ON Monday auto" nfl/data/own/forward research/own_numbers/forward_log.md
+bash shared/push_paths.sh "ON Monday auto" nfl/data/own/forward nfl/data/own/forward/scored research/own_numbers/forward_log.md research/own_numbers/forward_scorecard.md
 
 echo "=== ON Monday runner finished $(date -u +%Y-%m-%dT%H:%M:%SZ) rc=$RUNNER_RC ==="
 exit $RUNNER_RC
