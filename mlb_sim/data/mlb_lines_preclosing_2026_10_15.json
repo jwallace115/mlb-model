@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "ab3e5655be6b32e0853d683e51a60baa",
+    "game_date": "2026-10-15",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Milwaukee Brewers",
+    "commence_time": "2026-10-16T00:00:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 8.0,
+    "over_price": -102,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-15T22:00:08.577360+00:00"
+  },
+  {
+    "game_id": "b9d2e07cf437b5643307aba274c45a74",
+    "game_date": "2026-10-15",
+    "sport": "MLB",
+    "home_team": "Cleveland Guardians",
+    "away_team": "Tampa Bay Rays",
+    "commence_time": "2026-10-16T22:00:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.5,
+    "over_price": -107,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-15T22:00:08.577360+00:00"
+  }
+]
