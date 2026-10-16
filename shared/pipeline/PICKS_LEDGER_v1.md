@@ -1098,3 +1098,34 @@ Test asserts residual ≤ 1e-9.
 3. Merge SHA: `dc85b4f53`. ops/pm1 merged to main before MNF BUF@LA 20:15 ET.
 4. Cron: `0 11 * * * ... pull_nfl_postgame_data.py && build_postgame.py --all-final`
    on VM, 11:00Z daily. Outputs reach origin via push_daemon.sh (:00/:30).
+
+## P52 — reader_v3b: no one-way markets, edge-only confidence (2026-10-16)
+
+**Problem:** reader_v3 scored one-way ATD markets (no under_price) via
+`imp(over)*0.88` consensus, generating 77 ATD "Yes" picks at +1200..+5000 with
+conf 6–9 from the book-count term `min(n,9)*1.0`. These are 2–75 W/L. The
+book-count term inflated conf on any line with many books regardless of edge.
+
+**Fix (reader_v3b):**
+1. One-way markets (not game, not two_way) → ALWAYS no_view with
+   `p = clip(implied, 0.02, 0.98)`, reason "one-way market: no consensus to
+   price against". Both sports.
+2. `n < 2` gate: a single-book consensus → no_view "one book only".
+3. `conf = round(edge*500 * min(1, n/5), 1)` — no book-count term, no −3 term.
+   Cap 95, floor 1.0 for a view line.
+
+**v3b is a new reader line.** The v3 rows in the ledger keep their reader_model
+and their grades. `run_window.py --reader-model` default changes to `reader_v3b`.
+
+**Tests (RED first, all GREEN after):**
+- `test_atd_one_way_is_no_view`: ATD line with 7 books → no_view
+  (RED: `AssertionError: expected no_view, got price_vs_sharp`)
+- `test_two_way_conf_edge_only`: 7-book two-way, edge ~0.005 → conf 2.5
+  (RED: `assert 9.0 == 2.5` — v3 had book-count term)
+- `test_one_book_is_no_view`: n=1 → no_view
+  (RED: `expected no_view, got price_vs_sharp`)
+- `test_p_first_unchanged_on_two_way`: 20 synthetic two-way rows, p_first
+  identical (diff count: 0). Null control PASS.
+
+**Determinism re-read (10-13 open freeze, 231 rows):**
+no_view share: 0.4% → 50.2%. 111 one-way → all no_view. 4 two-way n<2 → no_view.
