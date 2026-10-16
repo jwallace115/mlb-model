@@ -755,9 +755,7 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.408,
-      "drift_applied": 0.0,
-      "result": "LOSS",
-      "actual_total": 8
+      "drift_applied": 0.0
     },
     {
       "game_id": 2026020108,
@@ -765,27 +763,11 @@
       "home_team": "TOR",
       "away_team": "BUF",
       "signal_side": "UNDER",
-      "edge": 0.1528,
-      "tier": "HIGH",
-      "closing_total": 6.5,
-      "lambda_total": 5.91,
-      "drift_applied": 0.0,
-      "result": "LOSS",
-      "actual_total": 9
-    },
-    {
-      "game_id": 2026020115,
-      "game_date": "2026-10-15",
-      "home_team": "NSH",
-      "away_team": "SJS",
-      "signal_side": "UNDER",
-      "edge": 0.1313,
+      "edge": 0.1303,
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
-      "lambda_total": 5.652,
-      "drift_applied": 0.0,
-      "result": "WIN",
-      "actual_total": 5
+      "lambda_total": 6.045,
+      "drift_applied": 0.0
     },
     {
       "game_id": 2026020117,
@@ -793,24 +775,10 @@
       "home_team": "EDM",
       "away_team": "UTA",
       "signal_side": "UNDER",
-      "edge": 0.1259,
+      "edge": 0.1243,
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
-      "lambda_total": 5.928,
-      "drift_applied": 0.0,
-      "result": "WIN",
-      "actual_total": 6
-    },
-    {
-      "game_id": 2026020119,
-      "game_date": "2026-10-16",
-      "home_team": "COL",
-      "away_team": "PIT",
-      "signal_side": "UNDER",
-      "edge": 0.1643,
-      "tier": "HIGH",
-      "closing_total": 6.5,
-      "lambda_total": 5.715,
+      "lambda_total": 5.942,
       "drift_applied": 0.0
     }
   ]
