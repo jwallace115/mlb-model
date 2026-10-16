@@ -37,7 +37,7 @@ NFL = {
     "ARI": "cardinals", "ATL": "falcons", "BAL": "ravens", "BUF": "bills", "CAR": "panthers",
     "CHI": "bears", "CIN": "bengals", "CLE": "browns", "DAL": "cowboys", "DEN": "broncos",
     "DET": "lions", "GB": "packers", "HOU": "texans", "IND": "colts", "JAX": "jaguars",
-    "KC": "chiefs", "LV": "raiders", "LAC": "chargers", "LAR": "rams", "MIA": "dolphins",
+    "KC": "chiefs", "LA": "rams", "LV": "raiders", "LAC": "chargers", "LAR": "rams", "MIA": "dolphins",
     "MIN": "vikings", "NE": "patriots", "NO": "saints", "NYG": "giants", "NYJ": "jets",
     "PHI": "eagles", "PIT": "steelers", "SF": "49ers", "SEA": "seahawks", "TB": "buccaneers",
     "TEN": "titans", "WAS": "commanders", "WSH": "commanders",

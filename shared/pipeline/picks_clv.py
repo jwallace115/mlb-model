@@ -249,6 +249,7 @@ def compute_clv(view_rows, root, now):
         # Compute CLV
         clv_points = None
         clv_price_pct = None
+        clv_basis_note = None
 
         if market == "moneyline":
             clv_points = None  # moneyline has no point
@@ -268,6 +269,16 @@ def compute_clv(view_rows, root, now):
             if cp is not None and pp is not None:
                 clv_price_pct = round(cp - pp, 4)
 
+        # P54: For props with book-basis close, check if the close quote is from
+        # the same pull as the pick's source (no later quote available at book).
+        # If so, clv_price_pct is undefined — not 0.0.
+        if is_prop and close_basis == "book" and close_as_of:
+            source_pt = _parse_dt(row.get("logged_utc") or row.get("source_utc"))
+            close_dt = _parse_dt(close_as_of)
+            if source_pt and close_dt and abs((close_dt - source_pt).total_seconds()) < 120:
+                clv_basis_note = "no later quote at book"
+                clv_price_pct = None
+
         results.append({
             "pick_id": row.get("pick_id"),
             "close_point": close_point,
@@ -278,10 +289,53 @@ def compute_clv(view_rows, root, now):
             "close_source": close_source,
             "clv_points": round(clv_points, 2) if clv_points is not None else None,
             "clv_price_pct": clv_price_pct,
+            "clv_basis_note": clv_basis_note,
             "computed_utc": now.isoformat(),
         })
 
     return results
+
+
+def _report(ledger_dir):
+    """Print CLV defined/undefined counts by sport and market type. P54."""
+    clv_path = ledger_dir / "clv.jsonl"
+    if not clv_path.exists():
+        print("no clv.jsonl found")
+        return
+    rows = {}
+    with open(clv_path) as f:
+        for line in f:
+            if line.strip():
+                try:
+                    r = json.loads(line)
+                    rows[r["pick_id"]] = r
+                except (json.JSONDecodeError, KeyError):
+                    pass
+
+    view_rows = pl.view(ledger_dir)
+    sport_map = {r["pick_id"]: r.get("sport", "?") for r in view_rows}
+    market_map = {r["pick_id"]: r.get("market", "?") for r in view_rows}
+
+    from collections import Counter
+    by_sport_type = Counter()
+    for pid, r in rows.items():
+        sport = sport_map.get(pid, "?")
+        mkt = market_map.get(pid, "?")
+        is_prop = "prop" in str(mkt) or "player_" in str(mkt)
+        mtype = "prop" if is_prop else "game"
+        note = r.get("clv_basis_note")
+        has_real_clv = r.get("clv_price_pct") is not None and note is None
+        by_sport_type[(sport, mtype, "real_clv")] += int(has_real_clv)
+        by_sport_type[(sport, mtype, "no_later_quote")] += int(note == "no later quote at book")
+        by_sport_type[(sport, mtype, "null_clv")] += int(r.get("clv_price_pct") is None and note is None)
+
+    print("\nCLV report (--report):")
+    print(f"{'sport':6} {'type':5} {'real_clv':>8} {'no_later':>8} {'null':>6}")
+    for (sport, mtype) in sorted({(s, t) for s, t, _ in by_sport_type}):
+        real = by_sport_type.get((sport, mtype, "real_clv"), 0)
+        no_later = by_sport_type.get((sport, mtype, "no_later_quote"), 0)
+        null = by_sport_type.get((sport, mtype, "null_clv"), 0)
+        print(f"{sport:6} {mtype:5} {real:>8} {no_later:>8} {null:>6}")
 
 
 def main():
@@ -289,11 +343,17 @@ def main():
     ap = argparse.ArgumentParser(description="CLV per pick")
     ap.add_argument("--recompute-null", action="store_true",
                     help="Re-run picks whose existing close_point is null, append corrected row (newest wins)")
+    ap.add_argument("--report", action="store_true",
+                    help="Print CLV defined/undefined counts by sport and market type (P54)")
     args = ap.parse_args()
 
     if not LEDGER_DIR.exists():
         print(f"HALT: PICKS_LEDGER_DIR={LEDGER_DIR} does not exist")
         sys.exit(1)
+
+    if args.report:
+        _report(LEDGER_DIR)
+        return
 
     now = datetime.now(timezone.utc)
     view_rows = pl.view(LEDGER_DIR)

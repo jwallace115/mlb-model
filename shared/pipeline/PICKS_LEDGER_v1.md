@@ -1157,3 +1157,32 @@ Cowork 14). Cause: `_load_ncaaf_officials` reads `research/ncaaf/cfbd_games_2026
 
 **Null control:** NFL crosswalk and grading unchanged (no NFL code modified).
 NCAAF picks graded once the VM pull runs and refreshes the archive.
+
+## P54 — MNF 10-12 ungraded + CLV honesty (2026-10-16)
+
+**Problem (a):** 10 Cowork + reader_v3 rows from MNF 10-12 BUF@LA ungraded
+after three grader runs. Cause: nflverse uses "LA" for the Rams, but `nfl_team("LA")`
+returned None (NFL dict had "LAR" but not "LA"). `_nfl_team_norm("LA")` → "LA"
+(passthrough), while tape → "LAR". "LA" != "LAR" → no crosswalk match.
+
+**Fix (a):** Added `"LA": "rams"` to `pick_sources.NFL`. Now `_nfl_team_norm("LA")`
+→ "LAR" (same as `_nfl_team_norm("Los Angeles Rams")`). Both directions match.
+
+**Test (RED → GREEN):** `test_la_returns_rams`:
+RED: `AssertionError: expected 'rams', got None`
+GREEN: nfl_team("LA") == "rams", LAR still works, LAC still works,
+norm("LA") == norm("Los Angeles Rams") == "LAR".
+
+**Problem (b):** `clv_price_pct ≡ 0.0` on props — no later same-book quote
+in the tape (props are pulled once per window; the "close" IS the pick's own
+source quote).
+
+**Fix (b):** `clv_basis_note` field in picks_clv rows. For props with book-basis
+close, if the close quote's timestamp is within 120s of the pick's logged_utc
+(same pull), `clv_price_pct = None` and `clv_basis_note = "no later quote at book"`.
+`--report` flag prints defined/undefined counts by sport and market type.
+
+**Decision:** Props CLV is undefined without a pre-kick Hard Rock pull (≈10 credits
+per game; Jeff decides whether to add a 30-min-before-kick pull — NOT done here).
+Game-line CLV is reported in points (clv_points); price CLV only when the close
+quote differs.
