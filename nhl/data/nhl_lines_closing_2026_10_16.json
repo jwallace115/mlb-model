@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "11a7ac0ec88aba6f80c96ce654c805b7",
+    "game_date": "2026-10-16",
+    "sport": "NHL",
+    "home_team": "Edmonton Oilers",
+    "away_team": "Utah Mammoth",
+    "commence_time": "2026-10-16T01:08:05Z",
+    "snapshot_type": "closing",
+    "total_line": 6.5,
+    "over_price": -125,
+    "under_price": 107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-16T03:00:07.031053+00:00"
+  },
+  {
+    "game_id": "31352e6ab98e96d7f2505fa0432b96e2",
+    "game_date": "2026-10-16",
+    "sport": "NHL",
+    "home_team": "Vegas Golden Knights",
+    "away_team": "Calgary Flames",
+    "commence_time": "2026-10-16T02:08:31Z",
+    "snapshot_type": "closing",
+    "total_line": 6.5,
+    "over_price": 109,
+    "under_price": -127,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-16T03:00:07.031053+00:00"
+  },
+  {
+    "game_id": "343be4cf732ddd9fd0a058953456d811",
+    "game_date": "2026-10-16",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "Pittsburgh Penguins",
+    "commence_time": "2026-10-17T01:10:00Z",
+    "snapshot_type": "closing",
+    "total_line": 6.5,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-16T03:00:07.031053+00:00"
+  },
+  {
+    "game_id": "7c44228f4c2e89133b34a3c70bfb30c5",
+    "game_date": "2026-10-16",
+    "sport": "NHL",
+    "home_team": "Anaheim Ducks",
+    "away_team": "Boston Bruins",
+    "commence_time": "2026-10-17T02:10:00Z",
+    "snapshot_type": "closing",
+    "total_line": 6.0,
+    "over_price": -116,
+    "under_price": 101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-16T03:00:07.031053+00:00"
+  }
+]
