@@ -780,6 +780,18 @@
       "closing_total": 6.5,
       "lambda_total": 5.942,
       "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020119,
+      "game_date": "2026-10-16",
+      "home_team": "COL",
+      "away_team": "PIT",
+      "signal_side": "UNDER",
+      "edge": 0.1853,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.632,
+      "drift_applied": 0.0
     }
   ]
 }
