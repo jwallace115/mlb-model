@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "343be4cf732ddd9fd0a058953456d811",
+    "game_date": "2026-10-17",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "Pittsburgh Penguins",
+    "commence_time": "2026-10-17T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-16T06:05:02.799852+00:00"
+  },
+  {
+    "game_id": "7c44228f4c2e89133b34a3c70bfb30c5",
+    "game_date": "2026-10-17",
+    "sport": "NHL",
+    "home_team": "Anaheim Ducks",
+    "away_team": "Boston Bruins",
+    "commence_time": "2026-10-17T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -116,
+    "under_price": 101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-16T06:05:02.799852+00:00"
+  }
+]
