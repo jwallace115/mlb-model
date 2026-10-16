@@ -1,0 +1,5 @@
+retrieved 2026-10-16 ~17:50Z by Cowork (claude-fable-5-1): Friday NCAAF read (Memphis@Tulane 23:30Z, App State@Coastal 00:00Z, Washington@Purdue 00:00Z)
+- lines: VM tape snap_20261016T160012Z.parquet (Hard Rock = book of record; Pinnacle, DraftKings, FanDuel for the no-vig comparison; Hard Rock has not moved on any of the three since Wednesday)
+- Kalshi: data/odds_archive/kalshi/ncaaf/season=2026/snap_20261016T1607Z.parquet (KXNCAAFGAME / SPREAD / TOTAL, mids used only where volume > 1,500)
+- news: ESPN college archive 10-15/10-16 — nothing on these six teams; no lineup/injury feed exists for college (CFB1 debt)
+- view: all nine lines sit inside the vig against Pinnacle and Kalshi (worst is Purdue -3.5 at -3.7%); with no lineup or news layer for college there is nothing to reason from beyond the price, so this read is nine passes with the numbers. The reader_v3b adhoc run from the same tape carries the page.
