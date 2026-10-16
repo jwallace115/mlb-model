@@ -1129,3 +1129,31 @@ and their grades. `run_window.py --reader-model` default changes to `reader_v3b`
 
 **Determinism re-read (10-13 open freeze, 231 rows):**
 no_view share: 0.4% → 50.2%. 111 one-way → all no_view. 4 two-way n<2 → no_view.
+
+## P53 — NCAAF results feed + grading (2026-10-16)
+
+**Problem:** 912 NCAAF picks since 10-03 ungraded (ai_ncaaf 13, reader_v3 898,
+Cowork 14). Cause: `_load_ncaaf_officials` reads `research/ncaaf/cfbd_games_2026.parquet`
+— a Sep 27 file, never refreshed. No completed games after week 4.
+
+**Fix:**
+1. `shared/pipeline/pull_ncaaf_results.py` (new): pulls CFBD /games for 2026
+   (regular + postseason), keeps id, season, week, seasonType, startDate,
+   completed, homeTeam, awayTeam, homePoints, awayPoints, neutralSite →
+   `data/results_archive/ncaaf/cfbd_games_2026_<UTC>.parquet`. Append-only,
+   timestamped. HALT on empty, < 500 rows, or no completed game in the last
+   10 days. RESULTS_ARCHIVE_DIR override on the Mac.
+2. `event_crosswalk._load_ncaaf_officials` reads the NEWEST archive file.
+   Fallback to the research file only if the archive is empty, with a printed
+   warning.
+3. VM cron `40 9 * * *` (after the NFL pull at 09:30Z, before the 10:10Z
+   crosswalk + grader).
+
+**Tests (RED on old code, GREEN after):**
+- `test_picks_newest_archive`: archive with two files → reads newest
+  (RED: old code reads research file only → empty DataFrame)
+- `test_fallback_to_research_with_warning`: no archive → fallback with WARNING
+- `test_halt_under_500`: < 500 rows → SystemExit
+
+**Null control:** NFL crosswalk and grading unchanged (no NFL code modified).
+NCAAF picks graded once the VM pull runs and refreshes the archive.
