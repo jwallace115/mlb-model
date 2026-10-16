@@ -4473,3 +4473,21 @@ SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
 ### FINAL
 - origin/main SHA: dedd355077a4487fd0b350d4cc38c55d6b127ca8
 - Main-branch check: `main`
+
+## 2026-10-16T15:17Z  claude-code (OPS-R1 — record repair)
+
+### RETURNED
+- Item 1 (P52): reader_v3b — one-way markets (ATD etc.) always no_view; conf = edge*500 * min(1, n/5), no book-count term; n<2 gate. run_window default = reader_v3b. 4 tests RED→GREEN. Committed b1e67faf2, pushed.
+- Item 2 (P53): pull_ncaaf_results.py — CFBD games 2026 → data/results_archive/ncaaf/. event_crosswalk reads newest archive, fallback with WARNING. 3 tests. Committed 2e0101a22, pushed.
+- Item 3 (P54): pick_sources.NFL += "LA":"rams" (nflverse uses "LA" for Rams). picks_clv clv_basis_note "no later quote at book" when close==source pull; --report flag. 4 tests RED→GREEN. Committed 2127ba03a, pushed.
+- Item 4 (P55): record_report.py (repo) — rank-within-freeze, conf bins, market family. _record_section in build_site.py shows tier + bin breakdown for non-embargoed readers. 4 tests. Committed e46c2aa72, pushed.
+
+### NOT DONE
+- VM cron lines for pull_ncaaf_results (40 9), record_report (45 10) — applied during MERGE.
+- VM hand-run: pull → crosswalk → grader → CLV --report — done during MERGE.
+- MNF 10-12 BUF@LA grading — verified fix, actual grading when VM crosswalk + grader re-run.
+
+### UNVERIFIED
+- Whether the CLV basis_note correctly identifies all same-pull cases (depends on logged_utc precision).
+- Whether the 912 NCAAF ungraded rows all grade after the CFBD pull (some may have crosswalk issues).
+- Whether the site build on VM renders the new tier rows correctly with real ledger data.

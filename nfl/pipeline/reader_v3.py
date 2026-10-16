@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""reader_v3: parameterised reader for the blind opinion log.
+"""reader_v3b: parameterised reader for the blind opinion log.
 
 Port of reader_v2 (research/layers/_to_delete/ai_w4/reader_v2.py, 205 lines,
 sha256 315b44e2…) with the same rules and arithmetic, but with --as-of and
 --injury-report arguments so every input is chosen deterministically.
 
-Rules (unchanged from reader_v2):
-  market  - sharp-weighted consensus (Pinnacle x3, others x1); one-way ATD gets
-            median of other books' implied Yes * 0.88
+Rules:
+  market  - sharp-weighted consensus (Pinnacle x3, others x1)
+  one-way - one-way markets (no under_price: player_anytime_td) are ALWAYS
+            no_view with p = clip(implied, 0.02, 0.98) and reason "one-way
+            market: no consensus to price against" — both sports (P52)
+  conf    - round(edge*500 * min(1, n/5), 1); n >= 2 GATE (n < 2 -> no_view
+            "one book only"); cap 95, floor 1.0 for a view line (P52)
   news    - official injury report: Out/Doubtful noted in reason
   history - 0.005 Under lean on two-way props; 0.01 Under prior when no other
             book quotes the line
@@ -18,6 +22,8 @@ Rules (unchanged from reader_v2):
 P24: this is the canonical reader; reader_v2 stays untouched in _to_delete.
 P38: --sport {nfl,ncaaf}. NCAAF: game lines only, per-event book of record
      (hardrockbet where listed, pinnacle otherwise), no props/NWS/HR-history.
+P52: one-way markets never get a mechanical pick; conf is edge-only; v3b is a
+     new reader line — the v3 rows in the ledger keep their reader and grades.
 """
 import argparse
 import hashlib
@@ -309,13 +315,24 @@ def read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix,
         book = r.q_first if r.two_way else imp(r.price_first)
         note = NEWS.get(r.player_name, "")
         book_label = "HR" if sport == "nfl" else row_book[:3].upper()
-        if c is None:
+
+        # P52(a): one-way markets are ALWAYS no_view — both sports
+        if not game and not r.two_way:
+            p = float(np.clip(book, 0.02, 0.98))
+            tag = "no_view"
+            reason = "one-way market: no consensus to price against"
+        elif c is None:
             if game:
                 p, tag, reason = float(np.clip(book, 0.02, 0.98)), "no_view", ""
             else:
                 p = float(np.clip(book - 0.01, 0.02, 0.98))
                 tag = "usage_trend"
                 reason = f"No other book on this {MK.get(r.market_key, r.market_key)} line; props-Under prior only."
+        # P52(b): n < 2 gate — one book only → no_view
+        elif n < 2:
+            p = float(np.clip(book, 0.02, 0.98))
+            tag = "no_view"
+            reason = "one book only"
         else:
             extra = []
             if r.market_key == "h2h":
@@ -359,9 +376,8 @@ def read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix,
         if tag == "no_view" or no_bet:
             conf = 0.0
         else:
-            conf = min(95.0, round(
-                (edge * 500 + min(n, 9) * 1.0 + (0 if c is not None else -3))
-                * min(1.0, n / 5), 1))
+            # P52(b): conf = edge-only, no book-count term, no -3 term
+            conf = min(95.0, round(edge * 500 * min(1.0, n / 5), 1))
             conf = max(conf, 1.0)
         # P50/PM-1c: thesis only for NFL; NCAAF has no thesis column
         row_out = {"event_id": r.event_id, "market_key": r.market_key,
@@ -382,7 +398,7 @@ def read_opinions(sheet, props, lines, KAL, WX, HIST, NEWS, kalshi_prefix,
 
 
 def main():
-    ap = argparse.ArgumentParser(description="reader_v3: parameterised blind-opinion reader")
+    ap = argparse.ArgumentParser(description="reader_v3b: parameterised blind-opinion reader")
     ap.add_argument("sheet", help="path to the sheet CSV (from log_ai_opinions.py sheet)")
     ap.add_argument("output", help="path for the output CSV")
     ap.add_argument("--sport", default="nfl", choices=["nfl", "ncaaf"],
@@ -405,7 +421,7 @@ def main():
 
     # Print own sha256
     own_sha = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
-    print(f"reader_v3 sha256: {own_sha}")
+    print(f"reader_v3b sha256: {own_sha}")
 
     # Load sheet
     sheet = pd.read_csv(args.sheet)

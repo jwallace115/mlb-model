@@ -263,8 +263,8 @@ def main():
     ap.add_argument("--sport", default="nfl", choices=["nfl", "ncaaf"])
     ap.add_argument("--window", required=True,
                     choices=["open", "mid", "late", "prekick", "adhoc"])
-    ap.add_argument("--reader-model", default="reader_v3",
-                    help="the model that forms the opinions (default: reader_v3)")
+    ap.add_argument("--reader-model", default="reader_v3b",
+                    help="the model that forms the opinions (default: reader_v3b)")
     ap.add_argument("--as-of", default=None,
                     help="UTC ISO timestamp for reproducible runs")
     ap.add_argument("--no-pull", action="store_true",

@@ -1098,3 +1098,114 @@ Test asserts residual ≤ 1e-9.
 3. Merge SHA: `dc85b4f53`. ops/pm1 merged to main before MNF BUF@LA 20:15 ET.
 4. Cron: `0 11 * * * ... pull_nfl_postgame_data.py && build_postgame.py --all-final`
    on VM, 11:00Z daily. Outputs reach origin via push_daemon.sh (:00/:30).
+
+## P52 — reader_v3b: no one-way markets, edge-only confidence (2026-10-16)
+
+**Problem:** reader_v3 scored one-way ATD markets (no under_price) via
+`imp(over)*0.88` consensus, generating 77 ATD "Yes" picks at +1200..+5000 with
+conf 6–9 from the book-count term `min(n,9)*1.0`. These are 2–75 W/L. The
+book-count term inflated conf on any line with many books regardless of edge.
+
+**Fix (reader_v3b):**
+1. One-way markets (not game, not two_way) → ALWAYS no_view with
+   `p = clip(implied, 0.02, 0.98)`, reason "one-way market: no consensus to
+   price against". Both sports.
+2. `n < 2` gate: a single-book consensus → no_view "one book only".
+3. `conf = round(edge*500 * min(1, n/5), 1)` — no book-count term, no −3 term.
+   Cap 95, floor 1.0 for a view line.
+
+**v3b is a new reader line.** The v3 rows in the ledger keep their reader_model
+and their grades. `run_window.py --reader-model` default changes to `reader_v3b`.
+
+**Tests (RED first, all GREEN after):**
+- `test_atd_one_way_is_no_view`: ATD line with 7 books → no_view
+  (RED: `AssertionError: expected no_view, got price_vs_sharp`)
+- `test_two_way_conf_edge_only`: 7-book two-way, edge ~0.005 → conf 2.5
+  (RED: `assert 9.0 == 2.5` — v3 had book-count term)
+- `test_one_book_is_no_view`: n=1 → no_view
+  (RED: `expected no_view, got price_vs_sharp`)
+- `test_p_first_unchanged_on_two_way`: 20 synthetic two-way rows, p_first
+  identical (diff count: 0). Null control PASS.
+
+**Determinism re-read (10-13 open freeze, 231 rows):**
+no_view share: 0.4% → 50.2%. 111 one-way → all no_view. 4 two-way n<2 → no_view.
+
+## P53 — NCAAF results feed + grading (2026-10-16)
+
+**Problem:** 912 NCAAF picks since 10-03 ungraded (ai_ncaaf 13, reader_v3 898,
+Cowork 14). Cause: `_load_ncaaf_officials` reads `research/ncaaf/cfbd_games_2026.parquet`
+— a Sep 27 file, never refreshed. No completed games after week 4.
+
+**Fix:**
+1. `shared/pipeline/pull_ncaaf_results.py` (new): pulls CFBD /games for 2026
+   (regular + postseason), keeps id, season, week, seasonType, startDate,
+   completed, homeTeam, awayTeam, homePoints, awayPoints, neutralSite →
+   `data/results_archive/ncaaf/cfbd_games_2026_<UTC>.parquet`. Append-only,
+   timestamped. HALT on empty, < 500 rows, or no completed game in the last
+   10 days. RESULTS_ARCHIVE_DIR override on the Mac.
+2. `event_crosswalk._load_ncaaf_officials` reads the NEWEST archive file.
+   Fallback to the research file only if the archive is empty, with a printed
+   warning.
+3. VM cron `40 9 * * *` (after the NFL pull at 09:30Z, before the 10:10Z
+   crosswalk + grader).
+
+**Tests (RED on old code, GREEN after):**
+- `test_picks_newest_archive`: archive with two files → reads newest
+  (RED: old code reads research file only → empty DataFrame)
+- `test_fallback_to_research_with_warning`: no archive → fallback with WARNING
+- `test_halt_under_500`: < 500 rows → SystemExit
+
+**Null control:** NFL crosswalk and grading unchanged (no NFL code modified).
+NCAAF picks graded once the VM pull runs and refreshes the archive.
+
+## P54 — MNF 10-12 ungraded + CLV honesty (2026-10-16)
+
+**Problem (a):** 10 Cowork + reader_v3 rows from MNF 10-12 BUF@LA ungraded
+after three grader runs. Cause: nflverse uses "LA" for the Rams, but `nfl_team("LA")`
+returned None (NFL dict had "LAR" but not "LA"). `_nfl_team_norm("LA")` → "LA"
+(passthrough), while tape → "LAR". "LA" != "LAR" → no crosswalk match.
+
+**Fix (a):** Added `"LA": "rams"` to `pick_sources.NFL`. Now `_nfl_team_norm("LA")`
+→ "LAR" (same as `_nfl_team_norm("Los Angeles Rams")`). Both directions match.
+
+**Test (RED → GREEN):** `test_la_returns_rams`:
+RED: `AssertionError: expected 'rams', got None`
+GREEN: nfl_team("LA") == "rams", LAR still works, LAC still works,
+norm("LA") == norm("Los Angeles Rams") == "LAR".
+
+**Problem (b):** `clv_price_pct ≡ 0.0` on props — no later same-book quote
+in the tape (props are pulled once per window; the "close" IS the pick's own
+source quote).
+
+**Fix (b):** `clv_basis_note` field in picks_clv rows. For props with book-basis
+close, if the close quote's timestamp is within 120s of the pick's logged_utc
+(same pull), `clv_price_pct = None` and `clv_basis_note = "no later quote at book"`.
+`--report` flag prints defined/undefined counts by sport and market type.
+
+**Decision:** Props CLV is undefined without a pre-kick Hard Rock pull (≈10 credits
+per game; Jeff decides whether to add a 30-min-before-kick pull — NOT done here).
+Game-line CLV is reported in points (clv_points); price CLV only when the close
+quote differs.
+
+## P55 — Record report in the repo + Record section by tier (2026-10-16)
+
+**record_report.py** (new, `shared/pipeline/`): the ops record generator moved
+into the repo. Reads the ledger view; maps source_file → reader_model via the
+manifests; rank-within-freeze (by conf desc) → top5/top10/top20/21+; conf bins
+0, 1–4, 5–9, 10–14, 15–19, 20–29, 30+; by market family; by day ET. Owners
+ai_*/sim_* only. Output: PICKS_LEDGER_DIR/record_report.txt and .json (never
+committed). VM cron `45 10 * * *` after picks_clv.
+
+**Site Record section** (build_site.py `_record_section`, P55): for each
+non-embargoed reader, shows W–L and units for "top 5 / top 10 / top 20 per read"
+and conf bins below the aggregate row. Embargoed owners (ai_nfl, sim_nfl per
+forward_status.json) show "scoring not published" — unchanged.
+
+**Tests (all GREEN):**
+- `test_rank_assignment`: fixture of 7+3 rows → ranks 1–7 and 1–3, buckets correct
+- `test_conf_bins`: conf values map to bins exactly as registered
+- `test_units`: W/L counts and units correct
+- `test_embargo_hides_ai_nfl`: ai_nfl row → "scoring not published" in HTML
+
+**Local dryrun build:** Record block renders "by rank: top 5: 3–2 +14.5% ·
+top 10: 6–4 +14.5% · top 20: 13–7 +24.1%" and conf bins.

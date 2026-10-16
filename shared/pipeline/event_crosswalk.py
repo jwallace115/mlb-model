@@ -128,10 +128,27 @@ def build_crosswalk(events_df, officials_df, sport, team_map=None):
 
 
 def _load_ncaaf_officials(root):
-    """Load CFBD games 2026."""
+    """Load CFBD games 2026 from data/results_archive/ncaaf/ (newest file).
+
+    Fallback to the research file only if the archive is empty, with a warning.
+    P53: the archive is written by pull_ncaaf_results.py on the VM cron.
+    """
+    archive_dir = Path(os.environ.get("RESULTS_ARCHIVE_DIR") or (root / "data" / "results_archive")) / "ncaaf"
+    if archive_dir.exists():
+        files = sorted(archive_dir.glob("cfbd_games_2026_*.parquet"))
+        if files:
+            newest = files[-1]
+            df = pd.read_parquet(newest)
+            print(f"NCAAF officials: {newest.name} ({len(df)} rows)")
+            df["date"] = pd.to_datetime(df.startDate).dt.date
+            return df.rename(columns={"id": "official_game_id", "homeTeam": "home", "awayTeam": "away",
+                                       "homePoints": "home_score", "awayPoints": "away_score"})
+
+    # Fallback to research file (stale — Sep 27)
     p = root / "research" / "ncaaf" / "cfbd_games_2026.parquet"
     if not p.exists():
         return pd.DataFrame()
+    print(f"WARNING: NCAAF using stale research file {p} — no archive found in {archive_dir}")
     df = pd.read_parquet(p)
     df["date"] = pd.to_datetime(df.startDate).dt.date
     return df.rename(columns={"id": "official_game_id", "homeTeam": "home", "awayTeam": "away",

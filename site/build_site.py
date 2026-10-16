@@ -1238,8 +1238,24 @@ def _load_clv(ledger_dir):
     return clv_by_pid
 
 
+def _rank_within_freeze(rows):
+    """Assign rank within freeze file by conf desc."""
+    by_freeze = defaultdict(list)
+    for r in rows:
+        by_freeze[(r.get("source_file", ""), r.get("owner", ""))].append(r)
+    for lst in by_freeze.values():
+        lst.sort(key=lambda r: -(float(r.get("conf") or 0)))
+        for i, r in enumerate(lst, 1):
+            r["_rank"] = i
+
+
 def _record_section(rows, embargo_owners, sport, source_info):
-    """Build the Record section for a sport tab."""
+    """Build the Record section for a sport tab.
+
+    P55: per reader that is NOT embargoed, W–L and units for
+    top 5 / top 10 / top 20 per read, and by conf bin.
+    Embargoed owners show "scoring not published".
+    """
     graded = [r for r in rows if r.get("result") in ("W", "L", "P", "V", "VOID") and r.get("sport") == sport]
     if not graded:
         return '<div class="card pad muted">No graded picks yet.</div>'
@@ -1247,6 +1263,9 @@ def _record_section(rows, embargo_owners, sport, source_info):
     # Load CLV
     ledger_dir = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
     clv_by_pid = _load_clv(ledger_dir)
+
+    # Assign ranks
+    _rank_within_freeze(graded)
 
     trs = []
     by_key = defaultdict(list)
@@ -1297,9 +1316,56 @@ def _record_section(rows, embargo_owners, sport, source_info):
                    f"<td class='num muted'>{clv_s}</td></tr>"
                    f"<tr><td colspan='8' class='note' style='padding-top:0'>{' · '.join(month_parts)}</td></tr>")
 
+        # P55: tier breakdown (top 5 / top 10 / top 20 per read)
+        tier_parts = []
+        for label, lo, hi in [("top 5", 1, 5), ("top 10", 1, 10), ("top 20", 1, 20)]:
+            tier_rows = [r for r in orows if lo <= r.get("_rank", 999) <= hi]
+            if tier_rows:
+                th, tr_, tn, _, tf = _picks_roi(tier_rows)
+                w = sum(1 for r in tier_rows if r["result"] == "W")
+                l_ = sum(1 for r in tier_rows if r["result"] == "L")
+                tier_parts.append(f"{label}: {w}–{l_} {pct(tr_, True) if tr_ is not None else '—'}")
+        if tier_parts:
+            trs.append(f"<tr><td colspan='8' class='note' style='padding-top:0;font-size:11px'>"
+                       f"by rank: {' · '.join(tier_parts)}</td></tr>")
+
+        # P55: conf bin breakdown
+        bin_parts = []
+        for label in ["30+", "20-29", "15-19", "10-14", "5-9", "1-4"]:
+            bin_rows = [r for r in orows if _conf_bin_label(r.get("conf")) == label]
+            if bin_rows:
+                bh, br, bn, _, bf = _picks_roi(bin_rows)
+                w = sum(1 for r in bin_rows if r["result"] == "W")
+                l_ = sum(1 for r in bin_rows if r["result"] == "L")
+                bin_parts.append(f"conf {label}: {w}–{l_}")
+        if bin_parts:
+            trs.append(f"<tr><td colspan='8' class='note' style='padding-top:0;font-size:11px'>"
+                       f"{' · '.join(bin_parts)}</td></tr>")
+
     return (f'<div class="tablewrap"><table><tr><th>Owner</th><th>Window</th><th>N</th>'
             f'<th>Dates</th><th>Hit</th><th>Real-price ROI</th><th>−110 (triage)</th><th>CLV</th></tr>'
             f'{"".join(trs)}</table></div>{source_info}')
+
+
+def _conf_bin_label(c):
+    """Map a conf value to its bin label."""
+    try:
+        c = float(c)
+    except (TypeError, ValueError):
+        return "n/a"
+    if c == 0:
+        return "0"
+    if c < 5:
+        return "1-4"
+    if c < 10:
+        return "5-9"
+    if c < 15:
+        return "10-14"
+    if c < 20:
+        return "15-19"
+    if c < 30:
+        return "20-29"
+    return "30+"
 
 
 def build_picks(now, health):
