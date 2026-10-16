@@ -1186,3 +1186,26 @@ close, if the close quote's timestamp is within 120s of the pick's logged_utc
 per game; Jeff decides whether to add a 30-min-before-kick pull — NOT done here).
 Game-line CLV is reported in points (clv_points); price CLV only when the close
 quote differs.
+
+## P55 — Record report in the repo + Record section by tier (2026-10-16)
+
+**record_report.py** (new, `shared/pipeline/`): the ops record generator moved
+into the repo. Reads the ledger view; maps source_file → reader_model via the
+manifests; rank-within-freeze (by conf desc) → top5/top10/top20/21+; conf bins
+0, 1–4, 5–9, 10–14, 15–19, 20–29, 30+; by market family; by day ET. Owners
+ai_*/sim_* only. Output: PICKS_LEDGER_DIR/record_report.txt and .json (never
+committed). VM cron `45 10 * * *` after picks_clv.
+
+**Site Record section** (build_site.py `_record_section`, P55): for each
+non-embargoed reader, shows W–L and units for "top 5 / top 10 / top 20 per read"
+and conf bins below the aggregate row. Embargoed owners (ai_nfl, sim_nfl per
+forward_status.json) show "scoring not published" — unchanged.
+
+**Tests (all GREEN):**
+- `test_rank_assignment`: fixture of 7+3 rows → ranks 1–7 and 1–3, buckets correct
+- `test_conf_bins`: conf values map to bins exactly as registered
+- `test_units`: W/L counts and units correct
+- `test_embargo_hides_ai_nfl`: ai_nfl row → "scoring not published" in HTML
+
+**Local dryrun build:** Record block renders "by rank: top 5: 3–2 +14.5% ·
+top 10: 6–4 +14.5% · top 20: 13–7 +24.1%" and conf bins.
