@@ -1,110 +1,113 @@
 # WHY Summary — Week 3
 
-Generated: 2026-10-16T11:12:52.665933+00:00
+Generated: 2026-10-17T11:13:18.929543+00:00
 
 
 ## Graded rows
 
 - ai_nfl / moneyline / L: 4
-- ai_nfl / moneyline / W: 11
+- ai_nfl / moneyline / W: 12
 - ai_nfl / prop:atd / L: 155
 - ai_nfl / prop:atd / V: 39
 - ai_nfl / prop:atd / W: 31
-- ai_nfl / prop:int / L: 18
+- ai_nfl / prop:int / L: 20
 - ai_nfl / prop:int / V: 2
 - ai_nfl / prop:int / W: 10
-- ai_nfl / prop:pass_att / L: 8
+- ai_nfl / prop:pass_att / L: 10
 - ai_nfl / prop:pass_att / V: 2
 - ai_nfl / prop:pass_att / W: 23
-- ai_nfl / prop:pass_cmp / L: 17
-- ai_nfl / prop:pass_cmp / W: 14
-- ai_nfl / prop:pass_td / L: 11
+- ai_nfl / prop:pass_cmp / L: 19
+- ai_nfl / prop:pass_cmp / W: 15
+- ai_nfl / prop:pass_td / L: 13
 - ai_nfl / prop:pass_td / W: 16
-- ai_nfl / prop:pass_yds / L: 13
+- ai_nfl / prop:pass_yds / L: 14
 - ai_nfl / prop:pass_yds / V: 1
-- ai_nfl / prop:pass_yds / W: 20
-- ai_nfl / prop:rec / L: 69
-- ai_nfl / prop:rec / V: 9
-- ai_nfl / prop:rec / W: 82
-- ai_nfl / prop:rec_yds / L: 68
-- ai_nfl / prop:rec_yds / V: 9
-- ai_nfl / prop:rec_yds / W: 78
-- ai_nfl / prop:rush_att / L: 15
+- ai_nfl / prop:pass_yds / W: 21
+- ai_nfl / prop:rec / L: 72
+- ai_nfl / prop:rec / V: 10
+- ai_nfl / prop:rec / W: 87
+- ai_nfl / prop:rec_yds / L: 73
+- ai_nfl / prop:rec_yds / V: 10
+- ai_nfl / prop:rec_yds / W: 81
+- ai_nfl / prop:rush_att / L: 18
 - ai_nfl / prop:rush_att / V: 1
-- ai_nfl / prop:rush_att / W: 37
-- ai_nfl / prop:rush_yds / L: 35
+- ai_nfl / prop:rush_att / W: 40
+- ai_nfl / prop:rush_yds / L: 37
 - ai_nfl / prop:rush_yds / V: 3
-- ai_nfl / prop:rush_yds / W: 44
+- ai_nfl / prop:rush_yds / W: 48
 - ai_nfl / spread / L: 5
 - ai_nfl / spread / P: 2
-- ai_nfl / spread / W: 17
-- ai_nfl / total / L: 10
+- ai_nfl / spread / W: 18
+- ai_nfl / total / L: 11
 - ai_nfl / total / W: 10
 - sim_nfl / prop:atd / L: 4
-- sim_nfl / prop:rec / L: 82
+- sim_nfl / prop:rec / L: 92
 - sim_nfl / prop:rec / V: 3
-- sim_nfl / prop:rec / W: 84
-- sim_nfl / prop:rush_att / L: 23
-- sim_nfl / prop:rush_att / W: 15
+- sim_nfl / prop:rec / W: 90
+- sim_nfl / prop:rush_att / L: 25
+- sim_nfl / prop:rush_att / W: 21
 
 ## why_code_auto (losses)
 
-- EFFICIENCY: 103
+- EFFICIENCY: 108
+- SCRIPT: 77
 - SHARE_OTHER: 66
-- SCRIPT: 62
-- UNDEFINED: 49
-- ROLE_SHIFT: 47
+- UNDEFINED: 58
+- ROLE_SHIFT: 48
 - TURNOVERS: 8
 - NOISE: 6
 - UNRESOLVED: 4
+- NON_OFFENSIVE_TD: 3
 - GARBAGE: 2
-- NON_OFFENSIVE_TD: 2
 
 ## why_code_auto (wins)
 
-- EFFICIENCY: 102
+- EFFICIENCY: 114
 - SHARE_OTHER: 100
-- SCRIPT: 89
-- UNDEFINED: 59
-- ROLE_SHIFT: 50
-- NOISE: 17
+- SCRIPT: 94
+- UNDEFINED: 65
+- ROLE_SHIFT: 56
+- NOISE: 18
 - TURNOVERS: 16
 - GARBAGE: 2
+- NON_OFFENSIVE_TD: 1
 
 ## Thesis verdicts
 
-- thesis_source=none: 259 rows
+- thesis_source=none: 284 rows
 - thesis_source=nan: 0 rows
-- thesis_source=tag_map: 812 rows
+- thesis_source=tag_map: 853 rows
 
 ## Freeze-join accounting
 
 - Freeze-sourced thesis: 0
-- Tag-map thesis: 812
-- No thesis: 259
+- Tag-map thesis: 853
+- No thesis: 284
 
-## Unresolved player names (29 rows)
+## Unresolved player names (31 rows)
 
 - Jack Bech (4x): markets=['prop:rec_yds', 'prop:rec']
 - Josh Oliver (4x): markets=['prop:rec_yds', 'prop:rec']
-- Jerry Jeudy (3x): markets=['prop:rec_yds', 'prop:rec']
 - Devin Singletary (3x): markets=['prop:rec_yds', 'prop:rec', 'prop:rush_yds']
+- Jerry Jeudy (3x): markets=['prop:rec_yds', 'prop:rec']
+- Elijah Arroyo (2x): markets=['prop:rec_yds', 'prop:rec']
 - Love (2x): markets=['prop:pass_att', 'prop:pass_yds']
 - Blake Whiteheart (2x): markets=['prop:rec_yds', 'prop:rec']
 - Xavier Legette (2x): markets=['prop:rec_yds', 'prop:rec']
 - Adonai Mitchell (2x): markets=['prop:rec_yds', 'prop:rec']
-- Elijah Arroyo (2x): markets=['prop:rec_yds', 'prop:rec']
+- Adam Trautman (2x): markets=['prop:rec_yds', 'prop:rec']
 - Erick All (2x): markets=['prop:rec_yds', 'prop:rec']
-- London (1x): markets=['prop:rec_yds']
 - Golden (1x): markets=['prop:rec']
+- London (1x): markets=['prop:rec_yds']
 - Emari Demercado (1x): markets=['prop:rush_yds']
 
-## PBP vs official stat mismatches (9 rows)
+## PBP vs official stat mismatches (10 rows)
 
 - Penix: prop:pass_att official=25.0 pbp=26.0
 - Michael Penix Jr.: prop:pass_att official=25.0 pbp=26.0
 - Geno Smith: prop:pass_att official=37.0 pbp=39.0
 - Kirk Cousins: prop:pass_att official=33.0 pbp=35.0
+- Bo Nix: prop:pass_att official=34.0 pbp=36.0
 - Deshaun Watson: prop:pass_att official=30.0 pbp=31.0
 - Chuba Hubbard: prop:rush_att official=19.0 pbp=20.0
 - Dak Prescott: prop:pass_att official=40.0 pbp=41.0
@@ -114,10 +117,11 @@ Generated: 2026-10-16T11:12:52.665933+00:00
 ## FLAGGED FOR THE TUESDAY READ
 
 
-### Top 20 picks (54 rows)
+### Top 20 picks (60 rows)
 
 - 6496e4cfb0d08b6f: total None → W
 - 119d1e953ac17a4d: moneyline None → L
+- 97a9105490d09ee9: spread None → W
 - e96c38cfacb8607d: moneyline None → W
 - cf3bdda78642634b: spread None → W
 - 902c9b1fc9be336f: total None → L
@@ -138,6 +142,7 @@ Generated: 2026-10-16T11:12:52.665933+00:00
 - b9281dc9bca61892: prop:rec Bhayshul Tuten → L
 - 5a2f73f38df7a12e: prop:rec Rachaad White → W
 - 89dd1b8f69732341: prop:rec Michael Mayer → W
+- 8c73b775072e1f52: prop:rec Jaylen Waddle → W
 - 1850c6ff07425cb6: prop:rec Rome Odunze → W
 - 81a15f9f72f0002a: prop:rush_att Saquon Barkley → L
 - e2e39a5d496eb8f7: prop:rec Elic Ayomanor → L
@@ -153,6 +158,10 @@ Generated: 2026-10-16T11:12:52.665933+00:00
 - 722e098fec1511a8: prop:rec Devaughn Vele → W
 - caf2663aa300fbc7: prop:rec Michael Mayer → W
 - 5a8de82a45b16bc7: prop:rec Noah Fant → W
+- 3c78d4605c05be14: prop:rec Colby Parkinson → W
+- a816785e1d056826: prop:rec Davante Adams → L
+- c3ad3ca446630108: prop:rec Jaylen Waddle → W
+- 3de3a4042089318d: prop:rush_att Blake Corum → W
 - 34ca914d764d7104: prop:rec CeeDee Lamb → L
 - 68a547f37ff4dcf7: prop:rec George Pickens → L
 - dc1d34e490dacfcc: prop:rec Jake Ferguson → W
@@ -180,11 +189,11 @@ Generated: 2026-10-16T11:12:52.665933+00:00
 - 8af61fc351802ed5: prop:rec_yds Drew Sample A=0.0 L=6.5 |ln|=6.477
 - 7896bb3da2f99336: prop:rush_yds KC Concepcion A=0.0 L=4.5 |ln|=6.109
 - 829f38bcdda1d1e3: prop:rec De'Von Achane A=0.0 L=3.5 |ln|=5.858
+- dcf2f619af7ecd55: prop:rec Evan Engram A=0.0 L=2.5 |ln|=5.521
+- 434c1d292f7478ae: prop:rec Evan Engram A=0.0 L=2.5 |ln|=5.521
 - 4e20961ad54bc2b2: prop:rec Bryce Lance A=0.0 L=1.5 |ln|=5.011
-- 5d07cb7744ece7c8: prop:rec Calvin Ridley A=0.0 L=1.5 |ln|=5.011
-- ee6c082215223892: prop:rec Jalen McMillan A=0.0 L=1.5 |ln|=5.011
 
-### AVAILABILITY / ROLE_SHIFT (97 rows)
+### AVAILABILITY / ROLE_SHIFT (104 rows)
 
 - 0348034a3ff31e51: ROLE_SHIFT prop:rec_yds Chris Bell
 - 46fee4207879951c: ROLE_SHIFT prop:rec_yds Greg Dulcich
@@ -228,6 +237,11 @@ Generated: 2026-10-16T11:12:52.665933+00:00
 - 8bb2e7b7b3434c61: ROLE_SHIFT prop:rec Parker Washington
 - 0e578005938547fd: ROLE_SHIFT prop:rec_yds Rachaad White
 - c3cb0954e7c95e4a: ROLE_SHIFT prop:rec Rachaad White
+- 1d274552b82cdbf5: ROLE_SHIFT prop:rec_yds Terrance Ferguson
+- 94ec243b9992a31c: ROLE_SHIFT prop:rec Terrance Ferguson
+- 1c164852b915024f: ROLE_SHIFT prop:rush_att Bo Nix
+- abe15e6b9533fa3f: ROLE_SHIFT prop:rush_att J.K. Dobbins
+- d7819f3d2337e3af: ROLE_SHIFT prop:rush_yds J.K. Dobbins
 - 2492186587ac06f7: ROLE_SHIFT prop:rec_yds Darren Waller
 - 1e4c850f1670e7af: ROLE_SHIFT prop:rec_yds Jalen Coker
 - 50116963401c407a: ROLE_SHIFT prop:rec Darren Waller
@@ -269,6 +283,7 @@ Generated: 2026-10-16T11:12:52.665933+00:00
 - c83df3149df1fdf0: ROLE_SHIFT prop:rec Mack Hollins
 - de5d0e0cffb99f88: ROLE_SHIFT prop:rec Parker Washington
 - 5a2f73f38df7a12e: ROLE_SHIFT prop:rec Rachaad White
+- 614e6b397646f61c: ROLE_SHIFT prop:rush_att J.K. Dobbins
 - 342f47525105da43: ROLE_SHIFT prop:rec Makai Lemon
 - a043dbc6a516808f: ROLE_SHIFT prop:rec Darren Waller
 - f9822929fb4abcfd: ROLE_SHIFT prop:rec Jalen Coker
@@ -281,7 +296,8 @@ Generated: 2026-10-16T11:12:52.665933+00:00
 - d6d3f76e62a7201c: ROLE_SHIFT prop:rush_att Christian McCaffrey
 - 7310ab82d018756f: ROLE_SHIFT prop:rec Ladd McConkey
 - cad5236906aff0f9: ROLE_SHIFT prop:rush_att James Cook
+- 35b1dda1a1df36f9: ROLE_SHIFT prop:rush_att J.K. Dobbins
 - 426e85282d3622df: ROLE_SHIFT prop:rec George Kittle
 - 79ef27fe1a28a4fc: ROLE_SHIFT prop:rush_att Christian McCaffrey
 
-Total flagged: 161
+Total flagged: 174

@@ -1,6 +1,6 @@
 # WHY Summary — Week 6
 
-Generated: 2026-10-16T11:12:52.871493+00:00
+Generated: 2026-10-17T11:13:19.165101+00:00
 
 
 ## Graded rows
@@ -39,9 +39,10 @@ Generated: 2026-10-16T11:12:52.871493+00:00
 
 ## why_code_auto (losses)
 
-- ROLE_SHIFT: 18
 - EFFICIENCY: 13
 - SCRIPT: 11
+- ROLE_SHIFT: 11
+- SHARE_OTHER: 7
 - TURNOVERS: 2
 - UNDEFINED: 1
 
@@ -49,9 +50,10 @@ Generated: 2026-10-16T11:12:52.871493+00:00
 
 - SCRIPT: 23
 - EFFICIENCY: 21
-- ROLE_SHIFT: 12
 - UNDEFINED: 10
+- ROLE_SHIFT: 9
 - TURNOVERS: 3
+- SHARE_OTHER: 3
 - NOISE: 2
 
 ## Thesis verdicts
@@ -141,31 +143,21 @@ Generated: 2026-10-16T11:12:52.871493+00:00
 - 9fbc874b7347c56f: prop:rec Cooper Kupp A=5.0 L=2.5 |ln|=0.693
 - e26b1df677cad53d: prop:rec J.K. Dobbins A=3.0 L=1.5 |ln|=0.693
 
-### AVAILABILITY / ROLE_SHIFT (30 rows)
+### AVAILABILITY / ROLE_SHIFT (20 rows)
 
-- 22fcdc9d886a046e: ROLE_SHIFT prop:rec_yds AJ Barner
-- b6c0a6e5db5d43df: ROLE_SHIFT prop:rec_yds Cooper Kupp
 - 78e3345fea9a2ff8: ROLE_SHIFT prop:rec_yds Evan Engram
 - f79f005d7e7a7e84: ROLE_SHIFT prop:rec_yds Marvin Mims Jr.
-- bf39656a208814dc: ROLE_SHIFT prop:rec AJ Barner
-- 9fbc874b7347c56f: ROLE_SHIFT prop:rec Cooper Kupp
 - 59d190b893f4b403: ROLE_SHIFT prop:rec Courtland Sutton
 - a73972cccd1e5fee: ROLE_SHIFT prop:rec Jaylen Waddle
 - df95216eae99ba42: ROLE_SHIFT prop:rec Marvin Mims Jr.
 - 79a66e067e7d8780: ROLE_SHIFT prop:rush_yds RJ Harvey
-- ff8a4f18b2a029b3: ROLE_SHIFT prop:rec AJ Barner
-- c9d5ecedd2fb2889: ROLE_SHIFT prop:rec Cooper Kupp
 - 4fcaac95be46b371: ROLE_SHIFT prop:rec Courtland Sutton
 - e26b1df677cad53d: ROLE_SHIFT prop:rec J.K. Dobbins
 - 3db7ec9862f8b2d2: ROLE_SHIFT prop:rec Jaylen Waddle
 - fece1532c9f9a66c: ROLE_SHIFT prop:rush_att RJ Harvey
-- a7bcafc3db0f51c4: ROLE_SHIFT prop:rec_yds AJ Barner
-- f4b3bdba746db8fd: ROLE_SHIFT prop:rec_yds Cooper Kupp
 - 9e835f77bfd81e85: ROLE_SHIFT prop:rec_yds Evan Engram
 - 46f8eb9172d7e7d2: ROLE_SHIFT prop:rec_yds J.K. Dobbins
 - 350800cdb8408cef: ROLE_SHIFT prop:rec_yds Marvin Mims Jr.
-- 33073319d63cb8fb: ROLE_SHIFT prop:rec AJ Barner
-- e4f5807c0fd4c330: ROLE_SHIFT prop:rec Cooper Kupp
 - 68af6e03cfb790d9: ROLE_SHIFT prop:rec Courtland Sutton
 - 4aeb194402716f63: ROLE_SHIFT prop:rec J.K. Dobbins
 - e286cef4c9473012: ROLE_SHIFT prop:rec Jaylen Waddle
@@ -174,4 +166,4 @@ Generated: 2026-10-16T11:12:52.871493+00:00
 - b6edb75c5f16b73c: ROLE_SHIFT prop:rush_att Sam Darnold
 - b319a70eb10dd92a: ROLE_SHIFT prop:rush_yds RJ Harvey
 
-Total flagged: 87
+Total flagged: 77

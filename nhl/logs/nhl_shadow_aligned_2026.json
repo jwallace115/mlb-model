@@ -755,7 +755,9 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.408,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 8
     },
     {
       "game_id": 2026020108,
@@ -767,7 +769,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 6.045,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 9
     },
     {
       "game_id": 2026020117,
@@ -779,7 +783,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 5.942,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 6
     },
     {
       "game_id": 2026020119,
@@ -791,6 +797,44 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.632,
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 7
+    },
+    {
+      "game_id": 2026020127,
+      "game_date": "2026-10-17",
+      "home_team": "DET",
+      "away_team": "SJS",
+      "signal_side": "UNDER",
+      "edge": 0.1306,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.729,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020133,
+      "game_date": "2026-10-17",
+      "home_team": "UTA",
+      "away_team": "EDM",
+      "signal_side": "UNDER",
+      "edge": 0.1324,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.985,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020134,
+      "game_date": "2026-10-17",
+      "home_team": "VGK",
+      "away_team": "PIT",
+      "signal_side": "UNDER",
+      "edge": 0.1685,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.67,
       "drift_applied": 0.0
     }
   ]

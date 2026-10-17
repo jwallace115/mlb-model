@@ -217722,5 +217722,83 @@
       }
     ],
     "snapshot_time": "2026-10-16T11:05:02.637012+00:00"
+  },
+  {
+    "game_date": "2026-10-18",
+    "event_id": "bf41baaebfa23a202d2f3a6811425ff9",
+    "game_pk": 849816,
+    "home_team": "Cleveland Guardians",
+    "away_team": "Tampa Bay Rays",
+    "home_team_abbr": "CLE",
+    "away_team_abbr": "TBR",
+    "commence_time": "2026-10-18T00:00:00Z",
+    "home_total_line": 2.5,
+    "away_total_line": 3.5,
+    "n_books": 5,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 2.5,
+        "over_price": -154,
+        "under_price": 120
+      },
+      {
+        "book": "draftkings",
+        "line": 2.5,
+        "over_price": -145,
+        "under_price": 114
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 118,
+        "under_price": 128
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 210,
+        "under_price": 128
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -165,
+        "under_price": 128
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": 120,
+        "under_price": -154
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": 105,
+        "under_price": -135
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 100,
+        "under_price": 143
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 170,
+        "under_price": 143
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -182,
+        "under_price": 143
+      }
+    ],
+    "snapshot_time": "2026-10-17T11:05:02.188471+00:00"
   }
 ]
