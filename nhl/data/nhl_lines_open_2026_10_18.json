@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "0fc72a0b9fd45e4ea478959e642a54f4",
+    "game_date": "2026-10-18",
+    "sport": "NHL",
+    "home_team": "Nashville Predators",
+    "away_team": "St Louis Blues",
+    "commence_time": "2026-10-18T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -132,
+    "under_price": 108,
+    "book": "fanduel",
+    "capture_timestamp": "2026-10-17T06:05:02.854278+00:00"
+  },
+  {
+    "game_id": "ad530128f8a287b794e713643ee46757",
+    "game_date": "2026-10-18",
+    "sport": "NHL",
+    "home_team": "Los Angeles Kings",
+    "away_team": "Boston Bruins",
+    "commence_time": "2026-10-18T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -130,
+    "under_price": 106,
+    "book": "fanduel",
+    "capture_timestamp": "2026-10-17T06:05:02.854278+00:00"
+  },
+  {
+    "game_id": "b5419971529fadc0610c47b095627156",
+    "game_date": "2026-10-18",
+    "sport": "NHL",
+    "home_team": "Utah Mammoth",
+    "away_team": "Edmonton Oilers",
+    "commence_time": "2026-10-18T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -122,
+    "under_price": 100,
+    "book": "fanduel",
+    "capture_timestamp": "2026-10-17T06:05:02.854278+00:00"
+  },
+  {
+    "game_id": "b8769f5cc81325b0693ee4b3e3f41407",
+    "game_date": "2026-10-18",
+    "sport": "NHL",
+    "home_team": "Vegas Golden Knights",
+    "away_team": "Pittsburgh Penguins",
+    "commence_time": "2026-10-18T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -118,
+    "under_price": -104,
+    "book": "fanduel",
+    "capture_timestamp": "2026-10-17T06:05:02.854278+00:00"
+  }
+]
