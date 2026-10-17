@@ -848,6 +848,30 @@
       "closing_total": 4.5,
       "lambda_total": 5.936,
       "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020124,
+      "game_date": "2026-10-17",
+      "home_team": "FLA",
+      "away_team": "SEA",
+      "signal_side": "UNDER",
+      "edge": 0.1934,
+      "tier": "HIGH",
+      "closing_total": 7.5,
+      "lambda_total": 5.748,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020130,
+      "game_date": "2026-10-17",
+      "home_team": "CHI",
+      "away_team": "DAL",
+      "signal_side": "UNDER",
+      "edge": 0.1303,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.503,
+      "drift_applied": 0.0
     }
   ]
 }
