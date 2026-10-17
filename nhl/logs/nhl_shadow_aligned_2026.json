@@ -836,6 +836,18 @@
       "closing_total": 6.5,
       "lambda_total": 5.67,
       "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020122,
+      "game_date": "2026-10-17",
+      "home_team": "WPG",
+      "away_team": "CAR",
+      "signal_side": "OVER",
+      "edge": 0.1299,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 4.5,
+      "lambda_total": 5.936,
+      "drift_applied": 0.0
     }
   ]
 }
