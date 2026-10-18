@@ -811,7 +811,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 5.729,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 7
     },
     {
       "game_id": 2026020133,
@@ -823,7 +825,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 5.985,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 8
     },
     {
       "game_id": 2026020134,
@@ -835,7 +839,9 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.67,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 8
     },
     {
       "game_id": 2026020122,
@@ -847,7 +853,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 4.5,
       "lambda_total": 5.936,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 5
     },
     {
       "game_id": 2026020124,
@@ -859,7 +867,9 @@
       "tier": "HIGH",
       "closing_total": 7.5,
       "lambda_total": 5.748,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 11
     },
     {
       "game_id": 2026020130,
@@ -871,6 +881,20 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 5.503,
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 4
+    },
+    {
+      "game_id": 2026020135,
+      "game_date": "2026-10-18",
+      "home_team": "MIN",
+      "away_team": "CBJ",
+      "signal_side": "UNDER",
+      "edge": 0.1229,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.727,
       "drift_applied": 0.0
     }
   ]
