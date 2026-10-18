@@ -1,0 +1,7 @@
+reader: claude-fable-5-1 (Cowork chat, reasoned read by hand, view first then price)
+sport: nfl week 6 Sunday slate incl. SNF (12 games, 877 lines, 44 picks), window adhoc 12h
+lines: data/odds_archive/nfl/line_history/season=2026/snap_20261018T124517Z.parquet (Mac multi_book capture 12:45Z)
+props: data_2026_10_mac.parquet pull 2026-10-18T12:45Z (sim adhoc step 2a, Hard Rock FL)
+packet: nfl_packet.py -> nfl_packet.txt (HR lines + HR open since Tue, Pinnacle, Kalshi mids/volume snap_20261018T0535Z, ESPN injuries injuries_20261018T0630Z, team news, sim freeze 20261017T213842Z views, other-book consensus)
+method: injury statuses + last-week usage + news per game -> view; Pinnacle no-vig, HR gap, Kalshi where volume > 1,500, sim where it has a view (conf>=20 trusted) -> price; picks p_first = book no-vig +/- conf/250 on the view's side; passes = no_view at book price; thesis per P50
+built: 2026-10-18T12:49:36Z by Cowork (jobs 75 clone repair + sim launch)
