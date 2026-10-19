@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "26b036ff107f3c658258eaf4a6f26228",
+    "game_date": "2026-10-19",
+    "sport": "NBA",
+    "home_team": "Detroit Pistons",
+    "away_team": "Boston Celtics",
+    "commence_time": "2026-10-20T19:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 221.5,
+    "over_price": -111,
+    "under_price": -103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-19T03:00:05.426749+00:00"
+  },
+  {
+    "game_id": "2b042ddad3d3c6c6fe5b7005dc26c775",
+    "game_date": "2026-10-19",
+    "sport": "NBA",
+    "home_team": "New York Knicks",
+    "away_team": "Philadelphia 76ers",
+    "commence_time": "2026-10-20T23:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 231.5,
+    "over_price": -113,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-19T03:00:05.426749+00:00"
+  }
+]
