@@ -1,0 +1,128 @@
+{
+  "game_id": "2026_06_CAR_PHI",
+  "week": 6,
+  "home": "PHI",
+  "away": "CAR",
+  "final_score": {
+    "home": 14,
+    "away": 25
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 187,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 14,
+        "away": 25
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 187,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 14,
+        "away": 25
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 61,
+      "dropbacks": 48,
+      "rush_attempts": 13,
+      "pass_rate": 0.7868852459016393,
+      "run_rate": 0.21311475409836067,
+      "pass_oe": 12.545914785005152
+    },
+    "away": {
+      "plays": 75,
+      "dropbacks": 42,
+      "rush_attempts": 33,
+      "pass_rate": 0.56,
+      "run_rate": 0.43999999999999995,
+      "pass_oe": 7.393794305818646
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 2,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "C.Steele",
+      "team": "PHI",
+      "quarter": 1,
+      "play_id": 721,
+      "desc": "(6:46) (Shotgun) 16-T.McKee pass short left to 34-C.Steele pushed ob at PHI 33 for 4 yards (58-B.Okereke). PHI-34-C.Steele was injured during the play."
+    },
+    {
+      "player": "D.Pierce",
+      "team": "PHI",
+      "quarter": 1,
+      "play_id": 784,
+      "desc": "(6:02) (No Huddle) 39-D.Pierce right end to PHI 49 for 9 yards (21-N.Scott). CAR-5-J.Phillips was injured during the play."
+    },
+    {
+      "player": "B.Mann",
+      "team": "PHI",
+      "quarter": 2,
+      "play_id": 1337,
+      "desc": "(12:57) 10-B.Mann punts 53 yards to CAR 18, Center-41-R.Underwood. 23-T.Etienne pushed ob at CAR 42 for 24 yards (54-J.Trotter). CAR-48-T.Incoom was injured during the play. ** Injury Update: PHI-34-C"
+    },
+    {
+      "player": "J.Coker",
+      "team": "CAR",
+      "quarter": 2,
+      "play_id": 1385,
+      "desc": "(12:45) 9-B.Young pass deep right to 18-J.Coker ran ob at CAR 42 for 19 yards (33-C.DeJean). PHI-3-N.Smith was injured during the play."
+    },
+    {
+      "player": "D.Smith",
+      "team": "PHI",
+      "quarter": 4,
+      "play_id": 3779,
+      "desc": "(13:08) (No Huddle, Shotgun) 16-T.McKee pass incomplete deep right to 6-D.Smith (24-W.Lee). PHI-6-D.Smith was injured during the play."
+    },
+    {
+      "player": "D.Wicks",
+      "team": "PHI",
+      "quarter": 4,
+      "play_id": 3805,
+      "desc": "(13:02) (Shotgun) 16-T.McKee pass short left to 13-D.Wicks to CAR 47 for 17 yards (95-D.Brown). PHI-13-D.Wicks was injured during the play."
+    },
+    {
+      "player": "C.Hubbard",
+      "team": "CAR",
+      "quarter": 4,
+      "play_id": 4315,
+      "desc": "(7:08) 30-C.Hubbard left end to PHI 34 for 5 yards (27-Q.Mitchell; 17-A.Ebiketie). PHI-90-J.Davis was injured during the play. PENALTY on PHI-33-C.DeJean, Unnecessary Roughness, 15 yards, enforced at "
+    }
+  ],
+  "ftn": "not covered"
+}

@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_06_HOU_JAX",
+  "week": 6,
+  "home": "JAX",
+  "away": "HOU",
+  "final_score": {
+    "home": 31,
+    "away": 34
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 31,
+        "away": 34
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 31,
+        "away": 34
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 68,
+      "dropbacks": 41,
+      "rush_attempts": 27,
+      "pass_rate": 0.6029411764705882,
+      "run_rate": 0.3970588235294118,
+      "pass_oe": 0.7614492722179579
+    },
+    "away": {
+      "plays": 59,
+      "dropbacks": 34,
+      "rush_attempts": 25,
+      "pass_rate": 0.576271186440678,
+      "run_rate": 0.423728813559322,
+      "pass_oe": 3.5743875162942067
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 6,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "K.Fairbairn",
+      "team": "JAX",
+      "quarter": 1,
+      "play_id": 612,
+      "desc": "15-K.Fairbairn kicks 58 yards from HOU 35 to JAX 7. 20-A.Abdullah to JAX 36 for 29 yards (30-W.Woodaz). JAX-20-A.Abdullah was injured during the play."
+    },
+    {
+      "player": "B.Tuten",
+      "team": "JAX",
+      "quarter": 2,
+      "play_id": 1338,
+      "desc": "(6:56) (Shotgun) 16-T.Lawrence pass short right to 33-B.Tuten for 27 yards, TOUCHDOWN. HOU-0-A.Al-Shaair was injured during the play."
+    },
+    {
+      "player": "J.Jordan",
+      "team": "HOU",
+      "quarter": 3,
+      "play_id": 2428,
+      "desc": "(11:14) (Shotgun) 25-J.Jordan left end to JAX 19 for no gain (4-Jar.Jones; 23-F.Oluokun). JAX-23-F.Oluokun was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

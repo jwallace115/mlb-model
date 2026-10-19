@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_06_DAL_GB",
+  "week": 6,
+  "home": "GB",
+  "away": "DAL",
+  "final_score": {
+    "home": 23,
+    "away": 13
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 194,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 13
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 194,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 13
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 70,
+      "dropbacks": 44,
+      "rush_attempts": 26,
+      "pass_rate": 0.6285714285714286,
+      "run_rate": 0.37142857142857144,
+      "pass_oe": 7.747824877908785
+    },
+    "away": {
+      "plays": 71,
+      "dropbacks": 56,
+      "rush_attempts": 15,
+      "pass_rate": 0.7887323943661971,
+      "run_rate": 0.21126760563380287,
+      "pass_oe": 4.905017068633786
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 2,
+      "fumbles_lost": 0,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "T.Smack",
+      "team": "DAL",
+      "quarter": 1,
+      "play_id": 39,
+      "desc": "28-T.Smack kicks 56 yards from GB 35 to DAL 9. 9-K.Turpin to DAL 34 for 25 yards (59-T.Hopper). DAL-9-K.Turpin was injured during the play."
+    },
+    {
+      "player": "M.Golden",
+      "team": "GB",
+      "quarter": 1,
+      "play_id": 922,
+      "desc": "(1:53) (Shotgun) 10-J.Love pass short left intended for 0-M.Golden INTERCEPTED by 53-D.Winters at GB 42. 53-D.Winters for 42 yards, TOUCHDOWN. The Replay Official reviewed the runner was not down by c"
+    },
+    {
+      "player": "P.Strong",
+      "team": "GB",
+      "quarter": 2,
+      "play_id": 1206,
+      "desc": "(13:36) (Shotgun) 10-J.Love pass short left to 22-P.Strong to GB 32 for 10 yards (26-D.Bland). DAL-53-D.Winters was injured during the play."
+    },
+    {
+      "player": "T.Kraft",
+      "team": "GB",
+      "quarter": 2,
+      "play_id": 1908,
+      "desc": "(1:45) (Shotgun) 10-J.Love pass short right to 85-T.Kraft pushed ob at GB 32 for 9 yards (13-C.Downs). The Replay Official reviewed the runner was out of bounds ruling, and the play was REVERSED. (Sho"
+    },
+    {
+      "player": "G.Pickens",
+      "team": "DAL",
+      "quarter": 4,
+      "play_id": 4111,
+      "desc": "(8:09) (Shotgun) 4-D.Prescott pass short left to 3-G.Pickens ran ob at GB 43 for 11 yards (2-B.Cisse). GB-2-B.Cisse was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

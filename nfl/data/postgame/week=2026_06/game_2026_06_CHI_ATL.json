@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_06_CHI_ATL",
+  "week": 6,
+  "home": "ATL",
+  "away": "CHI",
+  "final_score": {
+    "home": 23,
+    "away": 31
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 176,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 31
+      },
+      "garbage_time_plays": 19
+    },
+    "away": {
+      "plays_leading_7": 176,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 31
+      },
+      "garbage_time_plays": 19
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 52,
+      "dropbacks": 40,
+      "rush_attempts": 12,
+      "pass_rate": 0.7692307692307693,
+      "run_rate": 0.23076923076923073,
+      "pass_oe": 1.1194049749734267
+    },
+    "away": {
+      "plays": 73,
+      "dropbacks": 40,
+      "rush_attempts": 33,
+      "pass_rate": 0.547945205479452,
+      "run_rate": 0.452054794520548,
+      "pass_oe": 7.44967771890132
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 2,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 2,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 4
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Bailey",
+      "team": "ATL",
+      "quarter": 1,
+      "play_id": 525,
+      "desc": "(6:48) 16-J.Bailey punts 63 yards to CHI 18, Center-49-L.McCullough. 14-K.Raymond to CHI 41 for 23 yards (28-M.Ford; 34-J.Robinson). ATL-34-J.Robinson was injured during the play."
+    },
+    {
+      "player": "Bi.Robinson",
+      "team": "ATL",
+      "quarter": 2,
+      "play_id": 1089,
+      "desc": "(11:56) (Shotgun) 7-Bi.Robinson left guard to ATL 29 for 9 yards (21-C.Lewis). CHI-21-C.Lewis was injured during the play."
+    },
+    {
+      "player": "C.Loveland",
+      "team": "CHI",
+      "quarter": 2,
+      "play_id": 1855,
+      "desc": "(1:35) 18-C.Williams pass incomplete short left to 84-C.Loveland. ATL-12-Av.Terrell was injured during the play."
+    },
+    {
+      "player": "C.Loveland",
+      "team": "CHI",
+      "quarter": 3,
+      "play_id": 2624,
+      "desc": "(8:48) (Shotgun) 18-C.Williams pass short right to 84-C.Loveland to ATL 44 for 5 yards (53-K.Daniels). ATL-53-K.Daniels was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

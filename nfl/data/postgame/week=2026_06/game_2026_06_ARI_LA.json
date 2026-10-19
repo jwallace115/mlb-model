@@ -1,0 +1,121 @@
+{
+  "game_id": "2026_06_ARI_LA",
+  "week": 6,
+  "home": "LA",
+  "away": "ARI",
+  "final_score": {
+    "home": 16,
+    "away": 18
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 16,
+        "away": 18
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 16,
+        "away": 18
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 57,
+      "dropbacks": 37,
+      "rush_attempts": 20,
+      "pass_rate": 0.6491228070175439,
+      "run_rate": 0.3508771929824561,
+      "pass_oe": -4.3292898880807975
+    },
+    "away": {
+      "plays": 70,
+      "dropbacks": 35,
+      "rush_attempts": 35,
+      "pass_rate": 0.5,
+      "run_rate": 0.5,
+      "pass_oe": -8.900144861804115
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 0
+    }
+  },
+  "injuries": [
+    {
+      "player": "B.Grupe",
+      "team": "ARI",
+      "quarter": 1,
+      "play_id": 354,
+      "desc": "19-B.Grupe kicks 58 yards from LA 35 to ARI 7. 81-D.Duvernay pushed ob at ARI 47 for 40 yards (19-B.Grupe). LA-19-B.Grupe was injured during the play. ARI-0-C.Simon was injured during the play."
+    },
+    {
+      "player": "Z.Knight",
+      "team": "ARI",
+      "quarter": 2,
+      "play_id": 1659,
+      "desc": "(2:17) 20-Z.Knight up the middle to LA 21 for -1 yards (3-K.Curl, 55-B.Fiske). ARI-73-I.Seumalo was injured during the play."
+    },
+    {
+      "player": "D.Allen",
+      "team": "LA",
+      "quarter": 3,
+      "play_id": 2602,
+      "desc": "(2:44) 87-D.Allen up the middle to ARI 27 for no gain (50-J.Gibbens; 1-Ma.Wilson). ARI-97-W.Nolen was injured during the play. ARI-10-J.Sweat was injured during the play."
+    },
+    {
+      "player": "P.Nacua",
+      "team": "LA",
+      "quarter": 4,
+      "play_id": 3816,
+      "desc": "(1:46) (No Huddle, Shotgun) 9-M.Stafford pass short middle to 12-P.Nacua to ARI 13 for 16 yards (3-B.Baker). ARI-55-D.Stills was injured during the play."
+    },
+    {
+      "player": "K.Williams",
+      "team": "LA",
+      "quarter": 4,
+      "play_id": 3844,
+      "desc": "(1:30) (Shotgun) 9-M.Stafford pass short middle to 23-K.Williams to ARI 6 for 7 yards (50-J.Gibbens). LA-17-D.Adams was injured during the play."
+    },
+    {
+      "player": "T.Allgeier",
+      "team": "ARI",
+      "quarter": 4,
+      "play_id": 4032,
+      "desc": "(:41) 22-T.Allgeier up the middle to LA 24 for 5 yards (99-A.Donald). LA-97-P.Ford was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}
