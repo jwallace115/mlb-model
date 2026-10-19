@@ -1,0 +1,6 @@
+reader: claude-fable-5-1 (Cowork chat, reasoned read by hand, view first then price) — SNF evening read, Jeff 7:45 PM ET: "does it have the AI research layer"
+sport: nfl week 6 SNF DAL@GB (1 game, 76 lines, 4 picks), window adhoc 1.5h
+lines: data/odds_archive/nfl/line_history/season=2026/snap_20261018T220008Z.parquet (Mac capture 22:00Z)
+props: data_2026_10_mac.parquet pull 2026-10-18T12:45Z (no evening Hard Rock props pull; same quotes the morning read used)
+packet: nfl_packet.py 1.5 -> nfl_packet.txt (HR lines + open, Pinnacle, Kalshi snap_20261018T2205Z, ESPN injuries injuries_20261018T1830Z, news, sim 20261018T125343Z views, other-book consensus)
+built: 2026-10-18T23:47:16Z
