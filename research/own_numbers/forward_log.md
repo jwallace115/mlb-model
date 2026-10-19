@@ -14,3 +14,16 @@ Games: 14  |  Confident: 5
 | ARI@LA | away | +4.8 | -12.5 | -110 | -7.7 |
 | BUF@LV | home | -0.4 | 6.5 | -115 | +6.1 |
 
+
+## Week 7 (2026) -- PRIMARY
+Run: 2026-10-19T16:15:19Z  |  Manifest SHA: da59272230201888...
+Games: 14  |  Confident: 5
+
+| Game | Side | Our # | HR Quote | HR Price | Gap |
+|------|------|--------|----------|----------|-----|
+| NE@CHI | home | +10.1 | -3.0 | -115 | +7.1 |
+| CLE@TEN | home | +2.8 | 1.5 | -110 | +4.3 |
+| DEN@ARI | home | +0.9 | 4.5 | -110 | +5.4 |
+| LA@LV | home | -0.7 | 5.5 | -105 | +4.8 |
+| DAL@PHI | home | +0.9 | 5.0 | -110 | +5.9 |
+
