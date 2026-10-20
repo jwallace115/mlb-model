@@ -909,7 +909,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 5.611,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 7
     },
     {
       "game_id": 2026020139,
@@ -921,7 +923,9 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.904,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 4
     },
     {
       "game_id": 2026020140,
@@ -933,6 +937,32 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 6.031,
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 9
+    },
+    {
+      "game_id": 2026020148,
+      "game_date": "2026-10-20",
+      "home_team": "EDM",
+      "away_team": "MIN",
+      "signal_side": "UNDER",
+      "edge": 0.1571,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.534,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020151,
+      "game_date": "2026-10-20",
+      "home_team": "VGK",
+      "away_team": "TBL",
+      "signal_side": "UNDER",
+      "edge": 0.1231,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.695,
       "drift_applied": 0.0
     }
   ]

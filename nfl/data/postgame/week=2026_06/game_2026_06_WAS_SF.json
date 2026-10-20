@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_06_WAS_SF",
+  "week": 6,
+  "home": "SF",
+  "away": "WAS",
+  "final_score": {
+    "home": 23,
+    "away": 17
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 17
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 17
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 60,
+      "dropbacks": 31,
+      "rush_attempts": 29,
+      "pass_rate": 0.5166666666666667,
+      "run_rate": 0.4833333333333333,
+      "pass_oe": 2.3583899943097943
+    },
+    "away": {
+      "plays": 61,
+      "dropbacks": 44,
+      "rush_attempts": 17,
+      "pass_rate": 0.7213114754098361,
+      "run_rate": 0.2786885245901639,
+      "pass_oe": 5.021153949201107
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Daniels",
+      "team": "WAS",
+      "quarter": 1,
+      "play_id": 819,
+      "desc": "(2:16) (Shotgun) 5-J.Daniels sacked at WAS 38 for -6 yards (92-O.Odighizuwa). WAS-17-T.McLaurin was injured during the play."
+    },
+    {
+      "player": "M.Evans",
+      "team": "SF",
+      "quarter": 2,
+      "play_id": 1767,
+      "desc": "(1:10) (Shotgun) 13-B.Purdy pass short middle to 5-M.Evans to WAS 12 for 16 yards (39-J.Reaves). SF-5-M.Evans was injured during the play."
+    },
+    {
+      "player": "C.McCaffrey",
+      "team": "SF",
+      "quarter": 2,
+      "play_id": 1908,
+      "desc": "(:18) 23-C.McCaffrey left guard for 1 yard, TOUCHDOWN. WAS-99-J.Kinlaw was injured during the play."
+    },
+    {
+      "player": "J.McNichols",
+      "team": "WAS",
+      "quarter": 3,
+      "play_id": 2754,
+      "desc": "(1:29) (Shotgun) 26-J.McNichols right end to SF 7 for 4 yards (94-R.Height; 98-M.Williams). WAS-76-S.Cosmi was injured during the play. PENALTY on SF-93-G.Halton, Low Block, 4 yards, enforced at SF 7."
+    }
+  ],
+  "ftn": "covered"
+}
