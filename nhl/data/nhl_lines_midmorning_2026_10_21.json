@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "0b4bab4d663e04a571655ec7477eb10a",
+    "game_date": "2026-10-21",
+    "sport": "NHL",
+    "home_team": "Buffalo Sabres",
+    "away_team": "Philadelphia Flyers",
+    "commence_time": "2026-10-21T23:40:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.0,
+    "over_price": -103,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-21T13:25:03.638274+00:00"
+  },
+  {
+    "game_id": "5736c2282f978bfdf849f4b10876080e",
+    "game_date": "2026-10-21",
+    "sport": "NHL",
+    "home_team": "Ottawa Senators",
+    "away_team": "Florida Panthers",
+    "commence_time": "2026-10-21T23:40:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 5.5,
+    "over_price": -116,
+    "under_price": 104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-21T13:25:03.638274+00:00"
+  }
+]
