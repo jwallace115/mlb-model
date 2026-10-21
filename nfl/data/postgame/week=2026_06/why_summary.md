@@ -1,6 +1,6 @@
 # WHY Summary — Week 6
 
-Generated: 2026-10-20T11:19:27.879451+00:00
+Generated: 2026-10-21T11:19:27.619350+00:00
 
 
 ## Graded rows
@@ -47,10 +47,10 @@ Generated: 2026-10-20T11:19:27.879451+00:00
 
 ## why_code_auto (losses)
 
-- ROLE_SHIFT: 169
+- ROLE_SHIFT: 160
 - EFFICIENCY: 148
 - SCRIPT: 132
-- SHARE_OTHER: 44
+- SHARE_OTHER: 53
 - UNDEFINED: 40
 - NOISE: 27
 - TURNOVERS: 10
@@ -62,9 +62,9 @@ Generated: 2026-10-20T11:19:27.879451+00:00
 
 - SCRIPT: 150
 - EFFICIENCY: 148
-- ROLE_SHIFT: 139
+- ROLE_SHIFT: 135
 - UNDEFINED: 71
-- SHARE_OTHER: 35
+- SHARE_OTHER: 39
 - NOISE: 24
 - TURNOVERS: 9
 - UNRESOLVED: 8
@@ -317,7 +317,7 @@ Generated: 2026-10-20T11:19:27.879451+00:00
 - 507640d7b7a4870d: prop:rec Keaton Mitchell A=0.0 L=2.5 |ln|=5.521
 - fa6d2c48a2e73406: prop:rec Keaton Mitchell A=0.0 L=2.5 |ln|=5.521
 
-### AVAILABILITY / ROLE_SHIFT (308 rows)
+### AVAILABILITY / ROLE_SHIFT (295 rows)
 
 - 5357eaaf67e8bb2e: ROLE_SHIFT prop:rec_yds Bhayshul Tuten
 - 76b515895aeefc74: ROLE_SHIFT prop:rec_yds Jakobi Meyers
@@ -333,7 +333,6 @@ Generated: 2026-10-20T11:19:27.879451+00:00
 - 79a66e067e7d8780: ROLE_SHIFT prop:rush_yds RJ Harvey
 - 81dab48b83042aef: ROLE_SHIFT prop:rec_yds Christian McCaffrey
 - a8e29e958502faf2: ROLE_SHIFT prop:rec Christian McCaffrey
-- 1fb05ae5d9b09c0e: ROLE_SHIFT prop:rush_yds Christian McCaffrey
 - 4fcaac95be46b371: ROLE_SHIFT prop:rec Courtland Sutton
 - e26b1df677cad53d: ROLE_SHIFT prop:rec J.K. Dobbins
 - 3db7ec9862f8b2d2: ROLE_SHIFT prop:rec Jaylen Waddle
@@ -396,13 +395,9 @@ Generated: 2026-10-20T11:19:27.879451+00:00
 - c746fdd0cf391fdc: ROLE_SHIFT prop:rec Derrick Henry
 - c276742be154ab28: ROLE_SHIFT prop:rec Justice Hill
 - c89b63b36b94b793: ROLE_SHIFT prop:rec Mark Andrews
-- f30fcb339d5889a6: ROLE_SHIFT prop:rec Antonio Williams
 - b5b0385297fe0f47: ROLE_SHIFT prop:rec Christian McCaffrey
 - 055d5624fcc36222: ROLE_SHIFT prop:rec George Kittle
 - 2994ea4f04b5d4ce: ROLE_SHIFT prop:rec Mike Evans
-- d66ff1e26029aa6a: ROLE_SHIFT prop:rec Rachaad White
-- 0eb266426dcaf947: ROLE_SHIFT prop:rec Terry McLaurin
-- 65a3ceb3ec6ee741: ROLE_SHIFT prop:rush_att Christian McCaffrey
 - 2f5b81eca30287a5: ROLE_SHIFT prop:rush_att Rachaad White
 - 35d46f3288a0075c: ROLE_SHIFT prop:rec_yds DeMario Douglas
 - 866ca6c0b47a52d9: ROLE_SHIFT prop:rec_yds Garrett Wilson
@@ -502,18 +497,10 @@ Generated: 2026-10-20T11:19:27.879451+00:00
 - 847e6a6ac7c96a9d: ROLE_SHIFT prop:rec Mark Andrews
 - dcbdd3bd08930c32: ROLE_SHIFT prop:rec_yds Christian McCaffrey
 - 185430015ae1fa97: ROLE_SHIFT prop:rec_yds George Kittle
-- 88d971dff0bd315c: ROLE_SHIFT prop:rec_yds Rachaad White
-- c1d16fb0f748eb48: ROLE_SHIFT prop:rec_yds Stefon Diggs
-- fa5868e7ea7172c7: ROLE_SHIFT prop:rec_yds Terry McLaurin
-- 5407fc759253abd2: ROLE_SHIFT prop:rec Antonio Williams
 - 5472474cc4fcca53: ROLE_SHIFT prop:rec Christian McCaffrey
 - a03c59de9e11a47a: ROLE_SHIFT prop:rec George Kittle
 - 155e818809a7d890: ROLE_SHIFT prop:rec Mike Evans
-- b02a09a3b3cc1cb4: ROLE_SHIFT prop:rec Rachaad White
-- 2fd048aba8e6cae6: ROLE_SHIFT prop:rec Terry McLaurin
-- 8e1cff2b5075a5d4: ROLE_SHIFT prop:rush_att Christian McCaffrey
 - b4a41635f94fe4ce: ROLE_SHIFT prop:rush_yds Austin Ekeler
-- 2f16a6ed4713a437: ROLE_SHIFT prop:rush_yds Christian McCaffrey
 - 42865d9b50955ba6: ROLE_SHIFT prop:rec Garrett Wilson
 - cbd7cc07c5cb0385: ROLE_SHIFT prop:rush_att Braelon Allen
 - 88a48762d11e5afb: ROLE_SHIFT prop:pass_att Jameis Winston
@@ -628,4 +615,4 @@ Generated: 2026-10-20T11:19:27.879451+00:00
 - 2c7d79a59ad32a7d: ROLE_SHIFT prop:rush_att MarShawn Lloyd
 - 7f2a5a53b2a59f7e: ROLE_SHIFT prop:rec Tucker Kraft
 
-Total flagged: 507
+Total flagged: 494
