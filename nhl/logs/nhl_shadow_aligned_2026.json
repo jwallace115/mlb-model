@@ -982,6 +982,54 @@
       "drift_applied": 0.0,
       "result": "LOSS",
       "actual_total": 7
+    },
+    {
+      "game_id": 2026020155,
+      "game_date": "2026-10-22",
+      "home_team": "TOR",
+      "away_team": "NYR",
+      "signal_side": "UNDER",
+      "edge": 0.1567,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.585,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020156,
+      "game_date": "2026-10-22",
+      "home_team": "OTT",
+      "away_team": "SJS",
+      "signal_side": "UNDER",
+      "edge": 0.1325,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.749,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020158,
+      "game_date": "2026-10-22",
+      "home_team": "PIT",
+      "away_team": "FLA",
+      "signal_side": "UNDER",
+      "edge": 0.16,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.993,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020163,
+      "game_date": "2026-10-22",
+      "home_team": "EDM",
+      "away_team": "CAR",
+      "signal_side": "UNDER",
+      "edge": 0.1234,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.852,
+      "drift_applied": 0.0
     }
   ]
 }

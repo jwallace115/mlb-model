@@ -1,6 +1,6 @@
 # WHY Summary — Week 3
 
-Generated: 2026-10-21T11:19:27.348601+00:00
+Generated: 2026-10-22T11:20:26.307704+00:00
 
 
 ## Graded rows
