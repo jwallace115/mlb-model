@@ -1030,6 +1030,42 @@
       "closing_total": 6.5,
       "lambda_total": 5.852,
       "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020154,
+      "game_date": "2026-10-22",
+      "home_team": "BOS",
+      "away_team": "NSH",
+      "signal_side": "UNDER",
+      "edge": 0.1376,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.491,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020157,
+      "game_date": "2026-10-22",
+      "home_team": "NJD",
+      "away_team": "ANA",
+      "signal_side": "UNDER",
+      "edge": 0.1437,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.893,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020165,
+      "game_date": "2026-10-22",
+      "home_team": "VAN",
+      "away_team": "DET",
+      "signal_side": "UNDER",
+      "edge": 0.1226,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.764,
+      "drift_applied": 0.0
     }
   ]
 }
