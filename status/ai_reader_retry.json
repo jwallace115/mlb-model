@@ -25,9 +25,9 @@
   "error": "Expecting ',' delimiter: line 9 column 55 (char 1526)"
  },
  "nfl:2823e986597c449ab94126cd5ed3fae9": {
-  "attempt": 2,
-  "last_utc": "2026-10-23T20:04:52.777345+00:00",
-  "error": "Unterminated string starting at: line 65 column 109 (char 11800)"
+  "attempt": 3,
+  "last_utc": "2026-10-23T20:33:10.343422+00:00",
+  "error": "HALT for 2823e986597c449ab94126cd5ed3fae9: pick names unquoted line ('payd', 'Baker Mayfield', 214.5) (only 71 lines quoted for this event)"
  },
  "ncaaf:a28a6841bdc11350063d5e6d57fbd577": {
   "attempt": 2,
@@ -35,14 +35,14 @@
   "error": "HALT for a28a6841bdc11350063d5e6d57fbd577: pick names unquoted line ('total', '', 56.5) (only 3 lines quoted for this event)"
  },
  "nfl:2bba7fde6f97d0e54403d53676e4ab63": {
-  "attempt": 2,
-  "last_utc": "2026-10-23T20:06:18.535224+00:00",
-  "error": "HALT for 2bba7fde6f97d0e54403d53676e4ab63: pick names unquoted line ('spread', '', 10.5) (only 70 lines quoted for this event)"
+  "attempt": 3,
+  "last_utc": "2026-10-23T20:34:00.481421+00:00",
+  "error": "Expecting ',' delimiter: line 59 column 213 (char 10873)"
  },
  "nfl:f3992ad4496724baf7dcd1ef58245d6b": {
-  "attempt": 2,
-  "last_utc": "2026-10-23T20:06:58.048176+00:00",
-  "error": "HALT for f3992ad4496724baf7dcd1ef58245d6b: pick names unquoted line ('spread', '', 6.0) (only 59 lines quoted for this event)"
+  "attempt": 3,
+  "last_utc": "2026-10-23T20:34:38.263151+00:00",
+  "error": "HALT for f3992ad4496724baf7dcd1ef58245d6b: pick names unquoted line ('spread', '', -6.0) (only 59 lines quoted for this event)"
  },
  "nfl:be5dd120ca08b43d647b6caa8953500a": {
   "attempt": 2,
@@ -60,18 +60,23 @@
   "error": "HALT for 5dce18baccec5d3ad5fb3a3ce52f7619: pick names unquoted line ('spread', '', 2.0) (only 58 lines quoted for this event)"
  },
  "ncaaf:1f2a24570e2ca6de4516eae60b021507": {
-  "attempt": 1,
-  "last_utc": "2026-10-23T20:20:22.853707+00:00",
+  "attempt": 2,
+  "last_utc": "2026-10-23T20:34:54.561488+00:00",
   "error": "HALT for 1f2a24570e2ca6de4516eae60b021507: pick names unquoted line ('total', '', 51.5) (only 3 lines quoted for this event)"
  },
  "nfl:436119bb3ccdaa6ed7808aa3ebd82b76": {
-  "attempt": 1,
-  "last_utc": "2026-10-23T20:20:59.159454+00:00",
-  "error": "Unterminated string starting at: line 57 column 104 (char 9912)"
+  "attempt": 2,
+  "last_utc": "2026-10-23T20:36:06.082488+00:00",
+  "error": "HALT for 436119bb3ccdaa6ed7808aa3ebd82b76: pick names unquoted line ('spread', '', 4.5) (only 72 lines quoted for this event)"
  },
  "ncaaf:b4b3b6c003cd39a6258130ad906d0025": {
   "attempt": 1,
   "last_utc": "2026-10-23T20:22:04.455855+00:00",
   "error": "HALT for b4b3b6c003cd39a6258130ad906d0025: pick names unquoted line ('spread', '', 14.5) (only 3 lines quoted for this event)"
+ },
+ "nfl:f7679cf18454e4d88a8f2b990c3f08ac": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T20:37:42.228061+00:00",
+  "error": "Unterminated string starting at: line 57 column 26 (char 9404)"
  }
 }
