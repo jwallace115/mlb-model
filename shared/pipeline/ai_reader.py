@@ -743,6 +743,12 @@ def picks_to_filled(picks, sheet_df, sport, event_id=None):
             if p.get("tag") == "no_view" or p.get("conf", 0) == 0:
                 continue
             pk = (p.get("market", ""), p.get("player", ""), float(p.get("line", 0)))
+            # Spread sign normalisation: the sheet quotes the spread from the home (first) side;
+            # a pick echoing the away number (+2.5 for a -2.5 quote) is the same contract, other side.
+            if pk not in sheet_keys and pk[0] == "spreads" and (pk[0], pk[1], -pk[2]) in sheet_keys:
+                p["line"] = -pk[2]
+                p["side"] = "second" if p.get("side") == "first" else "first"
+                pk = (pk[0], pk[1], -pk[2])
             if pk not in sheet_keys:
                 raise SystemExit(
                     f"HALT for {event_id}: pick names unquoted line "
