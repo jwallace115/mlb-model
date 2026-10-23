@@ -4491,3 +4491,17 @@ SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
 - Whether the CLV basis_note correctly identifies all same-pull cases (depends on logged_utc precision).
 - Whether the 912 NCAAF ungraded rows all grade after the CFBD pull (some may have crosswalk issues).
 - Whether the site build on VM renders the new tier rows correctly with real ledger data.
+
+## 2026-10-23T01:38Z  claude-code (OPS-R2 window hardening)
+- WORKTREE: ~/mlb-model-opsr2 on ops/r2-window-hardening
+- ITEM 1 (P56): resolve_inputs() in log_ai_opinions.py; run_window.py pins --props-file/--lines-file to both sheet + freeze; manifest records inputs. 3 tests RED->GREEN. Commit 74eb021b6.
+- ITEM 2 (P57): PREKICK_LOW/HIGH 2h45/3h12; _check_recent_prekick double-fire guard (20 min dedup); _run_git_pull_with_retry 3x/20s. 5 tests RED->GREEN. Commit 3c83f17a0.
+- ITEM 3 (P58): flock via fcntl in pick_layers.py + picks_adapters.py; _acquire_lock LOCK_EX|LOCK_NB; second instance exits 0. Profile deferred to VM (Item 4). 2 tests RED->GREEN. Commit 18428813f.
+- ITEM 5 (P59): new nfl/pipeline/current_week.py reads nflverse/CFBD schedule parquet; run_window.py + sim_window.sh wired; auto-prekick gate logs games+delta. 5 tests RED->GREEN. Commit 9f77514c9 (rebased to 8180e73d7).
+- ITEM 6 (P60): _write_window_health in run_window.py; health.html Windows table; sport page failure line via picks_data + template. 4 tests RED->GREEN. Commit fde8217c2.
+- ITEM 4: NOT DONE — requires merge to main + VM hand-run.
+- FULL SUITE: 427 passed, 10 failed (all pre-existing at origin/main), 3 skipped.
+- STANDING REDS (pre-existing): test_score_first_side_and_units, test_ncaaf_sport_is_separate, test_fresh_news_passes, test_second_pull_writes, test_src_citation_sha, test_picks_is_index, test_page_has_chips, test_prop_render_no_plus, test_total_render_no_plus, test_header_et_not_utc.
+- NOT DONE: merge to main; Item 4 VM hand-run; pick_layers profile on VM.
+- UNVERIFIED: whether the 10 standing reds are the same 10 pre-OPS-R2.
+- VM CRONTAB: not changed. CREDITS: 0.
