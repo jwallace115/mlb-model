@@ -1,8 +1,8 @@
 {
  "nfl:2e710ea5a306b614f0f966e3d78732f8": {
-  "attempt": 2,
-  "last_utc": "2026-10-23T19:48:21.098396+00:00",
-  "error": "Unterminated string starting at: line 65 column 2 (char 11390)"
+  "attempt": 3,
+  "last_utc": "2026-10-23T20:18:20.669664+00:00",
+  "error": "HALT for 2e710ea5a306b614f0f966e3d78732f8: pick names unquoted line ('spread', '', 3.0) (only 71 lines quoted for this event)"
  },
  "ncaaf:bbbabc2490914e9a4d1e619a32461b1f": {
   "attempt": 1,
@@ -20,33 +20,58 @@
   "error": "HALT for 0f773ec5cb1e5b41f52f2bf8dbc4f182: pick names unquoted line ('spread', '', 8.5) (only 3 lines quoted for this event)"
  },
  "nfl:b1be064fb52a198a62109c279e7ab24c": {
-  "attempt": 1,
-  "last_utc": "2026-10-23T19:49:02.541182+00:00",
-  "error": "HALT for b1be064fb52a198a62109c279e7ab24c: pick names unquoted line ('total', '', 50.5) (only 64 lines quoted for this event)"
+  "attempt": 2,
+  "last_utc": "2026-10-23T20:18:57.853536+00:00",
+  "error": "Expecting ',' delimiter: line 9 column 55 (char 1526)"
  },
  "nfl:2823e986597c449ab94126cd5ed3fae9": {
-  "attempt": 1,
-  "last_utc": "2026-10-23T19:50:21.415164+00:00",
-  "error": "HALT for 2823e986597c449ab94126cd5ed3fae9: pick names unquoted line ('total', '', 44.5) (only 71 lines quoted for this event)"
+  "attempt": 2,
+  "last_utc": "2026-10-23T20:04:52.777345+00:00",
+  "error": "Unterminated string starting at: line 65 column 109 (char 11800)"
  },
  "ncaaf:a28a6841bdc11350063d5e6d57fbd577": {
-  "attempt": 1,
-  "last_utc": "2026-10-23T19:50:30.092258+00:00",
+  "attempt": 2,
+  "last_utc": "2026-10-23T20:05:22.051089+00:00",
   "error": "HALT for a28a6841bdc11350063d5e6d57fbd577: pick names unquoted line ('total', '', 56.5) (only 3 lines quoted for this event)"
  },
  "nfl:2bba7fde6f97d0e54403d53676e4ab63": {
-  "attempt": 1,
-  "last_utc": "2026-10-23T19:51:37.651642+00:00",
-  "error": "HALT for 2bba7fde6f97d0e54403d53676e4ab63: pick names unquoted line ('total', '', 42.5) (only 70 lines quoted for this event)"
+  "attempt": 2,
+  "last_utc": "2026-10-23T20:06:18.535224+00:00",
+  "error": "HALT for 2bba7fde6f97d0e54403d53676e4ab63: pick names unquoted line ('spread', '', 10.5) (only 70 lines quoted for this event)"
  },
  "nfl:f3992ad4496724baf7dcd1ef58245d6b": {
-  "attempt": 1,
-  "last_utc": "2026-10-23T19:52:16.762695+00:00",
-  "error": "HALT for f3992ad4496724baf7dcd1ef58245d6b: pick names unquoted line ('paatt', 'Daniel Jones', 33.5) (only 59 lines quoted for this event)"
+  "attempt": 2,
+  "last_utc": "2026-10-23T20:06:58.048176+00:00",
+  "error": "HALT for f3992ad4496724baf7dcd1ef58245d6b: pick names unquoted line ('spread', '', 6.0) (only 59 lines quoted for this event)"
  },
  "nfl:be5dd120ca08b43d647b6caa8953500a": {
-  "attempt": 1,
-  "last_utc": "2026-10-23T19:52:54.511254+00:00",
+  "attempt": 2,
+  "last_utc": "2026-10-23T20:07:35.065881+00:00",
   "error": "HALT for be5dd120ca08b43d647b6caa8953500a: pick names unquoted line ('total', '', 39.5) (only 64 lines quoted for this event)"
+ },
+ "nfl:550ec5290f935d311995affbcb0b5c79": {
+  "attempt": 2,
+  "last_utc": "2026-10-23T20:19:31.985405+00:00",
+  "error": "HALT for 550ec5290f935d311995affbcb0b5c79: pick names unquoted line ('spread', '', -1.0) (only 52 lines quoted for this event)"
+ },
+ "nfl:5dce18baccec5d3ad5fb3a3ce52f7619": {
+  "attempt": 2,
+  "last_utc": "2026-10-23T20:20:09.190927+00:00",
+  "error": "HALT for 5dce18baccec5d3ad5fb3a3ce52f7619: pick names unquoted line ('spread', '', 2.0) (only 58 lines quoted for this event)"
+ },
+ "ncaaf:1f2a24570e2ca6de4516eae60b021507": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T20:20:22.853707+00:00",
+  "error": "HALT for 1f2a24570e2ca6de4516eae60b021507: pick names unquoted line ('total', '', 51.5) (only 3 lines quoted for this event)"
+ },
+ "nfl:436119bb3ccdaa6ed7808aa3ebd82b76": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T20:20:59.159454+00:00",
+  "error": "Unterminated string starting at: line 57 column 104 (char 9912)"
+ },
+ "ncaaf:b4b3b6c003cd39a6258130ad906d0025": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T20:22:04.455855+00:00",
+  "error": "HALT for b4b3b6c003cd39a6258130ad906d0025: pick names unquoted line ('spread', '', 14.5) (only 3 lines quoted for this event)"
  }
 }
