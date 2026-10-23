@@ -8,6 +8,7 @@ frozen at the pick's logged_utc — no file timestamped after logged_utc is ever
 OPS3 Item 2, P11.
 """
 import argparse
+import fcntl
 import gzip
 import hashlib
 import json
@@ -27,6 +28,18 @@ import picks_ledger as pl
 ROOT = Path(os.environ.get("MLB_REPO_ROOT") or Path(__file__).resolve().parent.parent.parent)
 LEDGER_DIR = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
 TS_RE = re.compile(r"(\d{8}T\d{4}(?:\d{2})?Z)")
+
+
+def _acquire_lock(lock_path):
+    """P58(a): try to get an exclusive flock. Returns False if held by another instance."""
+    try:
+        fd = open(lock_path, "w")
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        # Keep fd alive (not closed) for the process lifetime
+        _acquire_lock._fd = fd
+        return True
+    except (OSError, IOError):
+        return False
 
 # ---- helpers ----
 def _parse_dt(s):
@@ -812,6 +825,12 @@ def rebuild_layer(pick, root, layers_dir, layer_name, reason):
 
 
 def main():
+    # P58(a): exclusive flock — a second instance exits 0
+    lock_path = LEDGER_DIR / ".pick_layers.lock"
+    if lock_path.parent.exists() and not _acquire_lock(lock_path):
+        print("pick_layers: another instance is running — exiting")
+        sys.exit(0)
+
     ap = argparse.ArgumentParser(description="Build detail cards for ranked picks")
     ap.add_argument("--build-missing", action="store_true", help="Build cards for currently ranked picks")
     ap.add_argument("--rebuild-empty-movement", action="store_true",

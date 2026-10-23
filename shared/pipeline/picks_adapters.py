@@ -12,7 +12,7 @@ normalised teams, |snapshot commence − leg commence| ≤ 6h → exactly ONE ev
 
 OPS2 Item 1.
 """
-import glob, json, os, re, sys, time as _time
+import fcntl, glob, json, os, re, sys, time as _time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -25,6 +25,17 @@ import ticket_id as tk
 
 ROOT = Path(os.environ.get("MLB_REPO_ROOT") or Path(__file__).resolve().parent.parent.parent)
 LEDGER_DIR = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
+
+
+def _acquire_lock(lock_path):
+    """P58(a): try to get an exclusive flock. Returns False if held by another instance."""
+    try:
+        fd = open(lock_path, "w")
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        _acquire_lock._fd = fd
+        return True
+    except (OSError, IOError):
+        return False
 
 # ---- owner map for pick_sources source files ----
 # P1 decision: one owner per source kind/lane
@@ -659,6 +670,12 @@ def adapt_site_tickets(root=None):
 
 
 def main():
+    # P58(a): exclusive flock — a second instance exits 0
+    lock_path = LEDGER_DIR / ".picks_adapters.lock"
+    if lock_path.parent.exists() and not _acquire_lock(lock_path):
+        print("picks_adapters: another instance is running — exiting")
+        sys.exit(0)
+
     if not LEDGER_DIR.exists():
         print(f"HALT: PICKS_LEDGER_DIR={LEDGER_DIR} does not exist")
         sys.exit(1)

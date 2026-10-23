@@ -1247,3 +1247,22 @@ own :00/:30 pushes can collide with the window's pull step (Saturday 22:00Z race
 
 **Tests:** `TestPrekickSlot` (bounds + slot coverage), `TestDoubleFire` (manifest fixture),
 `TestGitPullRetry` (function exists). All RED first, then GREEN.
+
+## P58 — Locks and speed for the ledger crons (2026-10-23)
+
+**(a)** `pick_layers.py` and `picks_adapters.py` take an exclusive `flock` on
+`PICKS_LEDGER_DIR/.<name>.lock` at start. If held, print
+"<name>: another instance is running — exiting" and exit 0. The `_acquire_lock`
+function uses `fcntl.LOCK_EX | fcntl.LOCK_NB` — non-blocking, so a second
+instance exits within 1 s.
+
+**(b)** Profile + optimization: deferred to VM hand-run (Item 4). The tape cache
+(`_load_tape_cached`) already exists in pick_layers.py — confirmed it caches per
+file path. If the profile on the VM shows the parquet re-read is the bottleneck,
+no further code change is needed (the cache covers it).
+
+**(c)** Card content: the lock mechanism does not change any card-building logic.
+
+**Tests:** `TestFlockGuard` — `test_flock_function_exists` and
+`test_second_instance_blocked` (holds lock, verifies second acquire returns False).
+RED first, then GREEN.
