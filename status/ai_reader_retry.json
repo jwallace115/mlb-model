@@ -20,9 +20,9 @@
   "error": "HALT for 0f773ec5cb1e5b41f52f2bf8dbc4f182: pick names unquoted line ('spread', '', 8.5) (only 3 lines quoted for this event)"
  },
  "nfl:b1be064fb52a198a62109c279e7ab24c": {
-  "attempt": 2,
-  "last_utc": "2026-10-23T20:18:57.853536+00:00",
-  "error": "Expecting ',' delimiter: line 9 column 55 (char 1526)"
+  "attempt": 3,
+  "last_utc": "2026-10-23T21:02:45.774290+00:00",
+  "error": "Extra data: line 6 column 2 (char 1107)"
  },
  "nfl:2823e986597c449ab94126cd5ed3fae9": {
   "attempt": 3,
@@ -55,9 +55,9 @@
   "error": "HALT for 550ec5290f935d311995affbcb0b5c79: pick names unquoted line ('spread', '', -1.0) (only 52 lines quoted for this event)"
  },
  "nfl:5dce18baccec5d3ad5fb3a3ce52f7619": {
-  "attempt": 2,
-  "last_utc": "2026-10-23T20:20:09.190927+00:00",
-  "error": "HALT for 5dce18baccec5d3ad5fb3a3ce52f7619: pick names unquoted line ('spread', '', 2.0) (only 58 lines quoted for this event)"
+  "attempt": 3,
+  "last_utc": "2026-10-23T21:03:07.017578+00:00",
+  "error": "Expecting ',' delimiter: line 5 column 61 (char 901)"
  },
  "ncaaf:1f2a24570e2ca6de4516eae60b021507": {
   "attempt": 2,
