@@ -180,6 +180,41 @@ def _write_unquoted_sidecar(sheet_path, week, root, sport):
     print(f"unquoted sidecar: {len(out)} events (no Hard Rock line yet) -> {dest}")
 
 
+def _resolve_inputs_once(args, env, effective_root):
+    """P56: resolve the exact props and lines files ONCE before the sheet.
+    Both sheet and freeze get --props-file / --lines-file so they see the same tape."""
+    resolve_cmd = [PY, "-c", (
+        "import sys; sys.path.insert(0, {root!r})\n"
+        "sys.path.insert(0, {pipeline!r})\n"
+        "import log_ai_opinions as lao\n"
+        "from datetime import datetime, timezone\n"
+        "lao.set_sport({sport!r})\n"
+        "now = datetime.fromisoformat({as_of!r}) if {as_of!r} else datetime.now(timezone.utc)\n"
+        "if now.tzinfo is None: now = now.replace(tzinfo=timezone.utc)\n"
+        "p, l = lao.resolve_inputs({season}, now)\n"
+        "print(p or '')\n"
+        "print(l)\n"
+    ).format(
+        root=str(ROOT),
+        pipeline=str(NFL_PIPELINE),
+        sport=args.sport,
+        as_of=args.as_of or "",
+        season=2026,
+    )]
+    result = subprocess.run(resolve_cmd, cwd=str(effective_root), env=env or os.environ,
+                            capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"STOP: resolve_inputs failed:\n{result.stderr[:500]}")
+        sys.exit(result.returncode)
+    lines = result.stdout.strip().split("\n")
+    props_path = lines[0] if lines[0] else None
+    lines_path = lines[1] if len(lines) > 1 else None
+    if not lines_path:
+        print("STOP: resolve_inputs returned no lines path")
+        sys.exit(1)
+    return props_path, lines_path
+
+
 def _commit_and_push(commit_mode, window, root, env, sport="nfl"):
     """Commit the frozen file + manifest (+ mac props + snapshot) and push."""
     if commit_mode == "none":
@@ -345,8 +380,13 @@ def main():
               "--sports", "americanfootball_nfl"],
              env=env)
 
-    # ── Step 2: Sheet → Reader → Freeze ──
+    # ── Step 1b: Resolve inputs ONCE (P56 — one tape per window) ──
     sport_upper = args.sport.upper()
+    resolved_props, resolved_lines = _resolve_inputs_once(args, env, effective_root)
+    print(f"  pinned props: {resolved_props or '(none)'}")
+    print(f"  pinned lines: {resolved_lines}")
+
+    # ── Step 2: Sheet → Reader → Freeze ──
     with tempfile.TemporaryDirectory() as tmp:
         sheet_path = Path(tmp) / "sheet.csv"
         filled_path = Path(tmp) / "filled.csv"
@@ -355,6 +395,10 @@ def main():
                      "sheet", "--sport", args.sport,
                      "--week", str(week),
                      "--out", str(sheet_path)]
+        if resolved_lines:
+            sheet_cmd += ["--lines-file", resolved_lines]
+        if resolved_props:
+            sheet_cmd += ["--props-file", resolved_props]
         if args.as_of:
             sheet_cmd += ["--as-of", args.as_of, "--pilot"]
         if args.window in ("prekick", "adhoc"):
@@ -378,6 +422,10 @@ def main():
                       "--reader-model", args.reader_model,
                       "--window", args.window,
                       "--reader-file", str(reader_file)]
+        if resolved_lines:
+            freeze_cmd += ["--lines-file", resolved_lines]
+        if resolved_props:
+            freeze_cmd += ["--props-file", resolved_props]
         if args.as_of:
             freeze_cmd += ["--as-of", args.as_of, "--pilot"]
         if args.window in ("prekick", "adhoc"):

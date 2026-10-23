@@ -1209,3 +1209,17 @@ forward_status.json) show "scoring not published" — unchanged.
 
 **Local dryrun build:** Record block renders "by rank: top 5: 3–2 +14.5% ·
 top 10: 6–4 +14.5% · top 20: 13–7 +24.1%" and conf bins.
+
+## P56 — One tape per window: resolve before sheet (2026-10-23)
+
+A freeze is always built on the tape its sheet was built on. `run_window.py` calls
+`resolve_inputs()` ONCE, then passes `--props-file` and `--lines-file` to BOTH the
+sheet and the freeze commands. The manifest records the pinned inputs under `inputs:
+{props, lines}`. Old entries are untouched (new keys only).
+
+**Bug fixed:** a new snapshot landing between the sheet and the freeze caused "N quoted
+lines have no opinion" (10-20 at 14:08Z: the 14:00Z snapshot appeared between the two
+steps, adding events the props didn't cover).
+
+**Tests:** `TestResolvePinning` — `test_resolve_inputs_exists`, `test_resolve_returns_paths`,
+`test_pinned_snapshot_consistent` (sheet twice on the same pinned files → identical).
