@@ -1288,3 +1288,20 @@ next skip is diagnosable (print, no behaviour change).
 **Tests:** `TestCurrentWeek` — `test_script_exists`, `test_week7_on_tue_open` (RED:
 calendar gives 6, schedule gives 7), `test_week6_on_mnf_day`, `test_week7_after_tnf`,
 `test_ncaaf_week`. All RED first (script didn't exist), then GREEN.
+
+## P60 — A dead window is visible, not silent (2026-10-23)
+
+`run_window.py` writes `status/window_health.json` at every exit path (COMPLETE,
+STOP, or HALT) with: sport, window, started/finished UTC, result, step, message[:200],
+and freeze_file. One entry per (sport, window), replaced on each run.
+
+`site/build_site.py` health.html: a "Windows" table from window_health.json. Rows
+with STOP/HALT are red-flagged.
+
+Each sport page (picks template): when the newest fixed or prekick window for a sport
+did not COMPLETE, a failure line appears under the title: "last automated read failed
+at <ET time> (<step>) — the board shows the previous read" (plain English, no stack
+traces, no paths).
+
+**Tests:** `TestWindowHealthFile` (function exists), `TestHealthPageWindows` (STOP → red
+row in health.html, COMPLETE → no failure). RED first, then GREEN.

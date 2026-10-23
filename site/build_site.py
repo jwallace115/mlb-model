@@ -492,6 +492,34 @@ def build_health(now, health):
             f'A job whose log shows a crash after its last slot is ERRORING. QUIET means it ran and had nothing new to write; OFF means out of season.</p></div>'
             f'{stale}<div class="tiles">{tiles}</div>'
             f'<div class="tablewrap"><table><tr><th>Job</th><th>Sport</th><th>Host</th><th>Schedule (UTC)</th><th>Newest file</th><th>Age</th><th>Status</th><th>Last log line</th></tr>{"".join(rows)}</table></div>{side}')
+    # P60: Windows table from status/window_health.json
+    wh = load_json(ROOT / "status" / "window_health.json")
+    if wh:
+        wh_rows = []
+        for entry in wh:
+            result_val = entry.get("result", "")
+            row_cls = ' class="bad"' if result_val in ("STOP", "HALT") else ""
+            finished = entry.get("finished_utc", "")[:16]
+            fin_age = ""
+            try:
+                fin_dt = datetime.fromisoformat(finished.replace("Z", "+00:00") if finished else "")
+                fin_age = fmt_age((now - fin_dt).total_seconds() / 60)
+            except (ValueError, TypeError):
+                pass
+            wh_rows.append(
+                f"<tr{row_cls}><td>{E(entry.get('sport', ''))}</td>"
+                f"<td>{E(entry.get('window', ''))}</td>"
+                f"<td class='mono'>{E(finished)}Z</td>"
+                f"<td class='num'>{fin_age}</td>"
+                f"<td>{badge(result_val) if result_val in ('STOP', 'HALT') else E(result_val)}</td>"
+                f"<td>{E(entry.get('step', ''))}</td>"
+                f"<td class='src'>{E(entry.get('message', '')[:140])}</td>"
+                f"<td class='src'>{E(entry.get('freeze_file') or '—')}</td></tr>")
+        body += (f'<h2 style="margin-top:32px">Windows</h2>'
+                 f'<div class="tablewrap"><table><tr><th>Sport</th><th>Window</th>'
+                 f'<th>Finished</th><th>Age</th><th>Result</th><th>Step</th>'
+                 f'<th>Message</th><th>Freeze file</th></tr>{"".join(wh_rows)}</table></div>')
+
     # Retired feeds
     retired = health.get("retired", [])
     if retired:

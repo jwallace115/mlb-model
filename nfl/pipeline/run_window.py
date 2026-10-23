@@ -57,6 +57,9 @@ PREKICK_LOW = timedelta(hours=2, minutes=45)
 PREKICK_HIGH = timedelta(hours=3, minutes=12)
 PREKICK_DEDUP_MIN = 20  # minutes: skip if a prekick freeze exists within this window
 
+# P60: module-level run context for health writes on failure
+_RUN_CTX = {"sport": None, "window": None}
+
 
 def _check_recent_prekick(freeze_dir, window, now):
     """P57(b): True if a prekick freeze for the same window already exists within PREKICK_DEDUP_MIN."""
@@ -145,6 +148,9 @@ def _run(desc, cmd, cwd=ROOT, env=None):
     print(f"  exit: {result.returncode}")
     if result.returncode != 0:
         print(f"STOP: {desc} failed with exit {result.returncode}")
+        if _RUN_CTX["sport"] and _RUN_CTX["window"]:
+            _write_window_health(_RUN_CTX["sport"], _RUN_CTX["window"], "STOP",
+                                  step=desc, message=f"exit {result.returncode}")
         sys.exit(result.returncode)
     return result
 
@@ -231,6 +237,34 @@ def _write_unquoted_sidecar(sheet_path, week, root, sport):
     dest = freeze_dir / f"unquoted_{ts}.csv"
     out.to_csv(dest, index=False)
     print(f"unquoted sidecar: {len(out)} events (no Hard Rock line yet) -> {dest}")
+
+
+def _write_window_health(sport, window, result, step="", message="", freeze_file=None,
+                          started_utc=None, root=ROOT):
+    """P60: write status/window_health.json at every exit path."""
+    import json as _json
+    status_dir = root / "status"
+    status_dir.mkdir(parents=True, exist_ok=True)
+    health_path = status_dir / "window_health.json"
+    try:
+        entries = _json.loads(health_path.read_text()) if health_path.exists() else []
+    except Exception:
+        entries = []
+    now = datetime.now(timezone.utc)
+    entry = {
+        "sport": sport,
+        "window": window,
+        "started_utc": started_utc or now.isoformat(),
+        "finished_utc": now.isoformat(),
+        "result": result,  # COMPLETE, STOP, HALT
+        "step": step,
+        "message": str(message)[:200],
+        "freeze_file": freeze_file,
+    }
+    # Replace if same sport+window exists, else append
+    entries = [e for e in entries if not (e.get("sport") == sport and e.get("window") == window)]
+    entries.append(entry)
+    health_path.write_text(_json.dumps(entries, indent=1) + "\n")
 
 
 def _resolve_inputs_once(args, env, effective_root):
@@ -370,6 +404,10 @@ def main():
     ap.add_argument("--window-hours", type=int, default=None,
                     help="override WINDOW_HOURS[window]")
     args = ap.parse_args()
+
+    # P60: set run context for health writes
+    _RUN_CTX["sport"] = args.sport
+    _RUN_CTX["window"] = args.window
 
     # ── NCAAF: --no-pull is required (the tape is the source; 0 credits by construction) ──
     if args.sport == "ncaaf" and not args.no_pull:
@@ -513,6 +551,10 @@ def main():
 
     # ── Step 5: Commit + Push ──
     _commit_and_push(args.commit, args.window, ROOT, env, sport=args.sport)
+
+    # P60: record success
+    _write_window_health(args.sport, args.window, "COMPLETE",
+                          step="done", freeze_file=None)
 
     print(f"\n{'='*60}")
     print(f"run_window COMPLETE: sport={args.sport} window={args.window}")
