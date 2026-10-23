@@ -79,7 +79,7 @@ def test_spread_sign_normalised_and_side_flipped():
     f = picks_to_filled(picks, sheet, "ncaaf", event_id="e1")
     row = f.iloc[0]
     assert float(row.line) == -2.5 and row.tag != "no_view"
-    assert row.p_first < 0.5  # the away side -> p_first below the home no-vig
+    assert row.p_first > 0.5  # side kept ("first" = home); only the line sign is normalised
 
 
 def test_spread_sign_normalised_side_kept_and_aliases_and_thesis_coerced():
