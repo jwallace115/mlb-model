@@ -343,3 +343,24 @@ class TestUnsupportedSports:
         with pytest.raises(SystemExit, match="HALT.*nba"):
             ar.build_packet("nba", [], pd.DataFrame(), pd.DataFrame(),
                             pd.DataFrame(), datetime.now(timezone.utc))
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# Test: DEFAULT_MODEL is in the live Console model list (CAD1b Item 1)
+# ──────────────────────────────────────────────────────────────────────────
+
+# Live /v1/models list pulled 2026-10-23T11:50Z
+LIVE_MODELS = [
+    "claude-haiku-5-5", "claude-sonnet-5-5", "claude-opus-5-5",
+    "claude-fable-5-1", "claude-opus-5", "claude-sonnet-5", "claude-fable-5",
+    "claude-opus-4-8", "claude-opus-4-7", "claude-sonnet-4-6", "claude-opus-4-6",
+    "claude-opus-4-5-20251101", "claude-haiku-4-5-20251001", "claude-sonnet-4-5-20250929",
+]
+
+
+class TestDefaultModelId:
+
+    def test_default_model_in_live_list(self):
+        """DEFAULT_MODEL must be a model ID that exists in the Console."""
+        assert ar.DEFAULT_MODEL in LIVE_MODELS, \
+            f"DEFAULT_MODEL {ar.DEFAULT_MODEL!r} is not in the live model list"

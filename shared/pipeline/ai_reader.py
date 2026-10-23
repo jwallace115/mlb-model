@@ -84,8 +84,13 @@ TEAM_TZ = {
     "Saints": -5, "Titans": -5, "Bears": -5, "Packers": -5, "Vikings": -5,
 }
 
-# Default AI reader model (newest Sonnet-class from the Anthropic Console)
-DEFAULT_MODEL = "claude-sonnet-4-6-20250514"
+# Default AI reader model (newest Sonnet-class from the Anthropic Console).
+# Live /v1/models list pulled 2026-10-23T11:50Z:
+#   claude-haiku-5-5, claude-sonnet-5-5 (2026-09-28), claude-opus-5-5,
+#   claude-fable-5-1, claude-opus-5, claude-sonnet-5, claude-fable-5,
+#   claude-opus-4-8, claude-opus-4-7, claude-sonnet-4-6, claude-opus-4-6,
+#   claude-opus-4-5-20251101, claude-haiku-4-5-20251001, claude-sonnet-4-5-20250929
+DEFAULT_MODEL = "claude-sonnet-5-5"
 
 # Monthly cap (USD) for AI reader spend
 DEFAULT_MONTHLY_CAP_USD = 150.0
