@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_07_NE_CHI",
+  "week": 7,
+  "home": "CHI",
+  "away": "NE",
+  "final_score": {
+    "home": 30,
+    "away": 24
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 30,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 30,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 66,
+      "dropbacks": 36,
+      "rush_attempts": 30,
+      "pass_rate": 0.5454545454545454,
+      "run_rate": 0.4545454545454546,
+      "pass_oe": 3.7716948043774154
+    },
+    "away": {
+      "plays": 50,
+      "dropbacks": 33,
+      "rush_attempts": 17,
+      "pass_rate": 0.66,
+      "run_rate": 0.33999999999999997,
+      "pass_oe": 3.5914611644469776
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "D.Swift",
+      "team": "CHI",
+      "quarter": 2,
+      "play_id": 1317,
+      "desc": "(10:09) (Shotgun) 4-D.Swift left guard to NE 26 for 5 yards (53-C.Elliss; 31-K.Byard). NE-31-K.Byard was injured during the play."
+    },
+    {
+      "player": "R.Stevenson",
+      "team": "NE",
+      "quarter": 3,
+      "play_id": 2535,
+      "desc": "(8:59) (Shotgun) 38-R.Stevenson left guard to NE 37 for 3 yards (97-J.Lynch; 93-K.Street). CHI-24-M.Muhammad was injured during the play."
+    },
+    {
+      "player": "C.Kmet",
+      "team": "CHI",
+      "quarter": 4,
+      "play_id": 3641,
+      "desc": "(5:46) 18-C.Williams pass short right to 85-C.Kmet to CHI 18 for 8 yards (14-R.Spillane). CHI-85-C.Kmet was injured during the play."
+    },
+    {
+      "player": "C.Williams",
+      "team": "CHI",
+      "quarter": 4,
+      "play_id": 3918,
+      "desc": "(1:46) (Shotgun) 18-C.Williams sacked at NE 40 for -10 yards (90-C.Barmore). NE-90-C.Barmore was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}
