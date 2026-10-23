@@ -206,6 +206,15 @@ def get_last_read_digest(event_id, sport, root=ROOT):
                 best_digest = digest
                 best_model = rm
 
+    # P68: parse per-event digest if stored as JSON dict
+    if best_digest and isinstance(best_digest, str):
+        try:
+            digest_dict = json.loads(best_digest)
+            if isinstance(digest_dict, dict) and event_id in digest_dict:
+                best_digest = digest_dict[event_id]
+        except (json.JSONDecodeError, TypeError):
+            pass
+
     return best_digest, best_logged, best_model
 
 
@@ -629,11 +638,16 @@ def main():
     pkt_path = freeze_dir / f"packet_{pkt_ts}.txt"
     pkt_path.write_text(header + "\n\n" + "\n\n".join(packets.values()))
 
-    # Read each game
+    # P68: read each game; track successes and failures separately
     model = os.environ.get("AI_READER_MODEL", ar.DEFAULT_MODEL)
-    all_picks = []
+    succeeded = {}   # eid -> picks list
+    failed = []      # eids that HALTed
     for eid in triggered:
         if eid not in packets:
+            continue
+        # P68: check retry back-off
+        if _is_in_backoff(eid, args.sport, root):
+            print(f"  skip {eid}: in retry back-off")
             continue
         game_sheet = sheet[sheet.event_id == eid]
         if game_sheet.empty:
@@ -642,34 +656,47 @@ def main():
             picks, in_tok, out_tok = ar.read_game(
                 packets[eid], game_sheet, args.sport,
                 model=model, root=root)
-            all_picks.extend(picks)
+            # P67: convert per game with event_id
+            game_filled = ar.picks_to_filled(picks, sheet, args.sport, event_id=eid)
+            succeeded[eid] = game_filled
             print(f"  read {eid}: {len(picks)} picks, {in_tok}/{out_tok} tokens")
         except Exception as e:
             print(f"  HALT for {eid}: {e}")
+            failed.append(eid)
+            _record_retry(eid, args.sport, str(e), root)
             continue
 
-    if not all_picks:
-        print("  no picks from any game — skipping freeze")
+    if not succeeded:
+        print("  no successful reads — skipping freeze")
         _write_health(args.sport, "event", "no_picks", root=root)
         return
 
-    # Convert and freeze
-    filled = ar.picks_to_filled(all_picks, sheet[sheet.event_id.isin(set(triggered))], args.sport)
-    reader_model = f"ai_reader_v1b/{model}"
+    # P68: concatenate only successful games
+    filled = pd.concat(list(succeeded.values()), ignore_index=True)
+    # Re-rank conf_rank across all games
+    filled = filled.sort_values(["conf", "event_id", "market_key", "player_name"],
+                                ascending=[False, True, True, True]).reset_index(drop=True)
+    filled["conf_rank"] = range(1, len(filled) + 1)
 
-    # Compute digest for each event
+    reader_model = f"ai_reader_v1b/{model}"
+    success_eids = list(succeeded.keys())
+
+    # Compute digest for each SUCCESSFUL event only
     digests = {}
-    for eid in triggered:
+    for eid in success_eids:
         d, _ = compute_inputs_digest(eid, args.sport, root=root, now=now)
         digests[eid] = d
 
+    # P68: freeze only successful games
+    success_triggers = {eid: trigger_text[eid] for eid in success_eids if eid in trigger_text}
     dest, sha, frozen = ar.freeze_reads(
         filled, args.sport, 2026, week, now,
         window="event", reader_model=reader_model, root=root,
-        triggers=trigger_text, props_file=props_path, lines_file=lines_path,
+        triggers=success_triggers, props_file=props_path, lines_file=lines_path,
         inputs_digest=json.dumps(digests))
 
-    print(f"  FROZEN: {dest.name} sha={sha[:16]} rows={len(frozen)}")
+    print(f"  FROZEN: {dest.name} sha={sha[:16]} rows={len(frozen)} "
+          f"games={len(success_eids)} (failed={len(failed)})")
 
     # Post-freeze: run adapters + top20 + site build
     env = dict(os.environ)
@@ -696,6 +723,61 @@ def main():
     spend = ar._load_spend(root)
     print(f"  spend: {json.dumps(spend)}")
     print(f"  odds credits: {_read_odds_credits(root)}")
+
+
+RETRY_DELAYS = [60, 300, 900, 3600]  # 1 min, 5 min, 15 min, then hourly
+
+
+def _retry_path(root):
+    return root / "status" / "ai_reader_retry.json"
+
+
+def _load_retry(root):
+    p = _retry_path(root)
+    if p.exists():
+        try:
+            return json.loads(p.read_text())
+        except Exception:
+            pass
+    return {}
+
+
+def _save_retry(data, root):
+    p = _retry_path(root)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(data, indent=1) + "\n")
+
+
+def _is_in_backoff(event_id, sport, root):
+    """P68: return True if this game is in retry back-off."""
+    data = _load_retry(root)
+    key = f"{sport}:{event_id}"
+    entry = data.get(key)
+    if not entry:
+        return False
+    attempt = entry.get("attempt", 0)
+    last_ts = entry.get("last_utc", "")
+    if not last_ts:
+        return False
+    delay = RETRY_DELAYS[min(attempt, len(RETRY_DELAYS) - 1)]
+    try:
+        last = _parse_utc(last_ts)
+        now = datetime.now(timezone.utc)
+        return (now - last).total_seconds() < delay
+    except Exception:
+        return False
+
+
+def _record_retry(event_id, sport, error, root):
+    """P68: record a failed read for back-off tracking."""
+    data = _load_retry(root)
+    key = f"{sport}:{event_id}"
+    entry = data.get(key, {"attempt": 0})
+    entry["attempt"] = entry.get("attempt", 0) + 1
+    entry["last_utc"] = datetime.now(timezone.utc).isoformat()
+    entry["error"] = str(error)[:200]
+    data[key] = entry
+    _save_retry(data, root)
 
 
 def write_sim_requests(sport, event_ids, reasons, root=ROOT):
