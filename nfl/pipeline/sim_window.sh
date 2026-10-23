@@ -35,10 +35,9 @@ while [[ $# -gt 0 ]]; do
 done
 [[ -z "$WINDOW" ]] && die "usage: sim_window.sh <window> [--auto-prekick] [--hours N] [--dry-run]"
 
-# ── Derive week ──
-DELTA=$(( ($(date -u +%s) - $(date -u -jf "%Y-%m-%d" "$SEASON_START" +%s 2>/dev/null || date -u -d "$SEASON_START" +%s)) / 86400 ))
-WEEK=$(( DELTA / 7 + 1 ))
-[[ $WEEK -lt 1 ]] && WEEK=1
+# ── Derive week (P59: from the schedule, not the calendar) ──
+WEEK=$($MAC_PY "$MAIN_REPO/nfl/pipeline/current_week.py" --sport nfl)
+[[ -z "$WEEK" ]] && die "current_week.py returned empty"
 WEEK_DIR="week=2026_$(printf '%02d' "$WEEK")"
 
 # ── Window hours ──
@@ -51,39 +50,45 @@ esac
 
 # ── Auto-prekick gate ──
 if [[ $AUTO_PREKICK -eq 1 ]]; then
-    # Check if any game kicks in [now+3h00m, now+3h30m]
+    # P59: check [now+3h, now+3h30m] and LOG every game considered with its delta
     NOW_EPOCH=$(date -u +%s)
     GATE_START=$((NOW_EPOCH + 10800))  # +3h
     GATE_END=$((NOW_EPOCH + 12600))    # +3h30m
-    HAS_GAME=0
-    # fix 2026-10-11: the pbp path never existed on the Mac (gate always 0); use the newest archived nflverse schedule
     SCHED_FILE=$(ls -t "$MAIN_REPO"/data/results_archive/nfl/schedules_2026_*.parquet 2>/dev/null | head -1)
     [[ -z "$SCHED_FILE" ]] && SCHED_FILE="$MAIN_REPO/nfl/data/pbp/schedules_2026.parquet"
-    if [[ -f "$SCHED_FILE" ]]; then
-        HAS_GAME=$($MAC_PY -c "
+    GATE_RESULT=$($MAC_PY -c "
 import pandas as pd, sys
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 df = pd.read_parquet('$SCHED_FILE')
 if 'gameday' not in df.columns or 'gametime' not in df.columns:
-    print(0); sys.exit()
+    print('NO_SCHED'); sys.exit()
+et = ZoneInfo('America/New_York')
 week_df = df[df.week == $WEEK]
+now_epoch = $NOW_EPOCH
+found = False
 for _, r in week_df.iterrows():
     try:
-        gt = str(r.gametime).strip()
-        gd = str(r.gameday).strip()
+        gd, gt = str(r.gameday).strip(), str(r.gametime).strip()
         if 'T' in gt:
             dt = datetime.fromisoformat(gt.replace('Z','+00:00'))
         else:
-            from zoneinfo import ZoneInfo
-            dt = datetime.strptime(f'{gd} {gt}', '%Y-%m-%d %H:%M').replace(tzinfo=ZoneInfo('America/New_York'))  # nflverse gametime is ET (fix 2026-10-11)
+            dt = datetime.strptime(f'{gd} {gt}', '%Y-%m-%d %H:%M').replace(tzinfo=et)
         e = int(dt.timestamp())
+        delta_min = (e - now_epoch) / 60
+        tag = '<-- IN SLOT' if $GATE_START <= e <= $GATE_END else ''
+        print(f'  {r.away_team}@{r.home_team} {gd} {gt} delta={delta_min:.0f}m {tag}')
         if $GATE_START <= e <= $GATE_END:
-            print(1); sys.exit()
+            found = True
     except: pass
-print(0)
-" 2>/dev/null || echo 0)
-    fi
-    if [[ "$HAS_GAME" != "1" ]]; then
+if found:
+    print('HAS_GAME=1')
+else:
+    print('HAS_GAME=0')
+" 2>/dev/null || echo "HAS_GAME=0")
+    log "auto-prekick gate (week $WEEK):"
+    echo "$GATE_RESULT" | while IFS= read -r line; do log "  $line"; done
+    if ! echo "$GATE_RESULT" | grep -q "HAS_GAME=1"; then
         log "auto-prekick: no game in [+3h, +3h30m] slot — skipping"
         exit 0
     fi

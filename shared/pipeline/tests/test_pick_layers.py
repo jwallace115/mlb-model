@@ -723,3 +723,26 @@ def test_sim_pilot_flag(tmp_path):
     assert sim["value"] is not None
     assert sim["value"].get("pilot") is True, "pilot flag should be in the layer"
     plyr._tape_cache.clear()
+
+
+# ---- OPS-R2 Item 3 (P58): flock ----
+
+class TestFlockGuard:
+    """P58(a): pick_layers takes an exclusive flock; a second instance exits 0."""
+
+    def test_flock_function_exists(self):
+        """pick_layers must have _acquire_lock."""
+        assert hasattr(plyr, "_acquire_lock"), "no _acquire_lock in pick_layers"
+
+    def test_second_instance_blocked(self, tmp_path):
+        """Holding the lock -> _acquire_lock returns False."""
+        import fcntl
+        lock_file = tmp_path / ".pick_layers.lock"
+        fd = open(lock_file, "w")
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        try:
+            got = plyr._acquire_lock(lock_file)
+            assert got is False, "should not acquire lock when held"
+        finally:
+            fcntl.flock(fd, fcntl.LOCK_UN)
+            fd.close()

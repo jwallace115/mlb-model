@@ -107,6 +107,16 @@ def picks_data(rows, now, ledger_dir, health, forward_status):
         hsum = f"{bad} down · {warn} late" if (bad or warn) else "all feeds on time"
         hbad = bool(bad)
 
+    # P60: load window health for per-sport failure line
+    wh = bs.load_json(bs.ROOT / "status" / "window_health.json") or []
+    sport_failures = {}
+    for entry in wh:
+        sp = (entry.get("sport") or "").upper()
+        if entry.get("result") in ("STOP", "HALT"):
+            finished = entry.get("finished_utc", "")[:16]
+            step = entry.get("step", "")
+            sport_failures[sp] = f"last automated read failed at {bs._utc_to_et(finished)} ({step}) — the board shows the previous read"
+
     out = {"built_utc": now.isoformat(), "built_et": bs._utc_to_et(now.isoformat()),
            "health": {"summary": hsum, "bad": hbad}, "sports": {}}
 
@@ -114,6 +124,7 @@ def picks_data(rows, now, ledger_dir, health, forward_status):
         res = bt.select_slate(rows, sport, now)
         if not res:
             out["sports"][sport] = {"events": [], "picks": [],
+                                    "window_failure": sport_failures.get(sport),
                                     "record_html": bs._record_section(rows, embargo_owners, sport, "")}
             continue
         events = []
@@ -143,6 +154,7 @@ def picks_data(rows, now, ledger_dir, health, forward_status):
                     "card_html": bs._render_card(card, pick=p) if card else None})
         out["sports"][sport] = {"events": events, "picks": picks, "n_freezes": res.get("n_freezes"),
                                 "unranked": len(res.get("unranked", [])),
+                                "window_failure": sport_failures.get(sport),
                                 "record_html": bs._record_section(rows, embargo_owners, sport, "")}
 
     pages = {"NFL": "nfl.html", "NCAAF": "ncaaf.html", "NHL": "nhl.html", "NBA": "nba.html"}

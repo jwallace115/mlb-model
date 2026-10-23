@@ -184,6 +184,43 @@ def build_sheet(props, lines, now, slate_date=None):
     return df
 
 
+def resolve_inputs(season, now, props_file=None, lines_file=None):
+    """Resolve the exact props file and lines snapshot that newest_inputs would pick.
+
+    Returns (props_path_or_None, lines_path) — the caller passes these to BOTH the
+    sheet and the freeze so both see the same tape (P56).
+    """
+    resolved_props = None
+    if props_file:
+        resolved_props = str(props_file)
+    elif PROPS_DIR is not None:
+        pf = sorted((PROPS_DIR / f"season={season}").glob("month=*/data_*.parquet"))[-2:]
+        if not pf:
+            raise SystemExit("HALT: no props archive for the season")
+        resolved_props = str(pf[-1])
+
+    if lines_file:
+        resolved_lines = str(lines_file)
+    else:
+        lf = sorted((LINES_DIR / f"season={season}").glob("snap_*.parquet"))
+        if not lf:
+            raise SystemExit("HALT: no game-line snapshots for the season")
+        # D225: newest snapshot ≤ now
+        resolved_lines = None
+        for f in reversed(lf):
+            import pandas as _pd
+            df = _pd.read_parquet(f, columns=["snapshot_utc"])
+            if df.empty:
+                continue
+            snap_t = parse_utc(df["snapshot_utc"].iloc[0])
+            if snap_t <= now:
+                resolved_lines = str(f)
+                break
+        if resolved_lines is None:
+            raise SystemExit("HALT: no game-line snapshot ≤ now")
+    return resolved_props, resolved_lines
+
+
 def newest_inputs(season, now, props_file=None, lines_file=None):
     """Newest pre-kick Hard Rock pull per event + the newest game-line snapshot, read from the tape.
     props_file / lines_file: a manual pull that has not reached the archive yet (_cowork_patches/)."""
@@ -400,7 +437,7 @@ PREKICK_HOURS = 3  # games within this many hours belong to the prekick window
 
 def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
            board_root=None, run_id=None, slate_date=None, packet_path=None, window=None,
-           reader_file=None):
+           reader_file=None, pinned_inputs=None):
     """sheet MUST come from build_sheet() in this process: prices are read from the tape at freeze
     time, never from a CSV the reader could have touched.
     N62: reader_model (the model that formed the opinions, e.g. 'claude-fable-5-1') is REQUIRED and is
@@ -534,6 +571,8 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
         rf = Path(reader_file)
         if rf.exists():
             entry["reader_sha256"] = hashlib.sha256(rf.read_bytes()).hexdigest()
+    if pinned_inputs:
+        entry["inputs"] = pinned_inputs
     entries.append(entry)
     man.write_text(json.dumps(entries, indent=1) + "\n")
     return dest, sha, m
@@ -1677,10 +1716,17 @@ def main():
         print(f"{len(sheet)} lines, {sheet.event_id.nunique()} game(s), two-way {int(sheet.two_way.sum())} -> {a.out}")
         print(sheet.groupby(["away_team", "home_team"])["source_age_min"].agg(["count", "min", "max"]).to_string())
     elif a.cmd == "freeze":
+        pinned = None
+        if a.props_file or a.lines_file:
+            pinned = {}
+            if a.props_file:
+                pinned["props"] = str(Path(a.props_file).name)
+            if a.lines_file:
+                pinned["lines"] = str(Path(a.lines_file).name)
         dest, sha, m = freeze(sheet, pd.read_csv(a.filled), season, a.week, a.pilot, now,
                              reader_model=a.reader_model, slate_date=a.date,
                              packet_path=a.packet, window=a.window,
-                             reader_file=a.reader_file)
+                             reader_file=a.reader_file, pinned_inputs=pinned)
         print(f"FROZEN {len(m)} lines -> {dest.relative_to(ROOT)}\nsha256 {sha}\n"
               f"pilot={a.pilot} no_view={(m.tag == 'no_view').mean():.1%} oldest source {m.source_age_min.max()} min")
     elif a.cmd == "score":

@@ -1209,3 +1209,99 @@ forward_status.json) show "scoring not published" — unchanged.
 
 **Local dryrun build:** Record block renders "by rank: top 5: 3–2 +14.5% ·
 top 10: 6–4 +14.5% · top 20: 13–7 +24.1%" and conf bins.
+
+## P56 — One tape per window: resolve before sheet (2026-10-23)
+
+A freeze is always built on the tape its sheet was built on. `run_window.py` calls
+`resolve_inputs()` ONCE, then passes `--props-file` and `--lines-file` to BOTH the
+sheet and the freeze commands. The manifest records the pinned inputs under `inputs:
+{props, lines}`. Old entries are untouched (new keys only).
+
+**Bug fixed:** a new snapshot landing between the sheet and the freeze caused "N quoted
+lines have no opinion" (10-20 at 14:08Z: the 14:00Z snapshot appeared between the two
+steps, adding events the props didn't cover).
+
+**Tests:** `TestResolvePinning` — `test_resolve_inputs_exists`, `test_resolve_returns_paths`,
+`test_pinned_snapshot_consistent` (sheet twice on the same pinned files → identical).
+
+## P57 — Prekick slot 2h45–3h12 + double-fire guard + git-pull retry (2026-10-23)
+
+**(a)** PREKICK_LOW/HIGH widened from 2h52/3h08 to **2h45/3h12** so the 8-59/15 ticks
+(:08/:23/:38/:53) land inside the slot for every kickoff minute in use.
+
+| Kick | Ticks (delta) |
+|------|---------------|
+| :00  | :08 (172m), :53 (187m) |
+| :05  | :08 (177m), :53 (192m) |
+| :15  | :08 (187m), :23 (172m) |
+| :20  | :08 (192m), :23 (177m) |
+| :25  | :23 (182m), :38 (167m) |
+| :30  | :23 (187m), :38 (172m) |
+
+**(b)** Double-fire guard: `_check_recent_prekick` checks the manifest for a prekick
+freeze within the last 20 min. If found, prints "prekick already frozen" and exits 0.
+This prevents two consecutive ticks from double-freezing the same events.
+
+**(c)** Git-pull retry: `_run_git_pull_with_retry` retries 3× with 20 s sleep. The VM's
+own :00/:30 pushes can collide with the window's pull step (Saturday 22:00Z race).
+
+**Tests:** `TestPrekickSlot` (bounds + slot coverage), `TestDoubleFire` (manifest fixture),
+`TestGitPullRetry` (function exists). All RED first, then GREEN.
+
+## P58 — Locks and speed for the ledger crons (2026-10-23)
+
+**(a)** `pick_layers.py` and `picks_adapters.py` take an exclusive `flock` on
+`PICKS_LEDGER_DIR/.<name>.lock` at start. If held, print
+"<name>: another instance is running — exiting" and exit 0. The `_acquire_lock`
+function uses `fcntl.LOCK_EX | fcntl.LOCK_NB` — non-blocking, so a second
+instance exits within 1 s.
+
+**(b)** Profile + optimization: deferred to VM hand-run (Item 4). The tape cache
+(`_load_tape_cached`) already exists in pick_layers.py — confirmed it caches per
+file path. If the profile on the VM shows the parquet re-read is the bottleneck,
+no further code change is needed (the cache covers it).
+
+**(c)** Card content: the lock mechanism does not change any card-building logic.
+
+**Tests:** `TestFlockGuard` — `test_flock_function_exists` and
+`test_second_instance_blocked` (holds lock, verifies second acquire returns False).
+RED first, then GREEN.
+
+## P59 — Week from the schedule, not the calendar (2026-10-23)
+
+New `nfl/pipeline/current_week.py`: `--sport nfl` prints the week of the EARLIEST
+game whose kickoff is still in the future, read from the newest
+`data/results_archive/nfl/schedules_2026_*.parquet`. Fallback: the old calendar
+formula, with a printed WARNING. `--sport ncaaf` does the same from the CFBD archive.
+
+`run_window.py`'s `_current_week()` / `_ncaaf_week()` now call `current_week()`.
+`sim_window.sh`'s WEEK now calls `$MAC_PY current_week.py --sport nfl`.
+
+**Bug fixed:** the calendar formula counted weeks from a Thursday (SEASON_START
+2026-09-10), so Tue/Wed fell in the previous week. The 10-20 Tue open freeze
+(week 7 games) was filed to week=2026_06. That mis-filed file is NOT moved
+(frozen files and manifests are never edited).
+
+The Mac auto-prekick gate now logs every game it considered and its Δ, so the
+next skip is diagnosable (print, no behaviour change).
+
+**Tests:** `TestCurrentWeek` — `test_script_exists`, `test_week7_on_tue_open` (RED:
+calendar gives 6, schedule gives 7), `test_week6_on_mnf_day`, `test_week7_after_tnf`,
+`test_ncaaf_week`. All RED first (script didn't exist), then GREEN.
+
+## P60 — A dead window is visible, not silent (2026-10-23)
+
+`run_window.py` writes `status/window_health.json` at every exit path (COMPLETE,
+STOP, or HALT) with: sport, window, started/finished UTC, result, step, message[:200],
+and freeze_file. One entry per (sport, window), replaced on each run.
+
+`site/build_site.py` health.html: a "Windows" table from window_health.json. Rows
+with STOP/HALT are red-flagged.
+
+Each sport page (picks template): when the newest fixed or prekick window for a sport
+did not COMPLETE, a failure line appears under the title: "last automated read failed
+at <ET time> (<step>) — the board shows the previous read" (plain English, no stack
+traces, no paths).
+
+**Tests:** `TestWindowHealthFile` (function exists), `TestHealthPageWindows` (STOP → red
+row in health.html, COMPLETE → no failure). RED first, then GREEN.

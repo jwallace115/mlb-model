@@ -50,24 +50,90 @@ NCAAF_WINDOW_HOURS = {
     "adhoc": 48,
 }
 
-# Prekick gate: [now + 2h52m, now + 3h08m]
-PREKICK_LOW = timedelta(hours=2, minutes=52)
-PREKICK_HIGH = timedelta(hours=3, minutes=8)
+# Prekick gate: [now + 2h45m, now + 3h12m]
+# P57: widened from 2h52/3h08 so that the 8-59/15 ticks (:08/:23/:38/:53)
+# cover every kickoff minute in use (:00, :05, :15, :20, :25, :30).
+PREKICK_LOW = timedelta(hours=2, minutes=45)
+PREKICK_HIGH = timedelta(hours=3, minutes=12)
+PREKICK_DEDUP_MIN = 20  # minutes: skip if a prekick freeze exists within this window
+
+# P60: module-level run context for health writes on failure
+_RUN_CTX = {"sport": None, "window": None}
 
 
-def _check_prekick_slot(commence_times):
-    """True if any game kicks in [now + 2h52m, now + 3h08m]."""
-    now = datetime.now(timezone.utc)
-    low = now + PREKICK_LOW
-    high = now + PREKICK_HIGH
-    for ct in commence_times:
+def _check_recent_prekick(freeze_dir, window, now):
+    """P57(b): True if a prekick freeze for the same window already exists within PREKICK_DEDUP_MIN."""
+    if window != "prekick":
+        return False
+    manifest_path = freeze_dir / "manifest.json"
+    if not manifest_path.exists():
+        return False
+    try:
+        import json as _json
+        entries = _json.loads(manifest_path.read_text())
+    except Exception:
+        return False
+    for entry in entries:
+        if entry.get("window") != "prekick":
+            continue
+        logged = entry.get("logged_utc")
+        if not logged:
+            continue
         try:
-            dt = datetime.fromisoformat(str(ct).replace("Z", "+00:00"))
-            if low <= dt <= high:
+            logged_dt = datetime.fromisoformat(str(logged).replace("Z", "+00:00"))
+            if logged_dt.tzinfo is None:
+                logged_dt = logged_dt.replace(tzinfo=timezone.utc)
+            age_min = (now - logged_dt).total_seconds() / 60
+            if 0 <= age_min <= PREKICK_DEDUP_MIN:
                 return True
         except (ValueError, TypeError):
             continue
     return False
+
+
+def _run_git_pull_with_retry(env, max_retries=3, sleep_sec=20):
+    """P57(c): git pull with retries — the VM's own push can collide."""
+    for attempt in range(1, max_retries + 1):
+        ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        print(f"\n{'='*60}")
+        print(f"[{ts}] git pull (attempt {attempt}/{max_retries})")
+        print(f"{'='*60}")
+        result = subprocess.run(
+            ["git", "pull", "--rebase", "--autostash"],
+            cwd=str(ROOT), env=env or os.environ,
+            capture_output=True, text=True)
+        print(result.stdout[:500] if result.stdout else "")
+        if result.returncode == 0:
+            print(f"  exit: 0")
+            return result
+        print(f"  exit: {result.returncode} — {result.stderr[:200]}")
+        if attempt < max_retries:
+            print(f"  retrying in {sleep_sec}s...")
+            import time
+            time.sleep(sleep_sec)
+    print(f"STOP: git pull failed after {max_retries} attempts")
+    sys.exit(result.returncode)
+
+
+def _check_prekick_slot(commence_times):
+    """True if any game kicks in [now + 2h45m, now + 3h12m].
+    P59: logs every game and its delta so a skip is diagnosable."""
+    now = datetime.now(timezone.utc)
+    low = now + PREKICK_LOW
+    high = now + PREKICK_HIGH
+    found = False
+    for ct in commence_times:
+        try:
+            dt = datetime.fromisoformat(str(ct).replace("Z", "+00:00"))
+            delta_min = (dt - now).total_seconds() / 60
+            in_slot = low <= dt <= high
+            tag = " <-- IN SLOT" if in_slot else ""
+            print(f"  prekick check: {ct} delta={delta_min:.0f}m{tag}")
+            if in_slot:
+                found = True
+        except (ValueError, TypeError):
+            continue
+    return found
 
 
 def _run(desc, cmd, cwd=ROOT, env=None):
@@ -82,32 +148,25 @@ def _run(desc, cmd, cwd=ROOT, env=None):
     print(f"  exit: {result.returncode}")
     if result.returncode != 0:
         print(f"STOP: {desc} failed with exit {result.returncode}")
+        if _RUN_CTX["sport"] and _RUN_CTX["window"]:
+            _write_window_health(_RUN_CTX["sport"], _RUN_CTX["window"], "STOP",
+                                  step=desc, message=f"exit {result.returncode}")
         sys.exit(result.returncode)
     return result
 
 
 def _current_week():
-    """Infer the current NFL week from the calendar (rough heuristic)."""
-    now = datetime.now(timezone.utc)
-    from datetime import date
-    season_start = date(2026, 9, 10)
-    delta = (now.date() - season_start).days
-    return max(1, delta // 7 + 1)
+    """P59: NFL week from the schedule archive (falls back to calendar with WARNING)."""
+    from nfl.pipeline.current_week import current_week
+    week, source = current_week("nfl", root=ROOT)
+    return week
 
 
 def _ncaaf_week():
-    """CFBD week number. Week 0 contains the last Saturday in August."""
-    now = datetime.now(timezone.utc)
-    from datetime import date
-    aug31 = date(now.year, 8, 31)
-    # Last Saturday in August: weekday 5 = Saturday
-    last_sat = aug31 - timedelta(days=(aug31.weekday() + 2) % 7)
-    # Week 0 starts on Thursday before that Saturday
-    week0_start = last_sat - timedelta(days=2)
-    delta = (now.date() - week0_start).days
-    if delta < 0:
-        return 0
-    return delta // 7
+    """P59: NCAAF week from the CFBD schedule archive (falls back to calendar with WARNING)."""
+    from nfl.pipeline.current_week import current_week
+    week, source = current_week("ncaaf", root=ROOT)
+    return week
 
 
 def _reader_sha(reader_file):
@@ -178,6 +237,69 @@ def _write_unquoted_sidecar(sheet_path, week, root, sport):
     dest = freeze_dir / f"unquoted_{ts}.csv"
     out.to_csv(dest, index=False)
     print(f"unquoted sidecar: {len(out)} events (no Hard Rock line yet) -> {dest}")
+
+
+def _write_window_health(sport, window, result, step="", message="", freeze_file=None,
+                          started_utc=None, root=ROOT):
+    """P60: write status/window_health.json at every exit path."""
+    import json as _json
+    status_dir = root / "status"
+    status_dir.mkdir(parents=True, exist_ok=True)
+    health_path = status_dir / "window_health.json"
+    try:
+        entries = _json.loads(health_path.read_text()) if health_path.exists() else []
+    except Exception:
+        entries = []
+    now = datetime.now(timezone.utc)
+    entry = {
+        "sport": sport,
+        "window": window,
+        "started_utc": started_utc or now.isoformat(),
+        "finished_utc": now.isoformat(),
+        "result": result,  # COMPLETE, STOP, HALT
+        "step": step,
+        "message": str(message)[:200],
+        "freeze_file": freeze_file,
+    }
+    # Replace if same sport+window exists, else append
+    entries = [e for e in entries if not (e.get("sport") == sport and e.get("window") == window)]
+    entries.append(entry)
+    health_path.write_text(_json.dumps(entries, indent=1) + "\n")
+
+
+def _resolve_inputs_once(args, env, effective_root):
+    """P56: resolve the exact props and lines files ONCE before the sheet.
+    Both sheet and freeze get --props-file / --lines-file so they see the same tape."""
+    resolve_cmd = [PY, "-c", (
+        "import sys; sys.path.insert(0, {root!r})\n"
+        "sys.path.insert(0, {pipeline!r})\n"
+        "import log_ai_opinions as lao\n"
+        "from datetime import datetime, timezone\n"
+        "lao.set_sport({sport!r})\n"
+        "now = datetime.fromisoformat({as_of!r}) if {as_of!r} else datetime.now(timezone.utc)\n"
+        "if now.tzinfo is None: now = now.replace(tzinfo=timezone.utc)\n"
+        "p, l = lao.resolve_inputs({season}, now)\n"
+        "print(p or '')\n"
+        "print(l)\n"
+    ).format(
+        root=str(ROOT),
+        pipeline=str(NFL_PIPELINE),
+        sport=args.sport,
+        as_of=args.as_of or "",
+        season=2026,
+    )]
+    result = subprocess.run(resolve_cmd, cwd=str(effective_root), env=env or os.environ,
+                            capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"STOP: resolve_inputs failed:\n{result.stderr[:500]}")
+        sys.exit(result.returncode)
+    lines = result.stdout.strip().split("\n")
+    props_path = lines[0] if lines[0] else None
+    lines_path = lines[1] if len(lines) > 1 else None
+    if not lines_path:
+        print("STOP: resolve_inputs returned no lines path")
+        sys.exit(1)
+    return props_path, lines_path
 
 
 def _commit_and_push(commit_mode, window, root, env, sport="nfl"):
@@ -276,12 +398,16 @@ def main():
     ap.add_argument("--commit", default="none",
                     help="none | main | branch:<name> — commit + push after verify")
     ap.add_argument("--auto-prekick", action="store_true",
-                    help="exit 0 if no game kicks in [now+2h52m, now+3h08m]")
+                    help="exit 0 if no game kicks in [now+2h45m, now+3h12m]")
     ap.add_argument("--injury-report", default=None,
                     help="path to injury report JSON (passed to reader_v3)")
     ap.add_argument("--window-hours", type=int, default=None,
                     help="override WINDOW_HOURS[window]")
     args = ap.parse_args()
+
+    # P60: set run context for health writes
+    _RUN_CTX["sport"] = args.sport
+    _RUN_CTX["window"] = args.window
 
     # ── NCAAF: --no-pull is required (the tape is the source; 0 credits by construction) ──
     if args.sport == "ncaaf" and not args.no_pull:
@@ -300,6 +426,14 @@ def main():
     else:
         week = args.week or _current_week()
         window_hours = args.window_hours or WINDOW_HOURS[args.window]
+
+    # ── P57(b): Double-fire guard for prekick ──
+    if args.window == "prekick":
+        sport_board = "ncaaf" if args.sport == "ncaaf" else "nfl"
+        freeze_dir = ROOT / sport_board / "data" / "board" / f"week=2026_{week:02d}" / "ai_opinions"
+        if _check_recent_prekick(freeze_dir, args.window, datetime.now(timezone.utc)):
+            print(f"prekick already frozen (within {PREKICK_DEDUP_MIN} min)")
+            sys.exit(0)
 
     reader_file = NFL_PIPELINE / "reader_v3.py"
     env = dict(os.environ)
@@ -326,10 +460,8 @@ def main():
             else:
                 print(f"  no injury report found for season=2026 week={week}")
 
-    # ── Step 0: Git pull (see Mac sim freeze before reader runs) ──
-    _run("git pull",
-         ["git", "pull", "--rebase", "--autostash"],
-         env=env)
+    # ── Step 0: Git pull with retry (P57c — VM push can collide) ──
+    _run_git_pull_with_retry(env)
 
     # ── Step 1: Pull (NFL only; ncaaf HALTs without --no-pull above) ──
     if not args.no_pull:
@@ -345,8 +477,13 @@ def main():
               "--sports", "americanfootball_nfl"],
              env=env)
 
-    # ── Step 2: Sheet → Reader → Freeze ──
+    # ── Step 1b: Resolve inputs ONCE (P56 — one tape per window) ──
     sport_upper = args.sport.upper()
+    resolved_props, resolved_lines = _resolve_inputs_once(args, env, effective_root)
+    print(f"  pinned props: {resolved_props or '(none)'}")
+    print(f"  pinned lines: {resolved_lines}")
+
+    # ── Step 2: Sheet → Reader → Freeze ──
     with tempfile.TemporaryDirectory() as tmp:
         sheet_path = Path(tmp) / "sheet.csv"
         filled_path = Path(tmp) / "filled.csv"
@@ -355,6 +492,10 @@ def main():
                      "sheet", "--sport", args.sport,
                      "--week", str(week),
                      "--out", str(sheet_path)]
+        if resolved_lines:
+            sheet_cmd += ["--lines-file", resolved_lines]
+        if resolved_props:
+            sheet_cmd += ["--props-file", resolved_props]
         if args.as_of:
             sheet_cmd += ["--as-of", args.as_of, "--pilot"]
         if args.window in ("prekick", "adhoc"):
@@ -378,6 +519,10 @@ def main():
                       "--reader-model", args.reader_model,
                       "--window", args.window,
                       "--reader-file", str(reader_file)]
+        if resolved_lines:
+            freeze_cmd += ["--lines-file", resolved_lines]
+        if resolved_props:
+            freeze_cmd += ["--props-file", resolved_props]
         if args.as_of:
             freeze_cmd += ["--as-of", args.as_of, "--pilot"]
         if args.window in ("prekick", "adhoc"):
@@ -406,6 +551,10 @@ def main():
 
     # ── Step 5: Commit + Push ──
     _commit_and_push(args.commit, args.window, ROOT, env, sport=args.sport)
+
+    # P60: record success
+    _write_window_health(args.sport, args.window, "COMPLETE",
+                          step="done", freeze_file=None)
 
     print(f"\n{'='*60}")
     print(f"run_window COMPLETE: sport={args.sport} window={args.window}")

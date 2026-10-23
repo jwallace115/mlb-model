@@ -174,8 +174,9 @@ h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.02em}
     if(!DATA.pages){try{history.replaceState(null,'','#'+s.toLowerCase());}catch(e){}}
   }
   function renderSlate(){
-    var s=state.sport,evs=sportData(s).events.filter(upcoming),slots=slotsOf(evs);
-    if(!evs.length){$('#slate').innerHTML='<div class="empty">No upcoming '+s+' games have been read yet.</div>';return;}
+    var s=state.sport,d=sportData(s),evs=d.events.filter(upcoming),slots=slotsOf(evs);
+    var failHtml='';if(d.window_failure){failHtml='<div class="warnbox" style="margin-bottom:12px;border-left:3px solid var(--bad);padding:8px 12px;font-size:14px;color:var(--bad)">'+esc(d.window_failure)+'</div>';}
+    if(!evs.length){$('#slate').innerHTML=failHtml+'<div class="empty">No upcoming '+s+' games have been read yet.</div>';return;}
     var h='<div class="row"><span class="lbl">Slot</span>';
     slots.forEach(function(sl){var on=sl.games.every(function(g){return state.ticked[g.event_id];});var part=!on&&sl.games.some(function(g){return state.ticked[g.event_id];});
       h+='<button class="chip '+(on?'on':part?'part':'')+'" data-slot="'+esc(sl.name)+'"><b>'+esc(sl.name)+'</b><span class="n">'+sl.games.length+(sl.games.length===1?' game':' games')+' · '+esc(sl.first_et.replace(/^\w+ \d+ /,''))+'</span></button>';});
@@ -188,7 +189,7 @@ h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.02em}
     evs.slice().sort(function(a,b){return a.kick_utc<b.kick_utc?-1:1;}).forEach(function(g){
       h+='<button class="gchip '+(state.ticked[g.event_id]?'on':'')+'" data-ev="'+g.event_id+'">'+esc(g.away_short)+' @ '+esc(g.home_short)+'<span class="k">'+esc(g.kick_et)+' · '+esc(g.window)+' read '+esc(g.freeze_et.replace(/^\w+ \d+ /,''))+'</span></button>';});
     h+='</div></details>';
-    $('#slate').innerHTML=h;
+    $('#slate').innerHTML=failHtml+h;
     $('#slate').querySelectorAll('.chip[data-slot]').forEach(function(b){b.onclick=function(){var sl=slots.filter(function(x){return x.name===b.getAttribute('data-slot');})[0];var on=sl.games.every(function(g){return state.ticked[g.event_id];});sl.games.forEach(function(g){state.ticked[g.event_id]=!on;});renderSlate();renderLists();};});
     $('#slate').querySelectorAll('.chip[data-group]').forEach(function(b){b.onclick=function(){var grp=b.getAttribute('data-group');var set=grp==='all'?evs:evs.filter(function(e){return /^Sun early|^Sun late|^SNF/.test(e.slot);});var on=set.every(function(g){return state.ticked[g.event_id];});
       if(on){set.forEach(function(g){state.ticked[g.event_id]=false;});}else{Object.keys(state.ticked).forEach(function(k){state.ticked[k]=false;});set.forEach(function(g){state.ticked[g.event_id]=true;});}
