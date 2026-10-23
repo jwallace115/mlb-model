@@ -19,6 +19,7 @@ Rate limits:
 
 P62 decision. OPS-CAD1 Item 2.
 """
+import fcntl
 import gzip
 import hashlib
 import json
@@ -593,6 +594,18 @@ def main():
     args = ap.parse_args()
 
     root = Path(args.root)
+
+    # P58 extension: flock — one watcher at a time per sport
+    ledger_dir = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
+    lock_path = ledger_dir / f".window_watch_{args.sport}.lock"
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        _lock_fd = open(lock_path, "w")
+        fcntl.flock(_lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except (OSError, IOError):
+        print(f"window_watch: another instance is running — exiting")
+        sys.exit(0)
+
     now = datetime.now(timezone.utc)
     ts = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     print(f"[{ts}] window_watch tick: sport={args.sport}")
