@@ -48,6 +48,76 @@ case "$WINDOW" in
     *)             die "unknown window: $WINDOW" ;;
 esac
 
+# ── P64: sim_requests.json gate ──
+SIM_REQUESTS="$MAIN_REPO/status/sim_requests.json"
+if [[ -f "$SIM_REQUESTS" ]] && [[ "$WINDOW" != "adhoc" ]]; then
+    SIM_CHECK=$($MAC_PY -c "
+import json, sys
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
+
+root = Path('$MAIN_REPO')
+reqs = json.loads(Path('$SIM_REQUESTS').read_text())
+if not isinstance(reqs, list) or not reqs:
+    print('NO_REQUESTS'); sys.exit()
+
+# Filter to NFL events
+nfl_reqs = [r for r in reqs if r.get('sport') == 'nfl']
+if not nfl_reqs:
+    print('NO_REQUESTS'); sys.exit()
+
+now = datetime.now(timezone.utc)
+
+# Find last sim freeze time
+last_sim_utc = None
+for wd in sorted(root.glob('nfl/data/board/week=2026_*/ai_opinions/manifest.json')):
+    try:
+        for e in json.loads(wd.read_text()):
+            if (e.get('reader_model') or '').startswith('nfl_sim'):
+                if last_sim_utc is None or e['logged_utc'] > last_sim_utc:
+                    last_sim_utc = e['logged_utc']
+    except: pass
+
+age_min = (now - datetime.fromisoformat(last_sim_utc.replace('Z','+00:00'))).total_seconds()/60 if last_sim_utc else 9999
+
+# Find earliest kick among requested events
+from pathlib import Path as P
+snap_dir = root / 'data' / 'odds_archive' / 'nfl' / 'line_history' / 'season=2026'
+snaps = sorted(snap_dir.glob('snap_*.parquet'))
+min_hours = 999
+if snaps:
+    import pandas as pd
+    df = pd.read_parquet(snaps[-1])
+    eids = {r['event_id'] for r in nfl_reqs}
+    ev = df[df.event_id.isin(eids)]
+    if not ev.empty:
+        for ct in ev.commence_time.unique():
+            try:
+                h = (datetime.fromisoformat(str(ct).replace('Z','+00:00')) - now).total_seconds()/3600
+                if h < min_hours and h > 0:
+                    min_hours = h
+            except: pass
+
+# Gate: last sim > 90 min ago OR kick < 3h
+if age_min > 90 or min_hours < 3:
+    # Compute hours to cover requested kicks
+    hours = max(1, int(min_hours + 1)) if min_hours < 999 else $WH
+    print(f'SIM_NEEDED events={len(nfl_reqs)} hours={hours}')
+else:
+    print(f'SIM_SKIP age={age_min:.0f}min min_kick={min_hours:.1f}h')
+" 2>/dev/null || echo "SIM_SKIP")
+    log "sim_requests check: $SIM_CHECK"
+    if echo "$SIM_CHECK" | grep -q "SIM_NEEDED"; then
+        # Extract hours
+        SIM_HOURS=$(echo "$SIM_CHECK" | grep -oP 'hours=\K\d+')
+        [[ -n "$SIM_HOURS" ]] && WH="$SIM_HOURS"
+        log "sim requested for $(echo "$SIM_CHECK" | grep -oP 'events=\K\d+') events -> adhoc --hours $WH"
+        WINDOW="adhoc"
+    elif echo "$SIM_CHECK" | grep -q "SIM_SKIP"; then
+        log "sim_requests: skipped (too recent or no urgency)"
+    fi
+fi
+
 # ── Auto-prekick gate ──
 if [[ $AUTO_PREKICK -eq 1 ]]; then
     # P59: check [now+3h, now+3h30m] and LOG every game considered with its delta
@@ -281,6 +351,20 @@ if [[ -d "$RUN_DIR" ]]; then
         git commit -m "sim run record $FREEZE_TS ($PILOT_LABEL)" 2>&1 || true
         git push origin eng/fwd6-parser-fix 2>&1 | tee -a "$LOG" || true
     fi
+fi
+
+# ── P64: clear served sim_requests ──
+if [[ -f "$SIM_REQUESTS" ]]; then
+    $MAC_PY -c "
+import json
+from pathlib import Path
+p = Path('$SIM_REQUESTS')
+reqs = json.loads(p.read_text()) if p.exists() else []
+# Remove served NFL requests
+reqs = [r for r in reqs if r.get('sport') != 'nfl']
+p.write_text(json.dumps(reqs, indent=1) + '\n')
+print(f'cleared NFL sim requests, {len(reqs)} remaining')
+" 2>&1 | tee -a "$LOG"
 fi
 
 log "=== sim_window $WINDOW DONE ==="

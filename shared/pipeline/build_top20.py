@@ -281,6 +281,72 @@ def select_slate(view_rows, sport, now):
     }
 
 
+def select_slate_per_owner(view_rows, sport, now):
+    """P65: select the newest freeze per (event, owner) for side-by-side display.
+
+    Returns dict of {owner: [{event_id, away, home, commence_time,
+    freeze_logged_utc, window, reader, n_picks, trigger}]}.
+    Top-20 and counts stay on the AI reader owner.
+    """
+    from collections import defaultdict
+
+    sport_lower = sport.lower()
+    # All owners for this sport
+    ai_owner = f"ai_{sport_lower}"
+    all_owners = {ai_owner, "sim_" + sport_lower}
+
+    candidates = [r for r in view_rows if r.get("sport") == sport]
+    if not candidates:
+        return {}
+
+    # Map reader_model prefix → owner-like label
+    by_source = defaultdict(list)
+    for r in candidates:
+        sf = r.get("source_file", "")
+        by_source[sf].append(r)
+
+    # Group freezes by owner
+    result = defaultdict(list)  # owner -> [event_info]
+    owner_rows = defaultdict(list)  # owner -> [row]
+    for sf, rows in by_source.items():
+        owner = rows[0].get("owner", "?")
+        logged = rows[0].get("logged_utc", "")
+        if logged and _parse_dt(logged) > now:
+            continue
+        for r in rows:
+            ct = r.get("commence_time")
+            if ct and _parse_dt(ct) > now:
+                owner_rows[owner].append((sf, logged, r))
+
+    # For each (owner, event_id), pick the newest freeze
+    for owner, items in owner_rows.items():
+        by_event = defaultdict(list)
+        for sf, logged, r in items:
+            by_event[r.get("event_id", "")].append((sf, logged, r))
+        for eid, event_items in by_event.items():
+            # Newest by logged_utc
+            event_items.sort(key=lambda x: x[1], reverse=True)
+            sf, logged, r0 = event_items[0]
+            # Count all rows from this freeze for this event
+            same_freeze = [x for x in event_items if x[0] == sf]
+            result[owner].append({
+                "event_id": eid,
+                "away": r0.get("away", ""),
+                "home": r0.get("home", ""),
+                "commence_time": r0.get("commence_time", ""),
+                "freeze_logged_utc": logged,
+                "window": r0.get("window") or "legacy",
+                "reader": r0.get("reader", ""),
+                "n_picks": len(same_freeze),
+            })
+
+    # Sort each owner's events by commence_time
+    for owner in result:
+        result[owner].sort(key=lambda e: e["commence_time"])
+
+    return dict(result)
+
+
 def top_for_selection(ordered_rows, event_ids):
     """Filter ordered rows by event_ids, renumber, cap at 20.
 

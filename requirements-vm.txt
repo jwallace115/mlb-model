@@ -1,0 +1,14 @@
+# VM venv packages — /root/mlb-model/venv on the DigitalOcean droplet.
+# Pinned versions from venv/bin/pip freeze (to be verified at merge).
+#
+# The only NEW install for OPS-CAD1 is anthropic.
+# Everything else should already be in the VM venv.
+
+anthropic==2.1.0
+
+# Core pipeline dependencies (already installed on the VM)
+requests>=2.31.0
+pandas>=2.0.0
+pyarrow>=14.0.0
+numpy>=1.24.0
+python-dotenv>=1.0.0

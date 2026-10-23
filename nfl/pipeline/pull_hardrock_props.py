@@ -133,13 +133,37 @@ def save_partition(rows, season, month):
     return path
 
 
+def _write_odds_credits(remaining, used_now, purpose):
+    """P63: write status/odds_credits.json (committed)."""
+    status_dir = ROOT / "status"
+    status_dir.mkdir(parents=True, exist_ok=True)
+    path = status_dir / "odds_credits.json"
+    try:
+        data = json.loads(path.read_text()) if path.exists() else {}
+    except Exception:
+        data = {}
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    data["remaining"] = remaining
+    data["updated_utc"] = datetime.now(timezone.utc).isoformat()
+    data.setdefault("used_today", {}).setdefault(today, 0)
+    data["used_today"][today] += used_now
+    data.setdefault("by_purpose", {}).setdefault(purpose, 0)
+    data["by_purpose"][purpose] += used_now
+    path.write_text(json.dumps(data, indent=1) + "\n")
+
+
+ODDS_PROPS_WEEKLY_CAP = int(os.environ.get("ODDS_PROPS_WEEKLY_CAP", 5000))
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Pull Hard Rock NFL player props")
     parser.add_argument("--window-hours", type=int, required=True,
                         help="Select events with commence_time within N hours")
-    parser.add_argument("--tag", choices=["open", "mid", "late", "prekick", "adhoc", "close"],
+    parser.add_argument("--tag", choices=["open", "mid", "late", "prekick", "adhoc", "close", "event"],
                         required=True, help="Snapshot tag written to snapshot_tag column")
+    parser.add_argument("--events", type=str, default=None,
+                        help="comma-separated event IDs to pull (P63: event-driven mode)")
     parser.add_argument("--dry-run", action="store_true",
                         help="List events and cost without pulling")
     parser.add_argument("--floor", type=int, default=HALT_THRESHOLD,
@@ -166,6 +190,8 @@ def main():
     print(f"events: HTTP {r.status_code}  x-requests-remaining={remaining}")
 
     events = r.json() if r.status_code == 200 else []
+    # P63: --events filter
+    requested_eids = set(e.strip() for e in args.events.split(",")) if args.events else None
     window = []
     for e in events:
         ct = e.get("commence_time", "")
@@ -173,7 +199,10 @@ def main():
             ct_dt = datetime.fromisoformat(ct.replace("Z", "+00:00"))
         except (ValueError, AttributeError):
             continue
-        if now <= ct_dt <= window_end:
+        if requested_eids:
+            if e["id"] in requested_eids and ct_dt > now:
+                window.append(e)
+        elif now <= ct_dt <= window_end:
             window.append(e)
 
     print(f"events in window (next {args.window_hours}h): {len(window)}")
@@ -193,6 +222,23 @@ def main():
     if after < args.floor:
         print(f"HALT: remaining {remaining} - cost {cost} = {after} < {args.floor}")
         sys.exit(1)
+    # P63: HALT if remaining < 50,000
+    if remaining < 50000:
+        print(f"HALT: remaining {remaining} < 50,000 credit floor")
+        sys.exit(1)
+    # P63: HALT if weekly props spend > cap
+    try:
+        oc = json.loads((ROOT / "status" / "odds_credits.json").read_text())
+        import datetime as _dt
+        today = now.date()
+        week_start = today - timedelta(days=today.weekday())
+        week_total = sum(v for k, v in oc.get("used_today", {}).items()
+                         if k >= week_start.isoformat())
+        if week_total + cost > ODDS_PROPS_WEEKLY_CAP:
+            print(f"HALT: weekly props spend {week_total}+{cost} > cap {ODDS_PROPS_WEEKLY_CAP}")
+            sys.exit(1)
+    except Exception:
+        pass  # first run, no file yet
 
     if args.dry_run:
         print("--dry-run: stopping before paid calls")
@@ -286,6 +332,9 @@ def main():
             print(f"  {bk:<20s}: {cnt}")
 
     print(f"\ncredits used: {credits_used}  tag: {args.tag}  events: {len(window)}")
+
+    # P63: write credits status
+    _write_odds_credits(remaining - credits_used, credits_used, args.tag)
 
 
 if __name__ == "__main__":

@@ -1305,3 +1305,124 @@ traces, no paths).
 
 **Tests:** `TestWindowHealthFile` (function exists), `TestHealthPageWindows` (STOP → red
 row in health.html, COMPLETE → no failure). RED first, then GREEN.
+
+## P61 — AI reader as code (2026-10-23)
+
+`shared/pipeline/ai_reader.py`: sport-parameterised module (nfl, ncaaf; nhl/nba HALT)
+with three stages:
+
+1. **PACKET** `build_packet(sport, event_ids, sheet, props_df, lines_df, now)` ports
+   the Cowork prototypes (nfl_packet.py, cfb_packet.py) into the repo. Sections: game
+   lines (HR current + open since Tue + Pinnacle + no-vig), Kalshi ML/spread/total mids
+   with volume, injuries (NFL; NCAAF says "no feed"), team news (5-day, noise-filtered),
+   newest sim freeze views, two-way props with consensus delta (NFL), INTERNATIONAL layer
+   (2026 venue table + base rates), and a WHAT CHANGED header listing triggers. Packet
+   saved as `packet_<TS>.txt` (committed; public data).
+
+2. **READ** `read_game(packet_text, sheet_df, sport)` — one Anthropic Messages API call
+   per game. Model from `AI_READER_MODEL` env, default `claude-sonnet-4-6-20250514`.
+   System prompt = `READER_SYSTEM` (view first, then price; picks on two-way + game lines
+   only; never ATD, never ML longshot > +250; MIX across markets; strict JSON schema).
+   `p_first = clip(book_novig +/- conf/250, 0.02, 0.98)` — the model never emits
+   probabilities. Spend tracked in `status/ai_reader_spend.json`; HALT when monthly
+   `usd_estimate >= AI_READER_MONTHLY_CAP_USD` (default 150).
+
+3. **FREEZE** `freeze_reads()` passes the filled DataFrame through the existing
+   `log_ai_opinions.freeze()` with `--window event` and `reader_model
+   ai_reader_v1/<model>`. `VALID_WINDOWS` gains `"event"`.
+
+**Reader model:** `ai_reader_v1/claude-sonnet-4-6-20250514` (the first automated reader line).
+The API key lives ONLY in `/root/private/env` on the VM; the module reads `ANTHROPIC_API_KEY`
+from the environment and never prints, logs, or commits it.
+
+**Tests (17):** INTERNATIONAL note for Wembley 10-18; absent for domestic; packet includes
+HR spread + Pinnacle; schema rejects ATD pick and +300 ML; accepts ML favorite; reason too
+short / too long; invalid thesis link; valid pick passes; mocked API → filled with correct
+p_first and contiguous conf_rank; no_view pass uses book probability; spend increments;
+cap HALTs; under-cap OK; NHL and NBA HALT.
+
+## P62 — Event-driven watcher (2026-10-23)
+
+`shared/pipeline/window_watch.py`: VM cron every 5 min. For every upcoming game
+(kick within 7 days), computes an `inputs_digest` from: newest HR + Pinnacle
+h2h/spread/total values, newest props pull_timestamp (NFL), injury hash (NFL),
+news ids (5-day), newest sim freeze id, Kalshi snapshot id. Compares with the
+digest on the game's newest `ai_reader_v1` freeze.
+
+**Triggers:** spread >= 1.0 pt, total >= 1.0 pt, ML no-vig >= 3 pp, new props,
+injury-hash change, new news, new sim, or horizon entry (no read + kick < 48 h).
+
+**Rate limits:** once per 30 min per game unless injury or kick < 3 h. Never
+inside last 20 min before kick.
+
+**Dedup rule change** in `log_ai_opinions.freeze()`: for `--window event`, cross-
+dedup key is `(reader_model, event_id, inputs_digest)`. Same reader may re-read
+when the digest changed; identical digest → HALT "already read on these inputs".
+
+**Tests (9):** spread 0.5 → no trigger; spread 1.0 → trigger; injury bypasses 30-min
+limit; non-injury rate-limited; identical digest → no trigger; quiet fixture → empty;
+horizon within 48h triggers; horizon beyond 48h → no trigger; blackout inside 20 min.
+
+## P63 — Props pulls on triggers, not on a clock (2026-10-23)
+
+`pull_hardrock_props.py` gains `--events <id,...>` (P63). The watcher pulls props
+for a game when: it enters the 48-h horizon (first pull), an injury/news trigger
+fires, kick < 2 h and last pull > 60 min old, or kick < 45 min and last pull > 20 min
+old (the pre-kick "close" pull — props CLV becomes defined).
+
+**Credits:** `status/odds_credits.json` tracks `remaining`, `used_today`, `by_purpose`.
+HALT when `remaining < 50,000` or weekly props spend > `ODDS_PROPS_WEEKLY_CAP` (default
+5,000).
+
+**Cross-platform:** the glob `data_*.parquet` picks up both `_mac` and `_vm` files.
+`newest_inputs` reads the last 2 month files and takes `max(pull_timestamp)` per event,
+so the newest pull wins regardless of which host wrote it.
+
+`--tag` gains `"event"` for event-driven pulls.
+
+**Tests (6):** --events filter; 45-min close pull fires / skips if recent; credit HALT
+below 50k / above 50k OK; newest_inputs reads across _mac and _vm files.
+
+## P64 — Sim on triggers, Mac side (2026-10-23)
+
+`window_watch.py` writes `status/sim_requests.json` (committed; list of
+`{sport, event_id, reason, requested_utc}`). `sim_window.sh` at every tick:
+if the file lists NFL events whose newest sim freeze is older than the request
+and the last sim run was > 90 min ago (or kick < 3 h), run the existing adhoc path
+(`--hours` sized to cover the requested kicks) and clear the served requests.
+
+**Tests (5):** write_sim_requests creates file, no duplicates, empty file → 0 events,
+dry-run prints request count, empty → skip.
+
+## P65 — Board shows per-owner reads and history (2026-10-23)
+
+`build_top20.py` gains `select_slate_per_owner(view_rows, sport, now)`: returns the
+newest freeze per (event, owner) for side-by-side display — the AI reader
+(`ai_reader_v1`), the Cowork read (`claude-fable-5-1`), and the mechanical reader
+(`reader_v3b`). Top-20 and counts stay on the AI reader.
+
+`picks_data.py`: each event gains `owner_reads` (per-owner freeze info) and
+`timeline` (chronological list of all reads for the game: window, reader, ET time,
+n_picks). P60 failure line extended to `window=event`.
+
+**VM cron:** `*/5 * * * * source /root/private/env && cd /root/mlb-model && venv/bin/python3 shared/pipeline/window_watch.py --sport nfl --once`
+at offsets :02/:17/:32/:47 — away from dashboard commits, prekick ticks, and Mac push.
+
+**Tests (3):** three owners → three entries in per_owner; timeline order; event window
+failure detected.
+
+## P66 — Measurement built in (2026-10-23)
+
+`record_report.py`: `ai_reader_v1` broken out by trigger type (horizon, line_move,
+injury, news, props, sim, prekick) and by hours-before-kick bucket (>24, 6–24, 3–6,
+<3), with CLV per read where defined, next to `claude-fable-5-1` and `reader_v3b` over
+the same games. The embargo keeps all of it off the site (`forward_status.json`
+`embargo_owners` already includes `ai_nfl`). Forward-only: nothing scored before its
+first live freeze.
+
+`_annotate_triggers()`: reads manifest `inputs.triggers` to classify each read's
+primary trigger. `_hours_to_kick_bucket()`: computes hours between `logged_utc` and
+`commence_time` and assigns to one of four buckets.
+
+**Tests (6):** ai_reader_v1 → ai_nfl adapter mapping; sim → sim_nfl; hours-to-kick
+buckets; trigger type annotation (line_move, horizon); embargo includes ai_nfl.

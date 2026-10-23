@@ -4505,3 +4505,45 @@ SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
 - NOT DONE: merge to main; Item 4 VM hand-run; pick_layers profile on VM.
 - UNVERIFIED: whether the 10 standing reds are the same 10 pre-OPS-R2.
 - VM CRONTAB: not changed. CREDITS: 0.
+
+## 2026-10-23T11:38Z  claude-code (OPS-CAD1 — event-driven layers, sim and AI read)
+
+### RETURNED
+- Branch: ops/cad1-event-driven (6 commits, dee4338bb..251829fd8), worktree ~/mlb-model-opscad1
+- P0.1-P0.5 pre-checks all passed
+- Item 1 (dee4338bb): shared/pipeline/ai_reader.py — packet + Messages API + freeze (P61). 17 tests GREEN.
+- Item 2 (62fa1e532): shared/pipeline/window_watch.py — event-driven triggers + inputs_digest dedup (P62). 9 tests GREEN.
+- Item 3 (49841768a): pull_hardrock_props.py --events + credits + close pull (P63). 6 tests GREEN.
+- Item 4 (b706aae85): sim_requests.json for Mac tick + sim_window.sh gate (P64). 5 tests GREEN.
+- Item 5 (df6ae500c): build_top20 per-owner + picks_data timeline (P65). 3 tests GREEN.
+- Item 6 (251829fd8): record_report trigger + hours-to-kick breakouts (P66). 6 tests GREEN.
+- Full suite: 46 tests GREEN, 0 RED.
+- grep -rn sk-ant → empty (no secrets).
+
+### NOT DONE
+- Merge to main (requires :00-:44 window, staged Mac outputs check, not during VM reader windows)
+- VM crontab install (window_watch.py */5 at :02/:17/:32/:47 offsets)
+- venv/bin/pip install anthropic on VM + requirements-vm.txt update
+- One live API call from the VM (the P61 test)
+- Caddyfile mtime check post-merge
+- Worktree removal after merge
+
+### UNVERIFIED
+- Whether event-driven watcher triggers correctly on real data (needs live cycle)
+- Whether site/build_site.py renders the timeline and per-owner views correctly
+- Whether the 45-min close pull actually captures pre-kick props snapshot
+- Whether sim_requests.json → sim_window.sh gate correctly sizes --hours
+
+## 2026-10-23T12:05Z  claude-code (OPS-CAD1b — fixups before merge)
+
+### RETURNED
+- Branch: ops/cad1-event-driven (4 more commits, 23452df0c..f36b112d5)
+- CAD1b Item 1 (23452df0c): DEFAULT_MODEL fixed to claude-sonnet-5-5. 1 test GREEN.
+- CAD1b Item 2 (1cdfa58b3): props pulls wired into watch_once (two-phase: pull then digest). 5 tests GREEN.
+- CAD1b Item 3 (95cbab650): pre-kick lockout already implemented; 3 confirmation tests GREEN.
+- CAD1b Item 4 (f36b112d5): requirements-vm.txt with anthropic==2.1.0.
+- Full suite: 55 tests GREEN, 0 RED.
+- grep -rn sk-ant → empty.
+
+### NOT DONE
+- Merge, VM install, live cycle, crontab — Cowork does these.
