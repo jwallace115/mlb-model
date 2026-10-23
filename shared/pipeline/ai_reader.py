@@ -121,8 +121,8 @@ reason (12-160 chars, carry the numbers: the line, the price, the key stat), \
 thesis (1-3 claims, each "link:dir" with link in {plays, pass_rate, run_rate, \
 share, efficiency, availability, script, points, turnovers, price} and dir in {up, down}, \
 semicolon-separated).
-6. Everything else is a PASS with a one-line reason carrying the HR/Pinnacle numbers \
-(tag = "no_view", conf = 0).
+6. Every quoted line you do NOT pick is a PASS. Do not emit passes — the system records every \
+unlisted quoted line as a pass automatically. Emit ONLY the lines you have a view on.
 
 OUTPUT: strict JSON array. Each element:
 {
@@ -136,8 +136,8 @@ OUTPUT: strict JSON array. Each element:
   "thesis": "<link:dir; ...>" or ""
 }
 
-You must emit exactly one element per line in the packet's sheet. \
-Do not add lines the book does not quote. Do not omit any quoted line. \
+Emit one element per PICK only (typically 0-8 per game). Never add a line the book does not quote; \
+echo market, player and line exactly as the QUOTED LINES list spells them. \
 Output ONLY the JSON array, no other text.
 """
 
@@ -146,7 +146,13 @@ Output ONLY the JSON array, no other text.
 # ---------------------------------------------------------------------------
 PICK_SCHEMA_KEYS = {"market", "player", "line", "side", "tag", "conf", "reason", "thesis"}
 MARKET_ALIASES = {"spread": "spreads", "spreads": "spreads", "total": "totals", "totals": "totals",
-                  "h2h": "h2h", "moneyline": "h2h", "ml": "h2h", "money line": "h2h"}
+                  "h2h": "h2h", "moneyline": "h2h", "ml": "h2h", "money line": "h2h",
+                  # the packet's prop abbreviations, which the model echoes back
+                  "rec": "player_receptions", "recyd": "player_reception_yds", "ruyd": "player_rush_yds",
+                  "ruatt": "player_rush_attempts", "payd": "player_pass_yds", "paatt": "player_pass_attempts",
+                  "cmp": "player_pass_completions", "patd": "player_pass_tds", "int": "player_pass_interceptions",
+                  "atd": "player_anytime_td"}
+PROP_LINK_COERCE = {"points": "efficiency", "turnovers": "efficiency"}
 GAME_LINK_COERCE = {"efficiency": "points", "plays": "points", "pass_rate": "points", "run_rate": "points",
                     "share": "points", "availability": "points"}
 VALID_SIDES = {"first", "second"}
@@ -656,7 +662,7 @@ def read_game(packet_text, sheet_df, sport, model=None, root=ROOT, dry_run=False
     # Build the user message: sheet summary + packet
     n_lines = len(sheet_df)
     sheet_summary = f"This game has {n_lines} quoted lines. "
-    sheet_summary += "You must return exactly one JSON element per quoted line, echoing market, player and line EXACTLY as listed "
+    sheet_summary += "Return a JSON element ONLY for the lines you pick (unlisted lines are recorded as passes), echoing market, player and line EXACTLY as listed "
     sheet_summary += "(line is quoted from the first side; side \"first\" = the first-side team / Over, \"second\" = the second-side team / Under).\n"
     sheet_summary += "QUOTED LINES (market | player | line | first side | second side):\n"
     for r in sheet_df.itertuples():
@@ -665,7 +671,7 @@ def read_game(packet_text, sheet_df, sport, model=None, root=ROOT, dry_run=False
 
     message = client.messages.create(
         model=model,
-        max_tokens=8192,
+        max_tokens=16384,
         system=READER_SYSTEM,
         messages=[{"role": "user", "content": sheet_summary}],
     )
@@ -762,14 +768,16 @@ def picks_to_filled(picks, sheet_df, sport, event_id=None):
             # Thesis links: game lines take {points, turnovers, script, price}; a prop-only link on a
             # game line is coerced (efficiency/plays/pass_rate/run_rate/share/availability -> points)
             # so one bad link cannot HALT the whole freeze downstream.
-            if pk[0] in ("spreads", "totals", "h2h") and p.get("thesis"):
+            if p.get("thesis"):
+                is_game = pk[0] in ("spreads", "totals", "h2h")
+                coerce = GAME_LINK_COERCE if is_game else PROP_LINK_COERCE
                 claims = []
                 for c in str(p["thesis"]).split(";"):
                     c = c.strip()
                     if not c or ":" not in c:
                         continue
                     link, d = c.split(":", 1)
-                    link = GAME_LINK_COERCE.get(link.strip(), link.strip())
+                    link = coerce.get(link.strip(), link.strip())
                     claims.append(f"{link}:{d.strip()}")
                 seen = []
                 for c in claims:

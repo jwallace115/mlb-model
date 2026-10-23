@@ -96,3 +96,17 @@ def test_spread_sign_normalised_side_kept_and_aliases_and_thesis_coerced():
     assert float(row.line) == 8.5 and row.tag != "no_view"
     assert row.p_first < 0.5            # second side (Oregon) -> below the first-side no-vig
     assert row.thesis == "points:up; price:up"
+
+
+def test_prop_abbreviation_alias_and_prop_thesis_coercion():
+    """10-23 NFL live: 'payd' echoed from the packet; 'points' on a prop coerced to efficiency."""
+    import pandas as pd
+    from shared.pipeline.ai_reader import picks_to_filled
+    sheet = pd.DataFrame([{"event_id": "e1", "market_key": "player_pass_yds", "player_name": "Baker Mayfield", "line": 214.5,
+                           "q_first": 0.5, "imp_first": 0.52, "two_way": True, "price_first": -115, "price_second": -115,
+                           "first_side": "Over", "second_side": "Under", "home_team": "H", "away_team": "A"}])
+    picks = [{"market": "payd", "player": "Baker Mayfield", "line": 214.5, "side": "first", "tag": "matchup", "conf": 10,
+              "reason": "Mayfield over 214.5: 280 last week vs a bad secondary.", "thesis": "points:up; share:up"}]
+    f = picks_to_filled(picks, sheet, "nfl", event_id="e1")
+    row = f.iloc[0]
+    assert row.tag != "no_view" and row.market_key == "player_pass_yds" and row.thesis == "efficiency:up; share:up"
