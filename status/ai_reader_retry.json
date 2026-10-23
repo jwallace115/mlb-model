@@ -25,9 +25,9 @@
   "error": "Extra data: line 6 column 2 (char 1196)"
  },
  "nfl:2823e986597c449ab94126cd5ed3fae9": {
-  "attempt": 3,
-  "last_utc": "2026-10-23T20:33:10.343422+00:00",
-  "error": "HALT for 2823e986597c449ab94126cd5ed3fae9: pick names unquoted line ('payd', 'Baker Mayfield', 214.5) (only 71 lines quoted for this event)"
+  "attempt": 4,
+  "last_utc": "2026-10-23T23:18:26.936405+00:00",
+  "error": "Expecting ',' delimiter: line 4 column 64 (char 668)"
  },
  "ncaaf:a28a6841bdc11350063d5e6d57fbd577": {
   "attempt": 2,
@@ -75,9 +75,9 @@
   "error": "HALT for b4b3b6c003cd39a6258130ad906d0025: pick names unquoted line ('spread', '', 14.5) (only 3 lines quoted for this event)"
  },
  "nfl:f7679cf18454e4d88a8f2b990c3f08ac": {
-  "attempt": 1,
-  "last_utc": "2026-10-23T20:37:42.228061+00:00",
-  "error": "Unterminated string starting at: line 57 column 26 (char 9404)"
+  "attempt": 2,
+  "last_utc": "2026-10-23T23:04:24.959958+00:00",
+  "error": "Expecting ',' delimiter: line 4 column 65 (char 688)"
  },
  "nfl:e8e5715eefb6a9ce64765e9ddf49c0cc": {
   "attempt": 1,
