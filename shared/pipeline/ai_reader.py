@@ -657,18 +657,19 @@ def read_game(packet_text, sheet_df, sport, model=None, root=ROOT, dry_run=False
 
     message = client.messages.create(
         model=model,
-        max_tokens=4096,
+        max_tokens=8192,
         system=READER_SYSTEM,
         messages=[{"role": "user", "content": sheet_summary}],
     )
 
-    # Extract response
-    content = message.content[0].text if message.content else ""
+    # Record spend FIRST — the call is paid for even if the response cannot be parsed
     input_tokens = message.usage.input_tokens
     output_tokens = message.usage.output_tokens
-
-    # Update spend
     _update_spend(root, model, input_tokens, output_tokens)
+
+    # Extract the TEXT blocks only (claude-sonnet-5-5 returns a thinking block first)
+    content = "".join(getattr(b, "text", "") for b in (message.content or [])
+                      if getattr(b, "type", "") == "text")
 
     # Parse JSON
     picks = _parse_response(content, sheet_df, sport)
