@@ -1393,3 +1393,20 @@ and the last sim run was > 90 min ago (or kick < 3 h), run the existing adhoc pa
 
 **Tests (5):** write_sim_requests creates file, no duplicates, empty file → 0 events,
 dry-run prints request count, empty → skip.
+
+## P65 — Board shows per-owner reads and history (2026-10-23)
+
+`build_top20.py` gains `select_slate_per_owner(view_rows, sport, now)`: returns the
+newest freeze per (event, owner) for side-by-side display — the AI reader
+(`ai_reader_v1`), the Cowork read (`claude-fable-5-1`), and the mechanical reader
+(`reader_v3b`). Top-20 and counts stay on the AI reader.
+
+`picks_data.py`: each event gains `owner_reads` (per-owner freeze info) and
+`timeline` (chronological list of all reads for the game: window, reader, ET time,
+n_picks). P60 failure line extended to `window=event`.
+
+**VM cron:** `*/5 * * * * source /root/private/env && cd /root/mlb-model && venv/bin/python3 shared/pipeline/window_watch.py --sport nfl --once`
+at offsets :02/:17/:32/:47 — away from dashboard commits, prekick ticks, and Mac push.
+
+**Tests (3):** three owners → three entries in per_owner; timeline order; event window
+failure detected.

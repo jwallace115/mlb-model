@@ -85,6 +85,59 @@ def favour(card):
     if "unchanged" in txt: return "flat"
     return None
 
+def _parse_utc_safe(s):
+    """Parse a UTC string, return datetime or None on failure."""
+    try:
+        from datetime import datetime as _dt, timezone as _tz
+        return _dt.fromisoformat(str(s).replace("Z", "+00:00").replace(" ", "T"))
+    except (ValueError, TypeError):
+        return None
+
+
+def _build_reads_timeline(rows, now):
+    """P65: build a timeline of reads per event_id from ledger rows.
+
+    Returns {event_id: [{window, reader, et_time, n_picks, owner}]}
+    """
+    from collections import defaultdict
+    by_event = defaultdict(list)
+    for r in rows:
+        eid = r.get("event_id", "")
+        ct = r.get("commence_time")
+        if not ct or not eid:
+            continue
+        if _parse_utc_safe(ct) and _parse_utc_safe(ct) <= now:
+            continue
+        logged = r.get("logged_utc", "")
+        owner = r.get("owner", "")
+        window = r.get("window", "legacy")
+        sf = r.get("source_file", "")
+        key = (eid, sf)
+        by_event[key].append(r)
+
+    timeline = defaultdict(list)
+    seen = set()
+    for (eid, sf), event_rows in sorted(by_event.items(), key=lambda x: x[0]):
+        if (eid, sf) in seen:
+            continue
+        seen.add((eid, sf))
+        r0 = event_rows[0]
+        logged = r0.get("logged_utc", "")
+        timeline[eid].append({
+            "window": r0.get("window", "legacy"),
+            "reader": r0.get("owner", ""),
+            "et_time": bs._utc_to_et(logged) if logged else "",
+            "n_picks": len(event_rows),
+            "owner": r0.get("owner", ""),
+        })
+
+    # Sort each event's timeline by et_time
+    for eid in timeline:
+        timeline[eid].sort(key=lambda x: x["et_time"])
+
+    return dict(timeline)
+
+
 def picks_data(rows, now, ledger_dir, health, forward_status):
     """Build the full picks data dict for the template.
 
@@ -120,8 +173,13 @@ def picks_data(rows, now, ledger_dir, health, forward_status):
     out = {"built_utc": now.isoformat(), "built_et": bs._utc_to_et(now.isoformat()),
            "health": {"summary": hsum, "bad": hbad}, "sports": {}}
 
+    # P65: load manifests for reads timeline
+    reads_timeline = _build_reads_timeline(rows, now)
+
     for sport in ["NFL", "NCAAF", "NHL", "NBA"]:
         res = bt.select_slate(rows, sport, now)
+        # P65: per-owner reads
+        per_owner = bt.select_slate_per_owner(rows, sport, now)
         if not res:
             out["sports"][sport] = {"events": [], "picks": [],
                                     "window_failure": sport_failures.get(sport),
@@ -130,10 +188,23 @@ def picks_data(rows, now, ledger_dir, health, forward_status):
         events = []
         for e in res["events"]:
             ct = str(e["commence_time"]).replace(" ", "T")
-            events.append({"event_id": e["event_id"], "away": e["away"], "home": e["home"],
+            eid = e["event_id"]
+            # P65: per-owner info for this event
+            owner_reads = {}
+            for owner, oevents in per_owner.items():
+                for oe in oevents:
+                    if oe["event_id"] == eid:
+                        owner_reads[owner] = {
+                            "window": oe["window"],
+                            "freeze_et": bs._utc_to_et(str(oe["freeze_logged_utc"])),
+                            "n_picks": oe["n_picks"],
+                        }
+            events.append({"event_id": eid, "away": e["away"], "home": e["home"],
                            "away_short": short_team(e["away"], sport), "home_short": short_team(e["home"], sport),
                            "kick_utc": ct, "kick_et": bs._utc_to_et(ct), "slot": bs._slot_for_commence(ct, sport),
-                           "freeze_et": bs._utc_to_et(str(e["freeze_logged_utc"])), "window": e["window"], "n_picks": e["n_picks"]})
+                           "freeze_et": bs._utc_to_et(str(e["freeze_logged_utc"])), "window": e["window"], "n_picks": e["n_picks"],
+                           "owner_reads": owner_reads,
+                           "timeline": reads_timeline.get(eid, [])})
         picks = []
         for col in ("props", "sides"):
             for i, p in enumerate(res[col]):
