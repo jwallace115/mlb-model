@@ -562,6 +562,29 @@ def main():
     print(f"  odds credits: {_read_odds_credits(root)}")
 
 
+def write_sim_requests(sport, event_ids, reasons, root=ROOT):
+    """P64: write status/sim_requests.json for the Mac tick."""
+    status_dir = root / "status"
+    status_dir.mkdir(parents=True, exist_ok=True)
+    path = status_dir / "sim_requests.json"
+    try:
+        existing = json.loads(path.read_text()) if path.exists() else []
+    except Exception:
+        existing = []
+    now = datetime.now(timezone.utc)
+    for eid in event_ids:
+        # Don't duplicate
+        if any(r.get("event_id") == eid and r.get("sport") == sport for r in existing):
+            continue
+        existing.append({
+            "sport": sport,
+            "event_id": eid,
+            "reason": reasons.get(eid, "trigger"),
+            "requested_utc": now.isoformat(),
+        })
+    path.write_text(json.dumps(existing, indent=1) + "\n")
+
+
 def _write_health(sport, window, result, freeze_file=None, root=ROOT, triggers=None):
     """Write status/window_health.json for the event window."""
     status_dir = root / "status"

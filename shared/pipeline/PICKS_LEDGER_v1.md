@@ -1382,3 +1382,14 @@ so the newest pull wins regardless of which host wrote it.
 
 **Tests (6):** --events filter; 45-min close pull fires / skips if recent; credit HALT
 below 50k / above 50k OK; newest_inputs reads across _mac and _vm files.
+
+## P64 — Sim on triggers, Mac side (2026-10-23)
+
+`window_watch.py` writes `status/sim_requests.json` (committed; list of
+`{sport, event_id, reason, requested_utc}`). `sim_window.sh` at every tick:
+if the file lists NFL events whose newest sim freeze is older than the request
+and the last sim run was > 90 min ago (or kick < 3 h), run the existing adhoc path
+(`--hours` sized to cover the requested kicks) and clear the served requests.
+
+**Tests (5):** write_sim_requests creates file, no duplicates, empty file → 0 events,
+dry-run prints request count, empty → skip.
