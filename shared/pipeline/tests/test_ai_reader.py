@@ -364,3 +364,24 @@ class TestDefaultModelId:
         """DEFAULT_MODEL must be a model ID that exists in the Console."""
         assert ar.DEFAULT_MODEL in LIVE_MODELS, \
             f"DEFAULT_MODEL {ar.DEFAULT_MODEL!r} is not in the live model list"
+
+
+def test_read_game_skips_thinking_blocks(monkeypatch, tmp_path):
+    """P61 fix 10-23: content[0] may be a thinking block; only text blocks are parsed; spend is recorded first."""
+    import types, sys, json as _json
+    import shared.pipeline.ai_reader as ar
+    class _B:
+        def __init__(self, t, text=None): self.type = t; self.text = text
+    class _Msg:
+        content = [_B("thinking"), _B("text", "[]")]
+        usage = types.SimpleNamespace(input_tokens=10, output_tokens=2)
+    class _Client:
+        def __init__(self, *a, **k): self.messages = types.SimpleNamespace(create=lambda **kw: _Msg())
+    monkeypatch.setitem(sys.modules, "anthropic", types.SimpleNamespace(Anthropic=_Client))
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test")
+    import pandas as pd
+    sheet = pd.DataFrame({"event_id": [], "market_key": [], "player_name": [], "line": [], "q_first": [], "imp_first": [], "two_way": []})
+    picks, i, o = ar.read_game("packet", sheet, "nfl", model="m", root=tmp_path)
+    assert picks == [] and i == 10 and o == 2
+    spend = _json.loads((tmp_path / "status" / "ai_reader_spend.json").read_text())
+    assert spend  # recorded even though no picks
