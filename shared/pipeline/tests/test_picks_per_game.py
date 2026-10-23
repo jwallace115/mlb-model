@@ -80,3 +80,19 @@ def test_spread_sign_normalised_and_side_flipped():
     row = f.iloc[0]
     assert float(row.line) == -2.5 and row.tag != "no_view"
     assert row.p_first < 0.5  # the away side -> p_first below the home no-vig
+
+
+def test_spread_sign_normalised_side_kept_and_aliases_and_thesis_coerced():
+    """10-23 20:04Z: side is team-based and must NOT flip; 'spread' alias; prop link on a game line coerced to points."""
+    import pandas as pd
+    from shared.pipeline.ai_reader import picks_to_filled
+    sheet = pd.DataFrame([{"event_id": "e1", "market_key": "spreads", "player_name": "", "line": 8.5,
+                           "q_first": 0.5, "imp_first": 0.52, "two_way": True, "price_first": -110, "price_second": -110,
+                           "first_side": "Illinois", "second_side": "Oregon", "home_team": "Illinois", "away_team": "Oregon"}])
+    picks = [{"market": "spread", "player": "", "line": -8.5, "side": "second", "tag": "price_vs_sharp", "conf": 14,
+              "reason": "HR Ducks -8.5 vs Pinnacle 9.5, a point cheaper.", "thesis": "efficiency:up; price:up"}]
+    f = picks_to_filled(picks, sheet, "ncaaf", event_id="e1")
+    row = f.iloc[0]
+    assert float(row.line) == 8.5 and row.tag != "no_view"
+    assert row.p_first < 0.5            # second side (Oregon) -> below the first-side no-vig
+    assert row.thesis == "points:up; price:up"
