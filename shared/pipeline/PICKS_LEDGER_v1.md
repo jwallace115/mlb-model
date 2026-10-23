@@ -1362,3 +1362,23 @@ when the digest changed; identical digest → HALT "already read on these inputs
 **Tests (9):** spread 0.5 → no trigger; spread 1.0 → trigger; injury bypasses 30-min
 limit; non-injury rate-limited; identical digest → no trigger; quiet fixture → empty;
 horizon within 48h triggers; horizon beyond 48h → no trigger; blackout inside 20 min.
+
+## P63 — Props pulls on triggers, not on a clock (2026-10-23)
+
+`pull_hardrock_props.py` gains `--events <id,...>` (P63). The watcher pulls props
+for a game when: it enters the 48-h horizon (first pull), an injury/news trigger
+fires, kick < 2 h and last pull > 60 min old, or kick < 45 min and last pull > 20 min
+old (the pre-kick "close" pull — props CLV becomes defined).
+
+**Credits:** `status/odds_credits.json` tracks `remaining`, `used_today`, `by_purpose`.
+HALT when `remaining < 50,000` or weekly props spend > `ODDS_PROPS_WEEKLY_CAP` (default
+5,000).
+
+**Cross-platform:** the glob `data_*.parquet` picks up both `_mac` and `_vm` files.
+`newest_inputs` reads the last 2 month files and takes `max(pull_timestamp)` per event,
+so the newest pull wins regardless of which host wrote it.
+
+`--tag` gains `"event"` for event-driven pulls.
+
+**Tests (6):** --events filter; 45-min close pull fires / skips if recent; credit HALT
+below 50k / above 50k OK; newest_inputs reads across _mac and _vm files.
