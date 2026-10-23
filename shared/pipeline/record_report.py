@@ -98,6 +98,34 @@ def _conf_bin(c):
     return "30+"
 
 
+def _trigger_type(r, manifests):
+    """P66: extract trigger type from the manifest's inputs dict."""
+    sf = os.path.basename(str(r.get("source_file") or ""))
+    m = manifests.get(sf)
+    if not m:
+        return "unknown"
+    # m is (reader_model, window) from _load_manifests
+    # For trigger info we need the full manifest entry
+    return r.get("_trigger_type", "unknown")
+
+
+def _hours_to_kick_bucket(r):
+    """P66: hours between logged_utc and commence_time."""
+    try:
+        logged = datetime.fromisoformat(str(r["logged_utc"]).replace("Z", "+00:00"))
+        commence = datetime.fromisoformat(str(r["commence_time"]).replace("Z", "+00:00"))
+        hours = (commence - logged).total_seconds() / 3600
+        if hours > 24:
+            return ">24h"
+        if hours > 6:
+            return "6-24h"
+        if hours > 3:
+            return "3-6h"
+        return "<3h"
+    except Exception:
+        return "?"
+
+
 def _rank_bucket(rank):
     if rank <= 5:
         return "top5"
@@ -106,6 +134,51 @@ def _rank_bucket(rank):
     if rank <= 20:
         return "top20"
     return "21+"
+
+
+def _annotate_triggers(rows, manifests, root):
+    """P66: annotate each ai_reader row with its trigger type from the manifest."""
+    # Load full manifests with trigger info
+    trigger_map = {}  # source_file → trigger_type
+    for mf in globmod.glob(str(root / "*/data/board/*/ai_opinions/manifest.json")):
+        for e in json.load(open(mf)):
+            rm = e.get("reader_model", "")
+            if not rm.startswith("ai_reader"):
+                continue
+            inputs = e.get("inputs", {})
+            triggers = inputs.get("triggers", {})
+            # Extract the primary trigger type from the trigger text
+            trigger_type = "unknown"
+            if triggers:
+                if isinstance(triggers, dict):
+                    all_trigs = "; ".join(triggers.values())
+                elif isinstance(triggers, str):
+                    all_trigs = triggers
+                else:
+                    all_trigs = str(triggers)
+
+                if "horizon" in all_trigs:
+                    trigger_type = "horizon"
+                elif "line_move" in all_trigs or "ml_move" in all_trigs:
+                    trigger_type = "line_move"
+                elif "injury" in all_trigs:
+                    trigger_type = "injury"
+                elif "news" in all_trigs:
+                    trigger_type = "news"
+                elif "props" in all_trigs:
+                    trigger_type = "props"
+                elif "sim" in all_trigs:
+                    trigger_type = "sim"
+                elif "prekick" in all_trigs:
+                    trigger_type = "prekick"
+            elif e.get("window") == "event":
+                trigger_type = "horizon"  # first read
+
+            trigger_map[e["file"]] = trigger_type
+
+    for r in rows:
+        sf = os.path.basename(str(r.get("source_file") or ""))
+        r["_trigger_type"] = trigger_map.get(sf, "unknown")
 
 
 def compute_ranks(rows):
@@ -194,6 +267,16 @@ def generate(root=None, ledger_dir=None):
     tables["by_reader_bin"] = build_table(rows, lambda r: (r["_reader"], r["_bin"]), clv_by_pid)
     tables["by_reader_fam"] = build_table(rows, lambda r: (r["_reader"], r["_fam"]), clv_by_pid)
     tables["by_reader_day"] = build_table(rows, lambda r: (r["_reader"], r["_day"]), clv_by_pid)
+
+    # P66: ai_reader_v1 breakouts by trigger type and hours-to-kick
+    ai_reader_rows = [r for r in rows if r["_reader"].startswith("ai_reader")]
+    if ai_reader_rows:
+        # Annotate trigger type from manifest inputs
+        _annotate_triggers(ai_reader_rows, manifests, root)
+        tables["ai_reader_by_trigger"] = build_table(
+            ai_reader_rows, lambda r: ("ai_reader", r.get("_trigger_type", "?")), clv_by_pid)
+        tables["ai_reader_by_hours_to_kick"] = build_table(
+            ai_reader_rows, lambda r: ("ai_reader", _hours_to_kick_bucket(r)), clv_by_pid)
 
     for name, tbl in tables.items():
         lines.append(f"\n== {name}")

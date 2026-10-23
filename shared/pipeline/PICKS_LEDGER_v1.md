@@ -1410,3 +1410,19 @@ at offsets :02/:17/:32/:47 — away from dashboard commits, prekick ticks, and M
 
 **Tests (3):** three owners → three entries in per_owner; timeline order; event window
 failure detected.
+
+## P66 — Measurement built in (2026-10-23)
+
+`record_report.py`: `ai_reader_v1` broken out by trigger type (horizon, line_move,
+injury, news, props, sim, prekick) and by hours-before-kick bucket (>24, 6–24, 3–6,
+<3), with CLV per read where defined, next to `claude-fable-5-1` and `reader_v3b` over
+the same games. The embargo keeps all of it off the site (`forward_status.json`
+`embargo_owners` already includes `ai_nfl`). Forward-only: nothing scored before its
+first live freeze.
+
+`_annotate_triggers()`: reads manifest `inputs.triggers` to classify each read's
+primary trigger. `_hours_to_kick_bucket()`: computes hours between `logged_utc` and
+`commence_time` and assigns to one of four buckets.
+
+**Tests (6):** ai_reader_v1 → ai_nfl adapter mapping; sim → sim_nfl; hours-to-kick
+buckets; trigger type annotation (line_move, horizon); embargo includes ai_nfl.
