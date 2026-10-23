@@ -4533,3 +4533,17 @@ SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
 - Whether site/build_site.py renders the timeline and per-owner views correctly
 - Whether the 45-min close pull actually captures pre-kick props snapshot
 - Whether sim_requests.json → sim_window.sh gate correctly sizes --hours
+
+## 2026-10-23T12:05Z  claude-code (OPS-CAD1b — fixups before merge)
+
+### RETURNED
+- Branch: ops/cad1-event-driven (4 more commits, 23452df0c..f36b112d5)
+- CAD1b Item 1 (23452df0c): DEFAULT_MODEL fixed to claude-sonnet-5-5. 1 test GREEN.
+- CAD1b Item 2 (1cdfa58b3): props pulls wired into watch_once (two-phase: pull then digest). 5 tests GREEN.
+- CAD1b Item 3 (95cbab650): pre-kick lockout already implemented; 3 confirmation tests GREEN.
+- CAD1b Item 4 (f36b112d5): requirements-vm.txt with anthropic==2.1.0.
+- Full suite: 55 tests GREEN, 0 RED.
+- grep -rn sk-ant → empty.
+
+### NOT DONE
+- Merge, VM install, live cycle, crontab — Cowork does these.
