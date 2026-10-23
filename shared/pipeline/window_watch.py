@@ -750,7 +750,7 @@ def main():
             game_filled = ar.picks_to_filled(picks, sheet, args.sport, event_id=eid)
             succeeded[eid] = game_filled
             print(f"  read {eid}: {len(picks)} picks, {in_tok}/{out_tok} tokens")
-        except Exception as e:
+        except (Exception, SystemExit) as e:  # a HALT for one game must not end the run
             print(f"  HALT for {eid}: {e}")
             failed.append(eid)
             _record_retry(eid, args.sport, str(e), root)

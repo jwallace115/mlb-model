@@ -65,3 +65,18 @@ class TestPicksPerGame:
     def test_reader_version_is_v1b(self):
         """Reader model string is now ai_reader_v1b."""
         assert "v1b" in f"ai_reader_v1b/{ar.DEFAULT_MODEL}"
+
+
+def test_spread_sign_normalised_and_side_flipped():
+    """10-23 live: the model echoed +2.5 for a quoted -2.5 spread; same contract, other side."""
+    import pandas as pd
+    from shared.pipeline.ai_reader import picks_to_filled
+    sheet = pd.DataFrame([{"event_id": "e1", "market_key": "spreads", "player_name": "", "line": -2.5,
+                           "q_first": 0.5, "imp_first": 0.52, "two_way": True, "price_first": -110, "price_second": -110,
+                           "first_side": "Home", "second_side": "Away", "home_team": "Home X", "away_team": "Away Y"}])
+    picks = [{"market": "spreads", "player": "", "line": 2.5, "side": "first", "tag": "matchup", "conf": 10,
+              "reason": "Away +2.5 is the number, twelve chars plus.", "thesis": "points:up"}]
+    f = picks_to_filled(picks, sheet, "ncaaf", event_id="e1")
+    row = f.iloc[0]
+    assert float(row.line) == -2.5 and row.tag != "no_view"
+    assert row.p_first < 0.5  # the away side -> p_first below the home no-vig
