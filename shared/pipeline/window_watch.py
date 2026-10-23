@@ -230,9 +230,80 @@ def _line_values_from_digest(components, book, market):
     return {name: (pt, price) for name, pt, price in vals}
 
 
+def _anchor_state_path(root):
+    return root / "status" / "anchor_state.json"
+
+
+def _load_anchor_state(root):
+    p = _anchor_state_path(root)
+    if p.exists():
+        try:
+            return json.loads(p.read_text())
+        except Exception:
+            pass
+    return {}
+
+
+def _save_anchor_state(data, root):
+    p = _anchor_state_path(root)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(data, indent=1) + "\n")
+
+
+def _et_now(now):
+    """Convert UTC datetime to ET date and hour."""
+    from zoneinfo import ZoneInfo
+    et = now.astimezone(ZoneInfo("America/New_York"))
+    return et
+
+
+def _check_anchors(event_id, sport, commence_time, now, root):
+    """P69: check for forced anchor triggers.
+
+    Returns list of anchor trigger strings (bypass rate limit and dedup).
+    Anchors fire exactly once; tracked in status/anchor_state.json.
+    """
+    kick = _parse_utc(commence_time)
+    hours_to_kick = (kick - now).total_seconds() / 3600
+    if hours_to_kick <= 0:
+        return []
+
+    state = _load_anchor_state(root)
+    anchors = []
+
+    # anchor_morning: 10:00 AM ET, for games with kick <= 48h
+    if hours_to_kick <= HORIZON_HOURS:
+        et_now = _et_now(now)
+        morning_key = f"morning:{event_id}:{et_now.strftime('%Y-%m-%d')}"
+        if morning_key not in state:
+            if et_now.hour >= 10:
+                anchors.append("anchor_morning")
+                state[morning_key] = now.isoformat()
+
+    # anchor_prekick: kick - 3h, exactly once per game (20-min guard)
+    prekick_key = f"prekick:{event_id}"
+    if prekick_key not in state:
+        if hours_to_kick <= 3.0 and hours_to_kick > BLACKOUT_MIN / 60:
+            anchors.append("anchor_prekick")
+            state[prekick_key] = now.isoformat()
+
+    # anchor_close: kick - 45min, exactly once, never inside last 20 min
+    close_key = f"close:{event_id}"
+    if close_key not in state:
+        min_to_kick = hours_to_kick * 60
+        if min_to_kick <= 45 and min_to_kick > BLACKOUT_MIN:
+            anchors.append("anchor_close")
+            state[close_key] = now.isoformat()
+
+    if anchors:
+        _save_anchor_state(state, root)
+
+    return anchors
+
+
 def detect_triggers(event_id, sport, current_digest, current_components,
                     last_digest, last_components, last_logged_utc,
-                    commence_time, now):
+                    commence_time, now, root=ROOT):
     """Detect all trigger reasons for a game.
 
     Returns list of trigger strings, or empty list if no trigger.
@@ -242,8 +313,14 @@ def detect_triggers(event_id, sport, current_digest, current_components,
     hours_to_kick = (kick - now).total_seconds() / 3600
 
     # Blackout: never inside last 20 min before kick
+    # (anchor_close is allowed up to 20 min but not below; checked inside _check_anchors)
     if hours_to_kick < BLACKOUT_MIN / 60:
         return []
+
+    # P69: check forced anchor triggers (bypass rate limit and dedup)
+    anchors = _check_anchors(event_id, sport, commence_time, now, root)
+    if anchors:
+        return anchors  # anchors are standalone triggers
 
     # No prior read + within horizon
     if last_digest is None:
@@ -532,7 +609,7 @@ def watch_once(sport, root=ROOT, now=None, dry_run=False):
         triggers = detect_triggers(
             eid, sport, digest, components,
             last_digest, last_components, last_logged,
-            ct, now)
+            ct, now, root=root)
 
         if triggers:
             triggered.append(eid)
