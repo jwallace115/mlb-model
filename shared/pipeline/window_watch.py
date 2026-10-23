@@ -361,6 +361,107 @@ def get_upcoming_games(sport, root=ROOT, now=None, lookback_days=LOOKBACK_DAYS):
 # Main watcher loop (one tick)
 # ---------------------------------------------------------------------------
 
+def _newest_props_ts(event_id, root):
+    """Return the newest pull_timestamp for an event from the props archive, or None."""
+    props_dir = root / "data" / "odds_archive" / "nfl" / "props" / "season=2026"
+    if not props_dir.exists():
+        return None
+    pfiles = sorted(props_dir.glob("month=*/data_*.parquet"))[-2:]
+    best = None
+    for pf in pfiles:
+        try:
+            df = pd.read_parquet(pf, columns=["event_id", "pull_timestamp"])
+            ev = df[df.event_id == event_id]
+            if not ev.empty:
+                ts = str(ev.pull_timestamp.max())
+                if best is None or ts > best:
+                    best = ts
+        except Exception:
+            pass
+    return best
+
+
+def _should_pull_props(eid, sport, ct_str, now, root,
+                       has_injury_trigger=False, has_news_trigger=False,
+                       has_horizon_trigger=False):
+    """P63/CAD1b: decide whether to pull props for this event.
+
+    Returns True if any of:
+      - no pull for the event yet and kick <= 48 h (horizon)
+      - injury-hash or new-news trigger fired
+      - kick <= 2 h and newest pull > 60 min old
+      - kick <= 45 min and newest pull > 20 min old (close pull)
+    """
+    if sport != "nfl":
+        return False
+    kick = _parse_utc(ct_str)
+    hours_to_kick = (kick - now).total_seconds() / 3600
+    if hours_to_kick <= 0:
+        return False
+
+    newest_ts = _newest_props_ts(eid, root)
+    pull_age_min = float("inf")
+    if newest_ts:
+        try:
+            pull_age_min = (now - _parse_utc(newest_ts)).total_seconds() / 60
+        except Exception:
+            pass
+
+    # Horizon: no pull yet and kick <= 48h
+    if newest_ts is None and hours_to_kick <= HORIZON_HOURS:
+        return True
+    if has_horizon_trigger and newest_ts is None:
+        return True
+
+    # Injury or news trigger
+    if has_injury_trigger or has_news_trigger:
+        return True
+
+    # Kick <= 2h and pull > 60 min old
+    if hours_to_kick <= 2 and pull_age_min > 60:
+        return True
+
+    # Kick <= 45 min and pull > 20 min old (close pull)
+    if hours_to_kick <= 0.75 and pull_age_min > 20:
+        return True
+
+    return False
+
+
+def _run_props_pull(event_ids, root, dry_run=False):
+    """Run pull_hardrock_props.py --events for the given event IDs.
+
+    Returns True if the pull succeeded (or was skipped on credit HALT).
+    """
+    if not event_ids or dry_run:
+        return True
+    puller = root / "nfl" / "pipeline" / "pull_hardrock_props.py"
+    if not puller.exists():
+        print(f"  WARNING: props puller not found at {puller}")
+        return False
+    cmd = [
+        sys.executable, str(puller),
+        "--events", ",".join(event_ids),
+        "--tag", "event",
+        "--window-hours", "168",
+        "--archive",
+    ]
+    print(f"  props pull: {len(event_ids)} events")
+    result = subprocess.run(cmd, cwd=str(root), capture_output=True, text=True, timeout=120)
+    if result.returncode != 0:
+        stderr = result.stderr[:200] if result.stderr else ""
+        if "HALT" in (result.stdout or "") or "HALT" in stderr:
+            print(f"  props pull HALT (credit limit) — read continues on older pull")
+            return True  # not fatal; read on older data
+        print(f"  props pull exit {result.returncode}: {stderr}")
+        return False
+    # Print credits line if available
+    for line in (result.stdout or "").splitlines():
+        if "credits" in line.lower() or "remaining" in line.lower():
+            print(f"  {line.strip()}")
+    return True
+
+
 def watch_once(sport, root=ROOT, now=None, dry_run=False):
     """Run one watcher tick.
 
@@ -374,13 +475,48 @@ def watch_once(sport, root=ROOT, now=None, dry_run=False):
         print(f"  {sport}: no upcoming games")
         return [], {}
 
+    # ── Phase 1: pre-trigger scan to identify props pull candidates ──
+    # Do a quick scan for injury/news/horizon triggers BEFORE pulling props
+    pull_candidates = []
+    pre_triggers = {}  # eid -> preliminary trigger info
+    for eid, home, away, ct in games:
+        # Quick check: does this game need a props pull?
+        # We need a preliminary trigger scan for injury/news
+        digest, components = compute_inputs_digest(eid, sport, root=root, now=now)
+        last_digest, last_logged, _ = get_last_read_digest(eid, sport, root=root)
+        last_components = _load_last_components(eid, sport, root)
+
+        # Check for injury/news changes
+        has_injury = False
+        has_news = False
+        has_horizon = (last_digest is None)
+        if last_components:
+            for key in components:
+                if key.startswith("inj_") and components[key] != (last_components or {}).get(key):
+                    has_injury = True
+            old_news = set((last_components or {}).get("news", []))
+            new_news = set(components.get("news", []))
+            if new_news - old_news:
+                has_news = True
+
+        pre_triggers[eid] = {"injury": has_injury, "news": has_news, "horizon": has_horizon}
+
+        if _should_pull_props(eid, sport, ct, now, root,
+                              has_injury_trigger=has_injury,
+                              has_news_trigger=has_news,
+                              has_horizon_trigger=has_horizon):
+            pull_candidates.append(eid)
+
+    # ── Phase 1b: run props pulls (NFL only) ──
+    if pull_candidates and sport == "nfl":
+        _run_props_pull(pull_candidates, root, dry_run=dry_run)
+
+    # ── Phase 2: compute digests AFTER pulls and detect triggers ──
     triggered = []
     details = {}
     for eid, home, away, ct in games:
         digest, components = compute_inputs_digest(eid, sport, root=root, now=now)
         last_digest, last_logged, _ = get_last_read_digest(eid, sport, root=root)
-
-        # Load last components from manifest inputs
         last_components = _load_last_components(eid, sport, root)
 
         triggers = detect_triggers(
