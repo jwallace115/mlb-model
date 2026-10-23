@@ -216,7 +216,7 @@ class TestResolvePinning:
         assert props_path is not None and Path(props_path).exists()
         assert lines_path is not None and Path(lines_path).exists()
 
-    def test_pinned_snapshot_consistent(self, tmp_path):
+    def test_pinned_snapshot_deterministic(self, tmp_path):
         """Sheet built twice on pinned files is identical (determinism)."""
         self._fixture_tape(tmp_path)
         sys.path.insert(0, str(ROOT / "nfl" / "pipeline"))
@@ -231,3 +231,72 @@ class TestResolvePinning:
         s1 = lao.build_sheet(*lao.newest_inputs(2026, now, props_file=props_path, lines_file=lines_path), now)
         s2 = lao.build_sheet(*lao.newest_inputs(2026, now, props_file=props_path, lines_file=lines_path), now)
         assert s1.equals(s2), "sheets differ on the same pinned files"
+
+
+# ---- OPS-R2 Item 2 (P57): prekick slot + double-fire guard + git-pull retry ----
+
+class TestPrekickSlot:
+    """P57(a): PREKICK_LOW/HIGH are 2h45/3h12."""
+
+    def test_prekick_bounds(self):
+        sys.path.insert(0, str(ROOT / "nfl" / "pipeline"))
+        import importlib
+        import run_window as rw
+        importlib.reload(rw)
+        assert rw.PREKICK_LOW == timedelta(hours=2, minutes=45), f"PREKICK_LOW={rw.PREKICK_LOW}"
+        assert rw.PREKICK_HIGH == timedelta(hours=3, minutes=12), f"PREKICK_HIGH={rw.PREKICK_HIGH}"
+
+    def test_slot_coverage(self):
+        """Every kick minute (:00,:05,:15,:20,:25,:30) has at least one tick in the slot."""
+        sys.path.insert(0, str(ROOT / "nfl" / "pipeline"))
+        import importlib
+        import run_window as rw
+        importlib.reload(rw)
+        kick_mins = [0, 5, 15, 20, 25, 30]
+        tick_offsets = [8, 23, 38, 53]  # VM cron :08/:23/:38/:53
+        for km in kick_mins:
+            hits = []
+            for to in tick_offsets:
+                # delta = kick - tick in minutes (from tick to kick)
+                delta_min = km + 180 - to  # kicks at HH:km, tick at (HH-3):to
+                if rw.PREKICK_LOW.total_seconds() / 60 <= delta_min <= rw.PREKICK_HIGH.total_seconds() / 60:
+                    hits.append(to)
+            assert len(hits) > 0, f"kick at :0{km} has no tick in [{rw.PREKICK_LOW}, {rw.PREKICK_HIGH}]"
+
+
+class TestDoubleFire:
+    """P57(b): if a prekick freeze for the same events exists within 20 min, skip."""
+
+    def test_double_fire_guard_exists(self):
+        """run_window must have _check_recent_prekick function."""
+        sys.path.insert(0, str(ROOT / "nfl" / "pipeline"))
+        import importlib
+        import run_window as rw
+        importlib.reload(rw)
+        assert hasattr(rw, "_check_recent_prekick"), "no _check_recent_prekick function"
+
+    def test_double_fire_skips(self, tmp_path):
+        """A manifest with a prekick freeze 10 min ago -> guard returns True (skip)."""
+        sys.path.insert(0, str(ROOT / "nfl" / "pipeline"))
+        import importlib
+        import run_window as rw
+        importlib.reload(rw)
+        now = datetime(2026, 12, 1, 15, 30, tzinfo=timezone.utc)
+        manifest_dir = tmp_path / "nfl" / "data" / "board" / "week=2026_13" / "ai_opinions"
+        manifest_dir.mkdir(parents=True)
+        entry = [{"file": "test.parquet", "sha256": "abc", "logged_utc": "2026-12-01T15:20:00+00:00",
+                  "window": "prekick", "first_kickoff_utc": "2026-12-01T18:00:00+00:00"}]
+        (manifest_dir / "manifest.json").write_text(json.dumps(entry))
+        assert rw._check_recent_prekick(manifest_dir, "prekick", now) is True
+
+
+class TestGitPullRetry:
+    """P57(c): git pull retries 3x before STOP."""
+
+    def test_git_pull_retry_exists(self):
+        """run_window must have _run_git_pull_with_retry."""
+        sys.path.insert(0, str(ROOT / "nfl" / "pipeline"))
+        import importlib
+        import run_window as rw
+        importlib.reload(rw)
+        assert hasattr(rw, "_run_git_pull_with_retry"), "no _run_git_pull_with_retry function"

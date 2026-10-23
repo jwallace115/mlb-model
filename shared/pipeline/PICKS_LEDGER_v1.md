@@ -1223,3 +1223,27 @@ steps, adding events the props didn't cover).
 
 **Tests:** `TestResolvePinning` — `test_resolve_inputs_exists`, `test_resolve_returns_paths`,
 `test_pinned_snapshot_consistent` (sheet twice on the same pinned files → identical).
+
+## P57 — Prekick slot 2h45–3h12 + double-fire guard + git-pull retry (2026-10-23)
+
+**(a)** PREKICK_LOW/HIGH widened from 2h52/3h08 to **2h45/3h12** so the 8-59/15 ticks
+(:08/:23/:38/:53) land inside the slot for every kickoff minute in use.
+
+| Kick | Ticks (delta) |
+|------|---------------|
+| :00  | :08 (172m), :53 (187m) |
+| :05  | :08 (177m), :53 (192m) |
+| :15  | :08 (187m), :23 (172m) |
+| :20  | :08 (192m), :23 (177m) |
+| :25  | :23 (182m), :38 (167m) |
+| :30  | :23 (187m), :38 (172m) |
+
+**(b)** Double-fire guard: `_check_recent_prekick` checks the manifest for a prekick
+freeze within the last 20 min. If found, prints "prekick already frozen" and exits 0.
+This prevents two consecutive ticks from double-freezing the same events.
+
+**(c)** Git-pull retry: `_run_git_pull_with_retry` retries 3× with 20 s sleep. The VM's
+own :00/:30 pushes can collide with the window's pull step (Saturday 22:00Z race).
+
+**Tests:** `TestPrekickSlot` (bounds + slot coverage), `TestDoubleFire` (manifest fixture),
+`TestGitPullRetry` (function exists). All RED first, then GREEN.

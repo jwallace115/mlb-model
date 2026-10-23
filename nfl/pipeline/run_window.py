@@ -50,13 +50,70 @@ NCAAF_WINDOW_HOURS = {
     "adhoc": 48,
 }
 
-# Prekick gate: [now + 2h52m, now + 3h08m]
-PREKICK_LOW = timedelta(hours=2, minutes=52)
-PREKICK_HIGH = timedelta(hours=3, minutes=8)
+# Prekick gate: [now + 2h45m, now + 3h12m]
+# P57: widened from 2h52/3h08 so that the 8-59/15 ticks (:08/:23/:38/:53)
+# cover every kickoff minute in use (:00, :05, :15, :20, :25, :30).
+PREKICK_LOW = timedelta(hours=2, minutes=45)
+PREKICK_HIGH = timedelta(hours=3, minutes=12)
+PREKICK_DEDUP_MIN = 20  # minutes: skip if a prekick freeze exists within this window
+
+
+def _check_recent_prekick(freeze_dir, window, now):
+    """P57(b): True if a prekick freeze for the same window already exists within PREKICK_DEDUP_MIN."""
+    if window != "prekick":
+        return False
+    manifest_path = freeze_dir / "manifest.json"
+    if not manifest_path.exists():
+        return False
+    try:
+        import json as _json
+        entries = _json.loads(manifest_path.read_text())
+    except Exception:
+        return False
+    for entry in entries:
+        if entry.get("window") != "prekick":
+            continue
+        logged = entry.get("logged_utc")
+        if not logged:
+            continue
+        try:
+            logged_dt = datetime.fromisoformat(str(logged).replace("Z", "+00:00"))
+            if logged_dt.tzinfo is None:
+                logged_dt = logged_dt.replace(tzinfo=timezone.utc)
+            age_min = (now - logged_dt).total_seconds() / 60
+            if 0 <= age_min <= PREKICK_DEDUP_MIN:
+                return True
+        except (ValueError, TypeError):
+            continue
+    return False
+
+
+def _run_git_pull_with_retry(env, max_retries=3, sleep_sec=20):
+    """P57(c): git pull with retries — the VM's own push can collide."""
+    for attempt in range(1, max_retries + 1):
+        ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        print(f"\n{'='*60}")
+        print(f"[{ts}] git pull (attempt {attempt}/{max_retries})")
+        print(f"{'='*60}")
+        result = subprocess.run(
+            ["git", "pull", "--rebase", "--autostash"],
+            cwd=str(ROOT), env=env or os.environ,
+            capture_output=True, text=True)
+        print(result.stdout[:500] if result.stdout else "")
+        if result.returncode == 0:
+            print(f"  exit: 0")
+            return result
+        print(f"  exit: {result.returncode} — {result.stderr[:200]}")
+        if attempt < max_retries:
+            print(f"  retrying in {sleep_sec}s...")
+            import time
+            time.sleep(sleep_sec)
+    print(f"STOP: git pull failed after {max_retries} attempts")
+    sys.exit(result.returncode)
 
 
 def _check_prekick_slot(commence_times):
-    """True if any game kicks in [now + 2h52m, now + 3h08m]."""
+    """True if any game kicks in [now + 2h45m, now + 3h12m]."""
     now = datetime.now(timezone.utc)
     low = now + PREKICK_LOW
     high = now + PREKICK_HIGH
@@ -311,7 +368,7 @@ def main():
     ap.add_argument("--commit", default="none",
                     help="none | main | branch:<name> — commit + push after verify")
     ap.add_argument("--auto-prekick", action="store_true",
-                    help="exit 0 if no game kicks in [now+2h52m, now+3h08m]")
+                    help="exit 0 if no game kicks in [now+2h45m, now+3h12m]")
     ap.add_argument("--injury-report", default=None,
                     help="path to injury report JSON (passed to reader_v3)")
     ap.add_argument("--window-hours", type=int, default=None,
@@ -335,6 +392,14 @@ def main():
     else:
         week = args.week or _current_week()
         window_hours = args.window_hours or WINDOW_HOURS[args.window]
+
+    # ── P57(b): Double-fire guard for prekick ──
+    if args.window == "prekick":
+        sport_board = "ncaaf" if args.sport == "ncaaf" else "nfl"
+        freeze_dir = ROOT / sport_board / "data" / "board" / f"week=2026_{week:02d}" / "ai_opinions"
+        if _check_recent_prekick(freeze_dir, args.window, datetime.now(timezone.utc)):
+            print(f"prekick already frozen (within {PREKICK_DEDUP_MIN} min)")
+            sys.exit(0)
 
     reader_file = NFL_PIPELINE / "reader_v3.py"
     env = dict(os.environ)
@@ -361,10 +426,8 @@ def main():
             else:
                 print(f"  no injury report found for season=2026 week={week}")
 
-    # ── Step 0: Git pull (see Mac sim freeze before reader runs) ──
-    _run("git pull",
-         ["git", "pull", "--rebase", "--autostash"],
-         env=env)
+    # ── Step 0: Git pull with retry (P57c — VM push can collide) ──
+    _run_git_pull_with_retry(env)
 
     # ── Step 1: Pull (NFL only; ncaaf HALTs without --no-pull above) ──
     if not args.no_pull:
