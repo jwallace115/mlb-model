@@ -113,18 +113,24 @@ def _run_git_pull_with_retry(env, max_retries=3, sleep_sec=20):
 
 
 def _check_prekick_slot(commence_times):
-    """True if any game kicks in [now + 2h45m, now + 3h12m]."""
+    """True if any game kicks in [now + 2h45m, now + 3h12m].
+    P59: logs every game and its delta so a skip is diagnosable."""
     now = datetime.now(timezone.utc)
     low = now + PREKICK_LOW
     high = now + PREKICK_HIGH
+    found = False
     for ct in commence_times:
         try:
             dt = datetime.fromisoformat(str(ct).replace("Z", "+00:00"))
-            if low <= dt <= high:
-                return True
+            delta_min = (dt - now).total_seconds() / 60
+            in_slot = low <= dt <= high
+            tag = " <-- IN SLOT" if in_slot else ""
+            print(f"  prekick check: {ct} delta={delta_min:.0f}m{tag}")
+            if in_slot:
+                found = True
         except (ValueError, TypeError):
             continue
-    return False
+    return found
 
 
 def _run(desc, cmd, cwd=ROOT, env=None):
@@ -144,27 +150,17 @@ def _run(desc, cmd, cwd=ROOT, env=None):
 
 
 def _current_week():
-    """Infer the current NFL week from the calendar (rough heuristic)."""
-    now = datetime.now(timezone.utc)
-    from datetime import date
-    season_start = date(2026, 9, 10)
-    delta = (now.date() - season_start).days
-    return max(1, delta // 7 + 1)
+    """P59: NFL week from the schedule archive (falls back to calendar with WARNING)."""
+    from nfl.pipeline.current_week import current_week
+    week, source = current_week("nfl", root=ROOT)
+    return week
 
 
 def _ncaaf_week():
-    """CFBD week number. Week 0 contains the last Saturday in August."""
-    now = datetime.now(timezone.utc)
-    from datetime import date
-    aug31 = date(now.year, 8, 31)
-    # Last Saturday in August: weekday 5 = Saturday
-    last_sat = aug31 - timedelta(days=(aug31.weekday() + 2) % 7)
-    # Week 0 starts on Thursday before that Saturday
-    week0_start = last_sat - timedelta(days=2)
-    delta = (now.date() - week0_start).days
-    if delta < 0:
-        return 0
-    return delta // 7
+    """P59: NCAAF week from the CFBD schedule archive (falls back to calendar with WARNING)."""
+    from nfl.pipeline.current_week import current_week
+    week, source = current_week("ncaaf", root=ROOT)
+    return week
 
 
 def _reader_sha(reader_file):

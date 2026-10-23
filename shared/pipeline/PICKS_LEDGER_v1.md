@@ -1266,3 +1266,25 @@ no further code change is needed (the cache covers it).
 **Tests:** `TestFlockGuard` — `test_flock_function_exists` and
 `test_second_instance_blocked` (holds lock, verifies second acquire returns False).
 RED first, then GREEN.
+
+## P59 — Week from the schedule, not the calendar (2026-10-23)
+
+New `nfl/pipeline/current_week.py`: `--sport nfl` prints the week of the EARLIEST
+game whose kickoff is still in the future, read from the newest
+`data/results_archive/nfl/schedules_2026_*.parquet`. Fallback: the old calendar
+formula, with a printed WARNING. `--sport ncaaf` does the same from the CFBD archive.
+
+`run_window.py`'s `_current_week()` / `_ncaaf_week()` now call `current_week()`.
+`sim_window.sh`'s WEEK now calls `$MAC_PY current_week.py --sport nfl`.
+
+**Bug fixed:** the calendar formula counted weeks from a Thursday (SEASON_START
+2026-09-10), so Tue/Wed fell in the previous week. The 10-20 Tue open freeze
+(week 7 games) was filed to week=2026_06. That mis-filed file is NOT moved
+(frozen files and manifests are never edited).
+
+The Mac auto-prekick gate now logs every game it considered and its Δ, so the
+next skip is diagnosable (print, no behaviour change).
+
+**Tests:** `TestCurrentWeek` — `test_script_exists`, `test_week7_on_tue_open` (RED:
+calendar gives 6, schedule gives 7), `test_week6_on_mnf_day`, `test_week7_after_tnf`,
+`test_ncaaf_week`. All RED first (script didn't exist), then GREEN.
