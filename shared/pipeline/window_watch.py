@@ -655,7 +655,7 @@ def main():
 
     # Convert and freeze
     filled = ar.picks_to_filled(all_picks, sheet[sheet.event_id.isin(set(triggered))], args.sport)
-    reader_model = f"ai_reader_v1/{model}"
+    reader_model = f"ai_reader_v1b/{model}"
 
     # Compute digest for each event
     digests = {}

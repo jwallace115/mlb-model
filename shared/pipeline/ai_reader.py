@@ -724,18 +724,37 @@ def _parse_response(content, sheet_df, sport, retry_content=None):
     return picks
 
 
-def picks_to_filled(picks, sheet_df, sport):
+def picks_to_filled(picks, sheet_df, sport, event_id=None):
     """Convert API picks to a filled DataFrame matching the log_ai_opinions schema.
 
     p_first = book no-vig +/- conf/250 on the view's side, clipped [0.02, 0.98].
+    P67: when event_id is set, match picks only against that event's rows.
+    A pick naming a (market, player, line) not quoted for the event raises SystemExit.
     """
+    # P67: filter sheet to the event if specified
+    if event_id is not None:
+        sheet_df = sheet_df[sheet_df.event_id == event_id].copy()
+        if sheet_df.empty:
+            raise SystemExit(f"HALT: no sheet rows for event {event_id}")
+        # Validate: every pick must name a line quoted for this event
+        sheet_keys = {(r.market_key, r.player_name or "", float(r.line))
+                      for _, r in sheet_df.iterrows()}
+        for p in picks:
+            if p.get("tag") == "no_view" or p.get("conf", 0) == 0:
+                continue
+            pk = (p.get("market", ""), p.get("player", ""), float(p.get("line", 0)))
+            if pk not in sheet_keys:
+                raise SystemExit(
+                    f"HALT for {event_id}: pick names unquoted line "
+                    f"{pk} (only {len(sheet_keys)} lines quoted for this event)")
+
     filled_rows = []
     for _, row in sheet_df.iterrows():
-        key = (row.market_key, row.player_name or "", float(row.line))
-        # Find matching pick
+        key = (row.event_id, row.market_key, row.player_name or "", float(row.line))
+        # Find matching pick (P67: match by event_id too)
         match = None
         for p in picks:
-            pk = (p.get("market", ""), p.get("player", ""), float(p.get("line", 0)))
+            pk = (row.event_id, p.get("market", ""), p.get("player", ""), float(p.get("line", 0)))
             if pk == key:
                 match = p
                 break
@@ -803,7 +822,7 @@ def freeze_reads(filled_df, sport, season, week, now, window="event",
         week: int
         now: UTC datetime
         window: freeze window (default "event" for event-driven)
-        reader_model: model string (default "ai_reader_v1/<model>")
+        reader_model: model string (default "ai_reader_v1b/<model>")
         root: repo root
         triggers: dict of {event_id: description}
         props_file: pinned props file path
@@ -819,7 +838,7 @@ def freeze_reads(filled_df, sport, season, week, now, window="event",
     import log_ai_opinions as lao
     lao.set_sport(sport)
 
-    model = reader_model or f"ai_reader_v1/{os.environ.get('AI_READER_MODEL', DEFAULT_MODEL)}"
+    model = reader_model or f"ai_reader_v1b/{os.environ.get('AI_READER_MODEL', DEFAULT_MODEL)}"
 
     # Rebuild the sheet from the same tape
     props, lines = lao.newest_inputs(season, now,
@@ -953,7 +972,7 @@ def main():
         return
 
     # Freeze
-    reader_model = f"ai_reader_v1/{model}"
+    reader_model = f"ai_reader_v1b/{model}"
     dest, sha, frozen = freeze_reads(
         filled, args.sport, args.season, args.week, now,
         window=args.window, reader_model=reader_model, root=root,
