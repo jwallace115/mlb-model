@@ -1340,3 +1340,25 @@ HR spread + Pinnacle; schema rejects ATD pick and +300 ML; accepts ML favorite; 
 short / too long; invalid thesis link; valid pick passes; mocked API → filled with correct
 p_first and contiguous conf_rank; no_view pass uses book probability; spend increments;
 cap HALTs; under-cap OK; NHL and NBA HALT.
+
+## P62 — Event-driven watcher (2026-10-23)
+
+`shared/pipeline/window_watch.py`: VM cron every 5 min. For every upcoming game
+(kick within 7 days), computes an `inputs_digest` from: newest HR + Pinnacle
+h2h/spread/total values, newest props pull_timestamp (NFL), injury hash (NFL),
+news ids (5-day), newest sim freeze id, Kalshi snapshot id. Compares with the
+digest on the game's newest `ai_reader_v1` freeze.
+
+**Triggers:** spread >= 1.0 pt, total >= 1.0 pt, ML no-vig >= 3 pp, new props,
+injury-hash change, new news, new sim, or horizon entry (no read + kick < 48 h).
+
+**Rate limits:** once per 30 min per game unless injury or kick < 3 h. Never
+inside last 20 min before kick.
+
+**Dedup rule change** in `log_ai_opinions.freeze()`: for `--window event`, cross-
+dedup key is `(reader_model, event_id, inputs_digest)`. Same reader may re-read
+when the digest changed; identical digest → HALT "already read on these inputs".
+
+**Tests (9):** spread 0.5 → no trigger; spread 1.0 → trigger; injury bypasses 30-min
+limit; non-injury rate-limited; identical digest → no trigger; quiet fixture → empty;
+horizon within 48h triggers; horizon beyond 48h → no trigger; blackout inside 20 min.

@@ -456,38 +456,65 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
     else:
         d = d or out_dir(season, week)
     # Cross-dedup for canonical (non-pilot) reader.
+    # P62: for --window event, dedup key is (reader_model, event_id, inputs_digest)
+    # — same reader may re-read same contracts when the digest changed;
+    # identical digest → HALT "already read on these inputs".
     if not pilot:
         board_root = board_root or SPORTS[SPORT]["out"]
-        contracts = [(r["event_id"], r["market_key"], r["player_name"], float(r["line"]))
-                     for _, r in filled.iterrows()]
-        dupes = []
-        contract_set = set(contracts)
-        glob_pat = "date=*/ai_opinions" if is_date_sport else f"week={season}_*/ai_opinions"
-        for wd in sorted(board_root.glob(glob_pat)):
-            manifest_path = wd / "manifest.json"
-            if not manifest_path.exists():
-                continue
-            manifest = json.loads(manifest_path.read_text())
-            for entry in manifest:
-                rm = entry.get("reader_model", "legacy")
-                ew = entry.get("window")
-                if rm != reader_model or entry.get("pilot", False) or ew != window:
+        if window == "event" and pinned_inputs and pinned_inputs.get("inputs_digest"):
+            # Event-driven dedup: check by (reader_model, event_id, inputs_digest)
+            new_digest = pinned_inputs["inputs_digest"]
+            new_eids = set(filled["event_id"].unique())
+            glob_pat = "date=*/ai_opinions" if is_date_sport else f"week={season}_*/ai_opinions"
+            for wd in sorted(board_root.glob(glob_pat)):
+                manifest_path = wd / "manifest.json"
+                if not manifest_path.exists():
                     continue
-                f = wd / entry["file"]
-                if not f.exists():
+                manifest = json.loads(manifest_path.read_text())
+                for entry in manifest:
+                    rm = entry.get("reader_model", "legacy")
+                    if rm != reader_model or entry.get("pilot", False):
+                        continue
+                    if entry.get("window") != "event":
+                        continue
+                    old_inputs = entry.get("inputs", {})
+                    old_digest = old_inputs.get("inputs_digest")
+                    if old_digest == new_digest:
+                        raise SystemExit(
+                            f"HALT: already read on these inputs "
+                            f"(digest={new_digest[:16]}, file={entry['file']})")
+        else:
+            # Standard cross-dedup by contract
+            contracts = [(r["event_id"], r["market_key"], r["player_name"], float(r["line"]))
+                         for _, r in filled.iterrows()]
+            dupes = []
+            contract_set = set(contracts)
+            glob_pat = "date=*/ai_opinions" if is_date_sport else f"week={season}_*/ai_opinions"
+            for wd in sorted(board_root.glob(glob_pat)):
+                manifest_path = wd / "manifest.json"
+                if not manifest_path.exists():
                     continue
-                try:
-                    edf = pd.read_parquet(f, columns=KEY)
-                except Exception:
-                    continue
-                for _, r in edf.iterrows():
-                    key = (r["event_id"], r["market_key"], r["player_name"], float(r["line"]))
-                    if key in contract_set:
-                        dupes.append((key, wd.parent.name))
-        if dupes:
-            raise SystemExit(
-                f"HALT: {len(dupes)} contract(s) already frozen (cross-dedup):\n"
-                + "\n".join(f"  {c} in {w}" for c, w in dupes[:10]))
+                manifest = json.loads(manifest_path.read_text())
+                for entry in manifest:
+                    rm = entry.get("reader_model", "legacy")
+                    ew = entry.get("window")
+                    if rm != reader_model or entry.get("pilot", False) or ew != window:
+                        continue
+                    f = wd / entry["file"]
+                    if not f.exists():
+                        continue
+                    try:
+                        edf = pd.read_parquet(f, columns=KEY)
+                    except Exception:
+                        continue
+                    for _, r in edf.iterrows():
+                        key = (r["event_id"], r["market_key"], r["player_name"], float(r["line"]))
+                        if key in contract_set:
+                            dupes.append((key, wd.parent.name))
+            if dupes:
+                raise SystemExit(
+                    f"HALT: {len(dupes)} contract(s) already frozen (cross-dedup):\n"
+                    + "\n".join(f"  {c} in {w}" for c, w in dupes[:10]))
     late = sheet[sheet["commence_time"].map(parse_utc) <= now]
     if len(late):
         raise SystemExit(f"HALT: {late['event_id'].nunique()} game(s) in the sheet have kicked off - nothing is frozen")
