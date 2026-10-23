@@ -145,6 +145,10 @@ Output ONLY the JSON array, no other text.
 # JSON schema for pick validation
 # ---------------------------------------------------------------------------
 PICK_SCHEMA_KEYS = {"market", "player", "line", "side", "tag", "conf", "reason", "thesis"}
+MARKET_ALIASES = {"spread": "spreads", "spreads": "spreads", "total": "totals", "totals": "totals",
+                  "h2h": "h2h", "moneyline": "h2h", "ml": "h2h", "money line": "h2h"}
+GAME_LINK_COERCE = {"efficiency": "points", "plays": "points", "pass_rate": "points", "run_rate": "points",
+                    "share": "points", "availability": "points"}
 VALID_SIDES = {"first", "second"}
 ML_LONGSHOT_THRESHOLD = 250  # +250 or worse is a longshot
 
@@ -652,8 +656,12 @@ def read_game(packet_text, sheet_df, sport, model=None, root=ROOT, dry_run=False
     # Build the user message: sheet summary + packet
     n_lines = len(sheet_df)
     sheet_summary = f"This game has {n_lines} quoted lines. "
-    sheet_summary += "You must return exactly one JSON element per quoted line.\n\n"
-    sheet_summary += packet_text
+    sheet_summary += "You must return exactly one JSON element per quoted line, echoing market, player and line EXACTLY as listed "
+    sheet_summary += "(line is quoted from the first side; side \"first\" = the first-side team / Over, \"second\" = the second-side team / Under).\n"
+    sheet_summary += "QUOTED LINES (market | player | line | first side | second side):\n"
+    for r in sheet_df.itertuples():
+        sheet_summary += f"  {r.market_key} | {getattr(r, 'player_name', '') or ''} | {float(r.line):g} | {getattr(r, 'first_side', 'Over/Home')} | {getattr(r, 'second_side', 'Under/Away')}\n"
+    sheet_summary += "\n" + packet_text
 
     message = client.messages.create(
         model=model,
@@ -742,13 +750,32 @@ def picks_to_filled(picks, sheet_df, sport, event_id=None):
         for p in picks:
             if p.get("tag") == "no_view" or p.get("conf", 0) == 0:
                 continue
+            # Market aliases the model uses for the sheet's market_key
+            p["market"] = MARKET_ALIASES.get(str(p.get("market", "")).strip().lower(), p.get("market", ""))
             pk = (p.get("market", ""), p.get("player", ""), float(p.get("line", 0)))
-            # Spread sign normalisation: the sheet quotes the spread from the home (first) side;
-            # a pick echoing the away number (+2.5 for a -2.5 quote) is the same contract, other side.
+            # Spread sign normalisation: the sheet quotes the spread from the home (first) side; a pick
+            # echoing the away number (+2.5 for a -2.5 quote) is the same contract. The model's "side" is
+            # team-based (first = home, second = away) and is NOT flipped (10-23 20:04Z lesson).
             if pk not in sheet_keys and pk[0] == "spreads" and (pk[0], pk[1], -pk[2]) in sheet_keys:
                 p["line"] = -pk[2]
-                p["side"] = "second" if p.get("side") == "first" else "first"
                 pk = (pk[0], pk[1], -pk[2])
+            # Thesis links: game lines take {points, turnovers, script, price}; a prop-only link on a
+            # game line is coerced (efficiency/plays/pass_rate/run_rate/share/availability -> points)
+            # so one bad link cannot HALT the whole freeze downstream.
+            if pk[0] in ("spreads", "totals", "h2h") and p.get("thesis"):
+                claims = []
+                for c in str(p["thesis"]).split(";"):
+                    c = c.strip()
+                    if not c or ":" not in c:
+                        continue
+                    link, d = c.split(":", 1)
+                    link = GAME_LINK_COERCE.get(link.strip(), link.strip())
+                    claims.append(f"{link}:{d.strip()}")
+                seen = []
+                for c in claims:
+                    if c not in seen:
+                        seen.append(c)
+                p["thesis"] = "; ".join(seen[:3])
             if pk not in sheet_keys:
                 raise SystemExit(
                     f"HALT for {event_id}: pick names unquoted line "
