@@ -19,6 +19,7 @@ Rate limits:
 
 P62 decision. OPS-CAD1 Item 2.
 """
+import fcntl
 import gzip
 import hashlib
 import json
@@ -206,6 +207,15 @@ def get_last_read_digest(event_id, sport, root=ROOT):
                 best_digest = digest
                 best_model = rm
 
+    # P68: parse per-event digest if stored as JSON dict
+    if best_digest and isinstance(best_digest, str):
+        try:
+            digest_dict = json.loads(best_digest)
+            if isinstance(digest_dict, dict) and event_id in digest_dict:
+                best_digest = digest_dict[event_id]
+        except (json.JSONDecodeError, TypeError):
+            pass
+
     return best_digest, best_logged, best_model
 
 
@@ -220,9 +230,80 @@ def _line_values_from_digest(components, book, market):
     return {name: (pt, price) for name, pt, price in vals}
 
 
+def _anchor_state_path(root):
+    return root / "status" / "anchor_state.json"
+
+
+def _load_anchor_state(root):
+    p = _anchor_state_path(root)
+    if p.exists():
+        try:
+            return json.loads(p.read_text())
+        except Exception:
+            pass
+    return {}
+
+
+def _save_anchor_state(data, root):
+    p = _anchor_state_path(root)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(data, indent=1) + "\n")
+
+
+def _et_now(now):
+    """Convert UTC datetime to ET date and hour."""
+    from zoneinfo import ZoneInfo
+    et = now.astimezone(ZoneInfo("America/New_York"))
+    return et
+
+
+def _check_anchors(event_id, sport, commence_time, now, root):
+    """P69: check for forced anchor triggers.
+
+    Returns list of anchor trigger strings (bypass rate limit and dedup).
+    Anchors fire exactly once; tracked in status/anchor_state.json.
+    """
+    kick = _parse_utc(commence_time)
+    hours_to_kick = (kick - now).total_seconds() / 3600
+    if hours_to_kick <= 0:
+        return []
+
+    state = _load_anchor_state(root)
+    anchors = []
+
+    # anchor_morning: 10:00 AM ET, for games with kick <= 48h
+    if hours_to_kick <= HORIZON_HOURS:
+        et_now = _et_now(now)
+        morning_key = f"morning:{event_id}:{et_now.strftime('%Y-%m-%d')}"
+        if morning_key not in state:
+            if et_now.hour >= 10:
+                anchors.append("anchor_morning")
+                state[morning_key] = now.isoformat()
+
+    # anchor_prekick: kick - 3h, exactly once per game (20-min guard)
+    prekick_key = f"prekick:{event_id}"
+    if prekick_key not in state:
+        if hours_to_kick <= 3.0 and hours_to_kick > BLACKOUT_MIN / 60:
+            anchors.append("anchor_prekick")
+            state[prekick_key] = now.isoformat()
+
+    # anchor_close: kick - 45min, exactly once, never inside last 20 min
+    close_key = f"close:{event_id}"
+    if close_key not in state:
+        min_to_kick = hours_to_kick * 60
+        if min_to_kick <= 45 and min_to_kick > BLACKOUT_MIN:
+            anchors.append("anchor_close")
+            state[close_key] = now.isoformat()
+
+    if anchors:
+        _save_anchor_state(state, root)
+
+    return anchors
+
+
 def detect_triggers(event_id, sport, current_digest, current_components,
                     last_digest, last_components, last_logged_utc,
-                    commence_time, now):
+                    commence_time, now, root=ROOT):
     """Detect all trigger reasons for a game.
 
     Returns list of trigger strings, or empty list if no trigger.
@@ -232,8 +313,14 @@ def detect_triggers(event_id, sport, current_digest, current_components,
     hours_to_kick = (kick - now).total_seconds() / 3600
 
     # Blackout: never inside last 20 min before kick
+    # (anchor_close is allowed up to 20 min but not below; checked inside _check_anchors)
     if hours_to_kick < BLACKOUT_MIN / 60:
         return []
+
+    # P69: check forced anchor triggers (bypass rate limit and dedup)
+    anchors = _check_anchors(event_id, sport, commence_time, now, root)
+    if anchors:
+        return anchors  # anchors are standalone triggers
 
     # No prior read + within horizon
     if last_digest is None:
@@ -522,7 +609,7 @@ def watch_once(sport, root=ROOT, now=None, dry_run=False):
         triggers = detect_triggers(
             eid, sport, digest, components,
             last_digest, last_components, last_logged,
-            ct, now)
+            ct, now, root=root)
 
         if triggers:
             triggered.append(eid)
@@ -584,6 +671,18 @@ def main():
     args = ap.parse_args()
 
     root = Path(args.root)
+
+    # P58 extension: flock — one watcher at a time per sport
+    ledger_dir = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
+    lock_path = ledger_dir / f".window_watch_{args.sport}.lock"
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        _lock_fd = open(lock_path, "w")
+        fcntl.flock(_lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except (OSError, IOError):
+        print(f"window_watch: another instance is running — exiting")
+        sys.exit(0)
+
     now = datetime.now(timezone.utc)
     ts = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     print(f"[{ts}] window_watch tick: sport={args.sport}")
@@ -629,11 +728,16 @@ def main():
     pkt_path = freeze_dir / f"packet_{pkt_ts}.txt"
     pkt_path.write_text(header + "\n\n" + "\n\n".join(packets.values()))
 
-    # Read each game
+    # P68: read each game; track successes and failures separately
     model = os.environ.get("AI_READER_MODEL", ar.DEFAULT_MODEL)
-    all_picks = []
+    succeeded = {}   # eid -> picks list
+    failed = []      # eids that HALTed
     for eid in triggered:
         if eid not in packets:
+            continue
+        # P68: check retry back-off
+        if _is_in_backoff(eid, args.sport, root):
+            print(f"  skip {eid}: in retry back-off")
             continue
         game_sheet = sheet[sheet.event_id == eid]
         if game_sheet.empty:
@@ -642,34 +746,47 @@ def main():
             picks, in_tok, out_tok = ar.read_game(
                 packets[eid], game_sheet, args.sport,
                 model=model, root=root)
-            all_picks.extend(picks)
+            # P67: convert per game with event_id
+            game_filled = ar.picks_to_filled(picks, sheet, args.sport, event_id=eid)
+            succeeded[eid] = game_filled
             print(f"  read {eid}: {len(picks)} picks, {in_tok}/{out_tok} tokens")
         except Exception as e:
             print(f"  HALT for {eid}: {e}")
+            failed.append(eid)
+            _record_retry(eid, args.sport, str(e), root)
             continue
 
-    if not all_picks:
-        print("  no picks from any game — skipping freeze")
+    if not succeeded:
+        print("  no successful reads — skipping freeze")
         _write_health(args.sport, "event", "no_picks", root=root)
         return
 
-    # Convert and freeze
-    filled = ar.picks_to_filled(all_picks, sheet[sheet.event_id.isin(set(triggered))], args.sport)
-    reader_model = f"ai_reader_v1/{model}"
+    # P68: concatenate only successful games
+    filled = pd.concat(list(succeeded.values()), ignore_index=True)
+    # Re-rank conf_rank across all games
+    filled = filled.sort_values(["conf", "event_id", "market_key", "player_name"],
+                                ascending=[False, True, True, True]).reset_index(drop=True)
+    filled["conf_rank"] = range(1, len(filled) + 1)
 
-    # Compute digest for each event
+    reader_model = f"ai_reader_v1b/{model}"
+    success_eids = list(succeeded.keys())
+
+    # Compute digest for each SUCCESSFUL event only
     digests = {}
-    for eid in triggered:
+    for eid in success_eids:
         d, _ = compute_inputs_digest(eid, args.sport, root=root, now=now)
         digests[eid] = d
 
+    # P68: freeze only successful games
+    success_triggers = {eid: trigger_text[eid] for eid in success_eids if eid in trigger_text}
     dest, sha, frozen = ar.freeze_reads(
         filled, args.sport, 2026, week, now,
         window="event", reader_model=reader_model, root=root,
-        triggers=trigger_text, props_file=props_path, lines_file=lines_path,
+        triggers=success_triggers, props_file=props_path, lines_file=lines_path,
         inputs_digest=json.dumps(digests))
 
-    print(f"  FROZEN: {dest.name} sha={sha[:16]} rows={len(frozen)}")
+    print(f"  FROZEN: {dest.name} sha={sha[:16]} rows={len(frozen)} "
+          f"games={len(success_eids)} (failed={len(failed)})")
 
     # Post-freeze: run adapters + top20 + site build
     env = dict(os.environ)
@@ -696,6 +813,61 @@ def main():
     spend = ar._load_spend(root)
     print(f"  spend: {json.dumps(spend)}")
     print(f"  odds credits: {_read_odds_credits(root)}")
+
+
+RETRY_DELAYS = [60, 300, 900, 3600]  # 1 min, 5 min, 15 min, then hourly
+
+
+def _retry_path(root):
+    return root / "status" / "ai_reader_retry.json"
+
+
+def _load_retry(root):
+    p = _retry_path(root)
+    if p.exists():
+        try:
+            return json.loads(p.read_text())
+        except Exception:
+            pass
+    return {}
+
+
+def _save_retry(data, root):
+    p = _retry_path(root)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(data, indent=1) + "\n")
+
+
+def _is_in_backoff(event_id, sport, root):
+    """P68: return True if this game is in retry back-off."""
+    data = _load_retry(root)
+    key = f"{sport}:{event_id}"
+    entry = data.get(key)
+    if not entry:
+        return False
+    attempt = entry.get("attempt", 0)
+    last_ts = entry.get("last_utc", "")
+    if not last_ts:
+        return False
+    delay = RETRY_DELAYS[min(attempt, len(RETRY_DELAYS) - 1)]
+    try:
+        last = _parse_utc(last_ts)
+        now = datetime.now(timezone.utc)
+        return (now - last).total_seconds() < delay
+    except Exception:
+        return False
+
+
+def _record_retry(event_id, sport, error, root):
+    """P68: record a failed read for back-off tracking."""
+    data = _load_retry(root)
+    key = f"{sport}:{event_id}"
+    entry = data.get(key, {"attempt": 0})
+    entry["attempt"] = entry.get("attempt", 0) + 1
+    entry["last_utc"] = datetime.now(timezone.utc).isoformat()
+    entry["error"] = str(error)[:200]
+    data[key] = entry
+    _save_retry(data, root)
 
 
 def write_sim_requests(sport, event_ids, reasons, root=ROOT):

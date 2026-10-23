@@ -126,6 +126,18 @@ def _hours_to_kick_bucket(r):
         return "?"
 
 
+def _anchor_bucket(r):
+    """P69: classify a read into morning / prekick / close / event."""
+    tt = r.get("_trigger_type", "unknown")
+    if "morning" in tt:
+        return "morning"
+    if "prekick" in tt:
+        return "prekick"
+    if "close" in tt:
+        return "close"
+    return "event"
+
+
 def _rank_bucket(rank):
     if rank <= 5:
         return "top5"
@@ -157,7 +169,14 @@ def _annotate_triggers(rows, manifests, root):
                 else:
                     all_trigs = str(triggers)
 
-                if "horizon" in all_trigs:
+                # P69: anchor triggers take precedence
+                if "anchor_morning" in all_trigs:
+                    trigger_type = "anchor_morning"
+                elif "anchor_prekick" in all_trigs:
+                    trigger_type = "anchor_prekick"
+                elif "anchor_close" in all_trigs:
+                    trigger_type = "anchor_close"
+                elif "horizon" in all_trigs:
                     trigger_type = "horizon"
                 elif "line_move" in all_trigs or "ml_move" in all_trigs:
                     trigger_type = "line_move"
@@ -277,6 +296,9 @@ def generate(root=None, ledger_dir=None):
             ai_reader_rows, lambda r: ("ai_reader", r.get("_trigger_type", "?")), clv_by_pid)
         tables["ai_reader_by_hours_to_kick"] = build_table(
             ai_reader_rows, lambda r: ("ai_reader", _hours_to_kick_bucket(r)), clv_by_pid)
+        # P69: by anchor (morning / prekick / close / event)
+        tables["ai_reader_by_anchor"] = build_table(
+            ai_reader_rows, lambda r: ("ai_reader", _anchor_bucket(r)), clv_by_pid)
 
     for name, tbl in tables.items():
         lines.append(f"\n== {name}")

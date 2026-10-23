@@ -4547,3 +4547,18 @@ SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
 
 ### NOT DONE
 - Merge, VM install, live cycle, crontab — Cowork does these.
+
+## 2026-10-23T15:48Z  claude-code (OPS-CAD2 — reader correctness + grading anchors)
+
+### RETURNED
+- Branch: ops/cad2-reader-fixes (5 commits, dee7468da..2cb2a536a)
+- Item 1 (dee7468da): picks_to_filled per game + reader v1b (P67). 3 tests GREEN.
+- Item 2 (be0a44b5f): failed read not frozen + retry back-off (P68). 4 tests GREEN.
+- Item 3 (4428af99d): flock on window_watch (P58 ext). 2 tests GREEN.
+- Item 4 (0bb56ede1): grading anchors morning/prekick/close (P69). 9 tests GREEN.
+- Item 5 (2cb2a536a): horizon consistency (F5). 4 tests GREEN.
+- Full suite: 22 tests GREEN, 0 RED.
+- grep -rn sk-ant → empty.
+
+### NOT DONE
+- Merge, VM un-comment cron, live cycle — Cowork does these.
