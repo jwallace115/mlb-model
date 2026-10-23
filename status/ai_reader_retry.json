@@ -55,9 +55,9 @@
   "error": "HALT for 550ec5290f935d311995affbcb0b5c79: pick names unquoted line ('spread', '', -1.0) (only 52 lines quoted for this event)"
  },
  "nfl:5dce18baccec5d3ad5fb3a3ce52f7619": {
-  "attempt": 3,
-  "last_utc": "2026-10-23T21:03:07.017578+00:00",
-  "error": "Expecting ',' delimiter: line 5 column 61 (char 901)"
+  "attempt": 4,
+  "last_utc": "2026-10-23T22:33:20.324142+00:00",
+  "error": "Extra data: line 9 column 2 (char 2062)"
  },
  "ncaaf:1f2a24570e2ca6de4516eae60b021507": {
   "attempt": 2,
@@ -83,5 +83,10 @@
   "attempt": 1,
   "last_utc": "2026-10-23T21:49:09.870390+00:00",
   "error": "Extra data: line 6 column 1 (char 932)"
+ },
+ "ncaaf:129a012809e96238263d1a6d0a7430fa": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T22:51:42.893177+00:00",
+  "error": "Extra data: line 13 column 1 (char 307)"
  }
 }

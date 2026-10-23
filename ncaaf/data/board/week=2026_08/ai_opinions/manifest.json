@@ -567,5 +567,93 @@
     "b4b3b6c003cd39a6258130ad906d0025": "new_news: 1 items"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261023T223405Z.parquet",
+  "sha256": "aca44839cf2f635f8f295df5ea21b307e45063e69ac57135b72194c840f6e57e",
+  "logged_utc": "2026-10-23T22:34:05.221722+00:00",
+  "rows": 18,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 6,
+  "no_view_share": 0.611,
+  "revised_rows": 17,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-24T16:00:00Z",
+  "reader_sha256": "932f932c9e20c4ba68ce590789181ef95d92304c31cf6453ecaa3be0101178e2",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261023T223007Z.parquet",
+   "inputs_digest": "{\"a493efd6ef737f676a45aacc0eaf7be8\": \"299683d6add90434\", \"c3dd6e7e07382aa22aca6458aea01f2d\": \"ddcdfa7901e0b506\", \"1612c641ab70fd57963596255b9cb69c\": \"b67d77d9c2c83589\", \"1067cba701eaa40c3724cceda30524c6\": \"0d9d759650e5b5b2\", \"1388547b792afa0aa6769aa1b7645b28\": \"5336e760cffd4706\", \"7b91563277082145d844f94b9ef1a8a6\": \"9505908efaa7ff33\", \"95bc14af9668222d8528934b43d65566\": \"1e6d7361eadf7256\", \"bdce7d97283542037fe3f8a033c36a72\": \"9dab447bf66742d1\", \"df510525b83238b6e856c80c353bb32a\": \"330a26baf764e310\"}",
+   "triggers": {
+    "a493efd6ef737f676a45aacc0eaf7be8": "new_news: 6 items",
+    "c3dd6e7e07382aa22aca6458aea01f2d": "new_news: 1 items",
+    "1612c641ab70fd57963596255b9cb69c": "new_news: 2 items",
+    "1067cba701eaa40c3724cceda30524c6": "new_news: 4 items",
+    "1388547b792afa0aa6769aa1b7645b28": "new_news: 1 items",
+    "7b91563277082145d844f94b9ef1a8a6": "new_news: 1 items",
+    "95bc14af9668222d8528934b43d65566": "new_news: 9 items",
+    "bdce7d97283542037fe3f8a033c36a72": "new_news: 2 items",
+    "df510525b83238b6e856c80c353bb32a": "new_news: 29 items"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261023T224904Z.parquet",
+  "sha256": "0577e178f15213ee833c8a678182dcbae8e4801e6d84ff5af06e96abb77a4381",
+  "logged_utc": "2026-10-23T22:49:04.643719+00:00",
+  "rows": 96,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 32,
+  "no_view_share": 0.667,
+  "revised_rows": 94,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-24T02:30:00Z",
+  "reader_sha256": "932f932c9e20c4ba68ce590789181ef95d92304c31cf6453ecaa3be0101178e2",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261023T223007Z.parquet",
+   "inputs_digest": "{\"1612c641ab70fd57963596255b9cb69c\": \"b2d2417a65b4807d\", \"027c66400a752f72c7a21ce15a3b1743\": \"b607f20e37d8ef73\", \"1f2a24570e2ca6de4516eae60b021507\": \"c34f0ccd7acdd300\", \"bbbabc2490914e9a4d1e619a32461b1f\": \"4f9d3f8ad717a76a\", \"7a2b82b534f197acfe4913fcdaa86792\": \"0f32e7c0397d5e84\", \"f8b869953172e3a19c4cf347b05c1ee8\": \"724ece3a89b5869b\", \"259f3312084b229ac2b74d414d36869f\": \"88fe856d1de00ed9\", \"2d125f14eca5c6eb1417f126cafde7c0\": \"fb1c2b26923980b2\", \"99932501288d30e4693c828c0ab2455e\": \"a29af46fef4f9d82\", \"e7321bb418f765df74afd2851bd0fade\": \"80d06ad9a191c427\", \"ba6abfebaef34d88099fa6dc6640dc08\": \"85e8ea93905000e4\", \"0f773ec5cb1e5b41f52f2bf8dbc4f182\": \"0b46c4f51363af6d\", \"173057d32ff5946d42566a0d164de287\": \"c1e1eaa001169b0e\", \"174cf7d3d434eeaada92afb534fb2557\": \"4ff134f482dff606\", \"b4b3b6c003cd39a6258130ad906d0025\": \"2a99a7015b7c9e97\", \"20d8411740b919c4478bd28a6dd751aa\": \"2cb9f53fa338d825\", \"1d2bda7e3fb33e2ff67ddf7ced277a53\": \"badce70741f2ab3f\", \"6dab7d3b6ae25bd042a24a6e550a4f23\": \"9bf48078062afcac\", \"ca109267525bde74bd35cecd176185be\": \"2cc0b3e1599aaf6a\", \"1e9caefb58095e7560167dff561c9ff7\": \"06da570d49294007\", \"f417c5ab864e0751355921f5d22f4b25\": \"f28d9bb7faec2d0d\", \"a337612e92dd80f7ba7cab853ff409d0\": \"d100fdbae09af8ba\", \"8a67420bfc49f0bcf8c92bc4c08be602\": \"c459f9bdc531a987\", \"c5223791e733b6bc0744618614b007b7\": \"0109112cc730d81b\", \"04db3b581ae63446a409f2ad30868e20\": \"626215be016fb38d\", \"a28a6841bdc11350063d5e6d57fbd577\": \"42f1d270adde4ed4\", \"423bd1c75b601ccfabfca3759cc69a3f\": \"dc69b98f57f1f307\", \"cc78a514047b7ed0d2c5a3acdf3cdc1e\": \"7523f790631894ba\", \"d73ad8085e6fe1f88a0f79d9538083d6\": \"5309a9a80606f928\", \"440de8df25b4cca8ebcecb7431bbb5c0\": \"1e32a1bcc078fdc5\", \"d99b11b38d1cf1cbb334246263c53ac9\": \"8ff8e3cb6211ba42\", \"ebe9883d9cb488e233e6c45cfa009008\": \"0b174c201fd1b1ac\", \"47595bd2a188e4dab8a27dce97c5b45d\": \"4af6fe6d14b5a91c\"}",
+   "triggers": {
+    "1612c641ab70fd57963596255b9cb69c": "new_news: 2 items",
+    "027c66400a752f72c7a21ce15a3b1743": "new_news: 4 items",
+    "1f2a24570e2ca6de4516eae60b021507": "new_news: 20 items",
+    "bbbabc2490914e9a4d1e619a32461b1f": "new_news: 8 items",
+    "7a2b82b534f197acfe4913fcdaa86792": "new_news: 9 items",
+    "f8b869953172e3a19c4cf347b05c1ee8": "new_news: 1 items",
+    "259f3312084b229ac2b74d414d36869f": "new_news: 15 items",
+    "2d125f14eca5c6eb1417f126cafde7c0": "new_news: 15 items",
+    "99932501288d30e4693c828c0ab2455e": "new_news: 5 items",
+    "e7321bb418f765df74afd2851bd0fade": "new_news: 1 items",
+    "ba6abfebaef34d88099fa6dc6640dc08": "new_news: 3 items",
+    "0f773ec5cb1e5b41f52f2bf8dbc4f182": "new_news: 8 items",
+    "173057d32ff5946d42566a0d164de287": "new_news: 16 items",
+    "174cf7d3d434eeaada92afb534fb2557": "new_news: 15 items",
+    "b4b3b6c003cd39a6258130ad906d0025": "new_news: 1 items",
+    "20d8411740b919c4478bd28a6dd751aa": "new_news: 1 items",
+    "1d2bda7e3fb33e2ff67ddf7ced277a53": "new_news: 2 items",
+    "6dab7d3b6ae25bd042a24a6e550a4f23": "new_news: 8 items",
+    "ca109267525bde74bd35cecd176185be": "new_news: 7 items",
+    "1e9caefb58095e7560167dff561c9ff7": "new_news: 17 items",
+    "f417c5ab864e0751355921f5d22f4b25": "new_news: 6 items",
+    "a337612e92dd80f7ba7cab853ff409d0": "new_news: 1 items",
+    "8a67420bfc49f0bcf8c92bc4c08be602": "new_news: 5 items",
+    "c5223791e733b6bc0744618614b007b7": "new_news: 1 items",
+    "04db3b581ae63446a409f2ad30868e20": "new_news: 9 items",
+    "a28a6841bdc11350063d5e6d57fbd577": "new_news: 10 items",
+    "423bd1c75b601ccfabfca3759cc69a3f": "new_news: 6 items",
+    "cc78a514047b7ed0d2c5a3acdf3cdc1e": "new_news: 13 items",
+    "d73ad8085e6fe1f88a0f79d9538083d6": "new_news: 4 items",
+    "440de8df25b4cca8ebcecb7431bbb5c0": "new_news: 7 items",
+    "d99b11b38d1cf1cbb334246263c53ac9": "new_news: 2 items",
+    "ebe9883d9cb488e233e6c45cfa009008": "new_news: 3 items",
+    "47595bd2a188e4dab8a27dce97c5b45d": "new_news: 18 items"
+   }
+  }
  }
 ]
