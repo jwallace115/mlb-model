@@ -1305,3 +1305,38 @@ traces, no paths).
 
 **Tests:** `TestWindowHealthFile` (function exists), `TestHealthPageWindows` (STOP → red
 row in health.html, COMPLETE → no failure). RED first, then GREEN.
+
+## P61 — AI reader as code (2026-10-23)
+
+`shared/pipeline/ai_reader.py`: sport-parameterised module (nfl, ncaaf; nhl/nba HALT)
+with three stages:
+
+1. **PACKET** `build_packet(sport, event_ids, sheet, props_df, lines_df, now)` ports
+   the Cowork prototypes (nfl_packet.py, cfb_packet.py) into the repo. Sections: game
+   lines (HR current + open since Tue + Pinnacle + no-vig), Kalshi ML/spread/total mids
+   with volume, injuries (NFL; NCAAF says "no feed"), team news (5-day, noise-filtered),
+   newest sim freeze views, two-way props with consensus delta (NFL), INTERNATIONAL layer
+   (2026 venue table + base rates), and a WHAT CHANGED header listing triggers. Packet
+   saved as `packet_<TS>.txt` (committed; public data).
+
+2. **READ** `read_game(packet_text, sheet_df, sport)` — one Anthropic Messages API call
+   per game. Model from `AI_READER_MODEL` env, default `claude-sonnet-4-6-20250514`.
+   System prompt = `READER_SYSTEM` (view first, then price; picks on two-way + game lines
+   only; never ATD, never ML longshot > +250; MIX across markets; strict JSON schema).
+   `p_first = clip(book_novig +/- conf/250, 0.02, 0.98)` — the model never emits
+   probabilities. Spend tracked in `status/ai_reader_spend.json`; HALT when monthly
+   `usd_estimate >= AI_READER_MONTHLY_CAP_USD` (default 150).
+
+3. **FREEZE** `freeze_reads()` passes the filled DataFrame through the existing
+   `log_ai_opinions.freeze()` with `--window event` and `reader_model
+   ai_reader_v1/<model>`. `VALID_WINDOWS` gains `"event"`.
+
+**Reader model:** `ai_reader_v1/claude-sonnet-4-6-20250514` (the first automated reader line).
+The API key lives ONLY in `/root/private/env` on the VM; the module reads `ANTHROPIC_API_KEY`
+from the environment and never prints, logs, or commits it.
+
+**Tests (17):** INTERNATIONAL note for Wembley 10-18; absent for domestic; packet includes
+HR spread + Pinnacle; schema rejects ATD pick and +300 ML; accepts ML favorite; reason too
+short / too long; invalid thesis link; valid pick passes; mocked API → filled with correct
+p_first and contiguous conf_rank; no_view pass uses book probability; spend increments;
+cap HALTs; under-cap OK; NHL and NBA HALT.

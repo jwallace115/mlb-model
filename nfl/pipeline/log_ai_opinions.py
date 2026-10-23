@@ -431,7 +431,7 @@ def prior_revisions(d, reader_model=None, pilot=None, window=None):
     return seen
 
 
-VALID_WINDOWS = {"open", "mid", "late", "prekick", "adhoc"}
+VALID_WINDOWS = {"open", "mid", "late", "prekick", "adhoc", "event"}
 PREKICK_HOURS = 3  # games within this many hours belong to the prekick window
 
 
