@@ -1,7 +1,52 @@
 {
  "nfl:2e710ea5a306b614f0f966e3d78732f8": {
+  "attempt": 2,
+  "last_utc": "2026-10-23T19:48:21.098396+00:00",
+  "error": "Unterminated string starting at: line 65 column 2 (char 11390)"
+ },
+ "ncaaf:bbbabc2490914e9a4d1e619a32461b1f": {
   "attempt": 1,
-  "last_utc": "2026-10-23T19:18:23.537657+00:00",
-  "error": "Unterminated string starting at: line 67 column 102 (char 11295)"
+  "last_utc": "2026-10-23T19:46:28.249218+00:00",
+  "error": "HALT for bbbabc2490914e9a4d1e619a32461b1f: pick names unquoted line ('spread', '', -18.5) (only 3 lines quoted for this event)"
+ },
+ "ncaaf:1388547b792afa0aa6769aa1b7645b28": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T19:47:22.994788+00:00",
+  "error": "HALT for 1388547b792afa0aa6769aa1b7645b28: pick names unquoted line ('h2h', '', -145.0) (only 3 lines quoted for this event)"
+ },
+ "ncaaf:0f773ec5cb1e5b41f52f2bf8dbc4f182": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T19:47:58.533489+00:00",
+  "error": "HALT for 0f773ec5cb1e5b41f52f2bf8dbc4f182: pick names unquoted line ('spread', '', 8.5) (only 3 lines quoted for this event)"
+ },
+ "nfl:b1be064fb52a198a62109c279e7ab24c": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T19:49:02.541182+00:00",
+  "error": "HALT for b1be064fb52a198a62109c279e7ab24c: pick names unquoted line ('total', '', 50.5) (only 64 lines quoted for this event)"
+ },
+ "nfl:2823e986597c449ab94126cd5ed3fae9": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T19:50:21.415164+00:00",
+  "error": "HALT for 2823e986597c449ab94126cd5ed3fae9: pick names unquoted line ('total', '', 44.5) (only 71 lines quoted for this event)"
+ },
+ "ncaaf:a28a6841bdc11350063d5e6d57fbd577": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T19:50:30.092258+00:00",
+  "error": "HALT for a28a6841bdc11350063d5e6d57fbd577: pick names unquoted line ('total', '', 56.5) (only 3 lines quoted for this event)"
+ },
+ "nfl:2bba7fde6f97d0e54403d53676e4ab63": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T19:51:37.651642+00:00",
+  "error": "HALT for 2bba7fde6f97d0e54403d53676e4ab63: pick names unquoted line ('total', '', 42.5) (only 70 lines quoted for this event)"
+ },
+ "nfl:f3992ad4496724baf7dcd1ef58245d6b": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T19:52:16.762695+00:00",
+  "error": "HALT for f3992ad4496724baf7dcd1ef58245d6b: pick names unquoted line ('paatt', 'Daniel Jones', 33.5) (only 59 lines quoted for this event)"
+ },
+ "nfl:be5dd120ca08b43d647b6caa8953500a": {
+  "attempt": 1,
+  "last_utc": "2026-10-23T19:52:54.511254+00:00",
+  "error": "HALT for be5dd120ca08b43d647b6caa8953500a: pick names unquoted line ('total', '', 39.5) (only 64 lines quoted for this event)"
  }
 }
