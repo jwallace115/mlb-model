@@ -1970,5 +1970,2076 @@
     "47595bd2a188e4dab8a27dce97c5b45d": "new_news: 1 availability items"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T140403Z.parquet",
+  "sha256": "82db589cd848c7540be1a9356bc665ee6611f5352e3c0a476c31ef9d2a01d1a4",
+  "logged_utc": "2026-10-24T14:04:03.313543+00:00",
+  "rows": 129,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 43,
+  "no_view_share": 0.705,
+  "revised_rows": 98,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-24T16:00:00Z",
+  "reader_sha256": "539ee9fb8dc7316c5b11958631d9779afe7f8be37a2a16215814f799b4caf888",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T140010Z.parquet",
+   "inputs_digest": "{\"1f2a24570e2ca6de4516eae60b021507\": \"a4f049745f980aef\", \"bbbabc2490914e9a4d1e619a32461b1f\": \"c276f8926ca15a65\", \"7a2b82b534f197acfe4913fcdaa86792\": \"adcea99dd0748d0a\", \"f8b869953172e3a19c4cf347b05c1ee8\": \"beadc9c03c8cb21f\", \"259f3312084b229ac2b74d414d36869f\": \"92c80d7bb0c3742c\", \"2d125f14eca5c6eb1417f126cafde7c0\": \"1e0c902a43a98b29\", \"99932501288d30e4693c828c0ab2455e\": \"a2729c3182a7b6c9\", \"1067cba701eaa40c3724cceda30524c6\": \"bb0df3f1f2349ade\", \"e7321bb418f765df74afd2851bd0fade\": \"cb972bcb8cf9296d\", \"ba6abfebaef34d88099fa6dc6640dc08\": \"21dd5e6fe4fa0d76\", \"7b91563277082145d844f94b9ef1a8a6\": \"43c693ca2f33b014\", \"0f773ec5cb1e5b41f52f2bf8dbc4f182\": \"2d8a4e882d13b8d7\", \"173057d32ff5946d42566a0d164de287\": \"5a1418538bb123de\", \"174cf7d3d434eeaada92afb534fb2557\": \"f2c0d913a4c9ce20\", \"b4b3b6c003cd39a6258130ad906d0025\": \"aa078458f05ac26e\", \"129a012809e96238263d1a6d0a7430fa\": \"646b053225bf25bd\", \"20d8411740b919c4478bd28a6dd751aa\": \"4729973542182ba3\", \"1d2bda7e3fb33e2ff67ddf7ced277a53\": \"e0a4873896fa1d54\", \"6dab7d3b6ae25bd042a24a6e550a4f23\": \"ff8c6e05bbf37648\", \"95bc14af9668222d8528934b43d65566\": \"d332f94d21c92857\", \"ca109267525bde74bd35cecd176185be\": \"19cd84200a3f42b7\", \"bdce7d97283542037fe3f8a033c36a72\": \"0cc56d0490b64bac\", \"1e9caefb58095e7560167dff561c9ff7\": \"4d69a6c042812b83\", \"f417c5ab864e0751355921f5d22f4b25\": \"7e57bb9f4008c539\", \"1a5a1c924e5dec296e50299139791794\": \"5ea20bd244a241f0\", \"a337612e92dd80f7ba7cab853ff409d0\": \"cf836fc4bc4b9f7c\", \"8e7bee2f3b66bdb4f992e30400aca4cb\": \"ffb3803c12ffc04b\", \"7d846d56825d93b254d23d0929bba224\": \"37f61fe6e4479c56\", \"c8b1ac2d988cf0d2c90200c8731bcde1\": \"b99719927857b57a\", \"8a67420bfc49f0bcf8c92bc4c08be602\": \"834071fa72cc969b\", \"c5223791e733b6bc0744618614b007b7\": \"f18029e0d2266fc4\", \"c6283d3fd69d830d2f74d8ef27bdefab\": \"249d4e502765eb11\", \"04db3b581ae63446a409f2ad30868e20\": \"243105a21fcc2e01\", \"a28a6841bdc11350063d5e6d57fbd577\": \"0f820196b72bdb3d\", \"423bd1c75b601ccfabfca3759cc69a3f\": \"36285cce3e1cdecc\", \"cc78a514047b7ed0d2c5a3acdf3cdc1e\": \"b6013ab41339295a\", \"d73ad8085e6fe1f88a0f79d9538083d6\": \"7a5c5ab0e277c034\", \"df510525b83238b6e856c80c353bb32a\": \"9159ebd9568887fd\", \"c4e171dd82e86c3a4dd50d4d3b54edab\": \"fc0adbc68c2d2d6e\", \"440de8df25b4cca8ebcecb7431bbb5c0\": \"1fd47d482185da64\", \"d99b11b38d1cf1cbb334246263c53ac9\": \"031928331f4e43e7\", \"ebe9883d9cb488e233e6c45cfa009008\": \"607a9823bffd2f59\", \"47595bd2a188e4dab8a27dce97c5b45d\": \"8600b9b1e72de80b\"}",
+   "components": {
+    "1f2a24570e2ca6de4516eae60b021507": {
+     "pinnacle_h2h": [
+      [
+       "Auburn Tigers",
+       0,
+       241
+      ],
+      [
+       "LSU Tigers",
+       0,
+       -278
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Auburn Tigers",
+       7.0,
+       -103
+      ],
+      [
+       "LSU Tigers",
+       -7.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -108
+      ],
+      [
+       "Under",
+       52.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2010s SEC was different \ud83d\udc80(beastkoby/IG) #2010s #CF",
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Alex Golesh making an impact at Auburn",
+      "Allstate Playoff Predictor",
+      "Auburn's Alex McPherson tells story of his battle ",
+      "Breaking down QB matchup: No. 18 LSU's Leavitt vs.",
+      "Can Week 8 up the ante again with more upsets and ",
+      "Cole Cubelic looks ahead to No. 18 LSU vs. Auburn",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Golesh reflects on UGA, Auburn rivalry and McPhers",
+      "Harper, Cubelic analyze the CFP chances of SEC con",
+      "How will Auburn face the challenge of outrunning L",
+      "Jason Campbell discusses Auburn's growing chemistr",
+      "LSU standout TE Trey'Dez Green poised for return v",
+      "Roman, Are You Impressed? This time, Roman is 'bey",
+      "SEC Network's Chris Doering sets Week 8 prediction",
+      "Sources: Auburn dismisses star linebacker Xavier A",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "bbbabc2490914e9a4d1e619a32461b1f": {
+     "pinnacle_h2h": [
+      [
+       "California Golden Bears",
+       0,
+       739
+      ],
+      [
+       "SMU Mustangs",
+       0,
+       -1037
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "California Golden Bears",
+       19.0,
+       -109
+      ],
+      [
+       "SMU Mustangs",
+       -19.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -105
+      ],
+      [
+       "Under",
+       55.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Miami's 2001 throwbacks lead best Week 8 uniforms ",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "7a2b82b534f197acfe4913fcdaa86792": {
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bearcats",
+       0,
+       381
+      ],
+      [
+       "Texas Tech Red Raiders",
+       0,
+       -466
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bearcats",
+       11.5,
+       -102
+      ],
+      [
+       "Texas Tech Red Raiders",
+       -11.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -113
+      ],
+      [
+       "Under",
+       56.5,
+       -103
+      ]
+     ],
+     "news": [
+      "'Prove it on the field': Morgan Scalley vouches fo",
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "How a group of Texas Tech fans ended up with Color",
+      "No. 8 Texas Tech looking to improve to 7-0 against",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, "
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "f8b869953172e3a19c4cf347b05c1ee8": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       -325
+      ],
+      [
+       "Rice Owls",
+       0,
+       277
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       -8.0,
+       -106
+      ],
+      [
+       "Rice Owls",
+       8.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -115
+      ],
+      [
+       "Under",
+       53.5,
+       -101
+      ]
+     ],
+     "news": [
+      "Bottom 10: Week 7's rash of upsets turned everythi"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "259f3312084b229ac2b74d414d36869f": {
+     "pinnacle_h2h": [
+      [
+       "Indiana Hoosiers",
+       0,
+       -300
+      ],
+      [
+       "Michigan Wolverines",
+       0,
+       258
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Indiana Hoosiers",
+       -7.5,
+       -104
+      ],
+      [
+       "Michigan Wolverines",
+       7.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -110
+      ],
+      [
+       "Under",
+       42.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "Allstate Playoff Predictor",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Michigan QB Tommy Carr, grandson of ex-coach, to g",
+      "Michigan Wolverines QB Tommy Carr has 'poise' that",
+      "No. 6 Indiana flips script on Michigan, becoming a",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "2d125f14eca5c6eb1417f126cafde7c0": {
+     "pinnacle_h2h": [
+      [
+       "Miami Hurricanes",
+       0,
+       -1636
+      ],
+      [
+       "Pittsburgh Panthers",
+       0,
+       1055
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami Hurricanes",
+       -21.0,
+       100
+      ],
+      [
+       "Pittsburgh Panthers",
+       21.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -101
+      ],
+      [
+       "Under",
+       51.0,
+       -115
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Allstate Playoff Predictor",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "FSU's Norvell says penalty in loss to Miami 'absol",
+      "Halfway Heisman Jeremiah Smith and other midseason",
+      "Miami's 2001 throwbacks lead best Week 8 uniforms ",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, "
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "99932501288d30e4693c828c0ab2455e": {
+     "pinnacle_h2h": [
+      [
+       "Northwestern Wildcats",
+       0,
+       -756
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       572
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northwestern Wildcats",
+       -14.5,
+       -113
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       14.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.0,
+       -108
+      ],
+      [
+       "Under",
+       59.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Miami's 2001 throwbacks lead best Week 8 uniforms ",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, "
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "1067cba701eaa40c3724cceda30524c6": {
+     "pinnacle_h2h": [
+      [
+       "TCU Horned Frogs",
+       0,
+       -394
+      ],
+      [
+       "West Virginia Mountaineers",
+       0,
+       329
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "TCU Horned Frogs",
+       -11.0,
+       -104
+      ],
+      [
+       "West Virginia Mountaineers",
+       11.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       -108
+      ],
+      [
+       "Under",
+       58.0,
+       -108
+      ]
+     ],
+     "news": [
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "Halfway Heisman Jeremiah Smith and other midseason"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "e7321bb418f765df74afd2851bd0fade": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       127
+      ],
+      [
+       "Kent State Golden Flashes",
+       0,
+       -140
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       3.0,
+       -114
+      ],
+      [
+       "Kent State Golden Flashes",
+       -3.0,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -107
+      ],
+      [
+       "Under",
+       47.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10: Week 7's rash of upsets turned everythi"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "ba6abfebaef34d88099fa6dc6640dc08": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -108
+      ],
+      [
+       "Kansas Jayhawks",
+       0,
+       -102
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       -1.0,
+       -103
+      ],
+      [
+       "Kansas Jayhawks",
+       1.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -106
+      ],
+      [
+       "Under",
+       53.0,
+       -110
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 7"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "7b91563277082145d844f94b9ef1a8a6": {
+     "pinnacle_h2h": [
+      [
+       "Central Michigan Chippewas",
+       0,
+       150
+      ],
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -167
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Central Michigan Chippewas",
+       3.5,
+       -105
+      ],
+      [
+       "Miami (OH) RedHawks",
+       -3.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -105
+      ],
+      [
+       "Under",
+       40.5,
+       -111
+      ]
+     ],
+     "news": [
+      "College football best bets for Week 8 include Hous"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "0f773ec5cb1e5b41f52f2bf8dbc4f182": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       321
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       -383
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       9.5,
+       -102
+      ],
+      [
+       "Oregon Ducks",
+       -9.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -107
+      ],
+      [
+       "Under",
+       49.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Allstate Playoff Predictor",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Oregon's Dante Moore, Evan Stewart ruled out vs. I",
+      "Oregon's Evan Stewart arrested on charge of drivin"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "173057d32ff5946d42566a0d164de287": {
+     "pinnacle_h2h": [
+      [
+       "Alabama Crimson Tide",
+       0,
+       -571
+      ],
+      [
+       "Texas A&M Aggies",
+       0,
+       453
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Alabama Crimson Tide",
+       -13.5,
+       -108
+      ],
+      [
+       "Texas A&M Aggies",
+       13.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -105
+      ],
+      [
+       "Under",
+       50.5,
+       -111
+      ]
+     ],
+     "news": [
+      "2010s SEC was different \ud83d\udc80(beastkoby/IG) #2010s #CF",
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Alabama coach DeBoer backs OC Ryan Grubb despite l",
+      "Allstate Playoff Predictor",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Finebaum Show caller 'Legend' lets out epic Alabam",
+      "Gene Chizik offers wisdom to fans of SEC heavyweig",
+      "Harper, Cubelic analyze the CFP chances of SEC con",
+      "Kalen DeBoer discusses expectations for Bama vs. S",
+      "Kris Budden eases Alabama panic ahead of matchup v",
+      "Roman Harper stresses need for Bama to have fresh ",
+      "Taylor Zarzour analyzes struggles for No. 19 Texas",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "What must Keelon Russell, No. 13 Bama keep in mind"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "174cf7d3d434eeaada92afb534fb2557": {
+     "pinnacle_h2h": [
+      [
+       "BYU Cougars",
+       0,
+       -276
+      ],
+      [
+       "UCF Knights",
+       0,
+       239
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "BYU Cougars",
+       -7.0,
+       -114
+      ],
+      [
+       "UCF Knights",
+       7.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -106
+      ],
+      [
+       "Under",
+       43.5,
+       -110
+      ]
+     ],
+     "news": [
+      "'Prove it on the field': Morgan Scalley vouches fo",
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "Allstate Playoff Predictor",
+      "BYU won't 'demand respect' but after beating Notre",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Halfway Heisman Jeremiah Smith and other midseason",
+      "No. 2 BYU goes from hunter to hunted at UCF this w",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, "
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "b4b3b6c003cd39a6258130ad906d0025": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       -606
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       476
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       -14.5,
+       -106
+      ],
+      [
+       "Sacramento State Hornets",
+       14.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -115
+      ],
+      [
+       "Under",
+       51.0,
+       -101
+      ]
+     ],
+     "news": [
+      "Bottom 10: Week 7's rash of upsets turned everythi"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "129a012809e96238263d1a6d0a7430fa": {
+     "pinnacle_h2h": [
+      [
+       "Boston College Eagles",
+       0,
+       204
+      ],
+      [
+       "Georgia Tech Yellow Jackets",
+       0,
+       -231
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boston College Eagles",
+       6.0,
+       -104
+      ],
+      [
+       "Georgia Tech Yellow Jackets",
+       -6.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -110
+      ],
+      [
+       "Under",
+       50.0,
+       -106
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 7",
+      "Fernando Mendoza is embracing being Raiders' lates",
+      "Source: Boston College RB Evan Dickens out for sea"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "20d8411740b919c4478bd28a6dd751aa": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       135
+      ],
+      [
+       "Buffalo Bulls",
+       0,
+       -149
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       3.0,
+       -106
+      ],
+      [
+       "Buffalo Bulls",
+       -3.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -109
+      ],
+      [
+       "Under",
+       44.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Bottom 10: Week 7's rash of upsets turned everythi"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "1d2bda7e3fb33e2ff67ddf7ced277a53": {
+     "pinnacle_h2h": [
+      [
+       "Hawaii Rainbow Warriors",
+       0,
+       -170
+      ],
+      [
+       "Northern Illinois Huskies",
+       0,
+       153
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Hawaii Rainbow Warriors",
+       -3.5,
+       -105
+      ],
+      [
+       "Northern Illinois Huskies",
+       3.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -107
+      ],
+      [
+       "Under",
+       48.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10: Week 7's rash of upsets turned everythi",
+      "Can Week 8 up the ante again with more upsets and "
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "6dab7d3b6ae25bd042a24a6e550a4f23": {
+     "pinnacle_h2h": [
+      [
+       "Iowa Hawkeyes",
+       0,
+       -289
+      ],
+      [
+       "Minnesota Golden Gophers",
+       0,
+       250
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa Hawkeyes",
+       -7.5,
+       -104
+      ],
+      [
+       "Minnesota Golden Gophers",
+       7.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -114
+      ],
+      [
+       "Under",
+       40.5,
+       -103
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Iowa to start QB Jeremy Hecklinski vs. Minnesota, ",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, "
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "95bc14af9668222d8528934b43d65566": {
+     "pinnacle_h2h": [
+      [
+       "Michigan State Spartans",
+       0,
+       553
+      ],
+      [
+       "UCLA Bruins",
+       0,
+       -725
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan State Spartans",
+       16.0,
+       -102
+      ],
+      [
+       "UCLA Bruins",
+       -16.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -110
+      ],
+      [
+       "Under",
+       42.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "A 3-9 rebuild to 6-0: No. 9 UCLA's fast rise meets",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Halfway Heisman Jeremiah Smith and other midseason",
+      "Miami's 2001 throwbacks lead best Week 8 uniforms ",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "UCLA QB Nico Iamaleava to undergo season-ending kn",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "ca109267525bde74bd35cecd176185be": {
+     "pinnacle_h2h": [
+      [
+       "Mississippi State Bulldogs",
+       0,
+       111
+      ],
+      [
+       "Oklahoma Sooners",
+       0,
+       -122
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Mississippi State Bulldogs",
+       2.5,
+       -113
+      ],
+      [
+       "Oklahoma Sooners",
+       -2.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Oklahoma: John Mateer remains best QB option despi",
+      "SEC Network's Chris Doering sets Week 8 prediction",
+      "SEC Now crew previews OU vs. MS State as Bulldogs ",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, "
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "bdce7d97283542037fe3f8a033c36a72": {
+     "pinnacle_h2h": [
+      [
+       "Navy Midshipmen",
+       0,
+       138
+      ],
+      [
+       "North Texas Mean Green",
+       0,
+       -153
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Navy Midshipmen",
+       3.0,
+       101
+      ],
+      [
+       "North Texas Mean Green",
+       -3.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       61.0,
+       -112
+      ],
+      [
+       "Under",
+       61.0,
+       -104
+      ]
+     ],
+     "news": [
+      "Halfway Heisman Jeremiah Smith and other midseason"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "1e9caefb58095e7560167dff561c9ff7": {
+     "pinnacle_h2h": [
+      [
+       "South Carolina Gamecocks",
+       0,
+       -123
+      ],
+      [
+       "Tennessee Volunteers",
+       0,
+       112
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Carolina Gamecocks",
+       -2.5,
+       -104
+      ],
+      [
+       "Tennessee Volunteers",
+       2.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -104
+      ],
+      [
+       "Under",
+       50.5,
+       -113
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "Allstate Playoff Predictor",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Gene Chizik: No. 11 Vols vs. Gamecocks is 'what tr",
+      "Harper, Cubelic analyze the CFP chances of SEC con",
+      "How does South Carolina match up against Tennessee",
+      "SEC Network's Chris Doering sets Week 8 prediction",
+      "Taylor McGregor previews No. 11 Tennessee vs. Sout",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "Vols' DeSean Bishop stresses importance of dominat",
+      "Which one-loss SEC teams are ready to prove they a",
+      "Who will win the run game: No. 11 Tennessee or Sou"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "f417c5ab864e0751355921f5d22f4b25": {
+     "pinnacle_h2h": [
+      [
+       "Arizona State Sun Devils",
+       0,
+       -102
+      ],
+      [
+       "Kansas State Wildcats",
+       0,
+       -108
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona State Sun Devils",
+       1.0,
+       -109
+      ],
+      [
+       "Kansas State Wildcats",
+       -1.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -108
+      ],
+      [
+       "Under",
+       51.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "Arizona State makes switch to Mikey Keene as quart",
+      "College Football Playoff Bubble Watch after Week 7",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "1a5a1c924e5dec296e50299139791794": {
+     "pinnacle_h2h": [
+      [
+       "Eastern Michigan Eagles",
+       0,
+       326
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -390
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Eastern Michigan Eagles",
+       10.0,
+       -109
+      ],
+      [
+       "Ohio Bobcats",
+       -10.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -111
+      ],
+      [
+       "Under",
+       48.5,
+       -105
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "a337612e92dd80f7ba7cab853ff409d0": {
+     "pinnacle_h2h": [
+      [
+       "Troy Trojans",
+       0,
+       -608
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       477
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Troy Trojans",
+       -11.5,
+       -113
+      ],
+      [
+       "UL Monroe Warhawks",
+       11.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -103
+      ],
+      [
+       "Under",
+       50.0,
+       -113
+      ]
+     ],
+     "news": [
+      "Bottom 10: Week 7's rash of upsets turned everythi"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "8e7bee2f3b66bdb4f992e30400aca4cb": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -392
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       327
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Ragin Cajuns",
+       -10.0,
+       -104
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       10.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -107
+      ],
+      [
+       "Under",
+       52.5,
+       -109
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "7d846d56825d93b254d23d0929bba224": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -524
+      ],
+      [
+       "Old Dominion Monarchs",
+       0,
+       421
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -13.5,
+       -110
+      ],
+      [
+       "Old Dominion Monarchs",
+       13.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -112
+      ],
+      [
+       "Under",
+       44.5,
+       -104
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "c8b1ac2d988cf0d2c90200c8731bcde1": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       -245
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       215
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       -6.5,
+       -110
+      ],
+      [
+       "San Jose State Spartans",
+       6.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -116
+      ],
+      [
+       "Under",
+       46.0,
+       -101
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "8a67420bfc49f0bcf8c92bc4c08be602": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -603
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       474
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -14.0,
+       -112
+      ],
+      [
+       "Washington State Cougars",
+       14.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -108
+      ],
+      [
+       "Under",
+       53.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, "
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "c5223791e733b6bc0744618614b007b7": {
+     "pinnacle_h2h": [
+      [
+       "Colorado State Rams",
+       0,
+       100
+      ],
+      [
+       "San Diego State Aztecs",
+       0,
+       -110
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado State Rams",
+       1.5,
+       -112
+      ],
+      [
+       "San Diego State Aztecs",
+       -1.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.5,
+       -110
+      ],
+      [
+       "Under",
+       59.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Marshall Faulk, Hall of Famer and Southern coach, "
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "c6283d3fd69d830d2f74d8ef27bdefab": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas State Red Wolves",
+       0,
+       119
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       -131
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas State Red Wolves",
+       2.5,
+       -104
+      ],
+      [
+       "Georgia State Panthers",
+       -2.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.5,
+       -109
+      ],
+      [
+       "Under",
+       58.5,
+       -107
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "04db3b581ae63446a409f2ad30868e20": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       -136
+      ],
+      [
+       "Virginia Tech Hokies",
+       0,
+       123
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       -2.5,
+       -114
+      ],
+      [
+       "Virginia Tech Hokies",
+       2.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       102
+      ],
+      [
+       "Under",
+       49.5,
+       -119
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "Allstate Playoff Predictor",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "a28a6841bdc11350063d5e6d57fbd577": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       433
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -542
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       13.5,
+       -104
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -13.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -108
+      ],
+      [
+       "Under",
+       56.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "How a group of Texas Tech fans ended up with Color",
+      "Sanders says Colorado 'united' despite 4-game losi",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "423bd1c75b601ccfabfca3759cc69a3f": {
+     "pinnacle_h2h": [
+      [
+       "Arizona Wildcats",
+       0,
+       -331
+      ],
+      [
+       "Iowa State Cyclones",
+       0,
+       282
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Wildcats",
+       -10.5,
+       -113
+      ],
+      [
+       "Iowa State Cyclones",
+       10.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -107
+      ],
+      [
+       "Under",
+       51.5,
+       -109
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 7",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "cc78a514047b7ed0d2c5a3acdf3cdc1e": {
+     "pinnacle_h2h": [
+      [
+       "Kentucky Wildcats",
+       0,
+       -428
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       354
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kentucky Wildcats",
+       -11.0,
+       100
+      ],
+      [
+       "Vanderbilt Commodores",
+       11.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -107
+      ],
+      [
+       "Under",
+       51.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "ESPN's Taylor Davis previews UK vs. Vandy, analyze",
+      "Harper, Cubelic analyze the CFP chances of SEC con",
+      "Kentucky RB CJ Baxter set to return vs. Vandy; WR ",
+      "Keys to victory as No. 12 Kentucky welcomes Vander",
+      "Marty spends the day with Stein to learn Kentucky'",
+      "Roman, Are You Impressed? This time, Roman is 'bey",
+      "The audacity of Kentucky Wildcats coach Will Stein",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "What's gone right and wrong for Power 4's first-ye",
+      "Which one-loss SEC teams are ready to prove they a",
+      "Will Stein evaluates Kentucky's successful run so ",
+      "Will Stein's surprising success at Kentucky"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "d73ad8085e6fe1f88a0f79d9538083d6": {
+     "pinnacle_h2h": [
+      [
+       "North Carolina Tar Heels",
+       0,
+       -351
+      ],
+      [
+       "Syracuse Orange",
+       0,
+       297
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Carolina Tar Heels",
+       -9.5,
+       -104
+      ],
+      [
+       "Syracuse Orange",
+       9.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -117
+      ],
+      [
+       "Under",
+       47.0,
+       100
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "df510525b83238b6e856c80c353bb32a": {
+     "pinnacle_h2h": [
+      [
+       "Ole Miss Rebels",
+       0,
+       135
+      ],
+      [
+       "Texas Longhorns",
+       0,
+       -150
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ole Miss Rebels",
+       3.0,
+       -103
+      ],
+      [
+       "Texas Longhorns",
+       -3.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -106
+      ],
+      [
+       "Under",
+       54.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "Allstate Playoff Predictor",
+      "Can Steve Sarkisian and Arch Manning save Texas' s",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Could Arch get benched if Texas starts slow vs. Ol",
+      "ESPN's Taylor Davis previews UK vs. Vandy, analyze",
+      "Fowler describes Manning's urgency ahead of Texas ",
+      "Gene Chizik offers wisdom to fans of SEC heavyweig",
+      "Halfway Heisman Jeremiah Smith and other midseason",
+      "Harper, Cubelic analyze the CFP chances of SEC con",
+      "How important is a win for Ole Miss' and Texas' CF",
+      "Rowe takes us inside Texas minds, shares Chambliss",
+      "Sources: Texas to give QB KJ Lacey Jr. increased f",
+      "Struggling Texas QB Arch Manning says he'll be 'le",
+      "Taylor Zarzour analyzes struggles for No. 19 Texas",
+      "Tebow analyzes impact of star quarterbacks Manning",
+      "Texas AD Del Conte clarifies AI use on key play th",
+      "Texas bans fan who made obscene gesture at Florida",
+      "Texas rules out Colin Simmons for Ole Miss clash",
+      "Texas-Ole Miss best bets: Chambliss, Manning and m",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "What happens to Steve Sarkisian if Texas loses to ",
+      "What's gone right and wrong for Power 4's first-ye",
+      "Where does No. 19 Texas defense stand against No. ",
+      "Which one-loss SEC teams are ready to prove they a",
+      "Why Stephen A. believes Sarkisian has been 'pacify"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "c4e171dd82e86c3a4dd50d4d3b54edab": {
+     "pinnacle_h2h": [
+      [
+       "Texas State Bobcats",
+       0,
+       -554
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       441
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Texas State Bobcats",
+       -13.5,
+       -115
+      ],
+      [
+       "Utah State Aggies",
+       13.5,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       61.0,
+       -106
+      ],
+      [
+       "Under",
+       61.0,
+       -110
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "440de8df25b4cca8ebcecb7431bbb5c0": {
+     "pinnacle_h2h": [
+      [
+       "USC Trojans",
+       0,
+       -141
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       127
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "USC Trojans",
+       -3.0,
+       100
+      ],
+      [
+       "Wisconsin Badgers",
+       3.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -107
+      ],
+      [
+       "Under",
+       50.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, "
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "d99b11b38d1cf1cbb334246263c53ac9": {
+     "pinnacle_h2h": [
+      [
+       "Tulane Green Wave",
+       0,
+       133
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -148
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Tulane Green Wave",
+       3.0,
+       -108
+      ],
+      [
+       "UTSA Roadrunners",
+       -3.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -112
+      ],
+      [
+       "Under",
+       51.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "ebe9883d9cb488e233e6c45cfa009008": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -185
+      ],
+      [
+       "North Dakota State Bison",
+       0,
+       165
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -4.5,
+       -104
+      ],
+      [
+       "North Dakota State Bison",
+       4.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.0,
+       -115
+      ],
+      [
+       "Under",
+       40.0,
+       -101
+      ]
+     ],
+     "news": [
+      "Can Week 8 up the ante again with more upsets and ",
+      "Connelly previews Week 8: SEC elimination games, t"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    },
+    "47595bd2a188e4dab8a27dce97c5b45d": {
+     "pinnacle_h2h": [
+      [
+       "Houston Cougars",
+       0,
+       211
+      ],
+      [
+       "Utah Utes",
+       0,
+       -241
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Houston Cougars",
+       6.5,
+       100
+      ],
+      [
+       "Utah Utes",
+       -6.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -107
+      ],
+      [
+       "Under",
+       57.5,
+       -109
+      ]
+     ],
+     "news": [
+      "'Prove it on the field': Morgan Scalley vouches fo",
+      "2026 'College GameDay' Week 8: Houston vs. Utah",
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Dalton Kincaid excited to be 'College GameDay' gue",
+      "Halfway Heisman Jeremiah Smith and other midseason",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "Utah Utes first-year coach Morgan Scalley leading ",
+      "Utah and Houston looking to cement themselves as B",
+      "Utah suspends Jamal Wallace after alleged rape, sh",
+      "What's gone right and wrong for Power 4's first-ye",
+      "Where is 'College GameDay'? 2026 schedule, locatio"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    }
+   },
+   "triggers": {
+    "1f2a24570e2ca6de4516eae60b021507": "anchor_morning",
+    "bbbabc2490914e9a4d1e619a32461b1f": "anchor_morning",
+    "7a2b82b534f197acfe4913fcdaa86792": "anchor_morning",
+    "f8b869953172e3a19c4cf347b05c1ee8": "anchor_morning",
+    "259f3312084b229ac2b74d414d36869f": "anchor_morning",
+    "2d125f14eca5c6eb1417f126cafde7c0": "anchor_morning",
+    "99932501288d30e4693c828c0ab2455e": "anchor_morning",
+    "1067cba701eaa40c3724cceda30524c6": "anchor_morning",
+    "e7321bb418f765df74afd2851bd0fade": "anchor_morning; anchor_prekick",
+    "ba6abfebaef34d88099fa6dc6640dc08": "anchor_morning; anchor_prekick",
+    "7b91563277082145d844f94b9ef1a8a6": "anchor_morning; anchor_prekick",
+    "0f773ec5cb1e5b41f52f2bf8dbc4f182": "anchor_morning",
+    "173057d32ff5946d42566a0d164de287": "anchor_morning",
+    "174cf7d3d434eeaada92afb534fb2557": "anchor_morning",
+    "b4b3b6c003cd39a6258130ad906d0025": "anchor_morning",
+    "129a012809e96238263d1a6d0a7430fa": "anchor_morning",
+    "20d8411740b919c4478bd28a6dd751aa": "anchor_morning",
+    "1d2bda7e3fb33e2ff67ddf7ced277a53": "anchor_morning",
+    "6dab7d3b6ae25bd042a24a6e550a4f23": "anchor_morning",
+    "95bc14af9668222d8528934b43d65566": "anchor_morning",
+    "ca109267525bde74bd35cecd176185be": "anchor_morning",
+    "bdce7d97283542037fe3f8a033c36a72": "anchor_morning",
+    "1e9caefb58095e7560167dff561c9ff7": "anchor_morning",
+    "f417c5ab864e0751355921f5d22f4b25": "anchor_morning",
+    "1a5a1c924e5dec296e50299139791794": "anchor_morning",
+    "a337612e92dd80f7ba7cab853ff409d0": "anchor_morning",
+    "8e7bee2f3b66bdb4f992e30400aca4cb": "anchor_morning",
+    "7d846d56825d93b254d23d0929bba224": "anchor_morning",
+    "c8b1ac2d988cf0d2c90200c8731bcde1": "anchor_morning",
+    "8a67420bfc49f0bcf8c92bc4c08be602": "anchor_morning",
+    "c5223791e733b6bc0744618614b007b7": "anchor_morning",
+    "c6283d3fd69d830d2f74d8ef27bdefab": "anchor_morning",
+    "04db3b581ae63446a409f2ad30868e20": "anchor_morning",
+    "a28a6841bdc11350063d5e6d57fbd577": "anchor_morning",
+    "423bd1c75b601ccfabfca3759cc69a3f": "anchor_morning",
+    "cc78a514047b7ed0d2c5a3acdf3cdc1e": "anchor_morning",
+    "d73ad8085e6fe1f88a0f79d9538083d6": "anchor_morning",
+    "df510525b83238b6e856c80c353bb32a": "anchor_morning",
+    "c4e171dd82e86c3a4dd50d4d3b54edab": "anchor_morning",
+    "440de8df25b4cca8ebcecb7431bbb5c0": "anchor_morning",
+    "d99b11b38d1cf1cbb334246263c53ac9": "anchor_morning",
+    "ebe9883d9cb488e233e6c45cfa009008": "anchor_morning",
+    "47595bd2a188e4dab8a27dce97c5b45d": "anchor_morning"
+   }
+  }
  }
 ]
