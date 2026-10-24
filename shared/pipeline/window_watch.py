@@ -821,8 +821,9 @@ def main():
                                      mode=args.mode)
 
     if not triggered:
-        # Write health
         _write_health(args.sport, "event", "no_triggers", root=root)
+        _write_check_status(args.sport, now, root, mode=args.mode,
+                            requested_by=args.requested_by, result="no_triggers")
         return
 
     if args.dry_run:
@@ -947,6 +948,13 @@ def main():
     print(f"  spend: {json.dumps(spend)}")
     print(f"  odds credits: {_read_odds_credits(root)}")
 
+    # P71: write check_now status
+    trigger_list = [{"game": eid, "text": trigger_text.get(eid, "")} for eid in success_eids]
+    _write_check_status(args.sport, now, root, mode=args.mode,
+                        requested_by=args.requested_by, result="COMPLETE",
+                        games_read=len(success_eids), frozen_file=dest.name,
+                        triggers=trigger_list, spend_usd=spend.get("usd_estimate"))
+
 
 RETRY_DELAYS = [60, 300, 900, 3600]  # 1 min, 5 min, 15 min, then hourly
 
@@ -1046,6 +1054,26 @@ def _write_health(sport, window, result, freeze_file=None, root=ROOT, triggers=N
     entries = [e for e in entries if not (e.get("sport") == sport and e.get("window") == window)]
     entries.append(entry)
     health_path.write_text(json.dumps(entries, indent=1) + "\n")
+
+
+def _write_check_status(sport, started_utc, root, mode="auto", requested_by=None,
+                        result="no_triggers", games_read=0, frozen_file=None,
+                        triggers=None, spend_usd=None, games_checked=0):
+    """P71: write status/check_now_<sport>.json for the button's status line."""
+    from shared.pipeline.check_now_service import write_check_status
+    data = {
+        "started_utc": started_utc.isoformat() if hasattr(started_utc, 'isoformat') else str(started_utc),
+        "finished_utc": datetime.now(timezone.utc).isoformat(),
+        "mode": mode,
+        "requested_by": requested_by or "cron",
+        "games_checked": games_checked,
+        "triggers": triggers or [],
+        "games_read": games_read,
+        "frozen_file": frozen_file,
+        "spend_usd": spend_usd,
+        "result": result,
+    }
+    write_check_status(sport, data, root)
 
 
 def _read_odds_credits(root):
