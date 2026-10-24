@@ -519,7 +519,7 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
     if len(late):
         raise SystemExit(f"HALT: {late['event_id'].nunique()} game(s) in the sheet have kicked off - nothing is frozen")
     # P20: prekick band exclusion
-    if window not in ("prekick", "adhoc"):
+    if window not in ("prekick", "adhoc", "event"):
         kicks_soon = sheet["commence_time"].map(lambda c: 0 < (parse_utc(c) - now).total_seconds() <= PREKICK_HOURS * 3600)
         n_excluded = int(kicks_soon.sum())
         if n_excluded:
