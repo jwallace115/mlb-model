@@ -6519,5 +6519,228 @@
     "1e9caefb58095e7560167dff561c9ff7": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T190404Z.parquet",
+  "sha256": "87748a72d2bf51f4572fe2719efbbcd45562bb136c534c79ce10b7f019c639d0",
+  "logged_utc": "2026-10-24T19:04:04.011971+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 1.0,
+  "revised_rows": 5,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-24T19:45:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T190007Z.parquet",
+   "inputs_digest": "{\"f417c5ab864e0751355921f5d22f4b25\": \"3b4aefdf5c3773d2\", \"8a67420bfc49f0bcf8c92bc4c08be602\": \"b611b83be39f4f6c\"}",
+   "components": {
+    "f417c5ab864e0751355921f5d22f4b25": {
+     "pinnacle_h2h": [
+      [
+       "Arizona State Sun Devils",
+       0,
+       104
+      ],
+      [
+       "Kansas State Wildcats",
+       0,
+       -114
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona State Sun Devils",
+       1.0,
+       -102
+      ],
+      [
+       "Kansas State Wildcats",
+       -1.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -107
+      ],
+      [
+       "Under",
+       51.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Arizona State makes switch to Mikey Keene as quart",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Sources: Kansas State QB Avery Johnson out vs. Ari",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T1837Z.parquet"
+    },
+    "8a67420bfc49f0bcf8c92bc4c08be602": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -633
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       494
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -14.5,
+       -106
+      ],
+      [
+       "Washington State Cougars",
+       14.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       101
+      ],
+      [
+       "Under",
+       52.5,
+       -118
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 7",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, "
+     ],
+     "kalshi_snap": "snap_20261024T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "f417c5ab864e0751355921f5d22f4b25": "anchor_close",
+    "8a67420bfc49f0bcf8c92bc4c08be602": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261024T191903Z.parquet",
+  "sha256": "741e88afd66d4a322bb8c9ad2e480cf128e6113ece39caa91b71e24431b0dbdb",
+  "logged_utc": "2026-10-24T19:19:03.227723+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 4,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-24T20:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T190007Z.parquet",
+   "inputs_digest": "{\"1a5a1c924e5dec296e50299139791794\": \"43dc4a1e43052bb3\", \"a337612e92dd80f7ba7cab853ff409d0\": \"fe3827661f5bd015\"}",
+   "components": {
+    "1a5a1c924e5dec296e50299139791794": {
+     "pinnacle_h2h": [
+      [
+       "Eastern Michigan Eagles",
+       0,
+       339
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -408
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Eastern Michigan Eagles",
+       10.0,
+       101
+      ],
+      [
+       "Ohio Bobcats",
+       -10.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -112
+      ],
+      [
+       "Under",
+       49.5,
+       -105
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1907Z.parquet"
+    },
+    "a337612e92dd80f7ba7cab853ff409d0": {
+     "pinnacle_h2h": [
+      [
+       "Troy Trojans",
+       0,
+       -653
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       507
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Troy Trojans",
+       -13.0,
+       -115
+      ],
+      [
+       "UL Monroe Warhawks",
+       13.0,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -111
+      ],
+      [
+       "Under",
+       50.5,
+       -105
+      ]
+     ],
+     "news": [
+      "Bottom 10: Week 7's rash of upsets turned everythi"
+     ],
+     "kalshi_snap": "snap_20261024T1907Z.parquet"
+    }
+   },
+   "triggers": {
+    "1a5a1c924e5dec296e50299139791794": "anchor_close",
+    "a337612e92dd80f7ba7cab853ff409d0": "anchor_close"
+   }
+  }
  }
 ]
