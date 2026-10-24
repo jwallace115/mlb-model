@@ -5441,5 +5441,113 @@
     "f417c5ab864e0751355921f5d22f4b25": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T170403Z.parquet",
+  "sha256": "0183f7f4ca555db41f47f07cbf63a77ae63a58c0c4fcc53303b8d663331e41a5",
+  "logged_utc": "2026-10-24T17:04:03.536549+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-24T20:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T170007Z.parquet",
+   "inputs_digest": "{\"1a5a1c924e5dec296e50299139791794\": \"4afe9556a613e171\", \"a337612e92dd80f7ba7cab853ff409d0\": \"ec685a38b5fc97a9\"}",
+   "components": {
+    "1a5a1c924e5dec296e50299139791794": {
+     "pinnacle_h2h": [
+      [
+       "Eastern Michigan Eagles",
+       0,
+       326
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -390
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Eastern Michigan Eagles",
+       10.0,
+       -109
+      ],
+      [
+       "Ohio Bobcats",
+       -10.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -111
+      ],
+      [
+       "Under",
+       48.5,
+       -105
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1637Z.parquet"
+    },
+    "a337612e92dd80f7ba7cab853ff409d0": {
+     "pinnacle_h2h": [
+      [
+       "Troy Trojans",
+       0,
+       -609
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       478
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Troy Trojans",
+       -13.0,
+       -102
+      ],
+      [
+       "UL Monroe Warhawks",
+       13.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -110
+      ],
+      [
+       "Under",
+       50.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Bottom 10: Week 7's rash of upsets turned everythi"
+     ],
+     "kalshi_snap": "snap_20261024T1637Z.parquet"
+    }
+   },
+   "triggers": {
+    "1a5a1c924e5dec296e50299139791794": "anchor_prekick",
+    "a337612e92dd80f7ba7cab853ff409d0": "anchor_prekick"
+   }
+  }
  }
 ]
