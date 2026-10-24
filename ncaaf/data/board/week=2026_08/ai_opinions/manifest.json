@@ -1565,5 +1565,32 @@
     "ebe9883d9cb488e233e6c45cfa009008": "new_news: 2 items"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T070403Z.parquet",
+  "sha256": "9c29eae7796b789177d622f159aa3c2a1e01731c676e352d226cbeab69cbec9e",
+  "logged_utc": "2026-10-24T07:04:03.987710+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.583,
+  "revised_rows": 12,
+  "oldest_source_age_min": 93.9,
+  "first_kickoff_utc": "2026-10-24T16:00:00Z",
+  "reader_sha256": "932f932c9e20c4ba68ce590789181ef95d92304c31cf6453ecaa3be0101178e2",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T053008Z.parquet",
+   "inputs_digest": "{\"1f2a24570e2ca6de4516eae60b021507\": \"726ba5aa26438a49\", \"259f3312084b229ac2b74d414d36869f\": \"b4070d6997b0bb96\", \"f417c5ab864e0751355921f5d22f4b25\": \"442835e1ae58802f\", \"47595bd2a188e4dab8a27dce97c5b45d\": \"03f5cb605f4b0bd2\"}",
+   "triggers": {
+    "1f2a24570e2ca6de4516eae60b021507": "new_news: 23 items",
+    "259f3312084b229ac2b74d414d36869f": "new_news: 15 items",
+    "f417c5ab864e0751355921f5d22f4b25": "new_news: 4 items",
+    "47595bd2a188e4dab8a27dce97c5b45d": "new_news: 17 items"
+   }
+  }
  }
 ]
