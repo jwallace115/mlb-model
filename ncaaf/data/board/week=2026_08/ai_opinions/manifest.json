@@ -7120,5 +7120,332 @@
     "c8b1ac2d988cf0d2c90200c8731bcde1": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T203405Z.parquet",
+  "sha256": "20b499467048cbb342b0c5061a239575900d6141bf9baa48e3b4b40654507d58",
+  "logged_utc": "2026-10-24T20:34:05.036646+00:00",
+  "rows": 18,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 6,
+  "no_view_share": 0.778,
+  "revised_rows": 13,
+  "oldest_source_age_min": 3.8,
+  "first_kickoff_utc": "2026-10-24T23:30:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T203014Z.parquet",
+   "inputs_digest": "{\"423bd1c75b601ccfabfca3759cc69a3f\": \"cdec42e7c7603d57\", \"cc78a514047b7ed0d2c5a3acdf3cdc1e\": \"09a19cbcbc3eb697\", \"d73ad8085e6fe1f88a0f79d9538083d6\": \"84b0fceec1c57429\", \"df510525b83238b6e856c80c353bb32a\": \"3b2ab2b668509d79\", \"c4e171dd82e86c3a4dd50d4d3b54edab\": \"9c50e25e63e92bcb\", \"440de8df25b4cca8ebcecb7431bbb5c0\": \"5b7f394aa561a293\"}",
+   "components": {
+    "423bd1c75b601ccfabfca3759cc69a3f": {
+     "pinnacle_h2h": [
+      [
+       "Arizona Wildcats",
+       0,
+       -351
+      ],
+      [
+       "Iowa State Cyclones",
+       0,
+       297
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Wildcats",
+       -12.0,
+       -108
+      ],
+      [
+       "Iowa State Cyclones",
+       12.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -108
+      ],
+      [
+       "Under",
+       51.5,
+       -108
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 7",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T2007Z.parquet"
+    },
+    "cc78a514047b7ed0d2c5a3acdf3cdc1e": {
+     "pinnacle_h2h": [
+      [
+       "Kentucky Wildcats",
+       0,
+       -428
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       354
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kentucky Wildcats",
+       -11.0,
+       100
+      ],
+      [
+       "Vanderbilt Commodores",
+       11.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -104
+      ],
+      [
+       "Under",
+       51.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "ESPN's Taylor Davis previews UK vs. Vandy, analyze",
+      "Kentucky RB CJ Baxter set to return vs. Vandy; WR ",
+      "Keys to victory as No. 12 Kentucky welcomes Vander",
+      "Marty spends the day with Stein to learn Kentucky'",
+      "The audacity of Kentucky Wildcats coach Will Stein",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "What's gone right and wrong for Power 4's first-ye",
+      "Which one-loss SEC teams are ready to prove they a",
+      "Will Stein evaluates Kentucky's successful run so ",
+      "Will Stein's surprising success at Kentucky"
+     ],
+     "kalshi_snap": "snap_20261024T2007Z.parquet"
+    },
+    "d73ad8085e6fe1f88a0f79d9538083d6": {
+     "pinnacle_h2h": [
+      [
+       "North Carolina Tar Heels",
+       0,
+       -355
+      ],
+      [
+       "Syracuse Orange",
+       0,
+       300
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Carolina Tar Heels",
+       -9.5,
+       -105
+      ],
+      [
+       "Syracuse Orange",
+       9.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -107
+      ],
+      [
+       "Under",
+       50.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7"
+     ],
+     "kalshi_snap": "snap_20261024T2007Z.parquet"
+    },
+    "df510525b83238b6e856c80c353bb32a": {
+     "pinnacle_h2h": [
+      [
+       "Ole Miss Rebels",
+       0,
+       134
+      ],
+      [
+       "Texas Longhorns",
+       0,
+       -148
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ole Miss Rebels",
+       3.0,
+       -104
+      ],
+      [
+       "Texas Longhorns",
+       -3.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -116
+      ],
+      [
+       "Under",
+       54.0,
+       -101
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "Can Steve Sarkisian and Arch Manning save Texas' s",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Could Arch get benched if Texas starts slow vs. Ol",
+      "ESPN's Taylor Davis previews UK vs. Vandy, analyze",
+      "Fowler describes Manning's urgency ahead of Texas ",
+      "Gene Chizik offers wisdom to fans of SEC heavyweig",
+      "Halfway Heisman Jeremiah Smith and other midseason",
+      "How important is a win for Ole Miss' and Texas' CF",
+      "Rowe takes us inside Texas minds, shares Chambliss",
+      "Sources: Texas to give QB KJ Lacey Jr. increased f",
+      "Struggling Texas QB Arch Manning says he'll be 'le",
+      "Taylor Zarzour analyzes struggles for No. 19 Texas",
+      "Tebow analyzes impact of star quarterbacks Manning",
+      "Texas AD Del Conte clarifies AI use on key play th",
+      "Texas RB Hollywood Smothers ruled out vs. Ole Miss",
+      "Texas bans fan who made obscene gesture at Florida",
+      "Texas rules out Colin Simmons for Ole Miss clash",
+      "Texas-Ole Miss best bets: Chambliss, Manning and m",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "What happens to Steve Sarkisian if Texas loses to ",
+      "What's gone right and wrong for Power 4's first-ye",
+      "Where does No. 19 Texas defense stand against No. ",
+      "Which one-loss SEC teams are ready to prove they a",
+      "Why Stephen A. believes Sarkisian has been 'pacify"
+     ],
+     "kalshi_snap": "snap_20261024T2007Z.parquet"
+    },
+    "c4e171dd82e86c3a4dd50d4d3b54edab": {
+     "pinnacle_h2h": [
+      [
+       "Texas State Bobcats",
+       0,
+       -572
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       453
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Texas State Bobcats",
+       -14.0,
+       -106
+      ],
+      [
+       "Utah State Aggies",
+       14.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       60.0,
+       -110
+      ],
+      [
+       "Under",
+       60.0,
+       -107
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T2007Z.parquet"
+    },
+    "440de8df25b4cca8ebcecb7431bbb5c0": {
+     "pinnacle_h2h": [
+      [
+       "USC Trojans",
+       0,
+       -135
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       122
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "USC Trojans",
+       -2.5,
+       -112
+      ],
+      [
+       "Wisconsin Badgers",
+       2.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -106
+      ],
+      [
+       "Under",
+       50.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, "
+     ],
+     "kalshi_snap": "snap_20261024T2007Z.parquet"
+    }
+   },
+   "triggers": {
+    "423bd1c75b601ccfabfca3759cc69a3f": "anchor_prekick",
+    "cc78a514047b7ed0d2c5a3acdf3cdc1e": "anchor_prekick",
+    "d73ad8085e6fe1f88a0f79d9538083d6": "anchor_prekick",
+    "df510525b83238b6e856c80c353bb32a": "anchor_prekick",
+    "c4e171dd82e86c3a4dd50d4d3b54edab": "anchor_prekick",
+    "440de8df25b4cca8ebcecb7431bbb5c0": "anchor_prekick"
+   }
+  }
  }
 ]

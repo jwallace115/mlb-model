@@ -4834,5 +4834,138 @@
     "550ec5290f935d311995affbcb0b5c79": "line_move: pinnacle totals Under 49.0\u219247.5; line_move: pinnacle totals Over 49.0\u219247.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T203206Z.parquet",
+  "sha256": "4f2667204b08c1fd2aac92240c807ab9cb994a545130ae6a7ed3ebd23deb3aea",
+  "logged_utc": "2026-10-24T20:32:06.610475+00:00",
+  "rows": 54,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.963,
+  "revised_rows": 52,
+  "oldest_source_age_min": 764.6,
+  "first_kickoff_utc": "2026-10-25T17:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261024T203014Z.parquet",
+   "inputs_digest": "{\"550ec5290f935d311995affbcb0b5c79\": \"deb611da76d85266\"}",
+   "components": {
+    "550ec5290f935d311995affbcb0b5c79": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       125
+      ],
+      [
+       "Cincinnati Bengals",
+       0,
+       -145
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       2.5,
+       -110
+      ],
+      [
+       "Cincinnati Bengals",
+       -2.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.0,
+       -115
+      ],
+      [
+       "Under",
+       47.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       132
+      ],
+      [
+       "Cincinnati Bengals",
+       0,
+       -149
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       2.5,
+       101
+      ],
+      [
+       "Cincinnati Bengals",
+       -2.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       100
+      ],
+      [
+       "Under",
+       47.5,
+       -116
+      ]
+     ],
+     "props_ts": "2026-10-24T07:47:28.825581+00:00",
+     "inj_Baltimore Ravens": "a1a657108468f137",
+     "inj_Cincinnati Bengals": "d864c4681194c585",
+     "news": [
+      "'It's Groundhog Day': Why Ravens lead the NFL in b",
+      "'It's Groundhog Day:' Why Ravens are NFL's worst a",
+      "49ers WR Mike Evans reps Bay Area with Curry jerse",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Bengals, Hendrickson downplaying matchup",
+      "Boye Mafe's proud of his culture",
+      "Burrow, Bengals understand importance of Ravens ma",
+      "Inside NFL's field-stitching process from Rio to P",
+      "Inside the silent messages Boye Mafe sends every g",
+      "Lamar Jackson 'heading in the right direction' but",
+      "Lamar Jackson remains day-to-day with ankle injury",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "Ravens' Humphrey expresses displeasure over 'sland",
+      "Ravens' Lamar Jackson (high ankle sprain) unsure i",
+      "Ravens' Lamar Jackson returns to practice but stat",
+      "Ravens' Trey Hendrickson on facing Bengals: 'It's ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Trey Hendrickson is set to face the Bengals for th",
+      "What a win over the Ravens would mean for the Beng",
+      "What are the longest field goals in NFL history?",
+      "Will Lamar Jackson make Sunday's game?"
+     ],
+     "kalshi_snap": "snap_20261024T2005Z.parquet"
+    }
+   },
+   "triggers": {
+    "550ec5290f935d311995affbcb0b5c79": "line_move: hardrockbet_fl spreads Baltimore Ravens 1.0\u21922.5; line_move: hardrockbet_fl spreads Cincinnati Bengals -1.0\u2192-2.5; line_move: hardrockbet_fl totals Under 48.0\u219247.0; line_move: hardrockbet_fl totals Over 48.0\u219247.0; ml_move: hardrockbet_fl novig 0.478\u21920.429; line_move: pinnacle spreads Baltimore Ravens 1.0\u21922.5; line_move: pinnacle spreads Cincinnati Bengals -1.0\u2192-2.5; ml_move: pinnacle novig 0.467\u21920.419"
+   }
+  }
  }
 ]
