@@ -8141,5 +8141,197 @@
     "440de8df25b4cca8ebcecb7431bbb5c0": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T230403Z.parquet",
+  "sha256": "852137132871c3d796cf1e18b8f187e557dee92d0edab807210473305ea7d107",
+  "logged_utc": "2026-10-24T23:04:03.643970+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-25T02:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T230007Z.parquet",
+   "inputs_digest": "{\"ebe9883d9cb488e233e6c45cfa009008\": \"78d87c7742e34614\"}",
+   "components": {
+    "ebe9883d9cb488e233e6c45cfa009008": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -194
+      ],
+      [
+       "North Dakota State Bison",
+       0,
+       173
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -4.5,
+       -111
+      ],
+      [
+       "North Dakota State Bison",
+       4.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.5,
+       -109
+      ],
+      [
+       "Under",
+       39.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Can Week 8 up the ante again with more upsets and ",
+      "Connelly previews Week 8: SEC elimination games, t"
+     ],
+     "kalshi_snap": "snap_20261024T2237Z.parquet"
+    }
+   },
+   "triggers": {
+    "ebe9883d9cb488e233e6c45cfa009008": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261024T231621Z.parquet",
+  "sha256": "1979c4af5a10cfb900a30d308620e1eb3b41beed0f8d400dff948881b726a589",
+  "logged_utc": "2026-10-24T23:16:21.022274+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.333,
+  "revised_rows": 5,
+  "oldest_source_age_min": 16.2,
+  "first_kickoff_utc": "2026-10-25T00:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T230007Z.parquet",
+   "inputs_digest": "{\"d99b11b38d1cf1cbb334246263c53ac9\": \"ceba4393e483c1e6\", \"47595bd2a188e4dab8a27dce97c5b45d\": \"5cfeeb343530888c\"}",
+   "components": {
+    "d99b11b38d1cf1cbb334246263c53ac9": {
+     "pinnacle_h2h": [
+      [
+       "Tulane Green Wave",
+       0,
+       130
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -144
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Tulane Green Wave",
+       3.0,
+       -111
+      ],
+      [
+       "UTSA Roadrunners",
+       -3.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -112
+      ],
+      [
+       "Under",
+       51.5,
+       -104
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T2307Z.parquet"
+    },
+    "47595bd2a188e4dab8a27dce97c5b45d": {
+     "pinnacle_h2h": [
+      [
+       "Houston Cougars",
+       0,
+       211
+      ],
+      [
+       "Utah Utes",
+       0,
+       -240
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Houston Cougars",
+       6.5,
+       -101
+      ],
+      [
+       "Utah Utes",
+       -6.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -104
+      ],
+      [
+       "Under",
+       57.5,
+       -112
+      ]
+     ],
+     "news": [
+      "'Prove it on the field': Morgan Scalley vouches fo",
+      "2026 'College GameDay' Week 8: Houston vs. Utah",
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Dalton Kincaid excited to be 'College GameDay' gue",
+      "Halfway Heisman Jeremiah Smith and other midseason",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "Utah Utes first-year coach Morgan Scalley leading ",
+      "Utah and Houston looking to cement themselves as B",
+      "Utah fans boo McAfee mercilessly for his Houston p",
+      "Utah suspends Jamal Wallace after alleged rape, sh",
+      "What's gone right and wrong for Power 4's first-ye",
+      "Where is 'College GameDay'? 2026 schedule, locatio"
+     ],
+     "kalshi_snap": "snap_20261024T2307Z.parquet"
+    }
+   },
+   "triggers": {
+    "d99b11b38d1cf1cbb334246263c53ac9": "anchor_close",
+    "47595bd2a188e4dab8a27dce97c5b45d": "anchor_prekick"
+   }
+  }
  }
 ]
