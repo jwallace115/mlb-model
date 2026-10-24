@@ -6810,5 +6810,315 @@
     "c5223791e733b6bc0744618614b007b7": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T200403Z.parquet",
+  "sha256": "645328d1d0cc2214118c0f34f7362de765e34f4e28e5dc8f5d8fbd12581a71ae",
+  "logged_utc": "2026-10-24T20:04:03.725910+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 7,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-24T23:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T200011Z.parquet",
+   "inputs_digest": "{\"c6283d3fd69d830d2f74d8ef27bdefab\": \"b3c10ff911406de2\", \"04db3b581ae63446a409f2ad30868e20\": \"c0d131a4b6213154\", \"a28a6841bdc11350063d5e6d57fbd577\": \"fae3cf05092c6921\"}",
+   "components": {
+    "c6283d3fd69d830d2f74d8ef27bdefab": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas State Red Wolves",
+       0,
+       120
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       -133
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas State Red Wolves",
+       2.5,
+       -102
+      ],
+      [
+       "Georgia State Panthers",
+       -2.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.5,
+       -108
+      ],
+      [
+       "Under",
+       58.5,
+       -108
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1937Z.parquet"
+    },
+    "04db3b581ae63446a409f2ad30868e20": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       -147
+      ],
+      [
+       "Virginia Tech Hokies",
+       0,
+       133
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       -3.0,
+       -105
+      ],
+      [
+       "Virginia Tech Hokies",
+       3.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -105
+      ],
+      [
+       "Under",
+       50.5,
+       -112
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T1937Z.parquet"
+    },
+    "a28a6841bdc11350063d5e6d57fbd577": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       430
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -538
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       13.5,
+       -105
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -13.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -102
+      ],
+      [
+       "Under",
+       55.5,
+       -114
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "How a group of Texas Tech fans ended up with Color",
+      "Sanders says Colorado 'united' despite 4-game losi",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T1937Z.parquet"
+    }
+   },
+   "triggers": {
+    "c6283d3fd69d830d2f74d8ef27bdefab": "anchor_prekick",
+    "04db3b581ae63446a409f2ad30868e20": "anchor_prekick",
+    "a28a6841bdc11350063d5e6d57fbd577": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261024T201903Z.parquet",
+  "sha256": "9abe9d94b9e97a76d2a1fc4c57a97aefad31b9ed5219bb643ac3223cb5c07e62",
+  "logged_utc": "2026-10-24T20:19:03.879666+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.444,
+  "revised_rows": 9,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-24T21:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T200011Z.parquet",
+   "inputs_digest": "{\"8e7bee2f3b66bdb4f992e30400aca4cb\": \"e75895567c33795c\", \"7d846d56825d93b254d23d0929bba224\": \"9f2b5a34fc8b606e\", \"c8b1ac2d988cf0d2c90200c8731bcde1\": \"0602b04f67b61a7a\"}",
+   "components": {
+    "8e7bee2f3b66bdb4f992e30400aca4cb": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -392
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       327
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Ragin Cajuns",
+       -10.0,
+       -104
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       10.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -107
+      ],
+      [
+       "Under",
+       52.5,
+       -109
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T2007Z.parquet"
+    },
+    "7d846d56825d93b254d23d0929bba224": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -539
+      ],
+      [
+       "Old Dominion Monarchs",
+       0,
+       431
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -14.0,
+       100
+      ],
+      [
+       "Old Dominion Monarchs",
+       14.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -114
+      ],
+      [
+       "Under",
+       44.0,
+       -102
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T2007Z.parquet"
+    },
+    "c8b1ac2d988cf0d2c90200c8731bcde1": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       -206
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       183
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       -5.5,
+       -106
+      ],
+      [
+       "San Jose State Spartans",
+       5.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -103
+      ],
+      [
+       "Under",
+       46.0,
+       -113
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T2007Z.parquet"
+    }
+   },
+   "triggers": {
+    "8e7bee2f3b66bdb4f992e30400aca4cb": "anchor_close",
+    "7d846d56825d93b254d23d0929bba224": "anchor_close",
+    "c8b1ac2d988cf0d2c90200c8731bcde1": "anchor_close"
+   }
+  }
  }
 ]
