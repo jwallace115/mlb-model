@@ -12,11 +12,11 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-10-24T04:50:52.410692+00:00",
-  "finished_utc": "2026-10-24T04:50:52.410692+00:00",
-  "result": "no_triggers",
+  "started_utc": "2026-10-24T05:54:53.242175+00:00",
+  "finished_utc": "2026-10-24T05:54:53.242175+00:00",
+  "result": "COMPLETE",
   "step": "window_watch",
-  "message": "",
-  "freeze_file": null
+  "message": "['new_news: 8 items', 'new_news: 10 items', 'new_news: 1 items', 'new_news: 14 items', 'new_news: 5 items', 'new_news: 4 items', 'new_news: 1 items', 'new_news: 3 items', 'new_news: 1 items', 'new_new",
+  "freeze_file": "ai_opinions_20261024T054904Z.parquet"
  }
 ]

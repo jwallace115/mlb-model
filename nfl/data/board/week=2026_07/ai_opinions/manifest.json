@@ -1015,5 +1015,76 @@
     "176d474ed8b2bbf1eb4d7e9c56b4bf22": "new_props: pull 2026-10-24T05:02:27.409707+00:00; injury_change: inj_Seattle Seahawks; injury_change: inj_Kansas City Chiefs; new_news: 29 items"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T053205Z.parquet",
+  "sha256": "ac6921cf7212a9a72f8a77478bf11f3c59487fc22b1fe6a218c01deb2da24e06",
+  "logged_utc": "2026-10-24T05:32:05.909695+00:00",
+  "rows": 772,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 11,
+  "no_view_share": 0.93,
+  "revised_rows": 768,
+  "oldest_source_age_min": 14.2,
+  "first_kickoff_utc": "2026-10-25T13:30:00Z",
+  "reader_sha256": "932f932c9e20c4ba68ce590789181ef95d92304c31cf6453ecaa3be0101178e2",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261024T053008Z.parquet",
+   "inputs_digest": "{\"2e710ea5a306b614f0f966e3d78732f8\": \"b35d47dc93a55917\", \"b1be064fb52a198a62109c279e7ab24c\": \"5e9259ec24455163\", \"2823e986597c449ab94126cd5ed3fae9\": \"2882540a2893489e\", \"5dce18baccec5d3ad5fb3a3ce52f7619\": \"cf01955cc9541481\", \"2bba7fde6f97d0e54403d53676e4ab63\": \"ef525e95435a1c69\", \"f3992ad4496724baf7dcd1ef58245d6b\": \"f35cf6c7420e2f89\", \"be5dd120ca08b43d647b6caa8953500a\": \"70b5d2d1c75b77e4\", \"436119bb3ccdaa6ed7808aa3ebd82b76\": \"8ba7171a8a6d1c25\", \"e8e5715eefb6a9ce64765e9ddf49c0cc\": \"38c548f09da37bbc\", \"f7679cf18454e4d88a8f2b990c3f08ac\": \"c24d1b0d5856a7a9\", \"176d474ed8b2bbf1eb4d7e9c56b4bf22\": \"d9baee804bdc7f9f\"}",
+   "triggers": {
+    "2e710ea5a306b614f0f966e3d78732f8": "new_props: pull 2026-10-24T05:32:52.978465+00:00; injury_change: inj_New Orleans Saints; injury_change: inj_Pittsburgh Steelers; new_news: 32 items",
+    "b1be064fb52a198a62109c279e7ab24c": "new_props: pull 2026-10-24T05:32:52.978465+00:00; injury_change: inj_Atlanta Falcons; injury_change: inj_San Francisco 49ers; new_news: 41 items",
+    "2823e986597c449ab94126cd5ed3fae9": "new_props: pull 2026-10-24T05:32:52.978465+00:00; injury_change: inj_Carolina Panthers; injury_change: inj_Tampa Bay Buccaneers; new_news: 28 items",
+    "5dce18baccec5d3ad5fb3a3ce52f7619": "new_props: pull 2026-10-24T05:32:52.978465+00:00; injury_change: inj_Tennessee Titans; injury_change: inj_Cleveland Browns; new_news: 27 items",
+    "2bba7fde6f97d0e54403d53676e4ab63": "new_props: pull 2026-10-24T05:32:52.978465+00:00; injury_change: inj_Houston Texans; injury_change: inj_New York Giants; new_news: 44 items",
+    "f3992ad4496724baf7dcd1ef58245d6b": "new_props: pull 2026-10-24T05:32:52.978465+00:00; injury_change: inj_Minnesota Vikings; injury_change: inj_Indianapolis Colts; new_news: 40 items",
+    "be5dd120ca08b43d647b6caa8953500a": "new_props: pull 2026-10-24T05:32:52.978465+00:00; injury_change: inj_New York Jets; injury_change: inj_Miami Dolphins; new_news: 28 items",
+    "436119bb3ccdaa6ed7808aa3ebd82b76": "new_props: pull 2026-10-24T05:32:52.978465+00:00; injury_change: inj_Arizona Cardinals; injury_change: inj_Denver Broncos; new_news: 28 items",
+    "e8e5715eefb6a9ce64765e9ddf49c0cc": "new_props: pull 2026-10-24T05:32:52.978465+00:00; injury_change: inj_Detroit Lions; injury_change: inj_Green Bay Packers; new_news: 31 items",
+    "f7679cf18454e4d88a8f2b990c3f08ac": "new_props: pull 2026-10-24T05:32:52.978465+00:00; injury_change: inj_Las Vegas Raiders; injury_change: inj_Los Angeles Rams; new_news: 45 items",
+    "176d474ed8b2bbf1eb4d7e9c56b4bf22": "new_props: pull 2026-10-24T05:32:52.978465+00:00; injury_change: inj_Seattle Seahawks; injury_change: inj_Kansas City Chiefs; new_news: 29 items"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261024T054704Z.parquet",
+  "sha256": "3db00e70df265696f35d508919a29949a59bb36637dc937d596e55494c70c4a3",
+  "logged_utc": "2026-10-24T05:47:04.713270+00:00",
+  "rows": 826,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 12,
+  "no_view_share": 0.932,
+  "revised_rows": 825,
+  "oldest_source_age_min": 16.9,
+  "first_kickoff_utc": "2026-10-25T13:30:00Z",
+  "reader_sha256": "932f932c9e20c4ba68ce590789181ef95d92304c31cf6453ecaa3be0101178e2",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261024T053008Z.parquet",
+   "inputs_digest": "{\"2e710ea5a306b614f0f966e3d78732f8\": \"d2822dd254bb353a\", \"b1be064fb52a198a62109c279e7ab24c\": \"fc7110a249d1d9ec\", \"550ec5290f935d311995affbcb0b5c79\": \"d973b9aca1b078f4\", \"2823e986597c449ab94126cd5ed3fae9\": \"8153f12473bb8785\", \"5dce18baccec5d3ad5fb3a3ce52f7619\": \"f42c0ff44160728c\", \"2bba7fde6f97d0e54403d53676e4ab63\": \"a12692871e2e7cce\", \"f3992ad4496724baf7dcd1ef58245d6b\": \"2ba1a777c5cdf655\", \"be5dd120ca08b43d647b6caa8953500a\": \"0a547d45743c2c23\", \"436119bb3ccdaa6ed7808aa3ebd82b76\": \"4f46adc708673d63\", \"e8e5715eefb6a9ce64765e9ddf49c0cc\": \"92a30beb58f6220b\", \"f7679cf18454e4d88a8f2b990c3f08ac\": \"a25431cd374e4834\", \"176d474ed8b2bbf1eb4d7e9c56b4bf22\": \"4f763ee757f7f0ce\"}",
+   "triggers": {
+    "2e710ea5a306b614f0f966e3d78732f8": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_New Orleans Saints; injury_change: inj_Pittsburgh Steelers; new_news: 32 items",
+    "b1be064fb52a198a62109c279e7ab24c": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_Atlanta Falcons; injury_change: inj_San Francisco 49ers; new_news: 41 items",
+    "550ec5290f935d311995affbcb0b5c79": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_Baltimore Ravens; injury_change: inj_Cincinnati Bengals; new_news: 32 items",
+    "2823e986597c449ab94126cd5ed3fae9": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_Carolina Panthers; injury_change: inj_Tampa Bay Buccaneers; new_news: 28 items",
+    "5dce18baccec5d3ad5fb3a3ce52f7619": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_Tennessee Titans; injury_change: inj_Cleveland Browns; new_news: 27 items",
+    "2bba7fde6f97d0e54403d53676e4ab63": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_Houston Texans; injury_change: inj_New York Giants; new_news: 44 items",
+    "f3992ad4496724baf7dcd1ef58245d6b": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_Minnesota Vikings; injury_change: inj_Indianapolis Colts; new_news: 40 items",
+    "be5dd120ca08b43d647b6caa8953500a": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_New York Jets; injury_change: inj_Miami Dolphins; new_news: 28 items",
+    "436119bb3ccdaa6ed7808aa3ebd82b76": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_Arizona Cardinals; injury_change: inj_Denver Broncos; new_news: 28 items",
+    "e8e5715eefb6a9ce64765e9ddf49c0cc": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_Detroit Lions; injury_change: inj_Green Bay Packers; new_news: 31 items",
+    "f7679cf18454e4d88a8f2b990c3f08ac": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_Las Vegas Raiders; injury_change: inj_Los Angeles Rams; new_news: 45 items",
+    "176d474ed8b2bbf1eb4d7e9c56b4bf22": "new_props: pull 2026-10-24T05:47:50.790486+00:00; injury_change: inj_Seattle Seahawks; injury_change: inj_Kansas City Chiefs; new_news: 29 items"
+   }
+  }
  }
 ]
