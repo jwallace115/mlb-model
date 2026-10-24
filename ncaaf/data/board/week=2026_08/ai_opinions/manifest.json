@@ -7649,5 +7649,170 @@
     "c5223791e733b6bc0744618614b007b7": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T221903Z.parquet",
+  "sha256": "dd02094a2e08bd6f9f0f6939027805ebbd746900980c559253a1000b507d2e5f",
+  "logged_utc": "2026-10-24T22:19:03.614142+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.444,
+  "revised_rows": 9,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-24T23:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T220010Z.parquet",
+   "inputs_digest": "{\"c6283d3fd69d830d2f74d8ef27bdefab\": \"5678a8a0de70f478\", \"04db3b581ae63446a409f2ad30868e20\": \"b389acb07f15fca9\", \"a28a6841bdc11350063d5e6d57fbd577\": \"f9ef73f37131bc30\"}",
+   "components": {
+    "c6283d3fd69d830d2f74d8ef27bdefab": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas State Red Wolves",
+       0,
+       118
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       -130
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas State Red Wolves",
+       2.5,
+       -105
+      ],
+      [
+       "Georgia State Panthers",
+       -2.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.5,
+       -108
+      ],
+      [
+       "Under",
+       58.5,
+       -108
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T2207Z.parquet"
+    },
+    "04db3b581ae63446a409f2ad30868e20": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       -152
+      ],
+      [
+       "Virginia Tech Hokies",
+       0,
+       137
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       -3.0,
+       -109
+      ],
+      [
+       "Virginia Tech Hokies",
+       3.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -102
+      ],
+      [
+       "Under",
+       50.5,
+       -114
+      ]
+     ],
+     "news": [
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T2207Z.parquet"
+    },
+    "a28a6841bdc11350063d5e6d57fbd577": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       423
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -527
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       13.5,
+       -108
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -13.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -111
+      ],
+      [
+       "Under",
+       55.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "How a group of Texas Tech fans ended up with Color",
+      "Sanders says Colorado 'united' despite 4-game losi",
+      "What's gone right and wrong for Power 4's first-ye"
+     ],
+     "kalshi_snap": "snap_20261024T2207Z.parquet"
+    }
+   },
+   "triggers": {
+    "c6283d3fd69d830d2f74d8ef27bdefab": "anchor_close",
+    "04db3b581ae63446a409f2ad30868e20": "anchor_close",
+    "a28a6841bdc11350063d5e6d57fbd577": "anchor_close"
+   }
+  }
  }
 ]
