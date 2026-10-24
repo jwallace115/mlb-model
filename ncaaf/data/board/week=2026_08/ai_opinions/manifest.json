@@ -5549,5 +5549,224 @@
     "a337612e92dd80f7ba7cab853ff409d0": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T180403Z.parquet",
+  "sha256": "648d96a5f8cbf7f396069d1a7367440324bd7d8d850ff74f1f0cf948021855b2",
+  "logged_utc": "2026-10-24T18:04:03.095949+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 7,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-24T21:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T180008Z.parquet",
+   "inputs_digest": "{\"8e7bee2f3b66bdb4f992e30400aca4cb\": \"fbf0cb95ccc8441f\", \"7d846d56825d93b254d23d0929bba224\": \"6c6258972168e53f\", \"c8b1ac2d988cf0d2c90200c8731bcde1\": \"90ecfe63ee522dbe\"}",
+   "components": {
+    "8e7bee2f3b66bdb4f992e30400aca4cb": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -392
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       327
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Ragin Cajuns",
+       -10.0,
+       -104
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       10.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -107
+      ],
+      [
+       "Under",
+       52.5,
+       -109
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1737Z.parquet"
+    },
+    "7d846d56825d93b254d23d0929bba224": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -543
+      ],
+      [
+       "Old Dominion Monarchs",
+       0,
+       434
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -14.0,
+       -101
+      ],
+      [
+       "Old Dominion Monarchs",
+       14.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -110
+      ],
+      [
+       "Under",
+       43.5,
+       -106
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1737Z.parquet"
+    },
+    "c8b1ac2d988cf0d2c90200c8731bcde1": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       -214
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       189
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       -5.5,
+       -110
+      ],
+      [
+       "San Jose State Spartans",
+       5.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -115
+      ],
+      [
+       "Under",
+       46.0,
+       -101
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T1737Z.parquet"
+    }
+   },
+   "triggers": {
+    "8e7bee2f3b66bdb4f992e30400aca4cb": "anchor_prekick",
+    "7d846d56825d93b254d23d0929bba224": "anchor_prekick",
+    "c8b1ac2d988cf0d2c90200c8731bcde1": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261024T181903Z.parquet",
+  "sha256": "19e6534d5bce27f79b630c9d86814c441fb94555f3891afa521e502660913dec",
+  "logged_utc": "2026-10-24T18:19:03.717082+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-24T19:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T180008Z.parquet",
+   "inputs_digest": "{\"0f773ec5cb1e5b41f52f2bf8dbc4f182\": \"ddb0f0d63e861bd6\"}",
+   "components": {
+    "0f773ec5cb1e5b41f52f2bf8dbc4f182": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       337
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       -405
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       10.0,
+       -102
+      ],
+      [
+       "Oregon Ducks",
+       -10.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -103
+      ],
+      [
+       "Under",
+       49.5,
+       -114
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Allstate Playoff Predictor",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Oregon's Dante Moore, Evan Stewart ruled out vs. I",
+      "Oregon's Evan Stewart arrested on charge of drivin"
+     ],
+     "kalshi_snap": "snap_20261024T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "0f773ec5cb1e5b41f52f2bf8dbc4f182": "anchor_close"
+   }
+  }
  }
 ]
