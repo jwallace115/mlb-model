@@ -3923,5 +3923,149 @@
     "f7679cf18454e4d88a8f2b990c3f08ac": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T150204Z.parquet",
+  "sha256": "fc817172ccab306d3f7dc28b4dc41a65a819058e722216bd5d0b3e3e90d49b4e",
+  "logged_utc": "2026-10-24T15:02:04.018463+00:00",
+  "rows": 74,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.932,
+  "revised_rows": 67,
+  "oldest_source_age_min": 104.5,
+  "first_kickoff_utc": "2026-10-25T17:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261024T150012Z.parquet",
+   "inputs_digest": "{\"2bba7fde6f97d0e54403d53676e4ab63\": \"b3022f06a290032a\"}",
+   "components": {
+    "2bba7fde6f97d0e54403d53676e4ab63": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Houston Texans",
+       0,
+       -525
+      ],
+      [
+       "New York Giants",
+       0,
+       375
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Houston Texans",
+       -10.0,
+       -115
+      ],
+      [
+       "New York Giants",
+       10.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       42.5,
+       -115
+      ],
+      [
+       "Under",
+       42.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Houston Texans",
+       0,
+       -471
+      ],
+      [
+       "New York Giants",
+       0,
+       370
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Houston Texans",
+       -10.5,
+       -102
+      ],
+      [
+       "New York Giants",
+       10.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       104
+      ],
+      [
+       "Under",
+       43.5,
+       -121
+      ]
+     ],
+     "props_ts": "2026-10-24T13:17:33.081657+00:00",
+     "inj_Houston Texans": "ce61ab0d617d58cd",
+     "inj_New York Giants": "d2d4f3ed7eab3aea",
+     "news": [
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "49ers WR Mike Evans reps Bay Area with Curry jerse",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "C.J. Stroud powers Houston Texans vs New York Gian",
+      "Cam Skattebo set to return to Giants RB mix after ",
+      "Could the Texans make another improbably run?",
+      "DeMeco Ryans can't wait to see Tank Dell back on t",
+      "Eisen says starting J.J. McCarthy 'the only move J",
+      "Giants LB Tremaine Edmunds (chest) out for year, s",
+      "Giants release RB Najee Harris 2 days after start",
+      "Giants releasing RB Najee Harris, source says",
+      "Giants turning to J.J. McCarthy as QB1 against Tex",
+      "Giants turning to J.J. McCarthy as QB1 this weeken",
+      "Goodell defends Giants' Tisch, 49ers' York attendi",
+      "How active NFL players continue to redefine all-ti",
+      "Inside Marvin Harrison Jr.s' exit from the Cardina",
+      "JJ McCarthy announced the Giants' QB1",
+      "JJ Watt lands new deal as full-time CBS lead analy",
+      "Jameis Winston vs. J.J. McCarthy: Pros and cons of",
+      "John Harbaugh: Giants 'honing in on' QB decision f",
+      "Jordan Rodgers: J.J. McCarthy gives Giants the bes",
+      "Kyrie Irving explains offer to pay Al-Shaair's eye",
+      "McCarthy to start at QB for Giants for 'foreseeabl",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL survivor power rankings: Why this is the week ",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Seven things Solak thinks entering NFL Week 7: Fro",
+      "Source: Giants turning to J.J. McCarthy as QB1 thi",
+      "Stephen A. sounds off on John Harbaugh over Cam Sk",
+      "Tank Dell to return in Week 7",
+      "Texans WR Tank Dell to play Sunday in 1st game sin",
+      "Texans' Tank Dell says he won't fear being hit in ",
+      "What are the longest field goals in NFL history?"
+     ],
+     "kalshi_snap": "snap_20261024T1435Z.parquet"
+    }
+   },
+   "triggers": {
+    "2bba7fde6f97d0e54403d53676e4ab63": "new_props: pull 2026-10-24T13:17:33.081657+00:00; injury_change: inj_New York Giants"
+   }
+  }
  }
 ]
