@@ -1361,5 +1361,55 @@
     "176d474ed8b2bbf1eb4d7e9c56b4bf22": "new_props: pull 2026-10-24T07:47:28.825581+00:00; injury_change: inj_Seattle Seahawks; injury_change: inj_Kansas City Chiefs; new_news: 26 items"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T083204Z.parquet",
+  "sha256": "9a5c4231368c97626fa0a812ea2fcfc7e3f94c18e0752fab9e8465bd43de70ed",
+  "logged_utc": "2026-10-24T08:32:04.763407+00:00",
+  "rows": 71,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.915,
+  "revised_rows": 71,
+  "oldest_source_age_min": 181.9,
+  "first_kickoff_utc": "2026-10-25T17:00:00Z",
+  "reader_sha256": "932f932c9e20c4ba68ce590789181ef95d92304c31cf6453ecaa3be0101178e2",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261024T053008Z.parquet",
+   "inputs_digest": "{\"5dce18baccec5d3ad5fb3a3ce52f7619\": \"bb78241e99b34c64\"}",
+   "triggers": {
+    "5dce18baccec5d3ad5fb3a3ce52f7619": "new_props: pull 2026-10-24T07:47:28.825581+00:00; injury_change: inj_Tennessee Titans; injury_change: inj_Cleveland Browns; new_news: 22 items"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261024T084703Z.parquet",
+  "sha256": "fc9c58b537f712be96793d26ad856d6af5fc83dd268c1013387b37f447ee2561",
+  "logged_utc": "2026-10-24T08:47:03.679461+00:00",
+  "rows": 62,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.919,
+  "revised_rows": 62,
+  "oldest_source_age_min": 196.9,
+  "first_kickoff_utc": "2026-10-25T20:25:00Z",
+  "reader_sha256": "932f932c9e20c4ba68ce590789181ef95d92304c31cf6453ecaa3be0101178e2",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261024T053008Z.parquet",
+   "inputs_digest": "{\"f7679cf18454e4d88a8f2b990c3f08ac\": \"c8555439d7eb1aab\"}",
+   "triggers": {
+    "f7679cf18454e4d88a8f2b990c3f08ac": "new_props: pull 2026-10-24T07:47:28.825581+00:00; injury_change: inj_Las Vegas Raiders; injury_change: inj_Los Angeles Rams; new_news: 36 items"
+   }
+  }
  }
 ]
