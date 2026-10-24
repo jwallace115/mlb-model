@@ -734,8 +734,9 @@ def watch_once(sport, root=ROOT, now=None, dry_run=False, mode="auto"):
     if not triggered:
         print(f"  {sport}: no triggers ({len(games)} games checked)")
 
-    # P70: record sweep time if this was a sweep with triggers
-    if cadence == "sweep" and triggered:
+    # P70: a sweep is recorded whether or not it found triggers — the games WERE checked
+    # (10-24: `and triggered` made the watcher sweep every 15 min until something changed)
+    if cadence == "sweep" and not dry_run:
         record_sweep(sport, now, root)
 
     return triggered, details
@@ -927,16 +928,10 @@ def main():
     env["MLB_REPO_ROOT"] = str(root)
     sport_upper = args.sport.upper()
 
-    # P72(a): adapters + site build inline; pick_layers detached (slow on 2 GB VM)
-    for desc, cmd in [
-        ("picks_adapters", [PY, str(root / "shared" / "pipeline" / "picks_adapters.py")]),
-        ("build_site", [PY, str(root / "site" / "build_site.py")]),
-    ]:
-        print(f"  {desc}...")
-        result = subprocess.run(cmd, cwd=str(root), env=env,
-                                capture_output=True, text=True, timeout=120)
-        if result.returncode != 0:
-            print(f"  WARNING: {desc} exit {result.returncode}: {result.stderr[:200]}")
+    # P72(a)/P73: adapters + site build inline with per-step timeouts; a timeout is a WARNING, never a crash
+    # (picks_adapters measured 158-222 s on the 2 GB VM on 10-24; the hourly :20 adapters cron and the 5-min site
+    # build catch up if a step is cut off). pick_layers stays detached.
+    _run_post_freeze_steps(root, env)
 
     # P72(a): pick_layers runs detached — the watcher completes regardless
     layers_log = Path(os.environ.get("HOME", "/root")) / "logs" / "pick_layers_event.log"
@@ -965,6 +960,41 @@ def main():
                         requested_by=args.requested_by, result="COMPLETE",
                         games_read=len(success_eids), frozen_file=dest.name,
                         triggers=trigger_list, spend_usd=spend.get("usd_estimate"))
+
+
+POST_FREEZE_TIMEOUTS = {"picks_adapters": 600, "build_site": 300}
+
+
+def _run_post_freeze_steps(root, env, runner=None, timeouts=None):
+    """P73: run picks_adapters then build_site; each step gets its own timeout and any failure or timeout is
+    printed as a WARNING and the next step still runs. Returns {step: "ok"|"exit N"|"timeout"|"error"}.
+    `runner` is injectable for tests (same signature as subprocess.run)."""
+    runner = runner or subprocess.run
+    timeouts = dict(POST_FREEZE_TIMEOUTS, **(timeouts or {}))
+    steps = [
+        ("picks_adapters", [PY, str(Path(root) / "shared" / "pipeline" / "picks_adapters.py")]),
+        ("build_site", [PY, str(Path(root) / "site" / "build_site.py")]),
+    ]
+    outcome = {}
+    for desc, cmd in steps:
+        tmo = timeouts.get(desc, 300)
+        print(f"  {desc}... (timeout {tmo}s)")
+        try:
+            result = runner(cmd, cwd=str(root), env=env, capture_output=True, text=True, timeout=tmo)
+        except subprocess.TimeoutExpired:
+            print(f"  WARNING: {desc} timed out after {tmo}s — continuing (the :20 adapters cron / 5-min site build catch up)")
+            outcome[desc] = "timeout"
+            continue
+        except Exception as e:  # noqa: BLE001 — the watcher must finish its bookkeeping
+            print(f"  WARNING: {desc} failed to start: {type(e).__name__}: {e}")
+            outcome[desc] = "error"
+            continue
+        if result.returncode != 0:
+            print(f"  WARNING: {desc} exit {result.returncode}: {(result.stderr or '')[:200]}")
+            outcome[desc] = f"exit {result.returncode}"
+        else:
+            outcome[desc] = "ok"
+    return outcome
 
 
 RETRY_DELAYS = [60, 300, 900, 3600]  # 1 min, 5 min, 15 min, then hourly
@@ -1095,5 +1125,28 @@ def _read_odds_credits(root):
     return {}
 
 
+def _sport_from_argv(argv):
+    for i, a in enumerate(argv):
+        if a == "--sport" and i + 1 < len(argv):
+            return argv[i + 1]
+        if a.startswith("--sport="):
+            return a.split("=", 1)[1]
+    return "nfl"
+
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit:
+        raise
+    except Exception as _e:  # P72(b): health + check_now on the exception path too
+        import traceback
+        traceback.print_exc()
+        _sport = _sport_from_argv(sys.argv)
+        try:
+            _write_health(_sport, "event", "STOP", root=ROOT)
+            _write_check_status(_sport, datetime.now(timezone.utc), ROOT,
+                                result=f"STOP: {type(_e).__name__}: {_e}"[:200])
+        except Exception:
+            pass
+        sys.exit(1)

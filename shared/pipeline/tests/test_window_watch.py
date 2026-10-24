@@ -148,15 +148,18 @@ class TestQuietFixture:
 
 class TestHorizonEntry:
 
-    def test_horizon_triggers_within_48h(self):
-        """A game within 48h with no prior read triggers horizon_entry."""
+    def test_horizon_triggers_within_48h(self, tmp_path):
+        """A game within 48h with no prior read triggers horizon_entry (P72d: tmp root; 13:00Z is before the
+        10 AM ET morning anchor, which at 14:00Z would be the standalone trigger instead)."""
         comp = {"hardrockbet_fl_spreads": [("Home", -3.0, -110)]}
-        kick = (_now() + timedelta(hours=24)).isoformat()  # 24h out
+        now = _now() - timedelta(hours=1)
+        kick = (now + timedelta(hours=24)).isoformat()  # 24h out
+        (tmp_path / "status").mkdir()
         triggers = ww.detect_triggers(
             "eid1", "nfl",
             ww._hash(comp), comp,
             None, None, None,  # no prior read
-            kick, _now())
+            kick, now, root=tmp_path)
         assert any("horizon" in t for t in triggers)
 
     def test_no_horizon_beyond_48h(self):
