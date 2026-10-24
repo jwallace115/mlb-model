@@ -50,9 +50,9 @@
   "error": "Extra data: line 4 column 2 (char 588)"
  },
  "nfl:550ec5290f935d311995affbcb0b5c79": {
-  "attempt": 5,
-  "last_utc": "2026-10-24T03:33:28.224076+00:00",
-  "error": "Extra data: line 6 column 2 (char 1107)"
+  "attempt": 6,
+  "last_utc": "2026-10-24T04:34:28.646113+00:00",
+  "error": "Extra data: line 7 column 1 (char 1142)"
  },
  "nfl:5dce18baccec5d3ad5fb3a3ce52f7619": {
   "attempt": 7,
@@ -93,5 +93,10 @@
   "attempt": 1,
   "last_utc": "2026-10-24T03:37:48.269738+00:00",
   "error": "Extra data: line 13 column 1 (char 315)"
+ },
+ "nfl:176d474ed8b2bbf1eb4d7e9c56b4bf22": {
+  "attempt": 1,
+  "last_utc": "2026-10-24T04:49:04.461897+00:00",
+  "error": "Extra data: line 6 column 2 (char 1179)"
  }
 }
