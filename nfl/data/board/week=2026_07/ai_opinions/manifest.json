@@ -2671,5 +2671,139 @@
     "176d474ed8b2bbf1eb4d7e9c56b4bf22": "new_props: pull 2026-10-24T07:47:28.825581+00:00; injury_change: inj_Seattle Seahawks; injury_change: inj_Kansas City Chiefs; new_news: 5 availability items"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T133203Z.parquet",
+  "sha256": "41b3ff25832f9adec8dcf74106e8c7e83477c7008f89d6b69ac533ef0a7aec7b",
+  "logged_utc": "2026-10-24T13:32:03.778243+00:00",
+  "rows": 54,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.944,
+  "revised_rows": 54,
+  "oldest_source_age_min": 481.9,
+  "first_kickoff_utc": "2026-10-25T17:00:00Z",
+  "reader_sha256": "539ee9fb8dc7316c5b11958631d9779afe7f8be37a2a16215814f799b4caf888",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261024T053008Z.parquet",
+   "inputs_digest": "{\"550ec5290f935d311995affbcb0b5c79\": \"bfcfc00ab973f313\"}",
+   "components": {
+    "550ec5290f935d311995affbcb0b5c79": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       -105
+      ],
+      [
+       "Cincinnati Bengals",
+       0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       1.0,
+       -110
+      ],
+      [
+       "Cincinnati Bengals",
+       -1.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       48.5,
+       -110
+      ],
+      [
+       "Under",
+       48.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       104
+      ],
+      [
+       "Cincinnati Bengals",
+       0,
+       -117
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       1.0,
+       -103
+      ],
+      [
+       "Cincinnati Bengals",
+       -1.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       101
+      ],
+      [
+       "Under",
+       49.0,
+       -118
+      ]
+     ],
+     "props_ts": "2026-10-24T07:47:28.825581+00:00",
+     "inj_Baltimore Ravens": "a1a657108468f137",
+     "inj_Cincinnati Bengals": "d864c4681194c585",
+     "news": [
+      "'It's Groundhog Day': Why Ravens lead the NFL in b",
+      "'It's Groundhog Day:' Why Ravens are NFL's worst a",
+      "49ers WR Mike Evans reps Bay Area with Curry jerse",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Bengals, Hendrickson downplaying matchup",
+      "Boye Mafe's proud of his culture",
+      "Burrow, Bengals understand importance of Ravens ma",
+      "How active NFL players continue to redefine all-ti",
+      "Inside NFL's field-stitching process from Rio to P",
+      "Inside the silent messages Boye Mafe sends every g",
+      "Lamar Jackson 'heading in the right direction' but",
+      "Lamar Jackson remains day-to-day with ankle injury",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "Ravens' Humphrey expresses displeasure over 'sland",
+      "Ravens' Lamar Jackson (high ankle sprain) unsure i",
+      "Ravens' Lamar Jackson returns to practice but stat",
+      "Ravens' Trey Hendrickson on facing Bengals: 'It's ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Trey Hendrickson is set to face the Bengals for th",
+      "What a win over the Ravens would mean for the Beng",
+      "What are the longest field goals in NFL history?",
+      "Will Lamar Jackson make Sunday's game?"
+     ],
+     "kalshi_snap": "snap_20261024T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "550ec5290f935d311995affbcb0b5c79": "new_props: pull 2026-10-24T07:47:28.825581+00:00; injury_change: inj_Baltimore Ravens; injury_change: inj_Cincinnati Bengals; new_news: 2 availability items"
+   }
+  }
  }
 ]
