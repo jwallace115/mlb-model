@@ -7581,5 +7581,73 @@
     "8a67420bfc49f0bcf8c92bc4c08be602": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T214903Z.parquet",
+  "sha256": "75b0242cf1f85490f27732bb3e350accb2f58824bb3f8811897387409e1ca24b",
+  "logged_utc": "2026-10-24T21:49:03.118533+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-24T22:30:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T213006Z.parquet",
+   "inputs_digest": "{\"c5223791e733b6bc0744618614b007b7\": \"dfca22bd9221851b\"}",
+   "components": {
+    "c5223791e733b6bc0744618614b007b7": {
+     "pinnacle_h2h": [
+      [
+       "Colorado State Rams",
+       0,
+       102
+      ],
+      [
+       "San Diego State Aztecs",
+       0,
+       -113
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado State Rams",
+       1.5,
+       -109
+      ],
+      [
+       "San Diego State Aztecs",
+       -1.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.5,
+       100
+      ],
+      [
+       "Under",
+       59.5,
+       -116
+      ]
+     ],
+     "news": [
+      "Marshall Faulk, Hall of Famer and Southern coach, "
+     ],
+     "kalshi_snap": "snap_20261024T2137Z.parquet"
+    }
+   },
+   "triggers": {
+    "c5223791e733b6bc0744618614b007b7": "anchor_close"
+   }
+  }
  }
 ]
