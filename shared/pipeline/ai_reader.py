@@ -541,14 +541,23 @@ def _save_spend(root, spend):
     p.write_text(json.dumps(spend, indent=1) + "\n")
 
 
+DEFAULT_DAILY_CAP_USD = 12.0
+
+
 def _check_spend_cap(root, cap_usd=None):
-    """HALT if monthly spend exceeds the cap."""
+    """HALT if monthly spend exceeds the cap, or today's spend exceeds the daily cap (10-24 runaway lesson)."""
     cap = cap_usd or float(os.environ.get("AI_READER_MONTHLY_CAP_USD", DEFAULT_MONTHLY_CAP_USD))
+    daily_cap = float(os.environ.get("AI_READER_DAILY_CAP_USD", DEFAULT_DAILY_CAP_USD))
     spend = _load_spend(root)
     current_month = datetime.now(timezone.utc).strftime("%Y-%m")
     if spend.get("month") == current_month and spend.get("usd_estimate", 0) >= cap:
         raise SystemExit(
             f"HALT: AI reader monthly spend ${spend['usd_estimate']:.2f} >= cap ${cap:.2f}")
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    today_usd = float((spend.get("daily") or {}).get(today, 0.0))
+    if today_usd >= daily_cap:
+        raise SystemExit(
+            f"HALT: AI reader daily spend ${today_usd:.2f} >= daily cap ${daily_cap:.2f}")
 
 
 def _update_spend(root, model, input_tokens, output_tokens):
@@ -569,6 +578,9 @@ def _update_spend(root, model, input_tokens, output_tokens):
         # Opus-class pricing: $15/M input, $75/M output
         cost = input_tokens * 15e-6 + output_tokens * 75e-6
     spend["usd_estimate"] = round(spend["usd_estimate"] + cost, 4)
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    daily = spend.setdefault("daily", {})
+    daily[today] = round(float(daily.get(today, 0.0)) + cost, 4)
     _save_spend(root, spend)
     return spend
 
@@ -853,7 +865,7 @@ def picks_to_filled(picks, sheet_df, sport, event_id=None):
 def freeze_reads(filled_df, sport, season, week, now, window="event",
                  reader_model=None, root=ROOT, triggers=None,
                  props_file=None, lines_file=None, inputs_digest=None,
-                 packet_dir=None):
+                 packet_dir=None, components=None):
     """Freeze the filled picks through log_ai_opinions.freeze().
 
     Args:
@@ -898,6 +910,8 @@ def freeze_reads(filled_df, sport, season, week, now, window="event",
         pinned["lines_file"] = str(lines_file)
     if inputs_digest:
         pinned["inputs_digest"] = inputs_digest
+    if components:
+        pinned["components"] = components  # {event_id: components} so the next tick compares like with like
     if triggers:
         pinned["triggers"] = triggers
 

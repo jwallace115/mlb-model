@@ -39,7 +39,9 @@ SPREAD_MOVE_THRESHOLD = 1.0
 TOTAL_MOVE_THRESHOLD = 1.0
 ML_NOVIG_MOVE_PP = 0.03  # 3 percentage points
 HORIZON_HOURS = 48
-REREAD_MIN = 30  # minutes: rate limit per game
+REREAD_MIN = 60  # minutes: rate limit per game (30 -> 60 after the 10-24 runaway)
+import re as _re
+NEWS_KEYWORDS = _re.compile(r"\b(out|questionable|doubtful|injur|ruled|suspend|inactive|activat|concussion|surgery|benched|starter|starting|will not play|won't play|limited|DNP|IR\b|return)", _re.I)
 BLACKOUT_MIN = 20  # never read inside last 20 min before kick
 LOOKBACK_DAYS = 7
 
@@ -385,9 +387,9 @@ def detect_triggers(event_id, sport, current_digest, current_components,
     # News change
     old_news = set((last_components or {}).get("news", []))
     new_news = set(current_components.get("news", []))
-    new_items = new_news - old_news
+    new_items = {h for h in (new_news - old_news) if NEWS_KEYWORDS.search(h)}
     if new_items:
-        triggers.append(f"new_news: {len(new_items)} items")
+        triggers.append(f"new_news: {len(new_items)} availability items")
 
     # Sim freeze change
     old_sim = (last_components or {}).get("sim_freeze")
@@ -583,7 +585,7 @@ def watch_once(sport, root=ROOT, now=None, dry_run=False):
                     has_injury = True
             old_news = set((last_components or {}).get("news", []))
             new_news = set(components.get("news", []))
-            if new_news - old_news:
+            if {h for h in (new_news - old_news) if NEWS_KEYWORDS.search(h)}:
                 has_news = True
 
         pre_triggers[eid] = {"injury": has_injury, "news": has_news, "horizon": has_horizon}
@@ -651,8 +653,10 @@ def _load_last_components(event_id, sport, root):
                     continue
             if logged and (best_logged is None or logged > best_logged):
                 best_logged = logged
-                # The components are stored as the inputs dict
-                best_components = inputs
+                # P62 fix (10-24): the per-event components live under inputs["components"][event_id];
+                # the inputs dict itself (paths, digest, triggers) is NOT comparable and must not be returned.
+                comps = (inputs.get("components") or {}).get(event_id)
+                best_components = comps if comps else {}
 
     return best_components
 
@@ -771,11 +775,13 @@ def main():
     reader_model = f"ai_reader_v1b/{model}"
     success_eids = list(succeeded.keys())
 
-    # Compute digest for each SUCCESSFUL event only
+    # Compute digest + components for each SUCCESSFUL event only (components are stored for the next comparison)
     digests = {}
+    comps_by_eid = {}
     for eid in success_eids:
-        d, _ = compute_inputs_digest(eid, args.sport, root=root, now=now)
+        d, c = compute_inputs_digest(eid, args.sport, root=root, now=now)
         digests[eid] = d
+        comps_by_eid[eid] = c
 
     # P68: freeze only successful games
     success_triggers = {eid: trigger_text[eid] for eid in success_eids if eid in trigger_text}
@@ -783,7 +789,7 @@ def main():
         filled, args.sport, 2026, week, now,
         window="event", reader_model=reader_model, root=root,
         triggers=success_triggers, props_file=props_path, lines_file=lines_path,
-        inputs_digest=json.dumps(digests))
+        inputs_digest=json.dumps(digests), components=comps_by_eid)
 
     print(f"  FROZEN: {dest.name} sha={sha[:16]} rows={len(frozen)} "
           f"games={len(success_eids)} (failed={len(failed)})")
