@@ -4067,5 +4067,639 @@
     "2bba7fde6f97d0e54403d53676e4ab63": "new_props: pull 2026-10-24T13:17:33.081657+00:00; injury_change: inj_New York Giants"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T183203Z.parquet",
+  "sha256": "eb4f26bc0785c71b62b7026e5d299be19c7c3ec54e5ab20b2c27cefaa94da6b2",
+  "logged_utc": "2026-10-24T18:32:03.927556+00:00",
+  "rows": 427,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 6,
+  "no_view_share": 0.941,
+  "revised_rows": 427,
+  "oldest_source_age_min": 644.6,
+  "first_kickoff_utc": "2026-10-25T13:30:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261024T183008Z.parquet",
+   "inputs_digest": "{\"2e710ea5a306b614f0f966e3d78732f8\": \"b539046e1fe9b1ef\", \"5dce18baccec5d3ad5fb3a3ce52f7619\": \"1c1c637f0a78bc96\", \"2bba7fde6f97d0e54403d53676e4ab63\": \"83a5e226d9553957\", \"f3992ad4496724baf7dcd1ef58245d6b\": \"955d64c64fba4588\", \"be5dd120ca08b43d647b6caa8953500a\": \"35f2996245f5e431\", \"176d474ed8b2bbf1eb4d7e9c56b4bf22\": \"229f47bc4cf5119e\"}",
+   "components": {
+    "2e710ea5a306b614f0f966e3d78732f8": {
+     "hardrockbet_fl_h2h": [
+      [
+       "New Orleans Saints",
+       0,
+       140
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       -170
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "New Orleans Saints",
+       3.0,
+       -105
+      ],
+      [
+       "Pittsburgh Steelers",
+       -3.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       45.0,
+       -110
+      ],
+      [
+       "Under",
+       45.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "New Orleans Saints",
+       0,
+       149
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       -169
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Orleans Saints",
+       3.0,
+       -103
+      ],
+      [
+       "Pittsburgh Steelers",
+       -3.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -115
+      ],
+      [
+       "Under",
+       44.5,
+       -101
+      ]
+     ],
+     "props_ts": "2026-10-24T18:32:29.502620+00:00",
+     "inj_New Orleans Saints": "eed4b0cae1f3ec17",
+     "inj_Pittsburgh Steelers": "d9f7b58a58ee86e3",
+     "news": [
+      "49ers WR Mike Evans reps Bay Area with Curry jerse",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Bucs QB Jalon Daniels swaps jerseys with idol, Ste",
+      "Cam Heyward details Steelers' preparation for Pari",
+      "Can the Saints carry their winning momentum into P",
+      "Early bets for NFL Week 7: Three games we're jumpi",
+      "French quarters: Saints feel at home in Paris and ",
+      "Goodell comfortable with security for NFL's Paris ",
+      "Inside NFL's field-stitching process from Rio to P",
+      "NFL House in Paris closes ahead of street protests",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL readies for Steelers-Saints in Paris amid civi",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL to increase security in Paris for Steelers-Sai",
+      "PSG unveil jersey for Steelers vs. Saints NFL game",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Saints GM Mickey Loomis asks for patience with 'yo",
+      "Steelers bring back veteran Marquez Valdes-Scantli",
+      "Steelers fan event in Paris canceled following rec",
+      "Steelers' Aaron Rodgers backs NFL on holding Paris",
+      "What are the longest field goals in NFL history?"
+     ],
+     "kalshi_snap": "snap_20261024T1805Z.parquet"
+    },
+    "5dce18baccec5d3ad5fb3a3ce52f7619": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cleveland Browns",
+       0,
+       -130
+      ],
+      [
+       "Tennessee Titans",
+       0,
+       110
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cleveland Browns",
+       -2.0,
+       -110
+      ],
+      [
+       "Tennessee Titans",
+       2.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       37.0,
+       -115
+      ],
+      [
+       "Under",
+       37.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cleveland Browns",
+       0,
+       -133
+      ],
+      [
+       "Tennessee Titans",
+       0,
+       118
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cleveland Browns",
+       -1.5,
+       -115
+      ],
+      [
+       "Tennessee Titans",
+       1.5,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.0,
+       -108
+      ],
+      [
+       "Under",
+       37.0,
+       -108
+      ]
+     ],
+     "props_ts": "2026-10-24T18:32:29.502620+00:00",
+     "inj_Tennessee Titans": "4b58686eadfb45ec",
+     "inj_Cleveland Browns": "6f08c7a5f53a07a1",
+     "news": [
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "49ers WR Mike Evans reps Bay Area with Curry jerse",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Browns RBs Quinshon Judkins, Dylan Sampson expecte",
+      "Calvin Ridley questionable for Titans in Week 7",
+      "Can the Browns' offense get off to a quick start v",
+      "How Browns' past two draft classes are catching th",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "Robert Saleh defends Jordan Elliott, says gun inci",
+      "Seven things Solak thinks entering NFL Week 7: Fro",
+      "Titans abruptly release DT Jordan Elliott for undi",
+      "Titans chase a rare 2nd straight win as the Browns",
+      "Titans working through Alontae Taylor situation",
+      "Titans' Robert Saleh defends Jordan Elliott: Gun i",
+      "What are the longest field goals in NFL history?",
+      "What's led to Titans' recent success? Under center"
+     ],
+     "kalshi_snap": "snap_20261024T1805Z.parquet"
+    },
+    "2bba7fde6f97d0e54403d53676e4ab63": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Houston Texans",
+       0,
+       -525
+      ],
+      [
+       "New York Giants",
+       0,
+       375
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Houston Texans",
+       -10.0,
+       -115
+      ],
+      [
+       "New York Giants",
+       10.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       42.5,
+       -115
+      ],
+      [
+       "Under",
+       42.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Houston Texans",
+       0,
+       -471
+      ],
+      [
+       "New York Giants",
+       0,
+       370
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Houston Texans",
+       -10.5,
+       -102
+      ],
+      [
+       "New York Giants",
+       10.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       104
+      ],
+      [
+       "Under",
+       43.5,
+       -121
+      ]
+     ],
+     "props_ts": "2026-10-24T18:32:29.502620+00:00",
+     "inj_Houston Texans": "ce61ab0d617d58cd",
+     "inj_New York Giants": "9af0a41c07e3f6a6",
+     "news": [
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "49ers WR Mike Evans reps Bay Area with Curry jerse",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "C.J. Stroud powers Houston Texans vs New York Gian",
+      "Cam Skattebo set to return to Giants RB mix after ",
+      "DeMeco Ryans can't wait to see Tank Dell back on t",
+      "Eisen says starting J.J. McCarthy 'the only move J",
+      "Giants LB Tremaine Edmunds (chest) out for year, s",
+      "Giants release RB Najee Harris 2 days after start",
+      "Giants releasing RB Najee Harris, source says",
+      "Giants turning to J.J. McCarthy as QB1 against Tex",
+      "Giants turning to J.J. McCarthy as QB1 this weeken",
+      "Goodell defends Giants' Tisch, 49ers' York attendi",
+      "Inside Marvin Harrison Jr.s' exit from the Cardina",
+      "JJ McCarthy announced the Giants' QB1",
+      "JJ Watt lands new deal as full-time CBS lead analy",
+      "Jameis Winston vs. J.J. McCarthy: Pros and cons of",
+      "John Harbaugh: Giants 'honing in on' QB decision f",
+      "Jordan Rodgers: J.J. McCarthy gives Giants the bes",
+      "Kyrie Irving explains offer to pay Al-Shaair's eye",
+      "McCarthy to start at QB for Giants for 'foreseeabl",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL survivor power rankings: Why this is the week ",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Seven things Solak thinks entering NFL Week 7: Fro",
+      "Source: Giants turning to J.J. McCarthy as QB1 thi",
+      "Tank Dell to return in Week 7",
+      "Texans WR Tank Dell to play Sunday in 1st game sin",
+      "Texans' Tank Dell says he won't fear being hit in ",
+      "What are the longest field goals in NFL history?"
+     ],
+     "kalshi_snap": "snap_20261024T1805Z.parquet"
+    },
+    "f3992ad4496724baf7dcd1ef58245d6b": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Indianapolis Colts",
+       0,
+       240
+      ],
+      [
+       "Minnesota Vikings",
+       0,
+       -300
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Indianapolis Colts",
+       6.0,
+       -110
+      ],
+      [
+       "Minnesota Vikings",
+       -6.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       41.5,
+       -110
+      ],
+      [
+       "Under",
+       41.5,
+       -110
+      ]
+     ],
+     "props_ts": "2026-10-24T18:32:29.502620+00:00",
+     "inj_Minnesota Vikings": "476e6b3f3d4b080f",
+     "inj_Indianapolis Colts": "0292c9f85ed48b4e",
+     "news": [
+      "49ers WR Mike Evans reps Bay Area with Curry jerse",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Colts QB Anthony Richardson Sr. charged with posse",
+      "Colts fire GM Chris Ballard after home loss to Tit",
+      "Colts to stick with Daniel Jones at quarterback vs",
+      "Colts' Tyler Warren to miss second game with groin",
+      "Early bets for NFL Week 7: Three games we're jumpi",
+      "Four players returning on offense for the Vikes",
+      "How will Colts respond to tumultuous week?",
+      "Jay-Z's greatest sports lyrics, ranked ahead of hi",
+      "Kyler Murray adds new dimension to Vikings offense",
+      "Marshall Faulk, Hall of Famer and Southern coach, ",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL survivor power rankings: Why this is the week ",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Seven things Solak thinks entering NFL Week 7: Fro",
+      "Shane Steichen coaching for his job in Indy",
+      "Source: Several teams interested in Colts RB Taylo",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "The case for (and against) the Colts keeping Shane",
+      "Unbeaten Vikings' dominant defense presents an unt",
+      "Vikings praise Aaron Jones Sr.'s heart with Jordan",
+      "What are the longest field goals in NFL history?",
+      "What does firing GM Ballard mean for Colts coach S",
+      "Which NFL teams are undefeated this season?"
+     ],
+     "kalshi_snap": "snap_20261024T1805Z.parquet"
+    },
+    "be5dd120ca08b43d647b6caa8953500a": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       185
+      ],
+      [
+       "New York Jets",
+       0,
+       -225
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Miami Dolphins",
+       4.5,
+       -110
+      ],
+      [
+       "New York Jets",
+       -4.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       39.5,
+       -110
+      ],
+      [
+       "Under",
+       39.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       186
+      ],
+      [
+       "New York Jets",
+       0,
+       -215
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami Dolphins",
+       4.5,
+       -109
+      ],
+      [
+       "New York Jets",
+       -4.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.5,
+       -101
+      ],
+      [
+       "Under",
+       39.5,
+       -115
+      ]
+     ],
+     "props_ts": "2026-10-24T18:32:29.502620+00:00",
+     "inj_New York Jets": "7a3f2be8242380c7",
+     "inj_Miami Dolphins": "4a7a1b0d963ff208",
+     "news": [
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "49ers WR Mike Evans reps Bay Area with Curry jerse",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Dolphins release Riley Patterson after Week 5 prob",
+      "Dolphins rookie WR Caleb Douglas set to return vs.",
+      "Early bets for NFL Week 7: Three games we're jumpi",
+      "Is the Jets' matchup vs. the Dolphins a must-win?",
+      "Jets WR Adonai Mitchell to play, RB Breece Hall qu",
+      "Jets excited to to have top WRs healthy",
+      "Jets face a 'huge' home test vs. winless Dolphins ",
+      "Jets' Aaron Glenn backs Frank Reich despite team's",
+      "Jets' Reich likes when star playmakers 'make noise",
+      "Miami Dolphins, New York Jets have clear plans for",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL survivor power rankings: Why this is the week ",
+      "Report: $250K fines for Sirianni, Vrabel, Glenn te",
+      "Sources: Nick Sirianni, Mike Vrabel, Aaron Glenn f",
+      "What are the longest field goals in NFL history?",
+      "Why Tristan H. Cockcroft likes the Jets defense in"
+     ],
+     "kalshi_snap": "snap_20261024T1805Z.parquet"
+    },
+    "176d474ed8b2bbf1eb4d7e9c56b4bf22": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Kansas City Chiefs",
+       0,
+       125
+      ],
+      [
+       "Seattle Seahawks",
+       0,
+       -145
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Kansas City Chiefs",
+       2.5,
+       -105
+      ],
+      [
+       "Seattle Seahawks",
+       -2.5,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       42.5,
+       -110
+      ],
+      [
+       "Under",
+       42.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Kansas City Chiefs",
+       0,
+       130
+      ],
+      [
+       "Seattle Seahawks",
+       0,
+       -147
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas City Chiefs",
+       3.0,
+       -113
+      ],
+      [
+       "Seattle Seahawks",
+       -3.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.0,
+       -112
+      ],
+      [
+       "Under",
+       42.0,
+       -104
+      ]
+     ],
+     "props_ts": "2026-10-24T18:32:29.502620+00:00",
+     "inj_Seattle Seahawks": "0a66b5aeec148c8c",
+     "inj_Kansas City Chiefs": "f3d9f706144cd67a",
+     "news": [
+      "49ers WR Mike Evans reps Bay Area with Curry jerse",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Chiefs mourn Allen Bailey after former NFL player ",
+      "Chiefs place LT Josh Simmons on IR as rehab proces",
+      "Fantasy's greatest tight end enshrined in ESPN Fan",
+      "Kansas City Chiefs WR Xavier Worthy thriving in ex",
+      "Kenneth Walker III is thriving with Chiefs. Why di",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Seahawks RB Zach Charbonnet activated off PUP list",
+      "Seahawks rule out RB Zach Charbonnet vs. Chiefs",
+      "Seahawks' Zach Charbonnet activated off PUP list, ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "The Seahawks prepare to face former teammate Kenne",
+      "What are the longest field goals in NFL history?",
+      "What's the gameplan for Seahawks backfield?",
+      "Which NFL teams are undefeated this season?",
+      "Why the Seahawks let Kenneth Walker III leave",
+      "Xavier Worthy proving to be an important piece for"
+     ],
+     "kalshi_snap": "snap_20261024T1805Z.parquet"
+    }
+   },
+   "triggers": {
+    "2e710ea5a306b614f0f966e3d78732f8": "new_props: pull 2026-10-24T18:32:29.502620+00:00; injury_change: inj_New Orleans Saints; injury_change: inj_Pittsburgh Steelers",
+    "5dce18baccec5d3ad5fb3a3ce52f7619": "new_props: pull 2026-10-24T18:32:29.502620+00:00; injury_change: inj_Tennessee Titans; injury_change: inj_Cleveland Browns",
+    "2bba7fde6f97d0e54403d53676e4ab63": "new_props: pull 2026-10-24T18:32:29.502620+00:00; injury_change: inj_New York Giants",
+    "f3992ad4496724baf7dcd1ef58245d6b": "new_props: pull 2026-10-24T18:32:29.502620+00:00; injury_change: inj_Indianapolis Colts",
+    "be5dd120ca08b43d647b6caa8953500a": "new_props: pull 2026-10-24T18:32:29.502620+00:00; injury_change: inj_New York Jets; injury_change: inj_Miami Dolphins",
+    "176d474ed8b2bbf1eb4d7e9c56b4bf22": "new_props: pull 2026-10-24T18:32:29.502620+00:00; injury_change: inj_Kansas City Chiefs"
+   }
+  }
  }
 ]
