@@ -4562,3 +4562,17 @@ SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
 
 ### NOT DONE
 - Merge, VM un-comment cron, live cycle — Cowork does these.
+
+## 2026-10-24T14:38Z  claude-code (OPS-CAD3 — cadence, Check now, cleanups, odds audit)
+
+### RETURNED
+- Branch: ops/cad3-cadence-button (4 commits, 654cef769..aba0252ab)
+- Item 1 (654cef769): cadence sweep/light/quiet (P70). 7 tests GREEN.
+- Item 2 (7ca3e3739): Check now button + service (P71). 5 tests GREEN.
+- Item 3 (fd6095ca3): detached pick_layers, pause, convention (P72). 4 tests GREEN.
+- Item 4 (aba0252ab): odds audit (report only). 2 tests GREEN.
+- Full suite: 18 tests GREEN, 0 RED.
+- grep -rn sk-ant → empty.
+
+### NOT DONE
+- Merge, VM cron, systemd, Caddyfile, plan verification — Cowork does these.

@@ -45,9 +45,98 @@ NEWS_KEYWORDS = _re.compile(r"\b(out|questionable|doubtful|injur|ruled|suspend|i
 BLACKOUT_MIN = 20  # never read inside last 20 min before kick
 LOOKBACK_DAYS = 7
 
+# P70: cadence thresholds
+SWEEP_INTERVAL_FAR = 180    # minutes: sweep every 3 h when nearest kick > 24 h
+SWEEP_INTERVAL_GAMEDAY = 60 # minutes: sweep every 1 h when nearest kick 3-24 h
+# inside 3 h → LIGHT ticks only (anchors, injury, avail news, close pull)
+LIGHT_TRIGGERS = {"anchor_morning", "anchor_prekick", "anchor_close",
+                  "injury_change", "new_news"}  # prefixes to match
+
 
 def _parse_utc(s):
     return datetime.fromisoformat(str(s).replace("Z", "+00:00"))
+
+
+def _watch_state_path(root):
+    return root / "status" / "watch_state.json"
+
+
+def _load_watch_state(root):
+    p = _watch_state_path(root)
+    if p.exists():
+        try:
+            return json.loads(p.read_text())
+        except Exception:
+            pass
+    return {}
+
+
+def _save_watch_state(data, root):
+    p = _watch_state_path(root)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(data, indent=1) + "\n")
+
+
+def decide_cadence(sport, nearest_kick_hours, now, root, mode="auto"):
+    """P70: decide whether this tick is a sweep, light, or quiet.
+
+    Args:
+        sport: "nfl" or "ncaaf"
+        nearest_kick_hours: hours to the nearest upcoming kick (None if no games)
+        now: UTC datetime
+        mode: "auto" (default), "sweep" (forced), "light" (forced)
+        root: repo root
+
+    Returns: ("sweep"|"light"|"quiet", reason_string)
+    """
+    if mode == "sweep":
+        return "sweep", "forced --mode sweep"
+    if mode == "light":
+        return "light", "forced --mode light"
+
+    if nearest_kick_hours is None:
+        return "quiet", "no upcoming games"
+
+    state = _load_watch_state(root)
+    last_sweep_utc = state.get(f"last_sweep_{sport}")
+    sweep_age_min = float("inf")
+    if last_sweep_utc:
+        try:
+            sweep_age_min = (now - _parse_utc(last_sweep_utc)).total_seconds() / 60
+        except Exception:
+            pass
+
+    # Check for 10 AM ET anchor → always a sweep
+    from zoneinfo import ZoneInfo
+    et_now = now.astimezone(ZoneInfo("America/New_York"))
+    if et_now.hour == 10 and et_now.minute < 15:
+        morning_key = f"morning_sweep_{sport}:{et_now.strftime('%Y-%m-%d')}"
+        if morning_key not in state:
+            return "sweep", f"anchor_morning 10:00 AM ET"
+
+    nk = nearest_kick_hours
+    if nk > 24:
+        if sweep_age_min >= SWEEP_INTERVAL_FAR:
+            return "sweep", f"nearest kick {nk:.1f}h, last sweep {sweep_age_min:.0f}min"
+        return "quiet", f"nearest kick {nk:.1f}h, last sweep {sweep_age_min:.0f}min"
+    elif nk > 3:
+        if sweep_age_min >= SWEEP_INTERVAL_GAMEDAY:
+            return "sweep", f"nearest kick {nk:.1f}h, last sweep {sweep_age_min:.0f}min"
+        return "quiet", f"nearest kick {nk:.1f}h, last sweep {sweep_age_min:.0f}min"
+    else:
+        return "light", f"kick in {nk:.1f}h"
+
+
+def record_sweep(sport, now, root):
+    """Record that a sweep just completed for this sport."""
+    state = _load_watch_state(root)
+    state[f"last_sweep_{sport}"] = now.isoformat()
+    # Mark morning sweep done for today
+    from zoneinfo import ZoneInfo
+    et_now = now.astimezone(ZoneInfo("America/New_York"))
+    morning_key = f"morning_sweep_{sport}:{et_now.strftime('%Y-%m-%d')}"
+    state[morning_key] = now.isoformat()
+    _save_watch_state(state, root)
 
 
 def _hash(data):
@@ -551,8 +640,11 @@ def _run_props_pull(event_ids, root, dry_run=False):
     return True
 
 
-def watch_once(sport, root=ROOT, now=None, dry_run=False):
+def watch_once(sport, root=ROOT, now=None, dry_run=False, mode="auto"):
     """Run one watcher tick.
+
+    Args:
+        mode: "auto" (cadence-aware), "sweep" (full), "light" (anchors+injury only)
 
     Returns (triggered_games, trigger_details) where:
       triggered_games = list of event_ids
@@ -562,6 +654,22 @@ def watch_once(sport, root=ROOT, now=None, dry_run=False):
     games = get_upcoming_games(sport, root=root, now=now)
     if not games:
         print(f"  {sport}: no upcoming games")
+        return [], {}
+
+    # P70: compute nearest kick and decide cadence
+    nearest_hours = None
+    for _, _, _, ct in games:
+        try:
+            h = (_parse_utc(ct) - now).total_seconds() / 3600
+            if h > 0 and (nearest_hours is None or h < nearest_hours):
+                nearest_hours = h
+        except Exception:
+            pass
+
+    cadence, reason = decide_cadence(sport, nearest_hours, now, root, mode=mode)
+    print(f"  cadence: {cadence} ({reason})")
+
+    if cadence == "quiet":
         return [], {}
 
     # ── Phase 1: pre-trigger scan to identify props pull candidates ──
@@ -614,12 +722,21 @@ def watch_once(sport, root=ROOT, now=None, dry_run=False):
             ct, now, root=root)
 
         if triggers:
-            triggered.append(eid)
-            details[eid] = triggers
-            print(f"  TRIGGER {eid} ({away} @ {home}): {'; '.join(triggers)}")
+            # P70: light ticks keep only anchor/injury/news triggers
+            if cadence == "light":
+                triggers = [t for t in triggers if any(
+                    t.startswith(p) for p in LIGHT_TRIGGERS)]
+            if triggers:
+                triggered.append(eid)
+                details[eid] = triggers
+                print(f"  TRIGGER {eid} ({away} @ {home}): {'; '.join(triggers)}")
 
     if not triggered:
         print(f"  {sport}: no triggers ({len(games)} games checked)")
+
+    # P70: record sweep time if this was a sweep with triggers
+    if cadence == "sweep" and triggered:
+        record_sweep(sport, now, root)
 
     return triggered, details
 
@@ -670,11 +787,19 @@ def main():
     ap = argparse.ArgumentParser(description="Event-driven watcher")
     ap.add_argument("--sport", default="nfl", choices=["nfl", "ncaaf"])
     ap.add_argument("--once", action="store_true", help="run one tick and exit")
+    ap.add_argument("--mode", default="auto", choices=["sweep", "light", "auto"])
+    ap.add_argument("--requested-by", default=None, help="who requested this run (cron/button)")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--root", default=str(ROOT))
     args = ap.parse_args()
 
     root = Path(args.root)
+
+    # P72(c): pause flag
+    if (root / "status" / "watch_paused").exists():
+        print(f"window_watch: paused (status/watch_paused exists)")
+        _write_health(args.sport, "event", "paused", root=root)
+        sys.exit(0)
 
     # P58 extension: flock — one watcher at a time per sport
     ledger_dir = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
@@ -685,17 +810,20 @@ def main():
         fcntl.flock(_lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except (OSError, IOError):
         print(f"window_watch: another instance is running — exiting")
+        _write_health(args.sport, "event", "busy", root=root)
         sys.exit(0)
 
     now = datetime.now(timezone.utc)
     ts = now.strftime("%Y-%m-%dT%H:%M:%SZ")
-    print(f"[{ts}] window_watch tick: sport={args.sport}")
+    print(f"[{ts}] window_watch tick: sport={args.sport} mode={args.mode}")
 
-    triggered, details = watch_once(args.sport, root=root, now=now, dry_run=args.dry_run)
+    triggered, details = watch_once(args.sport, root=root, now=now, dry_run=args.dry_run,
+                                     mode=args.mode)
 
     if not triggered:
-        # Write health
         _write_health(args.sport, "event", "no_triggers", root=root)
+        _write_check_status(args.sport, now, root, mode=args.mode,
+                            requested_by=args.requested_by, result="no_triggers")
         return
 
     if args.dry_run:
@@ -799,17 +927,28 @@ def main():
     env["MLB_REPO_ROOT"] = str(root)
     sport_upper = args.sport.upper()
 
+    # P72(a): adapters + site build inline; pick_layers detached (slow on 2 GB VM)
     for desc, cmd in [
         ("picks_adapters", [PY, str(root / "shared" / "pipeline" / "picks_adapters.py")]),
-        ("pick_layers --build-missing", [PY, str(root / "shared" / "pipeline" / "pick_layers.py"),
-                                         "--build-missing"]),
         ("build_site", [PY, str(root / "site" / "build_site.py")]),
     ]:
         print(f"  {desc}...")
         result = subprocess.run(cmd, cwd=str(root), env=env,
-                                capture_output=True, text=True, timeout=300)
+                                capture_output=True, text=True, timeout=120)
         if result.returncode != 0:
             print(f"  WARNING: {desc} exit {result.returncode}: {result.stderr[:200]}")
+
+    # P72(a): pick_layers runs detached — the watcher completes regardless
+    layers_log = Path(os.environ.get("HOME", "/root")) / "logs" / "pick_layers_event.log"
+    layers_log.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        subprocess.Popen(
+            [PY, str(root / "shared" / "pipeline" / "pick_layers.py"), "--build-missing"],
+            cwd=str(root), env=env, start_new_session=True,
+            stdout=open(str(layers_log), "a"), stderr=subprocess.STDOUT)
+        print(f"  pick_layers detached → {layers_log}")
+    except Exception as e:
+        print(f"  WARNING: pick_layers Popen failed: {e}")
 
     # Write health
     _write_health(args.sport, "event", "COMPLETE",
@@ -819,6 +958,13 @@ def main():
     spend = ar._load_spend(root)
     print(f"  spend: {json.dumps(spend)}")
     print(f"  odds credits: {_read_odds_credits(root)}")
+
+    # P71: write check_now status
+    trigger_list = [{"game": eid, "text": trigger_text.get(eid, "")} for eid in success_eids]
+    _write_check_status(args.sport, now, root, mode=args.mode,
+                        requested_by=args.requested_by, result="COMPLETE",
+                        games_read=len(success_eids), frozen_file=dest.name,
+                        triggers=trigger_list, spend_usd=spend.get("usd_estimate"))
 
 
 RETRY_DELAYS = [60, 300, 900, 3600]  # 1 min, 5 min, 15 min, then hourly
@@ -919,6 +1065,26 @@ def _write_health(sport, window, result, freeze_file=None, root=ROOT, triggers=N
     entries = [e for e in entries if not (e.get("sport") == sport and e.get("window") == window)]
     entries.append(entry)
     health_path.write_text(json.dumps(entries, indent=1) + "\n")
+
+
+def _write_check_status(sport, started_utc, root, mode="auto", requested_by=None,
+                        result="no_triggers", games_read=0, frozen_file=None,
+                        triggers=None, spend_usd=None, games_checked=0):
+    """P71: write status/check_now_<sport>.json for the button's status line."""
+    from shared.pipeline.check_now_service import write_check_status
+    data = {
+        "started_utc": started_utc.isoformat() if hasattr(started_utc, 'isoformat') else str(started_utc),
+        "finished_utc": datetime.now(timezone.utc).isoformat(),
+        "mode": mode,
+        "requested_by": requested_by or "cron",
+        "games_checked": games_checked,
+        "triggers": triggers or [],
+        "games_read": games_read,
+        "frozen_file": frozen_file,
+        "spend_usd": spend_usd,
+        "result": result,
+    }
+    write_check_status(sport, data, root)
 
 
 def _read_odds_credits(root):

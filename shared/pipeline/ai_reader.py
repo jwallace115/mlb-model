@@ -516,7 +516,8 @@ def build_packet(sport, event_ids, sheet, props_df, lines_df, now,
     props_ts = str(sh[sh.player_name != ""].source_utc.max())[:16] if "source_utc" in sh.columns and len(sh[sh.player_name != ""]) else "none"
     header = (f"packet built {now.strftime('%Y-%m-%dT%H:%MZ')} | "
               f"snap {snap_name} | props pull {props_ts} | "
-              f"kalshi {kalshi_file or 'none'} | injuries {inj_file or 'none'}")
+              f"kalshi {kalshi_file or 'none'} | injuries {inj_file or 'none'}\n"
+              f"Lines are quoted from the first side; first = home/Over, second = away/Under.")
 
     return header, packets
 

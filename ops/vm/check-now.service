@@ -1,0 +1,17 @@
+[Unit]
+Description=Check Now HTTP service for iamnotuncertain picks
+After=network.target
+
+[Service]
+Type=simple
+User=root
+EnvironmentFile=/root/private/env
+WorkingDirectory=/root/mlb-model
+ExecStart=/root/mlb-model/venv/bin/python3 /root/mlb-model/shared/pipeline/check_now_service.py
+Restart=always
+RestartSec=10
+StandardOutput=append:/root/logs/check_now_service.log
+StandardError=append:/root/logs/check_now_service.log
+
+[Install]
+WantedBy=multi-user.target

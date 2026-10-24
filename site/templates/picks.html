@@ -134,6 +134,10 @@ h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.02em}
   <h1>Picks</h1>
   <p class="lede">The reader's top 20 for the games you tick, ranked by confidence. Every number is frozen at the moment the pick was logged — click a pick for the layers behind it.</p>
   <div class="tabs" id="tabs"></div>
+  <div class="check-now" id="check-now" style="margin:8px 0;display:flex;align-items:center;gap:12px">
+    <button id="check-btn" style="padding:6px 14px;font:inherit;font-weight:600;border:1px solid var(--line);border-radius:6px;background:var(--panel);cursor:pointer" disabled>Check now</button>
+    <span id="check-status" style="color:var(--muted);font-size:0.9em"></span>
+  </div>
   <div class="slate" id="slate"></div>
   <div class="status" id="status"></div>
   <div class="seg" id="seg"><button data-col="props" class="on">Props</button><button data-col="sides">Sides · totals · ML</button></div>
@@ -240,6 +244,32 @@ h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.02em}
   var h=DATA.health||{};var ht=$('#health-txt');if(ht)ht.textContent=(h.summary||'health')+' · built '+(DATA.built_et||'');if(h.bad)$('#health').classList.add('bad');
   var want=DATA.sport||(location.hash||'').replace('#','').replace('tab-','').toUpperCase();
   selectSport(SPORTS.indexOf(want)>=0?want:SPORTS.filter(function(s){return sportData(s).events.some(upcoming);})[0]||'NFL');
+
+  /* P71: Check now button */
+  var checkBtn=$('#check-btn'),checkSt=$('#check-status'),checkPoll=null;
+  function checkNowSport(){return (state.sport||'nfl').toLowerCase();}
+  function updateCheckStatus(){
+    fetch('/api/status/'+checkNowSport()).then(function(r){return r.json();}).then(function(d){
+      if(!d||d.error){checkSt.textContent='Check now is offline';checkBtn.disabled=false;return;}
+      if(d.result==='running'){checkSt.textContent='Checking...';checkBtn.disabled=true;if(!checkPoll)checkPoll=setInterval(updateCheckStatus,5000);return;}
+      if(checkPoll){clearInterval(checkPoll);checkPoll=null;}
+      checkBtn.disabled=false;
+      var ft=d.finished_utc?new Date(d.finished_utc).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/New_York'}):'';
+      var gr=d.games_read||0;var gc=d.games_checked||0;
+      if(gr>0)checkSt.textContent='Last check: '+ft+' — re-read '+gr+' game'+(gr>1?'s':'');
+      else if(gc>0)checkSt.textContent='Last check: '+ft+' — no changes since the last read';
+      else if(ft)checkSt.textContent='Last check: '+ft;
+      else checkSt.textContent='';
+    }).catch(function(){checkSt.textContent='Check now is offline';checkBtn.disabled=false;if(checkPoll){clearInterval(checkPoll);checkPoll=null;}});
+  }
+  checkBtn.onclick=function(){
+    checkBtn.disabled=true;checkSt.textContent='Starting...';
+    fetch('/api/check/'+checkNowSport(),{method:'POST'}).then(function(r){return r.json();}).then(function(d){
+      if(d.status==='started'){checkPoll=setInterval(updateCheckStatus,5000);}
+      else if(d.status==='recent'){checkSt.textContent='Checked recently — try again in a few minutes';checkBtn.disabled=false;}
+    }).catch(function(){checkSt.textContent='Check now is offline';checkBtn.disabled=false;});
+  };
+  updateCheckStatus();
 })();
 </script>
 </body>

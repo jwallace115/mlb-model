@@ -1,0 +1,10 @@
+# Paste INSIDE the iamnotuncertain.net site block (after the existing handle directives).
+# The existing basic auth covers these paths.
+# Cowork: back up the Caddyfile first, paste this, caddy validate, reload.
+
+handle_path /api/check/* {
+    reverse_proxy 127.0.0.1:8787
+}
+handle_path /api/status/* {
+    reverse_proxy 127.0.0.1:8787
+}
