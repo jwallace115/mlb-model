@@ -4041,5 +4041,73 @@
     "47595bd2a188e4dab8a27dce97c5b45d": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T143404Z.parquet",
+  "sha256": "319a2e75ffcd8b27f22c6d41f0bee4b44b8567d4fa4d06c6217c1147d20089ba",
+  "logged_utc": "2026-10-24T14:34:04.466981+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-24T16:00:00Z",
+  "reader_sha256": "539ee9fb8dc7316c5b11958631d9779afe7f8be37a2a16215814f799b4caf888",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T143007Z.parquet",
+   "inputs_digest": "{\"f8b869953172e3a19c4cf347b05c1ee8\": \"960f270138bb2b66\"}",
+   "components": {
+    "f8b869953172e3a19c4cf347b05c1ee8": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       -347
+      ],
+      [
+       "Rice Owls",
+       0,
+       294
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       -9.5,
+       -105
+      ],
+      [
+       "Rice Owls",
+       9.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -105
+      ],
+      [
+       "Under",
+       54.0,
+       -111
+      ]
+     ],
+     "news": [
+      "Bottom 10: Week 7's rash of upsets turned everythi"
+     ],
+     "kalshi_snap": "snap_20261024T1407Z.parquet"
+    }
+   },
+   "triggers": {
+    "f8b869953172e3a19c4cf347b05c1ee8": "line_move: pinnacle spreads Florida Atlantic Owls -8.0\u2192-9.5; line_move: pinnacle spreads Rice Owls 8.0\u21929.5"
+   }
+  }
  }
 ]
