@@ -2,21 +2,21 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-10-24T01:39:59.094505+00:00",
-  "finished_utc": "2026-10-24T01:39:59.094505+00:00",
+  "started_utc": "2026-10-24T06:39:57.669727+00:00",
+  "finished_utc": "2026-10-24T06:39:57.669727+00:00",
   "result": "COMPLETE",
   "step": "window_watch",
-  "message": "['new_props: pull 2026-10-24T01:32:23.554914+00:00; injury_change: inj_New Orleans Saints; injury_change: inj_Pittsburgh Steelers; new_news: 32 items', 'new_props: pull 2026-10-24T01:32:23.554914+00:0",
-  "freeze_file": "ai_opinions_20261024T013203Z.parquet"
+  "message": "['new_props: pull 2026-10-24T06:32:30.202380+00:00; injury_change: inj_New Orleans Saints; injury_change: inj_Pittsburgh Steelers; new_news: 27 items', 'new_props: pull 2026-10-24T06:32:30.202380+00:0",
+  "freeze_file": "ai_opinions_20261024T063203Z.parquet"
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-10-24T06:21:42.289100+00:00",
-  "finished_utc": "2026-10-24T06:21:42.289100+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-10-24T06:50:14.973397+00:00",
+  "finished_utc": "2026-10-24T06:50:14.973397+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['new_news: 23 items', 'new_news: 16 items', 'new_news: 1 items', 'new_news: 6 items', 'new_news: 19 items']",
-  "freeze_file": "ai_opinions_20261024T061903Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]
