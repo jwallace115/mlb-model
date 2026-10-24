@@ -1,0 +1,131 @@
+packet built 2026-10-24T22:32Z | snap snap_20261024T223006Z.parquet | props pull 2026-10-24T07:47 | kalshi snap_20261024T2205Z.parquet | injuries injuries_20261024T1830Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: line_move: pinnacle totals Over 47.5→46.0; line_move: pinnacle totals Under 47.5→46.0
+######## Cincinnati Bengals @ Baltimore Ravens  kick 10-25T17:00Z
+  HR ML: Ravens +130 / Bengals -150 (no-vig home 0.420) | Pinnacle no-vig home 0.418
+  HR spread: Ravens +2.5 -110 / Bengals -2.5 -110 | Pinnacle Ravens 2.5 (+101) | HR open -2.5 (20261020)
+  HR total: 46.5 O-110/U-110 | Pinnacle 46.0 O-109/U-107 | HR open 51.0
+  Kalshi ML [('Cincinnati wins', 0.57, 2211599), ('Baltimore wins', 0.42, 336960)] | spread [('Cincinnati wins by over 2.5 points?', 0.51, 45862), ('Cincinnati wins by over 3.5 points?', 0.42, 1510)] | total [('Full Game: over 47.5 points scored?', 0.48, 2110), ('Full Game: over 48.5 points scored?', 0.46, 20284)]
+  -- Cincinnati Bengals injuries (20261024T1830)
+     Acti WR Colbie Young: Young (knee) was not listed on the Bengals' injury report Wednesday.
+     Acti TE Josh Kattus: The Bengals have signed Kattus to their practice squad.
+     Inju TE Tanner Hudson: Hudson (pectoral) was placed on injured reserve by the Bengals on Monday.
+     Acti WR Dohnte Meyers: Meyers brought in both of his targets for 12 yards during the Bengals' 31-24 win over the Dolphins on Sunday.
+     Inju LB Swayze Bozeman: The Bengals placed Bozeman on injured reserve Monday due to a fractured forearm, Ben Baby of ESPN.com reports.
+     Acti TE Jack Endries: 
+     Acti RB Samaje Perine: Perine rushed 14 times for 68 yards while catching both of his targets for 10 yards and a touchdown during Sunday's 31-24 win over Miami.
+     Acti TE Mike Gesicki: Gesicki brought in one of two targets for a four-yard touchdown in the Bengals' 31-24 win over the Dolphins on Sunday.
+     Acti WR Tee Higgins: Higgins brought in two of four targets for 22 yards in the Bengals' 31-24 win over the Dolphins on Sunday.
+     Acti RB Chase Brown: Brown rushed 13 times for 39 yards and brought in three of four targets for 21 yards in the Bengals' 31-24 win over the Dolphins on Sunday. He also lo
+     Acti QB Joe Burrow: Burrow completed 23 of 32 passes for 190 yards with four touchdowns and no interceptions and rushed four times for 10 yards in the Bengals' 31-24 win 
+     Acti WR Ja'Marr Chase: Chase brought in six of 10 targets for 77 yards and a touchdown in the Bengals' 31-24 win over the Dolphins on Sunday.
+     Acti WR Mitchell Tinsley: Tinsley caught three of his seven targets for 49 yards in the Bengals' 22-17 loss to the Jaguars on Sunday.
+     news 10-22T23:47 Trey Hendrickson is set to face the Bengals for the first time since signing with Baltimore
+     news 10-23T03:27 What are the longest field goals in NFL history?
+     news 10-23T20:55 Ravens' Lamar Jackson (high ankle sprain) unsure if he'll play
+     news 10-23T23:33 Boye Mafe's proud of his culture
+     news 10-23T23:43 Bengals, Hendrickson downplaying matchup
+  -- Baltimore Ravens injuries (20261024T1830)
+     Ques DT Broderick Washington Jr.: Washington (ankle) is listed as questionable for Sunday's game against the Bengals.
+     Acti QB Tyler Huntley: Huntley will start Sunday's Week 7 matchup against Cincinnati if Lamar Jackson (ankle) is unable to play, Ryan Mink of the Ravens' official site repor
+     Out  S  Jaylinn Hawkins: Hawkins (knee) has been ruled out for Sunday's game against the Bengals, Cordell Woodland of 105.7 The Fan Baltimore reports.
+     Out  LB Tavius Robinson: Head coach Jesse Minter said Friday that Robinson will be sidelined for the rest of the 2026 season due to a pectoral injury, Cordell Woodland of 105.
+     Ques QB Lamar Jackson: Jackson (ankle) was a limited participant in Friday's practice and is listed as questionable for Sunday's game against the Bengals.
+     Acti TE Matt Hibner: Hibner (hand) was a full participant at practice Thursday.
+     Acti WR Rashod Bateman: Bateman (shoulder) was a full participant in Thursday's practice.
+     Inju CB T.J. Tampa: The Ravens designated Tampa (toe/ankle) to return from injured reserve Wednesday.
+     Acti RB Justice Hill: Hill caught all three of his targets for nine yards during the Ravens' 13-10 loss to the Browns on Sunday.
+     Acti TE Mark Andrews: Andrews caught one of three targets for four yards during the Ravens' 13-10 loss to the Browns on Sunday.
+     Acti WR Elijah Sarratt: 
+     Acti WR Ja'Kobi Lane: Lane brought in four of five targets for 40 yards in the Ravens' 13-10 loss to the Browns on Sunday.
+     Acti WR Zay Flowers: Flowers brought in six of 11 targets for 66 yards and rushed once for one yard in the Ravens' 13-10 loss to the Browns on Sunday.
+     Acti RB Derrick Henry: Henry rushed 17 times for 58 yards and brought in his only target for two yards in the Ravens' 13-10 loss to the Browns on Sunday. He also lost a fumb
+     Acti TE Josh Cuevas: Cuevas caught four of five targets for 44 yards and a touchdown during Sunday's 13-10 loss to Cleveland.
+     news 10-22T23:47 Trey Hendrickson is set to face the Bengals for the first time since signing with Baltimore
+     news 10-23T03:27 What are the longest field goals in NFL history?
+     news 10-23T20:54 Lamar Jackson 'heading in the right direction' but unsure of return
+     news 10-23T20:55 Ravens' Lamar Jackson (high ankle sprain) unsure if he'll play
+     news 10-23T23:11 Will Lamar Jackson make Sunday's game?
+  -- props (pull 2026-10-24T07:47)
+     * Chase Brown: atd 0.5 (-105), recyd 20.5 (-110/-120), rec 3.5 (-110/-120), ruatt 10.5 (-130/+100), ruyd 40.5 (-115/-115)
+     * Derrick Henry: atd 0.5 (-210), recyd 6.5 (-115/-115), rec 1.5 (+145/-190), ruatt 19.5 (-110/-120), ruyd 85.5 (-115/-115)
+     * Dohnte Meyers: atd 0.5 (+400), recyd 14.5 (-115/-115), rec 1.5 (-140/+110)
+     * Ja'Kobi Lane: atd 0.5 (+375)
+     * Ja'Marr Chase: atd 0.5 (+105), recyd 82.5 (-115/-115), rec 7.5 (+105/-135)
+     * Joe Burrow: atd 0.5 (+650), paatt 37.5 (-105/-125), cmp 25.5 (+100/-130), int 0.5 (-120/-110), patd 1.5 (-180/+135), payd 261.5 (-115/-115), ruyd 6.5 (-115/-115)
+     * Justice Hill: atd 0.5 (+575)
+     * Mark Andrews: atd 0.5 (+230)
+     * Mike Gesicki: atd 0.5 (+300), recyd 22.5 (-120/-110), rec 2.5 (-110/-120)
+     * Rashod Bateman: atd 0.5 (+450)
+     * Samaje Perine: atd 0.5 (+275), recyd 8.5 (-110/-120), rec 1.5 (-140/+110), ruatt 8.5 (+100/-130), ruyd 26.5 (-115/-115)
+     * Tee Higgins: atd 0.5 (+140), recyd 65.5 (-115/-115), rec 4.5 (-145/+115)
+     * Zay Flowers: atd 0.5 (+170)
+
+  WHAT CHANGED: line_move: pinnacle totals Over 53.5→54.5; line_move: pinnacle totals Under 53.5→54.5
+######## Green Bay Packers @ Detroit Lions  kick 10-25T20:25Z
+  HR ML: Lions -185 / Packers +155 (no-vig home 0.623) | Pinnacle no-vig home 0.639
+  HR spread: Lions -3 -120 / Packers +3 +100 | Pinnacle Lions -3.5 (-108) | HR open -3.0 (20261020)
+  HR total: 54 O-110/U-110 | Pinnacle 54.5 O-111/U-105 | HR open 52.0
+  Kalshi ML [('Green Bay wins', 0.38, 433290), ('Detroit wins', 0.62, 47724)] | spread [('Detroit wins by over 2.5 points?', 0.58, 38001), ('Detroit wins by over 3.5 points?', 0.49, 57847)] | total [('Full Game: over 54.5 points scored?', 0.47, 876), ('Full Game: over 53.5 points scored?', 0.51, 19073)]
+  -- Green Bay Packers injuries (20261024T1830)
+     Ques G  Aaron Banks: Banks (knee/toe) is listed as questionable for Sunday's game against the Lions, Wes Hodkiewicz of the Packers' official site reports.
+     Ques WR Bo Melton: Melton (back) is questionable for Sunday's game against the Lions, Wes Hodkiewicz of the Packers' official site reports.
+     Out  LB Zaire Franklin: Franklin (shin) has been ruled out ahead of Sunday's game against the Lions, Weston Hodkiewicz of the Packers' official site reports.
+     Acti WR Savion Williams: Williams (ankle) does not carry an injury designation ahead of Sunday's game against the Lions, Wes Hodkiewicz of the Packers' official site reports.
+     Acti WR Matthew Golden: Golden (shoulder) doesn't have an injury designation for Sunday's game against the Lions.
+     Acti WR Christian Watson: Watson (ankle) doesn't have a designation for Sunday's game in Detroit, Wes Hodkiewicz of the Packers' official site reports.
+     Acti RB Josh Jacobs: Packers coach Matt LaFleur said Jacobs is on track to play Sunday against the Lions, Rob Demovsky of ESPN reports.
+     Out  TE Luke Musgrave: Packers head coach Matt Lafleur said Thursday it's "tough to say" whether Musgrave (neck) plays this season, Weston Hodkiewicz of the Packers' officia
+     Acti QB Jordan Love: Love (back) was a full practice participant Thursday, Rob Demovsky of ESPN.com reports.
+     Ques CB Benjamin St-Juste: questionable
+     Out  DE Micah Parsons: Packers head coach Matt LaFleur said that Parsons (knee) won't practice in Week 7, Weston Hodkiewicz of the team's official site reports. "He has to c
+     Acti RB MarShawn Lloyd: Lloyd rushed eight times for 10 yards while failing to catch his only target during Sunday night's 23-13 win over Dallas.
+     Acti RB Pierre Strong Jr.: Strong rushed 11 times for 28 yards in Sunday night's 23-13 win over the Cowboys. He caught five of six targets for 39 yards.
+     Acti TE Tucker Kraft: Kraft caught five of eight targets for 37 yards in Sunday night's 23-13 win over the Cowboys.
+     Inju DT Jonathan Ford: The Packers placed Ford (calf) on injured reserve Saturday.
+     Inju DT Javon Hargrave: The Packers placed Hargrave (Achilles) on injured reserve Saturday.
+     Inju WR Skyy Moore: The Packers placed Moore (ankle) on injured reserve Saturday.
+     news 10-21T23:56 Jordan Love's sore back not a concern for the QB
+     news 10-22T00:55 Packers' Josh Jacobs says he is trying to learn from 'mistake,' move forward
+     news 10-22T22:13 Bears QB Caleb Williams leads NFL Week 7's best arrivals
+     news 10-22T23:12 Lions kick off quest to win NFC North with 1st division game of year against surging Packers at home
+     news 10-23T17:03 Packers linebacker Zaire Franklin out Sunday with shin injury
+  -- Detroit Lions injuries (20261024T1830)
+     Inju C  Cade Mays: Mays (wrist) is questionable against the Packers on Sunday.
+     Out  S  Brian Branch: Branch (Achilles) is listed as questionable for Sunday's game against the Packers.
+     Acti WR DeAndre Carter: The Lions signed Carter to the active roster Thursday.
+     Out  S  Kerby Joseph: Lions head coach Dan Campbell stated Kerby (knee) "is in a good headspace" and expects the 25-year-old to play at some point this season, Nolan Bianch
+     Inju G  Ben Bartch: The Lions placed Bartch (foot) on injured reserve Friday.
+     Inju LB Devin White: The Lions placed White (forearm) on injured reserve Friday.
+     Inju WR Tom Kennedy: The Lions placed Kennedy (knee) on injured reserve Friday.
+     Acti WR Isaac TeSlaa: TeSlaa failed to haul in either of his two targets during the Lions' 45-21 win over the Cardinals on Sunday.
+     Acti QB Jared Goff: Goff completed 19 of 30 passes for 271 yards with three touchdowns and no interceptions while adding a one-yard touchdown on his only rush attempt in 
+     Acti TE Sam LaPorta: LaPorta brought in all five of his targets for 88 yards and a touchdown in the Lions' 45-21 win over the Cardinals on Sunday.
+     Acti WR Jameson Williams: Williams brought in two of four targets for 47 yards and two touchdowns in the Lions' 45-21 win over the Cardinals on Sunday.
+     Acti WR Amon-Ra St. Brown: St. Brown secured six of 11 targets for 69 yards and committed two fumbles that remained with Detroit in the Lions' 45-21 win over the Cardinals on Su
+     Acti RB Jahmyr Gibbs: Gibbs rushed 25 times for 151 yards and two touchdowns while bringing in five of six targets for 56 yards in the Lions' 45-21 win over the Cardinals o
+     Acti WR Jackson Meeks: Meeks (coach's decision) is inactive for Sunday's game against Arizona.
+     Acti TE Tyler Conklin: 
+     news 10-23T02:12 Lions approach first divisional matchup with urgency
+     news 10-23T02:25 Proposing NFL trade deadline offers: Moves for Saquon Barkley, Khalil Mack, more
+     news 10-23T17:03 Packers linebacker Zaire Franklin out Sunday with shin injury
+     news 10-23T19:09 Lions' Dan Campbell downplays Sam LaPorta's contract comments
+     news 10-23T20:46 Sam LaPorta addresses contract frustration with Lions
+  -- props (pull 2026-10-24T07:47)
+     * Amon-Ra St. Brown: atd 0.5 (-135), recyd 78.5 (-115/-115), rec 7.5 (+100/-130)
+     * Brock Wright: atd 0.5 (+650)
+     * Christian Watson: atd 0.5 (+130), recyd 75.5 (-115/-115), rec 4.5 (-120/-110)
+     * Isaac TeSlaa: atd 0.5 (+400), recyd 24.5 (-115/-115), rec 1.5 (-145/+110)
+     * Jahmyr Gibbs: atd 0.5 (-350), recyd 39.5 (-120/-110), rec 4.5 (-145/+110), ruatt 20.5 (-105/-125), ruyd 94.5 (-115/-115)
+     * Jameson Williams: atd 0.5 (+190), recyd 54.5 (-115/-115), rec 3.5 (-135/+105)
+     * Jared Goff: atd 0.5 (+900), paatt 36.5 (-125/-105), cmp 25.5 (-110/-120), int 0.5 (+115/-150), patd 2.5 (+155/-220), payd 278.5 (-115/-115), ruyd 0.5 (-120/-110)
+     * Jordan Love: atd 0.5 (+700), paatt 38.5 (-110/-120), cmp 23.5 (-115/-115), int 0.5 (-145/+110), patd 1.5 (-190/+140), payd 282.5 (-115/-115), ruatt 2.5 (+120/-155), ruyd 7.5 (-115/-115)
+     * Josh Jacobs: atd 0.5 (+105), recyd 9.5 (-110/-120), rec 1.5 (-130/+100), ruatt 13.5 (-110/-120), ruyd 51.5 (-110/-120)
+     * MarShawn Lloyd: atd 0.5 (+375), ruyd 10.5 (-110/-120)
+     * Matthew Golden: atd 0.5 (+145), recyd 74.5 (-115/-115), rec 4.5 (-160/+120)
+     * Pierre Strong Jr.: atd 0.5 (+375), recyd 7.5 (-110/-120), rec 1.5 (+110/-140), ruyd 8.5 (-110/-120)
+     * Sam LaPorta: atd 0.5 (+160), recyd 49.5 (-115/-115), rec 4.5 (-150/+115)
+     * Savion Williams: atd 0.5 (+350), recyd 21.5 (-115/-115), rec 2.5 (+115/-150)
+     * Sione Vaki: atd 0.5 (+900), ruyd 8.5 (-115/-115)
+     * Tucker Kraft: atd 0.5 (+170), recyd 50.5 (-115/-115), rec 4.5 (-115/-115)

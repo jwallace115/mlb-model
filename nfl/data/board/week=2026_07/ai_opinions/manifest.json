@@ -4967,5 +4967,242 @@
     "550ec5290f935d311995affbcb0b5c79": "line_move: hardrockbet_fl spreads Baltimore Ravens 1.0\u21922.5; line_move: hardrockbet_fl spreads Cincinnati Bengals -1.0\u2192-2.5; line_move: hardrockbet_fl totals Under 48.0\u219247.0; line_move: hardrockbet_fl totals Over 48.0\u219247.0; ml_move: hardrockbet_fl novig 0.478\u21920.429; line_move: pinnacle spreads Baltimore Ravens 1.0\u21922.5; line_move: pinnacle spreads Cincinnati Bengals -1.0\u2192-2.5; ml_move: pinnacle novig 0.467\u21920.419"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T223204Z.parquet",
+  "sha256": "4a15f46eb823c8fb323fd259df6408471d36fa9960ef0a0041d989fa5b146cdb",
+  "logged_utc": "2026-10-24T22:32:04.201689+00:00",
+  "rows": 123,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.943,
+  "revised_rows": 120,
+  "oldest_source_age_min": 884.6,
+  "first_kickoff_utc": "2026-10-25T17:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261024T223006Z.parquet",
+   "inputs_digest": "{\"550ec5290f935d311995affbcb0b5c79\": \"612cb78c0aa6528d\", \"e8e5715eefb6a9ce64765e9ddf49c0cc\": \"debcfb813b775350\"}",
+   "components": {
+    "550ec5290f935d311995affbcb0b5c79": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       130
+      ],
+      [
+       "Cincinnati Bengals",
+       0,
+       -150
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       2.5,
+       -110
+      ],
+      [
+       "Cincinnati Bengals",
+       -2.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.5,
+       -110
+      ],
+      [
+       "Under",
+       46.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       132
+      ],
+      [
+       "Cincinnati Bengals",
+       0,
+       -150
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       2.5,
+       101
+      ],
+      [
+       "Cincinnati Bengals",
+       -2.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -109
+      ],
+      [
+       "Under",
+       46.0,
+       -107
+      ]
+     ],
+     "props_ts": "2026-10-24T07:47:28.825581+00:00",
+     "inj_Baltimore Ravens": "a1a657108468f137",
+     "inj_Cincinnati Bengals": "d864c4681194c585",
+     "news": [
+      "'It's Groundhog Day': Why Ravens lead the NFL in b",
+      "'It's Groundhog Day:' Why Ravens are NFL's worst a",
+      "49ers WR Mike Evans reps Bay Area with Curry jerse",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Bengals, Hendrickson downplaying matchup",
+      "Boye Mafe's proud of his culture",
+      "Burrow, Bengals understand importance of Ravens ma",
+      "Inside NFL's field-stitching process from Rio to P",
+      "Inside the silent messages Boye Mafe sends every g",
+      "Lamar Jackson 'heading in the right direction' but",
+      "Lamar Jackson remains day-to-day with ankle injury",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "Ravens' Humphrey expresses displeasure over 'sland",
+      "Ravens' Lamar Jackson (high ankle sprain) unsure i",
+      "Ravens' Lamar Jackson returns to practice but stat",
+      "Ravens' Trey Hendrickson on facing Bengals: 'It's ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Trey Hendrickson is set to face the Bengals for th",
+      "What a win over the Ravens would mean for the Beng",
+      "What are the longest field goals in NFL history?",
+      "Will Lamar Jackson make Sunday's game?"
+     ],
+     "kalshi_snap": "snap_20261024T2205Z.parquet"
+    },
+    "e8e5715eefb6a9ce64765e9ddf49c0cc": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -185
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       155
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Detroit Lions",
+       -3.0,
+       -120
+      ],
+      [
+       "Green Bay Packers",
+       3.0,
+       100
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       54.0,
+       -110
+      ],
+      [
+       "Under",
+       54.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -193
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       169
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Detroit Lions",
+       -3.5,
+       -108
+      ],
+      [
+       "Green Bay Packers",
+       3.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -111
+      ],
+      [
+       "Under",
+       54.5,
+       -105
+      ]
+     ],
+     "props_ts": "2026-10-24T07:47:28.825581+00:00",
+     "inj_Detroit Lions": "fbbf0655a52f5181",
+     "inj_Green Bay Packers": "379cecae3a452f76",
+     "news": [
+      "49ers WR Mike Evans reps Bay Area with Curry jerse",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Jordan Love's sore back not a concern for the QB",
+      "LaFleur enthused Packers RB Jacobs, 'an elite-leve",
+      "Lions approach first divisional matchup with urgen",
+      "Lions getting key contributors back",
+      "Lions kick off quest to win NFC North with 1st div",
+      "Lions to get DB Brian Branch, C Cade Mays back vs.",
+      "Lions' Dan Campbell downplays Sam LaPorta's contra",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL announces U2 will play in first Thanksgiving E",
+      "Packers linebacker Zaire Franklin out Sunday with ",
+      "Packers' Josh Jacobs says he is trying to learn fr",
+      "Packers' Josh Jacobs to practice Wednesday, may pl",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Sam LaPorta addresses contract frustration with Li",
+      "Sam LaPorta not feeling contract 'love' from Lions",
+      "Super Bowl LXI odds: All 32 teams' odds to win the"
+     ],
+     "kalshi_snap": "snap_20261024T2205Z.parquet"
+    }
+   },
+   "triggers": {
+    "550ec5290f935d311995affbcb0b5c79": "line_move: pinnacle totals Over 47.5\u219246.0; line_move: pinnacle totals Under 47.5\u219246.0",
+    "e8e5715eefb6a9ce64765e9ddf49c0cc": "line_move: pinnacle totals Over 53.5\u219254.5; line_move: pinnacle totals Under 53.5\u219254.5"
+   }
+  }
  }
 ]
