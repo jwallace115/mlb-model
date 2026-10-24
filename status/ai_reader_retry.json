@@ -20,9 +20,9 @@
   "error": "HALT for 0f773ec5cb1e5b41f52f2bf8dbc4f182: pick names unquoted line ('spread', '', 8.5) (only 3 lines quoted for this event)"
  },
  "nfl:b1be064fb52a198a62109c279e7ab24c": {
-  "attempt": 4,
-  "last_utc": "2026-10-23T22:03:06.803684+00:00",
-  "error": "Extra data: line 6 column 2 (char 1196)"
+  "attempt": 5,
+  "last_utc": "2026-10-24T01:48:14.528886+00:00",
+  "error": "Extra data: line 6 column 2 (char 1114)"
  },
  "nfl:2823e986597c449ab94126cd5ed3fae9": {
   "attempt": 4,
@@ -45,9 +45,9 @@
   "error": "Expecting ',' delimiter: line 3 column 65 (char 346)"
  },
  "nfl:be5dd120ca08b43d647b6caa8953500a": {
-  "attempt": 4,
-  "last_utc": "2026-10-23T23:49:14.032514+00:00",
-  "error": "Extra data: line 6 column 1 (char 851)"
+  "attempt": 5,
+  "last_utc": "2026-10-24T01:49:04.985046+00:00",
+  "error": "Extra data: line 4 column 2 (char 588)"
  },
  "nfl:550ec5290f935d311995affbcb0b5c79": {
   "attempt": 4,
