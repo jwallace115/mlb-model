@@ -1,8 +1,8 @@
 {
  "nfl:2e710ea5a306b614f0f966e3d78732f8": {
-  "attempt": 3,
-  "last_utc": "2026-10-23T20:18:20.669664+00:00",
-  "error": "HALT for 2e710ea5a306b614f0f966e3d78732f8: pick names unquoted line ('spread', '', 3.0) (only 71 lines quoted for this event)"
+  "attempt": 4,
+  "last_utc": "2026-10-23T23:48:30.540402+00:00",
+  "error": "Extra data: line 8 column 1 (char 1502)"
  },
  "ncaaf:bbbabc2490914e9a4d1e619a32461b1f": {
   "attempt": 1,
@@ -40,24 +40,24 @@
   "error": "Extra data: line 7 column 1 (char 1250)"
  },
  "nfl:f3992ad4496724baf7dcd1ef58245d6b": {
-  "attempt": 4,
-  "last_utc": "2026-10-23T21:48:32.872657+00:00",
-  "error": "Extra data: line 7 column 1 (char 1265)"
+  "attempt": 5,
+  "last_utc": "2026-10-23T23:49:05.281417+00:00",
+  "error": "Expecting ',' delimiter: line 3 column 68 (char 364)"
  },
  "nfl:be5dd120ca08b43d647b6caa8953500a": {
-  "attempt": 3,
-  "last_utc": "2026-10-23T21:48:45.683469+00:00",
-  "error": "Extra data: line 7 column 1 (char 1182)"
+  "attempt": 4,
+  "last_utc": "2026-10-23T23:49:14.032514+00:00",
+  "error": "Extra data: line 6 column 1 (char 851)"
  },
  "nfl:550ec5290f935d311995affbcb0b5c79": {
-  "attempt": 2,
-  "last_utc": "2026-10-23T20:19:31.985405+00:00",
-  "error": "HALT for 550ec5290f935d311995affbcb0b5c79: pick names unquoted line ('spread', '', -1.0) (only 52 lines quoted for this event)"
+  "attempt": 3,
+  "last_utc": "2026-10-23T23:33:21.576001+00:00",
+  "error": "Extra data: line 7 column 1 (char 1095)"
  },
  "nfl:5dce18baccec5d3ad5fb3a3ce52f7619": {
-  "attempt": 4,
-  "last_utc": "2026-10-23T22:33:20.324142+00:00",
-  "error": "Extra data: line 9 column 2 (char 2062)"
+  "attempt": 5,
+  "last_utc": "2026-10-23T23:33:32.806555+00:00",
+  "error": "Extra data: line 7 column 2 (char 1492)"
  },
  "ncaaf:1f2a24570e2ca6de4516eae60b021507": {
   "attempt": 2,

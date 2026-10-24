@@ -12,11 +12,11 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-10-23T23:23:53.776626+00:00",
-  "finished_utc": "2026-10-23T23:23:53.776626+00:00",
+  "started_utc": "2026-10-23T23:54:35.267775+00:00",
+  "finished_utc": "2026-10-23T23:54:35.267775+00:00",
   "result": "COMPLETE",
   "step": "window_watch",
-  "message": "['new_props: pull 2026-10-23T23:17:21.276091+00:00; injury_change: inj_New Orleans Saints; injury_change: inj_Pittsburgh Steelers; new_news: 41 items', 'horizon_entry: kick in 42h, no prior read', 'ne",
-  "freeze_file": "ai_opinions_20261023T231704Z.parquet"
+  "message": "['new_props: pull 2026-10-23T23:47:40.193320+00:00; injury_change: inj_New Orleans Saints; injury_change: inj_Pittsburgh Steelers; new_news: 41 items', 'new_props: pull 2026-10-23T23:47:40.193320+00:0",
+  "freeze_file": "ai_opinions_20261023T234705Z.parquet"
  }
 ]
