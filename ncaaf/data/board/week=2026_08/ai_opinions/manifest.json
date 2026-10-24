@@ -4580,5 +4580,233 @@
     "1388547b792afa0aa6769aa1b7645b28": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T160403Z.parquet",
+  "sha256": "f16eebd47b667f2fe78449e62944e102a5841a9778cb6e1d8ddc9dcbc5b99d37",
+  "logged_utc": "2026-10-24T16:04:03.492757+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-24T19:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T160006Z.parquet",
+   "inputs_digest": "{\"0f773ec5cb1e5b41f52f2bf8dbc4f182\": \"6ce4ae3c766cd0ba\"}",
+   "components": {
+    "0f773ec5cb1e5b41f52f2bf8dbc4f182": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       327
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       -391
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       9.5,
+       101
+      ],
+      [
+       "Oregon Ducks",
+       -9.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -102
+      ],
+      [
+       "Under",
+       49.5,
+       -115
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Allstate Playoff Predictor",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "Oregon's Dante Moore, Evan Stewart ruled out vs. I",
+      "Oregon's Evan Stewart arrested on charge of drivin"
+     ],
+     "kalshi_snap": "snap_20261024T1537Z.parquet"
+    }
+   },
+   "triggers": {
+    "0f773ec5cb1e5b41f52f2bf8dbc4f182": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261024T161903Z.parquet",
+  "sha256": "a3b63977dc3fac4926c3af0ca31055466695951a182f9186fb070bf50bb52d04",
+  "logged_utc": "2026-10-24T16:19:03.681648+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.667,
+  "revised_rows": 8,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-24T17:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T160006Z.parquet",
+   "inputs_digest": "{\"e7321bb418f765df74afd2851bd0fade\": \"f1d37efaf0ebbcbc\", \"ba6abfebaef34d88099fa6dc6640dc08\": \"b278263586dc9b75\", \"7b91563277082145d844f94b9ef1a8a6\": \"84db22bfd0087a20\"}",
+   "components": {
+    "e7321bb418f765df74afd2851bd0fade": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       129
+      ],
+      [
+       "Kent State Golden Flashes",
+       0,
+       -143
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       3.0,
+       -113
+      ],
+      [
+       "Kent State Golden Flashes",
+       -3.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -107
+      ],
+      [
+       "Under",
+       47.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10: Week 7's rash of upsets turned everythi"
+     ],
+     "kalshi_snap": "snap_20261024T1607Z.parquet"
+    },
+    "ba6abfebaef34d88099fa6dc6640dc08": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -103
+      ],
+      [
+       "Kansas Jayhawks",
+       0,
+       -107
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       1.0,
+       -109
+      ],
+      [
+       "Kansas Jayhawks",
+       -1.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -116
+      ],
+      [
+       "Under",
+       54.0,
+       -101
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 7"
+     ],
+     "kalshi_snap": "snap_20261024T1607Z.parquet"
+    },
+    "7b91563277082145d844f94b9ef1a8a6": {
+     "pinnacle_h2h": [
+      [
+       "Central Michigan Chippewas",
+       0,
+       153
+      ],
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -171
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Central Michigan Chippewas",
+       3.5,
+       -102
+      ],
+      [
+       "Miami (OH) RedHawks",
+       -3.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -105
+      ],
+      [
+       "Under",
+       40.5,
+       -111
+      ]
+     ],
+     "news": [
+      "College football best bets for Week 8 include Hous"
+     ],
+     "kalshi_snap": "snap_20261024T1607Z.parquet"
+    }
+   },
+   "triggers": {
+    "e7321bb418f765df74afd2851bd0fade": "anchor_close",
+    "ba6abfebaef34d88099fa6dc6640dc08": "anchor_close",
+    "7b91563277082145d844f94b9ef1a8a6": "anchor_close"
+   }
+  }
  }
 ]
