@@ -138,3 +138,10 @@ class TestDigestInManifest:
             assert digest == "digest_abc", f"expected per-event digest, got {digest}"
             assert logged == "2026-10-23T14:00:00Z"
             assert model == "ai_reader_v1b/sonnet"
+
+
+def test_event_window_is_exempt_from_prekick_band():
+    """10-24 13:04Z: anchor reads inside 3 h must freeze; the P20 band applies to fixed windows only."""
+    import inspect, nfl.pipeline.log_ai_opinions as lao
+    src = inspect.getsource(lao)
+    assert 'window not in ("prekick", "adhoc", "event")' in src
