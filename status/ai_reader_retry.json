@@ -50,14 +50,14 @@
   "error": "Extra data: line 4 column 2 (char 588)"
  },
  "nfl:550ec5290f935d311995affbcb0b5c79": {
-  "attempt": 6,
-  "last_utc": "2026-10-24T04:34:28.646113+00:00",
-  "error": "Extra data: line 7 column 1 (char 1142)"
+  "attempt": 7,
+  "last_utc": "2026-10-24T07:33:31.354000+00:00",
+  "error": "Extra data: line 6 column 2 (char 1215)"
  },
  "nfl:5dce18baccec5d3ad5fb3a3ce52f7619": {
-  "attempt": 7,
-  "last_utc": "2026-10-24T03:49:13.396208+00:00",
-  "error": "Expecting ',' delimiter: line 4 column 61 (char 628)"
+  "attempt": 8,
+  "last_utc": "2026-10-24T07:33:53.814414+00:00",
+  "error": "Expecting ',' delimiter: line 4 column 61 (char 663)"
  },
  "ncaaf:1f2a24570e2ca6de4516eae60b021507": {
   "attempt": 2,
@@ -75,9 +75,9 @@
   "error": "HALT for b4b3b6c003cd39a6258130ad906d0025: pick names unquoted line ('spread', '', 14.5) (only 3 lines quoted for this event)"
  },
  "nfl:f7679cf18454e4d88a8f2b990c3f08ac": {
-  "attempt": 3,
-  "last_utc": "2026-10-24T04:04:32.402697+00:00",
-  "error": "Expecting ',' delimiter: line 5 column 69 (char 986)"
+  "attempt": 4,
+  "last_utc": "2026-10-24T07:34:41.814625+00:00",
+  "error": "HALT for f7679cf18454e4d88a8f2b990c3f08ac: pick names unquoted line ('player_receptions', 'Konata Mumpfield', 3.5) (only 62 lines quoted for this event)"
  },
  "nfl:e8e5715eefb6a9ce64765e9ddf49c0cc": {
   "attempt": 2,
