@@ -1,0 +1,62 @@
+packet built 2026-10-24T09:32Z | snap snap_20261024T053008Z.parquet | props pull 2026-10-24T07:47 | kalshi snap_20261024T0535Z.parquet | injuries injuries_20261024T0630Z.json.gz
+
+  WHAT CHANGED: new_props: pull 2026-10-24T07:47:28.825581+00:00; injury_change: inj_Baltimore Ravens; injury_change: inj_Cincinnati Bengals; new_news: 26 items
+######## Cincinnati Bengals @ Baltimore Ravens  kick 10-25T17:00Z
+  HR ML: Ravens -105 / Bengals -115 (no-vig home 0.489) | Pinnacle no-vig home 0.476
+  HR spread: Ravens +1 -110 / Bengals -1 -110 | Pinnacle Ravens 1.0 (-103) | HR open -2.5 (20261020)
+  HR total: 48.5 O-110/U-110 | Pinnacle 49.0 O+101/U-118 | HR open 51.0
+  Kalshi ML [('Cincinnati wins', 0.52, 564858), ('Baltimore wins', 0.48, 248831)] | spread [('Cincinnati wins by over 1.5 points?', 0.49, 16285), ('Cincinnati wins by over 2.5 points?', 0.45, 20078)] | total [('Full Game: over 48.5 points scored?', 0.48, 16729), ('Full Game: over 49.5 points scored?', 0.46, 333877)]
+  -- Cincinnati Bengals injuries (20261024T0630)
+     Acti WR Colbie Young: Young (knee) was not listed on the Bengals' injury report Wednesday.
+     Acti TE Josh Kattus: The Bengals have signed Kattus to their practice squad.
+     Inju TE Tanner Hudson: Hudson (pectoral) was placed on injured reserve by the Bengals on Monday.
+     Acti WR Dohnte Meyers: Meyers brought in both of his targets for 12 yards during the Bengals' 31-24 win over the Dolphins on Sunday.
+     Inju LB Swayze Bozeman: The Bengals placed Bozeman on injured reserve Monday due to a fractured forearm, Ben Baby of ESPN.com reports.
+     Acti TE Jack Endries: 
+     Acti RB Samaje Perine: Perine rushed 14 times for 68 yards while catching both of his targets for 10 yards and a touchdown during Sunday's 31-24 win over Miami.
+     Acti TE Mike Gesicki: Gesicki brought in one of two targets for a four-yard touchdown in the Bengals' 31-24 win over the Dolphins on Sunday.
+     Acti WR Tee Higgins: Higgins brought in two of four targets for 22 yards in the Bengals' 31-24 win over the Dolphins on Sunday.
+     Acti RB Chase Brown: Brown rushed 13 times for 39 yards and brought in three of four targets for 21 yards in the Bengals' 31-24 win over the Dolphins on Sunday. He also lo
+     Acti QB Joe Burrow: Burrow completed 23 of 32 passes for 190 yards with four touchdowns and no interceptions and rushed four times for 10 yards in the Bengals' 31-24 win 
+     Acti WR Ja'Marr Chase: Chase brought in six of 10 targets for 77 yards and a touchdown in the Bengals' 31-24 win over the Dolphins on Sunday.
+     Acti WR Mitchell Tinsley: Tinsley caught three of his seven targets for 49 yards in the Bengals' 22-17 loss to the Jaguars on Sunday.
+     news 10-22T23:47 Trey Hendrickson is set to face the Bengals for the first time since signing with Baltimore
+     news 10-23T03:27 What are the longest field goals in NFL history?
+     news 10-23T20:55 Ravens' Lamar Jackson (high ankle sprain) unsure if he'll play
+     news 10-23T23:33 Boye Mafe's proud of his culture
+     news 10-23T23:43 Bengals, Hendrickson downplaying matchup
+  -- Baltimore Ravens injuries (20261024T0630)
+     Ques DT Broderick Washington Jr.: Washington (ankle) is listed as questionable for Sunday's game against the Bengals.
+     Acti QB Tyler Huntley: Huntley will start Sunday's Week 7 matchup against Cincinnati if Lamar Jackson (ankle) is unable to play, Ryan Mink of the Ravens' official site repor
+     Out  S  Jaylinn Hawkins: Hawkins (knee) has been ruled out for Sunday's game against the Bengals, Cordell Woodland of 105.7 The Fan Baltimore reports.
+     Out  LB Tavius Robinson: Head coach Jesse Minter said Friday that Robinson will be sidelined for the rest of the 2026 season due to a pectoral injury, Cordell Woodland of 105.
+     Ques QB Lamar Jackson: Jackson (ankle) was a limited participant in Friday's practice and is listed as questionable for Sunday's game against the Bengals.
+     Acti TE Matt Hibner: Hibner (hand) was a full participant at practice Thursday.
+     Acti WR Rashod Bateman: Bateman (shoulder) was a full participant in Thursday's practice.
+     Inju CB T.J. Tampa: The Ravens designated Tampa (toe/ankle) to return from injured reserve Wednesday.
+     Acti RB Justice Hill: Hill caught all three of his targets for nine yards during the Ravens' 13-10 loss to the Browns on Sunday.
+     Acti TE Mark Andrews: Andrews caught one of three targets for four yards during the Ravens' 13-10 loss to the Browns on Sunday.
+     Acti WR Elijah Sarratt: 
+     Acti WR Ja'Kobi Lane: Lane brought in four of five targets for 40 yards in the Ravens' 13-10 loss to the Browns on Sunday.
+     Acti WR Zay Flowers: Flowers brought in six of 11 targets for 66 yards and rushed once for one yard in the Ravens' 13-10 loss to the Browns on Sunday.
+     Acti RB Derrick Henry: Henry rushed 17 times for 58 yards and brought in his only target for two yards in the Ravens' 13-10 loss to the Browns on Sunday. He also lost a fumb
+     Acti TE Josh Cuevas: Cuevas caught four of five targets for 44 yards and a touchdown during Sunday's 13-10 loss to Cleveland.
+     news 10-22T23:47 Trey Hendrickson is set to face the Bengals for the first time since signing with Baltimore
+     news 10-23T03:27 What are the longest field goals in NFL history?
+     news 10-23T20:54 Lamar Jackson 'heading in the right direction' but unsure of return
+     news 10-23T20:55 Ravens' Lamar Jackson (high ankle sprain) unsure if he'll play
+     news 10-23T23:11 Will Lamar Jackson make Sunday's game?
+  -- props (pull 2026-10-24T07:47)
+     * Chase Brown: atd 0.5 (-105), recyd 20.5 (-110/-120), rec 3.5 (-110/-120), ruatt 10.5 (-130/+100), ruyd 40.5 (-115/-115)
+     * Derrick Henry: atd 0.5 (-210), recyd 6.5 (-115/-115), rec 1.5 (+145/-190), ruatt 19.5 (-110/-120), ruyd 85.5 (-115/-115)
+     * Dohnte Meyers: atd 0.5 (+400), recyd 14.5 (-115/-115), rec 1.5 (-140/+110)
+     * Ja'Kobi Lane: atd 0.5 (+375)
+     * Ja'Marr Chase: atd 0.5 (+105), recyd 82.5 (-115/-115), rec 7.5 (+105/-135)
+     * Joe Burrow: atd 0.5 (+650), paatt 37.5 (-105/-125), cmp 25.5 (+100/-130), int 0.5 (-120/-110), patd 1.5 (-180/+135), payd 261.5 (-115/-115), ruyd 6.5 (-115/-115)
+     * Justice Hill: atd 0.5 (+575)
+     * Mark Andrews: atd 0.5 (+230)
+     * Mike Gesicki: atd 0.5 (+300), recyd 22.5 (-120/-110), rec 2.5 (-110/-120)
+     * Rashod Bateman: atd 0.5 (+450)
+     * Samaje Perine: atd 0.5 (+275), recyd 8.5 (-110/-120), rec 1.5 (-140/+110), ruatt 8.5 (+100/-130), ruyd 26.5 (-115/-115)
+     * Tee Higgins: atd 0.5 (+140), recyd 65.5 (-115/-115), rec 4.5 (-145/+115)
+     * Zay Flowers: atd 0.5 (+170)

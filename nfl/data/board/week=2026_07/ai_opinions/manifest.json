@@ -1411,5 +1411,30 @@
     "f7679cf18454e4d88a8f2b990c3f08ac": "new_props: pull 2026-10-24T07:47:28.825581+00:00; injury_change: inj_Las Vegas Raiders; injury_change: inj_Los Angeles Rams; new_news: 36 items"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T094703Z.parquet",
+  "sha256": "e336db86c164c2e28615be56188b10f98a96d673f851650b63cb475596732ead",
+  "logged_utc": "2026-10-24T09:47:03.791114+00:00",
+  "rows": 54,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.926,
+  "revised_rows": 54,
+  "oldest_source_age_min": 256.9,
+  "first_kickoff_utc": "2026-10-25T17:00:00Z",
+  "reader_sha256": "932f932c9e20c4ba68ce590789181ef95d92304c31cf6453ecaa3be0101178e2",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261024T053008Z.parquet",
+   "inputs_digest": "{\"550ec5290f935d311995affbcb0b5c79\": \"439b5424947bbe8d\"}",
+   "triggers": {
+    "550ec5290f935d311995affbcb0b5c79": "new_props: pull 2026-10-24T07:47:28.825581+00:00; injury_change: inj_Baltimore Ravens; injury_change: inj_Cincinnati Bengals; new_news: 26 items"
+   }
+  }
  }
 ]
