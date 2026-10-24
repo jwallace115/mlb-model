@@ -734,8 +734,9 @@ def watch_once(sport, root=ROOT, now=None, dry_run=False, mode="auto"):
     if not triggered:
         print(f"  {sport}: no triggers ({len(games)} games checked)")
 
-    # P70: record sweep time if this was a sweep with triggers
-    if cadence == "sweep" and triggered:
+    # P70: a sweep is recorded whether or not it found triggers — the games WERE checked
+    # (10-24: `and triggered` made the watcher sweep every 15 min until something changed)
+    if cadence == "sweep" and not dry_run:
         record_sweep(sport, now, root)
 
     return triggered, details
