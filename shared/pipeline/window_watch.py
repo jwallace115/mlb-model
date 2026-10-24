@@ -927,17 +927,28 @@ def main():
     env["MLB_REPO_ROOT"] = str(root)
     sport_upper = args.sport.upper()
 
+    # P72(a): adapters + site build inline; pick_layers detached (slow on 2 GB VM)
     for desc, cmd in [
         ("picks_adapters", [PY, str(root / "shared" / "pipeline" / "picks_adapters.py")]),
-        ("pick_layers --build-missing", [PY, str(root / "shared" / "pipeline" / "pick_layers.py"),
-                                         "--build-missing"]),
         ("build_site", [PY, str(root / "site" / "build_site.py")]),
     ]:
         print(f"  {desc}...")
         result = subprocess.run(cmd, cwd=str(root), env=env,
-                                capture_output=True, text=True, timeout=300)
+                                capture_output=True, text=True, timeout=120)
         if result.returncode != 0:
             print(f"  WARNING: {desc} exit {result.returncode}: {result.stderr[:200]}")
+
+    # P72(a): pick_layers runs detached — the watcher completes regardless
+    layers_log = Path(os.environ.get("HOME", "/root")) / "logs" / "pick_layers_event.log"
+    layers_log.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        subprocess.Popen(
+            [PY, str(root / "shared" / "pipeline" / "pick_layers.py"), "--build-missing"],
+            cwd=str(root), env=env, start_new_session=True,
+            stdout=open(str(layers_log), "a"), stderr=subprocess.STDOUT)
+        print(f"  pick_layers detached → {layers_log}")
+    except Exception as e:
+        print(f"  WARNING: pick_layers Popen failed: {e}")
 
     # Write health
     _write_health(args.sport, "event", "COMPLETE",
