@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-10-23T21:01:53.325814+00:00",
-  "last_updated": "2026-10-23 21:01 UTC",
+  "generated_at": "2026-10-24T21:02:06.087029+00:00",
+  "last_updated": "2026-10-24 21:02 UTC",
   "pipeline_run_date": "2026-04-12",
   "signals_source": "stale",
-  "game_date": "2026-10-23",
+  "game_date": "2026-10-24",
   "deployment_start_date": "2026-03-17",
   "model_description": "Soccer Over 2.5 Specialist (V2.2 Ridge). OVER signals only.",
   "active_scope_note": "Active: Bundesliga MEDIUM tier only. All other leagues/tiers computed and logged to shadow.",
@@ -166,8 +166,8 @@
     "correlation_note": false
   },
   "daily_review": {
-    "generated_at": "2026-10-23T21:01:53.330628+00:00",
-    "date_reviewed": "2026-10-22",
+    "generated_at": "2026-10-24T21:02:06.091649+00:00",
+    "date_reviewed": "2026-10-23",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
