@@ -50,14 +50,14 @@
   "error": "Extra data: line 4 column 2 (char 588)"
  },
  "nfl:550ec5290f935d311995affbcb0b5c79": {
-  "attempt": 4,
-  "last_utc": "2026-10-24T00:33:53.255031+00:00",
-  "error": "Extra data: line 5 column 2 (char 882)"
+  "attempt": 5,
+  "last_utc": "2026-10-24T03:33:28.224076+00:00",
+  "error": "Extra data: line 6 column 2 (char 1107)"
  },
  "nfl:5dce18baccec5d3ad5fb3a3ce52f7619": {
-  "attempt": 6,
-  "last_utc": "2026-10-24T02:18:37.066371+00:00",
-  "error": "Expecting ',' delimiter: line 5 column 61 (char 964)"
+  "attempt": 7,
+  "last_utc": "2026-10-24T03:49:13.396208+00:00",
+  "error": "Expecting ',' delimiter: line 4 column 61 (char 628)"
  },
  "ncaaf:1f2a24570e2ca6de4516eae60b021507": {
   "attempt": 2,
@@ -88,5 +88,10 @@
   "attempt": 1,
   "last_utc": "2026-10-23T22:51:42.893177+00:00",
   "error": "Extra data: line 13 column 1 (char 307)"
+ },
+ "ncaaf:04db3b581ae63446a409f2ad30868e20": {
+  "attempt": 1,
+  "last_utc": "2026-10-24T03:37:48.269738+00:00",
+  "error": "Extra data: line 13 column 1 (char 315)"
  }
 }
