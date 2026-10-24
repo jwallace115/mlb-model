@@ -7447,5 +7447,139 @@
     "440de8df25b4cca8ebcecb7431bbb5c0": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261024T210403Z.parquet",
+  "sha256": "19e124295869b35e1127b671de829fc09a6adb9bb18474e2f92d35c3dc977c20",
+  "logged_utc": "2026-10-24T21:04:03.898014+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-25T00:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T210009Z.parquet",
+   "inputs_digest": "{\"d99b11b38d1cf1cbb334246263c53ac9\": \"3bbdc28352dd9733\"}",
+   "components": {
+    "d99b11b38d1cf1cbb334246263c53ac9": {
+     "pinnacle_h2h": [
+      [
+       "Tulane Green Wave",
+       0,
+       130
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -144
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Tulane Green Wave",
+       3.0,
+       -111
+      ],
+      [
+       "UTSA Roadrunners",
+       -3.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -112
+      ],
+      [
+       "Under",
+       51.5,
+       -104
+      ]
+     ],
+     "kalshi_snap": "snap_20261024T2037Z.parquet"
+    }
+   },
+   "triggers": {
+    "d99b11b38d1cf1cbb334246263c53ac9": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261024T211903Z.parquet",
+  "sha256": "9b0010af78b3fd6e83141c3fc474c39692b842bb7226663e8f012fe2ea6a1309",
+  "logged_utc": "2026-10-24T21:19:03.718951+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-24T22:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261024T210009Z.parquet",
+   "inputs_digest": "{\"8a67420bfc49f0bcf8c92bc4c08be602\": \"fb2de0376110d698\"}",
+   "components": {
+    "8a67420bfc49f0bcf8c92bc4c08be602": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -603
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       474
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -14.5,
+       102
+      ],
+      [
+       "Washington State Cougars",
+       14.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       102
+      ],
+      [
+       "Under",
+       52.5,
+       -119
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 7",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, "
+     ],
+     "kalshi_snap": "snap_20261024T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "8a67420bfc49f0bcf8c92bc4c08be602": "anchor_close"
+   }
+  }
  }
 ]
