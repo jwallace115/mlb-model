@@ -1,6 +1,6 @@
 # WHY Summary — Week 7
 
-Generated: 2026-10-23T11:21:19.459311+00:00
+Generated: 2026-10-24T11:25:38.930799+00:00
 
 
 ## Graded rows
@@ -22,8 +22,9 @@ Generated: 2026-10-23T11:21:19.459311+00:00
 
 ## why_code_auto (losses)
 
-- ROLE_SHIFT: 11
+- ROLE_SHIFT: 7
 - EFFICIENCY: 6
+- SHARE_OTHER: 4
 - SCRIPT: 3
 - NOISE: 1
 
@@ -78,19 +79,15 @@ Generated: 2026-10-23T11:21:19.459311+00:00
 - 169ffd2e557a07c7: prop:rec Hunter Henry A=7.0 L=3.5 |ln|=0.693
 - 68df680ab8039a56: prop:rec Rhamondre Stevenson A=5.0 L=2.5 |ln|=0.693
 
-### AVAILABILITY / ROLE_SHIFT (12 rows)
+### AVAILABILITY / ROLE_SHIFT (8 rows)
 
-- 0d9b4b5be525f865: ROLE_SHIFT prop:rec_yds Colston Loveland
 - 6690aae66ab2d301: ROLE_SHIFT prop:rec_yds Eli Raridon
 - 3ad9f5f5a72ffa1a: ROLE_SHIFT prop:rec_yds Hunter Henry
-- 80bb3f08ef20e769: ROLE_SHIFT prop:rec Colston Loveland
-- 10c908db29a4a77a: ROLE_SHIFT prop:rec D'Andre Swift
 - 059df9c1bcdf2839: ROLE_SHIFT prop:rec Eli Raridon
 - 169ffd2e557a07c7: ROLE_SHIFT prop:rec Hunter Henry
-- 3b14240881c4fb13: ROLE_SHIFT prop:rec Luther Burden III
 - 68df680ab8039a56: ROLE_SHIFT prop:rec Rhamondre Stevenson
 - 14b3f6419d0bc60e: ROLE_SHIFT prop:rush_att TreVeyon Henderson
 - a594a95972260b62: ROLE_SHIFT prop:rush_yds D'Andre Swift
 - 3174ee5e5caabba7: ROLE_SHIFT prop:rush_yds TreVeyon Henderson
 
-Total flagged: 33
+Total flagged: 29

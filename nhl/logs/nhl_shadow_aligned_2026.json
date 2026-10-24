@@ -1080,6 +1080,42 @@
       "drift_applied": 0.0,
       "result": "LOSS",
       "actual_total": 7
+    },
+    {
+      "game_id": 2026020170,
+      "game_date": "2026-10-24",
+      "home_team": "BOS",
+      "away_team": "SJS",
+      "signal_side": "UNDER",
+      "edge": 0.1663,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.617,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020172,
+      "game_date": "2026-10-24",
+      "home_team": "PIT",
+      "away_team": "NSH",
+      "signal_side": "UNDER",
+      "edge": 0.1412,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.727,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020176,
+      "game_date": "2026-10-24",
+      "home_team": "EDM",
+      "away_team": "TOR",
+      "signal_side": "UNDER",
+      "edge": 0.1725,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 6.006,
+      "drift_applied": 0.0
     }
   ]
 }
