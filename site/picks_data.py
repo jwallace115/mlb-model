@@ -196,13 +196,13 @@ def picks_data(rows, now, ledger_dir, health, forward_status):
                     if oe["event_id"] == eid:
                         owner_reads[owner] = {
                             "window": oe["window"],
-                            "freeze_et": bs._utc_to_et(str(oe["freeze_logged_utc"])),
+                            "freeze_et": bs._utc_to_et(str(oe["freeze_logged_utc"])), "freeze_utc": str(oe["freeze_logged_utc"]),
                             "n_picks": oe["n_picks"],
                         }
             events.append({"event_id": eid, "away": e["away"], "home": e["home"],
                            "away_short": short_team(e["away"], sport), "home_short": short_team(e["home"], sport),
                            "kick_utc": ct, "kick_et": bs._utc_to_et(ct), "slot": bs._slot_for_commence(ct, sport),
-                           "freeze_et": bs._utc_to_et(str(e["freeze_logged_utc"])), "window": e["window"], "n_picks": e["n_picks"],
+                           "freeze_et": bs._utc_to_et(str(e["freeze_logged_utc"])), "freeze_utc": str(e["freeze_logged_utc"]), "window": e["window"], "n_picks": e["n_picks"],
                            "owner_reads": owner_reads,
                            "timeline": reads_timeline.get(eid, [])})
         picks = []
@@ -220,7 +220,7 @@ def picks_data(rows, now, ledger_dir, health, forward_status):
                     "price": bs.am(p.get("price_american")), "conf": p.get("conf"), "tag": p.get("tag"),
                     "reason": plain_reason(p.get("reason")), "window": p.get("window"),
                     "reader": "reader_v3" if "books (Pin x3)" in (p.get("reason") or "") else "AI reader",
-                    "freeze_et": bs._utc_to_et(str(p["logged_utc"])),
+                    "freeze_et": bs._utc_to_et(str(p["logged_utc"])), "freeze_utc": str(p["logged_utc"]),
                     "moved": moved(card) if card else None, "favour": favour(card) if card else None,
                     "card_html": bs._render_card(card, pick=p) if card else None})
         out["sports"][sport] = {"events": events, "picks": picks, "n_freezes": res.get("n_freezes"),
