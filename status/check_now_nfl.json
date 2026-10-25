@@ -1,41 +1,41 @@
 {
- "started_utc": "2026-10-25T15:45:15.041956+00:00",
- "finished_utc": "2026-10-25T15:50:54.197984+00:00",
- "mode": "sweep",
- "requested_by": "cowork",
+ "started_utc": "2026-10-25T16:17:03.834770+00:00",
+ "finished_utc": "2026-10-25T16:22:48.487137+00:00",
+ "mode": "auto",
+ "requested_by": "cron",
  "games_checked": 0,
  "triggers": [
   {
    "game": "b1be064fb52a198a62109c279e7ab24c",
-   "text": "new_props: pull 2026-10-25T15:02:30.986880+00:00"
+   "text": "anchor_close"
   },
   {
    "game": "550ec5290f935d311995affbcb0b5c79",
-   "text": "new_props: pull 2026-10-25T15:02:30.986880+00:00"
+   "text": "anchor_close"
   },
   {
    "game": "2823e986597c449ab94126cd5ed3fae9",
-   "text": "new_props: pull 2026-10-25T15:02:30.986880+00:00"
+   "text": "anchor_close"
   },
   {
    "game": "5dce18baccec5d3ad5fb3a3ce52f7619",
-   "text": "new_props: pull 2026-10-25T15:02:30.986880+00:00"
+   "text": "anchor_close"
   },
   {
    "game": "2bba7fde6f97d0e54403d53676e4ab63",
-   "text": "new_props: pull 2026-10-25T15:02:30.986880+00:00"
+   "text": "anchor_close"
   },
   {
    "game": "f3992ad4496724baf7dcd1ef58245d6b",
-   "text": "line_move: pinnacle spreads Minnesota Vikings -6.5\u2192-7.5; line_move: pinnacle spreads Indianapolis Colts 6.5\u21927.5; new_props: pull 2026-10-25T15:02:30.986880+00:00"
+   "text": "anchor_close"
   },
   {
    "game": "be5dd120ca08b43d647b6caa8953500a",
-   "text": "new_props: pull 2026-10-25T15:02:30.986880+00:00"
+   "text": "anchor_close"
   }
  ],
  "games_read": 7,
- "frozen_file": "ai_opinions_20261025T154515Z.parquet",
- "spend_usd": 33.7681,
+ "frozen_file": "ai_opinions_20261025T161703Z.parquet",
+ "spend_usd": 34.0287,
  "result": "COMPLETE"
 }
