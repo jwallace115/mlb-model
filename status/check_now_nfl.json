@@ -1,21 +1,12 @@
 {
- "started_utc": "2026-10-25T07:47:03.623379+00:00",
- "finished_utc": "2026-10-25T07:51:03.643333+00:00",
+ "started_utc": "2026-10-25T08:17:04.027984+00:00",
+ "finished_utc": "2026-10-25T08:17:04.340570+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "5dce18baccec5d3ad5fb3a3ce52f7619",
-   "text": "new_props: pull 2026-10-25T07:47:29.615829+00:00; injury_change: inj_Cleveland Browns"
-  },
-  {
-   "game": "f7679cf18454e4d88a8f2b990c3f08ac",
-   "text": "new_props: pull 2026-10-25T07:47:29.615829+00:00; injury_change: inj_Las Vegas Raiders"
-  }
- ],
- "games_read": 2,
- "frozen_file": "ai_opinions_20261025T074703Z.parquet",
- "spend_usd": 32.7075,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
