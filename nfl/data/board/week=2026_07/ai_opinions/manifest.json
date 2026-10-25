@@ -7215,5 +7215,241 @@
     "4853610e63c246f2027a6a248e642c9a": "new_props: pull 2026-10-25T06:32:30.115481+00:00; injury_change: inj_Philadelphia Eagles; injury_change: inj_Dallas Cowboys"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261025T074703Z.parquet",
+  "sha256": "b21fa14af1a481679c8f35b8e0fd671f1851ef3c46033e058a307baa29647c62",
+  "logged_utc": "2026-10-25T07:47:03.623379+00:00",
+  "rows": 131,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.916,
+  "revised_rows": 120,
+  "oldest_source_age_min": 137.0,
+  "first_kickoff_utc": "2026-10-25T17:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261025T053005Z.parquet",
+   "inputs_digest": "{\"5dce18baccec5d3ad5fb3a3ce52f7619\": \"bdf172f20b85e721\", \"f7679cf18454e4d88a8f2b990c3f08ac\": \"b6add170464636d4\"}",
+   "components": {
+    "5dce18baccec5d3ad5fb3a3ce52f7619": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cleveland Browns",
+       0,
+       -135
+      ],
+      [
+       "Tennessee Titans",
+       0,
+       110
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cleveland Browns",
+       -2.0,
+       -110
+      ],
+      [
+       "Tennessee Titans",
+       2.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       37.0,
+       -110
+      ],
+      [
+       "Under",
+       37.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cleveland Browns",
+       0,
+       -127
+      ],
+      [
+       "Tennessee Titans",
+       0,
+       113
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cleveland Browns",
+       -1.5,
+       -110
+      ],
+      [
+       "Tennessee Titans",
+       1.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.0,
+       -107
+      ],
+      [
+       "Under",
+       37.0,
+       -109
+      ]
+     ],
+     "props_ts": "2026-10-25T07:47:29.615829+00:00",
+     "inj_Tennessee Titans": "643c33ccac466568",
+     "inj_Cleveland Browns": "3cc044a273b5974e",
+     "news": [
+      "2027 NFL mock draft: Yates' early predictions for ",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Browns RBs Quinshon Judkins, Dylan Sampson expecte",
+      "Calvin Ridley questionable for Titans in Week 7",
+      "Can the Browns' offense get off to a quick start v",
+      "How Browns' past two draft classes are catching th",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "Robert Saleh defends Jordan Elliott, says gun inci",
+      "Seven things Solak thinks entering NFL Week 7: Fro",
+      "Titans abruptly release DT Jordan Elliott for undi",
+      "Titans chase a rare 2nd straight win as the Browns",
+      "Titans working through Alontae Taylor situation",
+      "Titans' Robert Saleh defends Jordan Elliott: Gun i",
+      "What are the longest field goals in NFL history?",
+      "What's led to Titans' recent success? Under center"
+     ],
+     "kalshi_snap": "snap_20261025T0535Z.parquet"
+    },
+    "f7679cf18454e4d88a8f2b990c3f08ac": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Las Vegas Raiders",
+       0,
+       145
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -175
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Las Vegas Raiders",
+       3.0,
+       100
+      ],
+      [
+       "Los Angeles Rams",
+       -3.0,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       48.5,
+       -110
+      ],
+      [
+       "Under",
+       48.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Las Vegas Raiders",
+       0,
+       148
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -169
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Las Vegas Raiders",
+       3.5,
+       -123
+      ],
+      [
+       "Los Angeles Rams",
+       -3.5,
+       109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -107
+      ],
+      [
+       "Under",
+       48.5,
+       -109
+      ]
+     ],
+     "props_ts": "2026-10-25T07:47:29.615829+00:00",
+     "inj_Las Vegas Raiders": "e00c4fa606acaff5",
+     "inj_Los Angeles Rams": "d71252ac5cc40c33",
+     "news": [
+      "'Good Morning Football' sends best wishes to Faulk",
+      "A battered Rams team faces a near must-win at Las ",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Betting buzz: Sportsbooks, bettors join the Nation",
+      "Bills DB Gardner-Johnson's one-game suspension for",
+      "Fernando Mendoza is embracing being Raiders' lates",
+      "How come the Raiders' pass rush is so inconsistent",
+      "How will the Rams replace Davante Adams?",
+      "Is Matthew Stafford a locked-in top-10 fantasy QB?",
+      "Lawrence McCutcheon, 5-time Pro Bowl RB for Rams, ",
+      "Marshall Faulk, Hall of Famer and Southern coach, ",
+      "Mike Washington Jr. potentially unavailable for SN",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL announces U2 will play in first Thanksgiving E",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Rams WR Puka Nacua leaves practice with calf injur",
+      "Rams WR Puka Nacua misses practice, questionable v",
+      "Rams face questions at WR ahead of Raiders matchup",
+      "Seven things Solak thinks entering NFL Week 7: Fro",
+      "Six games in, are the Rams undisciplined or unluck",
+      "Sources: Rams signing free agent kicker Brandon Mc",
+      "Stephen A. calls out Sean McVay amid disappointing",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "What are the longest field goals in NFL history?",
+      "Why are the Raiders struggling in the second half "
+     ],
+     "kalshi_snap": "snap_20261025T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "5dce18baccec5d3ad5fb3a3ce52f7619": "new_props: pull 2026-10-25T07:47:29.615829+00:00; injury_change: inj_Cleveland Browns",
+    "f7679cf18454e4d88a8f2b990c3f08ac": "new_props: pull 2026-10-25T07:47:29.615829+00:00; injury_change: inj_Las Vegas Raiders"
+   }
+  }
  }
 ]
