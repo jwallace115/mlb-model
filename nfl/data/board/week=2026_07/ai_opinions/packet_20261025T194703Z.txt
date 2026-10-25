@@ -1,0 +1,137 @@
+packet built 2026-10-25T19:47Z | snap snap_20261025T193011Z.parquet | props pull 2026-10-25T18:32 | kalshi snap_20261025T1935Z.parquet | injuries injuries_20261025T1830Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: anchor_close
+######## Green Bay Packers @ Detroit Lions  kick 10-25T20:25Z
+  HR ML: Lions -200 / Packers +170 (no-vig home 0.643) | Pinnacle no-vig home 0.642
+  HR spread: Lions -3.5 -110 / Packers +3.5 -110 | Pinnacle Lions -3.5 (-115) | HR open -3.0 (20261020)
+  HR total: 55.5 O-110/U-110 | Pinnacle 55.5 O-105/U-107 | HR open 52.0
+  Kalshi ML [('Green Bay wins', 0.35, 1514110), ('Detroit wins', 0.65, 192902)] | spread [('Detroit wins by over 3.5 points?', 0.52, 537401), ('Detroit wins by over 4.5 points?', 0.47, 28763)] | total [('Full Game: over 55.5 points scored?', 0.49, 263033), ('Full Game: over 54.5 points scored?', 0.54, 89352)]
+  -- Green Bay Packers injuries (20261025T1830)
+     Acti RB Josh Jacobs: Jacobs is expected to start in his season debut Sunday against the Lions, but the extent of his role is likely to be decided upon as the game unfolds,
+     Ques DT Jordon Riley: The Packers activated Riley (Achilles) from the active/PUP list Saturday.
+     Acti WR Coleman Owen: The Packers signed Owen from the practice squad to the active roster Saturday.
+     Ques G  Aaron Banks: Banks (knee/toe) is listed as questionable for Sunday's game against the Lions, Wes Hodkiewicz of the Packers' official site reports.
+     Ques WR Bo Melton: Melton (back) is questionable for Sunday's game against the Lions, Wes Hodkiewicz of the Packers' official site reports.
+     Out  LB Zaire Franklin: Franklin (shin) has been ruled out ahead of Sunday's game against the Lions, Weston Hodkiewicz of the Packers' official site reports.
+     Acti WR Savion Williams: Williams (ankle) does not carry an injury designation ahead of Sunday's game against the Lions, Wes Hodkiewicz of the Packers' official site reports.
+     Acti WR Matthew Golden: Golden (shoulder) doesn't have an injury designation for Sunday's game against the Lions.
+     Acti WR Christian Watson: Watson (ankle) doesn't have a designation for Sunday's game in Detroit, Wes Hodkiewicz of the Packers' official site reports.
+     Out  TE Luke Musgrave: Packers head coach Matt Lafleur said Thursday it's "tough to say" whether Musgrave (neck) plays this season, Weston Hodkiewicz of the Packers' officia
+     Acti QB Jordan Love: Love (back) was a full practice participant Thursday, Rob Demovsky of ESPN.com reports.
+     Ques CB Benjamin St-Juste: questionable
+     Out  DE Micah Parsons: Packers head coach Matt LaFleur said that Parsons (knee) won't practice in Week 7, Weston Hodkiewicz of the team's official site reports. "He has to c
+     Acti RB MarShawn Lloyd: Lloyd rushed eight times for 10 yards while failing to catch his only target during Sunday night's 23-13 win over Dallas.
+     Acti RB Pierre Strong Jr.: Strong rushed 11 times for 28 yards in Sunday night's 23-13 win over the Cowboys. He caught five of six targets for 39 yards.
+     Acti TE Tucker Kraft: Kraft caught five of eight targets for 37 yards in Sunday night's 23-13 win over the Cowboys.
+     Inju DT Jonathan Ford: The Packers placed Ford (calf) on injured reserve Saturday.
+     news 10-23T17:03 Packers linebacker Zaire Franklin out Sunday with shin injury
+     news 10-24T21:01 Packers activate RB Josh Jacobs for 2026 debut
+     news 10-25T03:26 Will the Packers' run game improve with Josh Jacobs?
+     news 10-25T16:34 Steelers Aaron Rodgers, QB room lead NFL Week 7's best arrivals
+     news 10-25T17:45 Week 7 NFL highlights: Best plays, moments, touchdowns, more
+  -- Detroit Lions injuries (20261025T1830)
+     Acti WR DeAndre Carter: The Lions signed Carter to the active roster Thursday.
+     Out  S  Kerby Joseph: Lions head coach Dan Campbell stated Kerby (knee) "is in a good headspace" and expects the 25-year-old to play at some point this season, Nolan Bianch
+     Inju G  Ben Bartch: The Lions placed Bartch (foot) on injured reserve Friday.
+     Inju LB Devin White: The Lions placed White (forearm) on injured reserve Friday.
+     Inju WR Tom Kennedy: The Lions placed Kennedy (knee) on injured reserve Friday.
+     Acti WR Isaac TeSlaa: TeSlaa failed to haul in either of his two targets during the Lions' 45-21 win over the Cardinals on Sunday.
+     Acti QB Jared Goff: Goff completed 19 of 30 passes for 271 yards with three touchdowns and no interceptions while adding a one-yard touchdown on his only rush attempt in 
+     Acti TE Sam LaPorta: LaPorta brought in all five of his targets for 88 yards and a touchdown in the Lions' 45-21 win over the Cardinals on Sunday.
+     Acti WR Jameson Williams: Williams brought in two of four targets for 47 yards and two touchdowns in the Lions' 45-21 win over the Cardinals on Sunday.
+     Acti WR Amon-Ra St. Brown: St. Brown secured six of 11 targets for 69 yards and committed two fumbles that remained with Detroit in the Lions' 45-21 win over the Cardinals on Su
+     Acti RB Jahmyr Gibbs: Gibbs rushed 25 times for 151 yards and two touchdowns while bringing in five of six targets for 56 yards in the Lions' 45-21 win over the Cardinals o
+     Acti WR Jackson Meeks: Meeks (coach's decision) is inactive for Sunday's game against Arizona.
+     Acti TE Tyler Conklin: 
+     news 10-23T19:09 Lions' Dan Campbell downplays Sam LaPorta's contract comments
+     news 10-23T20:46 Sam LaPorta addresses contract frustration with Lions
+     news 10-24T21:01 Packers activate RB Josh Jacobs for 2026 debut
+     news 10-25T16:34 Steelers Aaron Rodgers, QB room lead NFL Week 7's best arrivals
+     news 10-25T17:45 Week 7 NFL highlights: Best plays, moments, touchdowns, more
+  -- props (pull 2026-10-25T18:32)
+     * Amon-Ra St. Brown: atd 0.5 (-145), recyd 81.5 (-115/-115), rec 7.5 (-110/-120)
+     * Brock Wright: atd 0.5 (+650), rec 0.5 (-170/+125)
+     * Christian Watson: atd 0.5 (+115), recyd 77.5 (-115/-115), rec 4.5 (-130/+100)
+     * Isaac TeSlaa: atd 0.5 (+375), recyd 24.5 (-115/-115), rec 1.5 (-150/+115)
+     * Jahmyr Gibbs: atd 0.5 (-400), recyd 41.5 (-115/-115), rec 4.5 (-155/+120), ruatt 20.5 (-110/-120), ruyd 94.5 (-115/-115)
+     * Jameson Williams: atd 0.5 (+180), recyd 54.5 (-115/-115), rec 3.5 (-130/+100)
+     * Jared Goff: atd 0.5 (+800), paatt 36.5 (-120/-110), cmp 26.5 (+100/-130), int 0.5 (+110/-140), patd 2.5 (+135/-180), payd 280.5 (-115/-115), ruyd 0.5 (-125/-105)
+     * Jordan Love: atd 0.5 (+700), paatt 37.5 (-120/-110), cmp 23.5 (-115/-115), int 0.5 (-130/+100), patd 1.5 (-220/+150), payd 285.5 (-115/-115), ruatt 1.5 (-160/+125), ruyd 7.5 (-110/-120)
+     * Josh Jacobs: atd 0.5 (+100), recyd 10.5 (-110/-120), rec 1.5 (-130/+100), ruatt 12.5 (-120/-110), ruyd 46.5 (-115/-115)
+     * MarShawn Lloyd: atd 0.5 (+425), ruyd 10.5 (-115/-115)
+     * Matthew Golden: atd 0.5 (+140), recyd 74.5 (-115/-115), rec 4.5 (-160/+120)
+     * Pierre Strong Jr.: atd 0.5 (+375), recyd 7.5 (-110/-120), rec 1.5 (+115/-150), ruyd 7.5 (-120/-110)
+     * Sam LaPorta: atd 0.5 (+145), recyd 49.5 (-120/-110), rec 4.5 (-160/+120)
+     * Savion Williams: atd 0.5 (+350), recyd 24.5 (-115/-115), rec 2.5 (-105/-125)
+     * Sione Vaki: atd 0.5 (+750), ruyd 8.5 (-115/-115)
+     * Tucker Kraft: atd 0.5 (+155), recyd 51.5 (-115/-115), rec 4.5 (-120/-110)
+
+  WHAT CHANGED: anchor_close
+######## Los Angeles Rams @ Las Vegas Raiders  kick 10-25T20:25Z
+  HR ML: Raiders +150 / Rams -185 (no-vig home 0.381) | Pinnacle no-vig home 0.389
+  HR spread: Raiders +3.5 -115 / Rams -3.5 -105 | Pinnacle Raiders 3.5 (-118) | HR open 5.0 (20261020)
+  HR total: 49.5 O-110/U-110 | Pinnacle 48.5 O-117/U+104 | HR open 47.5
+  Kalshi ML [('Las Vegas wins', 0.39, 1223303), ('Los Angeles R wins', 0.61, 337649)] | spread [('Los Angeles R wins by over 3.5 points?', 0.47, 277767), ('Los Angeles R wins by over 4.5 points?', 0.43, 70307)] | total [('Full Game: over 49.5 points scored?', 0.47, 6534), ('Full Game: over 50.5 points scored?', 0.45, 2124)]
+  -- Los Angeles Rams injuries (20261025T1830)
+     Ques WR Puka Nacua: The Rams are optimistic that Nacua (calf), who is listed as questionable for Week 7, will play in Sunday's game at Las Vegas, Adam Schefter of ESPN re
+     Acti WR Jordan Whittington: Whittington could operate in an expanded role offensively if Puka Nacua (calf, questionable) cannot play against the Raiders on Sunday.
+     Acti WR Konata Mumpfield: Mumpfield could get a significant bump in opportunity Sunday in Week 7 against Las Vegas since Davante Adams (hamstring) is on IR and Puka Nacua (calf
+     Ques CB Trent McDuffie: McDuffie (groin) is listed as questionable for Sunday's game against the Raiders, Sarah Barshop of ESPN.com reports.
+     Out  LB Nate Landman: Landman (concussion) has been ruled out for Sunday's game against the Raiders, Gary Klein of the Los Angeles Times reports.
+     Inju DE Myles Garrett: Rams coach Sean McVay said Friday that Garrett (knee) could have his 21-day practice window opened next week, Nate Atkins of The Athletic reports.
+     Inju DE Kobie Turner: The Rams placed Turner (groin) on injured reserve Wednesday.
+     Inju DT Poona Ford: The Rams placed Ford (triceps) on injured reserve Tuesday.
+     Inju TE Terrance Ferguson: Ferguson (ankle), who is eligible to come off injured reserve next week, isn't expected to be ready at that time, Adam Schefter of ESPN reports.
+     Inju WR Davante Adams: Adams (hamstring) was placed on injured reserve Tuesday, Ian Rapoport of NFL Network reports.
+     Acti TE Tyler Higbee: Higbee caught all four of his targets for 22 yards during the Rams' 18-16 loss to the Cardinals on Sunday. He also lost a fumble.
+     Inju PK Blake Grupe: Rams head coach Sean McVay announced Monday that Grupe will miss the remainder of the season after sustaining a torn ACL in Sunday's 18-16 loss to the
+     Acti WR CJ Daniels: 
+     Acti QB Matthew Stafford: Stafford was 25-for-33 passing for 222 yards, two touchdowns and no interceptions during Sunday's 18-16 defeat against the Cardinals.
+     Acti TE Colby Parkinson: Parkinson caught five of six targets for 31 yards and a touchdown in Sunday's 18-16 loss to the Cardinals.
+     Acti RB Blake Corum: Corum produced 42 yards on nine carries and reeled in both of his targets for 18 yards and one touchdown during Sunday's 18-16 loss against the Cardin
+     Acti RB Kyren Williams: Williams notched 10 carries for 50 yards and recorded three catches (on six targets) for 17 yards during Sunday's 18-16 defeat to the Cardinals.
+     Acti QB Ty Simpson: Simpson (coach's decision) is inactive but will serve as the Rams' emergency third quarterback against the Cardinals on Sunday.
+     news 10-24T02:03 Lawrence McCutcheon, 5-time Pro Bowl RB for Rams, dies at 76
+     news 10-25T00:07 Rams face questions at WR ahead of Raiders matchup
+     news 10-25T15:09 Rams optimistic that star WR Puka Nacua will play vs. Raiders, source says
+     news 10-25T16:34 Steelers Aaron Rodgers, QB room lead NFL Week 7's best arrivals
+     news 10-25T17:45 Week 7 NFL highlights: Best plays, moments, touchdowns, more
+  -- Las Vegas Raiders injuries (20261025T1830)
+     Inju TE Carter Runyon: The Raiders have ruled out Runyon (foot) for Sunday's game against the Rams.
+     Ques RB Mike Washington Jr.: Washington (foot/back) is considered a game-time decision for Sunday's contest against the Rams, Jeremy Fowler of ESPN reports.
+     Ques LB Quay Walker: Walker (chest) is listed as questionable for Sunday's game against the Rams, Ryan McFadden of ESPN.com reports.
+     Inju WR Dont'e Thornton Jr.: Thornton (hamstring) has been ruled out for Sunday's game against the Rams, Sam Warren of The Athletic reports.
+     Acti TE Brock Bowers: Bowers (hamstring/calf) upgraded to a full practice Thursday, Anthony Galaviz of The Fresno Bee reports.
+     Acti QB Fernando Mendoza: Mendoza did not play a single snap during the Raiders' 33-30 loss to the Bills on Sunday.
+     Acti TE Michael Mayer: Mayer brought in seven of nine targets for 95 yards in the Raiders' 33-30 loss to the Bills on Sunday.
+     Acti QB Kirk Cousins: Cousins completed 23 of 41 passes for 313 yards with two touchdowns and one interception in the Raiders' 33-30 loss to the Bills on Sunday.
+     Acti RB Ashton Jeanty: Jeanty rushed 10 times for 22 yards and a touchdown and brought in four of six targets for 36 yards in the Raiders' 33-30 loss to the Bills on Sunday.
+     Acti WR Jalen Nailor: Nailor caught one of four targets for nine yards during Sunday's 33-30 loss to the Bills.
+     Acti WR Tre Tucker: Tucker caught five of seven targets for 97 yards and two touchdowns in Sunday's 33-30 loss to the Bills.
+     Acti QB Aidan O'Connell: O'Connell (coach's decision) is inactive but will serve as the Raiders' emergency third quarterback against the Bills on Sunday.
+     news 10-23T13:39 Mike Washington Jr. potentially unavailable for SNF
+     news 10-24T10:00 Fernando Mendoza is embracing being Raiders' latest Hispanic QB
+     news 10-24T22:33 How come the Raiders' pass rush is so inconsistent?
+     news 10-25T16:34 Steelers Aaron Rodgers, QB room lead NFL Week 7's best arrivals
+     news 10-25T17:45 Week 7 NFL highlights: Best plays, moments, touchdowns, more
+  -- props (pull 2026-10-25T18:32)
+     * Ashton Jeanty: atd 0.5 (-130), recyd 25.5 (-120/-110), rec 3.5 (-120/-110), ruatt 14.5 (-125/-105), ruyd 56.5 (-115/-115)
+     * Blake Corum: atd 0.5 (+190), recyd 8.5 (-120/-110), rec 1.5 (+135/-180), ruatt 8.5 (-105/-125), ruyd 36.5 (-120/-110)
+     * Brock Bowers: atd 0.5 (+105), recyd 71.5 (-120/-110), rec 6.5 (+115/-145)
+     * Colby Parkinson: atd 0.5 (+250), recyd 22.5 (-115/-115), rec 2.5 (-125/-105)
+     * Connor Heyward: atd 0.5 (+700)
+     * Davis Allen: atd 0.5 (+650), recyd 7.5 (-115/-115), rec 0.5 (-220/+155)
+     * Dylan Laube: atd 0.5 (+650)
+     * Jalen Nailor: atd 0.5 (+575)
+     * Jordan Whittington: atd 0.5 (+650), recyd 7.5 (-110/-120), rec 0.5 (-210/+150)
+     * Kirk Cousins: atd 0.5 (+2250), paatt 34.5 (-105/-125), cmp 21.5 (-120/-110), int 0.5 (-125/-105), patd 1.5 (-110/-120), payd 239.5 (-115/-115), ruyd 0.5 (-120/-110)
+     * Konata Mumpfield: atd 0.5 (+375), recyd 22.5 (-115/-115), rec 1.5 (-150/+115)
+     * Kyren Williams: atd 0.5 (-140), recyd 27.5 (-120/-110), rec 3.5 (-130/+105), ruatt 15.5 (-105/-125), ruyd 69.5 (-115/-115)
+     * Matthew Stafford: atd 0.5 (+2250), paatt 35.5 (-105/-125), cmp 23.5 (-105/-125), int 0.5 (-105/-125), patd 1.5 (-155/+120), payd 268.5 (-115/-115), ruyd 0.5 (+125/-165)
+     * Michael Mayer: atd 0.5 (+300), recyd 30.5 (-120/-110), rec 3.5 (-115/-115)
+     * Mike Washington Jr.: atd 0.5 (+350)
+     * Puka Nacua: atd 0.5 (+105), recyd 84.5 (-115/-115), rec 7.5 (-105/-125)
+     * Tre Tucker: atd 0.5 (+325), recyd 41.5 (-115/-115), rec 3.5 (+105/-135)
+     * Tutu Atwell: atd 0.5 (+650), recyd 7.5 (-110/-120), rec 0.5 (-155/+120)
+     * Tyler Higbee: atd 0.5 (+240), recyd 37.5 (-115/-115), rec 3.5 (-160/+120)

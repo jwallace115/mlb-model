@@ -166,33 +166,5 @@
     "result":"WIN",
     "net_units":0.462962963,
     "resolved":1
-  },
-  {
-    "date":"2026-04-10",
-    "game_id":"823968",
-    "home_team":"LAD",
-    "away_team":"TEX",
-    "home_sp_name":"Tyler Glasnow",
-    "away_sp_name":"Kumar Rocker",
-    "home_sp_xfip":3.9,
-    "away_sp_xfip":4.974,
-    "xfip_gap":1.074,
-    "home_f5_line":-0.5,
-    "away_f5_line":0.5,
-    "home_f5_price":-138,
-    "away_f5_price":106,
-    "bet_side":"HOME",
-    "bet_line":-0.5,
-    "bet_price":-138,
-    "stake_units":0.5,
-    "line_at_signal_time":-0.5,
-    "f5_line_closing":null,
-    "f5_clv":null,
-    "home_f5_score":3.0,
-    "away_f5_score":4.0,
-    "f5_margin":-1.0,
-    "result":"LOSS",
-    "net_units":-0.5,
-    "resolved":1
   }
 ]
