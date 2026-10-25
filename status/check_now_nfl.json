@@ -1,33 +1,12 @@
 {
- "started_utc": "2026-10-25T16:47:02.999797+00:00",
- "finished_utc": "2026-10-25T16:52:17.621333+00:00",
+ "started_utc": "2026-10-25T17:02:03.351271+00:00",
+ "finished_utc": "2026-10-25T17:02:59.240737+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "436119bb3ccdaa6ed7808aa3ebd82b76",
-   "text": "injury_change: inj_Arizona Cardinals; injury_change: inj_Denver Broncos"
-  },
-  {
-   "game": "e8e5715eefb6a9ce64765e9ddf49c0cc",
-   "text": "injury_change: inj_Green Bay Packers"
-  },
-  {
-   "game": "f7679cf18454e4d88a8f2b990c3f08ac",
-   "text": "injury_change: inj_Las Vegas Raiders"
-  },
-  {
-   "game": "176d474ed8b2bbf1eb4d7e9c56b4bf22",
-   "text": "injury_change: inj_Seattle Seahawks; injury_change: inj_Kansas City Chiefs"
-  },
-  {
-   "game": "4853610e63c246f2027a6a248e642c9a",
-   "text": "injury_change: inj_Philadelphia Eagles"
-  }
- ],
- "games_read": 5,
- "frozen_file": "ai_opinions_20261025T164702Z.parquet",
- "spend_usd": 34.224,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }

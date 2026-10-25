@@ -1,9 +1,9 @@
 [
  {
-  "sport": "ncaaf",
+  "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-10-25T16:49:04.460542+00:00",
-  "finished_utc": "2026-10-25T16:49:04.460542+00:00",
+  "started_utc": "2026-10-25T17:02:59.218345+00:00",
+  "finished_utc": "2026-10-25T17:02:59.218345+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -11,22 +11,22 @@
  },
  {
   "sport": "nfl",
-  "window": "event",
-  "started_utc": "2026-10-25T16:52:17.602340+00:00",
-  "finished_utc": "2026-10-25T16:52:17.602340+00:00",
-  "result": "COMPLETE",
-  "step": "window_watch",
-  "message": "['injury_change: inj_Arizona Cardinals; injury_change: inj_Denver Broncos', 'injury_change: inj_Green Bay Packers', 'injury_change: inj_Las Vegas Raiders', 'injury_change: inj_Seattle Seahawks; injury",
-  "freeze_file": "ai_opinions_20261025T164702Z.parquet"
+  "window": "prekick",
+  "started_utc": "2026-10-25T17:18:38.207460+00:00",
+  "finished_utc": "2026-10-25T17:18:38.207460+00:00",
+  "result": "STOP",
+  "step": "freeze",
+  "message": "exit 1",
+  "freeze_file": null
  },
  {
-  "sport": "nfl",
-  "window": "prekick",
-  "started_utc": "2026-10-25T16:53:57.182248+00:00",
-  "finished_utc": "2026-10-25T16:53:57.182248+00:00",
-  "result": "STOP",
-  "step": "reader_v3",
-  "message": "exit -9",
+  "sport": "ncaaf",
+  "window": "event",
+  "started_utc": "2026-10-25T17:19:03.755382+00:00",
+  "finished_utc": "2026-10-25T17:19:03.755382+00:00",
+  "result": "no_triggers",
+  "step": "window_watch",
+  "message": "",
   "freeze_file": null
  }
 ]
