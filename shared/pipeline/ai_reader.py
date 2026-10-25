@@ -703,26 +703,36 @@ def read_game(packet_text, sheet_df, sport, model=None, root=ROOT, dry_run=False
     return picks, input_tokens, output_tokens
 
 
+def _first_json_array(text):
+    """Return the first JSON array decodable from `text` (scanning each '[' as a start), or None."""
+    dec = json.JSONDecoder()
+    start = text.find("[")
+    while start >= 0:
+        try:
+            val, _end = dec.raw_decode(text[start:])
+            if isinstance(val, list):
+                return val
+        except json.JSONDecodeError:
+            pass
+        start = text.find("[", start + 1)
+    return None
+
+
 def _parse_response(content, sheet_df, sport, retry_content=None):
     """Parse the API response into validated picks.
 
     Returns list of pick dicts. Raises SystemExit on unrecoverable errors.
     """
     text = retry_content or content
-    # Try to extract JSON array from the response
+    # P74: take the FIRST JSON array in the response and ignore anything after it (the model sometimes appends
+    # notes or a second array — json.loads on the whole text failed with "Extra data").
     text = text.strip()
-    if not text.startswith("["):
-        # Try to find JSON array in the response
-        match = re.search(r"\[.*\]", text, re.DOTALL)
-        if match:
-            text = match.group(0)
-
-    try:
-        picks_raw = json.loads(text)
-    except json.JSONDecodeError as e:
+    picks_raw = _first_json_array(text)
+    if picks_raw is None:
+        err = json.JSONDecodeError("no JSON array in response", text, 0)
         if retry_content is not None:
-            raise SystemExit(f"HALT: invalid JSON on retry: {e}")
-        raise  # caller handles retry
+            raise SystemExit(f"HALT: invalid JSON on retry: {err}")
+        raise err  # caller handles retry
 
     if not isinstance(picks_raw, list):
         raise SystemExit("HALT: response is not a JSON array")
