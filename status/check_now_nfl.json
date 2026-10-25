@@ -1,61 +1,12 @@
 {
- "started_utc": "2026-10-25T00:47:03.131550+00:00",
- "finished_utc": "2026-10-25T00:52:56.696774+00:00",
+ "started_utc": "2026-10-25T01:17:03.638965+00:00",
+ "finished_utc": "2026-10-25T01:17:03.928271+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "b1be064fb52a198a62109c279e7ab24c",
-   "text": "line_move: pinnacle totals Under 49.5\u219250.5; line_move: pinnacle totals Over 49.5\u219250.5; new_props: pull 2026-10-25T00:47:28.742218+00:00; injury_change: inj_Atlanta Falcons; injury_change: inj_San Francisco 49ers"
-  },
-  {
-   "game": "550ec5290f935d311995affbcb0b5c79",
-   "text": "new_props: pull 2026-10-25T00:47:28.742218+00:00; injury_change: inj_Baltimore Ravens; new_news: 1 availability items"
-  },
-  {
-   "game": "2823e986597c449ab94126cd5ed3fae9",
-   "text": "new_props: pull 2026-10-25T00:47:28.742218+00:00; injury_change: inj_Carolina Panthers"
-  },
-  {
-   "game": "5dce18baccec5d3ad5fb3a3ce52f7619",
-   "text": "new_props: pull 2026-10-25T00:47:28.742218+00:00; injury_change: inj_Tennessee Titans; injury_change: inj_Cleveland Browns"
-  },
-  {
-   "game": "2bba7fde6f97d0e54403d53676e4ab63",
-   "text": "new_props: pull 2026-10-25T00:47:28.742218+00:00; injury_change: inj_Houston Texans; injury_change: inj_New York Giants"
-  },
-  {
-   "game": "f3992ad4496724baf7dcd1ef58245d6b",
-   "text": "new_props: pull 2026-10-25T00:47:28.742218+00:00; injury_change: inj_Minnesota Vikings; injury_change: inj_Indianapolis Colts; new_news: 1 availability items"
-  },
-  {
-   "game": "be5dd120ca08b43d647b6caa8953500a",
-   "text": "new_props: pull 2026-10-25T00:47:28.742218+00:00; injury_change: inj_New York Jets; injury_change: inj_Miami Dolphins"
-  },
-  {
-   "game": "436119bb3ccdaa6ed7808aa3ebd82b76",
-   "text": "new_props: pull 2026-10-25T00:47:28.742218+00:00; injury_change: inj_Arizona Cardinals; injury_change: inj_Denver Broncos"
-  },
-  {
-   "game": "e8e5715eefb6a9ce64765e9ddf49c0cc",
-   "text": "new_props: pull 2026-10-25T00:47:28.742218+00:00; injury_change: inj_Detroit Lions; injury_change: inj_Green Bay Packers; new_news: 1 availability items"
-  },
-  {
-   "game": "f7679cf18454e4d88a8f2b990c3f08ac",
-   "text": "new_props: pull 2026-10-25T00:47:28.742218+00:00; injury_change: inj_Las Vegas Raiders; injury_change: inj_Los Angeles Rams"
-  },
-  {
-   "game": "176d474ed8b2bbf1eb4d7e9c56b4bf22",
-   "text": "new_props: pull 2026-10-25T00:47:28.742218+00:00; injury_change: inj_Seattle Seahawks; injury_change: inj_Kansas City Chiefs"
-  },
-  {
-   "game": "4853610e63c246f2027a6a248e642c9a",
-   "text": "anchor_morning"
-  }
- ],
- "games_read": 12,
- "frozen_file": "ai_opinions_20261025T004703Z.parquet",
- "spend_usd": 32.2321,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }

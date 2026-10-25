@@ -8333,5 +8333,74 @@
     "47595bd2a188e4dab8a27dce97c5b45d": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261025T011903Z.parquet",
+  "sha256": "ec418a3dafc4f96a7db1515436401cf0055208be10a08f15d709bffc1b742810",
+  "logged_utc": "2026-10-25T01:19:03.880090+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-25T02:00:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261025T010008Z.parquet",
+   "inputs_digest": "{\"ebe9883d9cb488e233e6c45cfa009008\": \"41ebe2177af6b5a9\"}",
+   "components": {
+    "ebe9883d9cb488e233e6c45cfa009008": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -190
+      ],
+      [
+       "North Dakota State Bison",
+       0,
+       170
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -4.5,
+       -109
+      ],
+      [
+       "North Dakota State Bison",
+       4.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.5,
+       -109
+      ],
+      [
+       "Under",
+       39.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Can Week 8 up the ante again with more upsets and ",
+      "Connelly previews Week 8: SEC elimination games, t"
+     ],
+     "kalshi_snap": "snap_20261025T0107Z.parquet"
+    }
+   },
+   "triggers": {
+    "ebe9883d9cb488e233e6c45cfa009008": "anchor_close"
+   }
+  }
  }
 ]
