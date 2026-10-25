@@ -2,9 +2,9 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-10-25T04:18:08.295164+00:00",
-  "finished_utc": "2026-10-25T04:18:08.295164+00:00",
-  "result": "no_picks",
+  "started_utc": "2026-10-25T04:47:03.520285+00:00",
+  "finished_utc": "2026-10-25T04:47:03.520285+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
   "message": "",
   "freeze_file": null
@@ -12,8 +12,8 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-10-25T04:19:03.384873+00:00",
-  "finished_utc": "2026-10-25T04:19:03.384873+00:00",
+  "started_utc": "2026-10-25T04:49:04.190075+00:00",
+  "finished_utc": "2026-10-25T04:49:04.190075+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
