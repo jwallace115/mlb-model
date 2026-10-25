@@ -8402,5 +8402,88 @@
     "ebe9883d9cb488e233e6c45cfa009008": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261025T013403Z.parquet",
+  "sha256": "e5e410ea237423499acfc25e92e0f7eb74f271f8b5fa79c8340a03ff1dae123b",
+  "logged_utc": "2026-10-25T01:34:03.815411+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-25T02:15:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261025T013006Z.parquet",
+   "inputs_digest": "{\"47595bd2a188e4dab8a27dce97c5b45d\": \"f72d5d6e4886f124\"}",
+   "components": {
+    "47595bd2a188e4dab8a27dce97c5b45d": {
+     "pinnacle_h2h": [
+      [
+       "Houston Cougars",
+       0,
+       208
+      ],
+      [
+       "Utah Utes",
+       0,
+       -237
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Houston Cougars",
+       6.5,
+       -102
+      ],
+      [
+       "Utah Utes",
+       -6.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -108
+      ],
+      [
+       "Under",
+       57.0,
+       -108
+      ]
+     ],
+     "news": [
+      "'Prove it on the field': Morgan Scalley vouches fo",
+      "2026 'College GameDay' Week 8: Houston vs. Utah",
+      "2026 CFB Player Rank: The top 25 players at midsea",
+      "Can Week 8 up the ante again with more upsets and ",
+      "College Football Playoff Bubble Watch after Week 7",
+      "College football best bets for Week 8 include Hous",
+      "Connelly previews Week 8: SEC elimination games, t",
+      "Dalton Kincaid excited to be 'College GameDay' gue",
+      "Halfway Heisman Jeremiah Smith and other midseason",
+      "Top 25 betting lines: Texas favored vs. Ole Miss, ",
+      "Utah Utes first-year coach Morgan Scalley leading ",
+      "Utah and Houston looking to cement themselves as B",
+      "Utah fans boo McAfee mercilessly for his Houston p",
+      "Utah suspends Jamal Wallace after alleged rape, sh",
+      "What's gone right and wrong for Power 4's first-ye",
+      "Where is 'College GameDay'? 2026 schedule, locatio"
+     ],
+     "kalshi_snap": "snap_20261025T0107Z.parquet"
+    }
+   },
+   "triggers": {
+    "47595bd2a188e4dab8a27dce97c5b45d": "anchor_close"
+   }
+  }
  }
 ]
