@@ -6511,5 +6511,239 @@
     "4853610e63c246f2027a6a248e642c9a": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261025T020203Z.parquet",
+  "sha256": "1b0dd7dbdd87702c9a31d5e1afb273294be642b7703e1756b2727cb67fb6b843",
+  "logged_utc": "2026-10-25T02:02:03.459944+00:00",
+  "rows": 143,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.937,
+  "revised_rows": 128,
+  "oldest_source_age_min": 74.6,
+  "first_kickoff_utc": "2026-10-25T13:30:00Z",
+  "reader_sha256": "f489d64d2b9bf655953abf903e344cd2d4753268c5b8f5e304c9120d4c898060",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261025T020008Z.parquet",
+   "inputs_digest": "{\"2e710ea5a306b614f0f966e3d78732f8\": \"9e248a89d7e5a25a\", \"e8e5715eefb6a9ce64765e9ddf49c0cc\": \"b4046a128c077113\"}",
+   "components": {
+    "2e710ea5a306b614f0f966e3d78732f8": {
+     "hardrockbet_fl_h2h": [
+      [
+       "New Orleans Saints",
+       0,
+       140
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       -170
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "New Orleans Saints",
+       3.0,
+       -105
+      ],
+      [
+       "Pittsburgh Steelers",
+       -3.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       43.5,
+       -110
+      ],
+      [
+       "Under",
+       43.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "New Orleans Saints",
+       0,
+       143
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       -162
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Orleans Saints",
+       3.0,
+       -104
+      ],
+      [
+       "Pittsburgh Steelers",
+       -3.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -103
+      ],
+      [
+       "Under",
+       43.5,
+       -114
+      ]
+     ],
+     "props_ts": "2026-10-25T02:02:31.261347+00:00",
+     "inj_New Orleans Saints": "eed4b0cae1f3ec17",
+     "inj_Pittsburgh Steelers": "e91cf24b444d97db",
+     "news": [
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Bucs QB Jalon Daniels swaps jerseys with idol, Ste",
+      "Cam Heyward details Steelers' preparation for Pari",
+      "Early bets for NFL Week 7: Three games we're jumpi",
+      "French quarters: Saints feel at home in Paris and ",
+      "Goodell comfortable with security for NFL's Paris ",
+      "Inside NFL's field-stitching process from Rio to P",
+      "NFL House in Paris closes ahead of street protests",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL readies for Steelers-Saints in Paris amid civi",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL to increase security in Paris for Steelers-Sai",
+      "PSG unveil jersey for Steelers vs. Saints NFL game",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Saints GM Mickey Loomis asks for patience with 'yo",
+      "Steelers bring back veteran Marquez Valdes-Scantli",
+      "Steelers fan event in Paris canceled following rec",
+      "Steelers' Aaron Rodgers backs NFL on holding Paris",
+      "What are the longest field goals in NFL history?"
+     ],
+     "kalshi_snap": "snap_20261025T0135Z.parquet"
+    },
+    "e8e5715eefb6a9ce64765e9ddf49c0cc": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -200
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       165
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Detroit Lions",
+       -3.5,
+       -105
+      ],
+      [
+       "Green Bay Packers",
+       3.5,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       54.5,
+       -115
+      ],
+      [
+       "Under",
+       54.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -196
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       171
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Detroit Lions",
+       -3.5,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       3.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -107
+      ],
+      [
+       "Under",
+       55.5,
+       -109
+      ]
+     ],
+     "props_ts": "2026-10-25T00:47:28.742218+00:00",
+     "inj_Detroit Lions": "5522bbce14e4760d",
+     "inj_Green Bay Packers": "7fce1dc9f8106bb6",
+     "news": [
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Jordan Love's sore back not a concern for the QB",
+      "Lions approach first divisional matchup with urgen",
+      "Lions getting key contributors back",
+      "Lions kick off quest to win NFC North with 1st div",
+      "Lions to get DB Brian Branch, C Cade Mays back vs.",
+      "Lions' Dan Campbell downplays Sam LaPorta's contra",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL announces U2 will play in first Thanksgiving E",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers linebacker Zaire Franklin out Sunday with ",
+      "Packers' Josh Jacobs says he is trying to learn fr",
+      "Packers' Josh Jacobs to practice Wednesday, may pl",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Sam LaPorta addresses contract frustration with Li",
+      "Sam LaPorta not feeling contract 'love' from Lions",
+      "Super Bowl LXI odds: All 32 teams' odds to win the"
+     ],
+     "kalshi_snap": "snap_20261025T0135Z.parquet"
+    }
+   },
+   "triggers": {
+    "2e710ea5a306b614f0f966e3d78732f8": "line_move: hardrockbet_fl totals Under 45.0\u219243.5; line_move: hardrockbet_fl totals Over 45.0\u219243.5; line_move: pinnacle totals Under 44.5\u219243.5; line_move: pinnacle totals Over 44.5\u219243.5; new_props: pull 2026-10-25T02:02:31.261347+00:00; injury_change: inj_Pittsburgh Steelers",
+    "e8e5715eefb6a9ce64765e9ddf49c0cc": "line_move: pinnacle totals Under 54.5\u219255.5; line_move: pinnacle totals Over 54.5\u219255.5"
+   }
+  }
  }
 ]
