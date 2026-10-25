@@ -1,41 +1,33 @@
 {
- "started_utc": "2026-10-25T16:17:03.834770+00:00",
- "finished_utc": "2026-10-25T16:22:48.487137+00:00",
+ "started_utc": "2026-10-25T16:47:02.999797+00:00",
+ "finished_utc": "2026-10-25T16:52:17.621333+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
  "triggers": [
   {
-   "game": "b1be064fb52a198a62109c279e7ab24c",
-   "text": "anchor_close"
+   "game": "436119bb3ccdaa6ed7808aa3ebd82b76",
+   "text": "injury_change: inj_Arizona Cardinals; injury_change: inj_Denver Broncos"
   },
   {
-   "game": "550ec5290f935d311995affbcb0b5c79",
-   "text": "anchor_close"
+   "game": "e8e5715eefb6a9ce64765e9ddf49c0cc",
+   "text": "injury_change: inj_Green Bay Packers"
   },
   {
-   "game": "2823e986597c449ab94126cd5ed3fae9",
-   "text": "anchor_close"
+   "game": "f7679cf18454e4d88a8f2b990c3f08ac",
+   "text": "injury_change: inj_Las Vegas Raiders"
   },
   {
-   "game": "5dce18baccec5d3ad5fb3a3ce52f7619",
-   "text": "anchor_close"
+   "game": "176d474ed8b2bbf1eb4d7e9c56b4bf22",
+   "text": "injury_change: inj_Seattle Seahawks; injury_change: inj_Kansas City Chiefs"
   },
   {
-   "game": "2bba7fde6f97d0e54403d53676e4ab63",
-   "text": "anchor_close"
-  },
-  {
-   "game": "f3992ad4496724baf7dcd1ef58245d6b",
-   "text": "anchor_close"
-  },
-  {
-   "game": "be5dd120ca08b43d647b6caa8953500a",
-   "text": "anchor_close"
+   "game": "4853610e63c246f2027a6a248e642c9a",
+   "text": "injury_change: inj_Philadelphia Eagles"
   }
  ],
- "games_read": 7,
- "frozen_file": "ai_opinions_20261025T161703Z.parquet",
- "spend_usd": 34.0287,
+ "games_read": 5,
+ "frozen_file": "ai_opinions_20261025T164702Z.parquet",
+ "spend_usd": 34.224,
  "result": "COMPLETE"
 }

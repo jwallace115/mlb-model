@@ -1,19 +1,9 @@
 [
  {
-  "sport": "nfl",
-  "window": "prekick",
-  "started_utc": "2026-10-25T14:19:39.983941+00:00",
-  "finished_utc": "2026-10-25T14:19:39.983941+00:00",
-  "result": "STOP",
-  "step": "reader_v3",
-  "message": "exit -9",
-  "freeze_file": null
- },
- {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-10-25T16:19:04.735456+00:00",
-  "finished_utc": "2026-10-25T16:19:04.735456+00:00",
+  "started_utc": "2026-10-25T16:49:04.460542+00:00",
+  "finished_utc": "2026-10-25T16:49:04.460542+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -22,11 +12,21 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-10-25T16:22:48.469297+00:00",
-  "finished_utc": "2026-10-25T16:22:48.469297+00:00",
+  "started_utc": "2026-10-25T16:52:17.602340+00:00",
+  "finished_utc": "2026-10-25T16:52:17.602340+00:00",
   "result": "COMPLETE",
   "step": "window_watch",
-  "message": "['anchor_close', 'anchor_close', 'anchor_close', 'anchor_close', 'anchor_close', 'anchor_close', 'anchor_close']",
-  "freeze_file": "ai_opinions_20261025T161703Z.parquet"
+  "message": "['injury_change: inj_Arizona Cardinals; injury_change: inj_Denver Broncos', 'injury_change: inj_Green Bay Packers', 'injury_change: inj_Las Vegas Raiders', 'injury_change: inj_Seattle Seahawks; injury",
+  "freeze_file": "ai_opinions_20261025T164702Z.parquet"
+ },
+ {
+  "sport": "nfl",
+  "window": "prekick",
+  "started_utc": "2026-10-25T16:53:57.182248+00:00",
+  "finished_utc": "2026-10-25T16:53:57.182248+00:00",
+  "result": "STOP",
+  "step": "reader_v3",
+  "message": "exit -9",
+  "freeze_file": null
  }
 ]
