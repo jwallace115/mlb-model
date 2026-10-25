@@ -1,0 +1,68 @@
+packet built 2026-10-25T04:17Z | snap snap_20261025T040008Z.parquet | props pull 2026-10-25T02:02 | kalshi snap_20261025T0405Z.parquet | injuries injuries_20261025T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: line_move: pinnacle totals Over 43.5→42.5; line_move: pinnacle totals Under 43.5→42.5
+######## Pittsburgh Steelers @ New Orleans Saints  kick 10-25T13:30Z
+  HR ML: Saints +140 / Steelers -170 (no-vig home 0.398) | Pinnacle no-vig home 0.41
+  HR spread: Saints +3 -110 / Steelers -3 -110 | Pinnacle Saints 3.0 (-110) | HR open 3.0 (20261020)
+  HR total: 43 O-115/U-105 | Pinnacle 42.5 O-112/U-104 | HR open 44.0
+  Kalshi ML [('Pittsburgh wins', 0.59, 376132), ('New Orleans wins', 0.41, 282910)] | spread [('Pittsburgh wins by over 2.5 points?', 0.55, 139149), ('Pittsburgh wins by over 3.5 points?', 0.45, 769411)] | total [('Full Game: over 43.5 points scored?', 0.48, 22186), ('Full Game: over 42.5 points scored?', 0.53, 50671)]
+  INTERNATIONAL: Stade de France, Paris (UTC+2); kick 13:30Z = Saints body clock 08:30, Steelers body clock 09:30; second straight week in Paris: neither team; JAX all-time London 8-7, 2-0 in week-two-abroad games (2023 BUF, 2024 NE)
+    base rates (56 intl games thru 2025): favorites 41-14-1 SU / 35-21 ATS, FG+ favorites 24-16 ATS; unders 30-26 overall, Wembley 15-12 under & favorites 17-10 ATS, Tottenham 7-5 OVER; London-only favorites ~17-16 ATS (LSR) - venue alone is not a spread edge; 2025 intl games 4-3 over, 6/7 within 6 pts
+  -- Pittsburgh Steelers injuries (20261025T0030)
+     Acti WR Brandon Johnson: The Steelers elevated Johnson from the practice squad Saturday ahead of Sunday's game against the Saints.
+     Acti WR Brandon Smith: The Steelers elevated Smith from the practice squad Saturday ahead of Sunday's game against the Saints.
+     Ques S  DeShon Elliott: The Steelers activated Elliott (knee) from IR on Saturday ahead of Sunday's game against the Saints.
+     Ques RB Rico Dowdle: Dowdle (knee) was a limited participant in Friday's practice and is listed as questionable for Sunday's game against the Saints in Paris, NFL insider 
+     Out  CB Brandin Echols: Echols (hamstring) has been ruled out for Sunday's matchup with the Saints, Mike DeFabo of The Athletic reports.
+     Inju DT Sebastian Joseph-Day: Joseph-Day (triceps) was placed on injured reserve by the Steelers on Thursday, Teresa Varley of the team's official website reports.
+     Out  WR Ben Skowronek: The Steelers have ruled Skowronek (calf) out for Sunday's matchup against the Saints, Mike DeFabo of The Athletic reports.
+     Acti QB Drew Allar: 
+     Acti RB Eli Heidenreich: 
+     Acti QB Will Howard: 
+     Acti TE Pat Freiermuth: Freiermuth caught two of three targets for 11 yards in Sunday's 26-19 overtime win over the Bucs.
+     Acti WR DK Metcalf: Metcalf caught 11 of 15 targets for 93 yards in Sunday's 26-19 overtime win over the Buccaneers.
+     Acti RB Jaylen Warren: Warren carried the ball 14 times for 50 yards and caught two of four targets for 28 yards in Sunday's 26-19 overtime win over the Buccaneers.
+     Acti QB Aaron Rodgers: Rodgers completed 33 of 49 passes for 253 yards and two touchdowns with one interception in Sunday's 26-19 overtime win over the Buccaneers.
+     Acti TE Darnell Washington: Washington caught four of six targets for 25 yards and a touchdown in Sunday's 26-19 overtime win over the Bucs.
+     news 10-22T17:51 Steelers fan event in Paris canceled following recent civil unrest in capital
+     news 10-22T22:13 Bears QB Caleb Williams leads NFL Week 7's best arrivals
+     news 10-23T02:25 Proposing NFL trade deadline offers: Moves for Saquon Barkley, Khalil Mack, more
+     news 10-23T17:57 Steelers' Aaron Rodgers backs NFL on holding Paris game despite recent unrest
+     news 10-24T12:21 NFL House in Paris closes ahead of street protests in French capital
+  -- New Orleans Saints injuries (20261025T0030)
+     Acti WR Cedric Tillman: The Saints elevated Tillman from the practice squad to the active roster Saturday ahead of Sunday's game against the Steelers.
+     Ques G  Cesar Ruiz: Ruiz (knee) is listed as questionable for Sunday's game against the Steelers.
+     Ques DT Nathan Shepherd: Shepherd (illness) is listed as questionable for Sunday's game against the Steelers in Paris.
+     Acti RB Alvin Kamara: Kamara (back) was limited at Friday's practice but does not have an injury designation for Week 7, Katherine Terrell of ESPN.com reports.
+     Acti RB CJ Donaldson: Donaldson (shoulder) practiced without limitations Thursday.
+     Inju WR Jordyn Tyson: Saints general manager Mickey Loomis said Tuesday that Tyson (hamstring) is "getting closer" but won't practice this week, Ross Jackson of WWL Louisia
+     Acti WR Devaughn Vele: Vele caught three of six targets for 42 yards during the Saints' 34-27 win over the Giants on Sunday.
+     Acti WR Bryce Lance: Lance caught two of four passes for nine yards and a touchdown during the Saints' 34-27 win over the Giants on Sunday.
+     Acti QB Zach Wilson: 
+     Acti TE Juwan Johnson: Johnson failed to reel in either of his targets during Sunday's 34-27 win over the Giants.
+     Acti RB Kendre Miller: Miller carried the ball 20 times for 70 yards and caught both his targets for zero yards in Sunday's 34-27 win over the Giants.
+     Acti QB Tyler Shough: Shough completed 16 of 30 passes for 144 yards and three touchdowns in Sunday's 34-27 win over the Giants. He added 32 yards and a TD on five carries.
+     Acti WR Chris Olave: Olave caught four of seven targets for 43 yards and a touchdown in Sunday's 34-27 win over the Giants.
+     news 10-21T17:59 Goodell comfortable with security for NFL's Paris game
+     news 10-22T17:31 French quarters: Saints feel at home in Paris and face Steelers in historic game
+     news 10-22T22:13 Bears QB Caleb Williams leads NFL Week 7's best arrivals
+     news 10-23T03:27 What are the longest field goals in NFL history?
+     news 10-24T12:21 NFL House in Paris closes ahead of street protests in French capital
+  -- props (pull 2026-10-25T02:02)
+     * Aaron Rodgers: atd 0.5 (+1000), paatt 34.5 (-125/-105), cmp 21.5 (-130/+100), int 0.5 (+110/-145), patd 1.5 (-110/-120), payd 229.5 (-115/-115), ruyd 1.5 (-110/-120)
+     * Alvin Kamara: atd 0.5 (+350), recyd 12.5 (-120/-110), rec 2.5 (-130/+100), ruyd 16.5 (-120/-110)
+     * Bryce Lance: atd 0.5 (+575), recyd 13.5 (-115/-115), rec 1.5 (+115/-150)
+     * CJ Donaldson: atd 0.5 (+475), ruyd 10.5 (-115/-115)
+     * Chris Olave: atd 0.5 (+190), recyd 76.5 (-115/-115), rec 6.5 (+115/-150)
+     * DK Metcalf: atd 0.5 (+165), recyd 59.5 (-115/-115), rec 4.5 (-140/+110)
+     * Darnell Washington: atd 0.5 (+275), recyd 24.5 (-120/-110), rec 2.5 (-105/-125)
+     * Devaughn Vele: atd 0.5 (+275), recyd 43.5 (-115/-115), rec 4.5 (+125/-165)
+     * Germie Bernard: atd 0.5 (+230), recyd 53.5 (-115/-115), rec 4.5 (-160/+120)
+     * Jaylen Warren: atd 0.5 (-115), recyd 25.5 (-115/-115), rec 3.5 (+130/-180), ruatt 14.5 (-120/-110), ruyd 65.5 (-115/-115)
+     * Juwan Johnson: atd 0.5 (+275), recyd 32.5 (-115/-115), rec 3.5 (-120/-110)
+     * Kendre Miller: atd 0.5 (+165), recyd 3.5 (-115/-115), rec 0.5 (-175/+130), ruatt 11.5 (-110/-120), ruyd 35.5 (-115/-115)
+     * Noah Fant: atd 0.5 (+575), recyd 11.5 (-115/-115), rec 1.5 (-125/-105)
+     * Pat Freiermuth: atd 0.5 (+240), recyd 30.5 (-120/-110), rec 3.5 (+115/-150)
+     * Rico Dowdle: atd 0.5 (+275), recyd 7.5 (-115/-115), rec 1.5 (-105/-125), ruatt 7.5 (-110/-120), ruyd 28.5 (-120/-110)
+     * Tyler Shough: atd 0.5 (+400), paatt 36.5 (-110/-120), cmp 22.5 (-120/-110), int 0.5 (-135/+105), patd 1.5 (+140/-190), payd 219.5 (-115/-115), ruatt 3.5 (+110/-140), ruyd 14.5 (-110/-120)
