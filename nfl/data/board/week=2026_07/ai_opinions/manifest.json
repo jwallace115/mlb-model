@@ -11861,5 +11861,268 @@
     "4853610e63c246f2027a6a248e642c9a": "injury_change: inj_Philadelphia Eagles"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261025T173038Z.parquet",
+  "sha256": "1722c9000596362825a0243340f5ec20a45859f9332ef45311669c9cc6478c30",
+  "logged_utc": "2026-10-25T17:30:38.550516+00:00",
+  "rows": 221,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "reader_v3b",
+  "pilot": false,
+  "window": "prekick",
+  "games": 3,
+  "no_view_share": 0.362,
+  "revised_rows": 0,
+  "oldest_source_age_min": 43.1,
+  "first_kickoff_utc": "2026-10-25T20:05:00Z",
+  "reader_sha256": "a413d38af2157fcb8a04c1d71cbc17a791cdadaa375e6ec3da56b1e616ba6bfd",
+  "inputs": {
+   "props": "data_2026_10_mac.parquet",
+   "lines": "snap_20261025T170007Z.parquet"
+  }
+ },
+ {
+  "file": "ai_opinions_20261025T173205Z.parquet",
+  "sha256": "cea33a545f44b6f5ab6179cfa650b19b5beee8fc2b7038092831c8bba9c216e2",
+  "logged_utc": "2026-10-25T17:32:05.211192+00:00",
+  "rows": 143,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.944,
+  "revised_rows": 118,
+  "oldest_source_age_min": 44.5,
+  "first_kickoff_utc": "2026-10-25T20:25:00Z",
+  "reader_sha256": "113de37dc711321839d240555ca6a8804c0b6ffff7bb5340ec1d93bdbed6f90c",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261025T173008Z.parquet",
+   "inputs_digest": "{\"e8e5715eefb6a9ce64765e9ddf49c0cc\": \"fdc69d31c008537a\", \"f7679cf18454e4d88a8f2b990c3f08ac\": \"f242928ba4d7b4ef\"}",
+   "components": {
+    "e8e5715eefb6a9ce64765e9ddf49c0cc": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -195
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       165
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Detroit Lions",
+       -3.5,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       55.5,
+       -110
+      ],
+      [
+       "Under",
+       55.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -193
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       172
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Detroit Lions",
+       -3.5,
+       -115
+      ],
+      [
+       "Green Bay Packers",
+       3.5,
+       104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -105
+      ],
+      [
+       "Under",
+       55.5,
+       -107
+      ]
+     ],
+     "props_ts": "2026-10-25T16:47:32.602241+00:00",
+     "inj_Detroit Lions": "5522bbce14e4760d",
+     "inj_Green Bay Packers": "8698a58799647f48",
+     "news": [
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Jordan Love's sore back not a concern for the QB",
+      "Lions approach first divisional matchup with urgen",
+      "Lions getting key contributors back",
+      "Lions kick off quest to win NFC North with 1st div",
+      "Lions to get DB Brian Branch, C Cade Mays back vs.",
+      "Lions' Dan Campbell downplays Sam LaPorta's contra",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL announces U2 will play in first Thanksgiving E",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers linebacker Zaire Franklin out Sunday with ",
+      "Packers' Josh Jacobs says he is trying to learn fr",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Sam LaPorta addresses contract frustration with Li",
+      "Sam LaPorta not feeling contract 'love' from Lions",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261025T1705Z.parquet"
+    },
+    "f7679cf18454e4d88a8f2b990c3f08ac": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Las Vegas Raiders",
+       0,
+       150
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -180
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Las Vegas Raiders",
+       3.5,
+       -115
+      ],
+      [
+       "Los Angeles Rams",
+       -3.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       48.0,
+       -115
+      ],
+      [
+       "Under",
+       48.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Las Vegas Raiders",
+       0,
+       151
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -168
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Las Vegas Raiders",
+       3.5,
+       -118
+      ],
+      [
+       "Los Angeles Rams",
+       -3.5,
+       107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -110
+      ],
+      [
+       "Under",
+       48.5,
+       -102
+      ]
+     ],
+     "props_ts": "2026-10-25T16:47:32.602241+00:00",
+     "inj_Las Vegas Raiders": "8696c47774a07ef8",
+     "inj_Los Angeles Rams": "f0cc45f564309961",
+     "news": [
+      "'Good Morning Football' sends best wishes to Faulk",
+      "A battered Rams team faces a near must-win at Las ",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Betting buzz: Sportsbooks, bettors join the Nation",
+      "Bills DB Gardner-Johnson's one-game suspension for",
+      "Fernando Mendoza is embracing being Raiders' lates",
+      "How come the Raiders' pass rush is so inconsistent",
+      "How will the Rams replace Davante Adams?",
+      "Is Matthew Stafford a locked-in top-10 fantasy QB?",
+      "Lawrence McCutcheon, 5-time Pro Bowl RB for Rams, ",
+      "Marshall Faulk, Hall of Famer and Southern coach, ",
+      "Mike Washington Jr. potentially unavailable for SN",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL announces U2 will play in first Thanksgiving E",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Rams WR Puka Nacua leaves practice with calf injur",
+      "Rams WR Puka Nacua misses practice, questionable v",
+      "Rams face questions at WR ahead of Raiders matchup",
+      "Rams optimistic that star WR Puka Nacua will play ",
+      "Seven things Solak thinks entering NFL Week 7: Fro",
+      "Six games in, are the Rams undisciplined or unluck",
+      "Sources: Rams signing free agent kicker Brandon Mc",
+      "Stephen A. calls out Sean McVay amid disappointing",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "Why are the Raiders struggling in the second half "
+     ],
+     "kalshi_snap": "snap_20261025T1705Z.parquet"
+    }
+   },
+   "triggers": {
+    "e8e5715eefb6a9ce64765e9ddf49c0cc": "anchor_prekick",
+    "f7679cf18454e4d88a8f2b990c3f08ac": "anchor_prekick"
+   }
+  }
  }
 ]
