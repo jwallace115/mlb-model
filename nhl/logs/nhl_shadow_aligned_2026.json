@@ -1178,6 +1178,18 @@
       "drift_applied": 0.0,
       "result": "LOSS",
       "actual_total": 9
+    },
+    {
+      "game_id": 2026020183,
+      "game_date": "2026-10-25",
+      "home_team": "NSH",
+      "away_team": "COL",
+      "signal_side": "UNDER",
+      "edge": 0.1201,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.974,
+      "drift_applied": 0.0
     }
   ]
 }

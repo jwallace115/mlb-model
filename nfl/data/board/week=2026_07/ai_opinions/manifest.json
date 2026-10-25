@@ -12754,5 +12754,139 @@
    "props": "data_2026_10_mac.parquet",
    "lines": "snap_20261025T210009Z.parquet"
   }
+ },
+ {
+  "file": "ai_opinions_20261025T213203Z.parquet",
+  "sha256": "f463dcbc1abe1462f9c46ae3021a2b96b6897c39f8df34a992daf6f89f3eeeb1",
+  "logged_utc": "2026-10-25T21:32:03.130228+00:00",
+  "rows": 78,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.974,
+  "revised_rows": 69,
+  "oldest_source_age_min": 284.5,
+  "first_kickoff_utc": "2026-10-26T00:20:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=10/data_2026_10_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261025T213011Z.parquet",
+   "inputs_digest": "{\"176d474ed8b2bbf1eb4d7e9c56b4bf22\": \"4c1c1befb01a9c45\"}",
+   "components": {
+    "176d474ed8b2bbf1eb4d7e9c56b4bf22": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Kansas City Chiefs",
+       0,
+       125
+      ],
+      [
+       "Seattle Seahawks",
+       0,
+       -145
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Kansas City Chiefs",
+       2.5,
+       100
+      ],
+      [
+       "Seattle Seahawks",
+       -2.5,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       42.0,
+       -115
+      ],
+      [
+       "Under",
+       42.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Kansas City Chiefs",
+       0,
+       136
+      ],
+      [
+       "Seattle Seahawks",
+       0,
+       -151
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas City Chiefs",
+       3.0,
+       -108
+      ],
+      [
+       "Seattle Seahawks",
+       -3.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.0,
+       -118
+      ],
+      [
+       "Under",
+       42.0,
+       105
+      ]
+     ],
+     "props_ts": "2026-10-25T16:47:32.602241+00:00",
+     "inj_Seattle Seahawks": "a4b5ff9131b11fbf",
+     "inj_Kansas City Chiefs": "c1c5f0a1a85af442",
+     "news": [
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Chiefs mourn Allen Bailey after former NFL player ",
+      "Chiefs place LT Josh Simmons on IR as rehab proces",
+      "Fantasy's greatest tight end enshrined in ESPN Fan",
+      "How to bet Chiefs-Seahawks: Analysis, tips and top",
+      "Kansas City Chiefs WR Xavier Worthy thriving in ex",
+      "Kenneth Walker III is thriving with Chiefs. Why di",
+      "Mahomes and Kelce the Chiefs dynamic duo",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 latest intel, buzz questions, news, fan",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL execs, coaches rank the league's top five MVP ",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Seahawks RB Zach Charbonnet activated off PUP list",
+      "Seahawks rule out RB Zach Charbonnet vs. Chiefs",
+      "Seahawks' Zach Charbonnet activated off PUP list, ",
+      "Sources: Josh Simmons told to leave Chiefs meeting",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "The Seahawks prepare to face former teammate Kenne",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "What's the gameplan for Seahawks backfield?",
+      "Why the Seahawks let Kenneth Walker III leave",
+      "Xavier Worthy proving to be an important piece for"
+     ],
+     "kalshi_snap": "snap_20261025T2105Z.parquet"
+    }
+   },
+   "triggers": {
+    "176d474ed8b2bbf1eb4d7e9c56b4bf22": "anchor_prekick"
+   }
+  }
  }
 ]
