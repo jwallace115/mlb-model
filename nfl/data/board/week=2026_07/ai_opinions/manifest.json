@@ -7451,5 +7451,26 @@
     "f7679cf18454e4d88a8f2b990c3f08ac": "new_props: pull 2026-10-25T07:47:29.615829+00:00; injury_change: inj_Las Vegas Raiders"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261025T104048Z.parquet",
+  "sha256": "a555cf9b9c5a8d18c33f2209fda03f47d879afb2d2cff62534bb665fbc3a22cd",
+  "logged_utc": "2026-10-25T10:40:48.295713+00:00",
+  "rows": 73,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "reader_v3b",
+  "pilot": false,
+  "window": "prekick",
+  "games": 1,
+  "no_view_share": 0.315,
+  "revised_rows": 0,
+  "oldest_source_age_min": 518.3,
+  "first_kickoff_utc": "2026-10-25T13:30:00Z",
+  "reader_sha256": "a413d38af2157fcb8a04c1d71cbc17a791cdadaa375e6ec3da56b1e616ba6bfd",
+  "inputs": {
+   "props": "data_2026_10_mac.parquet",
+   "lines": "snap_20261025T053005Z.parquet"
+  }
  }
 ]
