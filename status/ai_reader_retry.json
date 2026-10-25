@@ -40,9 +40,9 @@
   "error": "Extra data: line 7 column 2 (char 1380)"
  },
  "nfl:f3992ad4496724baf7dcd1ef58245d6b": {
-  "attempt": 9,
-  "last_utc": "2026-10-24T06:34:14.328122+00:00",
-  "error": "Extra data: line 7 column 1 (char 1179)"
+  "attempt": 10,
+  "last_utc": "2026-10-25T13:32:59.886064+00:00",
+  "error": "HALT for f3992ad4496724baf7dcd1ef58245d6b: pick names unquoted line ('player_reception_yds', 'Mo Alie-Cox', 20.5) (only 68 lines quoted for this event)"
  },
  "nfl:be5dd120ca08b43d647b6caa8953500a": {
   "attempt": 5,

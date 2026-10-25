@@ -1,0 +1,67 @@
+packet built 2026-10-25T13:32Z | snap snap_20261025T130004Z.parquet | props pull 2026-10-25T06:32 | kalshi snap_20261025T0535Z.parquet | injuries injuries_20261025T1230Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: line_move: pinnacle spreads Minnesota Vikings -6.5→-7.5; line_move: pinnacle spreads Indianapolis Colts 6.5→7.5
+######## Indianapolis Colts @ Minnesota Vikings  kick 10-25T17:00Z
+  HR ML: Vikings -325 / Colts +260 (no-vig home 0.734) | Pinnacle no-vig home 0.734
+  HR spread: Vikings -6.5 -115 / Colts +6.5 -105 | Pinnacle Vikings -7.5 (+113) | HR open -5.5 (20261020)
+  HR total: 41.5 O-110/U-110 | Pinnacle 41.5 O-105/U-107 | HR open 42.0
+  Kalshi ML [('Minnesota wins', 0.73, 237582), ('Indianapolis wins', 0.27, 237047)] | spread [('Minnesota wins by over 6.5 points?', 0.52, 305977), ('Minnesota wins by over 7.5 points?', 0.46, 80702)] | total [('Full Game: over 41.5 points scored?', 0.51, 11292), ('Full Game: over 42.5 points scored?', 0.46, 2716)]
+  -- Indianapolis Colts injuries (20261025T1230)
+     Out  LB CJ Allen: Allen (ankle) has been ruled out ahead of Sunday's game against the Vikings.
+     Acti TE Mo Alie-Cox: Alie-Cox will operate in an expanded role against the Vikings on Sunday due to the absence of Tyler Warren (groin), Abby Halpin of the Colts' official
+     Acti TE Will Mallory: Mallory will once again operate in an expanded role after Tyler Warren (groin) was ruled out ahead of Sunday's game against the Vikings, Abby Halpin o
+     Ques LB Bryce Boettcher: questionable
+     Out  CB Sauce Gardner: out
+     Out  TE Tyler Warren: Warren (groin) is ruled out for Sunday's game against the Vikings, FOX59's Mike Chappell reports.
+     Acti QB Anthony Richardson Sr.: Richardson was charged with misdemeanor possession of marijuana in Carmel, Indiana earlier this week, Tyler Haughn of FOX 59 reports.
+     Acti TE Drew Ogletree: Ogletree (ankle) practiced in full Thursday.
+     Out  WR Anthony Gould: Gould (concussion) did not practice Wednesday or Thursday.
+     Acti WR Ashton Dulin: Dulin (hamstring) was a limited participant in practice Thursday.
+     Ques CB Justin Walley: questionable
+     Acti WR Laquon Treadwell: Treadwell caught two of five targets for 21 yards during Sunday's 26-20 loss to the Titans.
+     Acti RB Seth McGowan: McGowan took four carries for 27 yards during Sunday's 26-20 loss versus the Titans.
+     Inju WR Alec Pierce: Colts head coach Shane Steichen said Monday that Pierce (heel) won't have his 21-day practice window opened in Week 7, Nathan Brown of The Indianapoli
+     Acti QB Riley Leonard: 
+     Acti WR Keenan Allen: Allen caught eight of 11 targets for 82 yards in Sunday's 26-20 loss to the Titans.
+     Acti WR Josh Downs: Downs caught four of eight targets for 40 yards in Sunday's 26-20 loss to the Titans. He added seven rushing yards on his only carry.
+     Acti QB Daniel Jones: Jones completed 22 of 42 passes for 269 yards and a touchdown with two interceptions in Sunday's 26-20 loss to the Titans.
+     news 10-23T18:22 Colts QB Anthony Richardson Sr. charged with possession of marijuana
+     news 10-23T18:37 Colts' Tyler Warren to miss second game with groin injury
+     news 10-23T21:48 How will Colts respond to tumultuous week?
+     news 10-25T11:40 Week 7 NFL highlights: Best plays, moments, touchdowns, more
+     news 10-25T11:55 Sources: Colts face big decisions on star players as NFL trade deadline looms
+  -- Minnesota Vikings injuries (20261025T1230)
+     Acti RB DeeJay Dallas: The Vikings signed Dallas to the practice squad and elevated him to the active roster Saturday.
+     Acti RB Jordan Mason: The Vikings activated Mason (thumb) from injured reserve Saturday, and he does not carry an injury designation into Sunday's game against the Colts.
+     Acti RB Aaron Jones Sr.: Jones may log fewer touches in Week 7 against Indianapolis on Sunday, as fellow RB Jordan Mason (thumb) is questionable to suit up, Craig Peters of th
+     Acti TE T.J. Hockenson: Hockenson (concussion) practiced fully Friday and doesn't have a designation for Sunday's game versus the Colts, Adam Caplan of SiriusXM NFL Radio rep
+     Acti WR Justin Jefferson: Jefferson (ankle) practiced in full Thursday, Adam Caplan of SiriusXM NFL Radio reports.
+     Acti WR Jordan Addison: Head coach Kevin O'Connell said Addison (hamstring) will participate in practice Wednesday, Alec Lewis of The Athletic reports.
+     Acti WR Jauan Jennings: Jennings did not reel in his only target during Sunday's 23-13 win at New Orleans.
+     Acti QB Max Brosmer: 
+     Acti QB Kyler Murray: Murray completed 24 of 30 passes for 229 yards with a touchdown and no interceptions while adding 10 rushes for 51 yards in the Vikings' 23-13 win ove
+     Acti TE Ben Yurosek: Yurosek (ankle) is listed as active for Sunday's game against the Saints, Craig Peters of the Vikings' official site reports.
+     Inju G  Donovan Jackson: Jackson (knee) was placed on injured reserve by the Vikings on Tuesday.
+     Acti RB Demond Claiborne: Claiborne carried the ball three times for 12 yards during Minnesota's win over the Dolphins on Sunday.
+     news 10-23T03:27 What are the longest field goals in NFL history?
+     news 10-23T13:07 Jay-Z's greatest sports lyrics, ranked ahead of his SoFi Stadium show
+     news 10-23T19:56 Kyler Murray adds new dimension to Vikings offense
+     news 10-24T22:15 Vikings activate RB Jordan Mason off injured reserve
+     news 10-25T11:40 Week 7 NFL highlights: Best plays, moments, touchdowns, more
+  -- props (pull 2026-10-25T06:32)
+     * Aaron Jones: atd 0.5 (+125), recyd 14.5 (-115/-115), rec 2.5 (-115/-115), ruatt 9.5 (-125/-105), ruyd 39.5 (-120/-110)
+     * Daniel Jones: atd 0.5 (+600), paatt 32.5 (-115/-115), cmp 19.5 (-110/-120), int 0.5 (-145/+110), patd 0.5 (-240/+170), payd 189.5 (-115/-115), ruyd 6.5 (-115/-115)
+     * Jauan Jennings: atd 0.5 (+600), recyd 7.5 (-120/-110), rec 0.5 (-240/+170)
+     * Jonathan Taylor: atd 0.5 (-130), recyd 17.5 (-120/-110), rec 2.5 (-105/-125), ruatt 17.5 (-110/-120), ruyd 70.5 (-115/-115)
+     * Jordan Addison: atd 0.5 (+260), recyd 37.5 (-115/-115), rec 3.5 (+125/-160)
+     * Jordan Mason: atd 0.5 (+165), ruatt 11.5 (-125/-105), ruyd 49.5 (-115/-115)
+     * Josh Downs: atd 0.5 (+350), recyd 50.5 (-115/-115), rec 4.5 (-115/-115)
+     * Justin Jefferson: atd 0.5 (+165), recyd 73.5 (-115/-115), rec 5.5 (-130/+100)
+     * Keenan Allen: atd 0.5 (+350), recyd 41.5 (-115/-115), rec 5.5 (+120/-155)
+     * Kyler Murray: atd 0.5 (+400), paatt 30.5 (-115/-115), cmp 20.5 (-120/-110), int 0.5 (+115/-150), patd 1.5 (+110/-135), payd 207.5 (-115/-115), ruatt 4.5 (-135/+105), ruyd 25.5 (-120/-110)
+     * Laquon Treadwell: atd 0.5 (+650), recyd 20.5 (-115/-115), rec 1.5 (-175/+130)
+     * Mo Alie-Cox: atd 0.5 (+700)
+     * Seth McGowan: atd 0.5 (+1100), ruyd 13.5 (-120/-110)
+     * T.J. Hockenson: atd 0.5 (+225), recyd 36.5 (-115/-115), rec 4.5 (+110/-140)
+     * Will Mallory: atd 0.5 (+475), recyd 20.5 (-115/-115), rec 2.5 (+135/-180)
