@@ -152,6 +152,25 @@ MARKET_ALIASES = {"spread": "spreads", "spreads": "spreads", "total": "totals", 
                   "ruatt": "player_rush_attempts", "payd": "player_pass_yds", "paatt": "player_pass_attempts",
                   "cmp": "player_pass_completions", "patd": "player_pass_tds", "int": "player_pass_interceptions",
                   "atd": "player_anytime_td"}
+# P77: what the model writes → the registry's link names (applied before the cross-type coercion below)
+LINK_ALIASES = {"rush": "run_rate", "rushing": "run_rate", "run": "run_rate", "carries": "run_rate", "ground": "run_rate",
+                "pass": "pass_rate", "passing": "pass_rate", "attempts": "pass_rate", "volume": "pass_rate", "throws": "pass_rate",
+                "targets": "share", "target_share": "share", "usage": "share", "snaps": "share", "workload": "share",
+                "touches": "share", "role": "share", "opportunity": "share",
+                "injury": "availability", "injuries": "availability", "health": "availability", "status": "availability",
+                "active": "availability", "inactive": "availability", "lineup": "availability",
+                "pace": "plays", "tempo": "plays", "play_volume": "plays",
+                "matchup": "efficiency", "defense": "efficiency", "defence": "efficiency", "yards": "efficiency",
+                "ypc": "efficiency", "ypa": "efficiency", "td": "efficiency", "tds": "efficiency", "scoring": "efficiency",
+                "yardage": "efficiency", "production": "efficiency",
+                "gamescript": "script", "game_script": "script", "game": "script", "lead": "script",
+                "line": "price", "market": "price", "sharp": "price", "odds": "price", "value": "price", "number": "price",
+                "total": "points", "scoring_env": "points", "weather": "points", "wind": "points",
+                "turnover": "turnovers", "ints": "turnovers", "fumbles": "turnovers"}
+DIR_ALIASES = {"up": "up", "down": "down", "higher": "up", "more": "up", "over": "up", "increase": "up", "rise": "up",
+               "positive": "up", "+": "up", "lower": "down", "less": "down", "under": "down", "decrease": "down",
+               "fall": "down", "negative": "down", "-": "down"}
+VALID_LINKS = {"plays", "pass_rate", "run_rate", "share", "efficiency", "availability", "script", "points", "turnovers", "price"}
 PROP_LINK_COERCE = {"points": "efficiency", "turnovers": "efficiency"}
 GAME_LINK_COERCE = {"efficiency": "points", "plays": "points", "pass_rate": "points", "run_rate": "points",
                     "share": "points", "availability": "points"}
@@ -800,12 +819,20 @@ def picks_to_filled(picks, sheet_df, sport, event_id=None):
                     if not c or ":" not in c:
                         continue
                     link, d = c.split(":", 1)
-                    link = coerce.get(link.strip(), link.strip())
-                    claims.append(f"{link}:{d.strip()}")
+                    link = link.strip().lower().replace(" ", "_")
+                    link = LINK_ALIASES.get(link, link)          # P77: model's word → registry link
+                    link = coerce.get(link, link)                # cross-type coercion (game vs prop)
+                    d = DIR_ALIASES.get(d.strip().lower(), d.strip().lower())
+                    if link not in VALID_LINKS or d not in ("up", "down"):
+                        print(f"  WARNING: dropped thesis claim '{c}' ({pk[0]} {pk[1]} {pk[2]})", file=sys.stderr)
+                        continue                                  # P77: drop, never HALT the game for one claim
+                    claims.append(f"{link}:{d}")
                 seen = []
                 for c in claims:
                     if c not in seen:
                         seen.append(c)
+                if not seen:  # P77 fallback: the market's own link in the pick's direction
+                    seen = [f"{'points' if is_game else 'efficiency'}:{'up' if p.get('side') == 'first' else 'down'}"]
                 p["thesis"] = "; ".join(seen[:3])
             if pk not in sheet_keys:
                 raise SystemExit(

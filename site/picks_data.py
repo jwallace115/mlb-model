@@ -163,12 +163,23 @@ def picks_data(rows, now, ledger_dir, health, forward_status):
     # P60: load window health for per-sport failure line
     wh = bs.load_json(bs.ROOT / "status" / "window_health.json") or []
     sport_failures = {}
+    # P78: only the LATEST run per (sport, layer) counts; name the layer; the mechanical reader_v3 windows do not touch the
+    # AI reads on the cards, so say so instead of "the board shows the previous read".
+    latest = {}
     for entry in wh:
         sp = (entry.get("sport") or "").upper()
+        layer = "ai" if entry.get("window") == "event" else "mech"
+        latest[(sp, layer)] = entry
+    for (sp, layer), entry in latest.items():
         if entry.get("result") in ("STOP", "HALT"):
             finished = entry.get("finished_utc", "")[:16]
             step = entry.get("step", "")
-            sport_failures[sp] = f"last automated read failed at {bs._utc_to_et(finished)} ({step}) — the board shows the previous read"
+            t = bs._utc_to_et(finished)
+            if layer == "ai":
+                sport_failures[sp] = f"AI reader run failed at {t} ({step}) — the board shows the previous AI read"
+            elif sp not in sport_failures:
+                sport_failures[sp] = (f"mechanical layer (reader_v3 {entry.get('window')} window) failed at {t} — "
+                                      f"the AI reads on the cards are unaffected")
 
     out = {"built_utc": now.isoformat(), "built_et": bs._utc_to_et(now.isoformat()),
            "health": {"summary": hsum, "bad": hbad}, "sports": {}}
