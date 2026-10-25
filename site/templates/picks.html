@@ -236,7 +236,7 @@ h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.02em}
     document.querySelectorAll('#list-props .card-layer, #list-sides .card-layer').forEach(tidyLayer);
     var evs=d.events.filter(upcoming),nT=evs.filter(function(g){return state.ticked[g.event_id];}).length;
     var fz={};d.picks.forEach(function(p){if(state.ticked[p.event_id])fz[p.freeze_et+p.window]=p;});var nF=Object.keys(fz).length;
-    var newest=d.picks.filter(function(p){return state.ticked[p.event_id];}).map(function(p){return p.freeze_et;}).sort().pop();
+    var newestP=d.picks.filter(function(p){return state.ticked[p.event_id];}).sort(function(a,b){return (a.freeze_utc||'')<(b.freeze_utc||'')?-1:1;}).pop();var newest=newestP?newestP.freeze_et:null;
     $('#status').innerHTML='<span>'+nT+' of '+evs.length+' games ticked</span><span>'+(nF?nF+(nF===1?' read':' reads'):'no reads')+'</span>'+(newest?'<span>newest read '+esc(newest)+'</span>':'')+(d.unranked?'<span>'+d.unranked+' unranked (no confidence)</span>':'');
   }
   function renderRecord(){var d=sportData(state.sport);$('#record').innerHTML=d.record_html?'<h2>Record — '+state.sport+'</h2>'+d.record_html:'';}

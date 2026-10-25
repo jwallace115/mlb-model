@@ -64,9 +64,9 @@ class Handler(BaseHTTPRequestHandler):
             self._send(400, {"error": "invalid sport"})
             return
 
-        # Guard: no run in the last 10 min
+        # Guard (P76): only a BUTTON run in the last 10 min counts — the cron tick every 15 min must not block the button
         st = _load_status(sport)
-        if st.get("started_utc"):
+        if st.get("started_utc") and st.get("requested_by") == "button":
             try:
                 started = datetime.fromisoformat(st["started_utc"].replace("Z", "+00:00"))
                 if (datetime.now(timezone.utc) - started).total_seconds() < GUARD_MINUTES * 60:
