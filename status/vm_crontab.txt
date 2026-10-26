@@ -1,4 +1,4 @@
-# VM crontab as of 2026-10-26T21:47:10Z
+# VM crontab as of 2026-10-26T22:17:11Z
 SHELL=/bin/bash
 # ============================================================
 # iamnotuncertain — VM cron schedule (all times UTC)
@@ -120,47 +120,47 @@ SHELL=/bin/bash
 
 # ── NFL Props (10 books, L3/L4) ──
 # Tue 14:00 UTC — open (full week window)
-0 14 * * 2 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 168 --tag open >> /root/mlb-model/logs/props_capture.log 2>&1
+0 14 * * 2 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 168 --tag open >> /root/mlb-model/logs/props_capture.log 2>&1
 # Wed-Sat 14:00 UTC — mid (full week window)
-0 14 * * 3-6 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 168 --tag mid >> /root/mlb-model/logs/props_capture.log 2>&1
+0 14 * * 3-6 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 168 --tag mid >> /root/mlb-model/logs/props_capture.log 2>&1
 # Tue-Sat 02:00 UTC — mid (full week window)
-0 2 * * 2-6 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 168 --tag mid >> /root/mlb-model/logs/props_capture.log 2>&1
+0 2 * * 2-6 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 168 --tag mid >> /root/mlb-model/logs/props_capture.log 2>&1
 # Sun 15:00 UTC — close (game day)
-0 15 * * 0 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
+0 15 * * 0 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
 # Sun 16:00 UTC — close (after inactives)
-0 16 * * 0 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
+0 16 * * 0 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
 # Thu 22:00 UTC — close (TNF prime-time, KEPT)
-0 22 * * 4 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
+0 22 * * 4 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
 # Sun 19:30 UTC — close (after 4pm-game inactives)
-30 19 * * 0 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
+30 19 * * 0 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
 # Sun 23:15 UTC — close (after SNF inactives)
-15 23 * * 0 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
+15 23 * * 0 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
 # Mon 23:45 UTC — close (MNF prime-time, KEPT)
-45 23 * * 1 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
+45 23 * * 1 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
 # Thu 23:45 UTC — close (after TNF inactives)
-45 23 * * 4 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
+45 23 * * 4 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 12 --tag close >> /root/mlb-model/logs/props_capture.log 2>&1
 
 # ── NFL Event Markets (10 books, non-player markets, L2/L4) — same slots as props ──
-0 14 * * 2 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 168 --tag open --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
-0 14 * * 3-6 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 168 --tag mid --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
-0 2 * * 2-6 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 168 --tag mid --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
-0 15 * * 0 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
-0 16 * * 0 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
-0 22 * * 4 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
-30 19 * * 0 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
-15 23 * * 0 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
-45 23 * * 1 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 2 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
-45 23 * * 4 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
+0 14 * * 2 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 168 --tag open --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
+0 14 * * 3-6 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 168 --tag mid --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
+0 2 * * 2-6 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 168 --tag mid --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
+0 15 * * 0 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
+0 16 * * 0 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
+0 22 * * 4 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
+30 19 * * 0 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
+15 23 * * 0 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
+45 23 * * 1 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 2 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
+45 23 * * 4 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 12 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_event_markets.log 2>&1
 
 # ── NHL Event Markets (10 books, props included, L4) ──
 # Daily 15:00 UTC — open (16h window)
-0 15 * * * cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport icehockey_nhl --window-hours 16 --tag open >> /root/mlb-model/logs/nhl_event_markets.log 2>&1
+0 15 * * * cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport icehockey_nhl --window-hours 16 --tag open >> /root/mlb-model/logs/nhl_event_markets.log 2>&1
 # Daily 20:00 UTC — mid (after goalie news)
-0 20 * * * cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport icehockey_nhl --window-hours 16 --tag mid >> /root/mlb-model/logs/nhl_event_markets.log 2>&1
+0 20 * * * cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport icehockey_nhl --window-hours 16 --tag mid >> /root/mlb-model/logs/nhl_event_markets.log 2>&1
 # Daily 22:15 UTC — close (~45 min before 7pm ET puck)
-15 22 * * * cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport icehockey_nhl --window-hours 16 --tag close >> /root/mlb-model/logs/nhl_event_markets.log 2>&1
+15 22 * * * cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport icehockey_nhl --window-hours 16 --tag close >> /root/mlb-model/logs/nhl_event_markets.log 2>&1
 # Daily 01:15 UTC — close (late West games only, started excluded = cheap)
-15 1 * * * cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport icehockey_nhl --window-hours 16 --tag close >> /root/mlb-model/logs/nhl_event_markets.log 2>&1
+15 1 * * * cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport icehockey_nhl --window-hours 16 --tag close >> /root/mlb-model/logs/nhl_event_markets.log 2>&1
 
 # ── ESPN News + Status (WO10 Item 2) ──
 10 0,6,12,18 * * * cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_espn_news.py --sport nfl >> /root/mlb-model/logs/espn_nfl_news.log 2>&1
@@ -190,20 +190,20 @@ SHELL=/bin/bash
 
 # ── NFL Sunday Early (London games, tape + props + event markets) ──
 0 12,13 * * 0 cd /root/mlb-model && source venv/bin/activate && python3 shared/pipeline/multi_book_open_capture.py --sports americanfootball_nfl >> /root/logs/tape_nfl_sunam.log 2>&1
-15 12 * * 0 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close >> /root/mlb-model/logs/nfl_props_sunam.log 2>&1
-15 12 * * 0 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 2 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_em_sunam.log 2>&1
+15 12 * * 0 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close >> /root/mlb-model/logs/nfl_props_sunam.log 2>&1
+15 12 * * 0 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_nfl --window-hours 2 --tag close --exclude-prefix player_ >> /root/mlb-model/logs/nfl_em_sunam.log 2>&1
 
 # ── NBA Event Markets ──
-30 15 * * * cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport basketball_nba --window-hours 24 --tag mid >> /root/mlb-model/logs/nba_event_markets.log 2>&1
-0 22 * * * cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport basketball_nba --window-hours 6 --tag close >> /root/mlb-model/logs/nba_event_markets.log 2>&1
+30 15 * * * cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport basketball_nba --window-hours 24 --tag mid >> /root/mlb-model/logs/nba_event_markets.log 2>&1
+0 22 * * * cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport basketball_nba --window-hours 6 --tag close >> /root/mlb-model/logs/nba_event_markets.log 2>&1
 
 # ── NCAAF Event Markets ──
-0 16 * * 5 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_ncaaf --window-hours 36 --tag mid >> /root/mlb-model/logs/ncaaf_event_markets.log 2>&1
-0 13 * * 6 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_ncaaf --window-hours 16 --tag close >> /root/mlb-model/logs/ncaaf_event_markets.log 2>&1
-0 22 * * 2-4 cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_ncaaf --window-hours 26 --tag mid >> /root/mlb-model/logs/ncaaf_event_markets.log 2>&1
+0 16 * * 5 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_ncaaf --window-hours 36 --tag mid >> /root/mlb-model/logs/ncaaf_event_markets.log 2>&1
+0 13 * * 6 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_ncaaf --window-hours 16 --tag close >> /root/mlb-model/logs/ncaaf_event_markets.log 2>&1
+0 22 * * 2-4 cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport americanfootball_ncaaf --window-hours 26 --tag mid >> /root/mlb-model/logs/ncaaf_event_markets.log 2>&1
 
 # ── MLB Event Markets (postseason; remove after the World Series) ──
-0 15 * * * cd /root/mlb-model && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport baseball_mlb --window-hours 24 --tag mid >> /root/mlb-model/logs/mlb_event_markets.log 2>&1
+0 15 * * * cd /root/mlb-model && . /root/private/env && /root/mlb-model/venv/bin/python3 shared/pipeline/pull_event_markets.py --sport baseball_mlb --window-hours 24 --tag mid >> /root/mlb-model/logs/mlb_event_markets.log 2>&1
 20 * * * * cd /root/mlb-model && PICKS_LEDGER_DIR=/root/private/ledger venv/bin/python3 shared/pipeline/picks_adapters.py >> /root/logs/picks_adapters.log 2>&1
 25 * * * * cd /root/mlb-model && PICKS_LEDGER_DIR=/root/private/ledger venv/bin/python3 shared/pipeline/pick_layers.py --build-missing >> /root/logs/pick_layers.log 2>&1
 35 5 * * * bash /root/private/backup_picks.sh >> /root/logs/picks_backup.log 2>&1
