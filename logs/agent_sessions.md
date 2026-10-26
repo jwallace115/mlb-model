@@ -4609,3 +4609,34 @@ SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
 - Whether push_daemon.sh already handles all conflict files that the watcher writes
 - Whether the 5 failures delayed any Monday ON push (need the timestamps)
 - The exact cause of each failure (rebase conflict? push rejected? markers?)
+
+## 2026-10-26T01:15Z  claude-code (OPS-ON-1c follow-up — merge, VM state, Monday prep)
+
+### RETURNED
+- VM state: clean (on main, no locks, no rebase, no conflict markers). HEAD = 0cb6c6fad.
+- push_daemon 5 failures on 10-25:
+  * 4× "cannot rebase: You have unstaged changes" at 10:30, 11:00, 18:30, 21:30Z
+    (cron jobs write files between commit and rebase; NOT a file-conflict issue).
+  * 1× "REFUSED: conflict markers" at 19:30Z on data/line_movement.csv
+    (the file legitimately has ======= separators; picked up next cycle).
+  * FIX: --autostash on git pull --rebase in push_daemon.sh (a65a32234).
+- Merged ops/vm-crontab → main (0cb6c6fad). VM pulled (fast-forward). Health builder
+  ran by hand; status/vm_crontab.txt written (234 lines). Will reach origin on next
+  push_daemon :30 cycle.
+- Monday runner: `40 15 * * 1 bash /root/mlb-model/shared/on_monday.sh` present.
+  SHA256(on_monday.sh) = da1690ee1638fb00... — byte-identical VM vs origin/main.
+
+### MEANS
+- push_daemon will no longer fail on unstaged changes (the dominant failure mode).
+- The Monday ON push at 15:40 UTC (11:40 AM ET) will not be delayed by unstaged changes.
+- vm_crontab.txt is a living snapshot — any crontab change is captured on the next health cycle.
+
+### NOT DONE
+- Waiting for push_daemon :30 cycle to push vm_crontab.txt to origin.
+- The data/line_movement.csv marker-guard false positive is a cosmetic issue (the file gets
+  picked up next cycle); no change to the guard pattern.
+
+### UNVERIFIED
+- Whether the --autostash fix survives a real concurrent-write scenario (next push cycle will test it).
+
+SHAs: origin/main = 0cb6c6fad, VM HEAD = 0cb6c6fad, Mac HEAD = 0cb6c6fad. Mac branch = main.
