@@ -39,3 +39,36 @@ Source: 3,583,186 total prop rows across 2023-2026; 143,190 rows reassigned by N
 
 Rules out: nothing — this is an inventory. The per-market < 8,000 count may constrain
 the discovery/validation split (DA-D4).
+
+## DA-D2 — Defensive data inventory (2026-10-25)
+
+Inputs: da0_defense_inventory.parquet (160 rows). Sources: nflreadpy load_participation
+(2016-2025), load_ftn_charting (2022-2026), PBP via load_pbp (2021-2025).
+No publication receipt from nflreadpy.
+
+**Archetype families with 2021-2023 data (PBP-derived):**
+- Positional funnels (targets to TE/RB/WR by defense): YES — receiver_player_id 89%
+  non-null on pass plays, joinable to rosters for position. Available 2021+.
+- Run/pass funnel: YES — play_type + posteam/defteam. Available 2016+.
+- Explosive plays allowed (20+ yds): YES — yards_gained 100% non-null. Available 2016+.
+
+**Archetype families WITHOUT 2021-2023 data (scheme-based):**
+- Man/zone coverage (defense_man_zone_type): **2023+ only** at 100% coverage.
+  2018-2022 has only ~38% non-null (pass-play subset labelled by the participation feed).
+  2016-2017: 0%.
+- Coverage type detail (defense_coverage_type): ~49% even in 2023+.
+- Pass rushers (number_of_pass_rushers): 2023+ at 97-100%. 2016-2022: ~41-43%.
+- Defenders in box: 2023+ at 100%. 2016-2022: ~74%.
+
+**FTN charting (scheme data available from 2022 at 100%):**
+- n_blitzers, n_pass_rushers, is_motion, is_play_action, is_rpo: 2022-2026.
+- is_screen: NOT PRESENT in any season.
+
+**Grading DA-0a:** "coverage labels usable from 2022, not 2023" at 70%.
+WRONG — man/zone is 37.8% in 2022, 100% in 2023. FTN charting IS from 2022 (100%).
+So the prior is half right: FTN fields from 2022, participation man/zone from 2023.
+Prior grade: PARTIALLY CORRECT (50%). The useful year boundary is 2023 for the
+full scheme picture, 2022 for FTN-only fields.
+
+Rules out: using load_participation man/zone labels before 2023 at any scale; using
+defense_coverage_type as a primary feature (only 49% labelled).
