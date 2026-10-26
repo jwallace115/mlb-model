@@ -13449,5 +13449,167 @@
     "4853610e63c246f2027a6a248e642c9a": "new_props: pull 2026-10-26T19:02:28.596572+00:00; injury_change: inj_Philadelphia Eagles"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261026T211704Z.parquet",
+  "sha256": "e75e2064f308e73ed333bc5dd1afc65bcc0fbd248411cc073aa8bcc6f70dfadb",
+  "logged_utc": "2026-10-26T21:17:04.239350+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 16.9,
+  "first_kickoff_utc": "2026-10-27T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261026T210009Z.parquet",
+   "inputs_digest": "{\"4853610e63c246f2027a6a248e642c9a\": \"5a4c4b4479e863d9\"}",
+   "components": {
+    "4853610e63c246f2027a6a248e642c9a": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       -225
+      ],
+      [
+       "Philadelphia Eagles",
+       0,
+       180
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Dallas Cowboys",
+       -4.5,
+       -110
+      ],
+      [
+       "Philadelphia Eagles",
+       4.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       44.0,
+       -110
+      ],
+      [
+       "Under",
+       44.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       -226
+      ],
+      [
+       "Philadelphia Eagles",
+       0,
+       199
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Dallas Cowboys",
+       -4.5,
+       -101
+      ],
+      [
+       "Philadelphia Eagles",
+       4.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -107
+      ],
+      [
+       "Under",
+       44.0,
+       -105
+      ]
+     ],
+     "props_ts": "2026-10-26T19:02:28.596572+00:00",
+     "inj_Philadelphia Eagles": "bd6e66fd3cc82558",
+     "inj_Dallas Cowboys": "ea38425e73ca9ac1",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bears QB Caleb Williams leads NFL Week 7's best ar",
+      "Breaking down Cowboys-Eagles MNF matchup in wide-o",
+      "Can Saquon Barkley turn his season around starting",
+      "Cornell Green, 5-time Pro Bowl DB on Cowboys' Doom",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Cowboys feel the pressure of losing",
+      "Cowboys say still time to turn things around after",
+      "Dallas Cowboys cheerleaders unionize, will begin c",
+      "David Andrews' blood clot diagnosis illuminates wh",
+      "Eagles still trying to salvage NFC East crown with",
+      "Eagles' DeVonta Smith, Dontayvion Wicks out vs. Co",
+      "George Pickens expected to play against Eagles",
+      "Goodell says NFL welcomes investigation into Eagle",
+      "How to bet Cowboys-Eagles: Analysis, tips and top ",
+      "JJ Watt lands new deal as full-time CBS lead analy",
+      "Jay-Z's greatest sports lyrics, ranked ahead of hi",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL, NFLPA handling joint review of Jalen Hurts' b",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Report: $250K fines for Sirianni, Vrabel, Glenn te",
+      "Saquon Barkley expected to play against Cowboys",
+      "Sources: Eagles RB Barkley (hamstring) expected to",
+      "Sources: Nick Sirianni, Mike Vrabel, Aaron Glenn f",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Stephen A. lays into Michael Irvin for saying Cowb",
+      "What are the longest field goals in NFL history?",
+      "Why Stephen A. expects Cowboys to beat 'anemic' Ea",
+      "Will Eagles be buyers or sellers at trade deadline"
+     ],
+     "kalshi_snap": "snap_20261026T2105Z.parquet"
+    }
+   },
+   "triggers": {
+    "4853610e63c246f2027a6a248e642c9a": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261026T212342Z.parquet",
+  "sha256": "fc62b5be79457d2407f05ca309cec903cb4d7b3641458e7e460e1f6149a31e78",
+  "logged_utc": "2026-10-26T21:23:42.843541+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "reader_v3b",
+  "pilot": false,
+  "window": "prekick",
+  "games": 1,
+  "no_view_share": 0.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 23.6,
+  "first_kickoff_utc": "2026-10-27T00:15:00Z",
+  "reader_sha256": "a413d38af2157fcb8a04c1d71cbc17a791cdadaa375e6ec3da56b1e616ba6bfd",
+  "inputs": {
+   "props": "data_2026_11_mac.parquet",
+   "lines": "snap_20261026T210009Z.parquet"
+  }
  }
 ]
