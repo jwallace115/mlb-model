@@ -1,0 +1,71 @@
+[
+ {
+  "file": "ai_opinions_20261025T234904Z.parquet",
+  "sha256": "a1a80fab610d07e19854b491252bbffda6e25d84d8be2b9206c40b3f71e7bca2",
+  "logged_utc": "2026-10-25T23:49:04.661793+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 0,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261025T233005Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"28530675e8cbb179\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -109
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -105
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -1.0,
+       -105
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       1.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -107
+      ],
+      [
+       "Under",
+       56.0,
+       -113
+      ]
+     ],
+     "news": [
+      "Minicucci throws for 5 TDs, runs for another as De",
+      "Missouri State Bears vs. Delaware Blue Hens: Full "
+     ],
+     "kalshi_snap": "snap_20261025T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "anchor_morning"
+   }
+  }
+ }
+]
