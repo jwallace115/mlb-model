@@ -179,5 +179,116 @@
     "eed30e1ba5aa37d77ee6401d67832446": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261026T154903Z.parquet",
+  "sha256": "9ac0cc5baf01559791abb9108e657b74d8cef3a305a378af96cc3f9480285e97",
+  "logged_utc": "2026-10-26T15:49:03.655039+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 2,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261026T153008Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"35b7726e97005111\", \"eed30e1ba5aa37d77ee6401d67832446\": \"17d3db4fa4065940\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -101
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -113
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       1.0,
+       -109
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       -1.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -117
+      ],
+      [
+       "Under",
+       56.0,
+       -101
+      ]
+     ],
+     "news": [
+      "Delaware and Western Kentucky meet in CUSA action"
+     ],
+     "kalshi_snap": "snap_20261026T1507Z.parquet"
+    },
+    "eed30e1ba5aa37d77ee6401d67832446": {
+     "pinnacle_h2h": [
+      [
+       "Missouri State Bears",
+       0,
+       -215
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       182
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Missouri State Bears",
+       -6.0,
+       100
+      ],
+      [
+       "Sam Houston State Bearkats",
+       6.0,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -101
+      ],
+      [
+       "Under",
+       50.0,
+       -118
+      ]
+     ],
+     "news": [
+      "Missouri State squares off against Sam Houston in "
+     ],
+     "kalshi_snap": "snap_20261026T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "anchor_morning",
+    "eed30e1ba5aa37d77ee6401d67832446": "anchor_morning"
+   }
+  }
  }
 ]
