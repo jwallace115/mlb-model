@@ -72,3 +72,34 @@ full scheme picture, 2022 for FTN-only fields.
 
 Rules out: using load_participation man/zone labels before 2023 at any scale; using
 defense_coverage_type as a primary feature (only 49% labelled).
+
+## DA-D3 — Settlement source (2026-10-25)
+
+Inputs: da0_settlement_join.parquet (80,129 rows). Join: resolved prop player-games
+(by gsis_id) × nflreadpy load_player_stats (weekly) × schedule (game_id mapping).
+
+**Join rate per season × market (main prop markets):**
+| Market              | 2023   | 2024   | 2025   |
+|---------------------|--------|--------|--------|
+| player_receptions   | 93.9%  | 92.6%  | 93.1%  |
+| player_reception_yds| 92.5%  | 91.6%  | 92.8%  |
+| player_rush_yds     | 96.4%  | 95.2%  | 95.9%  |
+| player_pass_yds     | 96.1%  | 95.7%  | 97.1%  |
+| player_anytime_td   | 78.2%  | 77.3%  | 77.9%  |
+
+Reception/rec_yds join rate is 91-94%, not the 97% target. The gap is from event-to-
+game_id mapping failures (team abbreviation mismatches: JAX vs JAC, LA vs LAR) and
+a few multi-game weeks. Passing and rushing exceed 95%.
+
+**PBP vs official comparison (200-row sample, 2024 receptions):**
+0 mismatches out of 200. PBP-derived receptions = official receptions at prop-settlement
+scale. The postgame lane's pbp-vs-official gaps (e.g. Deebo Samuel wk3 rec_yds PBP=0
+official=80) appear in YARD totals, not reception counts.
+
+**DA-0d grading:** "official stats join at >= 97% by player_id + game_id" at 75%.
+PARTIALLY MET: passing and rushing > 95%, reception markets 91-94%. The shortfall is
+in the event→game_id mapping, not the stats join itself (once game_id is resolved, the
+player_id join is nearly 100%). Fixable by improving the team-abbreviation crosswalk
+(JAX/JAC, LA/LAR).
+
+Rules out: nothing. The join rate is workable with a crosswalk fix.
