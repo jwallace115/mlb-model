@@ -4640,3 +4640,32 @@ SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
 - Whether the --autostash fix survives a real concurrent-write scenario (next push cycle will test it).
 
 SHAs: origin/main = 0cb6c6fad, VM HEAD = 0cb6c6fad, Mac HEAD = 0cb6c6fad. Mac branch = main.
+
+## 2026-10-26T02:30Z  claude-code (DA-0 — defensive archetypes data inventory)
+
+### RETURNED
+- Item 1 (45018d379): prop archive inventory. 3,583,186 rows, 315 inventory rows, 85,651 name
+  resolution rows. 97.3% name resolution. 2 snapshots/event (2023-2025). HR+Pinnacle 2026 only.
+  3-market combined player-games 8,541-9,291 per season.
+- Item 2 (d7cd79cc1): defensive data inventory. 160 rows. Man/zone from 2023 at 100% (not 2022).
+  FTN charting from 2022. PBP funnels 2021+. No publication receipt.
+- Item 3 (c02d26e2c): settlement join. 80,129 rows. Reception join 91-94%, passing/rush 95-97%.
+  PBP vs official: 0/200 mismatches.
+- Item 4 (c92b09ee7): re-plan with 4 options. Priors graded. Prediction ledger updated.
+
+### MEANS
+- The data supports all four re-plan options. The constraint is the per-market sample size
+  (~3,500-3,900 for receptions/rec_yds per season, ~1,700 for rush_yds).
+- Clean-look: 2023-2025 are clean for prop-line work.
+
+### NOT DONE
+- No plan chosen (by design — Jeff and Cowork decide).
+- No merge to main (by design).
+- The team-abbreviation crosswalk (JAX/JAC, LA/LAR) would raise reception join from 91% to ~97%.
+
+### UNVERIFIED
+- Whether the 2-snapshot-per-event pattern in history represents open+close or two close pulls.
+- Whether FTN charting data quality is consistent across all weeks (the all-season 100% rate
+  may mask early-season lag).
+
+SHAs: origin/research/da0 = c92b09ee7. Mac main branch = main.
