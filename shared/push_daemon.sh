@@ -55,7 +55,7 @@ fi
 git commit -m "auto: dashboard update $TIMESTAMP" >> "$LOG" 2>&1
 
 # Pull with rebase
-if ! git pull --rebase origin main >> "$LOG" 2>&1; then
+if ! git pull --rebase --autostash origin main >> "$LOG" 2>&1; then
     # Auto-resolve known safe conflict files (always take remote version)
     SAFE_FILES=(
         "shared/last_updated.json"
