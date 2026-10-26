@@ -1,0 +1,51 @@
+packet built 2026-10-26T00:32Z | snap snap_20261026T003007Z.parquet | props pull none | kalshi snap_20261026T0005Z.parquet | injuries injuries_20261026T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: new_props: pull 2026-10-26T00:32:29.380316+00:00; injury_change: inj_Dallas Cowboys
+######## Dallas Cowboys @ Philadelphia Eagles  kick 10-27T00:15Z
+  HR ML: Eagles +190 / Cowboys -230 (no-vig home 0.331) | Pinnacle no-vig home 0.333
+  HR spread: Eagles +5.5 -110 / Cowboys -5.5 -110 | Pinnacle Eagles 4.5 (-104) | HR open 5.0 (20261020)
+  HR total: 44 O-115/U-105 | Pinnacle 44.0 O-108/U-108 | HR open 44.5
+  Kalshi ML [('Philadelphia wins', 0.33, 344359), ('Dallas wins', 0.68, 283700)] | spread [('Dallas wins by over 5.5 points?', 0.47, 16577), ('Dallas wins by over 6.5 points?', 0.45, 16465)] | total [('Full Game: over 43.5 points scored?', 0.53, 3896), ('Full Game: over 44.5 points scored?', 0.47, 8503)]
+  -- Dallas Cowboys injuries (20261026T0030)
+     Inju S  P.J. Locke: Locke (foot) has been downgraded from questionable to out for Monday's game against the Eagles.
+     Inju LB Marist Liufau: Liufau (forearm) has been downgraded from questionable to out ahead of Monday night's game against the Eagles.
+     Out  OT Drew Shelton: Shelton (hamstring) has been ruled out for Monday's game against Philadelphia, Adam Caplan of SiriusXM NFL Radio reports.
+     Out  LB Dee Winters: Winters (calf) has been ruled out for Sunday's game against the Eagles, Adam Caplan of SiriusXM NFL Radio reports.
+     Out  WR KaVontae Turpin: Turpin (ribs) has been ruled out for Monday's game against the Eagles, Adam Caplan of SiriusXM NFL Radio reports.
+     Acti WR George Pickens: Pickens (shoulder) was a full participant in Friday's practice, Tommy Yarrish of the Cowboys' official site reports.
+     Acti WR Camden Brown: 
+     Acti RB Javonte Williams: Williams rushed 11 times for 41 yards and a touchdown while catching both of his targets for nine yards in Sunday's 23-13 loss to the Packers.
+     Acti QB Dak Prescott: Prescott completed 34 of 54 passes for 258 yards, one touchdown and two interceptions in Sunday's 23-13 loss to the Packers. He also rushed twice for 
+     Acti WR Ryan Flournoy: Flournoy caught seven of nine targets for 40 yards and a touchdown in Sunday night's 23-13 loss to the Packers.
+     Acti TE Jake Ferguson: Ferguson caught two of three targets for 13 yards during Sunday night's 23-13 loss to the Packers.
+     Acti WR CeeDee Lamb: Lamb caught nine of 18 targets for 70 yards in Sunday's 23-13 loss to the Packers.
+     Acti RB Emari Demercado: Demercado (coach's decision) is inactive for Sunday night's matchup with the Packers, Patrik Walker of the Cowboys' official site reports.
+     news 10-23T22:54 Cowboys feel the pressure of losing
+     news 10-24T00:10 Cowboys say still time to turn things around after 2-4 start
+     news 10-24T01:24 Dallas Cowboys cheerleaders unionize, will begin collective bargaining
+     news 10-25T22:18 Breaking down Cowboys-Eagles MNF matchup in wide-open NFC East
+     news 10-25T23:18 Steelers Aaron Rodgers, QB room lead NFL Week 7's best arrivals
+  -- Philadelphia Eagles injuries (20261026T0030)
+     Inju G  Landon Dickerson: Dickerson (knee) is listed as questionable for Monday's game against the Cowboys.
+     Out  CB Michael Carter II: Carter (abdomen) has been ruled out to play the Cowboys on Monday Night Football in Week 7.
+     Out  LB Nolan Smith Jr.: Smith (concussion) has been ruled out for Monday's matchup against Dallas.
+     Inju TE Eli Stowers: Stowers (quadriceps), who is on injured reserve, is officially questionable to play Monday against Dallas.
+     Inju TE Grant Calcaterra: Calcaterra, who is on injured reserve due to a back injury, is questionable to suit up Monday versus Dallas.
+     Out  WR Dontayvion Wicks: Wicks (ankle) has been ruled out for Monday's game versus the Cowboys.
+     Ques RB Saquon Barkley: Barkley (hamstring) is listed as questionable for Monday's game against the Cowboys.
+     Acti TE Dallas Goedert: Goedert (knee) was a full participant in Saturday's practice and does not carry an injury designation into Monday's game against the Cowboys.
+     Out  WR DeVonta Smith: Smith (hamstring) has been ruled out for Monday's game against the Cowboys.
+     Ques LB Jonathan Greenard: Greenard (ankle) is listed as questionable for Monday night's game against the Cowboys, Martin Frank of The Delaware News Journal reports.
+     Acti WR Darius Cooper: Cooper caught one of two targets for nine yards and added 38 yards as a kick returner during Sunday's 25-14 loss to the Panthers.
+     Acti WR Hollywood Brown: NFL reporter Jordan Schultz reports that teams seeking help at wide receiver will likely call the Eagles about the status of Brown before the Nov. 10 
+     Ques LB Jalyx Hunt: questionable
+     Acti QB Joe Milton: 
+     Inju QB Jalen Hurts: Hurts (calf) is expected to be held out of football activities for multiple months and miss the rest of the season after new imaging over the weekend 
+     Acti QB Tanner McKee: McKee completed 26 of 45 passes for 215 yards with a touchdown and no interceptions while adding one carry for no gain in the Eagles' 25-14 loss to th
+     news 10-24T21:17 Eagles' DeVonta Smith, Dontayvion Wicks out vs. Cowboys
+     news 10-25T14:14 NFL, NFLPA handling joint review of Jalen Hurts' blood clot diagnosis
+     news 10-25T21:06 Saquon Barkley expected to play against Cowboys
+     news 10-25T22:18 Breaking down Cowboys-Eagles MNF matchup in wide-open NFC East
+     news 10-25T23:18 Steelers Aaron Rodgers, QB room lead NFL Week 7's best arrivals
+  -- props (pull none)
