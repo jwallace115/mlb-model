@@ -100,6 +100,18 @@ def due_times(exprs, start, end):
     return out
 
 
+_REDACT_KV = re.compile(r"(?i)(key|token|secret|password|passwd)=\S+")
+_REDACT_HEX = re.compile(r"[0-9a-fA-F]{32,}")
+_REDACT_B64 = re.compile(r"[A-Za-z0-9+/=]{32,}")
+
+
+def _redact_line(line):
+    """Redact secrets from a crontab line."""
+    line = _REDACT_KV.sub(lambda m: m.group(1) + "=<redacted>", line)
+    line = _REDACT_HEX.sub("<redacted>", line)
+    return line
+
+
 def read_crontab(path=None):
     if path:
         text = Path(path).read_text()
@@ -114,6 +126,22 @@ def read_crontab(path=None):
         if m:
             jobs.append({"expr": m.group(1), "cmd": m.group(2)})
     return jobs
+
+
+def write_crontab_snapshot(root, path=None):
+    """Write a redacted copy of the VM crontab to status/vm_crontab.txt."""
+    if path:
+        text = Path(path).read_text()
+    else:
+        text = subprocess.run(["crontab", "-l"], capture_output=True, text=True).stdout
+    now_utc = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    redacted = [f"# VM crontab as of {now_utc}"]
+    for line in text.splitlines():
+        redacted.append(_redact_line(line))
+    out = root / "status" / "vm_crontab.txt"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(redacted) + "\n")
+    return out
 
 
 # ---------------------------------------------------------------- file evidence
@@ -395,6 +423,7 @@ def main():
     a = ap.parse_args()
     now = datetime.fromisoformat(a.now) if a.now else datetime.now(timezone.utc)
     res = build(now, Path(a.root), a.crontab_file, a.registry, with_host=a.now is None)
+    write_crontab_snapshot(Path(a.root), a.crontab_file)
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = out.with_suffix(".json.tmp")

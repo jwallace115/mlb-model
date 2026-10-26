@@ -4576,3 +4576,36 @@ SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
 
 ### NOT DONE
 - Merge, VM cron, systemd, Caddyfile, plan verification — Cowork does these.
+
+## 2026-10-25T14:55Z  claude-code (OPS-ON-1c — VM crontab snapshot + push_daemon audit)
+
+### RETURNED
+- Item 1 (213ec3191): pipeline_health.py gains write_crontab_snapshot() — writes redacted
+  crontab to status/vm_crontab.txt alongside pipeline_health.json. Redaction: KEY=/TOKEN=/
+  SECRET=/PASSWORD= values and 32+ char hex strings replaced with <redacted>. Normal lines
+  pass through verbatim. 5 tests GREEN. push_daemon.sh uses git add -A, so the file reaches
+  origin automatically.
+- Item 2: push_daemon.failures_24h = 5 (from pipeline_health.json top-level push_daemon key).
+  CANNOT read /root/logs/push_daemon.log from the Mac — requires VM SSH. push_daemon.sh has
+  three failure modes: (1) rebase conflict on non-auto-resolvable files, (2) push rejected,
+  (3) conflict markers. Auto-resolve covers shared/last_updated.json and 3 golf/mlb files.
+  The most likely cause is rebase conflicts on the new status/*.json files (anchor_state,
+  watch_state, check_now_*, odds_credits) — these are written by both the VM cron and the
+  Mac auto-committer. FIX: add these files to push_daemon.sh SAFE_FILES array so they auto-
+  resolve with --theirs. BUT: this is a hypothesis, not confirmed from the log. Cowork must
+  read the log first.
+
+### MEANS
+- The redacted crontab will appear on origin after the next VM health cycle (every 5 min).
+- The push_daemon failures need VM log inspection before a fix can be committed.
+
+### NOT DONE
+- Merge to main (this branch is ready; Cowork merges)
+- VM log inspection for push_daemon failures
+- Adding new status files to SAFE_FILES (pending log confirmation)
+- Waiting for the VM health cycle to produce status/vm_crontab.txt
+
+### UNVERIFIED
+- Whether push_daemon.sh already handles all conflict files that the watcher writes
+- Whether the 5 failures delayed any Monday ON push (need the timestamps)
+- The exact cause of each failure (rebase conflict? push rejected? markers?)
