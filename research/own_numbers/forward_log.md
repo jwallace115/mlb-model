@@ -27,3 +27,15 @@ Games: 14  |  Confident: 5
 | LA@LV | home | -0.7 | 5.5 | -105 | +4.8 |
 | DAL@PHI | home | +0.9 | 5.0 | -110 | +5.9 |
 
+
+## Week 8 (2026) -- PRIMARY
+Run: 2026-10-26T16:15:33Z  |  Manifest SHA: da59272230201888...
+Games: 14  |  Confident: 4
+
+| Game | Side | Our # | HR Quote | HR Price | Gap |
+|------|------|--------|----------|----------|-----|
+| CAR@GB | away | -1.2 | -4.0 | -110 | -5.2 |
+| TEN@CIN | away | +4.7 | -10.5 | -110 | -5.8 |
+| ARI@DAL | away | +0.6 | -6.0 | -110 | -5.4 |
+| NE@MIA | home | -0.8 | 7.5 | -110 | +6.7 |
+
