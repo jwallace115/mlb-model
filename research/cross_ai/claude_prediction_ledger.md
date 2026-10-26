@@ -26,3 +26,17 @@ flat 30%; the real held rate is NOT more than 5 pp above the tag-shuffled null.
 **PM-6:** ≥ 30% of graded WINS with a checkable thesis are thesis-failed (won for the
 wrong reason).
 **Grade:** NOT YET GRADED.
+
+## DA-0a through DA-0d (registered 2026-10-25, DA-0 Item 0; graded by: Claude Code DA-0)
+
+**DA-0a (70%):** Coverage labels (man/zone, pass rushers, defenders in box) usable from 2022, not 2023.
+**Grade:** PARTIALLY HELD — FTN charting from 2022 at 100%; participation man/zone from 2023 only (37.8% in 2022).
+
+**DA-0b (60%):** Exact normalized name + team resolves >= 95% of prop player-games to a player_id.
+**Grade:** HELD — 97.3% resolution rate (from da0_name_resolution.parquet).
+
+**DA-0c (55%):** 2023, 2024 and 2025 EACH have >= 8,000 player-games with a receptions/rec-yds/rush-yds close.
+**Grade:** HELD if combined across 3 markets (8,541-9,291); DID NOT HOLD per individual market (max 3,965).
+
+**DA-0d (75%):** Official weekly stats join the resolved prop rows at >= 97% by player_id + game_id.
+**Grade:** PARTIALLY HELD — passing/rush 95-97%; reception 91-94% (gap is event→game_id mapping, fixable).

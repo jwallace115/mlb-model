@@ -103,3 +103,60 @@ player_id join is nearly 100%). Fixable by improving the team-abbreviation cross
 (JAX/JAC, LA/LAR).
 
 Rules out: nothing. The join rate is workable with a crosswalk fix.
+
+## DA-D4 — Re-plan statement, priors graded (2026-10-25)
+
+### Priors graded (from committed tables)
+
+| Prior | Prediction | Measured | Grade |
+|-------|-----------|----------|-------|
+| DA-0a (70%) | Coverage labels usable from 2022 | Man/zone from **2023** (100%); FTN from 2022 (100%) | PARTIALLY HELD (FTN yes, participation no) |
+| DA-0b (60%) | Name+team resolves >= 95% of player-games | **97.3%** overall | HELD |
+| DA-0c (55%) | Each season >= 8,000 player-games (rec/rec_yds/rush_yds) | Per-market max ~3,965; 3-market combined 8,541-9,291 | HELD if combined; DID NOT HOLD if per-market |
+| DA-0d (75%) | Official stats join >= 97% by player_id + game_id | Reception 91-94%, passing/rush 95-97% | PARTIALLY HELD (passing/rush yes, reception slightly below) |
+
+### RE-PLAN OPTIONS (for Cowork and Jeff to choose)
+
+**(i) Prop-level test: discovery = 2023 only, validation = 2024-25**
+- Discovery n per market: receptions 3,595, rec_yds 3,965, rush_yds 1,731 (combined 9,291).
+  Thin for single-market analysis; the rush sample is half the size.
+- Validation: 2024 (8,541) + 2025 (9,242) = 17,783 combined player-games.
+- CAN answer: whether defensive archetype labels discovered on 2023 predict prop outcomes in 2024-25.
+- CANNOT answer: anything about opening-line vs closing-line value (history has NO opening line; only
+  2026 has multi-snapshot data).
+- Close-test sample left: 2026 forward only (~1,300 player-games per 7 weeks so far, growing).
+
+**(ii) Discovery = 2023-24, validation = 2025 + 2026 forward**
+- Discovery: 2023-24 combined = 17,832 player-games (rec+rec_yds+rush_yds).
+- Validation: 2025 (9,242) + 2026 (growing).
+- Larger discovery sample (better archetype estimation), but shorter validation window.
+- Same opening-line limitation as (i). 2026 is the only source for opener data.
+- Close-test sample: 2026 forward.
+
+**(iii) Two-stage design: labels on pbp → prop-line test ONCE**
+- Stage 1: discover archetype labels + funnel effects on 2021-23 PBP against official
+  stats residuals from a simple usage baseline (no prop lines touched). Man/zone only
+  available for 2023; PBP funnels available 2021+.
+- Stage 2: apply the FROZEN labels to 2023-25 prop lines as a single validation pass
+  (never re-tuned). This is the cleanest design for a prop-line signal test.
+- CAN answer: whether pbp-derived defensive archetypes predict prop-line residuals.
+- CANNOT answer: opening-line edge (same limitation).
+- Close-test: 2026 forward (the only opener source).
+
+**(iv) Stop the phase**
+- DA-0c per-market < 8,000: the per-market samples (especially rush at ~1,700) are thin.
+  Combined across three markets they clear 8,000 per season. Whether this is enough
+  depends on effect size expectations.
+
+### Clean-look status for props vs game lines
+
+FIT_WINDOW_LEDGER.md is NOT PRESENT in the repo. The 2024/2025 clean-look status for
+PROP lines is NOT the same as for game lines. The sim Phase 9 model uses 2022-2023
+training on GAME-LINE features (no prop lines in any feature). No prop-line data was
+used in any prior discovery or fit in this repo. Seasons 2023-2025 are therefore clean
+for prop-line discovery/validation in all four options above. The constraint is only
+on features that touched game-line data (xFIP, wRC+, park factors — irrelevant here).
+
+### STOP
+
+This order is complete. The next order picks a plan from (i)-(iv).
