@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_07_CLE_TEN",
+  "week": 7,
+  "home": "TEN",
+  "away": "CLE",
+  "final_score": {
+    "home": 24,
+    "away": 27
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 24,
+        "away": 27
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 24,
+        "away": 27
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 62,
+      "dropbacks": 32,
+      "rush_attempts": 30,
+      "pass_rate": 0.5161290322580645,
+      "run_rate": 0.4838709677419355,
+      "pass_oe": -9.812130885464805
+    },
+    "away": {
+      "plays": 66,
+      "dropbacks": 37,
+      "rush_attempts": 29,
+      "pass_rate": 0.5606060606060606,
+      "run_rate": 0.43939393939393945,
+      "pass_oe": -3.3049987256526947
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "Q.Judkins",
+      "team": "CLE",
+      "quarter": 1,
+      "play_id": 837,
+      "desc": "(4:12) 10-Q.Judkins right tackle to CLE 5 for -1 yards (91-J.Franklin-Myers). TEN-91-J.Franklin-Myers was injured during the play."
+    },
+    {
+      "player": "T.Townsend",
+      "team": "TEN",
+      "quarter": 2,
+      "play_id": 2002,
+      "desc": "(1:51) 3-T.Townsend punts 44 yards to CLE 26, Center-46-M.Cox, fair catch by 1-K.Concepcion. TEN-3-T.Townsend was injured during the play."
+    },
+    {
+      "player": "D.Sampson",
+      "team": "CLE",
+      "quarter": 3,
+      "play_id": 2482,
+      "desc": "(12:31) 22-D.Sampson up the middle to TEN 48 for 5 yards (53-A.Hill; 94-T.Horne). CLE-71-T.Howard was injured during the play."
+    },
+    {
+      "player": "T.Pollard",
+      "team": "TEN",
+      "quarter": 4,
+      "play_id": 3393,
+      "desc": "(14:04) (Shotgun) 20-T.Pollard up the middle pushed ob at 50 for 17 yards (33-R.Hickman). CLE-94-M.Graham was injured during the play. ** Injury Update: CLE-26-M.Harden has returned to the game."
+    },
+    {
+      "player": "W.Robinson",
+      "team": "TEN",
+      "quarter": 4,
+      "play_id": 3554,
+      "desc": "(10:55) (Shotgun) 1-C.Ward pass short left to 4-W.Robinson to CLE 17 for no gain (9-G.Delpit). CLE-9-G.Delpit was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

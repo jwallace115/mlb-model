@@ -1189,6 +1189,20 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 5.974,
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 8
+    },
+    {
+      "game_id": 2026020187,
+      "game_date": "2026-10-26",
+      "home_team": "EDM",
+      "away_team": "DET",
+      "signal_side": "UNDER",
+      "edge": 0.1405,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.863,
       "drift_applied": 0.0
     }
   ]

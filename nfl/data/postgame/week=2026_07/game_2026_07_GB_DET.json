@@ -1,0 +1,86 @@
+{
+  "game_id": "2026_07_GB_DET",
+  "week": 7,
+  "home": "DET",
+  "away": "GB",
+  "final_score": {
+    "home": 20,
+    "away": 17
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 20,
+        "away": 17
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 20,
+        "away": 17
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 66,
+      "dropbacks": 33,
+      "rush_attempts": 33,
+      "pass_rate": 0.5,
+      "run_rate": 0.5,
+      "pass_oe": -6.105674113800276
+    },
+    "away": {
+      "plays": 65,
+      "dropbacks": 46,
+      "rush_attempts": 19,
+      "pass_rate": 0.7076923076923077,
+      "run_rate": 0.29230769230769227,
+      "pass_oe": 6.404651456804418
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 2,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 6,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "M.Golden",
+      "team": "GB",
+      "quarter": 2,
+      "play_id": 1526,
+      "desc": "(6:42) (Shotgun) 10-J.Love pass incomplete short right to 0-M.Golden. GB-0-M.Golden was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}
