@@ -182,3 +182,27 @@ The remaining gap is multi-game schedule disambiguation, not the team mapping.
 **Guard (da_guard.py):** HALTs if any prop row with nfl_season in {2024, 2025} is loaded
 while DA_PHASE != "validation". 8 tests: all schedule teams map, JAX=JAC, LAR resolves,
 full names, Washington variants, guard HALTs, guard OK in validation, guard OK in discovery.
+
+## DA-D6 — Label builder (2026-10-27)
+
+Inputs: nflreadpy pbp 2020-2025, participation 2023-2025, FTN 2022-2025, rosters, schedules.
+Output: labels/da_labels_{2021..2025}.parquet (3,520 rows total = 32 teams × 22 weeks × 5 seasons).
+Tercile cutoffs: labels/tercile_cutoffs_v1.json (15 features, sha=82106ae377c8de87).
+
+**AS-OF rule:** a label for week W uses only games whose kickoff + 4h < earliest kickoff of week W.
+**Prior-season blend:** value_W = (n·current + k·prior) / (n + k), k = 4 games; week 1 = prior only;
+no prior (or < 8 games) → UNLABELED (NaN), never a league default.
+
+**Families:**
+- F1 positional funnel: target share and rec/target to TE/RB/WR (receiver position from rosters).
+- F2 run/pass funnel: rush EPA - pass EPA; neutral-situation pass rate faced.
+- F3 explosive allowed: pass ≥ 20 yds and rush ≥ 10 yds rates.
+- F4 scheme (2023+ participation, 2022+ FTN): man rate, pressure rate (pass_rushers ≥ 5 from
+  participation, or blitzers ≥ 1 from FTN where participation absent), heavy box rate (box ≥ 8).
+  F4 source column records "participation" or "ftn" per row. Pre-2023 rows are UNLABELED for F4.
+
+**Tercile cutoffs** computed ONCE from 2021-23 rows (scheme: 2023 only) and frozen. 2024-25 labels
+use the frozen cutoffs. F4 man_rate 95.5% non-null in 2023 (NaN = week 1 with no 2022 prior).
+
+Rules out: using defense_coverage_type (49% labelled, not included); slot/wide split (rosters
+do not cleanly distinguish — deferred to DA-3 if slot data becomes available).
