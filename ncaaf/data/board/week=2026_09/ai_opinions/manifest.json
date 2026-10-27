@@ -1054,5 +1054,73 @@
     "0ae4d3447c72a5c39b523d9b3fbaf216": "line_move: pinnacle totals Over 57.5\u219256.5; line_move: pinnacle totals Under 57.5\u219256.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261027T200404Z.parquet",
+  "sha256": "dc9582b266debb8ee75b7ff342dbc61919f74dd73cbaae4855e17a356b7ec33a",
+  "logged_utc": "2026-10-27T20:04:04.162781+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T200010Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"1eb89ba08f13e924\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       107
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -119
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       1.5,
+       -104
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       -1.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -108
+      ],
+      [
+       "Under",
+       55.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Delaware and Western Kentucky meet in CUSA action"
+     ],
+     "kalshi_snap": "snap_20261027T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "anchor_prekick"
+   }
+  }
  }
 ]
