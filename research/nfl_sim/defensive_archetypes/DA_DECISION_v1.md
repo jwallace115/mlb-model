@@ -206,3 +206,21 @@ use the frozen cutoffs. F4 man_rate 95.5% non-null in 2023 (NaN = week 1 with no
 
 Rules out: using defense_coverage_type (49% labelled, not included); slot/wide split (rosters
 do not cleanly distinguish — deferred to DA-3 if slot data becomes available).
+
+## DA-D7 — Point-in-time proof (2026-10-27)
+
+**3a. Truncation equivalence:** 60 random (season, team, week) cells verified. All week-1
+labels have n_games_into_label = 0 (prior-season only). All numeric features are finite
+or NaN (never inf). 60/60 passed.
+
+**3b. Planted leak:** KC week 10 (2023) uses 9 games into the label. The as-of filter
+guarantees week-11+ data cannot affect it. The broken builder (as-of disabled) processes
+the full season and produces different values — confirming the as-of rule is effective.
+3/3 tests passed.
+
+**3c. Coverage:** labels/da_label_coverage.md. F1-F3 labelled 32/32 from week 1 (prior
+blend). F4 scheme: 32/32 from week 2 in 2023, week 1 in 2024-25 (has 2023 prior).
+Prior-blend share: 4.5% (week 1 only, 32/704 rows per season). Tercile persistence
+(week 9 → week 18): F1/F2/F3 range 47-78% across seasons — moderate stability.
+2023 shows 100% persistence because tercile cutoffs are derived from 2023 (tautological
+for that season); the 2024-25 persistence (47-78%) is the informative number.
