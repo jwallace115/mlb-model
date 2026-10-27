@@ -720,5 +720,203 @@
     "0ae4d3447c72a5c39b523d9b3fbaf216": "line_move: pinnacle spreads Western Kentucky Hilltoppers -1.0\u21921.5; line_move: pinnacle spreads Delaware Blue Hens 1.0\u2192-1.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261027T144903Z.parquet",
+  "sha256": "5c535c86d59db550b01648fd08ef441ecc3d681536ffd1cb440730c27bf137da",
+  "logged_utc": "2026-10-27T14:49:03.994680+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.833,
+  "revised_rows": 10,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T143005Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"f139c5491a9d6a21\", \"eed30e1ba5aa37d77ee6401d67832446\": \"dd7808d11007682c\", \"66c2794f789b9c2c028297eff4838e81\": \"afcbc8be836bf511\", \"cf6c89492427cb54521b70e7c5dc5993\": \"47ac4fe32cd92a48\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -107
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -103
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -1.5,
+       103
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       1.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -109
+      ],
+      [
+       "Under",
+       57.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Delaware and Western Kentucky meet in CUSA action"
+     ],
+     "kalshi_snap": "snap_20261027T1207Z.parquet"
+    },
+    "eed30e1ba5aa37d77ee6401d67832446": {
+     "pinnacle_h2h": [
+      [
+       "Missouri State Bears",
+       0,
+       -214
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       189
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Missouri State Bears",
+       -5.0,
+       -113
+      ],
+      [
+       "Sam Houston State Bearkats",
+       5.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -111
+      ],
+      [
+       "Under",
+       51.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Missouri State squares off against Sam Houston in "
+     ],
+     "kalshi_snap": "snap_20261027T1207Z.parquet"
+    },
+    "66c2794f789b9c2c028297eff4838e81": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       118
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -135
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       2.5,
+       -102
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       -2.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -114
+      ],
+      [
+       "Under",
+       50.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Jaylon Coleman scores 2 TDs in Liberty's 34-6 win ",
+      "Middle Tennessee and Kennesaw State meet in CUSA p"
+     ],
+     "kalshi_snap": "snap_20261027T1207Z.parquet"
+    },
+    "cf6c89492427cb54521b70e7c5dc5993": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -158
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       137
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -3.0,
+       -114
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -107
+      ],
+      [
+       "Under",
+       49.5,
+       -111
+      ]
+     ],
+     "news": [
+      "New Mexico State hosts Jacksonville State in CUSA "
+     ],
+     "kalshi_snap": "snap_20261027T1207Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "anchor_morning",
+    "eed30e1ba5aa37d77ee6401d67832446": "anchor_morning",
+    "66c2794f789b9c2c028297eff4838e81": "anchor_morning",
+    "cf6c89492427cb54521b70e7c5dc5993": "anchor_morning"
+   }
+  }
  }
 ]
