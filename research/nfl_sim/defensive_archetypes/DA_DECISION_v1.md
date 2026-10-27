@@ -160,3 +160,25 @@ on features that touched game-line data (xFIP, wRC+, park factors — irrelevant
 ### STOP
 
 This order is complete. The next order picks a plan from (i)-(iv).
+
+## DA-D5 — Plan of record and crosswalk (2026-10-27)
+
+Split chosen by Cowork 2026-10-27 (Jeff deferred the season split): DISCOVERY 2021-23
+-- pbp families on 2021-23, scheme families on 2023 only (single-season, labelled so),
+2023 prop-line residuals INCLUDED in discovery so every hypothesis is "beyond the line";
+VALIDATION = ONE pass on 2024-25 prop closes, never re-cut, survival |z| >= 2 discovery
+AND same sign z >= 1 validation; 2026 FORWARD = the only source for the opening-line /
+CLV question. Markets: receptions, rec yds, rush yds, rush att, pass yds, completions,
+attempts; anytime TD excluded. 2024-25 prop rows are NOT read by any script in DA-1 or
+DA-2; a guard enforces it. Caveat recorded: the sim's prop output was graded on 2023-25
+lines (HOLDOUT_2025_SCORED.lock, K4/N59), so there is no untouched season for a later
+"DA through the engine" test.
+
+**Crosswalk (team_xwalk.py):** canonical abbreviation per franchise-season. JAX=JAC,
+LA=LAR=STL, LV=OAK, WAS=WSH, LAC=SD. All (season, team) in schedules 2021-2026 map.
+Settlement join rate with crosswalk: reception 92-95%, pass_yds 96-99%, rush_yds 95-98%.
+The remaining gap is multi-game schedule disambiguation, not the team mapping.
+
+**Guard (da_guard.py):** HALTs if any prop row with nfl_season in {2024, 2025} is loaded
+while DA_PHASE != "validation". 8 tests: all schedule teams map, JAX=JAC, LAR resolves,
+full names, Washington variants, guard HALTs, guard OK in validation, guard OK in discovery.
