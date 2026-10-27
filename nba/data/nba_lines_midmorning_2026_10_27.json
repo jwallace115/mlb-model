@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "9ad8cc650802c0c5c3c23a1f32c3e0f6",
+    "game_date": "2026-10-27",
+    "sport": "NBA",
+    "home_team": "Boston Celtics",
+    "away_team": "Brooklyn Nets",
+    "commence_time": "2026-10-27T23:40:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 221.5,
+    "over_price": -112,
+    "under_price": -102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-27T13:25:03.167870+00:00"
+  },
+  {
+    "game_id": "bde272846214fd6cf197e14c278c12f2",
+    "game_date": "2026-10-27",
+    "sport": "NBA",
+    "home_team": "New York Knicks",
+    "away_team": "Detroit Pistons",
+    "commence_time": "2026-10-28T00:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 219.0,
+    "over_price": -109,
+    "under_price": -105,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-27T13:25:03.167870+00:00"
+  },
+  {
+    "game_id": "7a640609d2c74cbbfd05008d0875455b",
+    "game_date": "2026-10-27",
+    "sport": "NBA",
+    "home_team": "San Antonio Spurs",
+    "away_team": "Sacramento Kings",
+    "commence_time": "2026-10-28T00:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 231.0,
+    "over_price": -111,
+    "under_price": -103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-27T13:25:03.167870+00:00"
+  },
+  {
+    "game_id": "82afe4e028b0fbbd9f6cf92697bec6fc",
+    "game_date": "2026-10-27",
+    "sport": "NBA",
+    "home_team": "Los Angeles Lakers",
+    "away_team": "Portland Trail Blazers",
+    "commence_time": "2026-10-28T03:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 233.5,
+    "over_price": -112,
+    "under_price": -108,
+    "book": "draftkings",
+    "capture_timestamp": "2026-10-27T13:25:03.167870+00:00"
+  },
+  {
+    "game_id": "5997ee5c9fbdc53f9c86732b02f58158",
+    "game_date": "2026-10-27",
+    "sport": "NBA",
+    "home_team": "Indiana Pacers",
+    "away_team": "Philadelphia 76ers",
+    "commence_time": "2026-10-28T23:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 240.5,
+    "over_price": -105,
+    "under_price": -115,
+    "book": "draftkings",
+    "capture_timestamp": "2026-10-27T13:25:03.167870+00:00"
+  }
+]
