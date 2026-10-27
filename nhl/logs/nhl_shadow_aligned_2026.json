@@ -1204,6 +1204,30 @@
       "closing_total": 6.5,
       "lambda_total": 5.863,
       "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020196,
+      "game_date": "2026-10-27",
+      "home_team": "VGK",
+      "away_team": "OTT",
+      "signal_side": "UNDER",
+      "edge": 0.1262,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.811,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020197,
+      "game_date": "2026-10-27",
+      "home_team": "ANA",
+      "away_team": "VAN",
+      "signal_side": "UNDER",
+      "edge": 0.1694,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.803,
+      "drift_applied": 0.0
     }
   ]
 }
