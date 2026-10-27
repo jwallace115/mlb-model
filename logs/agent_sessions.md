@@ -4669,3 +4669,33 @@ SHAs: origin/main = 0cb6c6fad, VM HEAD = 0cb6c6fad, Mac HEAD = 0cb6c6fad. Mac br
   may mask early-season lag).
 
 SHAs: origin/research/da0 = c92b09ee7. Mac main branch = main.
+
+## 2026-10-27T04:30Z  claude-code (DA-1 — point-in-time defensive archetype labels)
+
+### RETURNED
+- Item 1 (76eba6121→21269ad1f): DA-D5 plan of record. team_xwalk.py (all 2021-2026 teams map;
+  JAX=JAC, LAR→LA, WSH→WAS). da_guard.py (HALTs on holdout seasons in discovery). 8 tests.
+- Item 2 (8bb2ab618): build_da_labels.py → 3,520 rows (32×22×5), 15 tercile features.
+  F1 positional funnel, F2 run/pass funnel, F3 explosive allowed, F4 scheme.
+  AS-OF rule enforced. Prior blend k=4. Tercile cutoffs sha=82106ae377c8de87.
+- Item 3 (20e1d3e14): DA-D7 point-in-time proof. 60/60 truncation equivalence.
+  Planted leak: as-of prevents future; broken builder differs. Coverage report:
+  F1-F3 32/32 from week 1; F4 from week 2 in 2023. Persistence 47-78% in validation years.
+- Item 4: DA-D5-D7 complete. "What DA-2 may and may not do" paragraph recorded.
+
+### MEANS
+- Defensive labels are ready for the discovery analysis (DA-2).
+- The holdout (2024-25) is guarded by code, not just convention.
+- The tercile cutoffs are frozen and will not be recomputed.
+
+### NOT DONE
+- DA-2: discovery analysis on 2021-23 with prop residuals.
+- No merge to main.
+
+### UNVERIFIED
+- nflverse publication receipts — none (the OPS-ON-1 lesson).
+- Whether weekly rosters give a usable slot/wide split — deferred.
+- Whether the participation-derived defteam (from game_id parsing) has edge cases
+  in special teams plays or overtime periods.
+
+SHAs: origin/research/da0 = 20e1d3e14. Mac branch = main.

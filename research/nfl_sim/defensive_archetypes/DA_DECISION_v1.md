@@ -224,3 +224,18 @@ Prior-blend share: 4.5% (week 1 only, 32/704 rows per season). Tercile persisten
 (week 9 → week 18): F1/F2/F3 range 47-78% across seasons — moderate stability.
 2023 shows 100% persistence because tercile cutoffs are derived from 2023 (tautological
 for that season); the 2024-25 persistence (47-78%) is the informative number.
+
+---
+
+### What DA-2 may and may not do
+
+DA-2 runs the discovery analysis on 2021-23 data ONLY (2023 prop residuals included).
+It produces hypotheses with directions (e.g. "TE targets against a man-heavy defense
+are Over-favoured by X residual-points") with Cowork priors and at least one null
+control (shuffled labels) frozen BEFORE any 2023 line residual is computed. The survival
+threshold is |z| >= 2 in discovery AND same-sign z >= 1 in validation (2024-25).
+
+DA-2 may NOT: read any 2024-25 prop row; re-cut tercile cutoffs; add or remove families
+after seeing any residual; change the as-of rule or the blend constant k. The da_guard
+enforces the holdout. The 2026 forward data is reserved for the opening-line / CLV
+question and is not touched until a frozen label set survives validation.
