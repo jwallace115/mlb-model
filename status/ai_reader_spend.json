@@ -1,13 +1,13 @@
 {
  "month": "2026-10",
- "calls": 1443,
- "input_tokens": 4639468,
- "output_tokens": 1392760,
- "usd_estimate": 34.8107,
+ "calls": 1444,
+ "input_tokens": 4642936,
+ "output_tokens": 1393391,
+ "usd_estimate": 34.8306,
  "model": "claude-sonnet-5-5",
  "daily": {
   "2026-10-24": 2.8756,
   "2026-10-25": 2.9018,
-  "2026-10-26": 0.1761
+  "2026-10-26": 0.196
  }
 }
