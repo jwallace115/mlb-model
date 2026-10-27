@@ -1122,5 +1122,73 @@
     "0ae4d3447c72a5c39b523d9b3fbaf216": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261027T210403Z.parquet",
+  "sha256": "1348261a7db38be4d84eab1dd4c6de8209f1efb80c80528f90263fd1664224e2",
+  "logged_utc": "2026-10-27T21:04:03.929077+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-28T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T210010Z.parquet",
+   "inputs_digest": "{\"eed30e1ba5aa37d77ee6401d67832446\": \"e71294c8087a4d90\"}",
+   "components": {
+    "eed30e1ba5aa37d77ee6401d67832446": {
+     "pinnacle_h2h": [
+      [
+       "Missouri State Bears",
+       0,
+       -214
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       190
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Missouri State Bears",
+       -6.0,
+       -103
+      ],
+      [
+       "Sam Houston State Bearkats",
+       6.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -116
+      ],
+      [
+       "Under",
+       51.5,
+       -101
+      ]
+     ],
+     "news": [
+      "Missouri State squares off against Sam Houston in "
+     ],
+     "kalshi_snap": "snap_20261027T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "eed30e1ba5aa37d77ee6401d67832446": "anchor_prekick"
+   }
+  }
  }
 ]
