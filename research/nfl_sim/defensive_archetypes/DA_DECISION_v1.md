@@ -278,3 +278,43 @@ Eight cells (H1-H8) with registered directions. Two targets (T1 line residual 20
 T2 stats residual 2021-23). Two null controls (N1 shuffled labels, N2 own-defense).
 Survival: |z| >= 2 discovery AND same sign z >= 1 validation (DA-3).
 Cowork priors: DA-2a (60%), DA-2b (55%), DA-2c (85%), DA-2d (90%).
+
+## DA-D10 — Discovery table (2026-10-27)
+
+512,275 rows in da2_rows_2021_23.parquet. Invariants: |corr(T1, close)| < 0.07 all
+markets (passed); rush_yds over-hit 46.2% (slightly low, noted); no 2024+ rows.
+
+## DA-D11 — Discovery pass results (2026-10-27)
+
+13 cells tested. **1 cell cleared the discovery bar: H2_rb_funnel.**
+
+| Cell | t2_z | t1_z | dir | N1 | N2 | Status |
+|------|------|------|-----|----|----|--------|
+| H1_te_funnel | 2.54 | 2.81 | OK | killed | OK | no (N1) |
+| **H2_rb_funnel** | **3.76** | **1.31** | **OK** | **survives** | **OK** | **CLEAR** |
+| H3_run_att | 3.00 | -0.67 | OK | killed | OK | no (N1) |
+| H3_run_yds | -0.67 | 0.72 | WRONG | - | - | no (dir) |
+| H4_pass_att | -0.77 | -0.25 | OK | - | - | no (|z|) |
+| H4_pass_cmp | 1.69 | 0.66 | WRONG | - | - | no (dir) |
+| H5_explosive_wr | 1.41 | 4.63 | OK | - | - | no (|z|<2 T2) |
+| H6_man_wr | -1.62 | 0.64 | WRONG | - | - | no (dir) |
+| H6_man_te | 2.00 | 3.16 | WRONG | - | - | no (dir) |
+| H7_pressure_qb | 0.96 | 0.73 | WRONG | - | - | no (|z|) |
+| H7_pressure_rb | 0.24 | 0.60 | OK | killed | OK | no (|z|) |
+| H8_box_rush | -0.05 | 1.22 | OK | - | - | no (|z|) |
+| H8_box_rec | 0.97 | 2.19 | OK | - | OK | no (|z|<2 T2) |
+
+**Priors graded:**
+- DA-2a (60%): >= 1 cell clears |z| >= 2 on T1 → H2 has t1_z=1.31, below 2; but
+  H1 t1_z=2.81 and H5 t1_z=4.63 both clear on T1. **HELD** (H1 and H5 clear T1 |z|>=2).
+- DA-2b (55%): strongest T1 cell (H5 z=4.63, rec_yds) same sign on T2 2021-22 →
+  T2 z=1.41 same sign (>0). **HELD**.
+- DA-2c (85%): N2 stays |z| < 2 on every cell → all N2 |z| < 2. **HELD**.
+- DA-2d (90%): N1 kills every cell that cleared → N1 did NOT kill H2. **DID NOT HOLD**.
+
+**The list for DA-3 (what DA-3 may test — nothing else):**
+H2_rb_funnel: RB receptions vs top f1_target_share_rb, direction > 0.
+
+Note: H5_explosive_wr (t1_z=4.63) and H1_te_funnel (t1_z=2.81) are strong on T1 but
+did not clear the combined bar (H5: T2 |z| < 2; H1: N1 killed). They are recorded as
+post-hoc observations, not pre-registered survivors.
