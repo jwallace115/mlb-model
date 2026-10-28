@@ -1939,5 +1939,74 @@
     "cf6c89492427cb54521b70e7c5dc5993": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261028T221904Z.parquet",
+  "sha256": "a471cfa03dd54bc4334eb0950ef4e3f985af803c191e3460444ef33ce8213944",
+  "logged_utc": "2026-10-28T22:19:04.076557+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-28T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T220010Z.parquet",
+   "inputs_digest": "{\"66c2794f789b9c2c028297eff4838e81\": \"14443618c2a65e24\"}",
+   "components": {
+    "66c2794f789b9c2c028297eff4838e81": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       -110
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       100
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       -1.0,
+       -105
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       1.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -106
+      ],
+      [
+       "Under",
+       50.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Middle Tennessee and Kennesaw State meet in CUSA p"
+     ],
+     "kalshi_snap": "snap_20261028T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "66c2794f789b9c2c028297eff4838e81": "anchor_close"
+   }
+  }
  }
 ]
