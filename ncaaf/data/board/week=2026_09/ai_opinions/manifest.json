@@ -1729,5 +1729,78 @@
     "66c2794f789b9c2c028297eff4838e81": "line_move: pinnacle spreads Middle Tennessee Blue Raiders -1.0\u21921.0; line_move: pinnacle spreads Kennesaw State Owls 1.0\u2192-1.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261028T193403Z.parquet",
+  "sha256": "6a2b876d49ef5d04bf353f18262251b339c680f2920c86cbeddfc20677347f63",
+  "logged_utc": "2026-10-28T19:34:03.444223+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-29T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T193007Z.parquet",
+   "inputs_digest": "{\"0540f5758ac50f3bb60beb36755f7a1e\": \"ab0bb8442605b9e4\"}",
+   "components": {
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1161
+      ],
+      [
+       "Troy Trojans",
+       0,
+       758
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -19.5,
+       -110
+      ],
+      [
+       "Troy Trojans",
+       19.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       100
+      ],
+      [
+       "Under",
+       50.0,
+       -116
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Louisiana-Monroe scores 18 points late, beats Troy",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "UL Monroe Warhawks vs. Troy Trojans: Full Highligh",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261028T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "0540f5758ac50f3bb60beb36755f7a1e": "line_move: pinnacle spreads James Madison Dukes -21.0\u2192-19.5; line_move: pinnacle spreads Troy Trojans 21.0\u219219.5"
+   }
+  }
  }
 ]
