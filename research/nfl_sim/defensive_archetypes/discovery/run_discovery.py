@@ -61,17 +61,17 @@ def clustered_z(residuals, game_ids):
     return mean_r, se, z
 
 
-def shuffled_null(df_cell, label_col, residual_col, game_col, n_draws=N_SHUFFLE):
-    """N1: permute each defense's weekly labels within season, compute z for each draw."""
+def cross_defense_null(df_cell, label_col, residual_col, game_col, n_draws=N_SHUFFLE):
+    """N1 FIXED: CROSS-DEFENSE permutation — within each (season, week), permute which
+    defense receives which label row. This breaks the opponent-player link while preserving
+    the within-week label distribution."""
     zs = []
     for _ in range(n_draws):
-        # Shuffle the label within each (season, defense)
         shuffled = df_cell.copy()
-        for (s, d), idx in shuffled.groupby(["season", "_opp"]).groups.items():
+        for (s, w), idx in shuffled.groupby(["season", "week"]).groups.items():
             vals = shuffled.loc[idx, label_col].values.copy()
             np.random.shuffle(vals)
             shuffled.loc[idx, label_col] = vals
-        # Recompute top tercile selection
         top = shuffled[shuffled[label_col] == 3]
         if len(top) >= 5:
             _, _, z = clustered_z(top[residual_col].values, top[game_col].values)
@@ -80,6 +80,12 @@ def shuffled_null(df_cell, label_col, residual_col, game_col, n_draws=N_SHUFFLE)
     if not zs:
         return np.nan, np.nan
     return np.percentile(zs, 2.5), np.percentile(zs, 97.5)
+
+
+def center_residuals(df, residual_col, group_cols=("season", "market_key", "position")):
+    """Center residuals by subtracting the season x market x position mean."""
+    group_means = df.groupby(list(group_cols))[residual_col].transform("mean")
+    return df[residual_col] - group_means
 
 
 # ── Define cells ──
@@ -102,6 +108,9 @@ CELLS = [
     {"name": "H4_pass_cmp", "pos": ["QB"], "label": "opp_f2_epa_diff_tercile",
      "market": "player_pass_completions", "residual": "t2_residual", "direction": "<",
      "t1_market": "player_pass_completions", "tercile_side": "bottom"},
+    {"name": "H4_rb_rush_att", "pos": ["RB", "FB"], "label": "opp_f2_epa_diff_tercile",
+     "market": "player_rush_attempts", "residual": "t2_residual", "direction": "<",
+     "t1_market": "player_rush_attempts", "tercile_side": "bottom"},
     {"name": "H5_explosive_wr", "pos": ["WR"], "label": "opp_f3_explosive_pass_rate_tercile",
      "market": "player_reception_yds", "residual": "t2_residual", "direction": ">",
      "t1_market": "player_reception_yds"},
@@ -166,12 +175,19 @@ for cell in CELLS:
     else:
         t1_mean, t1_se, t1_z, t1_oh = np.nan, np.nan, np.nan, np.nan
 
-    # ── N1: shuffled labels ──
+    # ── Centered residuals ──
+    if "t2_residual" in sub.columns:
+        sub["t2_centered"] = center_residuals(sub, "t2_residual")
+    t2c_r = top["t2_centered"].dropna() if "t2_centered" in top.columns else pd.Series()
+    t2c_mean, t2c_se, t2c_z = clustered_z(t2c_r.values, game_ids.values) if len(t2c_r) >= 5 else (np.nan, np.nan, np.nan)
+    t2_median = top["t2_residual"].median() if len(top) else np.nan
+
+    # ── N1: cross-defense permutation (FIXED) ──
     n1_lo, n1_hi = np.nan, np.nan
-    if len(sub) >= 20:
+    if len(sub) >= 20 and "week" in sub.columns:
         np.random.seed(42)
-        n1_lo, n1_hi = shuffled_null(sub, cell["label"], "t2_residual",
-                                      "game_id" if "game_id" in sub.columns else "season")
+        n1_lo, n1_hi = cross_defense_null(sub, cell["label"], "t2_residual",
+                                           "game_id" if "game_id" in sub.columns else "season")
 
     # ── N2: own-defense control ──
     # Replace opponent label with own team's label

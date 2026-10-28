@@ -54,3 +54,16 @@ wrong reason).
 
 **DA-2d (90%):** N1 (shuffled labels) kills every cell that cleared.
 **Grade:** DID NOT HOLD — N1 did NOT kill H2_rb_funnel (graded by: Claude Code DA-2).
+Note: DA-2d's N1 was a within-defense permutation that preserves >=60% of labels (a non-null).
+The corrected cross-defense N1 (DA-D12) was not re-run on discovery.
+
+## DA-3a through DA-3c (registered 2026-10-28, DA-3 Item 1c; BEFORE any 2024-25 row is read)
+
+**DA-3a (20%):** H2's CENTERED T1 effect on 2024-25 is same-sign with z >= 1.
+**Grade:** NOT YET GRADED.
+
+**DA-3b (10%):** H2 over at the DK close has positive ROI on 2024-25.
+**Grade:** NOT YET GRADED.
+
+**DA-3c (70%):** Own-defense control on H2 is |z| < 2.
+**Grade:** NOT YET GRADED.

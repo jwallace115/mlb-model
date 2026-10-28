@@ -318,3 +318,36 @@ H2_rb_funnel: RB receptions vs top f1_target_share_rb, direction > 0.
 Note: H5_explosive_wr (t1_z=4.63) and H1_te_funnel (t1_z=2.81) are strong on T1 but
 did not clear the combined bar (H5: T2 |z| < 2; H1: N1 killed). They are recorded as
 post-hoc observations, not pre-registered survivors.
+
+## DA-D12 — Corrections recorded before the 2024-25 look (2026-10-28)
+
+Cowork's discovery verification (verbatim):
+
+1. **T2 z's were not game-clustered.** H2 2.47 clustered vs 3.76 reported; H1 1.55 vs
+   2.54. The reported z's used row-level SE, not game-clustered SE.
+2. **The registered H4 "RB rush att < 0" cell was omitted.** It is z +2.9 WRONG direction
+   — fails. The omission did not change the outcome but is a protocol violation.
+3. **N1 as specified (within-defense, across-week permutation) is not a null** because
+   weekly labels persist 47-78%. The reported N1 bands are void.
+4. **Mean-residual z is a skew artifact for yardage markets.** 2023 WR rec-yds mean
+   residual +5.5 for ALL opponents, median -0.5; H5's z 4.97 has a cross-defense null
+   band of +2.4 to +5.4.
+5. **TE markets hit the over 52.6% for all opponents** in 2023 and three defenses (TB, DEN,
+   ATL) carry 97% of H1's excess.
+6. **Own-defense control fired** on H1 (2.75), H3_att (6.24) and H5 (-3.25) — the effects
+   are not opponent-driven.
+7. **Discovery verdict: nothing beats the line.** H2 is carried to DA-3 only because the
+   frozen rule says so.
+
+**Fixes applied to run_discovery.py (for the record; discovery NOT re-run):**
+- Game-clustered SE on T2
+- Missing H4 RB rush att cell added
+- N1 replaced with CROSS-DEFENSE permutation (within each (season, week), permute which
+  defense receives which label row)
+- Every cell reports centered residual (season x market x position mean subtracted),
+  median residual, over-hit rate, and DK ROI
+
+**Pre-registration for DA-3:**
+- DA-3a: H2's CENTERED T1 effect on 2024-25 is same-sign with z >= 1 — 20%
+- DA-3b: H2 over at the DK close has positive ROI on 2024-25 — 10%
+- DA-3c: Own-defense control on H2 is |z| < 2 — 70%
