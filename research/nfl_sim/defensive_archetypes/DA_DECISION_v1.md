@@ -351,3 +351,35 @@ Cowork's discovery verification (verbatim):
 - DA-3a: H2's CENTERED T1 effect on 2024-25 is same-sign with z >= 1 — 20%
 - DA-3b: H2 over at the DK close has positive ROI on 2024-25 — 10%
 - DA-3c: Own-defense control on H2 is |z| < 2 — 70%
+
+## DA-D13 — Validation result: H2 did not survive (2026-10-28)
+
+**ONE-SHOT validation on 2024-25.** 2024-25 prop rows read EXACTLY ONCE. Not re-run.
+
+H2_rb_funnel (RB receptions vs top f1_target_share_rb, direction > 0):
+| Metric | Value |
+|--------|-------|
+| n_top (all) | 7,711 |
+| n_t1 (with close) | 7,555 |
+| T1 centered z | **0.41** (needed >= 1) |
+| T1 raw mean | +0.024 |
+| T1 median | -0.5 |
+| Over-hit | 45.5% [44.4%, 46.7%] |
+| DK ROI over | **-13.1%** |
+| DK ROI under | +0.6% |
+| Triage -110 over | -13.1% |
+| N2 own-defense z | -1.09 (OK) |
+| Season: 2024 | z=0.68, oh=46.3% |
+| Season: 2025 | z=-0.58, oh=44.3% |
+| Top 3 defenses share | 3.4% |
+
+**Priors graded:**
+- DA-3a (20%): centered z >= 1 same sign → z = 0.41, **DID NOT HOLD**
+- DA-3b (10%): positive ROI over → -13.1%, **DID NOT HOLD**
+- DA-3c (70%): own-defense |z| < 2 → -1.09, **HELD**
+
+**2024-25 CONSUMED** for prop-archetype questions.
+
+**Verdict: nothing beats the line.** The RB funnel tercile (the one cell that survived
+discovery) shows no predictive power on 2024-25 prop closes. The over-hit is below 50%
+(the close already prices it). The phase produces no actionable signal.
