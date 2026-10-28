@@ -1215,7 +1215,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 5.811,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 5
     },
     {
       "game_id": 2026020197,
@@ -1227,7 +1229,9 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.803,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 11
     },
     {
       "game_id": 2026020198,
@@ -1239,6 +1243,20 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.768,
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 2
+    },
+    {
+      "game_id": 2026020200,
+      "game_date": "2026-10-28",
+      "home_team": "EDM",
+      "away_team": "CGY",
+      "signal_side": "UNDER",
+      "edge": 0.1575,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.695,
       "drift_applied": 0.0
     }
   ]
