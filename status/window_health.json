@@ -12,8 +12,8 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-10-28T18:17:04.054048+00:00",
-  "finished_utc": "2026-10-28T18:17:04.054048+00:00",
+  "started_utc": "2026-10-28T18:47:04.040607+00:00",
+  "finished_utc": "2026-10-28T18:47:04.040607+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -22,11 +22,11 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-10-28T18:23:38.077274+00:00",
-  "finished_utc": "2026-10-28T18:23:38.077274+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-10-28T18:49:04.404507+00:00",
+  "finished_utc": "2026-10-28T18:49:04.404507+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle spreads Middle Tennessee Blue Raiders -1.0\u21921.0; line_move: pinnacle spreads Kennesaw State Owls 1.0\u2192-1.0']",
-  "freeze_file": "ai_opinions_20261028T181904Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]

@@ -1,17 +1,12 @@
 {
- "started_utc": "2026-10-28T18:19:04.289607+00:00",
- "finished_utc": "2026-10-28T18:23:38.100866+00:00",
+ "started_utc": "2026-10-28T18:49:04.111039+00:00",
+ "finished_utc": "2026-10-28T18:49:04.462044+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "66c2794f789b9c2c028297eff4838e81",
-   "text": "line_move: pinnacle spreads Middle Tennessee Blue Raiders -1.0\u21921.0; line_move: pinnacle spreads Kennesaw State Owls 1.0\u2192-1.0"
-  }
- ],
- "games_read": 1,
- "frozen_file": "ai_opinions_20261028T181904Z.parquet",
- "spend_usd": 35.101,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
