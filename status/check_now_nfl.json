@@ -1,12 +1,17 @@
 {
- "started_utc": "2026-10-28T19:47:03.714909+00:00",
- "finished_utc": "2026-10-28T19:47:04.043657+00:00",
+ "started_utc": "2026-10-28T20:17:03.438783+00:00",
+ "finished_utc": "2026-10-28T20:23:58.260515+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "ab2865e9f2d4b012de8bc6fb6de11a7c",
+   "text": "injury_change: inj_Carolina Panthers"
+  }
+ ],
+ "games_read": 1,
+ "frozen_file": "ai_opinions_20261028T201703Z.parquet",
+ "spend_usd": 35.1452,
+ "result": "COMPLETE"
 }
