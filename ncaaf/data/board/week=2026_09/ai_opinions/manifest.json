@@ -2008,5 +2008,144 @@
     "66c2794f789b9c2c028297eff4838e81": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261028T230403Z.parquet",
+  "sha256": "f0d66e3fd090d1e8297077f21f10bd2c945acd68bac256526d75c73ebca7a0f4",
+  "logged_utc": "2026-10-28T23:04:03.876677+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-30T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T230007Z.parquet",
+   "inputs_digest": "{\"78b3d38cdfa28649fdd2ca92829569ce\": \"9799d6109cb5cf15\"}",
+   "components": {
+    "78b3d38cdfa28649fdd2ca92829569ce": {
+     "pinnacle_h2h": [
+      [
+       "Charlotte 49ers",
+       0,
+       297
+      ],
+      [
+       "Tulane Green Wave",
+       0,
+       -364
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Charlotte 49ers",
+       9.5,
+       -106
+      ],
+      [
+       "Tulane Green Wave",
+       -9.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -114
+      ],
+      [
+       "Under",
+       46.5,
+       -102
+      ]
+     ],
+     "news": [
+      "AAC matchup features Tulane against Charlotte",
+      "Allstate Playoff Predictor",
+      "UTSA Roadrunners vs. Tulane Green Wave: Full Highl",
+      "UTSA wins 5th straight, rolls past Tulane 42-19"
+     ],
+     "kalshi_snap": "snap_20261028T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "78b3d38cdfa28649fdd2ca92829569ce": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T231903Z.parquet",
+  "sha256": "2f75de31ead5c5b85052d79ed53f98d3f349f194d4611e56f71cfa1732393d68",
+  "logged_utc": "2026-10-28T23:19:03.654369+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-29T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T230007Z.parquet",
+   "inputs_digest": "{\"cf6c89492427cb54521b70e7c5dc5993\": \"6781e69f2f6217bd\"}",
+   "components": {
+    "cf6c89492427cb54521b70e7c5dc5993": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -153
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       137
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -3.0,
+       -109
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -110
+      ],
+      [
+       "Under",
+       50.5,
+       -106
+      ]
+     ],
+     "news": [
+      "New Mexico State hosts Jacksonville State in CUSA "
+     ],
+     "kalshi_snap": "snap_20261028T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "cf6c89492427cb54521b70e7c5dc5993": "anchor_close"
+   }
+  }
  }
 ]
