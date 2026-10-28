@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "1358a7c35b103e3242da6a96468d61f9",
+    "game_date": "2026-10-29",
+    "sport": "NHL",
+    "home_team": "Edmonton Oilers",
+    "away_team": "Calgary Flames",
+    "commence_time": "2026-10-29T00:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -113,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-28T06:05:02.562611+00:00"
+  },
+  {
+    "game_id": "dad41ac378a6c36e1be03122f7f34470",
+    "game_date": "2026-10-29",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "New Jersey Devils",
+    "commence_time": "2026-10-29T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": 102,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-28T06:05:02.562611+00:00"
+  },
+  {
+    "game_id": "f7510932dec00855b611e3685080819c",
+    "game_date": "2026-10-29",
+    "sport": "NHL",
+    "home_team": "Seattle Kraken",
+    "away_team": "Toronto Maple Leafs",
+    "commence_time": "2026-10-29T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -120,
+    "under_price": 105,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-28T06:05:02.562611+00:00"
+  }
+]
