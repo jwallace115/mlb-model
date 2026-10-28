@@ -33,9 +33,6 @@ DISCOVERY_SEASONS = {2021, 2022, 2023}
 SCHEME_DISCOVERY = {2023}  # participation man/zone only from 2023
 ALL_SEASONS = list(range(2021, 2026))
 
-# ── Flag for testing: disable as-of rule ──
-_DISABLE_ASOF = False
-
 
 def _load_pbp(seasons):
     """Load PBP for given seasons."""
@@ -129,12 +126,12 @@ def _week_cutoffs(sched):
     return cutoffs
 
 
-def _apply_asof(pbp, sched_cutoffs, season, week):
+def _apply_asof(pbp, sched_cutoffs, season, week, disable_asof=False):
     """Filter PBP to games whose kickoff + 4h < earliest kickoff of this week.
 
     This is the AS-OF RULE: prevents future data from leaking.
     """
-    if _DISABLE_ASOF:
+    if disable_asof:
         return pbp
 
     cutoff = sched_cutoffs.get((season, week))
@@ -334,10 +331,30 @@ def _f4_scheme(participation, ftn, season):
 # Main builder
 # ══════════════════════════════════════════════════════════════════════
 
+def _count_games_before_cutoff(sched, season, week, team, cutoffs):
+    """Count schedule games for this team in this season with kickoff + 4h < cutoff(week)."""
+    cutoff = cutoffs.get((season, week))
+    if cutoff is None:
+        return 0
+    n = 0
+    team_games = sched[(sched.season == season) &
+                       ((sched.home_team == team) | (sched.away_team == team))]
+    for _, g in team_games.iterrows():
+        gw = g.get("week", 0)
+        if gw >= week:
+            continue
+        game_kick = cutoffs.get((season, gw))
+        if game_kick and (game_kick + pd.Timedelta(hours=4)) < cutoff:
+            n += 1
+    return n
+
+
 def build_labels(seasons=None, disable_asof=False):
-    """Build all labels for given seasons."""
-    global _DISABLE_ASOF
-    _DISABLE_ASOF = disable_asof
+    """Build all labels for given seasons.
+
+    disable_asof: for testing only — disables the as-of filter. Labels built with
+    this flag are NEVER written to disk.
+    """
     seasons = seasons or ALL_SEASONS
 
     print("Loading data...")
@@ -358,7 +375,7 @@ def build_labels(seasons=None, disable_asof=False):
 
         for week in weeks:
             # AS-OF: filter pbp
-            pbp_asof = _apply_asof(pbp, cutoffs, season, week)
+            pbp_asof = _apply_asof(pbp, cutoffs, season, week, disable_asof=disable_asof)
             # Filter to current season only for current-season stats
             pbp_cur = pbp_asof[pbp_asof.season == season]
             # Also include prior season for the blend
@@ -491,8 +508,6 @@ def build_labels(seasons=None, disable_asof=False):
 
     cutoff_json = json.dumps(cutoff_data, indent=1, sort_keys=True)
     cutoff_sha = hashlib.sha256(cutoff_json.encode()).hexdigest()[:16]
-    cutoff_path = LABELS_DIR / "tercile_cutoffs_v1.json"
-    cutoff_path.write_text(cutoff_json + "\n")
     print(f"Tercile cutoffs: {len(cutoff_data)} features, sha={cutoff_sha}")
 
     # Apply terciles
@@ -502,6 +517,36 @@ def build_labels(seasons=None, disable_asof=False):
             df[col].isna(), np.nan,
             np.where(df[col] <= cuts["t1"], 1,
                      np.where(df[col] <= cuts["t2"], 2, 3)))
+
+    # ── INVARIANT CHECK: n_games_into_label == schedule count ──
+    print("\nInvariant check...")
+    canon_sched = sched.copy()
+    canon_sched["_home"] = canon_sched["home_team"].apply(canon)
+    canon_sched["_away"] = canon_sched["away_team"].apply(canon)
+    violations = 0
+    for _, row in df.iterrows():
+        season, week, team = int(row.season), int(row.week), row.defense
+        expected = _count_games_before_cutoff(canon_sched, season, week, team, cutoffs)
+        actual = int(row.n_games_into_label)
+        if actual != expected:
+            violations += 1
+            if violations <= 5:
+                print(f"  VIOLATION: {season} {team} wk{week}: expected {expected}, got {actual}")
+    if violations:
+        msg = f"HALT: {violations} n_games_into_label violations"
+        if not disable_asof:
+            raise SystemExit(msg)
+        else:
+            print(f"  WARNING (as-of disabled): {msg}")
+
+    # ── WRITE GUARD: never write when as-of is disabled ──
+    if disable_asof:
+        print("  as-of disabled — NOT writing files")
+        return df, cutoff_data, cutoff_sha
+
+    # Write tercile cutoffs
+    cutoff_path = LABELS_DIR / "tercile_cutoffs_v1.json"
+    cutoff_path.write_text(cutoff_json + "\n")
 
     # Save per-season
     for season in seasons:

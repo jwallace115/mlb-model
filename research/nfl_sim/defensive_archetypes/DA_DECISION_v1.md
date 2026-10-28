@@ -183,7 +183,7 @@ The remaining gap is multi-game schedule disambiguation, not the team mapping.
 while DA_PHASE != "validation". 8 tests: all schedule teams map, JAX=JAC, LAR resolves,
 full names, Washington variants, guard HALTs, guard OK in validation, guard OK in discovery.
 
-## DA-D6 — Label builder (2026-10-27)
+## DA-D6 — Label builder (2026-10-27) — RETRACTED: 2023 labels were full-season; see DA-D8
 
 Inputs: nflreadpy pbp 2020-2025, participation 2023-2025, FTN 2022-2025, rosters, schedules.
 Output: labels/da_labels_{2021..2025}.parquet (3,520 rows total = 32 teams × 22 weeks × 5 seasons).
@@ -207,7 +207,7 @@ use the frozen cutoffs. F4 man_rate 95.5% non-null in 2023 (NaN = week 1 with no
 Rules out: using defense_coverage_type (49% labelled, not included); slot/wide split (rosters
 do not cleanly distinguish — deferred to DA-3 if slot data becomes available).
 
-## DA-D7 — Point-in-time proof (2026-10-27)
+## DA-D7 — Point-in-time proof (2026-10-27) — RETRACTED: tests could not fail; see DA-D8
 
 **3a. Truncation equivalence:** 60 random (season, team, week) cells verified. All week-1
 labels have n_games_into_label = 0 (prior-season only). All numeric features are finite
@@ -239,3 +239,32 @@ DA-2 may NOT: read any 2024-25 prop row; re-cut tercile cutoffs; add or remove f
 after seeing any residual; change the as-of rule or the blend constant k. The da_guard
 enforces the holdout. The 2026 forward data is reserved for the opening-line / CLV
 question and is not touched until a frozen label set survives validation.
+
+## DA-D8 — 2023 labels leaked the full season; rebuilt (2026-10-27)
+
+**RETRACTED:** DA-D6 sha 82106ae377c8de87 and DA-D7's "KC week 10 uses 9 games" and
+"60/60 passed" were produced from a broken build. See below.
+
+**Cause:** `_DISABLE_ASOF` was a module-level global set to `True` by
+`build_labels(seasons=[2023], disable_asof=True)` in the planted-leak test and
+never reset. The main build inherited `_DISABLE_ASOF = True`, so `_apply_asof`
+returned unfiltered PBP for all seasons. The 2023 labels got the full season at
+every week (n_games_into_label = 21 at week 1). The 2024-25 labels happened to be
+correct because they were built in a separate process run (the original `__main__`
+invocation), not after the test.
+
+Evidence: the committed da_labels_2023.parquet has KC n_games = 21 at week 1 and
+constant values across weeks 2-18. da_labels_2024.parquet has KC n_games = 0 at
+week 1 and climbs 1, 2, 3... as expected.
+
+**Fix:** `_DISABLE_ASOF` removed. `disable_asof` is a function parameter threaded
+to `_apply_asof`. The file writer REFUSES to write when as-of is disabled. A builder
+INVARIANT checks every row: n_games_into_label == schedule count of games with
+kickoff + 4h < cutoff(W). The invariant is checked before writing and HALTs on any
+violation.
+
+**Rebuild:** all 5 seasons rebuilt. Tercile cutoffs recomputed — sha 82106ae377c8de87
+is UNCHANGED (the tercile percentiles over 2,112 rows are robust to the correction;
+the 33rd/67th percentiles shifted by < 1e-6). The cutoffs are NOT retracted.
+
+After rebuild: 2023 KC week 1 n_games = 0, week 2 = 1, week 10 = 9, week 22 = 20.
