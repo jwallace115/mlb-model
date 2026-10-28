@@ -44,13 +44,13 @@ wrong reason).
 ## DA-2a through DA-2d (registered 2026-10-27, DA-2 Item 1; DA_HYPOTHESES_v1.md sha d1ed065e514ad9bd)
 
 **DA-2a (60%):** >= 1 cell clears |z| >= 2 on T1 (2023 line residual).
-**Grade:** NOT YET GRADED — requires DA-2 Item 3.
+**Grade:** HELD — H1 t1_z=2.81, H5 t1_z=4.63 (graded by: Claude Code DA-2).
 
 **DA-2b (55%):** The strongest T1 cell has the same sign on T2 2021-22.
-**Grade:** NOT YET GRADED.
+**Grade:** HELD — H5 (strongest T1 z=4.63) has T2 z=1.41 same sign (graded by: Claude Code DA-2).
 
 **DA-2c (85%):** N2 (own-defense control) stays |z| < 2 on every cell.
-**Grade:** NOT YET GRADED.
+**Grade:** HELD — all N2 |z| < 2 (graded by: Claude Code DA-2).
 
 **DA-2d (90%):** N1 (shuffled labels) kills every cell that cleared.
-**Grade:** NOT YET GRADED.
+**Grade:** DID NOT HOLD — N1 did NOT kill H2_rb_funnel (graded by: Claude Code DA-2).

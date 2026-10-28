@@ -4727,3 +4727,32 @@ SHAs: origin/research/da0 = 20e1d3e14. Mac branch = main.
 - Whether weekly rosters give a usable slot/wide split — deferred.
 
 SHAs: origin/research/da0 = 645e6310f. Mac branch = main.
+
+## 2026-10-27T23:30Z  claude-code (DA-2 — frozen hypotheses + discovery pass)
+
+### RETURNED
+- Item 1 (da2d10d0d): DA_HYPOTHESES_v1.md committed alone, sha d1ed065e...a4. 8 cells, 2 targets,
+  2 nulls, 4 priors in the prediction ledger.
+- Item 2 (59a681ca1): da2_rows_2021_23.parquet — 512,275 rows. Baselines vectorized. Close lines
+  from DK (2023). |corr(T1, close)| < 0.07. Over-hit 46-51%.
+- Item 3 (43ee258ff): DA2_DISCOVERY.md + da2_cells.parquet. 13 cells tested.
+  **1 cell cleared: H2_rb_funnel** (t2_z=3.76, RB rec vs top f1_target_share_rb).
+  H5_explosive_wr had the strongest T1 signal (z=4.63) but failed T2 bar.
+  Priors graded: DA-2a HELD, DA-2b HELD, DA-2c HELD, DA-2d DID NOT HOLD.
+
+### MEANS
+- One cell (H2) is eligible for the DA-3 validation pass on 2024-25.
+- H5 (WR rec_yds vs explosive pass) is a strong post-hoc observation but NOT pre-registered.
+- The phase continues if Jeff/Cowork decide H2 alone justifies a validation pass.
+
+### NOT DONE
+- DA-3: validation on 2024-25 (reads 2024-25 props for the first time).
+- No merge to main.
+
+### UNVERIFIED
+- Whether the T1 close-line matching by player_display_name is 1:1 per event (the join
+  may have duplicated rows across events for the same player).
+- Whether the rush_yds over-hit of 46.2% indicates a systematic bias.
+- nflverse publication receipts — none.
+
+SHAs: origin/research/da0 = 43ee258ff. Mac branch = main.
