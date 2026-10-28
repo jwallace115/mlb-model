@@ -383,3 +383,30 @@ H2_rb_funnel (RB receptions vs top f1_target_share_rb, direction > 0):
 **Verdict: nothing beats the line.** The RB funnel tercile (the one cell that survived
 discovery) shows no predictive power on 2024-25 prop closes. The over-hit is below 50%
 (the close already prices it). The phase produces no actionable signal.
+
+## DA-D14 — Phase closed (2026-10-28)
+
+**What was tested.** Eight pre-registered hypotheses about NFL defensive archetypes
+(positional funnels, run/pass EPA, explosive plays, man/zone coverage, pressure,
+heavy box) as predictors of player-prop outcomes. Point-in-time labels built from PBP
+and participation data, discovery on 2021-23, one-shot validation on 2024-25.
+
+**What the close already prices.** The single discovery survivor (H2: RB receptions vs
+defenses that allow high RB target shares) produced centered z = 0.41 on validation
+(needed >= 1) and overs hit 45.5% (below 50%). The DK close already captures whatever
+funnel effect exists. The 13 cells collectively show no systematic line-beating signal.
+
+**What would change the verdict.** Only a 2026-forward opener/CLV test — which this
+phase does not run. If the question were "do these archetypes predict opener-to-close
+movement?" rather than "do they beat the close?", the 2026 data (multi-snapshot with
+open/mid/close tags) could answer it. That is a different question and a different order.
+
+**Parked observation for the ops/LM lane (NOT a DA finding):** 2023 prop closes leaned
+UNDER on RB/WR/QB-rush markets (overs 46-48%) and OVER on TE (53-54%). This is a
+market-tilt question, testable forward on the 2026 props tape (open/mid/close tags)
+with no holdout spent. It is not an archetype finding — it applies to ALL opponents,
+not to labeled terciles.
+
+**PHASE CLOSED.** No signal survived. The defensive archetype labels are research-only
+artifacts. The holdout (2024-25) is consumed. The 2026 forward data is reserved for
+the opener/CLV question if a future order asks it.

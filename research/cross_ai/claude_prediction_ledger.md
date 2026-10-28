@@ -60,10 +60,10 @@ The corrected cross-defense N1 (DA-D12) was not re-run on discovery.
 ## DA-3a through DA-3c (registered 2026-10-28, DA-3 Item 1c; BEFORE any 2024-25 row is read)
 
 **DA-3a (20%):** H2's CENTERED T1 effect on 2024-25 is same-sign with z >= 1.
-**Grade:** NOT YET GRADED.
+**Grade:** DID NOT HOLD — centered z = 0.41 (graded by: Claude Code DA-3).
 
 **DA-3b (10%):** H2 over at the DK close has positive ROI on 2024-25.
-**Grade:** NOT YET GRADED.
+**Grade:** DID NOT HOLD — DK ROI over = -13.1% (graded by: Claude Code DA-3).
 
 **DA-3c (70%):** Own-defense control on H2 is |z| < 2.
-**Grade:** NOT YET GRADED.
+**Grade:** HELD — own-defense z = -1.09 (graded by: Claude Code DA-3).

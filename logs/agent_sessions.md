@@ -4756,3 +4756,31 @@ SHAs: origin/research/da0 = 645e6310f. Mac branch = main.
 - nflverse publication receipts — none.
 
 SHAs: origin/research/da0 = 43ee258ff. Mac branch = main.
+
+## 2026-10-28T01:30Z  claude-code (DA-3 — validation + phase close)
+
+### RETURNED
+- Item 1 (ac0b80fd3): Cowork verification recorded verbatim (7 corrections). run_discovery.py
+  fixed: game-clustered SE, H4 RB cell, cross-defense N1, centered residuals.
+  DA-3 priors registered: DA-3a (20%), DA-3b (10%), DA-3c (70%).
+  3 tests: centering kills tilt, cross-defense changes labels, within-defense bug demonstrated.
+- Item 2 (daa999096): ONE-SHOT validation. H2_rb_funnel centered T1 z = 0.41 (needed >= 1),
+  over-hit 45.5%, DK ROI -13.1%. H2 did not survive. DA-3a DID NOT HOLD. DA-3b DID NOT HOLD.
+  DA-3c HELD. 2024-25 CONSUMED.
+- Item 3: Phase closed. No signal survived. Parked observation: market tilt on 2023 prop closes
+  (TE overs, RB/WR/QB unders) — testable forward, not a DA finding.
+
+### MEANS
+- The defensive archetype labels do not predict prop outcomes beyond the close.
+- The close is efficient for these effects.
+- The 2026 forward data is reserved for the opener/CLV question if asked.
+
+### NOT DONE
+- Merge to main (Cowork decides — research-only branch).
+- The 2026 opener/CLV question (a different order).
+
+### UNVERIFIED
+- Whether the market-tilt observation (TE overs, RB unders) persists in 2026.
+- nflverse publication receipts — none.
+
+SHAs: origin/research/da0 = daa999096. Mac branch = main.
