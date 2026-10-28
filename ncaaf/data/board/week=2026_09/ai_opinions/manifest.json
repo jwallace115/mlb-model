@@ -1871,5 +1871,73 @@
     "66c2794f789b9c2c028297eff4838e81": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261028T210403Z.parquet",
+  "sha256": "99b83e8a71a633107f9a0084045436f5a266f0b74e427cdcf26be02dc64806e1",
+  "logged_utc": "2026-10-28T21:04:03.431401+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-29T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T210009Z.parquet",
+   "inputs_digest": "{\"cf6c89492427cb54521b70e7c5dc5993\": \"4f4de79d3cdd9bcc\"}",
+   "components": {
+    "cf6c89492427cb54521b70e7c5dc5993": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -151
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       136
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -3.0,
+       -107
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -105
+      ],
+      [
+       "Under",
+       50.5,
+       -111
+      ]
+     ],
+     "news": [
+      "New Mexico State hosts Jacksonville State in CUSA "
+     ],
+     "kalshi_snap": "snap_20261028T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "cf6c89492427cb54521b70e7c5dc5993": "anchor_prekick"
+   }
+  }
  }
 ]
