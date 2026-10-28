@@ -268,3 +268,13 @@ is UNCHANGED (the tercile percentiles over 2,112 rows are robust to the correcti
 the 33rd/67th percentiles shifted by < 1e-6). The cutoffs are NOT retracted.
 
 After rebuild: 2023 KC week 1 n_games = 0, week 2 = 1, week 10 = 9, week 22 = 20.
+
+## DA-D9 — Hypothesis list frozen before any residual (2026-10-27)
+
+DA_HYPOTHESES_v1.md committed ALONE before any residual is computed.
+sha256: d1ed065e514ad9bd79a35563f459ea30dc8f9683aa482c9df6630d42aeeafed0
+
+Eight cells (H1-H8) with registered directions. Two targets (T1 line residual 2023,
+T2 stats residual 2021-23). Two null controls (N1 shuffled labels, N2 own-defense).
+Survival: |z| >= 2 discovery AND same sign z >= 1 validation (DA-3).
+Cowork priors: DA-2a (60%), DA-2b (55%), DA-2c (85%), DA-2d (90%).

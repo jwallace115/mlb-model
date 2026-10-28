@@ -40,3 +40,17 @@ wrong reason).
 
 **DA-0d (75%):** Official weekly stats join the resolved prop rows at >= 97% by player_id + game_id.
 **Grade:** PARTIALLY HELD — passing/rush 95-97%; reception 91-94% (gap is event→game_id mapping, fixable).
+
+## DA-2a through DA-2d (registered 2026-10-27, DA-2 Item 1; DA_HYPOTHESES_v1.md sha d1ed065e514ad9bd)
+
+**DA-2a (60%):** >= 1 cell clears |z| >= 2 on T1 (2023 line residual).
+**Grade:** NOT YET GRADED — requires DA-2 Item 3.
+
+**DA-2b (55%):** The strongest T1 cell has the same sign on T2 2021-22.
+**Grade:** NOT YET GRADED.
+
+**DA-2c (85%):** N2 (own-defense control) stays |z| < 2 on every cell.
+**Grade:** NOT YET GRADED.
+
+**DA-2d (90%):** N1 (shuffled labels) kills every cell that cleared.
+**Grade:** NOT YET GRADED.
