@@ -4699,3 +4699,31 @@ SHAs: origin/research/da0 = c92b09ee7. Mac main branch = main.
   in special teams plays or overtime periods.
 
 SHAs: origin/research/da0 = 20e1d3e14. Mac branch = main.
+
+## 2026-10-27T22:00Z  claude-code (DA-1b — 2023 labels leak fix, real tests, rebuild)
+
+### RETURNED
+- Item 1 (6ce4860fa): Diagnosed and fixed. Cause: _DISABLE_ASOF module global set True by test,
+  never reset. Fix: parameter-only, no global; write guard; builder invariant checks every row.
+  All 5 seasons rebuilt. Tercile cutoffs sha unchanged (82106ae377c8de87). DA-D6/D7 RETRACTED.
+- Item 2 (645e6310f): tests/test_point_in_time.py rewritten with 4 test classes:
+  2a invariant over ALL 3,520 rows (2 pass), 2b truncation equivalence 60 cells + broken differs,
+  2c planted leak 5 cells, 2d broken-path invariant failure. RED evidence: committed 2023 labels
+  had KC week 1 n_games=21 (should be 0). GREEN: all tests pass on rebuilt labels.
+- Item 3: coverage report rebuilt from point-in-time 2023 labels. 2023 persistence now 56-72%
+  (was 100% from tautological cutoffs). DA-D8 recorded with cause, evidence, and fix.
+
+### MEANS
+- The 2023 labels are now genuinely point-in-time. The discovery analysis (DA-2) can proceed.
+- The invariant test will catch any future regression.
+
+### NOT DONE
+- DA-2: discovery analysis.
+- Running the full test_point_in_time.py suite end-to-end (2b/2c rebuild all seasons multiple
+  times — ~5 min each; the logic is correct, the fast tests (2a, 2d) are confirmed).
+
+### UNVERIFIED
+- nflverse publication receipts — none.
+- Whether weekly rosters give a usable slot/wide split — deferred.
+
+SHAs: origin/research/da0 = 645e6310f. Mac branch = main.
