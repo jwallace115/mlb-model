@@ -1451,5 +1451,214 @@
     "0540f5758ac50f3bb60beb36755f7a1e": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261028T144903Z.parquet",
+  "sha256": "ce896130509b0f18f6865ba1ed916f2b51a1f47687dd147f2356de3917e4cf7f",
+  "logged_utc": "2026-10-28T14:49:03.627675+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.75,
+  "revised_rows": 8,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-28T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T143006Z.parquet",
+   "inputs_digest": "{\"66c2794f789b9c2c028297eff4838e81\": \"9386b229e1b97cd9\", \"cf6c89492427cb54521b70e7c5dc5993\": \"0090e3a059971dac\", \"c35bb6023b4b5005a38e7cec3ebe4d0b\": \"5e259c36bcfba914\", \"0540f5758ac50f3bb60beb36755f7a1e\": \"2ea25730af98056a\"}",
+   "components": {
+    "66c2794f789b9c2c028297eff4838e81": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       100
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -110
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       1.0,
+       -108
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       -1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -101
+      ],
+      [
+       "Under",
+       50.5,
+       -116
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Middle Tennessee and Kennesaw State meet in CUSA p"
+     ],
+     "kalshi_snap": "snap_20261028T1207Z.parquet"
+    },
+    "cf6c89492427cb54521b70e7c5dc5993": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -146
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       131
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -3.0,
+       -104
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -107
+      ],
+      [
+       "Under",
+       49.5,
+       -109
+      ]
+     ],
+     "news": [
+      "New Mexico State hosts Jacksonville State in CUSA "
+     ],
+     "kalshi_snap": "snap_20261028T1207Z.parquet"
+    },
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       402
+      ],
+      [
+       "North Texas Mean Green",
+       0,
+       -520
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       13.5,
+       101
+      ],
+      [
+       "North Texas Mean Green",
+       -13.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       77.0,
+       -109
+      ],
+      [
+       "Under",
+       77.0,
+       -107
+      ]
+     ],
+     "news": [
+      "9 touchdowns of at least 30 yards highlights FAU's",
+      "AAC matchup features North Texas squaring off agai",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H",
+      "North Texas turns big plays into 49-39 win over Na",
+      "Rice Owls vs. Florida Atlantic Owls: Full Highligh"
+     ],
+     "kalshi_snap": "snap_20261028T1207Z.parquet"
+    },
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1327
+      ],
+      [
+       "Troy Trojans",
+       0,
+       838
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -21.0,
+       100
+      ],
+      [
+       "Troy Trojans",
+       21.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -104
+      ],
+      [
+       "Under",
+       50.0,
+       -112
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Louisiana-Monroe scores 18 points late, beats Troy",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "UL Monroe Warhawks vs. Troy Trojans: Full Highligh",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261028T1207Z.parquet"
+    }
+   },
+   "triggers": {
+    "66c2794f789b9c2c028297eff4838e81": "anchor_morning",
+    "cf6c89492427cb54521b70e7c5dc5993": "anchor_morning",
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": "anchor_morning",
+    "0540f5758ac50f3bb60beb36755f7a1e": "anchor_morning"
+   }
+  }
  }
 ]
