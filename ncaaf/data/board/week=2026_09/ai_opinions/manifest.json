@@ -1326,5 +1326,130 @@
     "eed30e1ba5aa37d77ee6401d67832446": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261027T233403Z.parquet",
+  "sha256": "13db41dae0e9e171a05ae06b1f8a985e0c3dd14351c4a78b3fb83da5b39545f6",
+  "logged_utc": "2026-10-27T23:34:03.245286+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.833,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-29T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T233006Z.parquet",
+   "inputs_digest": "{\"c35bb6023b4b5005a38e7cec3ebe4d0b\": \"d9c23f8f00bb405f\", \"0540f5758ac50f3bb60beb36755f7a1e\": \"6281ba1203ef6d5d\"}",
+   "components": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       393
+      ],
+      [
+       "North Texas Mean Green",
+       0,
+       -531
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       13.5,
+       100
+      ],
+      [
+       "North Texas Mean Green",
+       -13.5,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       77.0,
+       -111
+      ],
+      [
+       "Under",
+       77.0,
+       -108
+      ]
+     ],
+     "news": [
+      "9 touchdowns of at least 30 yards highlights FAU's",
+      "AAC matchup features North Texas squaring off agai",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H",
+      "North Texas turns big plays into 49-39 win over Na",
+      "Rice Owls vs. Florida Atlantic Owls: Full Highligh"
+     ],
+     "kalshi_snap": "snap_20261027T2107Z.parquet"
+    },
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1362
+      ],
+      [
+       "Troy Trojans",
+       0,
+       799
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -21.0,
+       -101
+      ],
+      [
+       "Troy Trojans",
+       21.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       100
+      ],
+      [
+       "Under",
+       50.0,
+       -118
+      ]
+     ],
+     "news": [
+      "Appalachian State hands James Madison first loss o",
+      "College Football Playoff Bubble Watch after Week 8",
+      "James London's 40-yard FG in OT helps Appalachian ",
+      "James Madison Dukes vs. Appalachian State Mountain",
+      "Louisiana-Monroe scores 18 points late, beats Troy",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "UL Monroe Warhawks vs. Troy Trojans: Full Highligh",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261027T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": "anchor_morning",
+    "0540f5758ac50f3bb60beb36755f7a1e": "anchor_morning"
+   }
+  }
  }
 ]
