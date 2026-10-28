@@ -276,3 +276,6 @@
 {"utc": "20261027T1830Z", "feed": "espn_depth", "sha256": "080042bd116e5313e9b64e8f10990d9879d9e2726d9b060c29b706c9f6c3cb56", "status": "written"}
 {"utc": "20261028T0030Z", "feed": "espn_depth", "sha256": "b23a8fcdbe4238c975800e3775cc455f0ca318c2b94e0fcb3aa7929d2c4fe940", "status": "written"}
 {"utc": "20261028T0630Z", "feed": "espn_depth", "sha256": "41394c38585452560825d6c77b69b539d73609816ae7a971bca2e893ba6c23f2", "status": "written"}
+{"utc": "20261028T0900Z", "feed": "nflverse_depth", "file": "depth_charts.parquet", "sha256": "fa3435ade2d800b9be4f8471c311953bb4db40a408e33c3b43a3b60bbf37a6a9", "max_dt": "2026-10-28T06:01:45+00:00", "rows": 4663, "status": "delta"}
+{"utc":"20261028T0900Z","feed":"nflverse_injuries","file":"injuries.parquet","sha256":"6a72cef74e79c4868a5778d7568852e4805a25bd11ee68d41132b93c6d34b2ec","status":"written"}
+{"utc":"20261028T0900Z","feed":"nflverse_rosters","file":"rosters_weekly.parquet","sha256":"be56108376e6ac4c3fcd462ff30e320ed365771f0ce0d5e7256fc63f88ae05d5","status":"written"}
