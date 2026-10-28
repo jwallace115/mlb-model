@@ -10,23 +10,23 @@
   "freeze_file": null
  },
  {
-  "sport": "ncaaf",
+  "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-10-28T20:23:42.864455+00:00",
-  "finished_utc": "2026-10-28T20:23:42.864455+00:00",
+  "started_utc": "2026-10-28T20:47:04.477919+00:00",
+  "finished_utc": "2026-10-28T20:47:04.477919+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
   "freeze_file": null
  },
  {
-  "sport": "nfl",
+  "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-10-28T20:23:58.247301+00:00",
-  "finished_utc": "2026-10-28T20:23:58.247301+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-10-28T20:51:14.019604+00:00",
+  "finished_utc": "2026-10-28T20:51:14.019604+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['injury_change: inj_Carolina Panthers']",
-  "freeze_file": "ai_opinions_20261028T201703Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]
