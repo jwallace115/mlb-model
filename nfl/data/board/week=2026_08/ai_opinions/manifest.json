@@ -710,5 +710,149 @@
     "ab2865e9f2d4b012de8bc6fb6de11a7c": "injury_change: inj_Carolina Panthers"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261029T003203Z.parquet",
+  "sha256": "7c8fc9d8eeb37e859ea7b4229696af209855aebc62ce7a440e8af19e1b2207ee",
+  "logged_utc": "2026-10-29T00:32:03.836620+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 1.9,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261029T003008Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"16c20119d3081bb6\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       160
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -195
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       171
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -114
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -107
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "props_ts": "2026-10-28T14:00:11.757504+00:00",
+     "inj_Green Bay Packers": "97429ae30edec2f2",
+     "inj_Carolina Panthers": "beaaf39912c13770",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeff Saturday comes after Stephen A. for his Jorda",
+      "Josh Jacobs set for 2026 Lambeau debut on Thursday",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers and Panthers trying to bounce back as they",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Pass rusher Jaelan Phillips among four Panthers ru",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What Jordan Rodgers wants to see from Kyler Murray",
+      "What are the longest field goals in NFL history?",
+      "Why Panthers will be shorthanded vs. the Packers",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261029T0005Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "injury_change: inj_Green Bay Packers; injury_change: inj_Carolina Panthers"
+   }
+  }
  }
 ]
