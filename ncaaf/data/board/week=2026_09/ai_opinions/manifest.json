@@ -4947,5 +4947,178 @@
     "0540f5758ac50f3bb60beb36755f7a1e": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261029T230403Z.parquet",
+  "sha256": "2334d35813ee182fdb8f00acbe7cafb711fa7d3c1b0a5974244edcb55ed3323a",
+  "logged_utc": "2026-10-29T23:04:03.764884+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.889,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-31T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T230006Z.parquet",
+   "inputs_digest": "{\"6519cc9dfbff22ca11d607a9f246da2c\": \"e16dbc5e6773c832\", \"e4e95ca26b62e1c3ced6261cbb5c5f3a\": \"54a6b148faa12a1d\", \"c1fd3e172f0617a0d8543b8fd67fc2ce\": \"4914ca4868ed08ef\"}",
+   "components": {
+    "6519cc9dfbff22ca11d607a9f246da2c": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       188
+      ],
+      [
+       "Florida State Seminoles",
+       0,
+       -218
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       6.0,
+       -109
+      ],
+      [
+       "Florida State Seminoles",
+       -6.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -109
+      ],
+      [
+       "Under",
+       49.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Allstate Playoff Predictor",
+      "Clemson's Dabo Swinney still believes in team afte",
+      "Clemson, UNC support PCSA, ask for realignment fle",
+      "College Football Playoff Bubble Watch after Week 8",
+      "FSU president Richard McCullough to fans: 'I under",
+      "Florida State meets Clemson in ACC play",
+      "Virginia Tech Hokies vs. Clemson Tigers: Full High",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T2107Z.parquet"
+    },
+    "e4e95ca26b62e1c3ced6261cbb5c5f3a": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       293
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -359
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       9.0,
+       -101
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -9.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -114
+      ],
+      [
+       "Under",
+       57.0,
+       -102
+      ]
+     ],
+     "news": [
+      "AP college football Week 8 poll reaction: What's n",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Colorado Buffaloes vs. Oklahoma State Cowboys: Ful",
+      "Iowa State Cyclones vs. Arizona Wildcats: Full Hig",
+      "Iowa State hosts No. 24 Oklahoma State in Big 12 m",
+      "Noah Fifita throws for 308 yards and 2 TDs, No. 25",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Oklahoma State scores 34 points in the 2nd half to",
+      "Top 25 betting lines: Georgia double-digit favorit"
+     ],
+     "kalshi_snap": "snap_20261029T2107Z.parquet"
+    },
+    "c1fd3e172f0617a0d8543b8fd67fc2ce": {
+     "pinnacle_h2h": [
+      [
+       "San Diego State Aztecs",
+       0,
+       -135
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       119
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "San Diego State Aztecs",
+       -2.5,
+       -112
+      ],
+      [
+       "Washington State Cougars",
+       2.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -110
+      ],
+      [
+       "Under",
+       48.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Hauss Hejny's 5 total touchdowns power Colorado St",
+      "Riley runs for two scores and No. 21 Boise State p",
+      "San Diego State Aztecs vs. Colorado State Rams: Fu",
+      "San Diego State and Washington State meet in Pac-1"
+     ],
+     "kalshi_snap": "snap_20261029T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "6519cc9dfbff22ca11d607a9f246da2c": "anchor_morning",
+    "e4e95ca26b62e1c3ced6261cbb5c5f3a": "anchor_morning",
+    "c1fd3e172f0617a0d8543b8fd67fc2ce": "anchor_morning"
+   }
+  }
  }
 ]
