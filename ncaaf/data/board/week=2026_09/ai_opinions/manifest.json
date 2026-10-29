@@ -2577,5 +2577,137 @@
     "8916ba5e623a0a1d97dd0e7f50e4a205": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261029T153404Z.parquet",
+  "sha256": "dc4b3f1044b426d079e567df08326d7376671e8bca2d1c0f1a22cf17e7606665",
+  "logged_utc": "2026-10-29T15:34:04.103622+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-29T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T153009Z.parquet",
+   "inputs_digest": "{\"0540f5758ac50f3bb60beb36755f7a1e\": \"5e3e4d2592bb8f77\", \"44ee19d31b9288ad402868d6df737595\": \"2a89525f895ff14a\"}",
+   "components": {
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1148
+      ],
+      [
+       "Troy Trojans",
+       0,
+       802
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -19.5,
+       -111
+      ],
+      [
+       "Troy Trojans",
+       19.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -106
+      ],
+      [
+       "Under",
+       51.0,
+       -110
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Louisiana-Monroe scores 18 points late, beats Troy",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "UL Monroe Warhawks vs. Troy Trojans: Full Highligh",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -103
+      ],
+      [
+       "UCF Knights",
+       0,
+       -109
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       1.0,
+       -110
+      ],
+      [
+       "UCF Knights",
+       -1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       101
+      ],
+      [
+       "Under",
+       48.5,
+       -118
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "BYU Cougars vs. UCF Knights: Full Highlights",
+      "BYU's Sitake disputes roughing the kicker call in ",
+      "Baylor fires coach Dave Aranda in seventh season",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Isaiah Marshall accounts for 3 TDs, Kansas blocks ",
+      "Keyone Jenkins throws TD pass in double OT and UCF",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF hands No. 2 BYU first loss in dramatic fashion",
+      "UCF meets Baylor in Big 12 play",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "0540f5758ac50f3bb60beb36755f7a1e": "line_move: pinnacle totals Over 50.0\u219251.0; line_move: pinnacle totals Under 50.0\u219251.0",
+    "44ee19d31b9288ad402868d6df737595": "line_move: pinnacle totals Over 47.5\u219248.5; line_move: pinnacle totals Under 47.5\u219248.5"
+   }
+  }
  }
 ]
