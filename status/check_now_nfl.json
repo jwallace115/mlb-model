@@ -1,17 +1,12 @@
 {
- "started_utc": "2026-10-29T07:17:04.187569+00:00",
- "finished_utc": "2026-10-29T07:21:28.043416+00:00",
+ "started_utc": "2026-10-29T07:47:04.112632+00:00",
+ "finished_utc": "2026-10-29T07:47:04.431153+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "ab2865e9f2d4b012de8bc6fb6de11a7c",
-   "text": "injury_change: inj_Green Bay Packers; injury_change: inj_Carolina Panthers"
-  }
- ],
- "games_read": 1,
- "frozen_file": "ai_opinions_20261029T071704Z.parquet",
- "spend_usd": 35.2606,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
