@@ -1204,6 +1204,54 @@
       "closing_total": 6.5,
       "lambda_total": 5.863,
       "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020196,
+      "game_date": "2026-10-27",
+      "home_team": "VGK",
+      "away_team": "OTT",
+      "signal_side": "UNDER",
+      "edge": 0.137,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.811,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020197,
+      "game_date": "2026-10-27",
+      "home_team": "ANA",
+      "away_team": "VAN",
+      "signal_side": "UNDER",
+      "edge": 0.176,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.776,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020198,
+      "game_date": "2026-10-27",
+      "home_team": "SJS",
+      "away_team": "BUF",
+      "signal_side": "UNDER",
+      "edge": 0.1326,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 6.053,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020200,
+      "game_date": "2026-10-28",
+      "home_team": "EDM",
+      "away_team": "CGY",
+      "signal_side": "UNDER",
+      "edge": 0.1575,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.695,
+      "drift_applied": 0.0
     }
   ]
 }
