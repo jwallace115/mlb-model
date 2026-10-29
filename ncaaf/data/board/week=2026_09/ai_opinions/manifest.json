@@ -2229,5 +2229,78 @@
     "44ee19d31b9288ad402868d6df737595": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261029T031903Z.parquet",
+  "sha256": "9c071a0d3664eff90e14f7d9c76fa9eb9b6e0934a6e12a7c4a058ef47e0fbc9b",
+  "logged_utc": "2026-10-29T03:19:03.874326+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T02:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T030008Z.parquet",
+   "inputs_digest": "{\"8916ba5e623a0a1d97dd0e7f50e4a205\": \"c8aec7f407eb670b\"}",
+   "components": {
+    "8916ba5e623a0a1d97dd0e7f50e4a205": {
+     "pinnacle_h2h": [
+      [
+       "Kent State Golden Flashes",
+       0,
+       -351
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       288
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kent State Golden Flashes",
+       -10.0,
+       102
+      ],
+      [
+       "Sacramento State Hornets",
+       10.0,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -107
+      ],
+      [
+       "Under",
+       46.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Akron Zips vs. Kent State Golden Flashes: Full Hig",
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Dru DeShields throws 4 TDs passes, runs for anothe",
+      "Luster has 3 total touchdowns, Horton adds 2 rushi",
+      "Sacramento State Hornets vs. Ball State Cardinals:",
+      "Sacramento State hosts Kent State in MAC matchup"
+     ],
+     "kalshi_snap": "snap_20261029T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "8916ba5e623a0a1d97dd0e7f50e4a205": "anchor_morning"
+   }
+  }
  }
 ]
