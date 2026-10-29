@@ -3550,5 +3550,258 @@
     "d19dbab4071552441b056ccd2e23ca59": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261029T191903Z.parquet",
+  "sha256": "a8de94b7f07945478befe18d69d41c06dda81ca229fe3d2a690872ad254c2c85",
+  "logged_utc": "2026-10-29T19:19:03.780800+00:00",
+  "rows": 14,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.571,
+  "revised_rows": 2,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T16:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T190010Z.parquet",
+   "inputs_digest": "{\"e916f49c82de2ce0b1844ee9f6deccfa\": \"633fc70f37bdd7e2\", \"573eed720cdbfb7644835b8beb1bc89a\": \"e3811eb7d55bfe3c\", \"fa9022be308ebe9ca39ecda8ea15bda4\": \"e0fb7ddff8734d04\", \"e5817afb8338b8f7272feff21d87d7f7\": \"87748705eca6f06d\", \"183676bbb63b1716e2248ec6c6d205a9\": \"b16e3a0be61b7091\"}",
+   "components": {
+    "e916f49c82de2ce0b1844ee9f6deccfa": {
+     "pinnacle_spreads": [
+      [
+       "Navy Midshipmen",
+       30.5,
+       -107
+      ],
+      [
+       "Notre Dame Fighting Irish",
+       -30.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -105
+      ],
+      [
+       "Under",
+       57.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "Don't miss a thrilling ABC triple-header in Week 9",
+      "No. 5 Notre Dame and Navy meet in Foxborough, Mass",
+      "No. 5 Notre Dame seeks a reset against Navy after ",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H",
+      "Notre Dame CB DJ McKinney out extended period with",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ohio State replaces BYU at No. 2 in AP Top 25",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "573eed720cdbfb7644835b8beb1bc89a": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       -109
+      ],
+      [
+       "UConn Huskies",
+       0,
+       -103
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       -1.5,
+       101
+      ],
+      [
+       "UConn Huskies",
+       1.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -102
+      ],
+      [
+       "Under",
+       52.5,
+       -115
+      ]
+     ],
+     "news": [
+      "Air Force hosts UConn in Week 9"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "fa9022be308ebe9ca39ecda8ea15bda4": {
+     "pinnacle_h2h": [
+      [
+       "East Carolina Pirates",
+       0,
+       -216
+      ],
+      [
+       "Temple Owls",
+       0,
+       186
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "East Carolina Pirates",
+       -6.0,
+       -102
+      ],
+      [
+       "Temple Owls",
+       6.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -107
+      ],
+      [
+       "Under",
+       50.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "East Carolina hosts Temple in AAC action"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "e5817afb8338b8f7272feff21d87d7f7": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -218
+      ],
+      [
+       "South Alabama Jaguars",
+       0,
+       189
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -5.5,
+       -110
+      ],
+      [
+       "South Alabama Jaguars",
+       5.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.0,
+       -102
+      ],
+      [
+       "Under",
+       59.0,
+       -115
+      ]
+     ],
+     "news": [
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "Baker throws, runs for TDs, Louisiana Tech posts 2",
+      "College football futures: Evaluating five contende",
+      "Old Dominion Monarchs vs. Louisiana Tech Bulldogs:",
+      "Sun Belt matchup features Louisiana Tech taking on"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "183676bbb63b1716e2248ec6c6d205a9": {
+     "pinnacle_h2h": [
+      [
+       "Louisville Cardinals",
+       0,
+       -1706
+      ],
+      [
+       "Stanford Cardinal",
+       0,
+       1007
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisville Cardinals",
+       -22.5,
+       -108
+      ],
+      [
+       "Stanford Cardinal",
+       22.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       60.0,
+       -103
+      ],
+      [
+       "Under",
+       60.0,
+       -113
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Stanford visits Louisville in ACC matchup",
+      "Upsets and chaos reign supreme in college football",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "e916f49c82de2ce0b1844ee9f6deccfa": "new_news: 1 availability items",
+    "573eed720cdbfb7644835b8beb1bc89a": "anchor_morning",
+    "fa9022be308ebe9ca39ecda8ea15bda4": "anchor_morning",
+    "e5817afb8338b8f7272feff21d87d7f7": "anchor_morning",
+    "183676bbb63b1716e2248ec6c6d205a9": "anchor_morning"
+   }
+  }
  }
 ]
