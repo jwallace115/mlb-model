@@ -2147,5 +2147,87 @@
     "cf6c89492427cb54521b70e7c5dc5993": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261028T233403Z.parquet",
+  "sha256": "0fa4bdf5ccd7757821b8efebb01c4d10cddd70ccd3a4ae8f1ff21695bb8c421a",
+  "logged_utc": "2026-10-28T23:34:03.284311+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-30T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T233005Z.parquet",
+   "inputs_digest": "{\"44ee19d31b9288ad402868d6df737595\": \"9e2f674b242eebac\"}",
+   "components": {
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -104
+      ],
+      [
+       "UCF Knights",
+       0,
+       -109
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       1.0,
+       -110
+      ],
+      [
+       "UCF Knights",
+       -1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -114
+      ],
+      [
+       "Under",
+       47.5,
+       -102
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "BYU Cougars vs. UCF Knights: Full Highlights",
+      "BYU's Sitake disputes roughing the kicker call in ",
+      "Baylor fires coach Dave Aranda in seventh season",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Isaiah Marshall accounts for 3 TDs, Kansas blocks ",
+      "Keyone Jenkins throws TD pass in double OT and UCF",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF hands No. 2 BYU first loss in dramatic fashion",
+      "UCF meets Baylor in Big 12 play",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261028T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "44ee19d31b9288ad402868d6df737595": "anchor_morning"
+   }
+  }
  }
 ]
