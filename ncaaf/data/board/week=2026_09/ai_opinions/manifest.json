@@ -2709,5 +2709,618 @@
     "44ee19d31b9288ad402868d6df737595": "line_move: pinnacle totals Over 47.5\u219248.5; line_move: pinnacle totals Under 47.5\u219248.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261029T164903Z.parquet",
+  "sha256": "be287a7e538dddc2f8bee7f052ed20f84d14231dd3fe14d170a03fe3d1843c38",
+  "logged_utc": "2026-10-29T16:49:03.447888+00:00",
+  "rows": 32,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 11,
+  "no_view_share": 0.562,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T16:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T163006Z.parquet",
+   "inputs_digest": "{\"2d5a76d917c23b2f5036eb774608d1c9\": \"659252e3b4effae7\", \"807f73b612ed07bda8d1835550ddbd43\": \"e5ea043af014916b\", \"fc416b26c2c25018a05bc5cb0d80dbb6\": \"25121d8117b2a083\", \"aa15904c0f5814a899ddbe002c96406a\": \"f83171be91c648ff\", \"07da1e37f1e37363a71d35f2298f01d9\": \"131c65833c0fd39b\", \"929937ced936976088a9562342ba0b90\": \"2026a50b6ebefb5d\", \"e916f49c82de2ce0b1844ee9f6deccfa\": \"d78dd1f94251c460\", \"2f219378e527cf1f695b814a0a4ad63c\": \"d99020018f4cb7f2\", \"3713b2d962a33a6e55be7bffedd604a5\": \"83db5003fb65a321\", \"dea96094c29a9f24d7dc07a5d848afd7\": \"8bf4d4aea8cfb381\", \"3f36c41ee29e9339f71fada56d832914\": \"c552ec97842b78ea\"}",
+   "components": {
+    "2d5a76d917c23b2f5036eb774608d1c9": {
+     "pinnacle_h2h": [
+      [
+       "Arizona Wildcats",
+       0,
+       151
+      ],
+      [
+       "Texas Tech Red Raiders",
+       0,
+       -172
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Wildcats",
+       3.5,
+       -109
+      ],
+      [
+       "Texas Tech Red Raiders",
+       -3.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -106
+      ],
+      [
+       "Under",
+       54.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 college football recruits on the rise and how",
+      "AP college football Week 8 poll reaction: What's n",
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Cincinnati upsets No. 8 Texas Tech in battle of te",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football takeaways: Lasting impressions fr",
+      "Connelly on Week 8: Who in college football can --",
+      "How BYU and Texas Tech losses impact the playoff p",
+      "Iowa State Cyclones vs. Arizona Wildcats: Full Hig",
+      "JC French IV has 4 TD passes as Cincinnati stuns N",
+      "Noah Fifita throws for 308 yards and 2 TDs, No. 25",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Texas Tech Red Raiders vs. Cincinnati Bearcats: Fu",
+      "Texas Tech hosts Arizona in ranked Big 12 matchup",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Upsets and chaos reign supreme in college football",
+      "Week 8 live: Best moments and top plays",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "807f73b612ed07bda8d1835550ddbd43": {
+     "pinnacle_h2h": [
+      [
+       "Boston College Eagles",
+       0,
+       225
+      ],
+      [
+       "Duke Blue Devils",
+       0,
+       -265
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boston College Eagles",
+       7.0,
+       -106
+      ],
+      [
+       "Duke Blue Devils",
+       -7.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -107
+      ],
+      [
+       "Under",
+       48.0,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Boston College Eagles vs. Georgia Tech Yellow Jack",
+      "Boston College visits Duke in ACC matchup",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "McKenzie, MacCormack lead dynamic Boston College r",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "fc416b26c2c25018a05bc5cb0d80dbb6": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       408
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -530
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       13.5,
+       -111
+      ],
+      [
+       "Western Michigan Broncos",
+       -13.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -111
+      ],
+      [
+       "Under",
+       44.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Bowling Green Falcons vs. Buffalo Bulls: Full High",
+      "Burch runs for a career-high 184 yards and 3 TDs t",
+      "Richter, Miller lead Toledo's offensive show in 45",
+      "Western Michigan Broncos vs. Toledo Rockets: Full ",
+      "Western Michigan hosts Bowling Green in MAC play"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "aa15904c0f5814a899ddbe002c96406a": {
+     "pinnacle_h2h": [
+      [
+       "California Golden Bears",
+       0,
+       225
+      ],
+      [
+       "NC State Wolfpack",
+       0,
+       -265
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "California Golden Bears",
+       7.0,
+       -105
+      ],
+      [
+       "NC State Wolfpack",
+       -7.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -105
+      ],
+      [
+       "Under",
+       57.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "ACC matchup features NC State squaring off against",
+      "California Golden Bears vs. SMU Mustangs: Full Hig",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Doeren leaves NC State 'with no grudges,' will alw",
+      "Kevin Jennings breaks SMU's TD passing record as N",
+      "Kevin Jennings breaks SMU's TD passing record in w",
+      "NC State fires Dave Doeren amid 3-4 start in 14th ",
+      "NC State's Goebbel vows to build on 'foundation' l",
+      "Thamel: Philip Rivers is a real candidate to be ne",
+      "Upsets and chaos reign supreme in college football",
+      "Who could replace Doeren at NC State, what are the"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "07da1e37f1e37363a71d35f2298f01d9": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       -129
+      ],
+      [
+       "Maryland Terrapins",
+       0,
+       115
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       -2.5,
+       -108
+      ],
+      [
+       "Maryland Terrapins",
+       2.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -105
+      ],
+      [
+       "Under",
+       55.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Aidan Laughery, Collin Dixon score TDs as Illinois",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Illinois and Maryland meet in Big Ten play",
+      "Maryland offers students shot at free tuition for ",
+      "Oregon Ducks vs. Illinois Fighting Illini: Full Hi",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "929937ced936976088a9562342ba0b90": {
+     "pinnacle_h2h": [
+      [
+       "Iowa Hawkeyes",
+       0,
+       -168
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       148
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa Hawkeyes",
+       -3.5,
+       -102
+      ],
+      [
+       "Wisconsin Badgers",
+       3.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.0,
+       100
+      ],
+      [
+       "Under",
+       37.0,
+       -117
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 8 poll reaction: What's n",
+      "CC Sabathia, J.J. Watt top social media reaction t",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football takeaways: Lasting impressions fr",
+      "Drzewiecki's field goal as time expires lifts Minn",
+      "Former Trojans back Bryan Jackson, Wisconsin upset",
+      "Hawkeyes RB Kamari Moulton (upper body) out for re",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Iowa squares off against No. 25 Wisconsin in Big T",
+      "Luka Drzewiecki's last-second FG lifts Minnesota p",
+      "Luke Drzewiecki's last-second FG lifts Minnesota p",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Upsets and chaos reign supreme in college football",
+      "Wisconsin, former USC RB Bryan Jackson upset No. 1",
+      "Wisconsin, former USC RB Jackson, upset No. 16 Tro"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "e916f49c82de2ce0b1844ee9f6deccfa": {
+     "pinnacle_spreads": [
+      [
+       "Navy Midshipmen",
+       30.5,
+       -107
+      ],
+      [
+       "Notre Dame Fighting Irish",
+       -30.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -105
+      ],
+      [
+       "Under",
+       57.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "Don't miss a thrilling ABC triple-header in Week 9",
+      "No. 5 Notre Dame and Navy meet in Foxborough, Mass",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H",
+      "North Texas turns big plays into 49-39 win over Na",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ohio State replaces BYU at No. 2 in AP Top 25",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "2f219378e527cf1f695b814a0a4ad63c": {
+     "pinnacle_h2h": [
+      [
+       "SMU Mustangs",
+       0,
+       -368
+      ],
+      [
+       "Syracuse Orange",
+       0,
+       300
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "SMU Mustangs",
+       -10.5,
+       -105
+      ],
+      [
+       "Syracuse Orange",
+       10.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -110
+      ],
+      [
+       "Under",
+       57.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "California Golden Bears vs. SMU Mustangs: Full Hig",
+      "Calvin Russell's 4-yard TD catch lifts Syracuse to",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Kevin Jennings breaks SMU's TD passing record as N",
+      "Kevin Jennings breaks SMU's TD passing record in w",
+      "No. 19 SMU and Syracuse meet in ACC action",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Syracuse Orange vs. North Carolina Tar Heels: Full",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "3713b2d962a33a6e55be7bffedd604a5": {
+     "pinnacle_h2h": [
+      [
+       "South Florida Bulls",
+       0,
+       -299
+      ],
+      [
+       "UAB Blazers",
+       0,
+       250
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Florida Bulls",
+       -7.5,
+       -112
+      ],
+      [
+       "UAB Blazers",
+       7.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -109
+      ],
+      [
+       "Under",
+       42.5,
+       -107
+      ]
+     ],
+     "news": [
+      "South Florida squares off against UAB in AAC play"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "dea96094c29a9f24d7dc07a5d848afd7": {
+     "pinnacle_h2h": [
+      [
+       "Michigan Wolverines",
+       0,
+       -674
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       496
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan Wolverines",
+       -16.0,
+       -106
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       16.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -114
+      ],
+      [
+       "Under",
+       45.0,
+       -102
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 college football recruits on the rise and how",
+      "Aidan Chiles throws for 3 TD, runs in 2 more, and ",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Hoover's TD run lifts No. 6 Indiana to 13-6 OT win",
+      "Josh Hoover, Indiana get first win at Michigan sin",
+      "Michigan sticking with OC Jason Beck",
+      "Michigan takes on Rutgers in Big Ten play",
+      "Rutgers QB Dylan Lonergan exits with apparent head",
+      "Upsets and chaos reign supreme in college football",
+      "Week 8 live: Best moments and top plays"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "3f36c41ee29e9339f71fada56d832914": {
+     "pinnacle_h2h": [
+      [
+       "Auburn Tigers",
+       0,
+       384
+      ],
+      [
+       "Ole Miss Rebels",
+       0,
+       -493
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Auburn Tigers",
+       13.0,
+       -113
+      ],
+      [
+       "Ole Miss Rebels",
+       -13.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -106
+      ],
+      [
+       "Under",
+       57.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "Arch Manning and No. 19 Texas hang on to beat No. ",
+      "Auburn vs. No. 12 Ole Miss preview, highlighting r",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "LSU Tigers vs. Auburn Tigers: Game Highlights",
+      "No Huddle! Hustling through the storylines to look",
+      "No. 18 LSU shows signs of reaching its lofty ceili",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ole Miss RB Kewan Lacy out after dislocating shoul",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB Kenny Minchey agrees he played his best game, p",
+      "SEC matchup features No. 12 Ole Miss against Aubur",
+      "Sam Leavitt accounts for 4 TDs as No. 18 LSU handl",
+      "Sarkisian lauds 'edgy' Arch Manning after Texas ho",
+      "Steve Sarkisian lauds 'edgy' Arch Manning after Te",
+      "Texas survives with thrilling 34-27 win over Ole M",
+      "Texas, Manning hold off Ole Miss rally to snap two",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "2d5a76d917c23b2f5036eb774608d1c9": "anchor_morning",
+    "807f73b612ed07bda8d1835550ddbd43": "anchor_morning",
+    "fc416b26c2c25018a05bc5cb0d80dbb6": "anchor_morning",
+    "aa15904c0f5814a899ddbe002c96406a": "anchor_morning",
+    "07da1e37f1e37363a71d35f2298f01d9": "anchor_morning",
+    "929937ced936976088a9562342ba0b90": "anchor_morning",
+    "e916f49c82de2ce0b1844ee9f6deccfa": "anchor_morning",
+    "2f219378e527cf1f695b814a0a4ad63c": "anchor_morning",
+    "3713b2d962a33a6e55be7bffedd604a5": "anchor_morning",
+    "dea96094c29a9f24d7dc07a5d848afd7": "anchor_morning",
+    "3f36c41ee29e9339f71fada56d832914": "anchor_morning"
+   }
+  }
  }
 ]
