@@ -2302,5 +2302,280 @@
     "8916ba5e623a0a1d97dd0e7f50e4a205": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261029T141904Z.parquet",
+  "sha256": "c612268faee41e43e17ead88ccf97b1f2e0d20d0db35dced51fe4bb8711f0165",
+  "logged_utc": "2026-10-29T14:19:04.322728+00:00",
+  "rows": 15,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.867,
+  "revised_rows": 11,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-29T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T140012Z.parquet",
+   "inputs_digest": "{\"c35bb6023b4b5005a38e7cec3ebe4d0b\": \"4a0aff3c35234a86\", \"0540f5758ac50f3bb60beb36755f7a1e\": \"411a22dd3cfe39b7\", \"78b3d38cdfa28649fdd2ca92829569ce\": \"e461679fad5ac79f\", \"44ee19d31b9288ad402868d6df737595\": \"7f74a2a48c0d7bb0\", \"8916ba5e623a0a1d97dd0e7f50e4a205\": \"37eac0f17344c047\"}",
+   "components": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       436
+      ],
+      [
+       "North Texas Mean Green",
+       0,
+       -546
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       14.0,
+       100
+      ],
+      [
+       "North Texas Mean Green",
+       -14.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       78.0,
+       -108
+      ],
+      [
+       "Under",
+       78.0,
+       -108
+      ]
+     ],
+     "news": [
+      "9 touchdowns of at least 30 yards highlights FAU's",
+      "AAC matchup features North Texas squaring off agai",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H",
+      "North Texas turns big plays into 49-39 win over Na",
+      "Rice Owls vs. Florida Atlantic Owls: Full Highligh"
+     ],
+     "kalshi_snap": "snap_20261029T1207Z.parquet"
+    },
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1128
+      ],
+      [
+       "Troy Trojans",
+       0,
+       790
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -19.5,
+       -109
+      ],
+      [
+       "Troy Trojans",
+       19.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -108
+      ],
+      [
+       "Under",
+       50.0,
+       -108
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Louisiana-Monroe scores 18 points late, beats Troy",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "UL Monroe Warhawks vs. Troy Trojans: Full Highligh",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261029T1207Z.parquet"
+    },
+    "78b3d38cdfa28649fdd2ca92829569ce": {
+     "pinnacle_h2h": [
+      [
+       "Charlotte 49ers",
+       0,
+       287
+      ],
+      [
+       "Tulane Green Wave",
+       0,
+       -350
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Charlotte 49ers",
+       9.5,
+       -112
+      ],
+      [
+       "Tulane Green Wave",
+       -9.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -114
+      ],
+      [
+       "Under",
+       46.5,
+       -102
+      ]
+     ],
+     "news": [
+      "AAC matchup features Tulane against Charlotte",
+      "Allstate Playoff Predictor",
+      "UTSA Roadrunners vs. Tulane Green Wave: Full Highl",
+      "UTSA wins 5th straight, rolls past Tulane 42-19"
+     ],
+     "kalshi_snap": "snap_20261029T1207Z.parquet"
+    },
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -103
+      ],
+      [
+       "UCF Knights",
+       0,
+       -109
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       1.0,
+       -110
+      ],
+      [
+       "UCF Knights",
+       -1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -115
+      ],
+      [
+       "Under",
+       47.5,
+       -101
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "BYU Cougars vs. UCF Knights: Full Highlights",
+      "BYU's Sitake disputes roughing the kicker call in ",
+      "Baylor fires coach Dave Aranda in seventh season",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Isaiah Marshall accounts for 3 TDs, Kansas blocks ",
+      "Keyone Jenkins throws TD pass in double OT and UCF",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF hands No. 2 BYU first loss in dramatic fashion",
+      "UCF meets Baylor in Big 12 play",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261029T1207Z.parquet"
+    },
+    "8916ba5e623a0a1d97dd0e7f50e4a205": {
+     "pinnacle_h2h": [
+      [
+       "Kent State Golden Flashes",
+       0,
+       -336
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       277
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kent State Golden Flashes",
+       -8.5,
+       -106
+      ],
+      [
+       "Sacramento State Hornets",
+       8.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -106
+      ],
+      [
+       "Under",
+       46.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Akron Zips vs. Kent State Golden Flashes: Full Hig",
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Dru DeShields throws 4 TDs passes, runs for anothe",
+      "Luster has 3 total touchdowns, Horton adds 2 rushi",
+      "Sacramento State Hornets vs. Ball State Cardinals:",
+      "Sacramento State hosts Kent State in MAC matchup"
+     ],
+     "kalshi_snap": "snap_20261029T1207Z.parquet"
+    }
+   },
+   "triggers": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": "anchor_morning",
+    "0540f5758ac50f3bb60beb36755f7a1e": "anchor_morning",
+    "78b3d38cdfa28649fdd2ca92829569ce": "anchor_morning",
+    "44ee19d31b9288ad402868d6df737595": "anchor_morning",
+    "8916ba5e623a0a1d97dd0e7f50e4a205": "anchor_morning"
+   }
+  }
  }
 ]
