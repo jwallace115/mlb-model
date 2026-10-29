@@ -184,6 +184,25 @@ def build_sheet(props, lines, now, slate_date=None):
     return df
 
 
+def _newest_props_file(season):
+    """P79: among the season's month files (data_YYYY_MM[.suffix].parquet), the one whose newest pull is latest —
+    NOT the alphabetically last name (data_2026_10_mac.parquet sorted after data_2026_10.parquet and hid the VM's pulls)."""
+    import pandas as _pd
+    files = sorted((PROPS_DIR / f"season={season}").glob("month=*/data_*.parquet"))
+    if not files:
+        return None
+    best, best_t = None, None
+    for f in files:
+        try:
+            col = _pd.read_parquet(f, columns=["pull_timestamp"])["pull_timestamp"]
+            t = _pd.to_datetime(col, utc=True, errors="coerce").max()
+        except Exception:
+            t = None
+        if t is not None and not _pd.isna(t) and (best_t is None or t > best_t):
+            best, best_t = f, t
+    return best or files[-1]
+
+
 def resolve_inputs(season, now, props_file=None, lines_file=None):
     """Resolve the exact props file and lines snapshot that newest_inputs would pick.
 
@@ -194,10 +213,10 @@ def resolve_inputs(season, now, props_file=None, lines_file=None):
     if props_file:
         resolved_props = str(props_file)
     elif PROPS_DIR is not None:
-        pf = sorted((PROPS_DIR / f"season={season}").glob("month=*/data_*.parquet"))[-2:]
-        if not pf:
+        pf = _newest_props_file(season)  # P79
+        if pf is None:
             raise SystemExit("HALT: no props archive for the season")
-        resolved_props = str(pf[-1])
+        resolved_props = str(pf)
 
     if lines_file:
         resolved_lines = str(lines_file)
@@ -228,7 +247,7 @@ def newest_inputs(season, now, props_file=None, lines_file=None):
         props = pd.DataFrame(columns=["event_id", "commence_time", "home_team", "away_team", "bookmaker",
                                       "market_key", "player_name", "line", "over_price", "under_price", "pull_timestamp"])
     else:
-        pf = [Path(props_file)] if props_file else sorted((PROPS_DIR / f"season={season}").glob("month=*/data_*.parquet"))[-2:]
+        pf = [Path(props_file)] if props_file else [f for f in [_newest_props_file(season)] if f]  # P79
         if not pf:
             raise SystemExit("HALT: no props archive for the season")
         props = pd.concat([pd.read_parquet(f) for f in pf], ignore_index=True)
