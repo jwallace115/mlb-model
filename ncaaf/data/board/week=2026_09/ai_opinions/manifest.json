@@ -4760,5 +4760,192 @@
     "0540f5758ac50f3bb60beb36755f7a1e": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261029T223403Z.parquet",
+  "sha256": "f1c01ad46e8dfc2171fbb6565cb5ae71c6d00b74d122a62fbf2e6e677c6631a9",
+  "logged_utc": "2026-10-29T22:34:03.089492+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-31T22:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T223007Z.parquet",
+   "inputs_digest": "{\"e7510e4cb4351947263e33b6dc6a0812\": \"a8a191f63477ef81\"}",
+   "components": {
+    "e7510e4cb4351947263e33b6dc6a0812": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       182
+      ],
+      [
+       "Georgia Southern Eagles",
+       0,
+       -210
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       5.5,
+       -107
+      ],
+      [
+       "Georgia Southern Eagles",
+       -5.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -111
+      ],
+      [
+       "Under",
+       56.5,
+       -105
+      ]
+     ],
+     "news": [
+      "Georgia Southern hosts Appalachian State in Sun Be",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "e7510e4cb4351947263e33b6dc6a0812": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T224903Z.parquet",
+  "sha256": "eff0fb6d6686b3e5a31c7562b2b45051eb2603d6b707ed0d04ce490968165c1d",
+  "logged_utc": "2026-10-29T22:49:03.235777+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-29T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T223007Z.parquet",
+   "inputs_digest": "{\"c35bb6023b4b5005a38e7cec3ebe4d0b\": \"d4dd8afdef15008d\", \"0540f5758ac50f3bb60beb36755f7a1e\": \"33b620825e5d3c3a\"}",
+   "components": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       439
+      ],
+      [
+       "North Texas Mean Green",
+       0,
+       -550
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       14.0,
+       101
+      ],
+      [
+       "North Texas Mean Green",
+       -14.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       78.5,
+       -104
+      ],
+      [
+       "Under",
+       78.5,
+       -112
+      ]
+     ],
+     "news": [
+      "AAC matchup features North Texas squaring off agai",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H"
+     ],
+     "kalshi_snap": "snap_20261029T2107Z.parquet"
+    },
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1131
+      ],
+      [
+       "Troy Trojans",
+       0,
+       792
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -19.5,
+       -106
+      ],
+      [
+       "Troy Trojans",
+       19.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -114
+      ],
+      [
+       "Under",
+       51.0,
+       -102
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261029T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": "anchor_close",
+    "0540f5758ac50f3bb60beb36755f7a1e": "anchor_close"
+   }
+  }
  }
 ]
