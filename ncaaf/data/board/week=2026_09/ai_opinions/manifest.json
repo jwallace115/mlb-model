@@ -4643,5 +4643,122 @@
     "7fd2d018fdc5930fd62188de968a901c": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261029T203403Z.parquet",
+  "sha256": "bf85e7397d04d425e79d204bd6a9d66de2809eff48fc1e026bc52027cdc58c05",
+  "logged_utc": "2026-10-29T20:34:03.540658+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-29T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T203006Z.parquet",
+   "inputs_digest": "{\"c35bb6023b4b5005a38e7cec3ebe4d0b\": \"3ff07dfebb5525f9\", \"0540f5758ac50f3bb60beb36755f7a1e\": \"2ff7b2b7f184e675\"}",
+   "components": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       433
+      ],
+      [
+       "North Texas Mean Green",
+       0,
+       -541
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       14.0,
+       -101
+      ],
+      [
+       "North Texas Mean Green",
+       -14.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       78.0,
+       -106
+      ],
+      [
+       "Under",
+       78.0,
+       -110
+      ]
+     ],
+     "news": [
+      "AAC matchup features North Texas squaring off agai",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1150
+      ],
+      [
+       "Troy Trojans",
+       0,
+       803
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -19.5,
+       -110
+      ],
+      [
+       "Troy Trojans",
+       19.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -111
+      ],
+      [
+       "Under",
+       51.0,
+       -105
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": "anchor_prekick",
+    "0540f5758ac50f3bb60beb36755f7a1e": "anchor_prekick"
+   }
+  }
  }
 ]
