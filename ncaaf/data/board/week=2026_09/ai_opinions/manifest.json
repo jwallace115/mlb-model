@@ -3322,5 +3322,233 @@
     "3f36c41ee29e9339f71fada56d832914": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261029T180403Z.parquet",
+  "sha256": "35b7af7eb7304c8b55f1183cc3bba7157ad28b89aa6d367c8e8ba6940fff5efa",
+  "logged_utc": "2026-10-29T18:04:03.661922+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.583,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-30T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T180009Z.parquet",
+   "inputs_digest": "{\"44ee19d31b9288ad402868d6df737595\": \"b6fc5484611b6c96\", \"e88d624c699646a03bac59eb193a09bf\": \"d96bd8ad33ed1830\", \"47548a73e429985e77f81a4617b4fdfd\": \"f9b2e3f8e2f26396\", \"d19dbab4071552441b056ccd2e23ca59\": \"62bfe7f150d14137\"}",
+   "components": {
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -110
+      ],
+      [
+       "UCF Knights",
+       0,
+       -102
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       -1.0,
+       -105
+      ],
+      [
+       "UCF Knights",
+       1.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       101
+      ],
+      [
+       "Under",
+       48.5,
+       -118
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "BYU Cougars vs. UCF Knights: Full Highlights",
+      "BYU's Sitake disputes roughing the kicker call in ",
+      "Baylor fires coach Dave Aranda in seventh season",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Isaiah Marshall accounts for 3 TDs, Kansas blocks ",
+      "Keyone Jenkins throws TD pass in double OT and UCF",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF hands No. 2 BYU first loss in dramatic fashion",
+      "UCF meets Baylor in Big 12 play",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "e88d624c699646a03bac59eb193a09bf": {
+     "pinnacle_h2h": [
+      [
+       "Marshall Thundering Herd",
+       0,
+       -142
+      ],
+      [
+       "Old Dominion Monarchs",
+       0,
+       125
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Marshall Thundering Herd",
+       -3.0,
+       -101
+      ],
+      [
+       "Old Dominion Monarchs",
+       3.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       100
+      ],
+      [
+       "Under",
+       44.0,
+       -116
+      ]
+     ],
+     "news": [
+      "Baker throws, runs for TDs, Louisiana Tech posts 2",
+      "Old Dominion Monarchs vs. Louisiana Tech Bulldogs:",
+      "Old Dominion hosts Marshall in Sun Belt matchup"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "47548a73e429985e77f81a4617b4fdfd": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       187
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       -216
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       6.0,
+       -110
+      ],
+      [
+       "Georgia State Panthers",
+       -6.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -110
+      ],
+      [
+       "Under",
+       57.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Georgia State Panthers vs. Arkansas State Red Wolv",
+      "Georgia State squares off against Coastal Carolina",
+      "Trey Owens throws for 2 TDs and runs for 2, leadin"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "d19dbab4071552441b056ccd2e23ca59": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       -129
+      ],
+      [
+       "Kansas State Wildcats",
+       0,
+       114
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       -1.0,
+       -112
+      ],
+      [
+       "Kansas State Wildcats",
+       1.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -108
+      ],
+      [
+       "Under",
+       47.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Colorado Buffaloes vs. Oklahoma State Cowboys: Ful",
+      "Deion Sanders clarifies joke about silencing criti",
+      "Deion Sanders: Comment about silencing critics wit",
+      "Kansas State QB Avery Johnson out vs. Arizona Stat",
+      "Kansas State Wildcats vs. Arizona State Sun Devils",
+      "Kansas State and Colorado meet in Big 12 action",
+      "Mack scores 4 TDs, Arizona State shakes off QB inj",
+      "Oklahoma State scores 34 points in the 2nd half to",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "44ee19d31b9288ad402868d6df737595": "line_move: pinnacle spreads Baylor Bears 1.0\u2192-1.0; line_move: pinnacle spreads UCF Knights -1.0\u21921.0",
+    "e88d624c699646a03bac59eb193a09bf": "anchor_morning",
+    "47548a73e429985e77f81a4617b4fdfd": "anchor_morning",
+    "d19dbab4071552441b056ccd2e23ca59": "anchor_morning"
+   }
+  }
  }
 ]
