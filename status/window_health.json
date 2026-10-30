@@ -12,8 +12,8 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-10-30T03:17:03.732336+00:00",
-  "finished_utc": "2026-10-30T03:17:03.732336+00:00",
+  "started_utc": "2026-10-30T03:47:03.692172+00:00",
+  "finished_utc": "2026-10-30T03:47:03.692172+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -22,11 +22,11 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-10-30T03:24:03.630811+00:00",
-  "finished_utc": "2026-10-30T03:24:03.630811+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-10-30T03:49:03.645992+00:00",
+  "finished_utc": "2026-10-30T03:49:03.645992+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle spreads Kent State Golden Flashes -8.5\u2192-7.5; line_move: pinnacle spreads Sacramento State Hornets 8.5\u21927.5', 'line_move: pinnacle spreads Kansas Jayhawks 5.5\u21926.5; line_move: pinna",
-  "freeze_file": "ai_opinions_20261030T031903Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]
