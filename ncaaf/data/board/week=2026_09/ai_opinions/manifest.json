@@ -9089,5 +9089,82 @@
     "d0126c335a51772c70c76e17ca06afb3": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T161903Z.parquet",
+  "sha256": "fceb80ca4ec51f03ed0ce269f9e207d751872cbe47eac5672624aa73ccb7d0ef",
+  "logged_utc": "2026-10-30T16:19:03.752623+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-30T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T160009Z.parquet",
+   "inputs_digest": "{\"44ee19d31b9288ad402868d6df737595\": \"9476d0e2696140bb\"}",
+   "components": {
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -117
+      ],
+      [
+       "UCF Knights",
+       0,
+       106
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       -2.0,
+       100
+      ],
+      [
+       "UCF Knights",
+       2.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -115
+      ],
+      [
+       "Under",
+       48.5,
+       -101
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Baylor fires coach Dave Aranda in seventh season",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF meets Baylor in Big 12 play",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1607Z.parquet"
+    }
+   },
+   "triggers": {
+    "44ee19d31b9288ad402868d6df737595": "line_move: pinnacle spreads UCF Knights 1.0\u21922.0; line_move: pinnacle spreads Baylor Bears -1.0\u2192-2.0"
+   }
+  }
  }
 ]

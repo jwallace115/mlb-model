@@ -12,8 +12,8 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-10-30T15:47:03.777682+00:00",
-  "finished_utc": "2026-10-30T15:47:03.777682+00:00",
+  "started_utc": "2026-10-30T16:17:03.761205+00:00",
+  "finished_utc": "2026-10-30T16:17:03.761205+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -22,11 +22,11 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-10-30T15:49:04.250557+00:00",
-  "finished_utc": "2026-10-30T15:49:04.250557+00:00",
-  "result": "no_triggers",
+  "started_utc": "2026-10-30T16:24:43.619350+00:00",
+  "finished_utc": "2026-10-30T16:24:43.619350+00:00",
+  "result": "COMPLETE",
   "step": "window_watch",
-  "message": "",
-  "freeze_file": null
+  "message": "['line_move: pinnacle spreads UCF Knights 1.0\u21922.0; line_move: pinnacle spreads Baylor Bears -1.0\u2192-2.0']",
+  "freeze_file": "ai_opinions_20261030T161903Z.parquet"
  }
 ]
