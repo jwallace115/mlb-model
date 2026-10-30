@@ -6487,5 +6487,102 @@
     "47548a73e429985e77f81a4617b4fdfd": "line_move: pinnacle spreads Georgia State Panthers -5.0\u2192-4.0; line_move: pinnacle spreads Coastal Carolina Chanticleers 5.0\u21924.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T061904Z.parquet",
+  "sha256": "d783d097db861cd1f42735147dadcc4c193de1bd0b161a6abb4cbe5db9409bd2",
+  "logged_utc": "2026-10-30T06:19:04.176787+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 49.0,
+  "first_kickoff_utc": "2026-10-31T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T053004Z.parquet",
+   "inputs_digest": "{\"e2ffa742b36678caf388ca70fdd4878c\": \"a6a20086eb189ee1\"}",
+   "components": {
+    "e2ffa742b36678caf388ca70fdd4878c": {
+     "pinnacle_h2h": [
+      [
+       "Mississippi State Bulldogs",
+       0,
+       870
+      ],
+      [
+       "Texas Longhorns",
+       0,
+       -1396
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Mississippi State Bulldogs",
+       20.5,
+       -107
+      ],
+      [
+       "Texas Longhorns",
+       -20.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -109
+      ],
+      [
+       "Under",
+       50.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "2027 college football recruits on the rise and how",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "Connelly on Week 8: Who in college football can --",
+      "Diving into Arch Manning, Texas' upset over Ole Mi",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How every 2027 five-star college football prospect",
+      "MS State's Jeff Lebby on Week 8: 'They made those ",
+      "Mississippi State OL DJ Chester out vs. Texas in l",
+      "Mississippi State QB Kamario Taylor out for season",
+      "No Huddle! Hustling through the storylines to look",
+      "No. 11 Texas squares off against Mississippi State",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "SEC chaos, Texas top the list of Week 8 Power Rank",
+      "Sources: Mississippi State QB Kamario Taylor out f",
+      "Sources: Texas LT Trevor Goosby has successful kne",
+      "Sources: Texas' Trevor Goosby has season-ending kn",
+      "Stephen A. and Finebaum disagree over Arch Manning",
+      "Steve Sarkisian lauds 'edgy' Arch Manning after Te",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "What does Kamario Taylor's season-ending injury me",
+      "Where are Arch Manning and Texas projected in the ",
+      "Why Jordan Rodgers says Arch Manning should transf"
+     ],
+     "kalshi_snap": "snap_20261030T0607Z.parquet"
+    }
+   },
+   "triggers": {
+    "e2ffa742b36678caf388ca70fdd4878c": "new_news: 1 availability items"
+   }
+  }
  }
 ]
