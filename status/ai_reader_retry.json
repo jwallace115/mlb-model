@@ -98,5 +98,10 @@
   "attempt": 3,
   "last_utc": "2026-10-24T14:04:41.958492+00:00",
   "error": "Extra data: line 8 column 2 (char 1636)"
+ },
+ "nfl:52e7ee9c42525e6deec02da32dc2fad8": {
+  "attempt": 1,
+  "last_utc": "2026-10-30T19:18:52.768370+00:00",
+  "error": "no JSON array in response: line 1 column 1 (char 0)"
  }
 }
