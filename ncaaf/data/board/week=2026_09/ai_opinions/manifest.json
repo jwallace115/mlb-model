@@ -6342,5 +6342,82 @@
     "d0126c335a51772c70c76e17ca06afb3": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T041903Z.parquet",
+  "sha256": "17fafadd775925f9cff95bbc050816dbc4f06d20bb88955ab4df07cd6d02fde9",
+  "logged_utc": "2026-10-30T04:19:03.798956+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-31T19:45:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T040006Z.parquet",
+   "inputs_digest": "{\"09f66e3676ec3112e24cd6b9e97feb41\": \"b4113e7bc7895e52\"}",
+   "components": {
+    "09f66e3676ec3112e24cd6b9e97feb41": {
+     "pinnacle_h2h": [
+      [
+       "Virginia Cavaliers",
+       0,
+       396
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       0,
+       -511
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Virginia Cavaliers",
+       12.5,
+       -104
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       -12.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -110
+      ],
+      [
+       "Under",
+       48.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "No. 14 Wake Forest and Virginia meet in ACC action",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261030T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "09f66e3676ec3112e24cd6b9e97feb41": "line_move: pinnacle totals Under 49.5\u219248.5; line_move: pinnacle totals Over 49.5\u219248.5"
+   }
+  }
  }
 ]
