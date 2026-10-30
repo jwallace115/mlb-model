@@ -6419,5 +6419,73 @@
     "09f66e3676ec3112e24cd6b9e97feb41": "line_move: pinnacle totals Under 49.5\u219248.5; line_move: pinnacle totals Over 49.5\u219248.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T051903Z.parquet",
+  "sha256": "591cc57d3176db43fa7569a33beaf99d6f7b1d4b6d0e1cd8681d569b999f9d75",
+  "logged_utc": "2026-10-30T05:19:03.912599+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-31T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T050004Z.parquet",
+   "inputs_digest": "{\"47548a73e429985e77f81a4617b4fdfd\": \"5fe9c80cffa0b355\"}",
+   "components": {
+    "47548a73e429985e77f81a4617b4fdfd": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       161
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       -185
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       4.0,
+       -103
+      ],
+      [
+       "Georgia State Panthers",
+       -4.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -106
+      ],
+      [
+       "Under",
+       56.0,
+       -110
+      ]
+     ],
+     "news": [
+      "Georgia State squares off against Coastal Carolina"
+     ],
+     "kalshi_snap": "snap_20261030T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "47548a73e429985e77f81a4617b4fdfd": "line_move: pinnacle spreads Georgia State Panthers -5.0\u2192-4.0; line_move: pinnacle spreads Coastal Carolina Chanticleers 5.0\u21924.0"
+   }
+  }
  }
 ]

@@ -1,12 +1,17 @@
 {
- "started_utc": "2026-10-30T04:49:03.717563+00:00",
- "finished_utc": "2026-10-30T04:49:04.223548+00:00",
+ "started_utc": "2026-10-30T05:19:03.912599+00:00",
+ "finished_utc": "2026-10-30T05:24:41.418857+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "47548a73e429985e77f81a4617b4fdfd",
+   "text": "line_move: pinnacle spreads Georgia State Panthers -5.0\u2192-4.0; line_move: pinnacle spreads Coastal Carolina Chanticleers 5.0\u21924.0"
+  }
+ ],
+ "games_read": 1,
+ "frozen_file": "ai_opinions_20261030T051903Z.parquet",
+ "spend_usd": 36.1391,
+ "result": "COMPLETE"
 }
