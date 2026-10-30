@@ -1,17 +1,12 @@
 {
- "started_utc": "2026-10-30T16:19:03.752623+00:00",
- "finished_utc": "2026-10-30T16:24:43.655509+00:00",
+ "started_utc": "2026-10-30T16:49:03.240575+00:00",
+ "finished_utc": "2026-10-30T16:49:03.601860+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "44ee19d31b9288ad402868d6df737595",
-   "text": "line_move: pinnacle spreads UCF Knights 1.0\u21922.0; line_move: pinnacle spreads Baylor Bears -1.0\u2192-2.0"
-  }
- ],
- "games_read": 1,
- "frozen_file": "ai_opinions_20261030T161903Z.parquet",
- "spend_usd": 36.7543,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
