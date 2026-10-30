@@ -1,0 +1,1592 @@
+[
+ {
+  "file": "ai_opinions_20261028T011704Z.parquet",
+  "sha256": "ff1158a9fe424e79130a164cdf37986c058f953e6f2c0085ef462c4208c922d5",
+  "logged_utc": "2026-10-28T01:17:04.542266+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 17.0,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261028T010007Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"25a2f03e24d7d8d6\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       165
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -195
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       172
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -113
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -108
+      ],
+      [
+       "Under",
+       47.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-10-27T14:00:11.286615+00:00",
+     "inj_Green Bay Packers": "a42bb3609d9e6032",
+     "inj_Carolina Panthers": "a9ee3ec5fae25253",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers linebacker Zaire Franklin out Sunday with ",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to establish run game against Bucs",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261028T0105Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T043203Z.parquet",
+  "sha256": "d372846eac7919aa10a92581c2b3cc3c6c6b6ce6bfb502d631c4079a2ac55cd3",
+  "logged_utc": "2026-10-28T04:32:03.755874+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 2.0,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261028T043004Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"b0d314f2bbe99dc8\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       165
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -195
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       172
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -113
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -108
+      ],
+      [
+       "Under",
+       47.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-10-28T02:00:09.045129+00:00",
+     "inj_Green Bay Packers": "a42bb3609d9e6032",
+     "inj_Carolina Panthers": "a9ee3ec5fae25253",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers linebacker Zaire Franklin out Sunday with ",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to establish run game against Bucs",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Proposing NFL trade deadline offers: Moves for Saq",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261028T0405Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "new_props: pull 2026-10-28T02:00:09.045129+00:00"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T073204Z.parquet",
+  "sha256": "318a21395f041f598271835603299eba405adfb88c253401fe91ecafd4e2a4c0",
+  "logged_utc": "2026-10-28T07:32:04.010001+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 122.0,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261028T053004Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"445bda642b238869\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       165
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -195
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       172
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -113
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -108
+      ],
+      [
+       "Under",
+       47.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-10-28T02:00:09.045129+00:00",
+     "inj_Green Bay Packers": "6045c6069251eaa2",
+     "inj_Carolina Panthers": "7797f5107cf5dddb",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers linebacker Zaire Franklin out Sunday with ",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to establish run game against Bucs",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261028T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "injury_change: inj_Green Bay Packers; injury_change: inj_Carolina Panthers"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T140203Z.parquet",
+  "sha256": "aa311e979bbfd422dff6a4e8dc3ed52329666cc07d4d33e985c0858d417d03f9",
+  "logged_utc": "2026-10-28T14:02:03.821733+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 1.9,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261028T140011Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"21a33d8c181aad09\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       160
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -195
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       172
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -113
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -108
+      ],
+      [
+       "Under",
+       47.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-10-28T14:00:11.757504+00:00",
+     "inj_Green Bay Packers": "6045c6069251eaa2",
+     "inj_Carolina Panthers": "7797f5107cf5dddb",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 preview: Picks, predictions, schedule, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers linebacker Zaire Franklin out Sunday with ",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to establish run game against Bucs",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261028T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T201703Z.parquet",
+  "sha256": "3f72c898ece12552f226993ffae326a0fc22e510c41736ca3e78283ebfe67684",
+  "logged_utc": "2026-10-28T20:17:03.438783+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 16.9,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261028T200008Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"36e1588188dc5667\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       160
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -195
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       171
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -114
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -107
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "props_ts": "2026-10-28T14:00:11.757504+00:00",
+     "inj_Green Bay Packers": "6045c6069251eaa2",
+     "inj_Carolina Panthers": "209f55b450b4674e",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeff Saturday comes after Stephen A. for his Jorda",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 betting odds: Lines and totals for ever",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to establish run game against Bucs",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What Jordan Rodgers wants to see from Kyler Murray",
+      "What are the longest field goals in NFL history?",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261028T2005Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "injury_change: inj_Carolina Panthers"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T003203Z.parquet",
+  "sha256": "7c8fc9d8eeb37e859ea7b4229696af209855aebc62ce7a440e8af19e1b2207ee",
+  "logged_utc": "2026-10-29T00:32:03.836620+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 1.9,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261029T003008Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"16c20119d3081bb6\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       160
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -195
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       171
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -114
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -107
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "props_ts": "2026-10-28T14:00:11.757504+00:00",
+     "inj_Green Bay Packers": "97429ae30edec2f2",
+     "inj_Carolina Panthers": "beaaf39912c13770",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeff Saturday comes after Stephen A. for his Jorda",
+      "Josh Jacobs set for 2026 Lambeau debut on Thursday",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers and Panthers trying to bounce back as they",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Pass rusher Jaelan Phillips among four Panthers ru",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What Jordan Rodgers wants to see from Kyler Murray",
+      "What are the longest field goals in NFL history?",
+      "Why Panthers will be shorthanded vs. the Packers",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261029T0005Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "injury_change: inj_Green Bay Packers; injury_change: inj_Carolina Panthers"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T024704Z.parquet",
+  "sha256": "5885afd1f0d290042f2f6b81934c4b16fba54229a2d129b2b95d65eb9efa0bde",
+  "logged_utc": "2026-10-29T02:47:04.092038+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 17.0,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261029T023006Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"096116a00419c5b1\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       160
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -195
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       171
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -114
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -107
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "props_ts": "2026-10-29T02:00:09.368113+00:00",
+     "inj_Green Bay Packers": "97429ae30edec2f2",
+     "inj_Carolina Panthers": "beaaf39912c13770",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeff Saturday comes after Stephen A. for his Jorda",
+      "Josh Jacobs set for 2026 Lambeau debut on Thursday",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers and Panthers trying to bounce back as they",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Pass rusher Jaelan Phillips among four Panthers ru",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What Jordan Rodgers wants to see from Kyler Murray",
+      "What are the longest field goals in NFL history?",
+      "Why Panthers will be shorthanded vs. the Packers",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261029T0235Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "new_props: pull 2026-10-29T02:00:09.368113+00:00"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T071704Z.parquet",
+  "sha256": "39e908d280c6384ebef7bfca68f34d7d4310b9e6931e8497da72faa2748469fc",
+  "logged_utc": "2026-10-29T07:17:04.187569+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 107.0,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261029T053004Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"6e94fede487d1e38\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       165
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -200
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.0,
+       -115
+      ],
+      [
+       "Under",
+       47.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       172
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       4.0,
+       -114
+      ],
+      [
+       "Green Bay Packers",
+       -4.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -106
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "props_ts": "2026-10-29T02:00:09.368113+00:00",
+     "inj_Green Bay Packers": "c27b2040955c4210",
+     "inj_Carolina Panthers": "22cf366929d2ced9",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "CC Sabathia, J.J. Watt top social media reaction t",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeff Saturday comes after Stephen A. for his Jorda",
+      "Josh Jacobs set for 2026 Lambeau debut on Thursday",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers and Panthers trying to bounce back as they",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Pass rusher Jaelan Phillips among four Panthers ru",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What Jordan Rodgers wants to see from Kyler Murray",
+      "What are the longest field goals in NFL history?",
+      "Why Panthers will be shorthanded vs. the Packers",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261029T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "injury_change: inj_Green Bay Packers; injury_change: inj_Carolina Panthers"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T140203Z.parquet",
+  "sha256": "37ff2e6f563e045eb89a2b01ed9a35863eacbdd06b7b6ae0463846b0450c08a7",
+  "logged_utc": "2026-10-29T14:02:03.938656+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 1.9,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261029T140012Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"106ab384d5f50038\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       165
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -200
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -115
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.0,
+       -115
+      ],
+      [
+       "Under",
+       47.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       171
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -191
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -102
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -104
+      ],
+      [
+       "Under",
+       47.0,
+       -108
+      ]
+     ],
+     "props_ts": "2026-10-29T14:00:12.845772+00:00",
+     "inj_Green Bay Packers": "c27b2040955c4210",
+     "inj_Carolina Panthers": "22cf366929d2ced9",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "CC Sabathia, J.J. Watt top social media reaction t",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeff Saturday comes after Stephen A. for his Jorda",
+      "Josh Jacobs set for 2026 Lambeau debut on Thursday",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers and Panthers trying to bounce back as they",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Panthers' consistency starts in the trenches, rest",
+      "Pass rusher Jaelan Phillips among four Panthers ru",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What Jordan Rodgers wants to see from Kyler Murray",
+      "What are the longest field goals in NFL history?",
+      "Why Micah Parsons' ACL recovery is taking longer t",
+      "Why Panthers will be shorthanded vs. the Packers",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261029T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T184704Z.parquet",
+  "sha256": "0f14637adf91cb88b6d5de965250ba4fa21c4e76c48c7a60d224458be9c22791",
+  "logged_utc": "2026-10-29T18:47:04.739146+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 16.9,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261029T183009Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"128bfb7f803e267c\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       170
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -200
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -115
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.0,
+       -110
+      ],
+      [
+       "Under",
+       47.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       169
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -189
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -104
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -106
+      ],
+      [
+       "Under",
+       47.0,
+       -106
+      ]
+     ],
+     "props_ts": "2026-10-29T14:00:12.845772+00:00",
+     "inj_Green Bay Packers": "13a56beb4c977786",
+     "inj_Carolina Panthers": "04d53f1d5768a244",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "CC Sabathia, J.J. Watt top social media reaction t",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "How to bet Panthers-Packers: Analysis, tips and to",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeff Saturday comes after Stephen A. for his Jorda",
+      "Josh Jacobs set for 2026 Lambeau debut on Thursday",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers and Panthers trying to bounce back as they",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Panthers' consistency starts in the trenches, rest",
+      "Pass rusher Jaelan Phillips among four Panthers ru",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What Jordan Rodgers wants to see from Kyler Murray",
+      "What are the longest field goals in NFL history?",
+      "Why Micah Parsons' ACL recovery is taking longer t",
+      "Why Panthers will be shorthanded vs. the Packers",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261029T1835Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "injury_change: inj_Green Bay Packers; injury_change: inj_Carolina Panthers"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T211703Z.parquet",
+  "sha256": "9eb3e287c445f907832eccaea3eae3cb97e82e85ab1068b82bab5ccb8da10ec9",
+  "logged_utc": "2026-10-29T21:17:03.695312+00:00",
+  "rows": 3,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 16.9,
+  "first_kickoff_utc": "2026-10-30T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261029T210009Z.parquet",
+   "inputs_digest": "{\"ab2865e9f2d4b012de8bc6fb6de11a7c\": \"9fc2df77ba193b3b\"}",
+   "components": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       170
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -200
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -110
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.0,
+       -110
+      ],
+      [
+       "Under",
+       47.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       169
+      ],
+      [
+       "Green Bay Packers",
+       0,
+       -189
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       3.5,
+       -104
+      ],
+      [
+       "Green Bay Packers",
+       -3.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -101
+      ],
+      [
+       "Under",
+       47.0,
+       -111
+      ]
+     ],
+     "props_ts": "2026-10-29T14:00:12.845772+00:00",
+     "inj_Green Bay Packers": "13a56beb4c977786",
+     "inj_Carolina Panthers": "04d53f1d5768a244",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bucky Irving runs for 2 TDs and Bucs force 4 turno",
+      "Bucs make easy work of Panthers in important divis",
+      "CC Sabathia, J.J. Watt top social media reaction t",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "How to bet Panthers-Packers: Analysis, tips and to",
+      "Jake Bates kicks 22-yard FG as time expires to giv",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeff Saturday comes after Stephen A. for his Jorda",
+      "Josh Jacobs set for 2026 Lambeau debut on Thursday",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "Matt LaFleur isn't ruling out imminent practice re",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7 betting guide: the value bets to make o",
+      "NFL Week 7 uniforms: Alternates galore as Texans g",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Packers and Panthers trying to bounce back as they",
+      "Packers rip officiating after roughing penalties p",
+      "Panthers RT Taylor Moton carted off field with fra",
+      "Panthers RT Taylor Moton to undergo season-ending ",
+      "Panthers look to regroup after rough showing in We",
+      "Panthers shuffling offensive line",
+      "Panthers' consistency starts in the trenches, rest",
+      "Pass rusher Jaelan Phillips among four Panthers ru",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Packers LB Zaire Franklin has hairline fr",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What Jordan Rodgers wants to see from Kyler Murray",
+      "What are the longest field goals in NFL history?",
+      "Why Micah Parsons' ACL recovery is taking longer t",
+      "Why Panthers will be shorthanded vs. the Packers",
+      "Will the Packers' run game improve with Josh Jacob"
+     ],
+     "kalshi_snap": "snap_20261029T2105Z.parquet"
+    }
+   },
+   "triggers": {
+    "ab2865e9f2d4b012de8bc6fb6de11a7c": "anchor_prekick"
+   }
+  }
+ }
+]

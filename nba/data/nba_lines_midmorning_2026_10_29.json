@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "b123d92eb8046e43fabf95a33a676634",
+    "game_date": "2026-10-29",
+    "sport": "NBA",
+    "home_team": "Atlanta Hawks",
+    "away_team": "Cleveland Cavaliers",
+    "commence_time": "2026-10-30T00:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 237.5,
+    "over_price": -108,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-29T13:25:04.061308+00:00"
+  },
+  {
+    "game_id": "f91d27cc050b1b85073d745372c73833",
+    "game_date": "2026-10-29",
+    "sport": "NBA",
+    "home_team": "New Orleans Pelicans",
+    "away_team": "Sacramento Kings",
+    "commence_time": "2026-10-30T00:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 236.5,
+    "over_price": -105,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-29T13:25:04.061308+00:00"
+  },
+  {
+    "game_id": "ba667ca1b0b042f0661cb9d9af56c165",
+    "game_date": "2026-10-29",
+    "sport": "NBA",
+    "home_team": "Portland Trail Blazers",
+    "away_team": "Memphis Grizzlies",
+    "commence_time": "2026-10-30T02:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 233.5,
+    "over_price": -106,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-29T13:25:04.061308+00:00"
+  }
+]

@@ -358,5 +358,4407 @@
     "eed30e1ba5aa37d77ee6401d67832446": "line_move: pinnacle spreads Missouri State Bears -6.0\u2192-5.0; line_move: pinnacle spreads Sam Houston State Bearkats 6.0\u21925.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261026T214904Z.parquet",
+  "sha256": "339774a0b128f6935df4961771ca57a3a149b21135dbe7d2e3834378d20bee27",
+  "logged_utc": "2026-10-26T21:49:04.048656+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 5,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261026T213007Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"2dc91313ad2d3f18\", \"eed30e1ba5aa37d77ee6401d67832446\": \"c57b1d13775aeb8a\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -105
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -109
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       1.0,
+       -114
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       -1.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       -106
+      ],
+      [
+       "Under",
+       58.0,
+       -112
+      ]
+     ],
+     "news": [
+      "Delaware and Western Kentucky meet in CUSA action"
+     ],
+     "kalshi_snap": "snap_20261026T2107Z.parquet"
+    },
+    "eed30e1ba5aa37d77ee6401d67832446": {
+     "pinnacle_h2h": [
+      [
+       "Missouri State Bears",
+       0,
+       -212
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       180
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Missouri State Bears",
+       -5.0,
+       -111
+      ],
+      [
+       "Sam Houston State Bearkats",
+       5.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -106
+      ],
+      [
+       "Under",
+       51.0,
+       -113
+      ]
+     ],
+     "news": [
+      "Missouri State squares off against Sam Houston in "
+     ],
+     "kalshi_snap": "snap_20261026T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "line_move: pinnacle totals Under 56.0\u219258.0; line_move: pinnacle totals Over 56.0\u219258.0",
+    "eed30e1ba5aa37d77ee6401d67832446": "line_move: pinnacle totals Under 50.0\u219251.0; line_move: pinnacle totals Over 50.0\u219251.0"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261026T230403Z.parquet",
+  "sha256": "a520e6ecc157b0821cec8bd9cad32fcde666920b91a63a0730995e0db89ddd63",
+  "logged_utc": "2026-10-26T23:04:03.747002+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.833,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261026T230006Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"81b185f074ed9823\", \"66c2794f789b9c2c028297eff4838e81\": \"5721bf659bbd0fd6\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -105
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -109
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       1.0,
+       -113
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       -1.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -111
+      ],
+      [
+       "Under",
+       57.0,
+       -107
+      ]
+     ],
+     "news": [
+      "Delaware and Western Kentucky meet in CUSA action"
+     ],
+     "kalshi_snap": "snap_20261026T2107Z.parquet"
+    },
+    "66c2794f789b9c2c028297eff4838e81": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       123
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -142
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       3.0,
+       -116
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       -3.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -117
+      ],
+      [
+       "Under",
+       50.5,
+       -102
+      ]
+     ],
+     "news": [
+      "Jaylon Coleman scores 2 TDs in Liberty's 34-6 win ",
+      "Middle Tennessee and Kennesaw State meet in CUSA p"
+     ],
+     "kalshi_snap": "snap_20261026T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "line_move: pinnacle totals Under 58.0\u219257.0; line_move: pinnacle totals Over 58.0\u219257.0",
+    "66c2794f789b9c2c028297eff4838e81": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261027T000403Z.parquet",
+  "sha256": "14ce8a053d7b33096adcec1c996eb2ee5f15a1a6cf6f7181c682ac6453ab5b44",
+  "logged_utc": "2026-10-27T00:04:03.965330+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.8,
+  "first_kickoff_utc": "2026-10-29T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T000014Z.parquet",
+   "inputs_digest": "{\"cf6c89492427cb54521b70e7c5dc5993\": \"0bb6b68d5e59db82\"}",
+   "components": {
+    "cf6c89492427cb54521b70e7c5dc5993": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -158
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       137
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -3.0,
+       -114
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -107
+      ],
+      [
+       "Under",
+       49.5,
+       -111
+      ]
+     ],
+     "news": [
+      "James Jones rushes for 178 yards and a touchdown a",
+      "New Mexico State Aggies vs. Sam Houston Bearkats: ",
+      "New Mexico State hosts Jacksonville State in CUSA ",
+      "Tim Burns Jr. takes off on an 81-yard catch-and-ru"
+     ],
+     "kalshi_snap": "snap_20261026T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "cf6c89492427cb54521b70e7c5dc5993": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261027T033404Z.parquet",
+  "sha256": "6d794e0319538f1197c828492f27ef595e45173d7f62e547ba5a36ebf55fd43e",
+  "logged_utc": "2026-10-27T03:34:04.018572+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T033006Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"4940ec92d1c7422d\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -114
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       100
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -1.5,
+       -106
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       1.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -112
+      ],
+      [
+       "Under",
+       57.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Delaware and Western Kentucky meet in CUSA action"
+     ],
+     "kalshi_snap": "snap_20261027T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "line_move: pinnacle spreads Western Kentucky Hilltoppers -1.0\u21921.5; line_move: pinnacle spreads Delaware Blue Hens 1.0\u2192-1.5"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261027T144903Z.parquet",
+  "sha256": "5c535c86d59db550b01648fd08ef441ecc3d681536ffd1cb440730c27bf137da",
+  "logged_utc": "2026-10-27T14:49:03.994680+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.833,
+  "revised_rows": 10,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T143005Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"f139c5491a9d6a21\", \"eed30e1ba5aa37d77ee6401d67832446\": \"dd7808d11007682c\", \"66c2794f789b9c2c028297eff4838e81\": \"afcbc8be836bf511\", \"cf6c89492427cb54521b70e7c5dc5993\": \"47ac4fe32cd92a48\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -107
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -103
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -1.5,
+       103
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       1.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -109
+      ],
+      [
+       "Under",
+       57.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Delaware and Western Kentucky meet in CUSA action"
+     ],
+     "kalshi_snap": "snap_20261027T1207Z.parquet"
+    },
+    "eed30e1ba5aa37d77ee6401d67832446": {
+     "pinnacle_h2h": [
+      [
+       "Missouri State Bears",
+       0,
+       -214
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       189
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Missouri State Bears",
+       -5.0,
+       -113
+      ],
+      [
+       "Sam Houston State Bearkats",
+       5.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -111
+      ],
+      [
+       "Under",
+       51.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Missouri State squares off against Sam Houston in "
+     ],
+     "kalshi_snap": "snap_20261027T1207Z.parquet"
+    },
+    "66c2794f789b9c2c028297eff4838e81": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       118
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -135
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       2.5,
+       -102
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       -2.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -114
+      ],
+      [
+       "Under",
+       50.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Jaylon Coleman scores 2 TDs in Liberty's 34-6 win ",
+      "Middle Tennessee and Kennesaw State meet in CUSA p"
+     ],
+     "kalshi_snap": "snap_20261027T1207Z.parquet"
+    },
+    "cf6c89492427cb54521b70e7c5dc5993": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -158
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       137
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -3.0,
+       -114
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -107
+      ],
+      [
+       "Under",
+       49.5,
+       -111
+      ]
+     ],
+     "news": [
+      "New Mexico State hosts Jacksonville State in CUSA "
+     ],
+     "kalshi_snap": "snap_20261027T1207Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "anchor_morning",
+    "eed30e1ba5aa37d77ee6401d67832446": "anchor_morning",
+    "66c2794f789b9c2c028297eff4838e81": "anchor_morning",
+    "cf6c89492427cb54521b70e7c5dc5993": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261027T154904Z.parquet",
+  "sha256": "6f39a20f76fd45c1b6f548607569b4033216508da76fd94e47314c956c05bb7d",
+  "logged_utc": "2026-10-27T15:49:04.017542+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T153008Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"df9a3e5aadb0f6eb\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       100
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -111
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       1.0,
+       -105
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       -1.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -109
+      ],
+      [
+       "Under",
+       57.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Delaware and Western Kentucky meet in CUSA action"
+     ],
+     "kalshi_snap": "snap_20261027T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "line_move: pinnacle spreads Delaware Blue Hens -1.5\u21921.0; line_move: pinnacle spreads Western Kentucky Hilltoppers 1.5\u2192-1.0"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261027T180404Z.parquet",
+  "sha256": "76ddac8de5cac9effb440484c1703fb7b16b0ff93652e443d0bd3fc3a39294dd",
+  "logged_utc": "2026-10-27T18:04:04.218478+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T180009Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"0835740394d646b6\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       107
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -118
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       1.5,
+       -105
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       -1.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -110
+      ],
+      [
+       "Under",
+       56.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Delaware and Western Kentucky meet in CUSA action"
+     ],
+     "kalshi_snap": "snap_20261027T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "line_move: pinnacle totals Over 57.5\u219256.5; line_move: pinnacle totals Under 57.5\u219256.5"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261027T200404Z.parquet",
+  "sha256": "dc9582b266debb8ee75b7ff342dbc61919f74dd73cbaae4855e17a356b7ec33a",
+  "logged_utc": "2026-10-27T20:04:04.162781+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T200010Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"1eb89ba08f13e924\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       107
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -119
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       1.5,
+       -104
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       -1.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -108
+      ],
+      [
+       "Under",
+       55.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Delaware and Western Kentucky meet in CUSA action"
+     ],
+     "kalshi_snap": "snap_20261027T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261027T210403Z.parquet",
+  "sha256": "1348261a7db38be4d84eab1dd4c6de8209f1efb80c80528f90263fd1664224e2",
+  "logged_utc": "2026-10-27T21:04:03.929077+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-28T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T210010Z.parquet",
+   "inputs_digest": "{\"eed30e1ba5aa37d77ee6401d67832446\": \"e71294c8087a4d90\"}",
+   "components": {
+    "eed30e1ba5aa37d77ee6401d67832446": {
+     "pinnacle_h2h": [
+      [
+       "Missouri State Bears",
+       0,
+       -214
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       190
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Missouri State Bears",
+       -6.0,
+       -103
+      ],
+      [
+       "Sam Houston State Bearkats",
+       6.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -116
+      ],
+      [
+       "Under",
+       51.5,
+       -101
+      ]
+     ],
+     "news": [
+      "Missouri State squares off against Sam Houston in "
+     ],
+     "kalshi_snap": "snap_20261027T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "eed30e1ba5aa37d77ee6401d67832446": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261027T221903Z.parquet",
+  "sha256": "2171f07d89e7f28b09f214a6c3da527c51c3780dc3d2609ba68eedeedf37fffb",
+  "logged_utc": "2026-10-27T22:19:03.957144+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-27T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T220011Z.parquet",
+   "inputs_digest": "{\"0ae4d3447c72a5c39b523d9b3fbaf216\": \"ed3ea4ba82706807\"}",
+   "components": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       114
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -126
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       1.5,
+       102
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       -1.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -105
+      ],
+      [
+       "Under",
+       55.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Delaware and Western Kentucky meet in CUSA action"
+     ],
+     "kalshi_snap": "snap_20261027T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "0ae4d3447c72a5c39b523d9b3fbaf216": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261027T231903Z.parquet",
+  "sha256": "b514f227dcf7d17950df20d7e38400842db45af5ac3a374e922ea4958285ae94",
+  "logged_utc": "2026-10-27T23:19:03.967552+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-28T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T230006Z.parquet",
+   "inputs_digest": "{\"eed30e1ba5aa37d77ee6401d67832446\": \"31c8b51d65d18f2c\"}",
+   "components": {
+    "eed30e1ba5aa37d77ee6401d67832446": {
+     "pinnacle_h2h": [
+      [
+       "Missouri State Bears",
+       0,
+       -214
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       189
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Missouri State Bears",
+       -6.0,
+       -102
+      ],
+      [
+       "Sam Houston State Bearkats",
+       6.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -108
+      ],
+      [
+       "Under",
+       51.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Missouri State squares off against Sam Houston in "
+     ],
+     "kalshi_snap": "snap_20261027T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "eed30e1ba5aa37d77ee6401d67832446": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261027T233403Z.parquet",
+  "sha256": "13db41dae0e9e171a05ae06b1f8a985e0c3dd14351c4a78b3fb83da5b39545f6",
+  "logged_utc": "2026-10-27T23:34:03.245286+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.833,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-29T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261027T233006Z.parquet",
+   "inputs_digest": "{\"c35bb6023b4b5005a38e7cec3ebe4d0b\": \"d9c23f8f00bb405f\", \"0540f5758ac50f3bb60beb36755f7a1e\": \"6281ba1203ef6d5d\"}",
+   "components": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       393
+      ],
+      [
+       "North Texas Mean Green",
+       0,
+       -531
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       13.5,
+       100
+      ],
+      [
+       "North Texas Mean Green",
+       -13.5,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       77.0,
+       -111
+      ],
+      [
+       "Under",
+       77.0,
+       -108
+      ]
+     ],
+     "news": [
+      "9 touchdowns of at least 30 yards highlights FAU's",
+      "AAC matchup features North Texas squaring off agai",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H",
+      "North Texas turns big plays into 49-39 win over Na",
+      "Rice Owls vs. Florida Atlantic Owls: Full Highligh"
+     ],
+     "kalshi_snap": "snap_20261027T2107Z.parquet"
+    },
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1362
+      ],
+      [
+       "Troy Trojans",
+       0,
+       799
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -21.0,
+       -101
+      ],
+      [
+       "Troy Trojans",
+       21.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       100
+      ],
+      [
+       "Under",
+       50.0,
+       -118
+      ]
+     ],
+     "news": [
+      "Appalachian State hands James Madison first loss o",
+      "College Football Playoff Bubble Watch after Week 8",
+      "James London's 40-yard FG in OT helps Appalachian ",
+      "James Madison Dukes vs. Appalachian State Mountain",
+      "Louisiana-Monroe scores 18 points late, beats Troy",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "UL Monroe Warhawks vs. Troy Trojans: Full Highligh",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261027T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": "anchor_morning",
+    "0540f5758ac50f3bb60beb36755f7a1e": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T144903Z.parquet",
+  "sha256": "ce896130509b0f18f6865ba1ed916f2b51a1f47687dd147f2356de3917e4cf7f",
+  "logged_utc": "2026-10-28T14:49:03.627675+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.75,
+  "revised_rows": 8,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-28T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T143006Z.parquet",
+   "inputs_digest": "{\"66c2794f789b9c2c028297eff4838e81\": \"9386b229e1b97cd9\", \"cf6c89492427cb54521b70e7c5dc5993\": \"0090e3a059971dac\", \"c35bb6023b4b5005a38e7cec3ebe4d0b\": \"5e259c36bcfba914\", \"0540f5758ac50f3bb60beb36755f7a1e\": \"2ea25730af98056a\"}",
+   "components": {
+    "66c2794f789b9c2c028297eff4838e81": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       100
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -110
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       1.0,
+       -108
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       -1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -101
+      ],
+      [
+       "Under",
+       50.5,
+       -116
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Middle Tennessee and Kennesaw State meet in CUSA p"
+     ],
+     "kalshi_snap": "snap_20261028T1207Z.parquet"
+    },
+    "cf6c89492427cb54521b70e7c5dc5993": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -146
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       131
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -3.0,
+       -104
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -107
+      ],
+      [
+       "Under",
+       49.5,
+       -109
+      ]
+     ],
+     "news": [
+      "New Mexico State hosts Jacksonville State in CUSA "
+     ],
+     "kalshi_snap": "snap_20261028T1207Z.parquet"
+    },
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       402
+      ],
+      [
+       "North Texas Mean Green",
+       0,
+       -520
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       13.5,
+       101
+      ],
+      [
+       "North Texas Mean Green",
+       -13.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       77.0,
+       -109
+      ],
+      [
+       "Under",
+       77.0,
+       -107
+      ]
+     ],
+     "news": [
+      "9 touchdowns of at least 30 yards highlights FAU's",
+      "AAC matchup features North Texas squaring off agai",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H",
+      "North Texas turns big plays into 49-39 win over Na",
+      "Rice Owls vs. Florida Atlantic Owls: Full Highligh"
+     ],
+     "kalshi_snap": "snap_20261028T1207Z.parquet"
+    },
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1327
+      ],
+      [
+       "Troy Trojans",
+       0,
+       838
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -21.0,
+       100
+      ],
+      [
+       "Troy Trojans",
+       21.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -104
+      ],
+      [
+       "Under",
+       50.0,
+       -112
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Louisiana-Monroe scores 18 points late, beats Troy",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "UL Monroe Warhawks vs. Troy Trojans: Full Highligh",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261028T1207Z.parquet"
+    }
+   },
+   "triggers": {
+    "66c2794f789b9c2c028297eff4838e81": "anchor_morning",
+    "cf6c89492427cb54521b70e7c5dc5993": "anchor_morning",
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": "anchor_morning",
+    "0540f5758ac50f3bb60beb36755f7a1e": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T181904Z.parquet",
+  "sha256": "77baf7cfcc8a9c4e0f42b8be85c0bde7e521af155b8d9e7c9af499359c703a2e",
+  "logged_utc": "2026-10-28T18:19:04.289607+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 2,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-28T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T180009Z.parquet",
+   "inputs_digest": "{\"66c2794f789b9c2c028297eff4838e81\": \"b8c4d87ca58d1360\"}",
+   "components": {
+    "66c2794f789b9c2c028297eff4838e81": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       -108
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -102
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       -1.0,
+       -103
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       1.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       100
+      ],
+      [
+       "Under",
+       50.5,
+       -117
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Middle Tennessee and Kennesaw State meet in CUSA p"
+     ],
+     "kalshi_snap": "snap_20261028T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "66c2794f789b9c2c028297eff4838e81": "line_move: pinnacle spreads Middle Tennessee Blue Raiders -1.0\u21921.0; line_move: pinnacle spreads Kennesaw State Owls 1.0\u2192-1.0"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T193403Z.parquet",
+  "sha256": "6a2b876d49ef5d04bf353f18262251b339c680f2920c86cbeddfc20677347f63",
+  "logged_utc": "2026-10-28T19:34:03.444223+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-29T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T193007Z.parquet",
+   "inputs_digest": "{\"0540f5758ac50f3bb60beb36755f7a1e\": \"ab0bb8442605b9e4\"}",
+   "components": {
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1161
+      ],
+      [
+       "Troy Trojans",
+       0,
+       758
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -19.5,
+       -110
+      ],
+      [
+       "Troy Trojans",
+       19.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       100
+      ],
+      [
+       "Under",
+       50.0,
+       -116
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Louisiana-Monroe scores 18 points late, beats Troy",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "UL Monroe Warhawks vs. Troy Trojans: Full Highligh",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261028T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "0540f5758ac50f3bb60beb36755f7a1e": "line_move: pinnacle spreads James Madison Dukes -21.0\u2192-19.5; line_move: pinnacle spreads Troy Trojans 21.0\u219219.5"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T200403Z.parquet",
+  "sha256": "a5f6876bc13a0708484bc5e3e926f71dac9d8c37a721fb25925ad466018bb13d",
+  "logged_utc": "2026-10-28T20:04:03.765528+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-28T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T200008Z.parquet",
+   "inputs_digest": "{\"66c2794f789b9c2c028297eff4838e81\": \"3f60e37940cce625\"}",
+   "components": {
+    "66c2794f789b9c2c028297eff4838e81": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       -106
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -104
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       -1.0,
+       -101
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       1.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       100
+      ],
+      [
+       "Under",
+       50.5,
+       -117
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Middle Tennessee and Kennesaw State meet in CUSA p"
+     ],
+     "kalshi_snap": "snap_20261028T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "66c2794f789b9c2c028297eff4838e81": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T210403Z.parquet",
+  "sha256": "99b83e8a71a633107f9a0084045436f5a266f0b74e427cdcf26be02dc64806e1",
+  "logged_utc": "2026-10-28T21:04:03.431401+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-29T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T210009Z.parquet",
+   "inputs_digest": "{\"cf6c89492427cb54521b70e7c5dc5993\": \"4f4de79d3cdd9bcc\"}",
+   "components": {
+    "cf6c89492427cb54521b70e7c5dc5993": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -151
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       136
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -3.0,
+       -107
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -105
+      ],
+      [
+       "Under",
+       50.5,
+       -111
+      ]
+     ],
+     "news": [
+      "New Mexico State hosts Jacksonville State in CUSA "
+     ],
+     "kalshi_snap": "snap_20261028T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "cf6c89492427cb54521b70e7c5dc5993": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T221904Z.parquet",
+  "sha256": "a471cfa03dd54bc4334eb0950ef4e3f985af803c191e3460444ef33ce8213944",
+  "logged_utc": "2026-10-28T22:19:04.076557+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-28T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T220010Z.parquet",
+   "inputs_digest": "{\"66c2794f789b9c2c028297eff4838e81\": \"14443618c2a65e24\"}",
+   "components": {
+    "66c2794f789b9c2c028297eff4838e81": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       -110
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       100
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       -1.0,
+       -105
+      ],
+      [
+       "Middle Tennessee Blue Raiders",
+       1.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -106
+      ],
+      [
+       "Under",
+       50.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Middle Tennessee and Kennesaw State meet in CUSA p"
+     ],
+     "kalshi_snap": "snap_20261028T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "66c2794f789b9c2c028297eff4838e81": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T230403Z.parquet",
+  "sha256": "f0d66e3fd090d1e8297077f21f10bd2c945acd68bac256526d75c73ebca7a0f4",
+  "logged_utc": "2026-10-28T23:04:03.876677+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-30T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T230007Z.parquet",
+   "inputs_digest": "{\"78b3d38cdfa28649fdd2ca92829569ce\": \"9799d6109cb5cf15\"}",
+   "components": {
+    "78b3d38cdfa28649fdd2ca92829569ce": {
+     "pinnacle_h2h": [
+      [
+       "Charlotte 49ers",
+       0,
+       297
+      ],
+      [
+       "Tulane Green Wave",
+       0,
+       -364
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Charlotte 49ers",
+       9.5,
+       -106
+      ],
+      [
+       "Tulane Green Wave",
+       -9.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -114
+      ],
+      [
+       "Under",
+       46.5,
+       -102
+      ]
+     ],
+     "news": [
+      "AAC matchup features Tulane against Charlotte",
+      "Allstate Playoff Predictor",
+      "UTSA Roadrunners vs. Tulane Green Wave: Full Highl",
+      "UTSA wins 5th straight, rolls past Tulane 42-19"
+     ],
+     "kalshi_snap": "snap_20261028T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "78b3d38cdfa28649fdd2ca92829569ce": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T231903Z.parquet",
+  "sha256": "2f75de31ead5c5b85052d79ed53f98d3f349f194d4611e56f71cfa1732393d68",
+  "logged_utc": "2026-10-28T23:19:03.654369+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-29T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T230007Z.parquet",
+   "inputs_digest": "{\"cf6c89492427cb54521b70e7c5dc5993\": \"6781e69f2f6217bd\"}",
+   "components": {
+    "cf6c89492427cb54521b70e7c5dc5993": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -153
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       137
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -3.0,
+       -109
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -110
+      ],
+      [
+       "Under",
+       50.5,
+       -106
+      ]
+     ],
+     "news": [
+      "New Mexico State hosts Jacksonville State in CUSA "
+     ],
+     "kalshi_snap": "snap_20261028T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "cf6c89492427cb54521b70e7c5dc5993": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261028T233403Z.parquet",
+  "sha256": "0fa4bdf5ccd7757821b8efebb01c4d10cddd70ccd3a4ae8f1ff21695bb8c421a",
+  "logged_utc": "2026-10-28T23:34:03.284311+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-30T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261028T233005Z.parquet",
+   "inputs_digest": "{\"44ee19d31b9288ad402868d6df737595\": \"9e2f674b242eebac\"}",
+   "components": {
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -104
+      ],
+      [
+       "UCF Knights",
+       0,
+       -109
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       1.0,
+       -110
+      ],
+      [
+       "UCF Knights",
+       -1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -114
+      ],
+      [
+       "Under",
+       47.5,
+       -102
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "BYU Cougars vs. UCF Knights: Full Highlights",
+      "BYU's Sitake disputes roughing the kicker call in ",
+      "Baylor fires coach Dave Aranda in seventh season",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Isaiah Marshall accounts for 3 TDs, Kansas blocks ",
+      "Keyone Jenkins throws TD pass in double OT and UCF",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF hands No. 2 BYU first loss in dramatic fashion",
+      "UCF meets Baylor in Big 12 play",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261028T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "44ee19d31b9288ad402868d6df737595": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T031903Z.parquet",
+  "sha256": "9c071a0d3664eff90e14f7d9c76fa9eb9b6e0934a6e12a7c4a058ef47e0fbc9b",
+  "logged_utc": "2026-10-29T03:19:03.874326+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T02:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T030008Z.parquet",
+   "inputs_digest": "{\"8916ba5e623a0a1d97dd0e7f50e4a205\": \"c8aec7f407eb670b\"}",
+   "components": {
+    "8916ba5e623a0a1d97dd0e7f50e4a205": {
+     "pinnacle_h2h": [
+      [
+       "Kent State Golden Flashes",
+       0,
+       -351
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       288
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kent State Golden Flashes",
+       -10.0,
+       102
+      ],
+      [
+       "Sacramento State Hornets",
+       10.0,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -107
+      ],
+      [
+       "Under",
+       46.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Akron Zips vs. Kent State Golden Flashes: Full Hig",
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Dru DeShields throws 4 TDs passes, runs for anothe",
+      "Luster has 3 total touchdowns, Horton adds 2 rushi",
+      "Sacramento State Hornets vs. Ball State Cardinals:",
+      "Sacramento State hosts Kent State in MAC matchup"
+     ],
+     "kalshi_snap": "snap_20261029T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "8916ba5e623a0a1d97dd0e7f50e4a205": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T141904Z.parquet",
+  "sha256": "c612268faee41e43e17ead88ccf97b1f2e0d20d0db35dced51fe4bb8711f0165",
+  "logged_utc": "2026-10-29T14:19:04.322728+00:00",
+  "rows": 15,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.867,
+  "revised_rows": 11,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-29T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T140012Z.parquet",
+   "inputs_digest": "{\"c35bb6023b4b5005a38e7cec3ebe4d0b\": \"4a0aff3c35234a86\", \"0540f5758ac50f3bb60beb36755f7a1e\": \"411a22dd3cfe39b7\", \"78b3d38cdfa28649fdd2ca92829569ce\": \"e461679fad5ac79f\", \"44ee19d31b9288ad402868d6df737595\": \"7f74a2a48c0d7bb0\", \"8916ba5e623a0a1d97dd0e7f50e4a205\": \"37eac0f17344c047\"}",
+   "components": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       436
+      ],
+      [
+       "North Texas Mean Green",
+       0,
+       -546
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       14.0,
+       100
+      ],
+      [
+       "North Texas Mean Green",
+       -14.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       78.0,
+       -108
+      ],
+      [
+       "Under",
+       78.0,
+       -108
+      ]
+     ],
+     "news": [
+      "9 touchdowns of at least 30 yards highlights FAU's",
+      "AAC matchup features North Texas squaring off agai",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H",
+      "North Texas turns big plays into 49-39 win over Na",
+      "Rice Owls vs. Florida Atlantic Owls: Full Highligh"
+     ],
+     "kalshi_snap": "snap_20261029T1207Z.parquet"
+    },
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1128
+      ],
+      [
+       "Troy Trojans",
+       0,
+       790
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -19.5,
+       -109
+      ],
+      [
+       "Troy Trojans",
+       19.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -108
+      ],
+      [
+       "Under",
+       50.0,
+       -108
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Louisiana-Monroe scores 18 points late, beats Troy",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "UL Monroe Warhawks vs. Troy Trojans: Full Highligh",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261029T1207Z.parquet"
+    },
+    "78b3d38cdfa28649fdd2ca92829569ce": {
+     "pinnacle_h2h": [
+      [
+       "Charlotte 49ers",
+       0,
+       287
+      ],
+      [
+       "Tulane Green Wave",
+       0,
+       -350
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Charlotte 49ers",
+       9.5,
+       -112
+      ],
+      [
+       "Tulane Green Wave",
+       -9.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -114
+      ],
+      [
+       "Under",
+       46.5,
+       -102
+      ]
+     ],
+     "news": [
+      "AAC matchup features Tulane against Charlotte",
+      "Allstate Playoff Predictor",
+      "UTSA Roadrunners vs. Tulane Green Wave: Full Highl",
+      "UTSA wins 5th straight, rolls past Tulane 42-19"
+     ],
+     "kalshi_snap": "snap_20261029T1207Z.parquet"
+    },
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -103
+      ],
+      [
+       "UCF Knights",
+       0,
+       -109
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       1.0,
+       -110
+      ],
+      [
+       "UCF Knights",
+       -1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -115
+      ],
+      [
+       "Under",
+       47.5,
+       -101
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "BYU Cougars vs. UCF Knights: Full Highlights",
+      "BYU's Sitake disputes roughing the kicker call in ",
+      "Baylor fires coach Dave Aranda in seventh season",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Isaiah Marshall accounts for 3 TDs, Kansas blocks ",
+      "Keyone Jenkins throws TD pass in double OT and UCF",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF hands No. 2 BYU first loss in dramatic fashion",
+      "UCF meets Baylor in Big 12 play",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261029T1207Z.parquet"
+    },
+    "8916ba5e623a0a1d97dd0e7f50e4a205": {
+     "pinnacle_h2h": [
+      [
+       "Kent State Golden Flashes",
+       0,
+       -336
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       277
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kent State Golden Flashes",
+       -8.5,
+       -106
+      ],
+      [
+       "Sacramento State Hornets",
+       8.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -106
+      ],
+      [
+       "Under",
+       46.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Akron Zips vs. Kent State Golden Flashes: Full Hig",
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Dru DeShields throws 4 TDs passes, runs for anothe",
+      "Luster has 3 total touchdowns, Horton adds 2 rushi",
+      "Sacramento State Hornets vs. Ball State Cardinals:",
+      "Sacramento State hosts Kent State in MAC matchup"
+     ],
+     "kalshi_snap": "snap_20261029T1207Z.parquet"
+    }
+   },
+   "triggers": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": "anchor_morning",
+    "0540f5758ac50f3bb60beb36755f7a1e": "anchor_morning",
+    "78b3d38cdfa28649fdd2ca92829569ce": "anchor_morning",
+    "44ee19d31b9288ad402868d6df737595": "anchor_morning",
+    "8916ba5e623a0a1d97dd0e7f50e4a205": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T153404Z.parquet",
+  "sha256": "dc4b3f1044b426d079e567df08326d7376671e8bca2d1c0f1a22cf17e7606665",
+  "logged_utc": "2026-10-29T15:34:04.103622+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-29T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T153009Z.parquet",
+   "inputs_digest": "{\"0540f5758ac50f3bb60beb36755f7a1e\": \"5e3e4d2592bb8f77\", \"44ee19d31b9288ad402868d6df737595\": \"2a89525f895ff14a\"}",
+   "components": {
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1148
+      ],
+      [
+       "Troy Trojans",
+       0,
+       802
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -19.5,
+       -111
+      ],
+      [
+       "Troy Trojans",
+       19.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -106
+      ],
+      [
+       "Under",
+       51.0,
+       -110
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Louisiana-Monroe scores 18 points late, beats Troy",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "UL Monroe Warhawks vs. Troy Trojans: Full Highligh",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -103
+      ],
+      [
+       "UCF Knights",
+       0,
+       -109
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       1.0,
+       -110
+      ],
+      [
+       "UCF Knights",
+       -1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       101
+      ],
+      [
+       "Under",
+       48.5,
+       -118
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "BYU Cougars vs. UCF Knights: Full Highlights",
+      "BYU's Sitake disputes roughing the kicker call in ",
+      "Baylor fires coach Dave Aranda in seventh season",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Isaiah Marshall accounts for 3 TDs, Kansas blocks ",
+      "Keyone Jenkins throws TD pass in double OT and UCF",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF hands No. 2 BYU first loss in dramatic fashion",
+      "UCF meets Baylor in Big 12 play",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "0540f5758ac50f3bb60beb36755f7a1e": "line_move: pinnacle totals Over 50.0\u219251.0; line_move: pinnacle totals Under 50.0\u219251.0",
+    "44ee19d31b9288ad402868d6df737595": "line_move: pinnacle totals Over 47.5\u219248.5; line_move: pinnacle totals Under 47.5\u219248.5"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T164903Z.parquet",
+  "sha256": "be287a7e538dddc2f8bee7f052ed20f84d14231dd3fe14d170a03fe3d1843c38",
+  "logged_utc": "2026-10-29T16:49:03.447888+00:00",
+  "rows": 32,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 11,
+  "no_view_share": 0.562,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T16:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T163006Z.parquet",
+   "inputs_digest": "{\"2d5a76d917c23b2f5036eb774608d1c9\": \"659252e3b4effae7\", \"807f73b612ed07bda8d1835550ddbd43\": \"e5ea043af014916b\", \"fc416b26c2c25018a05bc5cb0d80dbb6\": \"25121d8117b2a083\", \"aa15904c0f5814a899ddbe002c96406a\": \"f83171be91c648ff\", \"07da1e37f1e37363a71d35f2298f01d9\": \"131c65833c0fd39b\", \"929937ced936976088a9562342ba0b90\": \"2026a50b6ebefb5d\", \"e916f49c82de2ce0b1844ee9f6deccfa\": \"d78dd1f94251c460\", \"2f219378e527cf1f695b814a0a4ad63c\": \"d99020018f4cb7f2\", \"3713b2d962a33a6e55be7bffedd604a5\": \"83db5003fb65a321\", \"dea96094c29a9f24d7dc07a5d848afd7\": \"8bf4d4aea8cfb381\", \"3f36c41ee29e9339f71fada56d832914\": \"c552ec97842b78ea\"}",
+   "components": {
+    "2d5a76d917c23b2f5036eb774608d1c9": {
+     "pinnacle_h2h": [
+      [
+       "Arizona Wildcats",
+       0,
+       151
+      ],
+      [
+       "Texas Tech Red Raiders",
+       0,
+       -172
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Wildcats",
+       3.5,
+       -109
+      ],
+      [
+       "Texas Tech Red Raiders",
+       -3.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -106
+      ],
+      [
+       "Under",
+       54.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 college football recruits on the rise and how",
+      "AP college football Week 8 poll reaction: What's n",
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Cincinnati upsets No. 8 Texas Tech in battle of te",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football takeaways: Lasting impressions fr",
+      "Connelly on Week 8: Who in college football can --",
+      "How BYU and Texas Tech losses impact the playoff p",
+      "Iowa State Cyclones vs. Arizona Wildcats: Full Hig",
+      "JC French IV has 4 TD passes as Cincinnati stuns N",
+      "Noah Fifita throws for 308 yards and 2 TDs, No. 25",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Texas Tech Red Raiders vs. Cincinnati Bearcats: Fu",
+      "Texas Tech hosts Arizona in ranked Big 12 matchup",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Upsets and chaos reign supreme in college football",
+      "Week 8 live: Best moments and top plays",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "807f73b612ed07bda8d1835550ddbd43": {
+     "pinnacle_h2h": [
+      [
+       "Boston College Eagles",
+       0,
+       225
+      ],
+      [
+       "Duke Blue Devils",
+       0,
+       -265
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boston College Eagles",
+       7.0,
+       -106
+      ],
+      [
+       "Duke Blue Devils",
+       -7.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -107
+      ],
+      [
+       "Under",
+       48.0,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Boston College Eagles vs. Georgia Tech Yellow Jack",
+      "Boston College visits Duke in ACC matchup",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "McKenzie, MacCormack lead dynamic Boston College r",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "fc416b26c2c25018a05bc5cb0d80dbb6": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       408
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -530
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       13.5,
+       -111
+      ],
+      [
+       "Western Michigan Broncos",
+       -13.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -111
+      ],
+      [
+       "Under",
+       44.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Bowling Green Falcons vs. Buffalo Bulls: Full High",
+      "Burch runs for a career-high 184 yards and 3 TDs t",
+      "Richter, Miller lead Toledo's offensive show in 45",
+      "Western Michigan Broncos vs. Toledo Rockets: Full ",
+      "Western Michigan hosts Bowling Green in MAC play"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "aa15904c0f5814a899ddbe002c96406a": {
+     "pinnacle_h2h": [
+      [
+       "California Golden Bears",
+       0,
+       225
+      ],
+      [
+       "NC State Wolfpack",
+       0,
+       -265
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "California Golden Bears",
+       7.0,
+       -105
+      ],
+      [
+       "NC State Wolfpack",
+       -7.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -105
+      ],
+      [
+       "Under",
+       57.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "ACC matchup features NC State squaring off against",
+      "California Golden Bears vs. SMU Mustangs: Full Hig",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Doeren leaves NC State 'with no grudges,' will alw",
+      "Kevin Jennings breaks SMU's TD passing record as N",
+      "Kevin Jennings breaks SMU's TD passing record in w",
+      "NC State fires Dave Doeren amid 3-4 start in 14th ",
+      "NC State's Goebbel vows to build on 'foundation' l",
+      "Thamel: Philip Rivers is a real candidate to be ne",
+      "Upsets and chaos reign supreme in college football",
+      "Who could replace Doeren at NC State, what are the"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "07da1e37f1e37363a71d35f2298f01d9": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       -129
+      ],
+      [
+       "Maryland Terrapins",
+       0,
+       115
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       -2.5,
+       -108
+      ],
+      [
+       "Maryland Terrapins",
+       2.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -105
+      ],
+      [
+       "Under",
+       55.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Aidan Laughery, Collin Dixon score TDs as Illinois",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Illinois and Maryland meet in Big Ten play",
+      "Maryland offers students shot at free tuition for ",
+      "Oregon Ducks vs. Illinois Fighting Illini: Full Hi",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "929937ced936976088a9562342ba0b90": {
+     "pinnacle_h2h": [
+      [
+       "Iowa Hawkeyes",
+       0,
+       -168
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       148
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa Hawkeyes",
+       -3.5,
+       -102
+      ],
+      [
+       "Wisconsin Badgers",
+       3.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.0,
+       100
+      ],
+      [
+       "Under",
+       37.0,
+       -117
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 8 poll reaction: What's n",
+      "CC Sabathia, J.J. Watt top social media reaction t",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football takeaways: Lasting impressions fr",
+      "Drzewiecki's field goal as time expires lifts Minn",
+      "Former Trojans back Bryan Jackson, Wisconsin upset",
+      "Hawkeyes RB Kamari Moulton (upper body) out for re",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Iowa squares off against No. 25 Wisconsin in Big T",
+      "Luka Drzewiecki's last-second FG lifts Minnesota p",
+      "Luke Drzewiecki's last-second FG lifts Minnesota p",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Upsets and chaos reign supreme in college football",
+      "Wisconsin, former USC RB Bryan Jackson upset No. 1",
+      "Wisconsin, former USC RB Jackson, upset No. 16 Tro"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "e916f49c82de2ce0b1844ee9f6deccfa": {
+     "pinnacle_spreads": [
+      [
+       "Navy Midshipmen",
+       30.5,
+       -107
+      ],
+      [
+       "Notre Dame Fighting Irish",
+       -30.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -105
+      ],
+      [
+       "Under",
+       57.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "Don't miss a thrilling ABC triple-header in Week 9",
+      "No. 5 Notre Dame and Navy meet in Foxborough, Mass",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H",
+      "North Texas turns big plays into 49-39 win over Na",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ohio State replaces BYU at No. 2 in AP Top 25",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "2f219378e527cf1f695b814a0a4ad63c": {
+     "pinnacle_h2h": [
+      [
+       "SMU Mustangs",
+       0,
+       -368
+      ],
+      [
+       "Syracuse Orange",
+       0,
+       300
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "SMU Mustangs",
+       -10.5,
+       -105
+      ],
+      [
+       "Syracuse Orange",
+       10.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -110
+      ],
+      [
+       "Under",
+       57.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "California Golden Bears vs. SMU Mustangs: Full Hig",
+      "Calvin Russell's 4-yard TD catch lifts Syracuse to",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Kevin Jennings breaks SMU's TD passing record as N",
+      "Kevin Jennings breaks SMU's TD passing record in w",
+      "No. 19 SMU and Syracuse meet in ACC action",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Syracuse Orange vs. North Carolina Tar Heels: Full",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "3713b2d962a33a6e55be7bffedd604a5": {
+     "pinnacle_h2h": [
+      [
+       "South Florida Bulls",
+       0,
+       -299
+      ],
+      [
+       "UAB Blazers",
+       0,
+       250
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Florida Bulls",
+       -7.5,
+       -112
+      ],
+      [
+       "UAB Blazers",
+       7.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -109
+      ],
+      [
+       "Under",
+       42.5,
+       -107
+      ]
+     ],
+     "news": [
+      "South Florida squares off against UAB in AAC play"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "dea96094c29a9f24d7dc07a5d848afd7": {
+     "pinnacle_h2h": [
+      [
+       "Michigan Wolverines",
+       0,
+       -674
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       496
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan Wolverines",
+       -16.0,
+       -106
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       16.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -114
+      ],
+      [
+       "Under",
+       45.0,
+       -102
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 college football recruits on the rise and how",
+      "Aidan Chiles throws for 3 TD, runs in 2 more, and ",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Hoover's TD run lifts No. 6 Indiana to 13-6 OT win",
+      "Josh Hoover, Indiana get first win at Michigan sin",
+      "Michigan sticking with OC Jason Beck",
+      "Michigan takes on Rutgers in Big Ten play",
+      "Rutgers QB Dylan Lonergan exits with apparent head",
+      "Upsets and chaos reign supreme in college football",
+      "Week 8 live: Best moments and top plays"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "3f36c41ee29e9339f71fada56d832914": {
+     "pinnacle_h2h": [
+      [
+       "Auburn Tigers",
+       0,
+       384
+      ],
+      [
+       "Ole Miss Rebels",
+       0,
+       -493
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Auburn Tigers",
+       13.0,
+       -113
+      ],
+      [
+       "Ole Miss Rebels",
+       -13.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -106
+      ],
+      [
+       "Under",
+       57.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "Arch Manning and No. 19 Texas hang on to beat No. ",
+      "Auburn vs. No. 12 Ole Miss preview, highlighting r",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "LSU Tigers vs. Auburn Tigers: Game Highlights",
+      "No Huddle! Hustling through the storylines to look",
+      "No. 18 LSU shows signs of reaching its lofty ceili",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ole Miss RB Kewan Lacy out after dislocating shoul",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB Kenny Minchey agrees he played his best game, p",
+      "SEC matchup features No. 12 Ole Miss against Aubur",
+      "Sam Leavitt accounts for 4 TDs as No. 18 LSU handl",
+      "Sarkisian lauds 'edgy' Arch Manning after Texas ho",
+      "Steve Sarkisian lauds 'edgy' Arch Manning after Te",
+      "Texas survives with thrilling 34-27 win over Ole M",
+      "Texas, Manning hold off Ole Miss rally to snap two",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "2d5a76d917c23b2f5036eb774608d1c9": "anchor_morning",
+    "807f73b612ed07bda8d1835550ddbd43": "anchor_morning",
+    "fc416b26c2c25018a05bc5cb0d80dbb6": "anchor_morning",
+    "aa15904c0f5814a899ddbe002c96406a": "anchor_morning",
+    "07da1e37f1e37363a71d35f2298f01d9": "anchor_morning",
+    "929937ced936976088a9562342ba0b90": "anchor_morning",
+    "e916f49c82de2ce0b1844ee9f6deccfa": "anchor_morning",
+    "2f219378e527cf1f695b814a0a4ad63c": "anchor_morning",
+    "3713b2d962a33a6e55be7bffedd604a5": "anchor_morning",
+    "dea96094c29a9f24d7dc07a5d848afd7": "anchor_morning",
+    "3f36c41ee29e9339f71fada56d832914": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T180403Z.parquet",
+  "sha256": "35b7af7eb7304c8b55f1183cc3bba7157ad28b89aa6d367c8e8ba6940fff5efa",
+  "logged_utc": "2026-10-29T18:04:03.661922+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.583,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-30T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T180009Z.parquet",
+   "inputs_digest": "{\"44ee19d31b9288ad402868d6df737595\": \"b6fc5484611b6c96\", \"e88d624c699646a03bac59eb193a09bf\": \"d96bd8ad33ed1830\", \"47548a73e429985e77f81a4617b4fdfd\": \"f9b2e3f8e2f26396\", \"d19dbab4071552441b056ccd2e23ca59\": \"62bfe7f150d14137\"}",
+   "components": {
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -110
+      ],
+      [
+       "UCF Knights",
+       0,
+       -102
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       -1.0,
+       -105
+      ],
+      [
+       "UCF Knights",
+       1.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       101
+      ],
+      [
+       "Under",
+       48.5,
+       -118
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "BYU Cougars vs. UCF Knights: Full Highlights",
+      "BYU's Sitake disputes roughing the kicker call in ",
+      "Baylor fires coach Dave Aranda in seventh season",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Isaiah Marshall accounts for 3 TDs, Kansas blocks ",
+      "Keyone Jenkins throws TD pass in double OT and UCF",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF hands No. 2 BYU first loss in dramatic fashion",
+      "UCF meets Baylor in Big 12 play",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "e88d624c699646a03bac59eb193a09bf": {
+     "pinnacle_h2h": [
+      [
+       "Marshall Thundering Herd",
+       0,
+       -142
+      ],
+      [
+       "Old Dominion Monarchs",
+       0,
+       125
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Marshall Thundering Herd",
+       -3.0,
+       -101
+      ],
+      [
+       "Old Dominion Monarchs",
+       3.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       100
+      ],
+      [
+       "Under",
+       44.0,
+       -116
+      ]
+     ],
+     "news": [
+      "Baker throws, runs for TDs, Louisiana Tech posts 2",
+      "Old Dominion Monarchs vs. Louisiana Tech Bulldogs:",
+      "Old Dominion hosts Marshall in Sun Belt matchup"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "47548a73e429985e77f81a4617b4fdfd": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       187
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       -216
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       6.0,
+       -110
+      ],
+      [
+       "Georgia State Panthers",
+       -6.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -110
+      ],
+      [
+       "Under",
+       57.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Georgia State Panthers vs. Arkansas State Red Wolv",
+      "Georgia State squares off against Coastal Carolina",
+      "Trey Owens throws for 2 TDs and runs for 2, leadin"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    },
+    "d19dbab4071552441b056ccd2e23ca59": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       -129
+      ],
+      [
+       "Kansas State Wildcats",
+       0,
+       114
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       -1.0,
+       -112
+      ],
+      [
+       "Kansas State Wildcats",
+       1.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -108
+      ],
+      [
+       "Under",
+       47.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Colorado Buffaloes vs. Oklahoma State Cowboys: Ful",
+      "Deion Sanders clarifies joke about silencing criti",
+      "Deion Sanders: Comment about silencing critics wit",
+      "Kansas State QB Avery Johnson out vs. Arizona Stat",
+      "Kansas State Wildcats vs. Arizona State Sun Devils",
+      "Kansas State and Colorado meet in Big 12 action",
+      "Mack scores 4 TDs, Arizona State shakes off QB inj",
+      "Oklahoma State scores 34 points in the 2nd half to",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "44ee19d31b9288ad402868d6df737595": "line_move: pinnacle spreads Baylor Bears 1.0\u2192-1.0; line_move: pinnacle spreads UCF Knights -1.0\u21921.0",
+    "e88d624c699646a03bac59eb193a09bf": "anchor_morning",
+    "47548a73e429985e77f81a4617b4fdfd": "anchor_morning",
+    "d19dbab4071552441b056ccd2e23ca59": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T191903Z.parquet",
+  "sha256": "a8de94b7f07945478befe18d69d41c06dda81ca229fe3d2a690872ad254c2c85",
+  "logged_utc": "2026-10-29T19:19:03.780800+00:00",
+  "rows": 14,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.571,
+  "revised_rows": 2,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T16:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T190010Z.parquet",
+   "inputs_digest": "{\"e916f49c82de2ce0b1844ee9f6deccfa\": \"633fc70f37bdd7e2\", \"573eed720cdbfb7644835b8beb1bc89a\": \"e3811eb7d55bfe3c\", \"fa9022be308ebe9ca39ecda8ea15bda4\": \"e0fb7ddff8734d04\", \"e5817afb8338b8f7272feff21d87d7f7\": \"87748705eca6f06d\", \"183676bbb63b1716e2248ec6c6d205a9\": \"b16e3a0be61b7091\"}",
+   "components": {
+    "e916f49c82de2ce0b1844ee9f6deccfa": {
+     "pinnacle_spreads": [
+      [
+       "Navy Midshipmen",
+       30.5,
+       -107
+      ],
+      [
+       "Notre Dame Fighting Irish",
+       -30.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -105
+      ],
+      [
+       "Under",
+       57.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "Don't miss a thrilling ABC triple-header in Week 9",
+      "No. 5 Notre Dame and Navy meet in Foxborough, Mass",
+      "No. 5 Notre Dame seeks a reset against Navy after ",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H",
+      "Notre Dame CB DJ McKinney out extended period with",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ohio State replaces BYU at No. 2 in AP Top 25",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "573eed720cdbfb7644835b8beb1bc89a": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       -109
+      ],
+      [
+       "UConn Huskies",
+       0,
+       -103
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       -1.5,
+       101
+      ],
+      [
+       "UConn Huskies",
+       1.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -102
+      ],
+      [
+       "Under",
+       52.5,
+       -115
+      ]
+     ],
+     "news": [
+      "Air Force hosts UConn in Week 9"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "fa9022be308ebe9ca39ecda8ea15bda4": {
+     "pinnacle_h2h": [
+      [
+       "East Carolina Pirates",
+       0,
+       -216
+      ],
+      [
+       "Temple Owls",
+       0,
+       186
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "East Carolina Pirates",
+       -6.0,
+       -102
+      ],
+      [
+       "Temple Owls",
+       6.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -107
+      ],
+      [
+       "Under",
+       50.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "East Carolina hosts Temple in AAC action"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "e5817afb8338b8f7272feff21d87d7f7": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -218
+      ],
+      [
+       "South Alabama Jaguars",
+       0,
+       189
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -5.5,
+       -110
+      ],
+      [
+       "South Alabama Jaguars",
+       5.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.0,
+       -102
+      ],
+      [
+       "Under",
+       59.0,
+       -115
+      ]
+     ],
+     "news": [
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "Baker throws, runs for TDs, Louisiana Tech posts 2",
+      "College football futures: Evaluating five contende",
+      "Old Dominion Monarchs vs. Louisiana Tech Bulldogs:",
+      "Sun Belt matchup features Louisiana Tech taking on"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "183676bbb63b1716e2248ec6c6d205a9": {
+     "pinnacle_h2h": [
+      [
+       "Louisville Cardinals",
+       0,
+       -1706
+      ],
+      [
+       "Stanford Cardinal",
+       0,
+       1007
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisville Cardinals",
+       -22.5,
+       -108
+      ],
+      [
+       "Stanford Cardinal",
+       22.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       60.0,
+       -103
+      ],
+      [
+       "Under",
+       60.0,
+       -113
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Stanford visits Louisville in ACC matchup",
+      "Upsets and chaos reign supreme in college football",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "e916f49c82de2ce0b1844ee9f6deccfa": "new_news: 1 availability items",
+    "573eed720cdbfb7644835b8beb1bc89a": "anchor_morning",
+    "fa9022be308ebe9ca39ecda8ea15bda4": "anchor_morning",
+    "e5817afb8338b8f7272feff21d87d7f7": "anchor_morning",
+    "183676bbb63b1716e2248ec6c6d205a9": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T201904Z.parquet",
+  "sha256": "c14555dd61782379018b435888785b57fe5769a99dbe938ce122c5c49b875935",
+  "logged_utc": "2026-10-29T20:19:04.174020+00:00",
+  "rows": 45,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 15,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T19:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T200011Z.parquet",
+   "inputs_digest": "{\"b0f68c9265402a825cbbf7954b726339\": \"8f190f8e7d2096b9\", \"9c33dd628312f89764392414cbc99c86\": \"ec31e42046f9fbe1\", \"581c12d11a86412432fe89645cbe80b2\": \"91adadabd4037e18\", \"e5ff4a85ab3b8341184a334a390f6ba2\": \"47cfe4c04f77b06f\", \"1e591733bae48534963359a9cff13701\": \"0b5ab741cf20f9f1\", \"7e3a5a0dcece26ded8c9d1a64dc6cee5\": \"a85387550644b73c\", \"c17c8f9e12ffe066cf601c96090fcb14\": \"3c4dd16d827d8cba\", \"7bac3aae16527dd33a224a2f81792033\": \"c90704488f63d4cf\", \"746742d4bb94424d9e63d00701eef4ec\": \"93fd37f6fc34ae74\", \"8480c989381049fc30c8d714be95db35\": \"5a03b64220bc2a8e\", \"09f66e3676ec3112e24cd6b9e97feb41\": \"94a6cdc864b55d39\", \"1841dedea57dac1d1de462bb44f8a732\": \"5914cd22c5c15695\", \"630ed6c8993fda8943e528a465e55518\": \"4bcc36a24adb7358\", \"096584989b4dd0a84650c37eb980a8b3\": \"b8e3dcdde687bf4f\", \"7fd2d018fdc5930fd62188de968a901c\": \"30bf95751fb47b3b\"}",
+   "components": {
+    "b0f68c9265402a825cbbf7954b726339": {
+     "pinnacle_h2h": [
+      [
+       "Arizona State Sun Devils",
+       0,
+       526
+      ],
+      [
+       "BYU Cougars",
+       0,
+       -724
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona State Sun Devils",
+       16.0,
+       -105
+      ],
+      [
+       "BYU Cougars",
+       -16.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       101
+      ],
+      [
+       "Under",
+       49.0,
+       -118
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "BYU Cougars vs. UCF Knights: Full Highlights",
+      "BYU's Sitake disputes roughing the kicker call in ",
+      "Big 12 matchup features No. 8 BYU taking on Arizon",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football takeaways: Lasting impressions fr",
+      "How BYU and Texas Tech losses impact the playoff p",
+      "Keyone Jenkins throws TD pass in double OT and UCF",
+      "Mack scores 4 TDs, Arizona State shakes off QB inj",
+      "No. 8 BYU looks to bolster its defense ahead of a ",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ohio State replaces BYU at No. 2 in AP Top 25",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF hands No. 2 BYU first loss in dramatic fashion",
+      "UCF's Frost: 'Don't think we'll have a letdown' af"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "9c33dd628312f89764392414cbc99c86": {
+     "pinnacle_h2h": [
+      [
+       "Colorado State Rams",
+       0,
+       208
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       -243
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado State Rams",
+       6.5,
+       -101
+      ],
+      [
+       "Utah State Aggies",
+       -6.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       63.0,
+       -109
+      ],
+      [
+       "Under",
+       63.0,
+       -107
+      ]
+     ],
+     "news": [
+      "Hauss Hejny's 5 total touchdowns power Colorado St",
+      "San Diego State Aztecs vs. Colorado State Rams: Fu",
+      "Texas State tops Utah State 20-17 on Jacob Bonilla",
+      "Utah State Aggies vs. Texas State Bobcats: Full Hi",
+      "Utah State and Colorado State meet in Pac-12 play"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "581c12d11a86412432fe89645cbe80b2": {
+     "pinnacle_h2h": [
+      [
+       "Florida Gators",
+       0,
+       350
+      ],
+      [
+       "Georgia Bulldogs",
+       0,
+       -441
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Gators",
+       12.5,
+       -111
+      ],
+      [
+       "Georgia Bulldogs",
+       -12.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -107
+      ],
+      [
+       "Under",
+       56.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "A Georgia fan's last breath led to a Florida man a",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "Betting buzz: Oregon's playoff hopes crater after ",
+      "Cole Cubelic previews Florida vs. Georgia possibil",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "Don't miss a thrilling ABC triple-header in Week 9",
+      "Florida's Sumrall won't name Philo or Jones as QB1",
+      "Florida's defense key to upsetting Georgia",
+      "Gene Chizik delivers a Florida film breakdown",
+      "Georgia focused on slowing down Jadan Baugh",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Jon Sumrall emphasizes focus for Florida vs. Georg",
+      "No Huddle! Hustling through the storylines to look",
+      "No. 3 Georgia and No. 17 Florida meet in Atlanta, ",
+      "No. 3 Georgia braces for test against No. 17 Flori",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ohio State replaces BYU at No. 2 in AP Top 25",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB recruit Bo Bryan, son of country star Luke Brya",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "e5ff4a85ab3b8341184a334a390f6ba2": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       442
+      ],
+      [
+       "Liberty Flames",
+       0,
+       -584
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       14.0,
+       -104
+      ],
+      [
+       "Liberty Flames",
+       -14.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -111
+      ],
+      [
+       "Under",
+       45.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "Florida International visits Liberty in CUSA match"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "1e591733bae48534963359a9cff13701": {
+     "pinnacle_h2h": [
+      [
+       "Indiana Hoosiers",
+       0,
+       -1370
+      ],
+      [
+       "Minnesota Golden Gophers",
+       0,
+       858
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Indiana Hoosiers",
+       -21.0,
+       100
+      ],
+      [
+       "Minnesota Golden Gophers",
+       21.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -107
+      ],
+      [
+       "Under",
+       41.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "2027 college football recruits on the rise and how",
+      "AP college football Week 8 poll reaction: What's n",
+      "Cignetti expects QB Hoover to be healthier vs. Min",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "Connelly on Week 8: Who in college football can --",
+      "Drzewiecki's field goal as time expires lifts Minn",
+      "Josh Hoover, Indiana get first win at Michigan sin",
+      "Luke Drzewiecki's last-second FG lifts Minnesota p",
+      "No. 4 Indiana hoping to jump start its sluggish of",
+      "No. 4 Indiana takes on Minnesota in Big Ten action",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ohio State replaces BYU at No. 2 in AP Top 25",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Upsets and chaos reign supreme in college football",
+      "Week 8 live: Best moments and top plays",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Where is 'College GameDay'? 2026 schedule, locatio"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "7e3a5a0dcece26ded8c9d1a64dc6cee5": {
+     "pinnacle_h2h": [
+      [
+       "Kansas Jayhawks",
+       0,
+       193
+      ],
+      [
+       "TCU Horned Frogs",
+       0,
+       -223
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas Jayhawks",
+       5.5,
+       -103
+      ],
+      [
+       "TCU Horned Frogs",
+       -5.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -110
+      ],
+      [
+       "Under",
+       46.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Big 12 matchup features TCU squaring off against K",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "c17c8f9e12ffe066cf601c96090fcb14": {
+     "pinnacle_h2h": [
+      [
+       "North Dakota State Bison",
+       0,
+       -2903
+      ],
+      [
+       "UTEP Miners",
+       0,
+       1461
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Dakota State Bison",
+       -24.0,
+       -111
+      ],
+      [
+       "UTEP Miners",
+       24.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -107
+      ],
+      [
+       "Under",
+       43.0,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Austin Brawley's pick-6 helps New Mexico beat Nort",
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "MWC matchup features North Dakota State against UT",
+      "Predicting the College Football Playoff: Who's mos"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "7bac3aae16527dd33a224a2f81792033": {
+     "pinnacle_h2h": [
+      [
+       "Northwestern Wildcats",
+       0,
+       154
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       -176
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northwestern Wildcats",
+       3.5,
+       -106
+      ],
+      [
+       "Oregon Ducks",
+       -3.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -113
+      ],
+      [
+       "Under",
+       47.0,
+       -103
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "From championship hopes to rock bottom, what went ",
+      "Jordan Rodgers: 'Without a doubt' Dante Moore is s",
+      "Northwestern's Chip Kellly went into the history b",
+      "Northwestern's Chip Kelly went into the history bo",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Oregon QB Dante Moore (concussion) not expected to",
+      "Oregon fires offensive coordinator Drew Mehringer",
+      "Oregon fires offensive coordinator Drew Mehringer ",
+      "Oregon hosts No. 20 Northwestern in Big Ten action",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Upsets and chaos reign supreme in college football",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "What's next for Oregon after likely losing Dante M"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "746742d4bb94424d9e63d00701eef4ec": {
+     "pinnacle_h2h": [
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       -176
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       155
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Southern Mississippi Golden Eagles",
+       -3.5,
+       -107
+      ],
+      [
+       "UL Monroe Warhawks",
+       3.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -109
+      ],
+      [
+       "Under",
+       56.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Southern Miss meets UL Monroe in Sun Belt play"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "8480c989381049fc30c8d714be95db35": {
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bearcats",
+       0,
+       208
+      ],
+      [
+       "Utah Utes",
+       0,
+       -243
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bearcats",
+       6.5,
+       -103
+      ],
+      [
+       "Utah Utes",
+       -6.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       100
+      ],
+      [
+       "Under",
+       57.5,
+       -117
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "Dampier runs wild, No. 10 Utah holds off No. 14 Ho",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Houston Cougars vs. Utah Utes: Full Highlights",
+      "How BYU and Texas Tech losses impact the playoff p",
+      "No. 6 Utah looks to remain unbeaten against upset-",
+      "No. 6 Utah visits Cincinnati in Big 12 action",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ohio State replaces BYU at No. 2 in AP Top 25",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Upsets and chaos reign supreme in college football",
+      "Week 8 live: Best moments and top plays",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "09f66e3676ec3112e24cd6b9e97feb41": {
+     "pinnacle_h2h": [
+      [
+       "Virginia Cavaliers",
+       0,
+       396
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       0,
+       -510
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Virginia Cavaliers",
+       12.5,
+       -104
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       -12.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -103
+      ],
+      [
+       "Under",
+       49.5,
+       -113
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "No. 14 Wake Forest and Virginia meet in ACC action",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "1841dedea57dac1d1de462bb44f8a732": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -646
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       480
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -14.5,
+       -109
+      ],
+      [
+       "San Jose State Spartans",
+       14.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -114
+      ],
+      [
+       "Under",
+       41.5,
+       -102
+      ]
+     ],
+     "news": [
+      "Austin Brawley's pick-6 helps New Mexico beat Nort",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football futures: Evaluating five contende",
+      "Connelly on Week 8: Who in college football can --",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "New Mexico meets San Jose State in MWC action",
+      "Predicting the College Football Playoff: Who's mos",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "630ed6c8993fda8943e528a465e55518": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       1021
+      ],
+      [
+       "UCLA Bruins",
+       0,
+       -1739
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       23.0,
+       -108
+      ],
+      [
+       "UCLA Bruins",
+       -23.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -106
+      ],
+      [
+       "Under",
+       44.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 8 poll reaction: What's n",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football takeaways: Lasting impressions fr",
+      "Luke Duncan and Marshaun Brown each have 2 total T",
+      "No. 7 UCLA hosts Nevada in Week 9",
+      "No. 9 UCLA rallies past Michigan State 28-10 for i",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ohio State replaces BYU at No. 2 in AP Top 25",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "096584989b4dd0a84650c37eb980a8b3": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma Sooners",
+       0,
+       -198
+      ],
+      [
+       "South Carolina Gamecocks",
+       0,
+       173
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma Sooners",
+       -5.0,
+       -105
+      ],
+      [
+       "South Carolina Gamecocks",
+       5.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -111
+      ],
+      [
+       "Under",
+       44.0,
+       -105
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "Allstate Playoff Predictor",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Every SEC team can be an issue, SEC Now dissects t",
+      "Gamecocks fined $500K after fans rush field in win",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "LaNorris Sellers has three TDs and South Carolina ",
+      "LaNorris Sellers praises Gamecocks' refusal to qui",
+      "LaNorris Sellers says comfort in Gamecocks' offens",
+      "Mateer throws 2 TD passes, Oklahoma hands Mississi",
+      "Oklahoma Sooners vs. Mississippi State Bulldogs: F",
+      "Oklahoma and South Carolina meet in SEC play",
+      "Roman, Are You Impressed? Week 8 brings a 'definit",
+      "SEC Now crew finds Oklahoma offensive performance ",
+      "SEC chaos, Texas top the list of Week 8 Power Rank",
+      "Shane Beamer on how South Carolina must navigate O",
+      "South Carolina rallies past No. 11 Tennessee on wa",
+      "Tennessee Volunteers vs. South Carolina Gamecocks:",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Upsets and chaos reign supreme in college football",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "7fd2d018fdc5930fd62188de968a901c": {
+     "pinnacle_h2h": [
+      [
+       "Penn State Nittany Lions",
+       0,
+       -316
+      ],
+      [
+       "Purdue Boilermakers",
+       0,
+       263
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Penn State Nittany Lions",
+       -8.5,
+       -116
+      ],
+      [
+       "Purdue Boilermakers",
+       8.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -113
+      ],
+      [
+       "Under",
+       54.0,
+       -103
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Allstate Playoff Predictor",
+      "Big Ten matchup features Penn State against Purdue",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "b0f68c9265402a825cbbf7954b726339": "anchor_morning",
+    "9c33dd628312f89764392414cbc99c86": "anchor_morning",
+    "581c12d11a86412432fe89645cbe80b2": "anchor_morning",
+    "e5ff4a85ab3b8341184a334a390f6ba2": "anchor_morning",
+    "1e591733bae48534963359a9cff13701": "anchor_morning",
+    "7e3a5a0dcece26ded8c9d1a64dc6cee5": "anchor_morning",
+    "c17c8f9e12ffe066cf601c96090fcb14": "anchor_morning",
+    "7bac3aae16527dd33a224a2f81792033": "anchor_morning",
+    "746742d4bb94424d9e63d00701eef4ec": "anchor_morning",
+    "8480c989381049fc30c8d714be95db35": "anchor_morning",
+    "09f66e3676ec3112e24cd6b9e97feb41": "anchor_morning",
+    "1841dedea57dac1d1de462bb44f8a732": "anchor_morning",
+    "630ed6c8993fda8943e528a465e55518": "anchor_morning",
+    "096584989b4dd0a84650c37eb980a8b3": "anchor_morning",
+    "7fd2d018fdc5930fd62188de968a901c": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261029T203403Z.parquet",
+  "sha256": "bf85e7397d04d425e79d204bd6a9d66de2809eff48fc1e026bc52027cdc58c05",
+  "logged_utc": "2026-10-29T20:34:03.540658+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-29T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261029T203006Z.parquet",
+   "inputs_digest": "{\"c35bb6023b4b5005a38e7cec3ebe4d0b\": \"3ff07dfebb5525f9\", \"0540f5758ac50f3bb60beb36755f7a1e\": \"2ff7b2b7f184e675\"}",
+   "components": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       433
+      ],
+      [
+       "North Texas Mean Green",
+       0,
+       -541
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       14.0,
+       -101
+      ],
+      [
+       "North Texas Mean Green",
+       -14.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       78.0,
+       -106
+      ],
+      [
+       "Under",
+       78.0,
+       -110
+      ]
+     ],
+     "news": [
+      "AAC matchup features North Texas squaring off agai",
+      "Cincinnati's Cody Campbell tag leads top trolls fr",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "North Texas Mean Green vs. Navy Midshipmen: Full H"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    },
+    "0540f5758ac50f3bb60beb36755f7a1e": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -1150
+      ],
+      [
+       "Troy Trojans",
+       0,
+       803
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -19.5,
+       -110
+      ],
+      [
+       "Troy Trojans",
+       19.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -111
+      ],
+      [
+       "Under",
+       51.0,
+       -105
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sun Belt matchup features James Madison taking on ",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261029T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "c35bb6023b4b5005a38e7cec3ebe4d0b": "anchor_prekick",
+    "0540f5758ac50f3bb60beb36755f7a1e": "anchor_prekick"
+   }
+  }
  }
 ]

@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_07_DAL_PHI",
+  "week": 7,
+  "home": "PHI",
+  "away": "DAL",
+  "final_score": {
+    "home": 21,
+    "away": 38
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 177,
+      "plays_trailing_14": 177,
+      "halftime_score": {
+        "home": 21,
+        "away": 38
+      },
+      "garbage_time_plays": 10
+    },
+    "away": {
+      "plays_leading_7": 177,
+      "plays_leading_14": 177,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 21,
+        "away": 38
+      },
+      "garbage_time_plays": 10
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 62,
+      "dropbacks": 37,
+      "rush_attempts": 25,
+      "pass_rate": 0.5967741935483871,
+      "run_rate": 0.4032258064516129,
+      "pass_oe": -6.284781116427797
+    },
+    "away": {
+      "plays": 66,
+      "dropbacks": 27,
+      "rush_attempts": 39,
+      "pass_rate": 0.4090909090909091,
+      "run_rate": 0.5909090909090908,
+      "pass_oe": -11.35005936471384
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 6,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "R.Flournoy",
+      "team": "DAL",
+      "quarter": 2,
+      "play_id": 2066,
+      "desc": "(1:14) (Shotgun) 4-D.Prescott pass short middle to 19-R.Flournoy to DAL 26 for 13 yards (27-Q.Mitchell). PHI-27-Q.Mitchell was injured during the play."
+    },
+    {
+      "player": "D.Pierce",
+      "team": "PHI",
+      "quarter": 4,
+      "play_id": 3643,
+      "desc": "(8:38) (No Huddle, Shotgun) 16-T.McKee pass short left to 39-D.Pierce pushed ob at DAL 47 for 1 yard (26-D.Bland). PHI-39-D.Pierce was injured during the play."
+    },
+    {
+      "player": "J.Williams",
+      "team": "DAL",
+      "quarter": 4,
+      "play_id": 3762,
+      "desc": "(7:04) 33-J.Williams left tackle to DAL 41 for 5 yards (97-M.Ojomo; 33-C.DeJean). PHI-97-M.Ojomo was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}
