@@ -6053,5 +6053,85 @@
     "877d5834acad37b6142a835438c23001": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T020403Z.parquet",
+  "sha256": "31e00a07d114d9c242f7ab4da951710be562be424766fe4b7312d2d501d53cf9",
+  "logged_utc": "2026-10-30T02:04:03.314447+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-01T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T020009Z.parquet",
+   "inputs_digest": "{\"b02a5444929be961896a4db9742a01fa\": \"6bfd85554c5f918d\"}",
+   "components": {
+    "b02a5444929be961896a4db9742a01fa": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -438
+      ],
+      [
+       "Texas State Bobcats",
+       0,
+       348
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -11.0,
+       -105
+      ],
+      [
+       "Texas State Bobcats",
+       11.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       64.0,
+       -106
+      ],
+      [
+       "Under",
+       64.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football futures: Evaluating five contende",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Pac-12 matchup features No. 20 Boise State playing",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Upsets and chaos reign supreme in college football",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261030T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "b02a5444929be961896a4db9742a01fa": "anchor_morning"
+   }
+  }
  }
 ]
