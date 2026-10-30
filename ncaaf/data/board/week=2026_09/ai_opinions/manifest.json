@@ -6584,5 +6584,2510 @@
     "e2ffa742b36678caf388ca70fdd4878c": "new_news: 1 availability items"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T140403Z.parquet",
+  "sha256": "f5195f845305224b2f3e554f45f8041cf7607b44fbba67ed6d81803aaa26d324",
+  "logged_utc": "2026-10-30T14:04:03.931995+00:00",
+  "rows": 149,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 50,
+  "no_view_share": 0.591,
+  "revised_rows": 128,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-30T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T140011Z.parquet",
+   "inputs_digest": "{\"78b3d38cdfa28649fdd2ca92829569ce\": \"987607e1e8f291ad\", \"44ee19d31b9288ad402868d6df737595\": \"cc90476a6b567df4\", \"8916ba5e623a0a1d97dd0e7f50e4a205\": \"8ff52e955a16e46d\", \"2d5a76d917c23b2f5036eb774608d1c9\": \"2c63537b696940c5\", \"807f73b612ed07bda8d1835550ddbd43\": \"caa1b0d9b9885fbc\", \"fc416b26c2c25018a05bc5cb0d80dbb6\": \"f904b590a21120e4\", \"aa15904c0f5814a899ddbe002c96406a\": \"416ebe1082b55df9\", \"07da1e37f1e37363a71d35f2298f01d9\": \"2be87c9f3464edca\", \"929937ced936976088a9562342ba0b90\": \"828b6a2641ecd112\", \"e916f49c82de2ce0b1844ee9f6deccfa\": \"e64b2ca23ef1c9b6\", \"2f219378e527cf1f695b814a0a4ad63c\": \"eafabe0f7eea27b9\", \"3713b2d962a33a6e55be7bffedd604a5\": \"e1188e4aa3ae9cc1\", \"dea96094c29a9f24d7dc07a5d848afd7\": \"e160bcb2b63bbdf2\", \"3f36c41ee29e9339f71fada56d832914\": \"6839634bf825f124\", \"e88d624c699646a03bac59eb193a09bf\": \"f2a31093b17ffb91\", \"47548a73e429985e77f81a4617b4fdfd\": \"3b3b86c1b860ff06\", \"d19dbab4071552441b056ccd2e23ca59\": \"9bd26575a0db2364\", \"573eed720cdbfb7644835b8beb1bc89a\": \"fda556452117d1b3\", \"fa9022be308ebe9ca39ecda8ea15bda4\": \"2b1ab2edbb3c2386\", \"e5817afb8338b8f7272feff21d87d7f7\": \"ff0b4d0ff84b9977\", \"183676bbb63b1716e2248ec6c6d205a9\": \"c0411c168777e424\", \"b0f68c9265402a825cbbf7954b726339\": \"dbf3f2e6e8438628\", \"9c33dd628312f89764392414cbc99c86\": \"b84f326e684ee723\", \"581c12d11a86412432fe89645cbe80b2\": \"52ba885927e7ee15\", \"e5ff4a85ab3b8341184a334a390f6ba2\": \"69e22dbea7940559\", \"1e591733bae48534963359a9cff13701\": \"b9480c024d216cc8\", \"7e3a5a0dcece26ded8c9d1a64dc6cee5\": \"9812c014a2bc958b\", \"c17c8f9e12ffe066cf601c96090fcb14\": \"5ecc3609aec12298\", \"7bac3aae16527dd33a224a2f81792033\": \"46aae1b835b7dc51\", \"746742d4bb94424d9e63d00701eef4ec\": \"a5e168e9b993128b\", \"8480c989381049fc30c8d714be95db35\": \"45436d84a9df7fbc\", \"09f66e3676ec3112e24cd6b9e97feb41\": \"3761c77ff43b046e\", \"1841dedea57dac1d1de462bb44f8a732\": \"e0cfdb3e213e5966\", \"630ed6c8993fda8943e528a465e55518\": \"930c233f31661200\", \"096584989b4dd0a84650c37eb980a8b3\": \"42494a25d76e81ef\", \"7fd2d018fdc5930fd62188de968a901c\": \"7fc400446bb80ca6\", \"e7510e4cb4351947263e33b6dc6a0812\": \"6ed544bc4853fc12\", \"6519cc9dfbff22ca11d607a9f246da2c\": \"d0be935ebc074670\", \"e4e95ca26b62e1c3ced6261cbb5c5f3a\": \"14bdcf874cd30b9f\", \"c1fd3e172f0617a0d8543b8fd67fc2ce\": \"5cd769ae8775d572\", \"49aa48a7dbcd6563f389ae4232707d64\": \"4cf5c950d386b907\", \"85b5947ccfe102a2fa2179d54c83ae31\": \"898c4818266c83f9\", \"e2ffa742b36678caf388ca70fdd4878c\": \"f93d26d85a0f7879\", \"bd73558e7eb5bee08962bfb1f5ef6c9a\": \"efa82cb17bc07060\", \"c6533cfcdfb0860d723a5fd9b9381098\": \"044082f3b1ddb149\", \"c2a32bff5ed94bef9a6a5847ff544783\": \"387e7905e0a38657\", \"877d5834acad37b6142a835438c23001\": \"96ec241643bd6260\", \"b02a5444929be961896a4db9742a01fa\": \"461b24c43cff512e\", \"1d5b8007f5249010b9c501138e25ac74\": \"9fff8ef593805902\", \"d0126c335a51772c70c76e17ca06afb3\": \"0258bce3cdc1a7b8\"}",
+   "components": {
+    "78b3d38cdfa28649fdd2ca92829569ce": {
+     "pinnacle_h2h": [
+      [
+       "Charlotte 49ers",
+       0,
+       278
+      ],
+      [
+       "Tulane Green Wave",
+       0,
+       -326
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Charlotte 49ers",
+       8.5,
+       -110
+      ],
+      [
+       "Tulane Green Wave",
+       -8.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -111
+      ],
+      [
+       "Under",
+       47.0,
+       -105
+      ]
+     ],
+     "news": [
+      "AAC matchup features Tulane against Charlotte",
+      "Allstate Playoff Predictor"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -115
+      ],
+      [
+       "UCF Knights",
+       0,
+       104
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       -1.0,
+       -110
+      ],
+      [
+       "UCF Knights",
+       1.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -104
+      ],
+      [
+       "Under",
+       48.5,
+       -112
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Baylor fires coach Dave Aranda in seventh season",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF meets Baylor in Big 12 play",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "8916ba5e623a0a1d97dd0e7f50e4a205": {
+     "pinnacle_h2h": [
+      [
+       "Kent State Golden Flashes",
+       0,
+       -308
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       264
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kent State Golden Flashes",
+       -7.5,
+       -101
+      ],
+      [
+       "Sacramento State Hornets",
+       7.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -106
+      ],
+      [
+       "Under",
+       46.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Sacramento State hosts Kent State in MAC matchup"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "2d5a76d917c23b2f5036eb774608d1c9": {
+     "pinnacle_h2h": [
+      [
+       "Arizona Wildcats",
+       0,
+       153
+      ],
+      [
+       "Texas Tech Red Raiders",
+       0,
+       -174
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Wildcats",
+       3.5,
+       -108
+      ],
+      [
+       "Texas Tech Red Raiders",
+       -3.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -106
+      ],
+      [
+       "Under",
+       54.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 college football recruits on the rise and how",
+      "AP college football Week 8 poll reaction: What's n",
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football takeaways: Lasting impressions fr",
+      "Connelly on Week 8: Who in college football can --",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "How every 2027 five-star college football prospect",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Texas Tech hosts Arizona in ranked Big 12 matchup",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "807f73b612ed07bda8d1835550ddbd43": {
+     "pinnacle_h2h": [
+      [
+       "Boston College Eagles",
+       0,
+       227
+      ],
+      [
+       "Duke Blue Devils",
+       0,
+       -268
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boston College Eagles",
+       7.0,
+       -105
+      ],
+      [
+       "Duke Blue Devils",
+       -7.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -113
+      ],
+      [
+       "Under",
+       48.0,
+       -103
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Boston College visits Duke in ACC matchup",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "fc416b26c2c25018a05bc5cb0d80dbb6": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       416
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -543
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       13.5,
+       -107
+      ],
+      [
+       "Western Michigan Broncos",
+       -13.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -112
+      ],
+      [
+       "Under",
+       44.0,
+       -104
+      ]
+     ],
+     "news": [
+      "Western Michigan hosts Bowling Green in MAC play"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "aa15904c0f5814a899ddbe002c96406a": {
+     "pinnacle_h2h": [
+      [
+       "California Golden Bears",
+       0,
+       231
+      ],
+      [
+       "NC State Wolfpack",
+       0,
+       -274
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "California Golden Bears",
+       7.0,
+       100
+      ],
+      [
+       "NC State Wolfpack",
+       -7.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -105
+      ],
+      [
+       "Under",
+       57.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "ACC matchup features NC State squaring off against",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Doeren leaves NC State 'with no grudges,' will alw",
+      "Kevin Jennings breaks SMU's TD passing record in w",
+      "NC State's Goebbel vows to build on 'foundation' l",
+      "Thamel: Philip Rivers is a real candidate to be ne"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "07da1e37f1e37363a71d35f2298f01d9": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       -130
+      ],
+      [
+       "Maryland Terrapins",
+       0,
+       115
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       -2.5,
+       -108
+      ],
+      [
+       "Maryland Terrapins",
+       2.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -102
+      ],
+      [
+       "Under",
+       54.5,
+       -114
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Illinois and Maryland meet in Big Ten play",
+      "Maryland offers students shot at free tuition for ",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "929937ced936976088a9562342ba0b90": {
+     "pinnacle_h2h": [
+      [
+       "Iowa Hawkeyes",
+       0,
+       -129
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       114
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa Hawkeyes",
+       -2.5,
+       -109
+      ],
+      [
+       "Wisconsin Badgers",
+       2.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.0,
+       101
+      ],
+      [
+       "Under",
+       37.0,
+       -118
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 8 poll reaction: What's n",
+      "CC Sabathia, J.J. Watt top social media reaction t",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "College football takeaways: Lasting impressions fr",
+      "Hawkeyes RB Kamari Moulton (upper body) out for re",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Iowa squares off against No. 25 Wisconsin in Big T",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "e916f49c82de2ce0b1844ee9f6deccfa": {
+     "pinnacle_spreads": [
+      [
+       "Navy Midshipmen",
+       30.5,
+       -109
+      ],
+      [
+       "Notre Dame Fighting Irish",
+       -30.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       101
+      ],
+      [
+       "Under",
+       57.0,
+       -118
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football ghost stories, from Death Valley ",
+      "Don't miss a thrilling ABC triple-header in Week 9",
+      "No. 5 Notre Dame and Navy meet in Foxborough, Mass",
+      "No. 5 Notre Dame seeks a reset against Navy after ",
+      "Notre Dame CB DJ McKinney out extended period with",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "2f219378e527cf1f695b814a0a4ad63c": {
+     "pinnacle_h2h": [
+      [
+       "SMU Mustangs",
+       0,
+       -371
+      ],
+      [
+       "Syracuse Orange",
+       0,
+       302
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "SMU Mustangs",
+       -10.5,
+       -106
+      ],
+      [
+       "Syracuse Orange",
+       10.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -110
+      ],
+      [
+       "Under",
+       57.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Kevin Jennings breaks SMU's TD passing record in w",
+      "Longtime football coach June Jones, pioneer of run",
+      "No. 19 SMU and Syracuse meet in ACC action",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "3713b2d962a33a6e55be7bffedd604a5": {
+     "pinnacle_h2h": [
+      [
+       "South Florida Bulls",
+       0,
+       -300
+      ],
+      [
+       "UAB Blazers",
+       0,
+       251
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Florida Bulls",
+       -7.5,
+       -112
+      ],
+      [
+       "UAB Blazers",
+       7.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -104
+      ],
+      [
+       "Under",
+       42.5,
+       -113
+      ]
+     ],
+     "news": [
+      "South Florida squares off against UAB in AAC play"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "dea96094c29a9f24d7dc07a5d848afd7": {
+     "pinnacle_h2h": [
+      [
+       "Michigan Wolverines",
+       0,
+       -680
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       500
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan Wolverines",
+       -16.0,
+       -108
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       16.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -109
+      ],
+      [
+       "Under",
+       45.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 college football recruits on the rise and how",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Michigan sticking with OC Jason Beck",
+      "Michigan takes on Rutgers in Big Ten play"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "3f36c41ee29e9339f71fada56d832914": {
+     "pinnacle_h2h": [
+      [
+       "Auburn Tigers",
+       0,
+       378
+      ],
+      [
+       "Ole Miss Rebels",
+       0,
+       -484
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Auburn Tigers",
+       13.0,
+       -117
+      ],
+      [
+       "Ole Miss Rebels",
+       -13.0,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -110
+      ],
+      [
+       "Under",
+       57.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "Auburn vs. No. 12 Ole Miss preview, highlighting r",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "No Huddle! Hustling through the storylines to look",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ole Miss RB Kewan Lacy out after dislocating shoul",
+      "SEC matchup features No. 12 Ole Miss against Aubur",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "e88d624c699646a03bac59eb193a09bf": {
+     "pinnacle_h2h": [
+      [
+       "Marshall Thundering Herd",
+       0,
+       -142
+      ],
+      [
+       "Old Dominion Monarchs",
+       0,
+       126
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Marshall Thundering Herd",
+       -3.0,
+       -101
+      ],
+      [
+       "Old Dominion Monarchs",
+       3.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -109
+      ],
+      [
+       "Under",
+       45.0,
+       -107
+      ]
+     ],
+     "news": [
+      "Old Dominion hosts Marshall in Sun Belt matchup"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "47548a73e429985e77f81a4617b4fdfd": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       161
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       -185
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       4.0,
+       -103
+      ],
+      [
+       "Georgia State Panthers",
+       -4.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -106
+      ],
+      [
+       "Under",
+       56.0,
+       -110
+      ]
+     ],
+     "news": [
+      "Georgia State squares off against Coastal Carolina"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "d19dbab4071552441b056ccd2e23ca59": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       -128
+      ],
+      [
+       "Kansas State Wildcats",
+       0,
+       113
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       -1.0,
+       -111
+      ],
+      [
+       "Kansas State Wildcats",
+       1.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -108
+      ],
+      [
+       "Under",
+       47.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "Colorado QB Lewis suffers medical emergency, hospi",
+      "Deion Sanders clarifies joke about silencing criti",
+      "Deion Sanders: Comment about silencing critics wit",
+      "Kansas State and Colorado meet in Big 12 action",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "573eed720cdbfb7644835b8beb1bc89a": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       -109
+      ],
+      [
+       "UConn Huskies",
+       0,
+       -103
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       -1.5,
+       101
+      ],
+      [
+       "UConn Huskies",
+       1.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -102
+      ],
+      [
+       "Under",
+       52.5,
+       -115
+      ]
+     ],
+     "news": [
+      "Air Force hosts UConn in Week 9"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "fa9022be308ebe9ca39ecda8ea15bda4": {
+     "pinnacle_h2h": [
+      [
+       "East Carolina Pirates",
+       0,
+       -195
+      ],
+      [
+       "Temple Owls",
+       0,
+       170
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "East Carolina Pirates",
+       -5.0,
+       -102
+      ],
+      [
+       "Temple Owls",
+       5.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -107
+      ],
+      [
+       "Under",
+       50.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "East Carolina hosts Temple in AAC action"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "e5817afb8338b8f7272feff21d87d7f7": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -232
+      ],
+      [
+       "South Alabama Jaguars",
+       0,
+       199
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -6.0,
+       -110
+      ],
+      [
+       "South Alabama Jaguars",
+       6.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.0,
+       -102
+      ],
+      [
+       "Under",
+       59.0,
+       -114
+      ]
+     ],
+     "news": [
+      "College football futures: Evaluating five contende",
+      "Sun Belt matchup features Louisiana Tech taking on"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "183676bbb63b1716e2248ec6c6d205a9": {
+     "pinnacle_h2h": [
+      [
+       "Louisville Cardinals",
+       0,
+       -1737
+      ],
+      [
+       "Stanford Cardinal",
+       0,
+       1021
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisville Cardinals",
+       -22.5,
+       -110
+      ],
+      [
+       "Stanford Cardinal",
+       22.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       60.0,
+       -115
+      ],
+      [
+       "Under",
+       60.0,
+       -102
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Stanford visits Louisville in ACC matchup",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "b0f68c9265402a825cbbf7954b726339": {
+     "pinnacle_h2h": [
+      [
+       "Arizona State Sun Devils",
+       0,
+       540
+      ],
+      [
+       "BYU Cougars",
+       0,
+       -749
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona State Sun Devils",
+       16.0,
+       -101
+      ],
+      [
+       "BYU Cougars",
+       -16.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -105
+      ],
+      [
+       "Under",
+       48.5,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "Big 12 matchup features No. 8 BYU taking on Arizon",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football takeaways: Lasting impressions fr",
+      "No. 8 BYU looks to bolster its defense ahead of a ",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF's Frost: 'Don't think we'll have a letdown' af"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "9c33dd628312f89764392414cbc99c86": {
+     "pinnacle_h2h": [
+      [
+       "Colorado State Rams",
+       0,
+       213
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       -250
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado State Rams",
+       7.0,
+       -114
+      ],
+      [
+       "Utah State Aggies",
+       -7.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       63.0,
+       -108
+      ],
+      [
+       "Under",
+       63.0,
+       -108
+      ]
+     ],
+     "news": [
+      "Utah State and Colorado State meet in Pac-12 play"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "581c12d11a86412432fe89645cbe80b2": {
+     "pinnacle_h2h": [
+      [
+       "Florida Gators",
+       0,
+       350
+      ],
+      [
+       "Georgia Bulldogs",
+       0,
+       -441
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Gators",
+       12.5,
+       -111
+      ],
+      [
+       "Georgia Bulldogs",
+       -12.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -107
+      ],
+      [
+       "Under",
+       56.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "A Georgia fan's last breath led to a Florida man a",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "Cole Cubelic previews Florida vs. Georgia possibil",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football ghost stories, from Death Valley ",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Don't miss a thrilling ABC triple-header in Week 9",
+      "Florida's Sumrall won't name Philo or Jones as QB1",
+      "Florida's defense key to upsetting Georgia",
+      "Gene Chizik delivers a Florida film breakdown",
+      "Georgia AD Josh Brooks shares Florida rivalry sche",
+      "Georgia focused on slowing down Jadan Baugh",
+      "How every 2027 five-star college football prospect",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Jon Sumrall emphasizes focus for Florida vs. Georg",
+      "No Huddle! Hustling through the storylines to look",
+      "No. 3 Georgia and No. 17 Florida meet in Atlanta, ",
+      "No. 3 Georgia braces for test against No. 17 Flori",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "QB recruit Bo Bryan, son of country star Luke Brya",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "e5ff4a85ab3b8341184a334a390f6ba2": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       438
+      ],
+      [
+       "Liberty Flames",
+       0,
+       -577
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       14.0,
+       -106
+      ],
+      [
+       "Liberty Flames",
+       -14.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -111
+      ],
+      [
+       "Under",
+       45.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Florida International visits Liberty in CUSA match"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "1e591733bae48534963359a9cff13701": {
+     "pinnacle_h2h": [
+      [
+       "Indiana Hoosiers",
+       0,
+       -1355
+      ],
+      [
+       "Minnesota Golden Gophers",
+       0,
+       851
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Indiana Hoosiers",
+       -21.0,
+       102
+      ],
+      [
+       "Minnesota Golden Gophers",
+       21.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -101
+      ],
+      [
+       "Under",
+       41.5,
+       -116
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 college football recruits on the rise and how",
+      "AP college football Week 8 poll reaction: What's n",
+      "Cignetti expects QB Hoover to be healthier vs. Min",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football ghost stories, from Death Valley ",
+      "Connelly on Week 8: Who in college football can --",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "How every 2027 five-star college football prospect",
+      "No. 4 Indiana hoping to jump start its sluggish of",
+      "No. 4 Indiana takes on Minnesota in Big Ten action",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Where is 'College GameDay'? 2026 schedule, locatio"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "7e3a5a0dcece26ded8c9d1a64dc6cee5": {
+     "pinnacle_h2h": [
+      [
+       "Kansas Jayhawks",
+       0,
+       204
+      ],
+      [
+       "TCU Horned Frogs",
+       0,
+       -238
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas Jayhawks",
+       6.5,
+       -109
+      ],
+      [
+       "TCU Horned Frogs",
+       -6.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -115
+      ],
+      [
+       "Under",
+       45.0,
+       -101
+      ]
+     ],
+     "news": [
+      "Big 12 matchup features TCU squaring off against K",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "c17c8f9e12ffe066cf601c96090fcb14": {
+     "pinnacle_h2h": [
+      [
+       "North Dakota State Bison",
+       0,
+       -3064
+      ],
+      [
+       "UTEP Miners",
+       0,
+       1515
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Dakota State Bison",
+       -24.5,
+       -110
+      ],
+      [
+       "UTEP Miners",
+       24.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -110
+      ],
+      [
+       "Under",
+       43.0,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "MWC matchup features North Dakota State against UT"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "7bac3aae16527dd33a224a2f81792033": {
+     "pinnacle_h2h": [
+      [
+       "Northwestern Wildcats",
+       0,
+       150
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       -170
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northwestern Wildcats",
+       3.5,
+       -110
+      ],
+      [
+       "Oregon Ducks",
+       -3.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -114
+      ],
+      [
+       "Under",
+       47.0,
+       -102
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "From championship hopes to rock bottom, what went ",
+      "How every 2027 five-star college football prospect",
+      "Jordan Rodgers: 'Without a doubt' Dante Moore is s",
+      "Northwestern's Chip Kellly went into the history b",
+      "Northwestern's Chip Kelly went into the history bo",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Oregon QB Dante Moore (concussion) not expected to",
+      "Oregon fires offensive coordinator Drew Mehringer ",
+      "Oregon hosts No. 20 Northwestern in Big Ten action",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "What's next for Oregon after likely losing Dante M"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "746742d4bb94424d9e63d00701eef4ec": {
+     "pinnacle_h2h": [
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       -169
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       149
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Southern Mississippi Golden Eagles",
+       -3.5,
+       -105
+      ],
+      [
+       "UL Monroe Warhawks",
+       3.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -107
+      ],
+      [
+       "Under",
+       55.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Southern Miss meets UL Monroe in Sun Belt play"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "8480c989381049fc30c8d714be95db35": {
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bearcats",
+       0,
+       224
+      ],
+      [
+       "Utah Utes",
+       0,
+       -265
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bearcats",
+       7.0,
+       -103
+      ],
+      [
+       "Utah Utes",
+       -7.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       101
+      ],
+      [
+       "Under",
+       57.5,
+       -117
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "No. 6 Utah looks to remain unbeaten against upset-",
+      "No. 6 Utah visits Cincinnati in Big 12 action",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "09f66e3676ec3112e24cd6b9e97feb41": {
+     "pinnacle_h2h": [
+      [
+       "Virginia Cavaliers",
+       0,
+       396
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       0,
+       -511
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Virginia Cavaliers",
+       12.5,
+       -104
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       -12.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -110
+      ],
+      [
+       "Under",
+       48.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "No. 14 Wake Forest and Virginia meet in ACC action",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "1841dedea57dac1d1de462bb44f8a732": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -650
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       482
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -14.5,
+       -110
+      ],
+      [
+       "San Jose State Spartans",
+       14.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -118
+      ],
+      [
+       "Under",
+       41.5,
+       101
+      ]
+     ],
+     "news": [
+      "College football Power Rankings: How Week 8 drama ",
+      "College football futures: Evaluating five contende",
+      "Connelly on Week 8: Who in college football can --",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "New Mexico meets San Jose State in MWC action"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "630ed6c8993fda8943e528a465e55518": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       984
+      ],
+      [
+       "UCLA Bruins",
+       0,
+       -1652
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       23.0,
+       -115
+      ],
+      [
+       "UCLA Bruins",
+       -23.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -101
+      ],
+      [
+       "Under",
+       44.0,
+       -116
+      ]
+     ],
+     "news": [
+      "AP college football Week 8 poll reaction: What's n",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football takeaways: Lasting impressions fr",
+      "No. 7 UCLA hosts Nevada in Week 9",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "UCLA QB Iamaleava 'heartbroken' over season-ending",
+      "Unbeaten No. 7 UCLA hosts Nevada with an 8-0 start"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "096584989b4dd0a84650c37eb980a8b3": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma Sooners",
+       0,
+       -162
+      ],
+      [
+       "South Carolina Gamecocks",
+       0,
+       143
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma Sooners",
+       -3.5,
+       -106
+      ],
+      [
+       "South Carolina Gamecocks",
+       3.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -110
+      ],
+      [
+       "Under",
+       44.0,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "Gamecocks fined $500K after fans rush field in win",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How every 2027 five-star college football prospect",
+      "LaNorris Sellers says comfort in Gamecocks' offens",
+      "Oklahoma and South Carolina meet in SEC play",
+      "Roman, Are You Impressed? Week 8 brings a 'definit",
+      "SEC chaos, Texas top the list of Week 8 Power Rank",
+      "Shane Beamer on how South Carolina must navigate O",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "7fd2d018fdc5930fd62188de968a901c": {
+     "pinnacle_h2h": [
+      [
+       "Penn State Nittany Lions",
+       0,
+       -369
+      ],
+      [
+       "Purdue Boilermakers",
+       0,
+       301
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Penn State Nittany Lions",
+       -10.0,
+       -117
+      ],
+      [
+       "Purdue Boilermakers",
+       10.0,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -115
+      ],
+      [
+       "Under",
+       54.0,
+       -102
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Allstate Playoff Predictor",
+      "Big Ten matchup features Penn State against Purdue",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "e7510e4cb4351947263e33b6dc6a0812": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       182
+      ],
+      [
+       "Georgia Southern Eagles",
+       0,
+       -210
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       5.5,
+       -107
+      ],
+      [
+       "Georgia Southern Eagles",
+       -5.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -111
+      ],
+      [
+       "Under",
+       56.5,
+       -105
+      ]
+     ],
+     "news": [
+      "Georgia Southern hosts Appalachian State in Sun Be",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "6519cc9dfbff22ca11d607a9f246da2c": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       189
+      ],
+      [
+       "Florida State Seminoles",
+       0,
+       -219
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       6.0,
+       -109
+      ],
+      [
+       "Florida State Seminoles",
+       -6.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -116
+      ],
+      [
+       "Under",
+       49.5,
+       -101
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Allstate Playoff Predictor",
+      "Clemson's Dabo Swinney still believes in team afte",
+      "Clemson, UNC support PCSA, ask for realignment fle",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "FSU president Richard McCullough to fans: 'I under",
+      "Florida State meets Clemson in ACC play",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "e4e95ca26b62e1c3ced6261cbb5c5f3a": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       293
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -359
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       9.0,
+       -101
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -9.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -114
+      ],
+      [
+       "Under",
+       57.0,
+       -102
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 8 poll reaction: What's n",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Iowa State hosts No. 24 Oklahoma State in Big 12 m",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "c1fd3e172f0617a0d8543b8fd67fc2ce": {
+     "pinnacle_h2h": [
+      [
+       "San Diego State Aztecs",
+       0,
+       -134
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       119
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "San Diego State Aztecs",
+       -2.5,
+       -112
+      ],
+      [
+       "Washington State Cougars",
+       2.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -110
+      ],
+      [
+       "Under",
+       48.0,
+       -106
+      ]
+     ],
+     "news": [
+      "San Diego State and Washington State meet in Pac-1"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "49aa48a7dbcd6563f389ae4232707d64": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Tech Yellow Jackets",
+       0,
+       252
+      ],
+      [
+       "Pittsburgh Panthers",
+       0,
+       -301
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Tech Yellow Jackets",
+       7.5,
+       -102
+      ],
+      [
+       "Pittsburgh Panthers",
+       -7.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -108
+      ],
+      [
+       "Under",
+       54.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Pittsburgh squares off against Georgia Tech in ACC",
+      "Top 25 betting lines: Georgia double-digit favorit"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "85b5947ccfe102a2fa2179d54c83ae31": {
+     "pinnacle_h2h": [
+      [
+       "Miami Hurricanes",
+       0,
+       -598
+      ],
+      [
+       "North Carolina Tar Heels",
+       0,
+       451
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami Hurricanes",
+       -14.0,
+       -103
+      ],
+      [
+       "North Carolina Tar Heels",
+       14.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -104
+      ],
+      [
+       "Under",
+       53.0,
+       -112
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 college football recruits on the rise and how",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "Clemson, UNC support PCSA, ask for realignment fle",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football takeaways: Lasting impressions fr",
+      "Connelly on Week 8: Who in college football can --",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Don't miss a thrilling ABC triple-header in Week 9",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How every 2027 five-star college football prospect",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "No. 1 Miami's high-powered offense represents a hu",
+      "North Carolina hosts No. 1 Miami (FL) in ACC match",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "e2ffa742b36678caf388ca70fdd4878c": {
+     "pinnacle_h2h": [
+      [
+       "Mississippi State Bulldogs",
+       0,
+       870
+      ],
+      [
+       "Texas Longhorns",
+       0,
+       -1396
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Mississippi State Bulldogs",
+       20.5,
+       -107
+      ],
+      [
+       "Texas Longhorns",
+       -20.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -109
+      ],
+      [
+       "Under",
+       50.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 college football recruits on the rise and how",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football ghost stories, from Death Valley ",
+      "Connelly on Week 8: Who in college football can --",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How every 2027 five-star college football prospect",
+      "MS State's Jeff Lebby on Week 8: 'They made those ",
+      "Mississippi State OL DJ Chester out vs. Texas in l",
+      "Mississippi State QB Kamario Taylor out for season",
+      "No Huddle! Hustling through the storylines to look",
+      "No. 11 Texas squares off against Mississippi State",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "SEC chaos, Texas top the list of Week 8 Power Rank",
+      "Sources: Mississippi State QB Kamario Taylor out f",
+      "Sources: Texas LT Trevor Goosby has successful kne",
+      "Sources: Texas' Trevor Goosby has season-ending kn",
+      "Stephen A. and Finebaum disagree over Arch Manning",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "What does Kamario Taylor's season-ending injury me",
+      "Why Jordan Rodgers says Arch Manning should transf"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "bd73558e7eb5bee08962bfb1f5ef6c9a": {
+     "pinnacle_h2h": [
+      [
+       "Ohio State Buckeyes",
+       0,
+       -243
+      ],
+      [
+       "USC Trojans",
+       0,
+       208
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ohio State Buckeyes",
+       -6.5,
+       -111
+      ],
+      [
+       "USC Trojans",
+       6.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -108
+      ],
+      [
+       "Under",
+       51.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "Betting on Ohio State-USC: How the Trojans can pul",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football takeaways: Lasting impressions fr",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How every 2027 five-star college football prospect",
+      "Lincoln Riley, addressing future at USC, says 'Thi",
+      "No. 2 Ohio State and USC meet in Big Ten action",
+      "No. 2 Ohio State has everything but a starting QB ",
+      "Ohio State backup quarterback Luke Fahey 'has a mo",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Why Jeremiah Smith is a generational NFL draft rec"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "c6533cfcdfb0860d723a5fd9b9381098": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas Razorbacks",
+       0,
+       300
+      ],
+      [
+       "Missouri Tigers",
+       0,
+       -369
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas Razorbacks",
+       10.0,
+       -109
+      ],
+      [
+       "Missouri Tigers",
+       -10.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -103
+      ],
+      [
+       "Under",
+       49.0,
+       -113
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 8 poll reaction: What's n",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "Missouri RB Ahmad Hardy to practice for first time",
+      "No Huddle! Hustling through the storylines to look",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ryan Silverfield talks Arkansas' urgency to keep a",
+      "SEC matchup features No. 23 Missouri against Arkan",
+      "Sources: Missouri RB Hardy to make season debut vs",
+      "Top 25 betting lines: Georgia double-digit favorit"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "c2a32bff5ed94bef9a6a5847ff544783": {
+     "pinnacle_h2h": [
+      [
+       "Army Black Knights",
+       0,
+       187
+      ],
+      [
+       "Memphis Tigers",
+       0,
+       -216
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Army Black Knights",
+       6.0,
+       -105
+      ],
+      [
+       "Memphis Tigers",
+       -6.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.5,
+       -112
+      ],
+      [
+       "Under",
+       59.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Memphis meets Army in AAC action",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "877d5834acad37b6142a835438c23001": {
+     "pinnacle_h2h": [
+      [
+       "Nebraska Cornhuskers",
+       0,
+       -302
+      ],
+      [
+       "Washington Huskies",
+       0,
+       252
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nebraska Cornhuskers",
+       -7.5,
+       -104
+      ],
+      [
+       "Washington Huskies",
+       7.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -106
+      ],
+      [
+       "Under",
+       50.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Big Ten matchup features Nebraska playing Washingt",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "b02a5444929be961896a4db9742a01fa": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -438
+      ],
+      [
+       "Texas State Bobcats",
+       0,
+       348
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -11.0,
+       -105
+      ],
+      [
+       "Texas State Bobcats",
+       11.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       64.0,
+       -106
+      ],
+      [
+       "Under",
+       64.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football futures: Evaluating five contende",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Pac-12 matchup features No. 20 Boise State playing",
+      "Top 25 betting lines: Georgia double-digit favorit"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "1d5b8007f5249010b9c501138e25ac74": {
+     "pinnacle_h2h": [
+      [
+       "Northern Illinois Huskies",
+       0,
+       1266
+      ],
+      [
+       "UNLV Rebels",
+       0,
+       -2356
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northern Illinois Huskies",
+       24.0,
+       -104
+      ],
+      [
+       "UNLV Rebels",
+       -24.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -117
+      ],
+      [
+       "Under",
+       53.5,
+       101
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "UNLV hosts Northern Illinois in MWC action"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    },
+    "d0126c335a51772c70c76e17ca06afb3": {
+     "pinnacle_h2h": [
+      [
+       "Fresno State Bulldogs",
+       0,
+       200
+      ],
+      [
+       "Oregon State Beavers",
+       0,
+       -232
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Fresno State Bulldogs",
+       6.0,
+       -103
+      ],
+      [
+       "Oregon State Beavers",
+       -6.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.5,
+       -106
+      ],
+      [
+       "Under",
+       58.5,
+       -110
+      ]
+     ],
+     "news": [
+      "College football Power Rankings: How Week 8 drama ",
+      "College football futures: Evaluating five contende",
+      "Fresno State hosts Oregon State in Pac-12 matchup",
+      "From unknown to a star, how Oregon State landed an",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1407Z.parquet"
+    }
+   },
+   "triggers": {
+    "78b3d38cdfa28649fdd2ca92829569ce": "anchor_morning",
+    "44ee19d31b9288ad402868d6df737595": "anchor_morning",
+    "8916ba5e623a0a1d97dd0e7f50e4a205": "anchor_morning",
+    "2d5a76d917c23b2f5036eb774608d1c9": "anchor_morning",
+    "807f73b612ed07bda8d1835550ddbd43": "anchor_morning",
+    "fc416b26c2c25018a05bc5cb0d80dbb6": "anchor_morning",
+    "aa15904c0f5814a899ddbe002c96406a": "anchor_morning",
+    "07da1e37f1e37363a71d35f2298f01d9": "anchor_morning",
+    "929937ced936976088a9562342ba0b90": "anchor_morning",
+    "e916f49c82de2ce0b1844ee9f6deccfa": "anchor_morning",
+    "2f219378e527cf1f695b814a0a4ad63c": "anchor_morning",
+    "3713b2d962a33a6e55be7bffedd604a5": "anchor_morning",
+    "dea96094c29a9f24d7dc07a5d848afd7": "anchor_morning",
+    "3f36c41ee29e9339f71fada56d832914": "anchor_morning",
+    "e88d624c699646a03bac59eb193a09bf": "anchor_morning",
+    "47548a73e429985e77f81a4617b4fdfd": "anchor_morning",
+    "d19dbab4071552441b056ccd2e23ca59": "anchor_morning",
+    "573eed720cdbfb7644835b8beb1bc89a": "anchor_morning",
+    "fa9022be308ebe9ca39ecda8ea15bda4": "anchor_morning",
+    "e5817afb8338b8f7272feff21d87d7f7": "anchor_morning",
+    "183676bbb63b1716e2248ec6c6d205a9": "anchor_morning",
+    "b0f68c9265402a825cbbf7954b726339": "anchor_morning",
+    "9c33dd628312f89764392414cbc99c86": "anchor_morning",
+    "581c12d11a86412432fe89645cbe80b2": "anchor_morning",
+    "e5ff4a85ab3b8341184a334a390f6ba2": "anchor_morning",
+    "1e591733bae48534963359a9cff13701": "anchor_morning",
+    "7e3a5a0dcece26ded8c9d1a64dc6cee5": "anchor_morning",
+    "c17c8f9e12ffe066cf601c96090fcb14": "anchor_morning",
+    "7bac3aae16527dd33a224a2f81792033": "anchor_morning",
+    "746742d4bb94424d9e63d00701eef4ec": "anchor_morning",
+    "8480c989381049fc30c8d714be95db35": "anchor_morning",
+    "09f66e3676ec3112e24cd6b9e97feb41": "anchor_morning",
+    "1841dedea57dac1d1de462bb44f8a732": "anchor_morning",
+    "630ed6c8993fda8943e528a465e55518": "anchor_morning",
+    "096584989b4dd0a84650c37eb980a8b3": "anchor_morning",
+    "7fd2d018fdc5930fd62188de968a901c": "anchor_morning",
+    "e7510e4cb4351947263e33b6dc6a0812": "anchor_morning",
+    "6519cc9dfbff22ca11d607a9f246da2c": "anchor_morning",
+    "e4e95ca26b62e1c3ced6261cbb5c5f3a": "anchor_morning",
+    "c1fd3e172f0617a0d8543b8fd67fc2ce": "anchor_morning",
+    "49aa48a7dbcd6563f389ae4232707d64": "anchor_morning",
+    "85b5947ccfe102a2fa2179d54c83ae31": "anchor_morning",
+    "e2ffa742b36678caf388ca70fdd4878c": "anchor_morning",
+    "bd73558e7eb5bee08962bfb1f5ef6c9a": "anchor_morning",
+    "c6533cfcdfb0860d723a5fd9b9381098": "anchor_morning",
+    "c2a32bff5ed94bef9a6a5847ff544783": "anchor_morning",
+    "877d5834acad37b6142a835438c23001": "anchor_morning",
+    "b02a5444929be961896a4db9742a01fa": "anchor_morning",
+    "1d5b8007f5249010b9c501138e25ac74": "anchor_morning",
+    "d0126c335a51772c70c76e17ca06afb3": "anchor_morning"
+   }
+  }
  }
 ]
