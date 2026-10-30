@@ -1,12 +1,25 @@
 {
- "started_utc": "2026-10-30T18:19:03.723015+00:00",
- "finished_utc": "2026-10-30T18:19:04.081270+00:00",
+ "started_utc": "2026-10-30T18:49:03.850052+00:00",
+ "finished_utc": "2026-10-30T18:55:36.542279+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "d19dbab4071552441b056ccd2e23ca59",
+   "text": "line_move: pinnacle spreads Colorado Buffaloes -1.0\u2192-2.5; line_move: pinnacle spreads Kansas State Wildcats 1.0\u21922.5"
+  },
+  {
+   "game": "8480c989381049fc30c8d714be95db35",
+   "text": "line_move: pinnacle totals Over 57.5\u219256.5; line_move: pinnacle totals Under 57.5\u219256.5"
+  },
+  {
+   "game": "1841dedea57dac1d1de462bb44f8a732",
+   "text": "line_move: pinnacle totals Over 41.5\u219242.5; line_move: pinnacle totals Under 41.5\u219242.5"
+  }
+ ],
+ "games_read": 3,
+ "frozen_file": "ai_opinions_20261030T184903Z.parquet",
+ "spend_usd": 36.7902,
+ "result": "COMPLETE"
 }

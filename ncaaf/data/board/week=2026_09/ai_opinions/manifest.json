@@ -9243,5 +9243,178 @@
     "44ee19d31b9288ad402868d6df737595": "line_move: pinnacle spreads UCF Knights 2.0\u21921.0; line_move: pinnacle spreads Baylor Bears -2.0\u2192-1.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T184903Z.parquet",
+  "sha256": "f4049e69623a91471dbb5ead181122d13484c7ab73e674230af3cdb3054f3794",
+  "logged_utc": "2026-10-30T18:49:03.850052+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.667,
+  "revised_rows": 7,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T183007Z.parquet",
+   "inputs_digest": "{\"d19dbab4071552441b056ccd2e23ca59\": \"1c7725a93424f4b1\", \"8480c989381049fc30c8d714be95db35\": \"5940ccf74fbf4c20\", \"1841dedea57dac1d1de462bb44f8a732\": \"7f728c7ca4ceacfc\"}",
+   "components": {
+    "d19dbab4071552441b056ccd2e23ca59": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       -140
+      ],
+      [
+       "Kansas State Wildcats",
+       0,
+       124
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       -2.5,
+       -107
+      ],
+      [
+       "Kansas State Wildcats",
+       2.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -108
+      ],
+      [
+       "Under",
+       47.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "Colorado QB Lewis suffers medical emergency, hospi",
+      "Deion Sanders clarifies joke about silencing criti",
+      "Deion Sanders: Comment about silencing critics wit",
+      "Ranking the top 60 college football recruiting cla",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1837Z.parquet"
+    },
+    "8480c989381049fc30c8d714be95db35": {
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bearcats",
+       0,
+       218
+      ],
+      [
+       "Utah Utes",
+       0,
+       -256
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bearcats",
+       7.0,
+       -108
+      ],
+      [
+       "Utah Utes",
+       -7.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -107
+      ],
+      [
+       "Under",
+       56.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "No. 6 Utah looks to remain unbeaten against upset-",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1837Z.parquet"
+    },
+    "1841dedea57dac1d1de462bb44f8a732": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -656
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       486
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -14.5,
+       -112
+      ],
+      [
+       "San Jose State Spartans",
+       14.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -109
+      ],
+      [
+       "Under",
+       42.5,
+       -107
+      ]
+     ],
+     "news": [
+      "College football Power Rankings: How Week 8 drama ",
+      "College football futures: Evaluating five contende",
+      "Connelly on Week 8: Who in college football can --",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "How to bet UGA-Florida, UNC-Miami and other best b"
+     ],
+     "kalshi_snap": "snap_20261030T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "d19dbab4071552441b056ccd2e23ca59": "line_move: pinnacle spreads Colorado Buffaloes -1.0\u2192-2.5; line_move: pinnacle spreads Kansas State Wildcats 1.0\u21922.5",
+    "8480c989381049fc30c8d714be95db35": "line_move: pinnacle totals Over 57.5\u219256.5; line_move: pinnacle totals Under 57.5\u219256.5",
+    "1841dedea57dac1d1de462bb44f8a732": "line_move: pinnacle totals Over 41.5\u219242.5; line_move: pinnacle totals Under 41.5\u219242.5"
+   }
+  }
  }
 ]
