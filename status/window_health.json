@@ -12,8 +12,8 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-10-30T05:17:04.183088+00:00",
-  "finished_utc": "2026-10-30T05:17:04.183088+00:00",
+  "started_utc": "2026-10-30T05:47:04.004577+00:00",
+  "finished_utc": "2026-10-30T05:47:04.004577+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -22,11 +22,11 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-10-30T05:24:41.385430+00:00",
-  "finished_utc": "2026-10-30T05:24:41.385430+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-10-30T05:49:03.586890+00:00",
+  "finished_utc": "2026-10-30T05:49:03.586890+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle spreads Georgia State Panthers -5.0\u2192-4.0; line_move: pinnacle spreads Coastal Carolina Chanticleers 5.0\u21924.0']",
-  "freeze_file": "ai_opinions_20261030T051903Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]
