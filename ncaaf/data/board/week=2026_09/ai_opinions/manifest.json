@@ -9416,5 +9416,73 @@
     "1841dedea57dac1d1de462bb44f8a732": "line_move: pinnacle totals Over 41.5\u219242.5; line_move: pinnacle totals Under 41.5\u219242.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T200403Z.parquet",
+  "sha256": "1d6bacb22b626c0689ab6656aaf446ce735dd149f23242ebd09edf4cb34b65a2",
+  "logged_utc": "2026-10-30T20:04:03.950190+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-30T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T200007Z.parquet",
+   "inputs_digest": "{\"78b3d38cdfa28649fdd2ca92829569ce\": \"f5634af9a7241334\"}",
+   "components": {
+    "78b3d38cdfa28649fdd2ca92829569ce": {
+     "pinnacle_h2h": [
+      [
+       "Charlotte 49ers",
+       0,
+       276
+      ],
+      [
+       "Tulane Green Wave",
+       0,
+       -324
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Charlotte 49ers",
+       8.5,
+       -112
+      ],
+      [
+       "Tulane Green Wave",
+       -8.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -116
+      ],
+      [
+       "Under",
+       46.5,
+       -101
+      ]
+     ],
+     "news": [
+      "UCF's, Air Force's space-themed threads lead best "
+     ],
+     "kalshi_snap": "snap_20261030T1937Z.parquet"
+    }
+   },
+   "triggers": {
+    "78b3d38cdfa28649fdd2ca92829569ce": "anchor_prekick"
+   }
+  }
  }
 ]
