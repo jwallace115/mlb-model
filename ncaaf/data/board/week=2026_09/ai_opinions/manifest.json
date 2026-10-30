@@ -9628,5 +9628,81 @@
     "78b3d38cdfa28649fdd2ca92829569ce": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T224903Z.parquet",
+  "sha256": "f0f22b4d499067e27466faf1a94573455f25141ad50af476895fc1898edab6df",
+  "logged_utc": "2026-10-30T22:49:03.775978+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.8,
+  "first_kickoff_utc": "2026-10-30T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T223013Z.parquet",
+   "inputs_digest": "{\"44ee19d31b9288ad402868d6df737595\": \"ad44238f311721bf\"}",
+   "components": {
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -123
+      ],
+      [
+       "UCF Knights",
+       0,
+       111
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       -2.0,
+       -102
+      ],
+      [
+       "UCF Knights",
+       2.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -107
+      ],
+      [
+       "Under",
+       49.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "UCF's, Air Force's space-themed threads lead best ",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T2237Z.parquet"
+    }
+   },
+   "triggers": {
+    "44ee19d31b9288ad402868d6df737595": "anchor_close"
+   }
+  }
  }
 ]
