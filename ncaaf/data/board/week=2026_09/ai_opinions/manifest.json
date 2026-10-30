@@ -5873,5 +5873,185 @@
     "c6533cfcdfb0860d723a5fd9b9381098": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T004904Z.parquet",
+  "sha256": "dcdcdd51b3f0ef50e8305e7c0136126317f0f8163af021b0e030e32453a1cc77",
+  "logged_utc": "2026-10-30T00:49:04.006377+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T003007Z.parquet",
+   "inputs_digest": "{\"bd73558e7eb5bee08962bfb1f5ef6c9a\": \"59ed5bafe70e5073\", \"c2a32bff5ed94bef9a6a5847ff544783\": \"76942f5b9d3f3e26\", \"877d5834acad37b6142a835438c23001\": \"b06882950603400e\"}",
+   "components": {
+    "bd73558e7eb5bee08962bfb1f5ef6c9a": {
+     "pinnacle_h2h": [
+      [
+       "Ohio State Buckeyes",
+       0,
+       -243
+      ],
+      [
+       "USC Trojans",
+       0,
+       208
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ohio State Buckeyes",
+       -6.5,
+       -111
+      ],
+      [
+       "USC Trojans",
+       6.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -108
+      ],
+      [
+       "Under",
+       51.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "AP college football Week 8 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "Betting on Ohio State-USC: How the Trojans can pul",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College Football Playoff top 12 projection after W",
+      "College football Power Rankings: How Week 8 drama ",
+      "College football takeaways: Lasting impressions fr",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How every 2027 five-star college football prospect",
+      "Lincoln Riley, addressing future at USC, says 'Thi",
+      "No. 2 Ohio State and USC meet in Big Ten action",
+      "No. 2 Ohio State has everything but a starting QB ",
+      "Ohio State backup quarterback Luke Fahey 'has a mo",
+      "Ohio State replaces BYU at No. 2 as Top 25 jumbled",
+      "Ohio State replaces BYU at No. 2 in AP Top 25",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Who could replace Aranda at Baylor? What are roste",
+      "Wisconsin, former USC RB Bryan Jackson upset No. 1"
+     ],
+     "kalshi_snap": "snap_20261030T0007Z.parquet"
+    },
+    "c2a32bff5ed94bef9a6a5847ff544783": {
+     "pinnacle_h2h": [
+      [
+       "Army Black Knights",
+       0,
+       187
+      ],
+      [
+       "Memphis Tigers",
+       0,
+       -216
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Army Black Knights",
+       6.0,
+       -105
+      ],
+      [
+       "Memphis Tigers",
+       -6.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.5,
+       -112
+      ],
+      [
+       "Under",
+       59.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Memphis meets Army in AAC action",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T0007Z.parquet"
+    },
+    "877d5834acad37b6142a835438c23001": {
+     "pinnacle_h2h": [
+      [
+       "Nebraska Cornhuskers",
+       0,
+       -291
+      ],
+      [
+       "Washington Huskies",
+       0,
+       245
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nebraska Cornhuskers",
+       -7.5,
+       101
+      ],
+      [
+       "Washington Huskies",
+       7.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -110
+      ],
+      [
+       "Under",
+       50.0,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Big Ten matchup features Nebraska playing Washingt",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Who could replace Aranda at Baylor? What are roste"
+     ],
+     "kalshi_snap": "snap_20261030T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "bd73558e7eb5bee08962bfb1f5ef6c9a": "new_news: 1 availability items",
+    "c2a32bff5ed94bef9a6a5847ff544783": "anchor_morning",
+    "877d5834acad37b6142a835438c23001": "anchor_morning"
+   }
+  }
  }
 ]
