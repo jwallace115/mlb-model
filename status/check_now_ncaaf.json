@@ -1,49 +1,12 @@
 {
- "started_utc": "2026-10-29T23:49:03.471604+00:00",
- "finished_utc": "2026-10-29T23:55:31.636543+00:00",
+ "started_utc": "2026-10-30T00:19:03.518620+00:00",
+ "finished_utc": "2026-10-30T00:19:03.859673+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "07da1e37f1e37363a71d35f2298f01d9",
-   "text": "line_move: pinnacle totals Under 55.5\u219254.5; line_move: pinnacle totals Over 55.5\u219254.5"
-  },
-  {
-   "game": "929937ced936976088a9562342ba0b90",
-   "text": "line_move: pinnacle spreads Iowa Hawkeyes -3.5\u2192-2.5; line_move: pinnacle spreads Wisconsin Badgers 3.5\u21922.5; ml_move: pinnacle novig 0.609\u21920.555"
-  },
-  {
-   "game": "e88d624c699646a03bac59eb193a09bf",
-   "text": "line_move: pinnacle totals Under 44.0\u219245.0; line_move: pinnacle totals Over 44.0\u219245.0"
-  },
-  {
-   "game": "47548a73e429985e77f81a4617b4fdfd",
-   "text": "line_move: pinnacle spreads Georgia State Panthers -6.0\u2192-5.0; line_move: pinnacle spreads Coastal Carolina Chanticleers 6.0\u21925.0; line_move: pinnacle totals Under 57.0\u219256.0; line_move: pinnacle totals Over 57.0\u219256.0"
-  },
-  {
-   "game": "fa9022be308ebe9ca39ecda8ea15bda4",
-   "text": "line_move: pinnacle spreads East Carolina Pirates -6.0\u2192-5.0; line_move: pinnacle spreads Temple Owls 6.0\u21925.0"
-  },
-  {
-   "game": "746742d4bb94424d9e63d00701eef4ec",
-   "text": "line_move: pinnacle totals Under 56.5\u219255.5; line_move: pinnacle totals Over 56.5\u219255.5"
-  },
-  {
-   "game": "096584989b4dd0a84650c37eb980a8b3",
-   "text": "line_move: pinnacle spreads South Carolina Gamecocks 5.0\u21923.5; line_move: pinnacle spreads Oklahoma Sooners -5.0\u2192-3.5; ml_move: pinnacle novig 0.645\u21920.603"
-  },
-  {
-   "game": "7fd2d018fdc5930fd62188de968a901c",
-   "text": "line_move: pinnacle spreads Penn State Nittany Lions -8.5\u2192-10.0; line_move: pinnacle spreads Purdue Boilermakers 8.5\u219210.0"
-  },
-  {
-   "game": "c6533cfcdfb0860d723a5fd9b9381098",
-   "text": "anchor_morning"
-  }
- ],
- "games_read": 9,
- "frozen_file": "ai_opinions_20261029T234903Z.parquet",
- "spend_usd": 36.0383,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
