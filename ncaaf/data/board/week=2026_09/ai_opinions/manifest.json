@@ -9166,5 +9166,82 @@
     "44ee19d31b9288ad402868d6df737595": "line_move: pinnacle spreads UCF Knights 1.0\u21922.0; line_move: pinnacle spreads Baylor Bears -1.0\u2192-2.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T173403Z.parquet",
+  "sha256": "fbdb2c240e712713795debd11f939fefeb48579d36f8a05db1f778312747e776",
+  "logged_utc": "2026-10-30T17:34:03.727797+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-30T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T173005Z.parquet",
+   "inputs_digest": "{\"44ee19d31b9288ad402868d6df737595\": \"2b08fbe7cade5feb\"}",
+   "components": {
+    "44ee19d31b9288ad402868d6df737595": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       -114
+      ],
+      [
+       "UCF Knights",
+       0,
+       103
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       -1.0,
+       -108
+      ],
+      [
+       "UCF Knights",
+       1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -115
+      ],
+      [
+       "Under",
+       48.5,
+       -101
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "Baylor fires coach Dave Aranda in seventh season",
+      "Baylor interim Joe Klanderman wants to give 'jolt ",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "Robert Griffin III says he is '100 percent' intere",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "UCF meets Baylor in Big 12 play",
+      "UCF's Frost: 'Don't think we'll have a letdown' af",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T1707Z.parquet"
+    }
+   },
+   "triggers": {
+    "44ee19d31b9288ad402868d6df737595": "line_move: pinnacle spreads UCF Knights 2.0\u21921.0; line_move: pinnacle spreads Baylor Bears -2.0\u2192-1.0"
+   }
+  }
  }
 ]
