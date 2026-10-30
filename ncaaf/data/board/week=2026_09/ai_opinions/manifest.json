@@ -6133,5 +6133,214 @@
     "b02a5444929be961896a4db9742a01fa": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261030T031903Z.parquet",
+  "sha256": "4f68fabd7786566671b115f1888a9758135c88ea9c02d1798ade6cee1748a02f",
+  "logged_utc": "2026-10-30T03:19:03.347040+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.667,
+  "revised_rows": 4,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T02:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261030T030008Z.parquet",
+   "inputs_digest": "{\"8916ba5e623a0a1d97dd0e7f50e4a205\": \"24e45994784fb612\", \"7e3a5a0dcece26ded8c9d1a64dc6cee5\": \"173946b3f124042c\", \"1d5b8007f5249010b9c501138e25ac74\": \"3cf41b54a832519f\", \"d0126c335a51772c70c76e17ca06afb3\": \"39c2ee1f1e00ba30\"}",
+   "components": {
+    "8916ba5e623a0a1d97dd0e7f50e4a205": {
+     "pinnacle_h2h": [
+      [
+       "Kent State Golden Flashes",
+       0,
+       -313
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       260
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kent State Golden Flashes",
+       -7.5,
+       -102
+      ],
+      [
+       "Sacramento State Hornets",
+       7.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -105
+      ],
+      [
+       "Under",
+       46.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Sacramento State hosts Kent State in MAC matchup"
+     ],
+     "kalshi_snap": "snap_20261030T0307Z.parquet"
+    },
+    "7e3a5a0dcece26ded8c9d1a64dc6cee5": {
+     "pinnacle_h2h": [
+      [
+       "Kansas Jayhawks",
+       0,
+       204
+      ],
+      [
+       "TCU Horned Frogs",
+       0,
+       -238
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas Jayhawks",
+       6.5,
+       -111
+      ],
+      [
+       "TCU Horned Frogs",
+       -6.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -114
+      ],
+      [
+       "Under",
+       45.0,
+       -103
+      ]
+     ],
+     "news": [
+      "Big 12 matchup features TCU squaring off against K",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T0307Z.parquet"
+    },
+    "1d5b8007f5249010b9c501138e25ac74": {
+     "pinnacle_h2h": [
+      [
+       "Northern Illinois Huskies",
+       0,
+       1265
+      ],
+      [
+       "UNLV Rebels",
+       0,
+       -2353
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northern Illinois Huskies",
+       24.0,
+       -104
+      ],
+      [
+       "UNLV Rebels",
+       -24.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -117
+      ],
+      [
+       "Under",
+       53.5,
+       101
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "UNLV hosts Northern Illinois in MWC action",
+      "Upsets and chaos reign supreme in college football"
+     ],
+     "kalshi_snap": "snap_20261030T0307Z.parquet"
+    },
+    "d0126c335a51772c70c76e17ca06afb3": {
+     "pinnacle_h2h": [
+      [
+       "Fresno State Bulldogs",
+       0,
+       200
+      ],
+      [
+       "Oregon State Beavers",
+       0,
+       -233
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Fresno State Bulldogs",
+       6.0,
+       -103
+      ],
+      [
+       "Oregon State Beavers",
+       -6.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.5,
+       -109
+      ],
+      [
+       "Under",
+       58.5,
+       -107
+      ]
+     ],
+     "news": [
+      "College football Power Rankings: How Week 8 drama ",
+      "College football futures: Evaluating five contende",
+      "Fresno State hosts Oregon State in Pac-12 matchup",
+      "From unknown to a star, how Oregon State landed an",
+      "Upsets and chaos reign supreme in college football",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261030T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "8916ba5e623a0a1d97dd0e7f50e4a205": "line_move: pinnacle spreads Kent State Golden Flashes -8.5\u2192-7.5; line_move: pinnacle spreads Sacramento State Hornets 8.5\u21927.5",
+    "7e3a5a0dcece26ded8c9d1a64dc6cee5": "line_move: pinnacle spreads Kansas Jayhawks 5.5\u21926.5; line_move: pinnacle spreads TCU Horned Frogs -5.5\u2192-6.5; line_move: pinnacle totals Over 46.0\u219245.0; line_move: pinnacle totals Under 46.0\u219245.0",
+    "1d5b8007f5249010b9c501138e25ac74": "anchor_morning",
+    "d0126c335a51772c70c76e17ca06afb3": "anchor_morning"
+   }
+  }
  }
 ]

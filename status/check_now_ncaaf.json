@@ -1,12 +1,29 @@
 {
- "started_utc": "2026-10-30T02:49:03.588775+00:00",
- "finished_utc": "2026-10-30T02:49:03.921990+00:00",
+ "started_utc": "2026-10-30T03:19:03.347040+00:00",
+ "finished_utc": "2026-10-30T03:24:03.668090+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "8916ba5e623a0a1d97dd0e7f50e4a205",
+   "text": "line_move: pinnacle spreads Kent State Golden Flashes -8.5\u2192-7.5; line_move: pinnacle spreads Sacramento State Hornets 8.5\u21927.5"
+  },
+  {
+   "game": "7e3a5a0dcece26ded8c9d1a64dc6cee5",
+   "text": "line_move: pinnacle spreads Kansas Jayhawks 5.5\u21926.5; line_move: pinnacle spreads TCU Horned Frogs -5.5\u2192-6.5; line_move: pinnacle totals Over 46.0\u219245.0; line_move: pinnacle totals Under 46.0\u219245.0"
+  },
+  {
+   "game": "1d5b8007f5249010b9c501138e25ac74",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "d0126c335a51772c70c76e17ca06afb3",
+   "text": "anchor_morning"
+  }
+ ],
+ "games_read": 4,
+ "frozen_file": "ai_opinions_20261030T031903Z.parquet",
+ "spend_usd": 36.1202,
+ "result": "COMPLETE"
 }
