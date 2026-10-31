@@ -13837,5 +13837,322 @@
     "dea96094c29a9f24d7dc07a5d848afd7": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T160403Z.parquet",
+  "sha256": "655e90391c21493d11e7e023dbc379cf8140aac55594c5d758c702992da53530",
+  "logged_utc": "2026-10-31T16:04:03.839786+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.667,
+  "revised_rows": 11,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-31T16:45:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T160006Z.parquet",
+   "inputs_digest": "{\"3f36c41ee29e9339f71fada56d832914\": \"fa7ae19e473f0575\", \"573eed720cdbfb7644835b8beb1bc89a\": \"a3a6a0edde9a3308\", \"fa9022be308ebe9ca39ecda8ea15bda4\": \"d5bc6662620fa4e4\", \"e5817afb8338b8f7272feff21d87d7f7\": \"9c09a18c1f1df778\"}",
+   "components": {
+    "3f36c41ee29e9339f71fada56d832914": {
+     "pinnacle_h2h": [
+      [
+       "Auburn Tigers",
+       0,
+       319
+      ],
+      [
+       "Ole Miss Rebels",
+       0,
+       -380
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Auburn Tigers",
+       10.0,
+       -104
+      ],
+      [
+       "Ole Miss Rebels",
+       -10.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.5,
+       -105
+      ],
+      [
+       "Under",
+       58.5,
+       -111
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Auburn vs. No. 12 Ole Miss preview, highlighting r",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Heather Dinich: Ole Miss is in 'must-win mode' vs.",
+      "No Huddle! Hustling through the storylines to look",
+      "Ole Miss RB Kewan Lacy out after dislocating shoul",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1607Z.parquet"
+    },
+    "573eed720cdbfb7644835b8beb1bc89a": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       103
+      ],
+      [
+       "UConn Huskies",
+       0,
+       -114
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       1.0,
+       -102
+      ],
+      [
+       "UConn Huskies",
+       -1.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -108
+      ],
+      [
+       "Under",
+       52.5,
+       -108
+      ]
+     ],
+     "news": [
+      "UCF's, Air Force's space-themed threads lead best "
+     ],
+     "kalshi_snap": "snap_20261031T1607Z.parquet"
+    },
+    "fa9022be308ebe9ca39ecda8ea15bda4": {
+     "pinnacle_h2h": [
+      [
+       "East Carolina Pirates",
+       0,
+       -178
+      ],
+      [
+       "Temple Owls",
+       0,
+       160
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "East Carolina Pirates",
+       -4.0,
+       -103
+      ],
+      [
+       "Temple Owls",
+       4.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -112
+      ],
+      [
+       "Under",
+       50.0,
+       -104
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings"
+     ],
+     "kalshi_snap": "snap_20261031T1607Z.parquet"
+    },
+    "e5817afb8338b8f7272feff21d87d7f7": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -235
+      ],
+      [
+       "South Alabama Jaguars",
+       0,
+       206
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -6.0,
+       -113
+      ],
+      [
+       "South Alabama Jaguars",
+       6.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       -108
+      ],
+      [
+       "Under",
+       58.0,
+       -108
+      ]
+     ],
+     "news": [
+      "College football futures: Evaluating five contende"
+     ],
+     "kalshi_snap": "snap_20261031T1607Z.parquet"
+    }
+   },
+   "triggers": {
+    "3f36c41ee29e9339f71fada56d832914": "anchor_close",
+    "573eed720cdbfb7644835b8beb1bc89a": "anchor_prekick",
+    "fa9022be308ebe9ca39ecda8ea15bda4": "anchor_prekick",
+    "e5817afb8338b8f7272feff21d87d7f7": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261031T161903Z.parquet",
+  "sha256": "0a029560ef3d0ebe55130bdf90227b03b7b9852dfd876058dbfc5cf7ed6b6ac0",
+  "logged_utc": "2026-10-31T16:19:03.678777+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.833,
+  "revised_rows": 6,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-31T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T160006Z.parquet",
+   "inputs_digest": "{\"e88d624c699646a03bac59eb193a09bf\": \"6bd3f522dce1fb13\", \"183676bbb63b1716e2248ec6c6d205a9\": \"35609e3f5c7981ab\"}",
+   "components": {
+    "e88d624c699646a03bac59eb193a09bf": {
+     "pinnacle_h2h": [
+      [
+       "Marshall Thundering Herd",
+       0,
+       -141
+      ],
+      [
+       "Old Dominion Monarchs",
+       0,
+       127
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Marshall Thundering Herd",
+       -3.0,
+       100
+      ],
+      [
+       "Old Dominion Monarchs",
+       3.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       101
+      ],
+      [
+       "Under",
+       46.5,
+       -118
+      ]
+     ],
+     "kalshi_snap": "snap_20261031T1607Z.parquet"
+    },
+    "183676bbb63b1716e2248ec6c6d205a9": {
+     "pinnacle_h2h": [
+      [
+       "Louisville Cardinals",
+       0,
+       -1657
+      ],
+      [
+       "Stanford Cardinal",
+       0,
+       1066
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisville Cardinals",
+       -22.5,
+       -107
+      ],
+      [
+       "Stanford Cardinal",
+       22.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       60.0,
+       -110
+      ],
+      [
+       "Under",
+       60.0,
+       -106
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "NCAA loses Kentucky appeals ruling; players remain",
+      "Ranking the top 60 college football recruiting cla",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1607Z.parquet"
+    }
+   },
+   "triggers": {
+    "e88d624c699646a03bac59eb193a09bf": "anchor_close",
+    "183676bbb63b1716e2248ec6c6d205a9": "anchor_prekick"
+   }
+  }
  }
 ]
