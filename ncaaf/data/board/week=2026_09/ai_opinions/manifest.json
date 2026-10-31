@@ -16763,5 +16763,74 @@
     "877d5834acad37b6142a835438c23001": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T214903Z.parquet",
+  "sha256": "ef47ceaf8da5ea0cc7f6e4f4f6ac84c01a1230d3607b518cde07c3e59a0f384d",
+  "logged_utc": "2026-10-31T21:49:03.612891+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-31T22:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T213005Z.parquet",
+   "inputs_digest": "{\"e7510e4cb4351947263e33b6dc6a0812\": \"c51601718a429efb\"}",
+   "components": {
+    "e7510e4cb4351947263e33b6dc6a0812": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       191
+      ],
+      [
+       "Georgia Southern Eagles",
+       0,
+       -216
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       5.5,
+       100
+      ],
+      [
+       "Georgia Southern Eagles",
+       -5.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -101
+      ],
+      [
+       "Under",
+       55.5,
+       -116
+      ]
+     ],
+     "news": [
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T2137Z.parquet"
+    }
+   },
+   "triggers": {
+    "e7510e4cb4351947263e33b6dc6a0812": "anchor_close"
+   }
+  }
  }
 ]
