@@ -14742,5 +14742,334 @@
     "09f66e3676ec3112e24cd6b9e97feb41": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T170403Z.parquet",
+  "sha256": "90a25f15f833716ee4163bede263ec5c8a54726e84071566a3ef5be831892ed7",
+  "logged_utc": "2026-10-31T17:04:03.328311+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-31T20:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T170006Z.parquet",
+   "inputs_digest": "{\"1841dedea57dac1d1de462bb44f8a732\": \"ff2f679ee5a0b590\"}",
+   "components": {
+    "1841dedea57dac1d1de462bb44f8a732": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -630
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       492
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -14.5,
+       -108
+      ],
+      [
+       "San Jose State Spartans",
+       14.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -110
+      ],
+      [
+       "Under",
+       42.5,
+       -106
+      ]
+     ],
+     "news": [
+      "College football futures: Evaluating five contende",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "How to bet UGA-Florida, UNC-Miami and other best b"
+     ],
+     "kalshi_snap": "snap_20261031T1707Z.parquet"
+    }
+   },
+   "triggers": {
+    "1841dedea57dac1d1de462bb44f8a732": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261031T171905Z.parquet",
+  "sha256": "b3ab44021d93b9170561a60999e7e406ccdc385c4ed0ab2b1adec512be2d4dca",
+  "logged_utc": "2026-10-31T17:19:05.320492+00:00",
+  "rows": 15,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.667,
+  "revised_rows": 15,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-31T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T170006Z.parquet",
+   "inputs_digest": "{\"47548a73e429985e77f81a4617b4fdfd\": \"13e4216a75a404b2\", \"d19dbab4071552441b056ccd2e23ca59\": \"b6a9787be2c37547\", \"630ed6c8993fda8943e528a465e55518\": \"a9896f6432da67e2\", \"096584989b4dd0a84650c37eb980a8b3\": \"01a1eca6cdc707ee\", \"7fd2d018fdc5930fd62188de968a901c\": \"2f3a0023e3f6711a\"}",
+   "components": {
+    "47548a73e429985e77f81a4617b4fdfd": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       155
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       -173
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       4.0,
+       -109
+      ],
+      [
+       "Georgia State Panthers",
+       -4.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -104
+      ],
+      [
+       "Under",
+       56.0,
+       -113
+      ]
+     ],
+     "kalshi_snap": "snap_20261031T1707Z.parquet"
+    },
+    "d19dbab4071552441b056ccd2e23ca59": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       -154
+      ],
+      [
+       "Kansas State Wildcats",
+       0,
+       139
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       -3.0,
+       -106
+      ],
+      [
+       "Kansas State Wildcats",
+       3.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -101
+      ],
+      [
+       "Under",
+       47.0,
+       -115
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "Colorado QB Lewis suffers medical emergency, hospi",
+      "Deion Sanders clarifies joke about silencing criti",
+      "Deion Sanders: Comment about silencing critics wit",
+      "Ranking the top 60 college football recruiting cla",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1707Z.parquet"
+    },
+    "630ed6c8993fda8943e528a465e55518": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       1016
+      ],
+      [
+       "UCLA Bruins",
+       0,
+       -1556
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       22.0,
+       -107
+      ],
+      [
+       "UCLA Bruins",
+       -22.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -101
+      ],
+      [
+       "Under",
+       43.0,
+       -116
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "UCLA QB Iamaleava 'heartbroken' over season-ending",
+      "Unbeaten No. 7 UCLA hosts Nevada with an 8-0 start"
+     ],
+     "kalshi_snap": "snap_20261031T1707Z.parquet"
+    },
+    "096584989b4dd0a84650c37eb980a8b3": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma Sooners",
+       0,
+       -155
+      ],
+      [
+       "South Carolina Gamecocks",
+       0,
+       140
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma Sooners",
+       -3.5,
+       100
+      ],
+      [
+       "South Carolina Gamecocks",
+       3.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -110
+      ],
+      [
+       "Under",
+       44.0,
+       -106
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How every 2027 five-star college football prospect",
+      "LaNorris Sellers says comfort in Gamecocks' offens",
+      "Ranking the top 60 college football recruiting cla",
+      "Roman, Are You Impressed? Week 8 brings a 'definit",
+      "Shane Beamer on how South Carolina must navigate O",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1707Z.parquet"
+    },
+    "7fd2d018fdc5930fd62188de968a901c": {
+     "pinnacle_h2h": [
+      [
+       "Penn State Nittany Lions",
+       0,
+       -360
+      ],
+      [
+       "Purdue Boilermakers",
+       0,
+       304
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Penn State Nittany Lions",
+       -10.0,
+       -113
+      ],
+      [
+       "Purdue Boilermakers",
+       10.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.0,
+       -108
+      ],
+      [
+       "Under",
+       55.0,
+       -108
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Ranking the top 60 college football recruiting cla",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1707Z.parquet"
+    }
+   },
+   "triggers": {
+    "47548a73e429985e77f81a4617b4fdfd": "anchor_close",
+    "d19dbab4071552441b056ccd2e23ca59": "anchor_close",
+    "630ed6c8993fda8943e528a465e55518": "anchor_prekick",
+    "096584989b4dd0a84650c37eb980a8b3": "anchor_prekick",
+    "7fd2d018fdc5930fd62188de968a901c": "anchor_prekick"
+   }
+  }
  }
 ]
