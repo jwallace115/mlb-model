@@ -109,7 +109,7 @@ def decide_cadence(sport, nearest_kick_hours, now, root, mode="auto"):
     # Check for 10 AM ET anchor → always a sweep
     from zoneinfo import ZoneInfo
     et_now = now.astimezone(ZoneInfo("America/New_York"))
-    if et_now.hour == 10 and et_now.minute < 15:
+    if 10 <= et_now.hour <= 11:  # P80: any tick from 10:00 until the morning sweep has happened (not just 10:00–10:14)
         morning_key = f"morning_sweep_{sport}:{et_now.strftime('%Y-%m-%d')}"
         if morning_key not in state:
             return "sweep", f"anchor_morning 10:00 AM ET"
@@ -131,11 +131,12 @@ def record_sweep(sport, now, root):
     """Record that a sweep just completed for this sport."""
     state = _load_watch_state(root)
     state[f"last_sweep_{sport}"] = now.isoformat()
-    # Mark morning sweep done for today
+    # P80: only a sweep at/after 10:00 AM ET counts as the morning-anchor sweep (a 9:47 sweep must not pre-empt it)
     from zoneinfo import ZoneInfo
     et_now = now.astimezone(ZoneInfo("America/New_York"))
-    morning_key = f"morning_sweep_{sport}:{et_now.strftime('%Y-%m-%d')}"
-    state[morning_key] = now.isoformat()
+    if et_now.hour >= 10:
+        morning_key = f"morning_sweep_{sport}:{et_now.strftime('%Y-%m-%d')}"
+        state[morning_key] = now.isoformat()
     _save_watch_state(state, root)
 
 
