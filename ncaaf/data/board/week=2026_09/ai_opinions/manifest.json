@@ -15764,5 +15764,196 @@
     "746742d4bb94424d9e63d00701eef4ec": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T190403Z.parquet",
+  "sha256": "1efe2a69b674da25ba70d2e4929f42b5059562017f2b33aaada19e7ccd23330c",
+  "logged_utc": "2026-10-31T19:04:03.766668+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.833,
+  "revised_rows": 5,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-31T19:45:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T190008Z.parquet",
+   "inputs_digest": "{\"8480c989381049fc30c8d714be95db35\": \"44d76131824fa95e\", \"09f66e3676ec3112e24cd6b9e97feb41\": \"bc34a9ad421bebaf\"}",
+   "components": {
+    "8480c989381049fc30c8d714be95db35": {
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bearcats",
+       0,
+       229
+      ],
+      [
+       "Utah Utes",
+       0,
+       -263
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bearcats",
+       7.0,
+       -101
+      ],
+      [
+       "Utah Utes",
+       -7.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -105
+      ],
+      [
+       "Under",
+       56.5,
+       -111
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "No. 6 Utah looks to remain unbeaten against upset-",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1837Z.parquet"
+    },
+    "09f66e3676ec3112e24cd6b9e97feb41": {
+     "pinnacle_h2h": [
+      [
+       "Virginia Cavaliers",
+       0,
+       422
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       0,
+       -526
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Virginia Cavaliers",
+       13.5,
+       -109
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       -13.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       100
+      ],
+      [
+       "Under",
+       48.5,
+       -116
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "8480c989381049fc30c8d714be95db35": "anchor_close",
+    "09f66e3676ec3112e24cd6b9e97feb41": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261031T191903Z.parquet",
+  "sha256": "4e16a76d3c4849f380795341cda5f66e5f47488680a5fc55ad2b05d4faa6f3ec",
+  "logged_utc": "2026-10-31T19:19:03.560602+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T20:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T190008Z.parquet",
+   "inputs_digest": "{\"1841dedea57dac1d1de462bb44f8a732\": \"d7a84589eb36bbdf\"}",
+   "components": {
+    "1841dedea57dac1d1de462bb44f8a732": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -631
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       492
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -14.5,
+       -108
+      ],
+      [
+       "San Jose State Spartans",
+       14.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -112
+      ],
+      [
+       "Under",
+       42.5,
+       -104
+      ]
+     ],
+     "news": [
+      "College football futures: Evaluating five contende",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "How to bet UGA-Florida, UNC-Miami and other best b"
+     ],
+     "kalshi_snap": "snap_20261031T1907Z.parquet"
+    }
+   },
+   "triggers": {
+    "1841dedea57dac1d1de462bb44f8a732": "anchor_close"
+   }
+  }
  }
 ]
