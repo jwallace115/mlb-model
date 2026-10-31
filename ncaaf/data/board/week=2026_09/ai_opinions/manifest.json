@@ -10827,5 +10827,154 @@
     "3713b2d962a33a6e55be7bffedd604a5": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T133403Z.parquet",
+  "sha256": "a54ab86a9ba1632d377e6e59cdc29b9dabad5831addbdf203ea72335b4f84d21",
+  "logged_utc": "2026-10-31T13:34:03.826967+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 484.0,
+  "first_kickoff_utc": "2026-10-31T16:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T053004Z.parquet",
+   "inputs_digest": "{\"dea96094c29a9f24d7dc07a5d848afd7\": \"9cba7cf968c793a3\"}",
+   "components": {
+    "dea96094c29a9f24d7dc07a5d848afd7": {
+     "pinnacle_h2h": [
+      [
+       "Michigan Wolverines",
+       0,
+       -681
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       501
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan Wolverines",
+       -16.5,
+       -103
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       16.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -104
+      ],
+      [
+       "Under",
+       46.5,
+       -112
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 college football recruits on the rise and how",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Michigan sticking with OC Jason Beck",
+      "Ranking the top 60 college football recruiting cla"
+     ],
+     "kalshi_snap": "snap_20261031T0537Z.parquet"
+    }
+   },
+   "triggers": {
+    "dea96094c29a9f24d7dc07a5d848afd7": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261031T134905Z.parquet",
+  "sha256": "9ef965488adb729020b0148e7ffc4c6ddf7e3a1e9ad0a277da6bb85e8e4437cb",
+  "logged_utc": "2026-10-31T13:49:05.414527+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 499.0,
+  "first_kickoff_utc": "2026-10-31T16:45:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T053004Z.parquet",
+   "inputs_digest": "{\"3f36c41ee29e9339f71fada56d832914\": \"bed6de34934032d4\"}",
+   "components": {
+    "3f36c41ee29e9339f71fada56d832914": {
+     "pinnacle_h2h": [
+      [
+       "Auburn Tigers",
+       0,
+       371
+      ],
+      [
+       "Ole Miss Rebels",
+       0,
+       -472
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Auburn Tigers",
+       11.5,
+       -106
+      ],
+      [
+       "Ole Miss Rebels",
+       -11.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -110
+      ],
+      [
+       "Under",
+       57.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Auburn vs. No. 12 Ole Miss preview, highlighting r",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Heather Dinich: Ole Miss is in 'must-win mode' vs.",
+      "No Huddle! Hustling through the storylines to look",
+      "Ole Miss RB Kewan Lacy out after dislocating shoul",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T0537Z.parquet"
+    }
+   },
+   "triggers": {
+    "3f36c41ee29e9339f71fada56d832914": "anchor_prekick"
+   }
+  }
  }
 ]

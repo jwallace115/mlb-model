@@ -10,23 +10,23 @@
   "freeze_file": null
  },
  {
-  "sport": "nfl",
-  "window": "event",
-  "started_utc": "2026-10-31T13:17:03.323249+00:00",
-  "finished_utc": "2026-10-31T13:17:03.323249+00:00",
-  "result": "no_triggers",
-  "step": "window_watch",
-  "message": "",
-  "freeze_file": null
- },
- {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-10-31T13:23:54.317182+00:00",
-  "finished_utc": "2026-10-31T13:23:54.317182+00:00",
-  "result": "no_triggers",
+  "started_utc": "2026-10-31T13:56:13.160372+00:00",
+  "finished_utc": "2026-10-31T13:56:13.160372+00:00",
+  "result": "COMPLETE",
   "step": "window_watch",
-  "message": "",
-  "freeze_file": null
+  "message": "['anchor_prekick']",
+  "freeze_file": "ai_opinions_20261031T134905Z.parquet"
+ },
+ {
+  "sport": "nfl",
+  "window": "event",
+  "started_utc": "2026-10-31T13:56:17.770410+00:00",
+  "finished_utc": "2026-10-31T13:56:17.770410+00:00",
+  "result": "COMPLETE",
+  "step": "window_watch",
+  "message": "['new_props: pull 2026-10-31T13:47:32.319370+00:00; injury_change: inj_Buffalo Bills', 'new_props: pull 2026-10-31T13:47:32.319370+00:00; injury_change: inj_Indianapolis Colts']",
+  "freeze_file": "ai_opinions_20261031T134703Z.parquet"
  }
 ]
