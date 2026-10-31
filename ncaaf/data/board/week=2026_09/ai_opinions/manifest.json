@@ -9840,5 +9840,403 @@
     "8916ba5e623a0a1d97dd0e7f50e4a205": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T024903Z.parquet",
+  "sha256": "7bb27c8beae6b02d094f48e0055089aaefc8a6ded47958b1517f61f8de92ea11",
+  "logged_utc": "2026-10-31T02:49:03.816638+00:00",
+  "rows": 24,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 8,
+  "no_view_share": 0.625,
+  "revised_rows": 18,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-10-31T16:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T023006Z.parquet",
+   "inputs_digest": "{\"807f73b612ed07bda8d1835550ddbd43\": \"bf37ac1bb034c865\", \"fc416b26c2c25018a05bc5cb0d80dbb6\": \"42d341be027b17b3\", \"aa15904c0f5814a899ddbe002c96406a\": \"ae5804412e05aa15\", \"2f219378e527cf1f695b814a0a4ad63c\": \"765d29f837aebb12\", \"3f36c41ee29e9339f71fada56d832914\": \"cddc1b19487e47f2\", \"9c33dd628312f89764392414cbc99c86\": \"d18d899c44ee4a11\", \"e4e95ca26b62e1c3ced6261cbb5c5f3a\": \"5cb4acb6e62cfa90\", \"1d5b8007f5249010b9c501138e25ac74\": \"a8e562883e598d8f\"}",
+   "components": {
+    "807f73b612ed07bda8d1835550ddbd43": {
+     "pinnacle_h2h": [
+      [
+       "Boston College Eagles",
+       0,
+       220
+      ],
+      [
+       "Duke Blue Devils",
+       0,
+       -259
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boston College Eagles",
+       7.0,
+       -109
+      ],
+      [
+       "Duke Blue Devils",
+       -7.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -109
+      ],
+      [
+       "Under",
+       49.0,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Ranking the top 60 college football recruiting cla",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T0237Z.parquet"
+    },
+    "fc416b26c2c25018a05bc5cb0d80dbb6": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       432
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -567
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       13.5,
+       100
+      ],
+      [
+       "Western Michigan Broncos",
+       -13.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -109
+      ],
+      [
+       "Under",
+       45.0,
+       -107
+      ]
+     ],
+     "kalshi_snap": "snap_20261031T0237Z.parquet"
+    },
+    "aa15904c0f5814a899ddbe002c96406a": {
+     "pinnacle_h2h": [
+      [
+       "California Golden Bears",
+       0,
+       255
+      ],
+      [
+       "NC State Wolfpack",
+       0,
+       -305
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "California Golden Bears",
+       9.5,
+       -107
+      ],
+      [
+       "NC State Wolfpack",
+       -9.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -104
+      ],
+      [
+       "Under",
+       57.0,
+       -112
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Doeren leaves NC State 'with no grudges,' will alw",
+      "Kevin Jennings breaks SMU's TD passing record in w",
+      "NC State's Goebbel vows to build on 'foundation' l",
+      "Ranking the top 60 college football recruiting cla",
+      "Thamel: Philip Rivers is a real candidate to be ne"
+     ],
+     "kalshi_snap": "snap_20261031T0237Z.parquet"
+    },
+    "2f219378e527cf1f695b814a0a4ad63c": {
+     "pinnacle_h2h": [
+      [
+       "SMU Mustangs",
+       0,
+       -339
+      ],
+      [
+       "Syracuse Orange",
+       0,
+       280
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "SMU Mustangs",
+       -9.5,
+       -112
+      ],
+      [
+       "Syracuse Orange",
+       9.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       -113
+      ],
+      [
+       "Under",
+       58.0,
+       -103
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Kevin Jennings breaks SMU's TD passing record in w",
+      "Longtime football coach June Jones, pioneer of run",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "UCF's, Air Force's space-themed threads lead best ",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T0237Z.parquet"
+    },
+    "3f36c41ee29e9339f71fada56d832914": {
+     "pinnacle_h2h": [
+      [
+       "Auburn Tigers",
+       0,
+       371
+      ],
+      [
+       "Ole Miss Rebels",
+       0,
+       -472
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Auburn Tigers",
+       11.5,
+       -106
+      ],
+      [
+       "Ole Miss Rebels",
+       -11.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -110
+      ],
+      [
+       "Under",
+       57.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Auburn vs. No. 12 Ole Miss preview, highlighting r",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football Power Rankings: How Week 8 drama ",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Heather Dinich: Ole Miss is in 'must-win mode' vs.",
+      "No Huddle! Hustling through the storylines to look",
+      "Ole Miss RB Kewan Lacy out after dislocating shoul",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T0237Z.parquet"
+    },
+    "9c33dd628312f89764392414cbc99c86": {
+     "pinnacle_h2h": [
+      [
+       "Colorado State Rams",
+       0,
+       243
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       -289
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado State Rams",
+       7.5,
+       -110
+      ],
+      [
+       "Utah State Aggies",
+       -7.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       62.0,
+       -105
+      ],
+      [
+       "Under",
+       62.0,
+       -111
+      ]
+     ],
+     "kalshi_snap": "snap_20261031T0237Z.parquet"
+    },
+    "e4e95ca26b62e1c3ced6261cbb5c5f3a": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       287
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -350
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       9.0,
+       -106
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -9.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       -106
+      ],
+      [
+       "Under",
+       58.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit"
+     ],
+     "kalshi_snap": "snap_20261031T0237Z.parquet"
+    },
+    "1d5b8007f5249010b9c501138e25ac74": {
+     "pinnacle_h2h": [
+      [
+       "Northern Illinois Huskies",
+       0,
+       1134
+      ],
+      [
+       "UNLV Rebels",
+       0,
+       -2014
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northern Illinois Huskies",
+       22.5,
+       -109
+      ],
+      [
+       "UNLV Rebels",
+       -22.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -112
+      ],
+      [
+       "Under",
+       54.0,
+       -104
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "UCF's, Air Force's space-themed threads lead best "
+     ],
+     "kalshi_snap": "snap_20261031T0237Z.parquet"
+    }
+   },
+   "triggers": {
+    "807f73b612ed07bda8d1835550ddbd43": "line_move: pinnacle totals Under 48.0\u219249.0; line_move: pinnacle totals Over 48.0\u219249.0",
+    "fc416b26c2c25018a05bc5cb0d80dbb6": "line_move: pinnacle totals Under 44.0\u219245.0; line_move: pinnacle totals Over 44.0\u219245.0",
+    "aa15904c0f5814a899ddbe002c96406a": "line_move: pinnacle spreads NC State Wolfpack -7.0\u2192-9.5; line_move: pinnacle spreads California Golden Bears 7.0\u21929.5",
+    "2f219378e527cf1f695b814a0a4ad63c": "line_move: pinnacle spreads SMU Mustangs -10.5\u2192-9.5; line_move: pinnacle spreads Syracuse Orange 10.5\u21929.5",
+    "3f36c41ee29e9339f71fada56d832914": "line_move: pinnacle spreads Auburn Tigers 13.0\u219211.5; line_move: pinnacle spreads Ole Miss Rebels -13.0\u2192-11.5",
+    "9c33dd628312f89764392414cbc99c86": "line_move: pinnacle totals Under 63.0\u219262.0; line_move: pinnacle totals Over 63.0\u219262.0",
+    "e4e95ca26b62e1c3ced6261cbb5c5f3a": "line_move: pinnacle totals Under 57.0\u219258.0; line_move: pinnacle totals Over 57.0\u219258.0",
+    "1d5b8007f5249010b9c501138e25ac74": "line_move: pinnacle spreads UNLV Rebels -24.0\u2192-22.5; line_move: pinnacle spreads Northern Illinois Huskies 24.0\u219222.5"
+   }
+  }
  }
 ]

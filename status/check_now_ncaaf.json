@@ -1,12 +1,45 @@
 {
- "started_utc": "2026-10-31T02:19:03.996237+00:00",
- "finished_utc": "2026-10-31T02:23:44.273712+00:00",
+ "started_utc": "2026-10-31T02:49:03.816638+00:00",
+ "finished_utc": "2026-10-31T02:55:51.628072+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "807f73b612ed07bda8d1835550ddbd43",
+   "text": "line_move: pinnacle totals Under 48.0\u219249.0; line_move: pinnacle totals Over 48.0\u219249.0"
+  },
+  {
+   "game": "fc416b26c2c25018a05bc5cb0d80dbb6",
+   "text": "line_move: pinnacle totals Under 44.0\u219245.0; line_move: pinnacle totals Over 44.0\u219245.0"
+  },
+  {
+   "game": "aa15904c0f5814a899ddbe002c96406a",
+   "text": "line_move: pinnacle spreads NC State Wolfpack -7.0\u2192-9.5; line_move: pinnacle spreads California Golden Bears 7.0\u21929.5"
+  },
+  {
+   "game": "2f219378e527cf1f695b814a0a4ad63c",
+   "text": "line_move: pinnacle spreads SMU Mustangs -10.5\u2192-9.5; line_move: pinnacle spreads Syracuse Orange 10.5\u21929.5"
+  },
+  {
+   "game": "3f36c41ee29e9339f71fada56d832914",
+   "text": "line_move: pinnacle spreads Auburn Tigers 13.0\u219211.5; line_move: pinnacle spreads Ole Miss Rebels -13.0\u2192-11.5"
+  },
+  {
+   "game": "9c33dd628312f89764392414cbc99c86",
+   "text": "line_move: pinnacle totals Under 63.0\u219262.0; line_move: pinnacle totals Over 63.0\u219262.0"
+  },
+  {
+   "game": "e4e95ca26b62e1c3ced6261cbb5c5f3a",
+   "text": "line_move: pinnacle totals Under 57.0\u219258.0; line_move: pinnacle totals Over 57.0\u219258.0"
+  },
+  {
+   "game": "1d5b8007f5249010b9c501138e25ac74",
+   "text": "line_move: pinnacle spreads UNLV Rebels -24.0\u2192-22.5; line_move: pinnacle spreads Northern Illinois Huskies 24.0\u219222.5"
+  }
+ ],
+ "games_read": 8,
+ "frozen_file": "ai_opinions_20261031T024903Z.parquet",
+ "spend_usd": 37.8039,
+ "result": "COMPLETE"
 }
