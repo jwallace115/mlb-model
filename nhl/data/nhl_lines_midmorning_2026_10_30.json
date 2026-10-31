@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "5c712e15e1cd4b9283b4bf410fb334f4",
+    "game_date": "2026-10-30",
+    "sport": "NHL",
+    "home_team": "Vegas Golden Knights",
+    "away_team": "New Jersey Devils",
+    "commence_time": "2026-10-30T22:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.0,
+    "over_price": -110,
+    "under_price": -102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-30T13:25:03.279316+00:00"
+  },
+  {
+    "game_id": "a536736a6da269d2e10edbdb27a789bd",
+    "game_date": "2026-10-30",
+    "sport": "NHL",
+    "home_team": "Florida Panthers",
+    "away_team": "Winnipeg Jets",
+    "commence_time": "2026-10-30T23:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.5,
+    "over_price": 110,
+    "under_price": -134,
+    "book": "fanduel",
+    "capture_timestamp": "2026-10-30T13:25:03.279316+00:00"
+  },
+  {
+    "game_id": "026d37181dd4ace0df7565d9b208ce7e",
+    "game_date": "2026-10-30",
+    "sport": "NHL",
+    "home_team": "Calgary Flames",
+    "away_team": "Seattle Kraken",
+    "commence_time": "2026-10-31T00:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.5,
+    "over_price": -101,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-30T13:25:03.279316+00:00"
+  }
+]

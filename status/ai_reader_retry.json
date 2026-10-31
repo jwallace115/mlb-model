@@ -98,5 +98,20 @@
   "attempt": 3,
   "last_utc": "2026-10-24T14:04:41.958492+00:00",
   "error": "Extra data: line 8 column 2 (char 1636)"
+ },
+ "nfl:52e7ee9c42525e6deec02da32dc2fad8": {
+  "attempt": 1,
+  "last_utc": "2026-10-30T19:18:52.768370+00:00",
+  "error": "no JSON array in response: line 1 column 1 (char 0)"
+ },
+ "nfl:2ff84d3f6053d083c8c0a5bebf7cdd4c": {
+  "attempt": 1,
+  "last_utc": "2026-10-31T01:19:29.178390+00:00",
+  "error": "no JSON array in response: line 1 column 1 (char 0)"
+ },
+ "nfl:05405af79752f5e742cdf50b61f6745e": {
+  "attempt": 1,
+  "last_utc": "2026-10-31T01:19:57.359544+00:00",
+  "error": "HALT for 05405af79752f5e742cdf50b61f6745e: pick names unquoted line ('player_pass_attempts', 'Maye', 29.5) (only 72 lines quoted for this event)"
  }
 }
