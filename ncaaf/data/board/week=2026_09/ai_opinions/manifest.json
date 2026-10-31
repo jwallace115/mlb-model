@@ -16995,5 +16995,248 @@
     "c1fd3e172f0617a0d8543b8fd67fc2ce": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T224904Z.parquet",
+  "sha256": "224109f3faae05b8a6b965253df1a13fa50613659a72371678953871d6e08325",
+  "logged_utc": "2026-10-31T22:49:04.312558+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.667,
+  "revised_rows": 11,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T23:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T223008Z.parquet",
+   "inputs_digest": "{\"49aa48a7dbcd6563f389ae4232707d64\": \"50a1c0fc98536b36\", \"85b5947ccfe102a2fa2179d54c83ae31\": \"67abb204d36ab792\", \"e2ffa742b36678caf388ca70fdd4878c\": \"d83f5ba5b72e381d\", \"bd73558e7eb5bee08962bfb1f5ef6c9a\": \"7f1f81c4cc8a4f32\"}",
+   "components": {
+    "49aa48a7dbcd6563f389ae4232707d64": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Tech Yellow Jackets",
+       0,
+       259
+      ],
+      [
+       "Pittsburgh Panthers",
+       0,
+       -301
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Tech Yellow Jackets",
+       7.5,
+       101
+      ],
+      [
+       "Pittsburgh Panthers",
+       -7.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -111
+      ],
+      [
+       "Under",
+       54.5,
+       -105
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit"
+     ],
+     "kalshi_snap": "snap_20261031T2237Z.parquet"
+    },
+    "85b5947ccfe102a2fa2179d54c83ae31": {
+     "pinnacle_h2h": [
+      [
+       "Miami Hurricanes",
+       0,
+       -557
+      ],
+      [
+       "North Carolina Tar Heels",
+       0,
+       443
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami Hurricanes",
+       -13.5,
+       -106
+      ],
+      [
+       "North Carolina Tar Heels",
+       13.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -109
+      ],
+      [
+       "Under",
+       53.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 college football recruits on the rise and how",
+      "Clemson, UNC support PCSA, ask for realignment fle",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Don't miss a thrilling ABC triple-header in Week 9",
+      "Drew Mestemaker's rise to predicted No. 1 QB in 20",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How every 2027 five-star college football prospect",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "NFL scouts favor Drew Mestemaker as first QB taken",
+      "No. 1 Miami's high-powered offense represents a hu",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T2237Z.parquet"
+    },
+    "e2ffa742b36678caf388ca70fdd4878c": {
+     "pinnacle_h2h": [
+      [
+       "Mississippi State Bulldogs",
+       0,
+       808
+      ],
+      [
+       "Texas Longhorns",
+       0,
+       -1160
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Mississippi State Bulldogs",
+       20.0,
+       -103
+      ],
+      [
+       "Texas Longhorns",
+       -20.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -103
+      ],
+      [
+       "Under",
+       50.5,
+       -113
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 college football recruits on the rise and how",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How every 2027 five-star college football prospect",
+      "Manning and No. 11 Texas want to keep momentum goi",
+      "Mississippi State OL DJ Chester out vs. Texas in l",
+      "Mississippi State QB Kamario Taylor out for season",
+      "NFL scouts favor Drew Mestemaker as first QB taken",
+      "Ranking the top 60 college football recruiting cla",
+      "Sources: Mississippi State QB Kamario Taylor out f",
+      "Sources: Texas LT Trevor Goosby has successful kne",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "What does Kamario Taylor's season-ending injury me",
+      "Why Jordan Rodgers says Arch Manning should transf"
+     ],
+     "kalshi_snap": "snap_20261031T2237Z.parquet"
+    },
+    "bd73558e7eb5bee08962bfb1f5ef6c9a": {
+     "pinnacle_h2h": [
+      [
+       "Ohio State Buckeyes",
+       0,
+       -242
+      ],
+      [
+       "USC Trojans",
+       0,
+       213
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ohio State Buckeyes",
+       -6.5,
+       -106
+      ],
+      [
+       "USC Trojans",
+       6.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -103
+      ],
+      [
+       "Under",
+       51.0,
+       -114
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Betting on Ohio State-USC: How the Trojans can pul",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How every 2027 five-star college football prospect",
+      "Lincoln Riley, addressing future at USC, says 'Thi",
+      "No. 2 Ohio State has everything but a starting QB ",
+      "Ohio State backup quarterback Luke Fahey 'has a mo",
+      "Ranking the top 60 college football recruiting cla",
+      "Stephen A. makes bold prediction for Ohio State-US",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Week 9 live: Tracking top plays from around the co",
+      "Why Jeremiah Smith is a generational NFL draft rec"
+     ],
+     "kalshi_snap": "snap_20261031T2237Z.parquet"
+    }
+   },
+   "triggers": {
+    "49aa48a7dbcd6563f389ae4232707d64": "anchor_close",
+    "85b5947ccfe102a2fa2179d54c83ae31": "anchor_close",
+    "e2ffa742b36678caf388ca70fdd4878c": "anchor_close",
+    "bd73558e7eb5bee08962bfb1f5ef6c9a": "anchor_close"
+   }
+  }
  }
 ]
