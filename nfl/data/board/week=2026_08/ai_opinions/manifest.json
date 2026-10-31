@@ -3123,5 +3123,1122 @@
     "05405af79752f5e742cdf50b61f6745e": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T011703Z.parquet",
+  "sha256": "599447801be3d2a3c858ffba028b206f42659e833b8b3a801b05f3f77b08e7c9",
+  "logged_utc": "2026-10-31T01:17:03.849161+00:00",
+  "rows": 611,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 9,
+  "no_view_share": 0.935,
+  "revised_rows": 608,
+  "oldest_source_age_min": 676.9,
+  "first_kickoff_utc": "2026-11-01T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261031T010008Z.parquet",
+   "inputs_digest": "{\"9255ca8f32aea590d00aa57de79f6bb6\": \"83f990ca74de874e\", \"921859689f5f8b3b8b1caf4248bdb1ec\": \"4bed940b3a0d20fb\", \"c93c421e5fa46031a43162d111d981d0\": \"e76890eb4ffc1bb5\", \"9c5d8f57e0ba0fbd9ef436c1f0898f99\": \"81f6ffa6505e6099\", \"ab5ab731ab655bd6308bc7a922275518\": \"c1260c7640776bc3\", \"52e7ee9c42525e6deec02da32dc2fad8\": \"9ab7d0bfe4638819\", \"159dbf0253dd2038eda2212f84387f0c\": \"1f3ace392539040a\", \"98f1b121b793977434c046e76c707145\": \"433bf972c7fbee94\", \"f2a036d5edf483a277880014861e78ad\": \"26f1af7b20696c38\"}",
+   "components": {
+    "9255ca8f32aea590d00aa57de79f6bb6": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Arizona Cardinals",
+       0,
+       260
+      ],
+      [
+       "Dallas Cowboys",
+       0,
+       -350
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Arizona Cardinals",
+       7.0,
+       -115
+      ],
+      [
+       "Dallas Cowboys",
+       -7.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       54.5,
+       -115
+      ],
+      [
+       "Under",
+       54.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Arizona Cardinals",
+       0,
+       261
+      ],
+      [
+       "Dallas Cowboys",
+       0,
+       -314
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Cardinals",
+       7.5,
+       -125
+      ],
+      [
+       "Dallas Cowboys",
+       -7.5,
+       111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -108
+      ],
+      [
+       "Under",
+       54.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-10-31T01:17:32.039331+00:00",
+     "inj_Dallas Cowboys": "dbc140c8fd20acd2",
+     "inj_Arizona Cardinals": "c00105ad2de2d60d",
+     "news": [
+      "2026 NFL trade deadline updates: DeForest Buckner,",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline updates: Marvin Harrison J",
+      "2026 NFL trade deadline updates: Quenton Nelson, M",
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Are the Cowboys now favorites to win the NFC East?",
+      "Bo Nix runs for a 62-yard TD, leads Broncos past t",
+      "Breaking down Cowboys-Eagles MNF matchup in wide-o",
+      "Budda Baker fields trade rumor questions in costum",
+      "Cardinals WR Jalen Brooks to miss rest of season w",
+      "Cardinals rookie RB Jeremiyah Love (ankle) set to ",
+      "Cardinals' Budda Baker hopes to stay with Arizona ",
+      "Cardinals' red-zone offense continues to worsen",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Cowboys bounce back, take down Eagles on MNF",
+      "Cowboys feeling the urgency to win now",
+      "Cowboys handle Eagles on Javonte Williams' career ",
+      "Cowboys keep pace in NFC East, end 2-game slide wi",
+      "Cowboys look for rare winning streak under Brian S",
+      "Dak Prescott throws 3 TD passes, Javonte Williams ",
+      "Defensive tweaks on deck for the Cowboys",
+      "Ex-Cowboy Dez Bryant calls out police investigatio",
+      "Fantasy football buzz: Despite win, can you trust ",
+      "Fantasy football buzz: Philly no problem for Dak P",
+      "Fantasy football buzz: Starters on bye? Finish you",
+      "Fantasy football buzz: Vikings defensive dilemma? ",
+      "Fantasy football buzz: Week 8 streaming picks, Pay",
+      "Has Tyler Guyton become the Cowboys' franchise lef",
+      "How active NFL players continue to redefine all-ti",
+      "How to bet Cowboys-Eagles: Analysis, tips and top ",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeremiyah Love expected back for Cardinals vs. Cow",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: DeForest Buckner, Quent",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Peyton compares 'Omaha' to Dak Prescott's 'Here we",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Stephen A. lays into Michael Irvin for saying Cowb",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "Why Stephen A. believes there's a lack of confiden"
+     ],
+     "kalshi_snap": "snap_20261031T0105Z.parquet"
+    },
+    "921859689f5f8b3b8b1caf4248bdb1ec": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Atlanta Falcons",
+       0,
+       115
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       -135
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Atlanta Falcons",
+       2.5,
+       -110
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       -2.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       43.5,
+       -110
+      ],
+      [
+       "Under",
+       43.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Atlanta Falcons",
+       0,
+       118
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       -133
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Atlanta Falcons",
+       2.5,
+       -110
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       -2.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -111
+      ],
+      [
+       "Under",
+       43.0,
+       -106
+      ]
+     ],
+     "props_ts": "2026-10-31T01:17:32.039331+00:00",
+     "inj_Tampa Bay Buccaneers": "1cbc06d2f8215449",
+     "inj_Atlanta Falcons": "4ba41c63518f1fe1",
+     "news": [
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Baker Mayfield gets light workload in return game",
+      "Calijah Kancey explains his front flip celebration",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Falcons' Penix and Buccaneers' Mayfield aiming to ",
+      "How active NFL players continue to redefine all-ti",
+      "How the Falcons' two biggest stars bond off the fi",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Kyle Pitts is heating up in the red zone for Atlan",
+      "Longtime football coach June Jones, pioneer of run",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Rookie Kendal Daniels has game to remember in retu",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?"
+     ],
+     "kalshi_snap": "snap_20261031T0105Z.parquet"
+    },
+    "c93c421e5fa46031a43162d111d981d0": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       150
+      ],
+      [
+       "Buffalo Bills",
+       0,
+       -175
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       3.0,
+       -105
+      ],
+      [
+       "Buffalo Bills",
+       -3.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       54.5,
+       -110
+      ],
+      [
+       "Under",
+       54.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       155
+      ],
+      [
+       "Buffalo Bills",
+       0,
+       -176
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       3.5,
+       -121
+      ],
+      [
+       "Buffalo Bills",
+       -3.5,
+       108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -113
+      ],
+      [
+       "Under",
+       54.0,
+       -104
+      ]
+     ],
+     "props_ts": "2026-10-31T01:17:32.039331+00:00",
+     "inj_Buffalo Bills": "91fedf09eb0ae8e5",
+     "inj_Baltimore Ravens": "5c081fd995243931",
+     "news": [
+      "2026 NFL trade deadline updates: DeForest Buckner,",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline updates: Marvin Harrison J",
+      "2026 NFL trade deadline updates: Quenton Nelson, M",
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bills making contingencies if hurt starters aren't",
+      "Bills' Sam Franklin Jr. ready to play this week af",
+      "Can Lamar Jackson solve the Ravens' historic ident",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Ed Oliver fully participates in Thursday's practic",
+      "How active NFL players continue to redefine all-ti",
+      "Inside the complicated injury history of Ravens' L",
+      "Is Bills' Josh Allen the best goal line rusher eve",
+      "Is Bills' Josh Allen the best goal-line rusher eve",
+      "Is Lamar Jackson's future in Baltimore in question",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Josh Allen looks to renew rivalry with Lamar Jacks",
+      "Justin Tucker, out of NFL since sexual misconduct ",
+      "Lamar Jackson is set to return",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL trade deadline grades: DeForest Buckner, Quent",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Ravens QB Jackson to return for Bills clash, calls",
+      "Ravens coach Jesse Minter expects Lamar Jackson ba",
+      "Ravens list Lamar Jackson as full participant in p",
+      "Ravens' Jesse Minter optimistic QB Lamar Jackson c",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sizing up NFL Week 7: Time to trust the Giants? St",
+      "Sources: Chiefs sign former Ravens kicker Justin T",
+      "Sources: Ravens rookie G Olaivavega Ioane expected",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Stephen A. calls out Dan Orlovsky for his take dur",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tre'Davious White rejoins Bills, lands on practice",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "Where do the Ravens go from here after loss?"
+     ],
+     "kalshi_snap": "snap_20261031T0105Z.parquet"
+    },
+    "9c5d8f57e0ba0fbd9ef436c1f0898f99": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -800
+      ],
+      [
+       "Tennessee Titans",
+       0,
+       525
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cincinnati Bengals",
+       -12.0,
+       -110
+      ],
+      [
+       "Tennessee Titans",
+       12.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.0,
+       -110
+      ],
+      [
+       "Under",
+       47.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -822
+      ],
+      [
+       "Tennessee Titans",
+       0,
+       581
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bengals",
+       -13.0,
+       102
+      ],
+      [
+       "Tennessee Titans",
+       13.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       102
+      ],
+      [
+       "Under",
+       47.0,
+       -119
+      ]
+     ],
+     "props_ts": "2026-10-31T01:17:32.039331+00:00",
+     "inj_Cincinnati Bengals": "2770b64ea4a112c4",
+     "inj_Tennessee Titans": "15094e794c21a656",
+     "news": [
+      "'A league-changing move!' Kimes reacts to Bears' t",
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bears acquire All-Pro DT Jeffery Simmons in trade ",
+      "Bears get Jeffery Simmons: Key intel on blockbuste",
+      "Bengals put TE Erick All Jr. on IR; believed to be",
+      "Bowen: Four players (and a defense) that have chan",
+      "Burrow, Bengals go into November with momentum as ",
+      "Chase's fiery halftime speech inspires Bengals to ",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "How Ja'Marr Chase's halftime speech sparked Bengal",
+      "How Jeffery Simmons landed with the Bears",
+      "How Shemar Stewart can get back on the field for C",
+      "How active NFL players continue to redefine all-ti",
+      "How the Jeffery Simmons trade came to be",
+      "Inside how Titans were convinced to trade their be",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeffery Simmons traded to Bears: Does dealing mult",
+      "Judging overreactions to NFL Week 7: McCarthy-led ",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Shemar Stewart focuses on giving Bengals 'confiden",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "What went wrong for the Titans in Week 7?",
+      "Why Jeremiah Smith is a generational NFL draft rec"
+     ],
+     "kalshi_snap": "snap_20261031T0105Z.parquet"
+    },
+    "ab5ab731ab655bd6308bc7a922275518": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cleveland Browns",
+       0,
+       165
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       -195
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cleveland Browns",
+       3.5,
+       -110
+      ],
+      [
+       "Pittsburgh Steelers",
+       -3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       39.0,
+       -110
+      ],
+      [
+       "Under",
+       39.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cleveland Browns",
+       0,
+       168
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       -193
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cleveland Browns",
+       3.5,
+       -110
+      ],
+      [
+       "Pittsburgh Steelers",
+       -3.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       38.5,
+       -117
+      ],
+      [
+       "Under",
+       38.5,
+       100
+      ]
+     ],
+     "props_ts": "2026-10-31T01:17:32.039331+00:00",
+     "inj_Pittsburgh Steelers": "a87719c1e7829bd5",
+     "inj_Cleveland Browns": "f68c972eb2f47cbf",
+     "news": [
+      "2026 NFL trade deadline updates: DeForest Buckner,",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline updates: Marvin Harrison J",
+      "2026 NFL trade deadline updates: Quenton Nelson, M",
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Aaron Rodgers suggests full week of international ",
+      "Aaron Rodgers takes shot at NFL, outlines potentia",
+      "Aaron Rodgers' 2026 NFL season: Tracking records, ",
+      "Browns activate Gabriel off IR, now have 4 QBs on ",
+      "Browns balance relishing close wins, lamenting slo",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Does Deshaun Watson have a future with Browns? Ada",
+      "How active NFL players continue to redefine all-ti",
+      "In Pittsburgh, the Browns chase a rare win and sol",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL trade deadline grades: DeForest Buckner, Quent",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Rodgers throws TD pass in Paris as Steelers beat S",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "What has gone wrong for 2025 running backs? Ashton"
+     ],
+     "kalshi_snap": "snap_20261031T0105Z.parquet"
+    },
+    "52e7ee9c42525e6deec02da32dc2fad8": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -180
+      ],
+      [
+       "Minnesota Vikings",
+       0,
+       150
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Detroit Lions",
+       -3.5,
+       -105
+      ],
+      [
+       "Minnesota Vikings",
+       3.5,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.0,
+       -110
+      ],
+      [
+       "Under",
+       46.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -181
+      ],
+      [
+       "Minnesota Vikings",
+       0,
+       159
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Detroit Lions",
+       -3.0,
+       -120
+      ],
+      [
+       "Minnesota Vikings",
+       3.0,
+       107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -103
+      ],
+      [
+       "Under",
+       46.0,
+       -113
+      ]
+     ],
+     "props_ts": "2026-10-31T01:17:32.039331+00:00",
+     "inj_Detroit Lions": "69d8c4ef588d3aa3",
+     "inj_Minnesota Vikings": "b4ee943cd10d3d1e",
+     "news": [
+      "2026 NFL trade deadline updates: DeForest Buckner,",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline updates: Marvin Harrison J",
+      "2026 NFL trade deadline updates: Quenton Nelson, M",
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Aaron Jones' status uncertain for Vikings vs. Lion",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Does Jared Goff belong in the MVP conversation?",
+      "Early bets for NFL Week 8: Two games we're jumping",
+      "Fantasy football buzz: Despite win, can you trust ",
+      "Fantasy football buzz: Starters on bye? Finish you",
+      "Fantasy football buzz: Vikings defensive dilemma? ",
+      "Fantasy football buzz: Week 8 streaming picks, Pay",
+      "Green Bay Packers vs. Detroit Lions: Game Highligh",
+      "How active NFL players continue to redefine all-ti",
+      "How far can Kyler Murray take the Vikings this sea",
+      "Jahmyr Gibbs shares his mindset after fully taking",
+      "Jay-Z's greatest sports lyrics, ranked ahead of hi",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Judging overreactions to NFL Week 7: McCarthy-led ",
+      "Justin Jefferson on down year amid Vikes' 6-0 star",
+      "Lions beat Packers 20-17 on last-play field goal t",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting guide: The value bets to make o",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL trade deadline grades: DeForest Buckner, Quent",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Packers activate RB Josh Jacobs for 2026 debut",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sizing up NFL Week 7: Time to trust the Giants? St",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Stephen A.: Kevin O'Connell is lucky he's got a jo",
+      "Vikings RB Jones avoids serious knee injury, day-t",
+      "Vikings and Lions match up NFL's stingiest defense",
+      "Vikings prepare for toughest part of their schedul",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What Jordan Rodgers wants to see from Kyler Murray",
+      "What are the longest field goals in NFL history?",
+      "Which NFL teams are undefeated this season?",
+      "Why Vikings' astronomical 70% blitz rate isn't a g"
+     ],
+     "kalshi_snap": "snap_20261031T0105Z.parquet"
+    },
+    "159dbf0253dd2038eda2212f84387f0c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Indianapolis Colts",
+       0,
+       375
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -525
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Indianapolis Colts",
+       9.0,
+       -105
+      ],
+      [
+       "Jacksonville Jaguars",
+       -9.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.5,
+       -115
+      ],
+      [
+       "Under",
+       46.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Indianapolis Colts",
+       0,
+       364
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -462
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Indianapolis Colts",
+       10.5,
+       -120
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.5,
+       107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -107
+      ],
+      [
+       "Under",
+       46.5,
+       -109
+      ]
+     ],
+     "props_ts": "2026-10-31T01:17:32.039331+00:00",
+     "inj_Jacksonville Jaguars": "d38916410fda52b9",
+     "inj_Indianapolis Colts": "66dcb3642089d13d",
+     "news": [
+      "2026 NFL trade deadline updates: DeForest Buckner,",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline updates: Quenton Nelson, M",
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Brian Thomas Jr. trying to ignore trade talk, 'kee",
+      "Buckner, Nelson trades signal Colts' rebuild under",
+      "Can the Jags extend their 11-game win streak vs. t",
+      "Colts trade DT DeForest Buckner to 49ers in anothe",
+      "Colts' Jonathan Taylor confirms he hasn't requeste",
+      "Colts' Shane Steichen: WR Josh Downs 'ready to go'",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fantasy football buzz: Despite win, can you trust ",
+      "Fantasy football buzz: Starters on bye? Finish you",
+      "Fantasy football buzz: Vikings defensive dilemma? ",
+      "Fantasy football buzz: Week 8 streaming picks, Pay",
+      "How active NFL players continue to redefine all-ti",
+      "How the Jags are preparing for rainy weather",
+      "Ian Rapoport shares latest on Josh Downs trade tal",
+      "Ian Rapoport: Seahawks getting one of the NFL's be",
+      "Jags' home winning streak against Indy is 'weird, ",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jonathan Taylor: 'I'm always proud to wear the hor",
+      "Kyle Brandt shares his Halloween treat for Chiefs ",
+      "Marcus Spears: DeForest Buckner trade a win-win fo",
+      "McAfee thanks Quenton Nelson for service to Colts ",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: DeForest Buckner, Quent",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Quenton Nelson, DeForest Buckner trades signal big",
+      "Quenton Nelson: Cherished time with Colts but exci",
+      "Schefter sees Colts dealing players at trade deadl",
+      "Seahawks acquire Pro Bowl guard Quenton Nelson in ",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Colts' Josh Downs requests trade; Jonatha",
+      "Sources: Seahawks acquire Pro Bowl guard Quenton N",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What has gone wrong for 2025 running backs? Ashton",
+      "Why Jeff Saturday is not surprised about Colts tra",
+      "Why did Seahawks trade for Quenton Nelson? Are the",
+      "Will the Colts bench Daniel Jones?"
+     ],
+     "kalshi_snap": "snap_20261031T0105Z.parquet"
+    },
+    "98f1b121b793977434c046e76c707145": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Las Vegas Raiders",
+       0,
+       100
+      ],
+      [
+       "New York Jets",
+       0,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Las Vegas Raiders",
+       1.5,
+       -110
+      ],
+      [
+       "New York Jets",
+       -1.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.0,
+       -110
+      ],
+      [
+       "Under",
+       46.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Las Vegas Raiders",
+       0,
+       106
+      ],
+      [
+       "New York Jets",
+       0,
+       -120
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Las Vegas Raiders",
+       1.0,
+       -102
+      ],
+      [
+       "New York Jets",
+       -1.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -112
+      ],
+      [
+       "Under",
+       45.5,
+       -105
+      ]
+     ],
+     "props_ts": "2026-10-31T01:17:32.039331+00:00",
+     "inj_New York Jets": "bd4791422f58ef3b",
+     "inj_Las Vegas Raiders": "497864518174a3f2",
+     "news": [
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Aaron Glenn says Garrett Wilson's outburst 'overbl",
+      "Can the Jets redeem themselves on Sunday?",
+      "Could a QB change be on the horizon for the Raider",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Garrett Wilson frustrated with role in Jets' offen",
+      "How active NFL players continue to redefine all-ti",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jets WR Garrett Wilson says he doesn't want to be ",
+      "Jets dealing with defensive injuries for matchup v",
+      "Jets not worried about Ashton Jeanty's comments",
+      "Jets' Brownlee says he was benched for missing mee",
+      "Jets' Garrett Wilson says sideline screaming wasn'",
+      "Kirk Cousins to remain Raiders' starting QB vs. Je",
+      "Las Vegas Raiders vs Los Angeles Rams: Game Highli",
+      "Matthew Stafford sets Rams TD pass record as Los A",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Raiders and Jets will try to stop struggles and qu",
+      "Raiders' Kubiak on switching to QB Mendoza: 'We're",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Sizing up NFL Week 7: Time to trust the Giants? St",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What has gone wrong for 2025 running backs? Ashton",
+      "When will the Raiders make Fernando Mendoza the st"
+     ],
+     "kalshi_snap": "snap_20261031T0105Z.parquet"
+    },
+    "f2a036d5edf483a277880014861e78ad": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       100
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Denver Broncos",
+       1.5,
+       -110
+      ],
+      [
+       "Kansas City Chiefs",
+       -1.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.5,
+       -110
+      ],
+      [
+       "Under",
+       40.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       103
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       -115
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Denver Broncos",
+       1.5,
+       -114
+      ],
+      [
+       "Kansas City Chiefs",
+       -1.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -106
+      ],
+      [
+       "Under",
+       40.5,
+       -110
+      ]
+     ],
+     "props_ts": "2026-10-31T01:17:32.039331+00:00",
+     "inj_Denver Broncos": "2bcf305d15a36c75",
+     "inj_Kansas City Chiefs": "151e05de08549edd",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "AFC West lead at stake as Patrick Mahomes and Bo N",
+      "Answering 10 questions about Chiefs-Broncos showdo",
+      "Bo Nix runs for a 62-yard TD, leads Broncos past t",
+      "Bo Nix wows with 62-yard run as Broncos stand by '",
+      "Chiefs get Rashee Rice back from injury for Bronco",
+      "Chiefs move to 5-0 as Kenneth Walker runs for two ",
+      "Chiefs struggle mightily in loss to Seahawks",
+      "Chiefs to sign Justin Tucker to practice squad",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Denver looking for revenge against the Chiefs",
+      "Do the Chiefs need to trade for a WR to fix their ",
+      "How active NFL players continue to redefine all-ti",
+      "J.K. Dobbins puts team success first",
+      "Jaxon Smith-Njigba has 150 receiving yards and a s",
+      "Jaxon Smith-Njigba has 150 receiving yards, TD in ",
+      "Jaxon Smith-Njigba, stifling defense help Seahawks",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jonah Coleman a difference maker for Broncos in wi",
+      "Judging overreactions to NFL Week 7: McCarthy-led ",
+      "Justin Tucker, out of NFL since sexual misconduct ",
+      "Kyle Brandt shares his Halloween treat for Chiefs ",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Seahawks contain Chiefs' Kenneth Walker III in RB'",
+      "Seahawks knock off Chiefs 20-3, giving K.C. its fi",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Chiefs sign former Ravens kicker Justin T",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Stephen A. stunned by Chiefs' offensive woes",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Toub: Butker still Chiefs' kicker despite struggle",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "Where the Chiefs stand on the injury front ahead o",
+      "Why is Chris Jones having a slow start to the seas"
+     ],
+     "kalshi_snap": "snap_20261031T0105Z.parquet"
+    }
+   },
+   "triggers": {
+    "9255ca8f32aea590d00aa57de79f6bb6": "new_props: pull 2026-10-31T01:17:32.039331+00:00; injury_change: inj_Dallas Cowboys; injury_change: inj_Arizona Cardinals",
+    "921859689f5f8b3b8b1caf4248bdb1ec": "new_props: pull 2026-10-31T01:17:32.039331+00:00; injury_change: inj_Tampa Bay Buccaneers; injury_change: inj_Atlanta Falcons",
+    "c93c421e5fa46031a43162d111d981d0": "new_props: pull 2026-10-31T01:17:32.039331+00:00; injury_change: inj_Buffalo Bills; injury_change: inj_Baltimore Ravens; new_news: 2 availability items",
+    "9c5d8f57e0ba0fbd9ef436c1f0898f99": "new_props: pull 2026-10-31T01:17:32.039331+00:00; injury_change: inj_Cincinnati Bengals; injury_change: inj_Tennessee Titans",
+    "ab5ab731ab655bd6308bc7a922275518": "new_props: pull 2026-10-31T01:17:32.039331+00:00; injury_change: inj_Pittsburgh Steelers; injury_change: inj_Cleveland Browns",
+    "52e7ee9c42525e6deec02da32dc2fad8": "new_props: pull 2026-10-31T01:17:32.039331+00:00; injury_change: inj_Detroit Lions; injury_change: inj_Minnesota Vikings",
+    "159dbf0253dd2038eda2212f84387f0c": "new_props: pull 2026-10-31T01:17:32.039331+00:00; injury_change: inj_Jacksonville Jaguars; injury_change: inj_Indianapolis Colts",
+    "98f1b121b793977434c046e76c707145": "new_props: pull 2026-10-31T01:17:32.039331+00:00; injury_change: inj_New York Jets; injury_change: inj_Las Vegas Raiders",
+    "f2a036d5edf483a277880014861e78ad": "new_props: pull 2026-10-31T01:17:32.039331+00:00; injury_change: inj_Denver Broncos; injury_change: inj_Kansas City Chiefs; new_news: 2 availability items"
+   }
+  }
  }
 ]

@@ -9772,5 +9772,73 @@
     "8916ba5e623a0a1d97dd0e7f50e4a205": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T014903Z.parquet",
+  "sha256": "8576caa27cb79c79be82a822c050f103356dd6c5c618918e0681db0fb24b2217",
+  "logged_utc": "2026-10-31T01:49:03.818258+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T02:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T013007Z.parquet",
+   "inputs_digest": "{\"8916ba5e623a0a1d97dd0e7f50e4a205\": \"489172307e53e480\"}",
+   "components": {
+    "8916ba5e623a0a1d97dd0e7f50e4a205": {
+     "pinnacle_h2h": [
+      [
+       "Kent State Golden Flashes",
+       0,
+       -285
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       246
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kent State Golden Flashes",
+       -7.0,
+       -112
+      ],
+      [
+       "Sacramento State Hornets",
+       7.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -110
+      ],
+      [
+       "Under",
+       46.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings"
+     ],
+     "kalshi_snap": "snap_20261031T0137Z.parquet"
+    }
+   },
+   "triggers": {
+    "8916ba5e623a0a1d97dd0e7f50e4a205": "anchor_close"
+   }
+  }
  }
 ]

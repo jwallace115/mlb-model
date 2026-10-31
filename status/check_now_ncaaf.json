@@ -1,12 +1,17 @@
 {
- "started_utc": "2026-10-31T01:04:03.721650+00:00",
- "finished_utc": "2026-10-31T01:06:48.376523+00:00",
+ "started_utc": "2026-10-31T01:49:03.818258+00:00",
+ "finished_utc": "2026-10-31T01:55:21.538593+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "8916ba5e623a0a1d97dd0e7f50e4a205",
+   "text": "anchor_close"
+  }
+ ],
+ "games_read": 1,
+ "frozen_file": "ai_opinions_20261031T014903Z.parquet",
+ "spend_usd": 37.7063,
+ "result": "COMPLETE"
 }
