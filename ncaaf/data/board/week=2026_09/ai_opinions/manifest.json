@@ -15225,5 +15225,544 @@
     "e5817afb8338b8f7272feff21d87d7f7": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T183403Z.parquet",
+  "sha256": "906c5bb4649bd980da6f34bb9b4510760d33dbbfadd0575bb7cd9e5f8ce160eb",
+  "logged_utc": "2026-10-31T18:34:03.798457+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-31T19:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T183007Z.parquet",
+   "inputs_digest": "{\"183676bbb63b1716e2248ec6c6d205a9\": \"0176ea52b99a187b\"}",
+   "components": {
+    "183676bbb63b1716e2248ec6c6d205a9": {
+     "pinnacle_h2h": [
+      [
+       "Louisville Cardinals",
+       0,
+       -1634
+      ],
+      [
+       "Stanford Cardinal",
+       0,
+       1054
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisville Cardinals",
+       -22.5,
+       -107
+      ],
+      [
+       "Stanford Cardinal",
+       22.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.0,
+       -111
+      ],
+      [
+       "Under",
+       59.0,
+       -105
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "NCAA loses Kentucky appeals ruling; players remain",
+      "Ranking the top 60 college football recruiting cla",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "183676bbb63b1716e2248ec6c6d205a9": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261031T184903Z.parquet",
+  "sha256": "3fb4769f0d3161368838c15e0f9c495ecb1390dda6acafcdf08377937040718c",
+  "logged_utc": "2026-10-31T18:49:03.769289+00:00",
+  "rows": 27,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 9,
+  "no_view_share": 0.704,
+  "revised_rows": 24,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T19:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T183007Z.parquet",
+   "inputs_digest": "{\"b0f68c9265402a825cbbf7954b726339\": \"dea9eabd6684d984\", \"9c33dd628312f89764392414cbc99c86\": \"23788ce696e1d8fc\", \"581c12d11a86412432fe89645cbe80b2\": \"b77a67a636fd4f8e\", \"e5ff4a85ab3b8341184a334a390f6ba2\": \"b19cbcf9b6bfed5a\", \"1e591733bae48534963359a9cff13701\": \"7462f8c198fd6fd4\", \"7e3a5a0dcece26ded8c9d1a64dc6cee5\": \"50747377ecc5c7fc\", \"c17c8f9e12ffe066cf601c96090fcb14\": \"9a74734236e13b51\", \"7bac3aae16527dd33a224a2f81792033\": \"147b9fd4ed1686e0\", \"746742d4bb94424d9e63d00701eef4ec\": \"14214d05307fa05e\"}",
+   "components": {
+    "b0f68c9265402a825cbbf7954b726339": {
+     "pinnacle_h2h": [
+      [
+       "Arizona State Sun Devils",
+       0,
+       582
+      ],
+      [
+       "BYU Cougars",
+       0,
+       -772
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona State Sun Devils",
+       17.0,
+       -108
+      ],
+      [
+       "BYU Cougars",
+       -17.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -105
+      ],
+      [
+       "Under",
+       48.0,
+       -111
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "No. 8 BYU looks to bolster its defense ahead of a ",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "UCF fined for fans' chants at BYU; Big 12 sets pol",
+      "Week 9 live: Tracking top plays from around the co"
+     ],
+     "kalshi_snap": "snap_20261031T1837Z.parquet"
+    },
+    "9c33dd628312f89764392414cbc99c86": {
+     "pinnacle_h2h": [
+      [
+       "Colorado State Rams",
+       0,
+       261
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       -304
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado State Rams",
+       9.0,
+       -108
+      ],
+      [
+       "Utah State Aggies",
+       -9.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       60.5,
+       -109
+      ],
+      [
+       "Under",
+       60.5,
+       -107
+      ]
+     ],
+     "kalshi_snap": "snap_20261031T1837Z.parquet"
+    },
+    "581c12d11a86412432fe89645cbe80b2": {
+     "pinnacle_h2h": [
+      [
+       "Florida Gators",
+       0,
+       362
+      ],
+      [
+       "Georgia Bulldogs",
+       0,
+       -440
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Gators",
+       11.0,
+       -106
+      ],
+      [
+       "Georgia Bulldogs",
+       -11.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -109
+      ],
+      [
+       "Under",
+       56.0,
+       -107
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "A Georgia fan's last breath led to a Florida man a",
+      "Benjamin Watson dissects Georgia's mindset vs. Flo",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "Doering, Watson draw up plans for success ahead of",
+      "Don't miss a thrilling ABC triple-header in Week 9",
+      "Florida vs. Georgia rivalry through the lens of fo",
+      "Florida's defense key to upsetting Georgia",
+      "Gene Chizik delivers a Florida film breakdown",
+      "Georgia AD Josh Brooks shares Florida rivalry sche",
+      "Georgia focused on slowing down Jadan Baugh",
+      "How consistent change of college football landscap",
+      "How every 2027 five-star college football prospect",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "No. 3 Georgia braces for test against No. 17 Flori",
+      "Ranking the top 60 college football recruiting cla",
+      "Roman Harper gives an interesting way Florida can ",
+      "Scott Stricklin explains why he loves UF and UGA's",
+      "Sources: Florida's Aaron Philo resumes QB1 role vs",
+      "Tebow breaks down Florida's 'unique hope' vs. Geor",
+      "Tim Tebow reminisces on his time as a Gator, disse",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "What does Florida-Georgia matchup mean for both te",
+      "What will be deciding factor for Florida vs. Georg"
+     ],
+     "kalshi_snap": "snap_20261031T1837Z.parquet"
+    },
+    "e5ff4a85ab3b8341184a334a390f6ba2": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       435
+      ],
+      [
+       "Liberty Flames",
+       0,
+       -545
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       14.0,
+       -111
+      ],
+      [
+       "Liberty Flames",
+       -14.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -114
+      ],
+      [
+       "Under",
+       45.0,
+       -102
+      ]
+     ],
+     "kalshi_snap": "snap_20261031T1837Z.parquet"
+    },
+    "1e591733bae48534963359a9cff13701": {
+     "pinnacle_h2h": [
+      [
+       "Indiana Hoosiers",
+       0,
+       -1329
+      ],
+      [
+       "Minnesota Golden Gophers",
+       0,
+       899
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Indiana Hoosiers",
+       -20.5,
+       -114
+      ],
+      [
+       "Minnesota Golden Gophers",
+       20.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.0,
+       -115
+      ],
+      [
+       "Under",
+       40.0,
+       -102
+      ]
+     ],
+     "news": [
+      "2026 'College GameDay' Week 9: Minnesota vs. India",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 college football recruits on the rise and how",
+      "Cignetti: We're going to have to play really well ",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "How every 2027 five-star college football prospect",
+      "No. 4 Indiana hoping to jump start its sluggish of",
+      "Ranking the top 60 college football recruiting cla",
+      "So close! Indiana student just misses kick for $1 ",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "Week 9 live: Tracking top plays from around the co",
+      "Where is 'College GameDay'? 2026 schedule, locatio"
+     ],
+     "kalshi_snap": "snap_20261031T1837Z.parquet"
+    },
+    "7e3a5a0dcece26ded8c9d1a64dc6cee5": {
+     "pinnacle_h2h": [
+      [
+       "Kansas Jayhawks",
+       0,
+       195
+      ],
+      [
+       "TCU Horned Frogs",
+       0,
+       -221
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas Jayhawks",
+       6.5,
+       -112
+      ],
+      [
+       "TCU Horned Frogs",
+       -6.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -107
+      ],
+      [
+       "Under",
+       46.0,
+       -109
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Ranking the top 60 college football recruiting cla",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1837Z.parquet"
+    },
+    "c17c8f9e12ffe066cf601c96090fcb14": {
+     "pinnacle_h2h": [
+      [
+       "North Dakota State Bison",
+       0,
+       -2609
+      ],
+      [
+       "UTEP Miners",
+       0,
+       1495
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Dakota State Bison",
+       -23.5,
+       -108
+      ],
+      [
+       "UTEP Miners",
+       23.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -109
+      ],
+      [
+       "Under",
+       44.0,
+       -107
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "How to bet UGA-Florida, UNC-Miami and other best b"
+     ],
+     "kalshi_snap": "snap_20261031T1837Z.parquet"
+    },
+    "7bac3aae16527dd33a224a2f81792033": {
+     "pinnacle_h2h": [
+      [
+       "Northwestern Wildcats",
+       0,
+       164
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       -183
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northwestern Wildcats",
+       3.5,
+       102
+      ],
+      [
+       "Oregon Ducks",
+       -3.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -108
+      ],
+      [
+       "Under",
+       47.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Connelly previews Week 9: Utah, Georgia, Ole Miss ",
+      "From championship hopes to rock bottom, what went ",
+      "How every 2027 five-star college football prospect",
+      "Jordan Rodgers: 'Without a doubt' Dante Moore is s",
+      "NFL scouts favor Drew Mestemaker as first QB taken",
+      "Northwestern's Chip Kellly went into the history b",
+      "Northwestern's Chip Kelly went into the history bo",
+      "Oregon QB Dante Moore (concussion) not expected to",
+      "Oregon freshman WR Messiah Hampton arrested in con",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs",
+      "What's next for Oregon after likely losing Dante M"
+     ],
+     "kalshi_snap": "snap_20261031T1837Z.parquet"
+    },
+    "746742d4bb94424d9e63d00701eef4ec": {
+     "pinnacle_h2h": [
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       -162
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       146
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Southern Mississippi Golden Eagles",
+       -3.5,
+       100
+      ],
+      [
+       "UL Monroe Warhawks",
+       3.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -108
+      ],
+      [
+       "Under",
+       54.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings"
+     ],
+     "kalshi_snap": "snap_20261031T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "b0f68c9265402a825cbbf7954b726339": "anchor_close",
+    "9c33dd628312f89764392414cbc99c86": "anchor_close",
+    "581c12d11a86412432fe89645cbe80b2": "anchor_close",
+    "e5ff4a85ab3b8341184a334a390f6ba2": "anchor_close",
+    "1e591733bae48534963359a9cff13701": "anchor_close",
+    "7e3a5a0dcece26ded8c9d1a64dc6cee5": "anchor_close",
+    "c17c8f9e12ffe066cf601c96090fcb14": "anchor_close",
+    "7bac3aae16527dd33a224a2f81792033": "anchor_close",
+    "746742d4bb94424d9e63d00701eef4ec": "anchor_close"
+   }
+  }
  }
 ]
