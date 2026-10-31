@@ -16169,5 +16169,168 @@
     "e7510e4cb4351947263e33b6dc6a0812": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T200403Z.parquet",
+  "sha256": "41f4d4656507b52a0d522f95f6de9f81c1224b130ad21f5c38c7a783d4025777",
+  "logged_utc": "2026-10-31T20:04:03.623679+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 8,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-10-31T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T200008Z.parquet",
+   "inputs_digest": "{\"6519cc9dfbff22ca11d607a9f246da2c\": \"d6da0efb4cc6b3e0\", \"e4e95ca26b62e1c3ced6261cbb5c5f3a\": \"0c108e0235e63f12\", \"c1fd3e172f0617a0d8543b8fd67fc2ce\": \"cc96cb6b13183138\"}",
+   "components": {
+    "6519cc9dfbff22ca11d607a9f246da2c": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       175
+      ],
+      [
+       "Florida State Seminoles",
+       0,
+       -196
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       5.0,
+       -107
+      ],
+      [
+       "Florida State Seminoles",
+       -5.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -112
+      ],
+      [
+       "Under",
+       50.0,
+       -104
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Clemson's Dabo Swinney still believes in team afte",
+      "Clemson, UNC support PCSA, ask for realignment fle",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "FSU president Richard McCullough to fans: 'I under",
+      "Ranking the top 60 college football recruiting cla",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1937Z.parquet"
+    },
+    "e4e95ca26b62e1c3ced6261cbb5c5f3a": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       312
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -371
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       10.0,
+       -108
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -10.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       -111
+      ],
+      [
+       "Under",
+       58.0,
+       -105
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Drew Mestemaker's rise to predicted No. 1 QB in 20",
+      "NFL scouts favor Drew Mestemaker as first QB taken",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit"
+     ],
+     "kalshi_snap": "snap_20261031T1937Z.parquet"
+    },
+    "c1fd3e172f0617a0d8543b8fd67fc2ce": {
+     "pinnacle_h2h": [
+      [
+       "San Diego State Aztecs",
+       0,
+       -127
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       115
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "San Diego State Aztecs",
+       -2.5,
+       -105
+      ],
+      [
+       "Washington State Cougars",
+       2.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -106
+      ],
+      [
+       "Under",
+       48.0,
+       -110
+      ]
+     ],
+     "kalshi_snap": "snap_20261031T1937Z.parquet"
+    }
+   },
+   "triggers": {
+    "6519cc9dfbff22ca11d607a9f246da2c": "anchor_prekick",
+    "e4e95ca26b62e1c3ced6261cbb5c5f3a": "anchor_prekick",
+    "c1fd3e172f0617a0d8543b8fd67fc2ce": "anchor_prekick"
+   }
+  }
  }
 ]
