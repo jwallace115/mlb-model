@@ -10238,5 +10238,158 @@
     "1d5b8007f5249010b9c501138e25ac74": "line_move: pinnacle spreads UNLV Rebels -24.0\u2192-22.5; line_move: pinnacle spreads Northern Illinois Huskies 24.0\u219222.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T040403Z.parquet",
+  "sha256": "5d51d7fcd934ddd211f20a96a5c8bcb44e5a7ee6727ca727fab6a419fac6d97a",
+  "logged_utc": "2026-10-31T04:04:03.628923+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.444,
+  "revised_rows": 8,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-31T16:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T040006Z.parquet",
+   "inputs_digest": "{\"3713b2d962a33a6e55be7bffedd604a5\": \"b5cc51d1dbddada0\", \"dea96094c29a9f24d7dc07a5d848afd7\": \"641b8266268827b8\", \"e88d624c699646a03bac59eb193a09bf\": \"2523564757e16d10\"}",
+   "components": {
+    "3713b2d962a33a6e55be7bffedd604a5": {
+     "pinnacle_h2h": [
+      [
+       "South Florida Bulls",
+       0,
+       -292
+      ],
+      [
+       "UAB Blazers",
+       0,
+       245
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Florida Bulls",
+       -7.5,
+       -107
+      ],
+      [
+       "UAB Blazers",
+       7.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -111
+      ],
+      [
+       "Under",
+       41.5,
+       -105
+      ]
+     ],
+     "kalshi_snap": "snap_20261031T0407Z.parquet"
+    },
+    "dea96094c29a9f24d7dc07a5d848afd7": {
+     "pinnacle_h2h": [
+      [
+       "Michigan Wolverines",
+       0,
+       -682
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       502
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan Wolverines",
+       -16.5,
+       -103
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       16.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -107
+      ],
+      [
+       "Under",
+       46.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 8 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 college football recruits on the rise and how",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Michigan sticking with OC Jason Beck",
+      "Ranking the top 60 college football recruiting cla"
+     ],
+     "kalshi_snap": "snap_20261031T0407Z.parquet"
+    },
+    "e88d624c699646a03bac59eb193a09bf": {
+     "pinnacle_h2h": [
+      [
+       "Marshall Thundering Herd",
+       0,
+       -143
+      ],
+      [
+       "Old Dominion Monarchs",
+       0,
+       127
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Marshall Thundering Herd",
+       -3.0,
+       -102
+      ],
+      [
+       "Old Dominion Monarchs",
+       3.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -111
+      ],
+      [
+       "Under",
+       46.0,
+       -105
+      ]
+     ],
+     "kalshi_snap": "snap_20261031T0407Z.parquet"
+    }
+   },
+   "triggers": {
+    "3713b2d962a33a6e55be7bffedd604a5": "line_move: pinnacle totals Over 42.5\u219241.5; line_move: pinnacle totals Under 42.5\u219241.5",
+    "dea96094c29a9f24d7dc07a5d848afd7": "line_move: pinnacle totals Over 45.5\u219246.5; line_move: pinnacle totals Under 45.5\u219246.5",
+    "e88d624c699646a03bac59eb193a09bf": "line_move: pinnacle totals Over 45.0\u219246.0; line_move: pinnacle totals Under 45.0\u219246.0"
+   }
+  }
  }
 ]

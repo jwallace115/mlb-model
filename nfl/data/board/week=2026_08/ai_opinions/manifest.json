@@ -4240,5 +4240,381 @@
     "f2a036d5edf483a277880014861e78ad": "new_props: pull 2026-10-31T01:17:32.039331+00:00; injury_change: inj_Denver Broncos; injury_change: inj_Kansas City Chiefs; new_news: 2 availability items"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T041704Z.parquet",
+  "sha256": "ef062f61b82b81b46252791b831afc0ff0278d019098dfcc560cd8c4a503efda",
+  "logged_utc": "2026-10-31T04:17:04.015878+00:00",
+  "rows": 212,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.92,
+  "revised_rows": 126,
+  "oldest_source_age_min": 136.9,
+  "first_kickoff_utc": "2026-11-01T21:05:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261031T040006Z.parquet",
+   "inputs_digest": "{\"2ff84d3f6053d083c8c0a5bebf7cdd4c\": \"6e7d8aff2c50771c\", \"05405af79752f5e742cdf50b61f6745e\": \"98fdb4eb4a940b72\", \"b9c60db63b1a19ad319f24b33c0defe8\": \"17630adee0b65baf\"}",
+   "components": {
+    "2ff84d3f6053d083c8c0a5bebf7cdd4c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       250
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -300
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Los Angeles Chargers",
+       6.5,
+       -110
+      ],
+      [
+       "Los Angeles Rams",
+       -6.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       45.0,
+       -110
+      ],
+      [
+       "Under",
+       45.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       245
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -293
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Los Angeles Chargers",
+       6.5,
+       -114
+      ],
+      [
+       "Los Angeles Rams",
+       -6.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -109
+      ],
+      [
+       "Under",
+       45.0,
+       -107
+      ]
+     ],
+     "props_ts": "2026-10-31T04:17:32.636089+00:00",
+     "inj_Los Angeles Rams": "c60b1ffa8dbb3b0d",
+     "inj_Los Angeles Chargers": "26f7714a8d7a53f0",
+     "news": [
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Chiefs move to 5-0 as Kenneth Walker runs for two ",
+      "Could the Rams use two kickers in Week 8?",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "How Chargers 2026 first-round pick Akheem Mesidor ",
+      "How Chargers' 2026 first-round pick Akheem Mesidor",
+      "How active NFL players continue to redefine all-ti",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Las Vegas Raiders vs Los Angeles Rams: Game Highli",
+      "Matthew Stafford makes history after 3-TD showing ",
+      "Matthew Stafford sets Rams TD pass record as Los A",
+      "Matthew Stafford: Win vs. Raiders a step in the ri",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL survivor power rankings: Why this is the week ",
+      "National Tight Ends Day 2026: Davis Allen, Mason T",
+      "Rams and Chargers share a city, not a rivalry as t",
+      "Rams' DE Garrett, TE Ferguson won't practice this ",
+      "Seahawks troll Taylor Swift, Travis Kelce to top N",
+      "Stafford makes NFL history in win over Raiders",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "What has gone wrong for 2025 running backs? Ashton",
+      "When can the Rams expect Davante Adams to return?",
+      "Why Jeremiah Smith is a generational NFL draft rec",
+      "Winless Chargers sticking with Mike McDaniel as of",
+      "With Davante Adams out, Rams leaning on the run ga"
+     ],
+     "kalshi_snap": "snap_20261031T0405Z.parquet"
+    },
+    "05405af79752f5e742cdf50b61f6745e": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       260
+      ],
+      [
+       "New England Patriots",
+       0,
+       -350
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Miami Dolphins",
+       6.5,
+       -105
+      ],
+      [
+       "New England Patriots",
+       -6.5,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       43.0,
+       -115
+      ],
+      [
+       "Under",
+       43.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       291
+      ],
+      [
+       "New England Patriots",
+       0,
+       -355
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami Dolphins",
+       7.0,
+       -109
+      ],
+      [
+       "New England Patriots",
+       -7.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -103
+      ],
+      [
+       "Under",
+       43.5,
+       -113
+      ]
+     ],
+     "props_ts": "2026-10-31T04:17:32.636089+00:00",
+     "inj_Miami Dolphins": "f5bc274cb97857b7",
+     "inj_New England Patriots": "6c79ef229705506a",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "A. J. Brown misses Patriots practice",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Dolphins beat the Jets to avoid 0-7 start",
+      "Dolphins look to build momentum against defending ",
+      "How active NFL players continue to redefine all-ti",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeff Hafley, Dolphins hold off Jets, then revel in",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 7: Big takeaways, questions and fantasy s",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL survivor power rankings: Why this is the week ",
+      "Patriots WR A.J. Brown (ankle, knee) listed as que",
+      "Patriots' A.J. Brown misses practice Thursday due ",
+      "Patriots' starting secondary will start vs. the Do",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "Week 7 NFL highlights: Best plays, moments, touchd",
+      "What are the longest field goals in NFL history?",
+      "What has gone wrong for 2025 running backs? Ashton",
+      "Why Jeremiah Smith is a generational NFL draft rec"
+     ],
+     "kalshi_snap": "snap_20261031T0405Z.parquet"
+    },
+    "b9c60db63b1a19ad319f24b33c0defe8": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Philadelphia Eagles",
+       0,
+       210
+      ],
+      [
+       "Washington Commanders",
+       0,
+       -260
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Philadelphia Eagles",
+       6.0,
+       -110
+      ],
+      [
+       "Washington Commanders",
+       -6.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.0,
+       -115
+      ],
+      [
+       "Under",
+       40.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Philadelphia Eagles",
+       0,
+       211
+      ],
+      [
+       "Washington Commanders",
+       0,
+       -247
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Philadelphia Eagles",
+       6.0,
+       -108
+      ],
+      [
+       "Washington Commanders",
+       -6.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       100
+      ],
+      [
+       "Under",
+       40.5,
+       -117
+      ]
+     ],
+     "props_ts": "2026-10-27T13:02:29.519480+00:00",
+     "inj_Washington Commanders": "0e7d5481ddcb0912",
+     "inj_Philadelphia Eagles": "f7ee23b2a272f78b",
+     "news": [
+      "'You can overcome this': Students of Jalen Hurts' ",
+      "2026 NFL trade deadline updates: DeForest Buckner,",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline updates: Marvin Harrison J",
+      "2026 NFL trade deadline updates: Quenton Nelson, M",
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "A lot on the line for Commanders in matchup vs. Ea",
+      "Breaking down Cowboys-Eagles MNF matchup in wide-o",
+      "Commanders and Eagles head into 'Sunday Night Foot",
+      "Commanders excited about WR Antonio Williams",
+      "Commanders face pressure to turn season around",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Cowboys bounce back, take down Eagles on MNF",
+      "Cowboys handle Eagles on Javonte Williams' career ",
+      "Dak Prescott throws 3 TD passes, Javonte Williams ",
+      "Eagles star Saquon Barkley says he was forced to d",
+      "Eagles' Saquon Barkley carries no injury designati",
+      "Eagles' Saquon Barkley says hamstring 'great' in r",
+      "Fantasy football buzz: Despite win, can you trust ",
+      "Fantasy football buzz: Philly no problem for Dak P",
+      "Fantasy football buzz: Starters on bye? Finish you",
+      "Fantasy football buzz: Vikings defensive dilemma? ",
+      "Fantasy football buzz: Week 8 streaming picks, Pay",
+      "How active NFL players continue to redefine all-ti",
+      "How to bet Cowboys-Eagles: Analysis, tips and top ",
+      "Jay-Z's greatest sports lyrics, ranked ahead of hi",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jayden Daniels focusing on faster operation at the",
+      "Makai Lemon emerging as a bright spot for Eagles",
+      "Michael Vick's iconic MNF game is now in the ESPN ",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: DeForest Buckner, Quent",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Saquon Barkley feeling good about his health",
+      "Saquon Barkley hopes to play Sunday vs. Commanders",
+      "Sources: Commanders' Daron Payne likely IR-bound a",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "What are the longest field goals in NFL history?",
+      "Where Sonny Styles wants to improve his game",
+      "Why Commanders believe they aren't done yet in the",
+      "Will Nick Sirianni still be Eagles coach next seas"
+     ],
+     "kalshi_snap": "snap_20261031T0405Z.parquet"
+    }
+   },
+   "triggers": {
+    "2ff84d3f6053d083c8c0a5bebf7cdd4c": "new_props: pull 2026-10-31T04:17:32.636089+00:00; injury_change: inj_Los Angeles Rams; injury_change: inj_Los Angeles Chargers",
+    "05405af79752f5e742cdf50b61f6745e": "new_props: pull 2026-10-31T04:17:32.636089+00:00; injury_change: inj_Miami Dolphins; injury_change: inj_New England Patriots",
+    "b9c60db63b1a19ad319f24b33c0defe8": "horizon_entry: kick in 45h, no prior read"
+   }
+  }
  }
 ]

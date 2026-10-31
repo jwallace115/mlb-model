@@ -1,12 +1,25 @@
 {
- "started_utc": "2026-10-31T03:47:03.526029+00:00",
- "finished_utc": "2026-10-31T03:47:03.878492+00:00",
+ "started_utc": "2026-10-31T04:17:04.015878+00:00",
+ "finished_utc": "2026-10-31T04:22:03.015278+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "2ff84d3f6053d083c8c0a5bebf7cdd4c",
+   "text": "new_props: pull 2026-10-31T04:17:32.636089+00:00; injury_change: inj_Los Angeles Rams; injury_change: inj_Los Angeles Chargers"
+  },
+  {
+   "game": "05405af79752f5e742cdf50b61f6745e",
+   "text": "new_props: pull 2026-10-31T04:17:32.636089+00:00; injury_change: inj_Miami Dolphins; injury_change: inj_New England Patriots"
+  },
+  {
+   "game": "b9c60db63b1a19ad319f24b33c0defe8",
+   "text": "horizon_entry: kick in 45h, no prior read"
+  }
+ ],
+ "games_read": 3,
+ "frozen_file": "ai_opinions_20261031T041704Z.parquet",
+ "spend_usd": 37.9611,
+ "result": "COMPLETE"
 }
