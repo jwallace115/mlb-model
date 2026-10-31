@@ -16648,5 +16648,120 @@
     "c6533cfcdfb0860d723a5fd9b9381098": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T210403Z.parquet",
+  "sha256": "bdf04fdf7384c8c5110dd3c0522bccfa9d73439a0620baf63bd95a02e5731b40",
+  "logged_utc": "2026-10-31T21:04:03.115170+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 6,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-01T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T210009Z.parquet",
+   "inputs_digest": "{\"c2a32bff5ed94bef9a6a5847ff544783\": \"c20d290275eef461\", \"877d5834acad37b6142a835438c23001\": \"138db35cea42aabe\"}",
+   "components": {
+    "c2a32bff5ed94bef9a6a5847ff544783": {
+     "pinnacle_h2h": [
+      [
+       "Army Black Knights",
+       0,
+       189
+      ],
+      [
+       "Memphis Tigers",
+       0,
+       -214
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Army Black Knights",
+       6.0,
+       -104
+      ],
+      [
+       "Memphis Tigers",
+       -6.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.5,
+       -101
+      ],
+      [
+       "Under",
+       59.5,
+       -116
+      ]
+     ],
+     "news": [
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T2037Z.parquet"
+    },
+    "877d5834acad37b6142a835438c23001": {
+     "pinnacle_h2h": [
+      [
+       "Nebraska Cornhuskers",
+       0,
+       -307
+      ],
+      [
+       "Washington Huskies",
+       0,
+       264
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nebraska Cornhuskers",
+       -7.5,
+       -108
+      ],
+      [
+       "Washington Huskies",
+       7.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -101
+      ],
+      [
+       "Under",
+       50.5,
+       -115
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Nebraska QB Anthony Colandrea re-signs for 2027 se",
+      "Ranking the top 60 college football recruiting cla",
+      "UCF's, Air Force's space-themed threads lead best ",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T2037Z.parquet"
+    }
+   },
+   "triggers": {
+    "c2a32bff5ed94bef9a6a5847ff544783": "anchor_prekick",
+    "877d5834acad37b6142a835438c23001": "anchor_prekick"
+   }
+  }
  }
 ]
