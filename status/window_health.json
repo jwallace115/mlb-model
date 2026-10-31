@@ -10,23 +10,23 @@
   "freeze_file": null
  },
  {
-  "sport": "nfl",
-  "window": "event",
-  "started_utc": "2026-10-31T20:17:04.002022+00:00",
-  "finished_utc": "2026-10-31T20:17:04.002022+00:00",
-  "result": "no_triggers",
-  "step": "window_watch",
-  "message": "",
-  "freeze_file": null
- },
- {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-10-31T20:20:32.927560+00:00",
-  "finished_utc": "2026-10-31T20:20:32.927560+00:00",
-  "result": "no_triggers",
+  "started_utc": "2026-10-31T20:52:20.389310+00:00",
+  "finished_utc": "2026-10-31T20:52:20.389310+00:00",
+  "result": "COMPLETE",
   "step": "window_watch",
-  "message": "",
-  "freeze_file": null
+  "message": "['anchor_prekick']",
+  "freeze_file": "ai_opinions_20261031T204904Z.parquet"
+ },
+ {
+  "sport": "nfl",
+  "window": "event",
+  "started_utc": "2026-10-31T20:53:43.094372+00:00",
+  "finished_utc": "2026-10-31T20:53:43.094372+00:00",
+  "result": "COMPLETE",
+  "step": "window_watch",
+  "message": "['line_move: hardrockbet_fl spreads Philadelphia Eagles 5.0\u21926.0; line_move: hardrockbet_fl spreads Washington Commanders -5.0\u2192-6.0']",
+  "freeze_file": "ai_opinions_20261031T204703Z.parquet"
  }
 ]

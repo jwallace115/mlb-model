@@ -1,12 +1,17 @@
 {
- "started_utc": "2026-10-31T20:17:03.697794+00:00",
- "finished_utc": "2026-10-31T20:17:04.061484+00:00",
+ "started_utc": "2026-10-31T20:47:03.780103+00:00",
+ "finished_utc": "2026-10-31T20:53:43.115449+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "b9c60db63b1a19ad319f24b33c0defe8",
+   "text": "line_move: hardrockbet_fl spreads Philadelphia Eagles 5.0\u21926.0; line_move: hardrockbet_fl spreads Washington Commanders -5.0\u2192-6.0"
+  }
+ ],
+ "games_read": 1,
+ "frozen_file": "ai_opinions_20261031T204703Z.parquet",
+ "spend_usd": 40.6198,
+ "result": "COMPLETE"
 }

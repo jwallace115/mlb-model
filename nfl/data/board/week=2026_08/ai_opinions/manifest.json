@@ -8690,5 +8690,157 @@
     "b9c60db63b1a19ad319f24b33c0defe8": "new_props: pull 2026-10-31T19:32:31.801609+00:00; injury_change: inj_Washington Commanders"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T204703Z.parquet",
+  "sha256": "63795d2bc0a75e273d5d9901a4914b7b9281a80813fcc140831defd0fc055d1b",
+  "logged_utc": "2026-10-31T20:47:03.780103+00:00",
+  "rows": 66,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.939,
+  "revised_rows": 60,
+  "oldest_source_age_min": 74.5,
+  "first_kickoff_utc": "2026-11-02T01:20:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261031T203005Z.parquet",
+   "inputs_digest": "{\"b9c60db63b1a19ad319f24b33c0defe8\": \"5047d1f9317b212c\"}",
+   "components": {
+    "b9c60db63b1a19ad319f24b33c0defe8": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Philadelphia Eagles",
+       0,
+       210
+      ],
+      [
+       "Washington Commanders",
+       0,
+       -260
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Philadelphia Eagles",
+       6.0,
+       -110
+      ],
+      [
+       "Washington Commanders",
+       -6.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.0,
+       -115
+      ],
+      [
+       "Under",
+       40.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Philadelphia Eagles",
+       0,
+       212
+      ],
+      [
+       "Washington Commanders",
+       0,
+       -248
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Philadelphia Eagles",
+       6.0,
+       -107
+      ],
+      [
+       "Washington Commanders",
+       -6.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       100
+      ],
+      [
+       "Under",
+       40.5,
+       -117
+      ]
+     ],
+     "props_ts": "2026-10-31T19:32:31.801609+00:00",
+     "inj_Washington Commanders": "5e0fd8619e9a26f8",
+     "inj_Philadelphia Eagles": "3f5ba158f3718062",
+     "news": [
+      "'You can overcome this': Students of Jalen Hurts' ",
+      "2026 NFL trade deadline updates: DeForest Buckner,",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline updates: Marvin Harrison J",
+      "2026 NFL trade deadline updates: Quenton Nelson, M",
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "A lot on the line for Commanders in matchup vs. Ea",
+      "Commanders and Eagles head into 'Sunday Night Foot",
+      "Commanders excited about WR Antonio Williams",
+      "Cowboys bounce back, take down Eagles on MNF",
+      "Cowboys handle Eagles on Javonte Williams' career ",
+      "Dak Prescott throws 3 TD passes, Javonte Williams ",
+      "Eagles star Saquon Barkley says he was forced to d",
+      "Eagles' Saquon Barkley carries no injury designati",
+      "Eagles' Saquon Barkley says hamstring 'great' in r",
+      "Fantasy football buzz: Despite win, can you trust ",
+      "Fantasy football buzz: Philly no problem for Dak P",
+      "Fantasy football buzz: Starters on bye? Finish you",
+      "Fantasy football buzz: Vikings defensive dilemma? ",
+      "Fantasy football buzz: Week 8 streaming picks, Pay",
+      "How active NFL players continue to redefine all-ti",
+      "Jay-Z's greatest sports lyrics, ranked ahead of hi",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jayden Daniels focusing on faster operation at the",
+      "Makai Lemon emerging as a bright spot for Eagles",
+      "Michael Vick's iconic MNF game is now in the ESPN ",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: DeForest Buckner, Quent",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Saquon Barkley feeling good about his health",
+      "Saquon Barkley hopes to play Sunday vs. Commanders",
+      "Source: Commanders DT Daron Payne suffered season-",
+      "Sources: Commanders' Daron Payne likely IR-bound a",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "What are the longest field goals in NFL history?",
+      "Where Sonny Styles wants to improve his game",
+      "Why Commanders believe they aren't done yet in the",
+      "Will Nick Sirianni still be Eagles coach next seas"
+     ],
+     "kalshi_snap": "snap_20261031T2035Z.parquet"
+    }
+   },
+   "triggers": {
+    "b9c60db63b1a19ad319f24b33c0defe8": "line_move: hardrockbet_fl spreads Philadelphia Eagles 5.0\u21926.0; line_move: hardrockbet_fl spreads Washington Commanders -5.0\u2192-6.0"
+   }
+  }
  }
 ]
