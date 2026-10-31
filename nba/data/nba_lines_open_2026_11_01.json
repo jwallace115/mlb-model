@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "6d7e1e0af6d568f4435d35a1763a3622",
+    "game_date": "2026-11-01",
+    "sport": "NBA",
+    "home_team": "Milwaukee Bucks",
+    "away_team": "Cleveland Cavaliers",
+    "commence_time": "2026-11-01T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 237.5,
+    "over_price": -107,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-31T06:05:02.380995+00:00"
+  },
+  {
+    "game_id": "863ae1092be42c6b563b2c4f099a3eb3",
+    "game_date": "2026-11-01",
+    "sport": "NBA",
+    "home_team": "Memphis Grizzlies",
+    "away_team": "Sacramento Kings",
+    "commence_time": "2026-11-01T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 233.0,
+    "over_price": -106,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-31T06:05:02.380995+00:00"
+  },
+  {
+    "game_id": "06a03fb0ce0f81a970c6000fb71fdc6d",
+    "game_date": "2026-11-01",
+    "sport": "NBA",
+    "home_team": "San Antonio Spurs",
+    "away_team": "Minnesota Timberwolves",
+    "commence_time": "2026-11-01T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 226.5,
+    "over_price": -108,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-31T06:05:02.380995+00:00"
+  },
+  {
+    "game_id": "c30d3bdf126e98ced5b9389db8617926",
+    "game_date": "2026-11-01",
+    "sport": "NBA",
+    "home_team": "Houston Rockets",
+    "away_team": "Oklahoma City Thunder",
+    "commence_time": "2026-11-01T00:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 218.5,
+    "over_price": -115,
+    "under_price": -105,
+    "book": "draftkings",
+    "capture_timestamp": "2026-10-31T06:05:02.380995+00:00"
+  }
+]
