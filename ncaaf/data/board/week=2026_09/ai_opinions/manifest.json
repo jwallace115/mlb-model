@@ -13765,5 +13765,77 @@
     "3713b2d962a33a6e55be7bffedd604a5": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T154903Z.parquet",
+  "sha256": "91f39c038f601f2fa02194a9034696bfe7678bb084d2b5cbbae62120fa60d23f",
+  "logged_utc": "2026-10-31T15:49:03.491262+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T16:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T153009Z.parquet",
+   "inputs_digest": "{\"dea96094c29a9f24d7dc07a5d848afd7\": \"9326a3edc44ef0d2\"}",
+   "components": {
+    "dea96094c29a9f24d7dc07a5d848afd7": {
+     "pinnacle_h2h": [
+      [
+       "Michigan Wolverines",
+       0,
+       -722
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       551
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan Wolverines",
+       -16.5,
+       -116
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       16.5,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -115
+      ],
+      [
+       "Under",
+       46.5,
+       -102
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 college football recruits on the rise and how",
+      "College Football Playoff Bubble Watch after Week 8",
+      "Michigan sticking with OC Jason Beck",
+      "Ranking the top 60 college football recruiting cla"
+     ],
+     "kalshi_snap": "snap_20261031T1537Z.parquet"
+    }
+   },
+   "triggers": {
+    "dea96094c29a9f24d7dc07a5d848afd7": "anchor_close"
+   }
+  }
  }
 ]
