@@ -15071,5 +15071,159 @@
     "7fd2d018fdc5930fd62188de968a901c": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T181905Z.parquet",
+  "sha256": "487b248ca7975cc38953d7173be3a518d0a6308e6a6a3379c04c30fb385e630b",
+  "logged_utc": "2026-10-31T18:19:05.069508+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 7,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-10-31T19:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T180008Z.parquet",
+   "inputs_digest": "{\"573eed720cdbfb7644835b8beb1bc89a\": \"933f9d7c53e1d8bc\", \"fa9022be308ebe9ca39ecda8ea15bda4\": \"417a539653dca4f6\", \"e5817afb8338b8f7272feff21d87d7f7\": \"edca79d1f53bb0b9\"}",
+   "components": {
+    "573eed720cdbfb7644835b8beb1bc89a": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       -107
+      ],
+      [
+       "UConn Huskies",
+       0,
+       -103
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       1.0,
+       -113
+      ],
+      [
+       "UConn Huskies",
+       -1.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -117
+      ],
+      [
+       "Under",
+       52.5,
+       100
+      ]
+     ],
+     "news": [
+      "UCF's, Air Force's space-themed threads lead best "
+     ],
+     "kalshi_snap": "snap_20261031T1807Z.parquet"
+    },
+    "fa9022be308ebe9ca39ecda8ea15bda4": {
+     "pinnacle_h2h": [
+      [
+       "East Carolina Pirates",
+       0,
+       -183
+      ],
+      [
+       "Temple Owls",
+       0,
+       163
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "East Carolina Pirates",
+       -4.0,
+       -106
+      ],
+      [
+       "Temple Owls",
+       4.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -109
+      ],
+      [
+       "Under",
+       51.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings"
+     ],
+     "kalshi_snap": "snap_20261031T1807Z.parquet"
+    },
+    "e5817afb8338b8f7272feff21d87d7f7": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -224
+      ],
+      [
+       "South Alabama Jaguars",
+       0,
+       197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -6.0,
+       -107
+      ],
+      [
+       "South Alabama Jaguars",
+       6.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       -107
+      ],
+      [
+       "Under",
+       58.0,
+       -109
+      ]
+     ],
+     "news": [
+      "College football futures: Evaluating five contende"
+     ],
+     "kalshi_snap": "snap_20261031T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "573eed720cdbfb7644835b8beb1bc89a": "anchor_close",
+    "fa9022be308ebe9ca39ecda8ea15bda4": "anchor_close",
+    "e5817afb8338b8f7272feff21d87d7f7": "anchor_close"
+   }
+  }
  }
 ]

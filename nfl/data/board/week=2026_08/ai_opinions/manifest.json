@@ -7738,5 +7738,132 @@
     "b9c60db63b1a19ad319f24b33c0defe8": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T181703Z.parquet",
+  "sha256": "492a116f97b96d4c53e4aed8f96b24ca23274e384173d6d060f744ab267a0640",
+  "logged_utc": "2026-10-31T18:17:03.758796+00:00",
+  "rows": 72,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.944,
+  "revised_rows": 72,
+  "oldest_source_age_min": 256.9,
+  "first_kickoff_utc": "2026-11-01T21:25:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261031T180008Z.parquet",
+   "inputs_digest": "{\"05405af79752f5e742cdf50b61f6745e\": \"3c21308feb83c0c3\"}",
+   "components": {
+    "05405af79752f5e742cdf50b61f6745e": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       275
+      ],
+      [
+       "New England Patriots",
+       0,
+       -350
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Miami Dolphins",
+       7.0,
+       -115
+      ],
+      [
+       "New England Patriots",
+       -7.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       43.0,
+       -115
+      ],
+      [
+       "Under",
+       43.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       291
+      ],
+      [
+       "New England Patriots",
+       0,
+       -355
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami Dolphins",
+       7.0,
+       -109
+      ],
+      [
+       "New England Patriots",
+       -7.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -103
+      ],
+      [
+       "Under",
+       43.5,
+       -113
+      ]
+     ],
+     "props_ts": "2026-10-31T18:17:32.636385+00:00",
+     "inj_Miami Dolphins": "deb9fdc67ba1aac7",
+     "inj_New England Patriots": "98d88efd3fa10c94",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "A. J. Brown misses Patriots practice",
+      "Dolphins look to build momentum against defending ",
+      "How active NFL players continue to redefine all-ti",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL survivor power rankings: Why this is the week ",
+      "Patriots WR A.J. Brown (ankle, knee) listed as que",
+      "Patriots rule out A.J. Brown, TreVeyon Henderson v",
+      "Patriots' A.J. Brown misses practice Thursday due ",
+      "Patriots' starting secondary will start vs. the Do",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Steelers Aaron Rodgers, QB room lead NFL Week 7's ",
+      "What are the longest field goals in NFL history?",
+      "What has gone wrong for 2025 running backs? Ashton",
+      "Why Jeremiah Smith is a generational NFL draft rec"
+     ],
+     "kalshi_snap": "snap_20261031T1805Z.parquet"
+    }
+   },
+   "triggers": {
+    "05405af79752f5e742cdf50b61f6745e": "new_props: pull 2026-10-31T18:17:32.636385+00:00; new_news: 1 availability items"
+   }
+  }
  }
 ]
