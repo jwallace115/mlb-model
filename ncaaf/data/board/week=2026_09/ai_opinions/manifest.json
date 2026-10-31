@@ -15955,5 +15955,219 @@
     "1841dedea57dac1d1de462bb44f8a732": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T193404Z.parquet",
+  "sha256": "5ac1658209df9760bd0ab3319f7ea6652c22571e79c7b4333f59cad0efaba5b5",
+  "logged_utc": "2026-10-31T19:34:04.027477+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.417,
+  "revised_rows": 11,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-10-31T20:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T193005Z.parquet",
+   "inputs_digest": "{\"630ed6c8993fda8943e528a465e55518\": \"90ee2c0d52bd2c2f\", \"096584989b4dd0a84650c37eb980a8b3\": \"e63f716542d18840\", \"7fd2d018fdc5930fd62188de968a901c\": \"6753007b517fab44\", \"e7510e4cb4351947263e33b6dc6a0812\": \"3ea9760365cc040d\"}",
+   "components": {
+    "630ed6c8993fda8943e528a465e55518": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       1062
+      ],
+      [
+       "UCLA Bruins",
+       0,
+       -1649
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       22.0,
+       103
+      ],
+      [
+       "UCLA Bruins",
+       -22.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -103
+      ],
+      [
+       "Under",
+       43.0,
+       -113
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Ranking the top 60 college football recruiting cla",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "UCLA QB Iamaleava 'heartbroken' over season-ending",
+      "Unbeaten No. 7 UCLA hosts Nevada with an 8-0 start"
+     ],
+     "kalshi_snap": "snap_20261031T1937Z.parquet"
+    },
+    "096584989b4dd0a84650c37eb980a8b3": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma Sooners",
+       0,
+       -156
+      ],
+      [
+       "South Carolina Gamecocks",
+       0,
+       140
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma Sooners",
+       -3.5,
+       -101
+      ],
+      [
+       "South Carolina Gamecocks",
+       3.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -103
+      ],
+      [
+       "Under",
+       44.0,
+       -113
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 8",
+      "College football ghost stories, from Death Valley ",
+      "Heisman race after Week 8: Miami's Malachi Toney i",
+      "How every 2027 five-star college football prospect",
+      "LaNorris Sellers says comfort in Gamecocks' offens",
+      "NFL scouts favor Drew Mestemaker as first QB taken",
+      "Ranking the top 60 college football recruiting cla",
+      "Shane Beamer on how South Carolina must navigate O",
+      "Top 25 betting lines: Georgia double-digit favorit",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1937Z.parquet"
+    },
+    "7fd2d018fdc5930fd62188de968a901c": {
+     "pinnacle_h2h": [
+      [
+       "Penn State Nittany Lions",
+       0,
+       -358
+      ],
+      [
+       "Purdue Boilermakers",
+       0,
+       302
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Penn State Nittany Lions",
+       -10.0,
+       -111
+      ],
+      [
+       "Purdue Boilermakers",
+       10.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.0,
+       -108
+      ],
+      [
+       "Under",
+       55.0,
+       -108
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 8",
+      "Ranking the top 60 college football recruiting cla",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1937Z.parquet"
+    },
+    "e7510e4cb4351947263e33b6dc6a0812": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       192
+      ],
+      [
+       "Georgia Southern Eagles",
+       0,
+       -218
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       5.5,
+       101
+      ],
+      [
+       "Georgia Southern Eagles",
+       -5.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -103
+      ],
+      [
+       "Under",
+       55.5,
+       -113
+      ]
+     ],
+     "news": [
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T1937Z.parquet"
+    }
+   },
+   "triggers": {
+    "630ed6c8993fda8943e528a465e55518": "anchor_close",
+    "096584989b4dd0a84650c37eb980a8b3": "anchor_close",
+    "7fd2d018fdc5930fd62188de968a901c": "anchor_close",
+    "e7510e4cb4351947263e33b6dc6a0812": "anchor_prekick"
+   }
+  }
  }
 ]
