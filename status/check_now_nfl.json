@@ -1,12 +1,53 @@
 {
- "started_utc": "2026-11-01T00:47:04.823615+00:00",
- "finished_utc": "2026-11-01T00:47:05.388333+00:00",
+ "started_utc": "2026-11-01T01:17:05.138884+00:00",
+ "finished_utc": "2026-11-01T01:22:40.640228+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "c93c421e5fa46031a43162d111d981d0",
+   "text": "new_props: pull 2026-11-01T01:18:04.385588+00:00; injury_change: inj_Buffalo Bills; injury_change: inj_Baltimore Ravens"
+  },
+  {
+   "game": "9c5d8f57e0ba0fbd9ef436c1f0898f99",
+   "text": "new_props: pull 2026-11-01T01:18:04.385588+00:00; injury_change: inj_Tennessee Titans"
+  },
+  {
+   "game": "ab5ab731ab655bd6308bc7a922275518",
+   "text": "new_props: pull 2026-11-01T01:18:04.385588+00:00; injury_change: inj_Pittsburgh Steelers; injury_change: inj_Cleveland Browns"
+  },
+  {
+   "game": "52e7ee9c42525e6deec02da32dc2fad8",
+   "text": "new_props: pull 2026-11-01T01:18:04.385588+00:00; injury_change: inj_Detroit Lions"
+  },
+  {
+   "game": "159dbf0253dd2038eda2212f84387f0c",
+   "text": "new_props: pull 2026-11-01T01:18:04.385588+00:00; injury_change: inj_Jacksonville Jaguars; injury_change: inj_Indianapolis Colts"
+  },
+  {
+   "game": "98f1b121b793977434c046e76c707145",
+   "text": "new_props: pull 2026-11-01T01:18:04.385588+00:00; injury_change: inj_New York Jets; injury_change: inj_Las Vegas Raiders; new_news: 1 availability items"
+  },
+  {
+   "game": "2ff84d3f6053d083c8c0a5bebf7cdd4c",
+   "text": "new_props: pull 2026-11-01T01:18:04.385588+00:00; injury_change: inj_Los Angeles Rams; injury_change: inj_Los Angeles Chargers; new_news: 1 availability items"
+  },
+  {
+   "game": "f2a036d5edf483a277880014861e78ad",
+   "text": "new_props: pull 2026-11-01T01:18:04.385588+00:00; injury_change: inj_Denver Broncos; injury_change: inj_Kansas City Chiefs"
+  },
+  {
+   "game": "05405af79752f5e742cdf50b61f6745e",
+   "text": "new_props: pull 2026-11-01T01:18:04.385588+00:00; injury_change: inj_Miami Dolphins; injury_change: inj_New England Patriots"
+  },
+  {
+   "game": "b9c60db63b1a19ad319f24b33c0defe8",
+   "text": "new_props: pull 2026-11-01T01:18:04.385588+00:00; injury_change: inj_Washington Commanders"
+  }
+ ],
+ "games_read": 10,
+ "frozen_file": "ai_opinions_20261101T011705Z.parquet",
+ "spend_usd": 0.4101,
+ "result": "COMPLETE"
 }
