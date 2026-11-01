@@ -10002,5 +10002,351 @@
     "b9c60db63b1a19ad319f24b33c0defe8": "new_props: pull 2026-11-01T01:18:04.385588+00:00; injury_change: inj_Washington Commanders"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261101T023203Z.parquet",
+  "sha256": "b72fc432ff0acb4e5bac6012b2181ab836cd30935ba3f0f3e62af8e33112e105",
+  "logged_utc": "2026-11-01T02:32:03.239788+00:00",
+  "rows": 198,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.919,
+  "revised_rows": 121,
+  "oldest_source_age_min": 751.9,
+  "first_kickoff_utc": "2026-11-01T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261101T023006Z.parquet",
+   "inputs_digest": "{\"921859689f5f8b3b8b1caf4248bdb1ec\": \"b703c34eb28ca9bc\", \"98f1b121b793977434c046e76c707145\": \"5dc835fdbc59ccd2\", \"7d664fbcd39350e559d83c0068ba7169\": \"163dc406df3e1d15\"}",
+   "components": {
+    "921859689f5f8b3b8b1caf4248bdb1ec": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Atlanta Falcons",
+       0,
+       110
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       -130
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Atlanta Falcons",
+       2.0,
+       -105
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       -2.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       43.5,
+       -110
+      ],
+      [
+       "Under",
+       43.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Atlanta Falcons",
+       0,
+       108
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       -122
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Atlanta Falcons",
+       2.5,
+       -119
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       -2.5,
+       106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -109
+      ],
+      [
+       "Under",
+       43.0,
+       -107
+      ]
+     ],
+     "props_ts": "2026-11-01T02:32:32.512781+00:00",
+     "inj_Tampa Bay Buccaneers": "5aafbe80a455b8b5",
+     "inj_Atlanta Falcons": "f35da1b7cac235fe",
+     "news": [
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Baker Mayfield gets light workload in return game",
+      "Falcons' Anterio Thompson says he can't play footb",
+      "Falcons' Penix and Buccaneers' Mayfield aiming to ",
+      "How the Falcons' two biggest stars bond off the fi",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Kyle Pitts is heating up in the red zone for Atlan",
+      "Longtime football coach June Jones, pioneer of run",
+      "Michael Penix Jr. shows he could be Atlanta's QB1",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "What are the longest field goals in NFL history?",
+      "Where the 2026 Vikings rank among worst 6-0 NFL te"
+     ],
+     "kalshi_snap": "snap_20261101T0205Z.parquet"
+    },
+    "98f1b121b793977434c046e76c707145": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Las Vegas Raiders",
+       0,
+       100
+      ],
+      [
+       "New York Jets",
+       0,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Las Vegas Raiders",
+       1.5,
+       -110
+      ],
+      [
+       "New York Jets",
+       -1.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.5,
+       -110
+      ],
+      [
+       "Under",
+       46.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Las Vegas Raiders",
+       0,
+       110
+      ],
+      [
+       "New York Jets",
+       0,
+       -123
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Las Vegas Raiders",
+       1.0,
+       101
+      ],
+      [
+       "New York Jets",
+       -1.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -107
+      ],
+      [
+       "Under",
+       46.5,
+       -110
+      ]
+     ],
+     "props_ts": "2026-11-01T01:18:04.385588+00:00",
+     "inj_New York Jets": "a6d478ec10c9859f",
+     "inj_Las Vegas Raiders": "3d01f1e295c314f6",
+     "news": [
+      "'No way' that Jets trade star WR Garrett Wilson be",
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Can the Jets redeem themselves on Sunday?",
+      "Can the Raiders get Jalen Nailor more involved?",
+      "Garrett Wilson frustrated with role in Jets' offen",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jets WR Garrett Wilson says he doesn't want to be ",
+      "Jets dealing with defensive injuries for matchup v",
+      "Jets not worried about Ashton Jeanty's comments",
+      "Jets' Brownlee says he was benched for missing mee",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "Raiders and Jets will try to stop struggles and qu",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "T'Vondre Sweat placed on injured reserve with knee",
+      "What has gone wrong for 2025 running backs? Ashton",
+      "When will the Raiders make Fernando Mendoza the st"
+     ],
+     "kalshi_snap": "snap_20261101T0205Z.parquet"
+    },
+    "7d664fbcd39350e559d83c0068ba7169": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       145
+      ],
+      [
+       "Seattle Seahawks",
+       0,
+       -170
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Chicago Bears",
+       3.0,
+       -105
+      ],
+      [
+       "Seattle Seahawks",
+       -3.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.5,
+       -110
+      ],
+      [
+       "Under",
+       46.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       144
+      ],
+      [
+       "Seattle Seahawks",
+       0,
+       -164
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Chicago Bears",
+       3.0,
+       -106
+      ],
+      [
+       "Seattle Seahawks",
+       -3.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -108
+      ],
+      [
+       "Under",
+       46.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-10-31T14:00:10.969736+00:00",
+     "inj_Seattle Seahawks": "dfaaf67fdcdd6499",
+     "inj_Chicago Bears": "f3ba9f03ad2a27d7",
+     "news": [
+      "'A league-changing move!' Kimes reacts to Bears' t",
+      "2026 NFL trade deadline updates: DeForest Buckner,",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline updates: Quenton Nelson, M",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bears acquire All-Pro DT Jeffery Simmons in trade ",
+      "Bears get Jeffery Simmons: Key intel on blockbuste",
+      "Bears' Caleb Williams to continue wearing Caddix '",
+      "How Jeffery Simmons landed with the Bears",
+      "Ian Rapoport: Seahawks getting one of the NFL's be",
+      "Jay-Z's road to the Super Bowl: Were the clues the",
+      "Jeffery Simmons traded to Bears: Does dealing mult",
+      "McAfee thanks Quenton Nelson for service to Colts ",
+      "Montez Sweat returns after two-game suspension",
+      "Montez Sweat returns to Bears following 'devastati",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL trade deadline grades: DeForest Buckner, Quent",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Quenton Nelson's arrival reshapes Seahawks' offens",
+      "Quenton Nelson: Cherished time with Colts but exci",
+      "Seahawks acquire Pro Bowl guard Quenton Nelson in ",
+      "Seahawks trade for Quenton Nelson",
+      "Seahawks' dominant defense faces challenge in Bear",
+      "Source: Bears quarterback Caleb Williams fined aga",
+      "Sources: Seahawks acquire Pro Bowl guard Quenton N",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "What are the longest field goals in NFL history?",
+      "Why Jeff Saturday is not surprised about Colts tra",
+      "Why did Seahawks trade for Quenton Nelson? Are the",
+      "Zach Charbonnet, Jadarian Price have no game desig"
+     ],
+     "kalshi_snap": "snap_20261101T0205Z.parquet"
+    }
+   },
+   "triggers": {
+    "921859689f5f8b3b8b1caf4248bdb1ec": "new_props: pull 2026-11-01T02:32:32.512781+00:00; injury_change: inj_Atlanta Falcons",
+    "98f1b121b793977434c046e76c707145": "line_move: pinnacle totals Under 45.5\u219246.5; line_move: pinnacle totals Over 45.5\u219246.5",
+    "7d664fbcd39350e559d83c0068ba7169": "anchor_morning"
+   }
+  }
  }
 ]
