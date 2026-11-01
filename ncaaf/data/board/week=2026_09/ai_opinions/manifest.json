@@ -17472,5 +17472,75 @@
     "877d5834acad37b6142a835438c23001": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T233404Z.parquet",
+  "sha256": "e659443f7ffd5e80007418e5368c4ee6d5955e7a99a86360c4a49735db07e7c7",
+  "logged_utc": "2026-10-31T23:34:04.122384+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-01T02:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261031T233007Z.parquet",
+   "inputs_digest": "{\"1d5b8007f5249010b9c501138e25ac74\": \"89c2913dd87e563c\"}",
+   "components": {
+    "1d5b8007f5249010b9c501138e25ac74": {
+     "pinnacle_h2h": [
+      [
+       "Northern Illinois Huskies",
+       0,
+       1166
+      ],
+      [
+       "UNLV Rebels",
+       0,
+       -1866
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northern Illinois Huskies",
+       22.5,
+       -115
+      ],
+      [
+       "UNLV Rebels",
+       -22.5,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.0,
+       -103
+      ],
+      [
+       "Under",
+       55.0,
+       -113
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "How to bet UGA-Florida, UNC-Miami and other best b",
+      "UCF's, Air Force's space-themed threads lead best "
+     ],
+     "kalshi_snap": "snap_20261031T2307Z.parquet"
+    }
+   },
+   "triggers": {
+    "1d5b8007f5249010b9c501138e25ac74": "anchor_prekick"
+   }
+  }
  }
 ]
