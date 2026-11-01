@@ -1,12 +1,21 @@
 {
- "started_utc": "2026-11-01T12:17:04.224446+00:00",
- "finished_utc": "2026-11-01T12:17:04.534553+00:00",
+ "started_utc": "2026-11-01T12:47:03.248432+00:00",
+ "finished_utc": "2026-11-01T12:52:31.664480+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "c93c421e5fa46031a43162d111d981d0",
+   "text": "new_props: pull 2026-11-01T12:47:32.805587+00:00; injury_change: inj_Buffalo Bills"
+  },
+  {
+   "game": "f2a036d5edf483a277880014861e78ad",
+   "text": "new_props: pull 2026-11-01T12:47:32.805587+00:00; injury_change: inj_Denver Broncos"
+  }
+ ],
+ "games_read": 2,
+ "frozen_file": "ai_opinions_20261101T124703Z.parquet",
+ "spend_usd": 1.1589,
+ "result": "COMPLETE"
 }

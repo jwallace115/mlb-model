@@ -11829,5 +11829,253 @@
     "2ff84d3f6053d083c8c0a5bebf7cdd4c": "new_props: pull 2026-11-01T08:02:45.515519+00:00; injury_change: inj_Los Angeles Rams; injury_change: inj_Los Angeles Chargers"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261101T124703Z.parquet",
+  "sha256": "ad3a2457649292666590393d01ce7a5709dbc9726017a3849b4328549d64b6a6",
+  "logged_utc": "2026-11-01T12:47:03.248432+00:00",
+  "rows": 156,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.929,
+  "revised_rows": 147,
+  "oldest_source_age_min": 344.4,
+  "first_kickoff_utc": "2026-11-01T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261101T120006Z.parquet",
+   "inputs_digest": "{\"c93c421e5fa46031a43162d111d981d0\": \"887617b27aee4981\", \"f2a036d5edf483a277880014861e78ad\": \"4944a20c552f44d6\"}",
+   "components": {
+    "c93c421e5fa46031a43162d111d981d0": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       150
+      ],
+      [
+       "Buffalo Bills",
+       0,
+       -175
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       3.0,
+       100
+      ],
+      [
+       "Buffalo Bills",
+       -3.0,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       54.5,
+       -110
+      ],
+      [
+       "Under",
+       54.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       151
+      ],
+      [
+       "Buffalo Bills",
+       0,
+       -172
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       3.5,
+       -121
+      ],
+      [
+       "Buffalo Bills",
+       -3.5,
+       108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -114
+      ],
+      [
+       "Under",
+       54.0,
+       -102
+      ]
+     ],
+     "props_ts": "2026-11-01T12:47:32.805587+00:00",
+     "inj_Buffalo Bills": "3d06ab4f9ce301a4",
+     "inj_Baltimore Ravens": "14ec329f7c24f56f",
+     "news": [
+      "2026 NFL trade deadline updates: DeForest Buckner,",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline updates: Marvin Harrison J",
+      "2026 NFL trade deadline updates: Quenton Nelson, M",
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bills making contingencies if hurt starters aren't",
+      "Bills' Sam Franklin Jr. ready to play this week af",
+      "Ed Oliver fully participates in Thursday's practic",
+      "Inside the complicated injury history of Ravens' L",
+      "Is Bills' Josh Allen the best goal-line rusher eve",
+      "Is Lamar Jackson's future in Baltimore in question",
+      "Josh Allen looks to renew rivalry with Lamar Jacks",
+      "Justin Tucker, out of NFL since sexual misconduct ",
+      "Lamar Jackson is set to return",
+      "Lamar Jackson set to return in Buffalo",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL trade deadline grades: DeForest Buckner, Quent",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Ravens QB Jackson to return for Bills clash, calls",
+      "Ravens coach Jesse Minter expects Lamar Jackson ba",
+      "Ravens list Lamar Jackson as full participant in p",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Chiefs sign former Ravens kicker Justin T",
+      "Sources: Ravens rookie G Olaivavega Ioane expected",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tre'Davious White rejoins Bills, lands on practice",
+      "Will the Bills' defense stop them from winning a S"
+     ],
+     "kalshi_snap": "snap_20261101T0535Z.parquet"
+    },
+    "f2a036d5edf483a277880014861e78ad": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       100
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Denver Broncos",
+       1.0,
+       -110
+      ],
+      [
+       "Kansas City Chiefs",
+       -1.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.5,
+       -110
+      ],
+      [
+       "Under",
+       40.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       101
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       -114
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Denver Broncos",
+       1.5,
+       -117
+      ],
+      [
+       "Kansas City Chiefs",
+       -1.5,
+       104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -109
+      ],
+      [
+       "Under",
+       40.5,
+       -107
+      ]
+     ],
+     "props_ts": "2026-11-01T12:47:32.805587+00:00",
+     "inj_Denver Broncos": "ded1f6791c4b4100",
+     "inj_Kansas City Chiefs": "22cc8102d940ed0e",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "AFC West lead at stake as Patrick Mahomes and Bo N",
+      "Answering 10 questions about Chiefs-Broncos showdo",
+      "Chiefs get Rashee Rice back from injury for Bronco",
+      "Chiefs move to 5-0 as Kenneth Walker runs for two ",
+      "Chiefs to sign Justin Tucker to practice squad",
+      "Denver looking for revenge against the Chiefs",
+      "J.K. Dobbins puts team success first",
+      "Justin Tucker, out of NFL since sexual misconduct ",
+      "Kyle Brandt shares his Halloween treat for Chiefs ",
+      "NFL Power Rankings: How all 32 teams stack up for ",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Ranking the top 10 trick plays in Super Bowl histo",
+      "Seven things Solak thinks entering NFL Week 8: WR ",
+      "Sources: Chiefs sign former Ravens kicker Justin T",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Toub: Butker still Chiefs' kicker despite struggle",
+      "Where the 2026 Vikings rank among worst 6-0 NFL te",
+      "Where the Chiefs stand on the injury front ahead o",
+      "Why is Chris Jones having a slow start to the seas"
+     ],
+     "kalshi_snap": "snap_20261101T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "c93c421e5fa46031a43162d111d981d0": "new_props: pull 2026-11-01T12:47:32.805587+00:00; injury_change: inj_Buffalo Bills",
+    "f2a036d5edf483a277880014861e78ad": "new_props: pull 2026-11-01T12:47:32.805587+00:00; injury_change: inj_Denver Broncos"
+   }
+  }
  }
 ]
