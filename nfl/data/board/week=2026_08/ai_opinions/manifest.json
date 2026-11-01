@@ -15810,5 +15810,134 @@
     "98f1b121b793977434c046e76c707145": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261101T181704Z.parquet",
+  "sha256": "60aa9bf536a6d4612607bc97eb3fd9090a30ff5cde8a4a2070ad62846d699ba2",
+  "logged_utc": "2026-11-01T18:17:04.896221+00:00",
+  "rows": 80,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.938,
+  "revised_rows": 79,
+  "oldest_source_age_min": 88.9,
+  "first_kickoff_utc": "2026-11-01T21:05:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261101T180010Z.parquet",
+   "inputs_digest": "{\"2ff84d3f6053d083c8c0a5bebf7cdd4c\": \"22d580502ca629df\"}",
+   "components": {
+    "2ff84d3f6053d083c8c0a5bebf7cdd4c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       250
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -300
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Los Angeles Chargers",
+       6.5,
+       -105
+      ],
+      [
+       "Los Angeles Rams",
+       -6.5,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.0,
+       -110
+      ],
+      [
+       "Under",
+       46.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       259
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -302
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Los Angeles Chargers",
+       6.5,
+       100
+      ],
+      [
+       "Los Angeles Rams",
+       -6.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -104
+      ],
+      [
+       "Under",
+       46.0,
+       -109
+      ]
+     ],
+     "props_ts": "2026-11-01T16:48:13.693210+00:00",
+     "inj_Los Angeles Rams": "d1a997cda675bda0",
+     "inj_Los Angeles Chargers": "66c40cfc6c50c202",
+     "news": [
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Chiefs move to 5-0 as Kenneth Walker runs for two ",
+      "Cooper Kupp's 'I scored a touchdown' story: SB LVI",
+      "Could the Rams use two kickers in Week 8?",
+      "Derwin James placed on injured reserve after hamst",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL survivor power rankings: Why this is the week ",
+      "Rams and Chargers share a city, not a rivalry as t",
+      "Rams' DE Garrett, TE Ferguson won't practice this ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "What has gone wrong for 2025 running backs? Ashton",
+      "When can the Rams expect Davante Adams to return?",
+      "Why Jeremiah Smith is a generational NFL draft rec",
+      "Winless Chargers sticking with Mike McDaniel as of",
+      "With Davante Adams out, Rams leaning on the run ga"
+     ],
+     "kalshi_snap": "snap_20261101T1805Z.parquet"
+    }
+   },
+   "triggers": {
+    "2ff84d3f6053d083c8c0a5bebf7cdd4c": "anchor_prekick"
+   }
+  }
  }
 ]
