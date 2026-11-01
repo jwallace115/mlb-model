@@ -1,12 +1,61 @@
 {
- "started_utc": "2026-11-01T14:47:03.321333+00:00",
- "finished_utc": "2026-11-01T14:47:03.676631+00:00",
+ "started_utc": "2026-11-01T15:02:04.621604+00:00",
+ "finished_utc": "2026-11-01T15:18:30.867872+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "9255ca8f32aea590d00aa57de79f6bb6",
+   "text": "anchor_morning; anchor_prekick"
+  },
+  {
+   "game": "921859689f5f8b3b8b1caf4248bdb1ec",
+   "text": "anchor_morning; anchor_prekick"
+  },
+  {
+   "game": "c93c421e5fa46031a43162d111d981d0",
+   "text": "anchor_morning; anchor_prekick"
+  },
+  {
+   "game": "9c5d8f57e0ba0fbd9ef436c1f0898f99",
+   "text": "anchor_morning; anchor_prekick"
+  },
+  {
+   "game": "ab5ab731ab655bd6308bc7a922275518",
+   "text": "anchor_morning; anchor_prekick"
+  },
+  {
+   "game": "52e7ee9c42525e6deec02da32dc2fad8",
+   "text": "anchor_morning; anchor_prekick"
+  },
+  {
+   "game": "98f1b121b793977434c046e76c707145",
+   "text": "anchor_morning; anchor_prekick"
+  },
+  {
+   "game": "2ff84d3f6053d083c8c0a5bebf7cdd4c",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "f2a036d5edf483a277880014861e78ad",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "05405af79752f5e742cdf50b61f6745e",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "b9c60db63b1a19ad319f24b33c0defe8",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "7d664fbcd39350e559d83c0068ba7169",
+   "text": "anchor_morning"
+  }
+ ],
+ "games_read": 12,
+ "frozen_file": "ai_opinions_20261101T150204Z.parquet",
+ "spend_usd": 1.6835,
+ "result": "COMPLETE"
 }
