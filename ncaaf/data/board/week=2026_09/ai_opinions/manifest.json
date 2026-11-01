@@ -17542,5 +17542,75 @@
     "1d5b8007f5249010b9c501138e25ac74": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261101T000408Z.parquet",
+  "sha256": "70e909a4feb6cc66e138e7026502ac8cfbea8b542f607296a6898cb4b272f6f8",
+  "logged_utc": "2026-11-01T00:04:08.597981+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-01T03:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261101T000015Z.parquet",
+   "inputs_digest": "{\"d0126c335a51772c70c76e17ca06afb3\": \"fe6e53f919ea8301\"}",
+   "components": {
+    "d0126c335a51772c70c76e17ca06afb3": {
+     "pinnacle_h2h": [
+      [
+       "Fresno State Bulldogs",
+       0,
+       189
+      ],
+      [
+       "Oregon State Beavers",
+       0,
+       -213
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Fresno State Bulldogs",
+       6.0,
+       -111
+      ],
+      [
+       "Oregon State Beavers",
+       -6.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -107
+      ],
+      [
+       "Under",
+       57.5,
+       -109
+      ]
+     ],
+     "news": [
+      "College football futures: Evaluating five contende",
+      "From unknown to a star, how Oregon State landed an",
+      "Week 9 has the ACC in the spotlight and backup QBs"
+     ],
+     "kalshi_snap": "snap_20261031T2337Z.parquet"
+    }
+   },
+   "triggers": {
+    "d0126c335a51772c70c76e17ca06afb3": "anchor_prekick"
+   }
+  }
  }
 ]
