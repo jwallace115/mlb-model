@@ -1,17 +1,12 @@
 {
- "started_utc": "2026-11-01T13:47:03.950281+00:00",
- "finished_utc": "2026-11-01T13:52:21.130561+00:00",
+ "started_utc": "2026-11-01T14:17:04.103870+00:00",
+ "finished_utc": "2026-11-01T14:17:04.447788+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "159dbf0253dd2038eda2212f84387f0c",
-   "text": "new_props: pull 2026-11-01T13:47:35.030773+00:00; injury_change: inj_Jacksonville Jaguars"
-  }
- ],
- "games_read": 1,
- "frozen_file": "ai_opinions_20261101T134703Z.parquet",
- "spend_usd": 1.201,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
