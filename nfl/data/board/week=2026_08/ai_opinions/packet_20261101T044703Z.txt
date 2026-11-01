@@ -1,0 +1,66 @@
+packet built 2026-11-01T04:47Z | snap snap_20261101T043004Z.parquet | props pull 2026-11-01T01:18 | kalshi snap_20261101T0435Z.parquet | injuries injuries_20261101T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: line_move: pinnacle totals Under 47.0→46.0; line_move: pinnacle totals Over 47.0→46.0
+######## Tennessee Titans @ Cincinnati Bengals  kick 11-01T18:00Z
+  HR ML: Bengals -900 / Titans +575 (no-vig home 0.859) | Pinnacle no-vig home 0.859
+  HR spread: Bengals -12.5 -110 / Titans +12.5 -110 | Pinnacle Bengals -13.0 (+102) | HR open -10.5 (20261027)
+  HR total: 46.5 O-110/U-110 | Pinnacle 46.0 O-106/U-110 | HR open 47.0
+  Kalshi ML [('Tennessee wins', 0.14, 488023), ('Cincinnati wins', 0.86, 562299)] | spread [('Cincinnati wins by over 13.5 points?', 0.47, 26331), ('Cincinnati wins by over 14.5 points?', 0.41, 1462)] | total [('Full Game: over 46.5 points scored?', 0.48, 6030), ('Full Game: over 47.5 points scored?', 0.45, 781)]
+  -- Tennessee Titans injuries (20261101T0030)
+     Acti WR Xavier Restrepo: The Titans elevated Restrepo from their practice squad to their active roster Saturday, Jim Wyatt of the Titans' official site reports.
+     Out  WR Carnell Tate: Tate (shoulder) will not play against the Bengals on Sunday but is expected to be back in action following the Titans' bye for Week 10 against the Jag
+     Out  P  Tommy Townsend: Townsend (knee) has been ruled out for Sunday's game against the Bengals, Jim Wyatt of the Titans' official site reports.
+     Ques DE John Franklin-Myers: Franklin-Myers (groin) is questionable for Sunday's game against the Bengals, Jim Wyatt of the Titans' official site reports.
+     Ques WR Calvin Ridley: Ridley (hip) is officially questionable for Sunday's matchup against Cincinnati.
+     Acti WR Elic Ayomanor: Carnell Tate (shoulder) has been ruled out for Sunday's game against the Bengals, leaving Ayomanor and Wan'Dale Robinson as the top wide receivers in 
+     Acti WR Wan'Dale Robinson: Robinson and the other pass catchers will operate in elevated roles against the Bengals on Sunday due to the absence of rookie fourth overall pick Car
+     Acti RB Tony Pollard: Pollard will have a chance to easily pace the Titans backfield against Cincinnati on Sunday due to the absence of Tyjae Spears (knee), Jim Wyatt of th
+     Out  RB Tyjae Spears: Spears (knee) has been ruled out for Sunday's game against the Bengals.
+     Ques CB Jaylon Jones: questionable
+     Acti TE Kylen Granson: 
+     Acti RB Nicholas Singleton: 
+     Acti TE Gunnar Helm: Helm caught three of four targets for 24 yards in Sunday's 27-24 loss to the Browns.
+     Acti QB Cam Ward: Ward completed 20 of 31 passes for 181 yards with an interception in Sunday's 27-24 loss to Cleveland. He added five yards on two carries.
+     Inju LB Dorian Mausi: The Titans opened Mausi's 21-day practice window Wednesday, Jim Wyatt of the team's official website reports.
+     news 10-30T04:47 How the Jeffery Simmons trade came to be
+     news 10-30T10:25 Why Jeremiah Smith is a generational NFL draft receiver prospect for 2027
+     news 10-30T15:17 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 10-30T16:04 Inside how Titans were convinced to trade their best player
+     news 10-30T16:06 Bears acquire All-Pro DT Jeffery Simmons in trade with Titans
+  -- Cincinnati Bengals injuries (20261101T0030)
+     Inju WR Andrei Iosivas: Iosivas (thumb) is making good progress in his rehab, Mike Petraglia of CLNSCincy.com reports.
+     Acti WR Ja'Marr Chase: Chase (ankle) was a full participant in Thursday's practice, Mike Petraglia of CLNSCincy.com reports.
+     Ques LB Joe Giles-Harris: questionable
+     Inju TE Erick All Jr.: Bengals head coach Zac Taylor confirmed Wednesday that All has been diagnosed with a torn ACL in his right knee and will require season-ending surgery
+     Acti WR Dohnte Meyers: Meyers failed to catch either of his two targets in Sunday's 35-13 win over the Ravens.
+     Out  S  Kyle Dugger: Dugger (quadriceps) won't play in Sunday's game against the Titans, Paul Dehner Jr. of The Athletic reports.
+     Acti TE Cam Grandy: The Bengals signed Grandy off the Vikings' practice squad Monday, Aaron Wilson of KPRC 2 Houston reports.
+     Acti TE Mike Gesicki: Gesicki caught his only target for a six-yard touchdown in Sunday's 35-13 win over the Ravens.
+     Acti RB Samaje Perine: Perine rushed four times for 16 yards and a touchdown in Sunday's 35-13 win over the Ravens.
+     Acti TE Drew Sample: Sample caught both of his targets for 24 yards and a touchdown in Sunday's 35-13 win over the Ravens.
+     Acti RB Chase Brown: Brown rushed 11 times for 39 yards and brought in four of five targets for 19 yards in the Bengals' 35-13 win over the Ravens on Sunday.
+     Acti QB Joe Burrow: Burrow completed 22 of 30 passes for 292 yards with four touchdowns and no interceptions while adding two rushes for 12 yards in the Bengals' 35-13 wi
+     Acti WR Tee Higgins: Higgins secured six of seven targets for 148 yards and a touchdown in the Bengals' 35-13 win over the Ravens on Sunday.
+     Acti WR Colbie Young: Young (knee) was not listed on the Bengals' injury report Wednesday.
+     news 10-29T17:44 Burrow, Bengals go into November with momentum as they host struggling Titans
+     news 10-30T00:01 NFL Week 8's best arrivals, led by Panthers' Bryce Young
+     news 10-30T15:17 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 10-30T18:20 Super Bowl LXI odds: All 32 teams' odds to win the championship
+     news 10-31T10:00 Joe Burrow's trust makes Tee Higgins level up for Bengals
+  -- props (pull 2026-11-01T01:18)
+     * Calvin Ridley: atd 0.5 (+525), recyd 21.5 (-120/-110), rec 1.5 (-165/+125)
+     * Cam Ward: atd 0.5 (+475), paatt 32.5 (-120/-110), cmp 19.5 (-110/-120), int 0.5 (-145/+110), patd 0.5 (-220/+160), payd 191.5 (-115/-115), ruyd 7.5 (-120/-110)
+     * Chase Brown: atd 0.5 (-155), recyd 19.5 (-115/-115), rec 3.5 (-105/-125), ruatt 14.5 (-130/+100), ruyd 58.5 (-115/-115)
+     * Daniel Bellinger: atd 0.5 (+1000), recyd 9.5 (-120/-110), rec 1.5 (+120/-160)
+     * Dohnte Meyers: atd 0.5 (+375), recyd 13.5 (-120/-110), rec 1.5 (-125/-105)
+     * Drew Sample: atd 0.5 (+500), recyd 8.5 (-115/-115), rec 1.5 (+110/-140)
+     * Elic Ayomanor: atd 0.5 (+375), recyd 32.5 (-115/-115), rec 2.5 (-145/+110)
+     * Gunnar Helm: atd 0.5 (+450), recyd 21.5 (-115/-115), rec 2.5 (-130/+100)
+     * Ja'Marr Chase: atd 0.5 (-125), recyd 81.5 (-115/-115), rec 6.5 (-125/-105)
+     * Joe Burrow: atd 0.5 (+475), paatt 34.5 (-105/-125), cmp 24.5 (-130/+100), int 0.5 (+120/-155), patd 2.5 (+125/-165), payd 272.5 (-115/-115), ruyd 5.5 (-115/-115)
+     * Mike Gesicki: atd 0.5 (+220), recyd 22.5 (-115/-115), rec 2.5 (+110/-145)
+     * Samaje Perine: atd 0.5 (+200), recyd 7.5 (-110/-120), rec 1.5 (+145/-195), ruatt 5.5 (-130/+100), ruyd 23.5 (-110/-120)
+     * Tee Higgins: atd 0.5 (-105), recyd 70.5 (-115/-115), rec 4.5 (-155/+120)
+     * Tony Pollard: atd 0.5 (+130), recyd 14.5 (-115/-115), rec 2.5 (+120/-155), ruatt 15.5 (-120/-110), ruyd 65.5 (-115/-115)
+     * Wan'Dale Robinson: atd 0.5 (+325), recyd 47.5 (-115/-115), rec 5.5 (-110/-120)
