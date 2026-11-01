@@ -16192,5 +16192,366 @@
    "props": "data_2026_11.parquet",
    "lines": "snap_20261101T183015Z.parquet"
   }
+ },
+ {
+  "file": "ai_opinions_20261101T203203Z.parquet",
+  "sha256": "3edd5dfe8003dd06748d62c48b00b52964edc0f4eb0889d7e385b9d4af1bb473",
+  "logged_utc": "2026-11-01T20:32:03.833914+00:00",
+  "rows": 80,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.938,
+  "revised_rows": 75,
+  "oldest_source_age_min": 61.9,
+  "first_kickoff_utc": "2026-11-01T21:05:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261101T203006Z.parquet",
+   "inputs_digest": "{\"2ff84d3f6053d083c8c0a5bebf7cdd4c\": \"76dc7c5773e244e6\"}",
+   "components": {
+    "2ff84d3f6053d083c8c0a5bebf7cdd4c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       250
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -300
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Los Angeles Chargers",
+       6.5,
+       -105
+      ],
+      [
+       "Los Angeles Rams",
+       -6.5,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.0,
+       -110
+      ],
+      [
+       "Under",
+       46.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       256
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -297
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Los Angeles Chargers",
+       6.5,
+       -102
+      ],
+      [
+       "Los Angeles Rams",
+       -6.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -109
+      ],
+      [
+       "Under",
+       46.0,
+       -103
+      ]
+     ],
+     "props_ts": "2026-11-01T20:32:21.152824+00:00",
+     "inj_Los Angeles Rams": "d1a997cda675bda0",
+     "inj_Los Angeles Chargers": "66c40cfc6c50c202",
+     "news": [
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Chiefs move to 5-0 as Kenneth Walker runs for two ",
+      "Cooper Kupp's 'I scored a touchdown' story: SB LVI",
+      "Could the Rams use two kickers in Week 8?",
+      "Derwin James placed on injured reserve after hamst",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL survivor power rankings: Why this is the week ",
+      "Rams and Chargers share a city, not a rivalry as t",
+      "Rams' DE Garrett, TE Ferguson won't practice this ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "What has gone wrong for 2025 running backs? Ashton",
+      "When can the Rams expect Davante Adams to return?",
+      "Why Jeremiah Smith is a generational NFL draft rec",
+      "Winless Chargers sticking with Mike McDaniel as of",
+      "With Davante Adams out, Rams leaning on the run ga"
+     ],
+     "kalshi_snap": "snap_20261101T2005Z.parquet"
+    }
+   },
+   "triggers": {
+    "2ff84d3f6053d083c8c0a5bebf7cdd4c": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261101T204703Z.parquet",
+  "sha256": "9ff815782b0f14dfd66a82510289cd97bc1f89679f4db9714366aa378fca3c29",
+  "logged_utc": "2026-11-01T20:47:03.694998+00:00",
+  "rows": 152,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.941,
+  "revised_rows": 136,
+  "oldest_source_age_min": 17.0,
+  "first_kickoff_utc": "2026-11-01T21:25:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261101T203006Z.parquet",
+   "inputs_digest": "{\"f2a036d5edf483a277880014861e78ad\": \"21c9f18b3a58c483\", \"05405af79752f5e742cdf50b61f6745e\": \"0c62547c997bae02\"}",
+   "components": {
+    "f2a036d5edf483a277880014861e78ad": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -105
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Denver Broncos",
+       1.0,
+       -110
+      ],
+      [
+       "Kansas City Chiefs",
+       -1.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       41.5,
+       -110
+      ],
+      [
+       "Under",
+       41.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -105
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       -105
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Denver Broncos",
+       1.0,
+       -114
+      ],
+      [
+       "Kansas City Chiefs",
+       -1.0,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -114
+      ],
+      [
+       "Under",
+       41.5,
+       101
+      ]
+     ],
+     "props_ts": "2026-11-01T20:32:21.152824+00:00",
+     "inj_Denver Broncos": "aa845a78b40b28a3",
+     "inj_Kansas City Chiefs": "22cc8102d940ed0e",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "AFC West lead at stake as Patrick Mahomes and Bo N",
+      "Answering 10 questions about Chiefs-Broncos showdo",
+      "Chiefs get Rashee Rice back from injury for Bronco",
+      "Chiefs move to 5-0 as Kenneth Walker runs for two ",
+      "Chiefs to sign Justin Tucker to practice squad",
+      "Denver looking for revenge against the Chiefs",
+      "J.K. Dobbins puts team success first",
+      "Justin Tucker, out of NFL since sexual misconduct ",
+      "Kyle Brandt shares his Halloween treat for Chiefs ",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Ranking the top 10 trick plays in Super Bowl histo",
+      "Sources: Chiefs sign former Ravens kicker Justin T",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Toub: Butker still Chiefs' kicker despite struggle",
+      "Where the 2026 Vikings rank among worst 6-0 NFL te",
+      "Where the Chiefs stand on the injury front ahead o",
+      "Why is Chris Jones having a slow start to the seas"
+     ],
+     "kalshi_snap": "snap_20261101T2035Z.parquet"
+    },
+    "05405af79752f5e742cdf50b61f6745e": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       275
+      ],
+      [
+       "New England Patriots",
+       0,
+       -375
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Miami Dolphins",
+       6.5,
+       100
+      ],
+      [
+       "New England Patriots",
+       -6.5,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       41.0,
+       -110
+      ],
+      [
+       "Under",
+       41.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       297
+      ],
+      [
+       "New England Patriots",
+       0,
+       -351
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami Dolphins",
+       6.5,
+       103
+      ],
+      [
+       "New England Patriots",
+       -6.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       104
+      ],
+      [
+       "Under",
+       41.5,
+       -117
+      ]
+     ],
+     "props_ts": "2026-11-01T20:32:21.152824+00:00",
+     "inj_Miami Dolphins": "faa3e8b982f7f63b",
+     "inj_New England Patriots": "78a117ec429ba122",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "A. J. Brown misses Patriots practice",
+      "Dolphins look to build momentum against defending ",
+      "How will Caleb Douglas fare against Christian Gonz",
+      "Miami Dolphins WR Caleb Douglas rounding into form",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL survivor power rankings: Why this is the week ",
+      "Patriots WR A.J. Brown (ankle, knee) listed as que",
+      "Patriots rule out A.J. Brown, TreVeyon Henderson v",
+      "Patriots' A.J. Brown misses practice Thursday due ",
+      "Patriots' starting secondary will start vs. the Do",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Ranking the top 10 trick plays in Super Bowl histo",
+      "The Patriots are 18-43 all time in Miami. Here are",
+      "What has gone wrong for 2025 running backs? Ashton",
+      "Why Jeremiah Smith is a generational NFL draft rec"
+     ],
+     "kalshi_snap": "snap_20261101T2035Z.parquet"
+    }
+   },
+   "triggers": {
+    "f2a036d5edf483a277880014861e78ad": "anchor_close",
+    "05405af79752f5e742cdf50b61f6745e": "anchor_close"
+   }
+  }
  }
 ]
