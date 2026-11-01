@@ -16574,5 +16574,147 @@
    "props": "data_2026_11.parquet",
    "lines": "snap_20261101T220009Z.parquet"
   }
+ },
+ {
+  "file": "ai_opinions_20261101T223205Z.parquet",
+  "sha256": "1b79a5aa31b3ae92cfc2d887fc44c567ef0532123a84d2a3194b3dde2c4171da",
+  "logged_utc": "2026-11-01T22:32:05.055661+00:00",
+  "rows": 68,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.941,
+  "revised_rows": 62,
+  "oldest_source_age_min": 181.9,
+  "first_kickoff_utc": "2026-11-02T01:20:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261101T223009Z.parquet",
+   "inputs_digest": "{\"b9c60db63b1a19ad319f24b33c0defe8\": \"5c5ded9bacfef72e\"}",
+   "components": {
+    "b9c60db63b1a19ad319f24b33c0defe8": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Philadelphia Eagles",
+       0,
+       225
+      ],
+      [
+       "Washington Commanders",
+       0,
+       -275
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Philadelphia Eagles",
+       5.5,
+       -105
+      ],
+      [
+       "Washington Commanders",
+       -5.5,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.0,
+       -110
+      ],
+      [
+       "Under",
+       40.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Philadelphia Eagles",
+       0,
+       216
+      ],
+      [
+       "Washington Commanders",
+       0,
+       -247
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Philadelphia Eagles",
+       6.0,
+       -110
+      ],
+      [
+       "Washington Commanders",
+       -6.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -103
+      ],
+      [
+       "Under",
+       40.5,
+       -109
+      ]
+     ],
+     "props_ts": "2026-11-01T16:48:13.693210+00:00",
+     "inj_Washington Commanders": "d4faad8407554da7",
+     "inj_Philadelphia Eagles": "50a21086a473bd38",
+     "news": [
+      "2026 NFL trade deadline updates: DeForest Buckner,",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline: Ranking the top 25 candid",
+      "2027 NFL draft order projections for Round 1, chan",
+      "A lot on the line for Commanders in matchup vs. Ea",
+      "Commanders and Eagles head into 'Sunday Night Foot",
+      "Commanders excited about WR Antonio Williams",
+      "Eagles star Saquon Barkley says he was forced to d",
+      "Eagles' Saquon Barkley carries no injury designati",
+      "Fantasy football buzz: Despite win, can you trust ",
+      "Fantasy football buzz: Starters on bye? Finish you",
+      "Fantasy football buzz: Vikings defensive dilemma? ",
+      "Fantasy football buzz: Week 8 streaming picks, Pay",
+      "How does loss of Daron Payne affect Commanders?",
+      "How to bet Eagles-Commanders: Analysis, tips and t",
+      "Jayden Daniels focusing on faster operation at the",
+      "Makai Lemon emerging as a bright spot for Eagles",
+      "Michael Vick's iconic MNF game is now in the ESPN ",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: DeForest Buckner, Quent",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Ranking the top 10 trick plays in Super Bowl histo",
+      "Saquon Barkley feeling good about his health",
+      "Saquon Barkley hopes to play Sunday vs. Commanders",
+      "Source: Commanders DT Daron Payne suffered season-",
+      "Sources: Commanders' Daron Payne likely IR-bound a",
+      "Sources: Saquon Barkley won't be traded by deadlin",
+      "Where Sonny Styles wants to improve his game",
+      "Why Commanders believe they aren't done yet in the"
+     ],
+     "kalshi_snap": "snap_20261101T2205Z.parquet"
+    }
+   },
+   "triggers": {
+    "b9c60db63b1a19ad319f24b33c0defe8": "anchor_prekick"
+   }
+  }
  }
 ]

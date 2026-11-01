@@ -1,0 +1,71 @@
+packet built 2026-11-01T22:32Z | snap snap_20261101T223009Z.parquet | props pull 2026-11-01T19:30 | kalshi snap_20261101T2205Z.parquet | injuries injuries_20261101T1830Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: anchor_prekick
+######## Philadelphia Eagles @ Washington Commanders  kick 11-02T01:20Z
+  HR ML: Commanders -275 / Eagles +225 (no-vig home 0.704) | Pinnacle no-vig home 0.692
+  HR spread: Commanders -5.5 -115 / Eagles +5.5 -105 | Pinnacle Commanders -6.0 (+100) | HR open -4.5 (20261027)
+  HR total: 40 O-110/U-110 | Pinnacle 40.5 O-103/U-109 | HR open 40.5
+  Kalshi ML [('Washington wins', 0.7, 181012), ('Philadelphia wins', 0.29, 683116)] | spread [('Washington wins by over 5.5 points?', 0.52, 809515), ('Washington wins by over 6.5 points?', 0.46, 54403)] | total [('Full Game: over 40.5 points scored?', 0.49, 356883), ('Full Game: over 39.5 points scored?', 0.53, 37835)]
+  -- Philadelphia Eagles injuries (20261101T1830)
+     Acti RB Saquon Barkley: The Eagles aren't expected to move Barkley ahead of the Nov. 10 trade deadline, Mike Garafolo of NFL Network reports.
+     Inju CB Jakorian Bennett: Bennett (knee) has been ruled out for Sunday's game against the Commanders.
+     Acti RB Elijah Mitchell: The Eagles elevated Mitchell from the practice squad to the active roster Saturday.
+     Out  LB Jihaad Campbell: Campbell (hamstring/quadriceps) has been ruled out for Sunday's game against Washington.
+     Out  WR Britain Covey: Covey (knee) has been ruled out for Sunday's game against the Commanders.
+     Acti WR Makai Lemon: Lemon will be the Eagles' top wide receiver for a second consecutive game Sunday at Washington due to the absences of both DeVonta Smith (hamstring) a
+     Out  WR Dontayvion Wicks: Wicks (ankle) has been ruled out for Sunday night's game against the Commanders.
+     Out  WR DeVonta Smith: Smith (hamstring) is listed as out for Sunday night's game against the Commanders.
+     Out  CB Jonathan Jones: out
+     Acti RB Jaydon Blue: The Eagles signed Blue from the practice squad to the active roster Wednesday.
+     Inju RB Dameon Pierce: The Eagles placed Pierce (undisclosed) on injured reserve Wednesday
+     Acti WR Elijah Moore: Moore caught both of his targets for 16 yards during Monday's 38-21 loss to the Cowboys.
+     Acti TE Eli Stowers: Stowers failed to haul in his lone target during Monday's 38-21 loss to Dallas.
+     Acti WR Darius Cooper: Cooper caught one of three passes for 17 yards during the Eagles' 38-21 loss to the Cowboys on Monday.
+     news 10-30T21:13 Eagles' Saquon Barkley carries no injury designation for Commanders matchup
+     news 11-01T11:00 Ranking the top 10 trick plays in Super Bowl history
+     news 11-01T11:30 How to bet Eagles-Commanders: Analysis, tips and top prop plays
+     news 11-01T14:35 Sources: Saquon Barkley won't be traded by deadline despite Eagles' struggles
+     news 11-01T17:05 NFL Week 8's best arrivals, led by Vikings' Kyler Murray
+  -- Washington Commanders injuries (20261101T1830)
+     Ques WR Treylon Burks: Burks (foot), who is listed as questionable for Sunday's game against the Eagles, is expected to play, Adam Schefter of ESPN reports.
+     Inju DT Jer'Zhan Newton: Newton (pectoral) has been ruled out for Sunday's game against the Eagles.
+     Out  DT Daron Payne: Payne suffered a season-ending Jones fracture during practice Friday, Adam Schefter of ESPN reports.
+     Out  DT Javon Kinlaw: Kinlaw (knee) has been ruled out for Sunday's game against the Eagles.
+     Ques TE John Bates: Bates (shoulder) is listed as questionable for Sunday's game against the Eagles.
+     Inju WR Terry McLaurin: McLaurin (knee) underwent surgery Friday to repair the torn patellar tendon in his left knee, Nicki Jhabvala of The Athletic reports.
+     Acti WR Stefon Diggs: Diggs (hand/hamstring) was a full practice participant Thursday.
+     Inju OT Laremy Tunsil: Tunsil (triceps) could potentially return late in the season, Nicki Jhabvala of The Athletic reports.
+     Acti WR Van Jefferson: The Commanders signed Jefferson to the active roster Wednesday, Zach Selby of the team's official site reports.
+     Acti QB Marcus Mariota: Mariota (knee) was a full participant in Wednesday's practice.
+     Acti WR Antonio Williams: Coach Dan Quinn noted Monday that with Terry McLaurin (knee) out for the season, Stefon Diggs' workload isn't expected to change much, however others,
+     Inju WR Jaylin Lane: Lane underwent surgery Oct. 9 to repair his fractured and dislocated ankle, and he is expected to be cleared for activities before OTAs, Tashan Reed o
+     Acti RB Austin Ekeler: Ekeler logged a three-yard carry and caught both of his targets for four yards during the Commanders' 23-17 loss to the 49ers on Monday.
+     Acti WR Dyami Brown: Brown hauled in his only target for six yards during Monday's 23-17 loss versus San Francisco.
+     Acti RB Jeremy McNichols: McNichols accrued five rushes for 13 yards during Monday's 23-17 loss to the 49ers.
+     Ques DE Charles Omenihu: questionable
+     Acti TE Chig Okonkwo: Okonkwo brought in all seven targets for 69 yards in the Commanders' 23-17 loss to the 49ers on Monday night.
+     Acti RB Rachaad White: White rushed seven times for 27 yards and brought in four of five targets for 30 yards and a touchdown in the Commanders' 23-17 loss to the 49ers on M
+     news 10-31T00:05 Sources: Commanders' Daron Payne likely IR-bound after practice injury
+     news 10-31T20:12 Source: Commanders DT Daron Payne suffered season-ending foot injury
+     news 10-31T22:36 How does loss of Daron Payne affect Commanders?
+     news 11-01T11:30 How to bet Eagles-Commanders: Analysis, tips and top prop plays
+     news 11-01T17:05 NFL Week 8's best arrivals, led by Vikings' Kyler Murray
+  -- props (pull 2026-11-01T19:30)
+     * Antonio Williams: atd 0.5 (+325), recyd 37.5 (-115/-115), rec 3.5 (+125/-165)
+     * Austin Ekeler: atd 0.5 (+525)
+     * Chig Okonkwo: atd 0.5 (+275), recyd 33.5 (-115/-115), rec 3.5 (+110/-140)
+     * Dallas Goedert: atd 0.5 (+250), recyd 45.5 (-115/-115), rec 4.5 (-155/+120)
+     * Darius Cooper: atd 0.5 (+450), recyd 26.5 (-115/-115), rec 2.5 (-110/-120)
+     * Dyami Brown: atd 0.5 (+525), recyd 12.5 (-115/-115), rec 1.5 (+125/-165)
+     * Elijah Mitchell: atd 0.5 (+425), ruyd 29.5 (-110/-120)
+     * Hollywood Brown: atd 0.5 (+600), recyd 22.5 (-115/-115), rec 1.5 (-175/+130)
+     * Jayden Daniels: atd 0.5 (+210), paatt 29.5 (-110/-120), cmp 18.5 (-105/-125), int 0.5 (+155/-210), patd 1.5 (+120/-155), payd 200.5 (-115/-115), ruatt 6.5 (-130/+100), ruyd 36.5 (-115/-115)
+     * Jaydon Blue: atd 0.5 (+700)
+     * Jeremy McNichols: atd 0.5 (+350), ruyd 18.5 (-120/-110)
+     * Makai Lemon: atd 0.5 (+300), recyd 43.5 (-115/-115), rec 4.5 (-120/-110)
+     * Rachaad White: atd 0.5 (+120), recyd 12.5 (-115/-115), rec 2.5 (+110/-140), ruatt 11.5 (-115/-115), ruyd 42.5 (-115/-115)
+     * Saquon Barkley: atd 0.5 (+165), recyd 12.5 (-115/-115), rec 2.5 (+130/-175), ruatt 11.5 (-110/-120), ruyd 45.5 (-115/-115)
+     * Stefon Diggs: atd 0.5 (+195), recyd 42.5 (-115/-115), rec 4.5 (+125/-165)
+     * Tanner McKee: atd 0.5 (+1100), paatt 33.5 (-115/-115), cmp 19.5 (-125/-105), int 0.5 (-165/+125), patd 0.5 (-240/+170), payd 204.5 (-115/-115), ruyd 0.5 (-110/-120)
+     * Treylon Burks: atd 0.5 (+425), recyd 21.5 (-115/-115), rec 1.5 (-120/-110)
