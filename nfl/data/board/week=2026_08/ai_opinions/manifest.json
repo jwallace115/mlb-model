@@ -15939,5 +15939,258 @@
     "2ff84d3f6053d083c8c0a5bebf7cdd4c": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261101T183208Z.parquet",
+  "sha256": "cdecb32f49220a870b4273b65c0f053a0655172d22288825e24663d243a35f0e",
+  "logged_utc": "2026-11-01T18:32:08.426033+00:00",
+  "rows": 155,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.948,
+  "revised_rows": 149,
+  "oldest_source_age_min": 152.0,
+  "first_kickoff_utc": "2026-11-01T21:25:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261101T183015Z.parquet",
+   "inputs_digest": "{\"f2a036d5edf483a277880014861e78ad\": \"0701fafdebf62f31\", \"05405af79752f5e742cdf50b61f6745e\": \"8d2721644a8eb6c0\"}",
+   "components": {
+    "f2a036d5edf483a277880014861e78ad": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -105
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Denver Broncos",
+       1.0,
+       -110
+      ],
+      [
+       "Kansas City Chiefs",
+       -1.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       41.5,
+       -110
+      ],
+      [
+       "Under",
+       41.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -105
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       -105
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Denver Broncos",
+       1.0,
+       -114
+      ],
+      [
+       "Kansas City Chiefs",
+       -1.0,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -114
+      ],
+      [
+       "Under",
+       41.5,
+       101
+      ]
+     ],
+     "props_ts": "2026-11-01T16:48:13.693210+00:00",
+     "inj_Denver Broncos": "aa845a78b40b28a3",
+     "inj_Kansas City Chiefs": "22cc8102d940ed0e",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "AFC West lead at stake as Patrick Mahomes and Bo N",
+      "Answering 10 questions about Chiefs-Broncos showdo",
+      "Chiefs get Rashee Rice back from injury for Bronco",
+      "Chiefs move to 5-0 as Kenneth Walker runs for two ",
+      "Chiefs to sign Justin Tucker to practice squad",
+      "Denver looking for revenge against the Chiefs",
+      "J.K. Dobbins puts team success first",
+      "Justin Tucker, out of NFL since sexual misconduct ",
+      "Kyle Brandt shares his Halloween treat for Chiefs ",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 latest intel, buzz questions, news, fan",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Ranking the top 10 trick plays in Super Bowl histo",
+      "Sources: Chiefs sign former Ravens kicker Justin T",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Toub: Butker still Chiefs' kicker despite struggle",
+      "Where the 2026 Vikings rank among worst 6-0 NFL te",
+      "Where the Chiefs stand on the injury front ahead o",
+      "Why is Chris Jones having a slow start to the seas"
+     ],
+     "kalshi_snap": "snap_20261101T1805Z.parquet"
+    },
+    "05405af79752f5e742cdf50b61f6745e": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       275
+      ],
+      [
+       "New England Patriots",
+       0,
+       -375
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Miami Dolphins",
+       7.0,
+       -115
+      ],
+      [
+       "New England Patriots",
+       -7.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       41.0,
+       -110
+      ],
+      [
+       "Under",
+       41.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       302
+      ],
+      [
+       "New England Patriots",
+       0,
+       -358
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami Dolphins",
+       6.5,
+       105
+      ],
+      [
+       "New England Patriots",
+       -6.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       105
+      ],
+      [
+       "Under",
+       41.5,
+       -118
+      ]
+     ],
+     "props_ts": "2026-11-01T07:02:40.932213+00:00",
+     "inj_Miami Dolphins": "faa3e8b982f7f63b",
+     "inj_New England Patriots": "78a117ec429ba122",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "A. J. Brown misses Patriots practice",
+      "Dolphins look to build momentum against defending ",
+      "How will Caleb Douglas fare against Christian Gonz",
+      "Miami Dolphins WR Caleb Douglas rounding into form",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL survivor power rankings: Why this is the week ",
+      "Patriots WR A.J. Brown (ankle, knee) listed as que",
+      "Patriots rule out A.J. Brown, TreVeyon Henderson v",
+      "Patriots' A.J. Brown misses practice Thursday due ",
+      "Patriots' starting secondary will start vs. the Do",
+      "Ranking the best 2026 NFL rookies: Arvell Reese, D",
+      "Ranking the top 10 trick plays in Super Bowl histo",
+      "The Patriots are 18-43 all time in Miami. Here are",
+      "What has gone wrong for 2025 running backs? Ashton",
+      "Why Jeremiah Smith is a generational NFL draft rec"
+     ],
+     "kalshi_snap": "snap_20261101T1805Z.parquet"
+    }
+   },
+   "triggers": {
+    "f2a036d5edf483a277880014861e78ad": "anchor_prekick",
+    "05405af79752f5e742cdf50b61f6745e": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261101T185452Z.parquet",
+  "sha256": "1e7320ea41e4810911d2af0390a64f7bdab53795f643281745cf968c86a78f52",
+  "logged_utc": "2026-11-01T18:54:52.772716+00:00",
+  "rows": 235,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "reader_v3b",
+  "pilot": false,
+  "window": "prekick",
+  "games": 3,
+  "no_view_share": 0.37,
+  "revised_rows": 0,
+  "oldest_source_age_min": 174.7,
+  "first_kickoff_utc": "2026-11-01T21:05:00Z",
+  "reader_sha256": "a413d38af2157fcb8a04c1d71cbc17a791cdadaa375e6ec3da56b1e616ba6bfd",
+  "inputs": {
+   "props": "data_2026_11.parquet",
+   "lines": "snap_20261101T183015Z.parquet"
+  }
  }
 ]
