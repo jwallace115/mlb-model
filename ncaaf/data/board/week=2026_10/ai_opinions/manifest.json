@@ -135,5 +135,116 @@
     "657053f4734af94664beb750813257bb": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261102T150404Z.parquet",
+  "sha256": "a1ea3e6c70c17e089a12e69921a3db5c4d54cf9ce0d0b1c340481490df16b4be",
+  "logged_utc": "2026-11-02T15:04:04.690216+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 6,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-04T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261102T150010Z.parquet",
+   "inputs_digest": "{\"c0ddb68355a79fb70194e95b75c037ca\": \"e0e26e8e294aa56d\", \"657053f4734af94664beb750813257bb\": \"f7d0f8d79efe18ae\"}",
+   "components": {
+    "c0ddb68355a79fb70194e95b75c037ca": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       391
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -527
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       13.0,
+       -102
+      ],
+      [
+       "Ohio Bobcats",
+       -13.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -111
+      ],
+      [
+       "Under",
+       51.0,
+       -107
+      ]
+     ],
+     "news": [
+      "Ohio visits Akron in MAC play"
+     ],
+     "kalshi_snap": "snap_20261102T1507Z.parquet"
+    },
+    "657053f4734af94664beb750813257bb": {
+     "pinnacle_h2h": [
+      [
+       "Buffalo Bulls",
+       0,
+       204
+      ],
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -244
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Buffalo Bulls",
+       6.5,
+       -107
+      ],
+      [
+       "Miami (OH) RedHawks",
+       -6.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -112
+      ],
+      [
+       "Under",
+       44.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Miami (OH) hosts Buffalo in MAC action"
+     ],
+     "kalshi_snap": "snap_20261102T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "c0ddb68355a79fb70194e95b75c037ca": "anchor_morning",
+    "657053f4734af94664beb750813257bb": "anchor_morning"
+   }
+  }
  }
 ]
