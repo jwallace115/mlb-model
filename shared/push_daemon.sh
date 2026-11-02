@@ -98,7 +98,6 @@ if ! git pull --rebase --autostash origin main >> "$LOG" 2>&1; then
         exit 1
     fi
 fi
-fi
 
 # Check for incoming code changes (from MacBook deploys)
 BEFORE_HASH=$(git rev-parse HEAD)
