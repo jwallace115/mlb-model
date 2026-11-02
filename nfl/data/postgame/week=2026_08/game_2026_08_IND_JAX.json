@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_08_IND_JAX",
+  "week": 8,
+  "home": "JAX",
+  "away": "IND",
+  "final_score": {
+    "home": 42,
+    "away": 7
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 157,
+      "plays_leading_14": 157,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 42,
+        "away": 7
+      },
+      "garbage_time_plays": 36
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 157,
+      "plays_trailing_14": 157,
+      "halftime_score": {
+        "home": 42,
+        "away": 7
+      },
+      "garbage_time_plays": 36
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 53,
+      "dropbacks": 20,
+      "rush_attempts": 33,
+      "pass_rate": 0.37735849056603776,
+      "run_rate": 0.6226415094339622,
+      "pass_oe": -15.389083408647114
+    },
+    "away": {
+      "plays": 60,
+      "dropbacks": 34,
+      "rush_attempts": 26,
+      "pass_rate": 0.5666666666666667,
+      "run_rate": 0.43333333333333335,
+      "pass_oe": -2.132997169332989
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 2,
+      "fumbles_lost": 1,
+      "total": 3
+    }
+  },
+  "non_offensive_tds": 1,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 2,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Taylor",
+      "team": "IND",
+      "quarter": 2,
+      "play_id": 1282,
+      "desc": "(9:11) (Shotgun) 28-J.Taylor FUMBLES (Aborted) at JAX 49, RECOVERED by JAX-57-Bry.Thomas at 50. JAX-52-D.Hamilton was injured during the play."
+    },
+    {
+      "player": "D.Burks",
+      "team": "IND",
+      "quarter": 3,
+      "play_id": 2391,
+      "desc": "(12:00) (Shotgun) 17-D.Jones pass short right to 80-D.Burks to IND 41 for 2 yards (44-T.Walker; 23-F.Oluokun). JAX-44-T.Walker was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

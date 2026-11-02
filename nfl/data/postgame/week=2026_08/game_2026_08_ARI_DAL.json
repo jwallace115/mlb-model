@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_08_ARI_DAL",
+  "week": 8,
+  "home": "DAL",
+  "away": "ARI",
+  "final_score": {
+    "home": 30,
+    "away": 33
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 30,
+        "away": 33
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 30,
+        "away": 33
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": true
+  },
+  "volume": {
+    "home": {
+      "plays": 72,
+      "dropbacks": 33,
+      "rush_attempts": 39,
+      "pass_rate": 0.4583333333333333,
+      "run_rate": 0.5416666666666667,
+      "pass_oe": -2.8129306762185817
+    },
+    "away": {
+      "plays": 78,
+      "dropbacks": 51,
+      "rush_attempts": 27,
+      "pass_rate": 0.6538461538461539,
+      "run_rate": 0.34615384615384615,
+      "pass_oe": -1.588303844134013
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 6,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 6,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Williams",
+      "team": "DAL",
+      "quarter": 1,
+      "play_id": 809,
+      "desc": "(3:06) 77-B.Jones reported in as eligible. 4-D.Prescott pass short right to 33-J.Williams to ARI 4 for 1 yard (16-M.Melton). ARI-16-M.Melton was injured during the play. ** Injury Update: DAL-87-J.Fer"
+    },
+    {
+      "player": "J.Love",
+      "team": "ARI",
+      "quarter": 1,
+      "play_id": 1039,
+      "desc": "(:32) 4-J.Love left guard to DAL 47 for 3 yards (50-S.James; 1-P.Locke). ARI-4-J.Love was injured during the play."
+    },
+    {
+      "player": "Z.Knight",
+      "team": "ARI",
+      "quarter": 2,
+      "play_id": 2144,
+      "desc": "(:21) (Shotgun) 7-J.Brissett pass short middle to 20-Z.Knight to ARI 46 for 10 yards (2-C.Durant, 0-D.Overshown). FUMBLES (0-D.Overshown), RECOVERED by DAL-99-L.Overton at ARI 47. ARI-20-Z.Knight was "
+    },
+    {
+      "player": "G.Minshew",
+      "team": "ARI",
+      "quarter": 4,
+      "play_id": 4233,
+      "desc": "(2:23) (No Huddle, Shotgun) 15-G.Minshew pass incomplete deep middle to 82-R.Virgil. ARI-82-R.Virgil was injured during the play. PENALTY on DAL-7-R.Gary, Roughing the Passer, 15 yards, enforced at DA"
+    },
+    {
+      "player": "T.Allgeier",
+      "team": "ARI",
+      "quarter": 5,
+      "play_id": 5098,
+      "desc": "(4:34) 22-T.Allgeier up the middle to DAL 28 for 3 yards (1-P.Locke; 0-D.Overshown). DAL-1-P.Locke was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

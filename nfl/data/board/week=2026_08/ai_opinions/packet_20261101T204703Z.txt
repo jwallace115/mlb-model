@@ -1,0 +1,139 @@
+packet built 2026-11-01T20:47Z | snap snap_20261101T203006Z.parquet | props pull 2026-11-01T20:32 | kalshi snap_20261101T2035Z.parquet | injuries injuries_20261101T1830Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: anchor_close
+######## Kansas City Chiefs @ Denver Broncos  kick 11-01T21:25Z
+  HR ML: Broncos -105 / Chiefs -115 (no-vig home 0.489) | Pinnacle no-vig home 0.5
+  HR spread: Broncos +1 -110 / Chiefs -1 -110 | Pinnacle Broncos 1.0 (-114) | HR open 1.5 (20261027)
+  HR total: 41.5 O-110/U-110 | Pinnacle 41.5 O-114/U+101 | HR open 41.0
+  Kalshi ML [('Kansas City wins', 0.51, 821449), ('Denver wins', 0.49, 613379)] | spread [('Kansas City wins by over 1.5 points?', 0.47, 377710), ('Kansas City wins by over 2.5 points?', 0.45, 15409)] | total [('Full Game: over 41.5 points scored?', 0.52, 359504), ('Full Game: over 42.5 points scored?', 0.47, 192040)]
+  -- Kansas City Chiefs injuries (20261101T1830)
+     Out  CB Mansoor Delane: Delane (shoulder) has been downgraded from questionable to out for Sunday's game against the Broncos.
+     Inju CB L'Jarius Sneed: The Chiefs placed Sneed (knee) on injured reserve Saturday.
+     Acti WR Xavier Worthy: Rashee Rice (knee/hamstring) has no injury designation for Sunday's game against the Broncos, so Worthy will move back into his WR2 role for Week 8.
+     Acti TE Travis Kelce: Kelce (ankle) doesn't have an injury designation for Sunday's game against the Broncos.
+     Acti WR Rashee Rice: Rice (hamstring) will play in Sunday's game against the Broncos, Matt McMullen of the Chiefs' official website reports.
+     Out  DT Omarr Norman-Lott: The Chiefs designated Norman-Lott (knee) to return from injured reserve Wednesday.
+     Acti WR Cyrus Allen: Chiefs head coach Andy Reid said Wednesday that Allen will "get a little bit more [snaps]" during Sunday's game against the Broncos, Nate Taylor of ES
+     Acti WR Andrew Armstrong: Armstrong caught one of two targets for three yards during Sunday night's 20-3 loss to Seattle.
+     Acti TE Noah Gray: Gray caught three passes on as many targets for 44 yards during Sunday's 20-3 loss to the Seahawks.
+     Acti RB Emmett Johnson: Johnson caught two of three passes for 17 yards and returned three kickoffs for 81 yards during Sunday's 20-3 loss to the Seahawks. He also added two 
+     Acti QB Patrick Mahomes: Mahomes completed 19 of 33 passes for 165 yards, no touchdowns and one interception in Sunday's 20-3 loss to the Seahawks. He added two rushing attemp
+     Acti RB Kenneth Walker III: Walker rushed 14 times for 36 yards while catching four of five targets for 21 yards in Sunday's 20-3 loss to the Seahawks.
+     Acti QB Garrett Nussmeier: Nussmeier (coach's decision) is inactive as the emergency third quarterback for Sunday night's game against the Seahawks.
+     Inju RB Brashard Smith: The Chiefs placed Smith (hamstring) on injured reserve Saturday.
+     news 10-30T18:20 Super Bowl LXI odds: All 32 teams' odds to win the championship
+     news 10-30T19:53 Chiefs get Rashee Rice back from injury for Broncos game
+     news 10-31T06:23 Where the Chiefs stand on the injury front ahead of Broncos matchup
+     news 11-01T11:00 Ranking the top 10 trick plays in Super Bowl history
+     news 11-01T17:05 NFL Week 8's best arrivals, led by Vikings' Kyler Murray
+  -- Denver Broncos injuries (20261101T1830)
+     Ques WR Jaylen Waddle: Waddle (chest) is trending in a positive direction for Sunday's game against the Chiefs, Ian Rapoport of NFL Network reports.
+     Acti RB Cody Schrader: The Broncos elevated Schrader from the practice squad to the active roster Saturday, Zac Stevens of TheDNVR.com reports.
+     Inju RB RJ Harvey: The Broncos placed Harvey (knee) on injured reserve Saturday, Ian Rapoport of NFL Network reports.
+     Ques DE Zach Allen: Allen (hamstring) is questionable for Sunday's game against the Chiefs.
+     Out  S  Talanoa Hufanga: Hufanga (ankle) has been ruled out for Sunday's matchup against Kansas City.
+     Ques S  Brandon Jones: Jones (hamstring) is listed as questionable for Sunday's game against the Chiefs.
+     Acti RB J.K. Dobbins: Dobbins and Jonah Coleman will lead the Broncos' backfield against the Chiefs on Sunday due to the absence of RJ Harvey (knee), Eric DiLalla of the Br
+     Acti RB Jonah Coleman: Coleman said Friday that he'll be ready for a larger role if that's what the team needs in the absence of RJ Harvey, who has been ruled out for Sunday
+     Acti WR Marvin Mims Jr.: Mims (ankle) practiced fully Thursday,Zac Stevens of TheDNVR.com reports.
+     Ques OT Garett Bolles: questionable
+     Acti TE Evan Engram: Engram caught one of three targets for two yards during Sunday's 30-16 win over the Cardinals.
+     Acti WR Troy Franklin: Franklin failed to bring in either of his two targets in the Broncos' 30-16 win over the Cardinals on Sunday.
+     Acti TE Dallen Bentley: 
+     Acti WR Courtland Sutton: Sutton caught three of five targets for 45 yards during Sunday's 30-16 win over Arizona.
+     Acti QB Bo Nix: Nix completed 15 of 29 passes for 222 yards and a touchdown while rushing seven times for 73 yards and a touchdown in Sunday's 30-16 win over the Card
+     Acti QB Sam Ehlinger: Ehlinger (coach's decision) is inactive but will serve as the emergency third quarterback in Sunday's game against the Cardinals, Aric DiLalla of the 
+     Inju RB Tyler Badie: The Broncos placed Badie (thumb) on injured reserve Saturday, Aric DiLalla of the team's official site reports.
+     Inju LB Jonah Elliss: The Broncos placed Elliss (ankle) on injured reserve Saturday, Aric DiLalla of the team's official site reports.
+     news 10-30T19:53 Chiefs get Rashee Rice back from injury for Broncos game
+     news 10-30T21:25 Denver looking for revenge against the Chiefs
+     news 10-31T10:58 Where the 2026 Vikings rank among worst 6-0 NFL teams ever
+     news 11-01T11:00 Ranking the top 10 trick plays in Super Bowl history
+     news 11-01T17:05 NFL Week 8's best arrivals, led by Vikings' Kyler Murray
+  -- props (pull 2026-11-01T20:32)
+     * Bo Nix: atd 0.5 (+450), paatt 33.5 (-110/-120), cmp 20.5 (-120/-110), int 0.5 (+100/-130), patd 1.5 (+170/-240), payd 209.5 (-115/-115), ruatt 4.5 (+100/-130), ruyd 15.5 (-110/-120)
+     * Courtland Sutton: atd 0.5 (+240), recyd 35.5 (-110/-120), rec 3.5 (+115/-150)
+     * Cyrus Allen: atd 0.5 (+1300), recyd 0.5 (-115/-115), rec 0.5 (-110/-120)
+     * Emmett Johnson: atd 0.5 (+800), recyd 7.5 (-110/-120), rec 1.5 (+130/-175), ruyd 7.5 (-115/-115)
+     * Evan Engram: atd 0.5 (+450), recyd 24.5 (-115/-115), rec 2.5 (-120/-110)
+     * J.K. Dobbins: atd 0.5 (+195), ruatt 9.5 (-105/-125), ruyd 30.5 (-115/-115)
+     * Jalen Royals: atd 0.5 (+650)
+     * Jaylen Waddle: atd 0.5 (+275), recyd 40.5 (-115/-115), rec 3.5 (-145/+110)
+     * Jonah Coleman: atd 0.5 (+180), recyd 20.5 (-120/-110), rec 3.5 (+130/-170), ruatt 11.5 (-110/-120), ruyd 42.5 (-115/-115)
+     * Kenneth Walker III: atd 0.5 (-135), recyd 19.5 (-110/-120), rec 2.5 (-170/+130), ruatt 19.5 (-110/-120), ruyd 87.5 (-115/-115)
+     * Marvin Mims Jr.: atd 0.5 (+550), recyd 16.5 (-110/-120), rec 1.5 (-155/+120)
+     * Noah Gray: atd 0.5 (+700), recyd 14.5 (-120/-110), rec 1.5 (-115/-115)
+     * Patrick Mahomes: atd 0.5 (+525), paatt 33.5 (-115/-115), cmp 20.5 (-120/-110), int 0.5 (-115/-115), patd 1.5 (+135/-180), payd 222.5 (-115/-115), ruatt 3.5 (+120/-150), ruyd 13.5 (-120/-110)
+     * Rashee Rice: atd 0.5 (+240), recyd 48.5 (-115/-115), rec 4.5 (-105/-125)
+     * Travis Kelce: atd 0.5 (+260), recyd 47.5 (-115/-115), rec 4.5 (+110/-140)
+     * Troy Franklin: atd 0.5 (+550), recyd 13.5 (-115/-115), rec 1.5 (-105/-125)
+     * Xavier Worthy: atd 0.5 (+275), recyd 29.5 (-115/-115), rec 3.5 (+115/-150)
+
+  WHAT CHANGED: anchor_close
+######## New England Patriots @ Miami Dolphins  kick 11-01T21:25Z
+  HR ML: Dolphins +275 / Patriots -375 (no-vig home 0.252) | Pinnacle no-vig home 0.245
+  HR spread: Dolphins +6.5 +100 / Patriots -6.5 -120 | Pinnacle Dolphins 6.5 (+103) | HR open 7.5 (20261027)
+  HR total: 41 O-110/U-110 | Pinnacle 41.5 O+104/U-117 | HR open 44.5
+  Kalshi ML [('New England wins', 0.76, 978547), ('Miami wins', 0.23, 449105)] | spread [('New England wins by over 6.5 points?', 0.54, 1724424), ('New England wins by over 7.5 points?', 0.46, 546419)] | total [('Full Game: over 41.5 points scored?', 0.48, 365834), ('Full Game: over 42.5 points scored?', 0.46, 893613)]
+  -- New England Patriots injuries (20261101T1830)
+     Inju OT Marcus Bryant: Bryant (ankle) has been ruled out for Sunday's game against the Dolphins, Mike Kadlick of CLNSMedia.com reports.
+     Acti WR Ryan Miller: The Patriots elevated Miller from the practice squad to the active roster Saturday, Mike Reiss of ESPN.com reports.
+     Acti RB Lan Larison: The Patriots signed Larison off the practice squad to the active roster Saturday, Mike Reiss of ESPN.com reports.
+     Out  RB TreVeyon Henderson: Henderson (illness) has been downgraded from questionable to out for Sunday's game against the Dolphins, Ian Rapoport of ESPN and NFL Network reports.
+     Out  WR A.J. Brown: Brown (knee/ankle) has been ruled out for Sunday's game against the Dolphins, Ian Rapoport of ESPN and NFL Network reports.
+     Ques CB Carlton Davis III: Davis (neck) is questionable for Sunday's Week 8 contest in Miami.
+     Ques LB Christian Elliss: Elliss (chest) is listed as questionable against the Dolphins on Sunday.
+     Acti QB Behren Morton: 
+     Acti WR Kyle Williams: Williams returned two kickoffs for 47 yards and failed to haul in his lone target during the Patriots' 30-24 loss to the Bears on Thursday.
+     Acti RB Corey Kiner: Kiner rushed four times for 13 yards in Thursday's Week 7 loss to Chicago. He also returned four kickoffs for 102 yards.
+     Acti TE Eli Raridon: Raridon caught three of four targets for 56 yards and a touchdown in Thursday's Week 7 loss to the Bears.
+     Acti WR Efton Chism III: Chism caught his sole target for 16 yards in the Patriots' 30-24 loss to the Bears on Thursday.
+     Acti WR DeMario Douglas: Douglas caught three of his four targets for 23 yards in the Patriots' 30-24 loss to the Bears on Thursday.
+     Acti TE Hunter Henry: Henry secured all seven targets for 71 yards in the Patriots' 30-24 loss to the Bears on Thursday.
+     Acti RB Rhamondre Stevenson: Stevenson rushed six times for 22 yards and brought in all five targets for 93 yards and a touchdown in the Patriots' 30-24 loss to the Bears on Thurs
+     Acti QB Drake Maye: Maye completed 24 of 31 passes for 321 yards with two touchdowns and one interception while adding four rushes for 26 yards and another score in the P
+     Inju G  Alijah Vera-Tucker: Vera-Tucker (hamstring) was placed on injured reserve by the Patriots on Thursday.
+     news 10-30T18:03 Patriots WR A.J. Brown (ankle, knee) listed as questionable
+     news 10-31T20:09 Patriots rule out A.J. Brown, TreVeyon Henderson vs. Dolphins
+     news 11-01T11:00 Ranking the top 10 trick plays in Super Bowl history
+     news 11-01T11:00 The Patriots are 18-43 all time in Miami. Here are keys to a Week 8 victory
+     news 11-01T17:05 NFL Week 8's best arrivals, led by Vikings' Kyler Murray
+  -- Miami Dolphins injuries (20261101T1830)
+     Ques CB Reese Taylor: Taylor (quadriceps) is questionable for Sunday's contest against New England, C. Isaiah Smalls II of the Miami Herald reports.
+     Out  OT Kadyn Proctor: Proctor (concussion) has been ruled out for Sunday's game against the Patriots, C. Isaiah Smalls II of the Miami Herald reports.
+     Acti TE Will Kacmarek: Kacmarek (hamstring) doesn't have a designation for Sunday's battle against the Patriots, C. Isaiah Smalls II of the Miami Herald reports.
+     Acti WR Jared Wayne: Wayne (knee) does not carry an injury designation ahead of Sunday's game against the Patriots, C. Isaiah Smalls II of the Miami Herald reports.
+     Ques CB JuJu Brents: Brents (neck/concussion) is listed as questionable for Sunday's game against the Patriots, C. Isaiah Smalls II of the Miami Herald reports.
+     Acti WR Malik Washington: Washington (knee) doesn't have an injury designation for Sunday's game against the Patriots, C. Isaiah Smalls II of the Miami Herald reports.
+     Acti TE Greg Dulcich: Dulcich (ankle) doesn't have an injury designation for Sunday's game against the Patriots, C. Isaiah Smalls II of the Miami Herald reports.
+     Acti RB Jaylen Wright: Wright (quadriceps/foot) was a full participant in Wednesday's practice, Marcel Louis-Jacques of ESPN.com reports.
+     Acti WR Kevin Coleman Jr.: Coleman did not catch his only target in the Dolphins' 28-25 win over the Jets on Sunday.
+     Acti WR Chris Bell: Bell caught three of his four targets for 25 yards in the Dolphins' 28-25 win over the Jets on Sunday.
+     Acti RB Kaytron Allen: Allen logged six snaps on special teams and didn't show up on the box score otherwise during Sunday's 28-25 win over the Jets.
+     Acti WR Jalen Tolbert: 
+     Acti WR Caleb Douglas: Douglas (ankle) caught two of three targets for 70 yards and two touchdowns in Sunday's 28-25 win over the Jets.
+     Acti QB Malik Willis: Willis completed 14 of 21 passes for 208 yards and two touchdowns while rushing six times for 39 yards and a touchdown in Sunday's 28-25 win over the 
+     Acti RB Ollie Gordon II: Gordon rushed 25 times for 103 yards and a touchdown while catching one of three targets for no gain in Sunday's 28-25 win over the Jets.
+     news 10-30T10:25 Why Jeremiah Smith is a generational NFL draft receiver prospect for 2027
+     news 10-30T15:17 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 11-01T02:51 How will Caleb Douglas fare against Christian Gonzalez on Sunday?
+     news 11-01T11:00 Miami Dolphins WR Caleb Douglas rounding into form ahead of Pats matchup
+     news 11-01T17:05 NFL Week 8's best arrivals, led by Vikings' Kyler Murray
+  -- props (pull 2026-11-01T20:32)
+     * Caleb Douglas: atd 0.5 (+375), recyd 36.5 (-115/-115), rec 2.5 (-175/+130)
+     * Chris Bell: atd 0.5 (+650), recyd 17.5 (-120/-110), rec 1.5 (-130/+100)
+     * Corey Kiner: atd 0.5 (+275), recyd 0.5 (+105/-135), ruyd 34.5 (-115/-115)
+     * DeMario Douglas: atd 0.5 (+250), recyd 40.5 (-115/-115), rec 3.5 (-105/-125)
+     * Drake Maye: atd 0.5 (+325), paatt 30.5 (-115/-115), cmp 19.5 (-125/-105), int 0.5 (-115/-115), patd 1.5 (-125/-105), payd 236.5 (-115/-115), ruatt 5.5 (-120/-110), ruyd 24.5 (-115/-115)
+     * Efton Chism III: atd 0.5 (+325), recyd 27.5 (-110/-120), rec 2.5 (-115/-115)
+     * Eli Raridon: atd 0.5 (+325), recyd 26.5 (-115/-115), rec 2.5 (-105/-125)
+     * Greg Dulcich: atd 0.5 (+450), recyd 28.5 (-115/-115), rec 3.5 (+120/-160)
+     * Hunter Henry: atd 0.5 (+175), recyd 45.5 (-115/-115), rec 4.5 (+115/-150)
+     * Jaylen Wright: atd 0.5 (+525), ruatt 4.5 (-115/-115), ruyd 14.5 (-110/-120)
+     * Kyle Williams: atd 0.5 (+400), recyd 22.5 (-115/-115), rec 1.5 (+105/-140)
+     * Malik Washington: atd 0.5 (+325), recyd 41.5 (-115/-115), rec 4.5 (+115/-140), ruyd 5.5 (-110/-120)
+     * Malik Willis: atd 0.5 (+275), paatt 27.5 (-110/-120), cmp 15.5 (-105/-125), int 0.5 (-150/+115), patd 0.5 (-175/+130), payd 174.5 (-115/-115), ruatt 6.5 (-115/-115), ruyd 33.5 (-110/-120)
+     * Ollie Gordon II: atd 0.5 (+155), recyd 8.5 (-120/-110), rec 1.5 (-105/-125), ruatt 15.5 (-120/-110), ruyd 62.5 (-115/-115)
+     * Rhamondre Stevenson: atd 0.5 (-130), recyd 24.5 (-115/-115), rec 3.5 (+115/-150), ruatt 14.5 (-120/-110), ruyd 58.5 (-115/-115)
+     * Will Kacmarek: atd 0.5 (+2250), recyd 0.5 (+100/-135), rec 0.5 (-115/-115)

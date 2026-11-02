@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "10a3cc989861cd05cb2a95b5ebc4abb0",
+    "game_date": "2026-11-01",
+    "sport": "NHL",
+    "home_team": "Washington Capitals",
+    "away_team": "Minnesota Wild",
+    "commence_time": "2026-11-01T20:40:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 5.0,
+    "over_price": 107,
+    "under_price": -124,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-01T22:00:06.649413+00:00"
+  },
+  {
+    "game_id": "4b59901ec085a0f20022fc14ffa1ba6c",
+    "game_date": "2026-11-01",
+    "sport": "NHL",
+    "home_team": "Philadelphia Flyers",
+    "away_team": "Utah Mammoth",
+    "commence_time": "2026-11-01T21:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.5,
+    "over_price": -104,
+    "under_price": -113,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-01T22:00:06.649413+00:00"
+  },
+  {
+    "game_id": "d8dd95fa4fc001a1ea9f6629a8c8ffee",
+    "game_date": "2026-11-01",
+    "sport": "NHL",
+    "home_team": "New York Rangers",
+    "away_team": "Edmonton Oilers",
+    "commence_time": "2026-11-01T23:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.5,
+    "over_price": -112,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-01T22:00:06.649413+00:00"
+  },
+  {
+    "game_id": "a5203c5f9248aa3653feba547eabd4b8",
+    "game_date": "2026-11-01",
+    "sport": "NHL",
+    "home_team": "Anaheim Ducks",
+    "away_team": "Ottawa Senators",
+    "commence_time": "2026-11-02T01:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.5,
+    "over_price": -126,
+    "under_price": 112,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-01T22:00:06.649413+00:00"
+  }
+]

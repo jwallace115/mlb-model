@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_08_BAL_BUF",
+  "week": 8,
+  "home": "BUF",
+  "away": "BAL",
+  "final_score": {
+    "home": 36,
+    "away": 10
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 176,
+      "plays_leading_14": 176,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 36,
+        "away": 10
+      },
+      "garbage_time_plays": 28
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 176,
+      "plays_trailing_14": 176,
+      "halftime_score": {
+        "home": 36,
+        "away": 10
+      },
+      "garbage_time_plays": 28
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 77,
+      "dropbacks": 36,
+      "rush_attempts": 41,
+      "pass_rate": 0.4675324675324675,
+      "run_rate": 0.5324675324675325,
+      "pass_oe": -2.984260824284976
+    },
+    "away": {
+      "plays": 49,
+      "dropbacks": 30,
+      "rush_attempts": 19,
+      "pass_rate": 0.6122448979591837,
+      "run_rate": 0.3877551020408163,
+      "pass_oe": -7.060521125793457
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 2,
+      "total": 3
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "Z.Flowers",
+      "team": "BAL",
+      "quarter": 1,
+      "play_id": 437,
+      "desc": "(10:04) 8-L.Jackson pass incomplete short right to 4-Z.Flowers (15-G.Rousseau). BAL-8-L.Jackson was injured during the play."
+    },
+    {
+      "player": "J.Palmer",
+      "team": "BUF",
+      "quarter": 1,
+      "play_id": 1088,
+      "desc": "(2:29) (Shotgun) 17-J.Allen pass incomplete deep right to 5-J.Palmer. BUF-5-J.Palmer was injured during the play."
+    },
+    {
+      "player": "R.Eckley",
+      "team": "BAL",
+      "quarter": 2,
+      "play_id": 1964,
+      "desc": "(4:33) 30-R.Eckley punts 62 yards to BUF 10, Center-46-N.Moore. 19-G.Dortch to BUF 18 for 8 yards (26-R.Ali; 50-A.Isaac). BAL-26-R.Ali was injured during the play."
+    },
+    {
+      "player": "R.Eckley",
+      "team": "BAL",
+      "quarter": 3,
+      "play_id": 3552,
+      "desc": "(1:08) 30-R.Eckley punts 55 yards to BUF 18, Center-46-N.Moore. 19-G.Dortch to BUF 35 for 17 yards (24-M.Starks). BUF-7-R.Davis was injured during the play."
+    },
+    {
+      "player": "J.Cook",
+      "team": "BUF",
+      "quarter": 4,
+      "play_id": 3673,
+      "desc": "(14:25) 4-J.Cook up the middle to BAL 43 for 5 yards (25-K.Wallace). BUF-4-J.Cook was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

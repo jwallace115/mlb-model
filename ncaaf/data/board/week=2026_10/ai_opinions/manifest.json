@@ -1,0 +1,250 @@
+[
+ {
+  "file": "ai_opinions_20261102T003405Z.parquet",
+  "sha256": "40aad2b45a1a216781da80c7bbef4125bd13ebf07a4d46643e8b07a546ac5d27",
+  "logged_utc": "2026-11-02T00:34:05.991492+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-04T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261102T003006Z.parquet",
+   "inputs_digest": "{\"c0ddb68355a79fb70194e95b75c037ca\": \"8e2966ddafd1f9ef\"}",
+   "components": {
+    "c0ddb68355a79fb70194e95b75c037ca": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       369
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -490
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       12.0,
+       -103
+      ],
+      [
+       "Ohio Bobcats",
+       -12.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -111
+      ],
+      [
+       "Under",
+       51.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Ohio visits Akron in MAC play"
+     ],
+     "kalshi_snap": "snap_20261102T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "c0ddb68355a79fb70194e95b75c037ca": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261102T034903Z.parquet",
+  "sha256": "86d13d8c6001e90af7ce6316f2a79ecf07dcae1bd3314d2f2cfc214d3a6247ad",
+  "logged_utc": "2026-11-02T03:49:03.994704+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 0,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-04T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261102T033006Z.parquet",
+   "inputs_digest": "{\"657053f4734af94664beb750813257bb\": \"aa0dfb7b2e7cafb8\"}",
+   "components": {
+    "657053f4734af94664beb750813257bb": {
+     "pinnacle_h2h": [
+      [
+       "Buffalo Bulls",
+       0,
+       218
+      ],
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -264
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Buffalo Bulls",
+       7.0,
+       -115
+      ],
+      [
+       "Miami (OH) RedHawks",
+       -7.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -109
+      ],
+      [
+       "Under",
+       44.0,
+       -111
+      ]
+     ],
+     "news": [
+      "Miami (OH) hosts Buffalo in MAC action"
+     ],
+     "kalshi_snap": "snap_20261102T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "657053f4734af94664beb750813257bb": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261102T150404Z.parquet",
+  "sha256": "a1ea3e6c70c17e089a12e69921a3db5c4d54cf9ce0d0b1c340481490df16b4be",
+  "logged_utc": "2026-11-02T15:04:04.690216+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 6,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-04T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261102T150010Z.parquet",
+   "inputs_digest": "{\"c0ddb68355a79fb70194e95b75c037ca\": \"e0e26e8e294aa56d\", \"657053f4734af94664beb750813257bb\": \"f7d0f8d79efe18ae\"}",
+   "components": {
+    "c0ddb68355a79fb70194e95b75c037ca": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       391
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -527
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       13.0,
+       -102
+      ],
+      [
+       "Ohio Bobcats",
+       -13.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -111
+      ],
+      [
+       "Under",
+       51.0,
+       -107
+      ]
+     ],
+     "news": [
+      "Ohio visits Akron in MAC play"
+     ],
+     "kalshi_snap": "snap_20261102T1507Z.parquet"
+    },
+    "657053f4734af94664beb750813257bb": {
+     "pinnacle_h2h": [
+      [
+       "Buffalo Bulls",
+       0,
+       204
+      ],
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -244
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Buffalo Bulls",
+       6.5,
+       -107
+      ],
+      [
+       "Miami (OH) RedHawks",
+       -6.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -112
+      ],
+      [
+       "Under",
+       44.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Miami (OH) hosts Buffalo in MAC action"
+     ],
+     "kalshi_snap": "snap_20261102T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "c0ddb68355a79fb70194e95b75c037ca": "anchor_morning",
+    "657053f4734af94664beb750813257bb": "anchor_morning"
+   }
+  }
+ }
+]
