@@ -39,3 +39,15 @@ Games: 14  |  Confident: 4
 | ARI@DAL | away | +0.6 | -6.0 | -110 | -5.4 |
 | NE@MIA | home | -0.8 | 7.5 | -110 | +6.7 |
 
+
+## Week 9 (2026) -- PRIMARY
+Run: 2026-11-02T17:30:59Z  |  Manifest SHA: da59272230201888...
+Games: 15  |  Confident: 4
+
+| Game | Side | Our # | HR Quote | HR Price | Gap |
+|------|------|--------|----------|----------|-----|
+| JAX@BAL | home | -1.2 | 8.0 | -110 | +6.8 |
+| DEN@CAR | home | +2.7 | 2.5 | 100 | +5.2 |
+| DAL@IND | home | +0.7 | 5.5 | -110 | +6.2 |
+| LA@WAS | home | -0.5 | 5.5 | -105 | +5.0 |
+
