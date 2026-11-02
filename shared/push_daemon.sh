@@ -23,6 +23,39 @@ if GIT_OPTIONAL_LOCKS=0 git status --porcelain | grep -q '^UU\|^AA\|^DD'; then
     echo "$TIMESTAMP — cleaned up stale conflict state" >> "$LOG"
 fi
 
+# P81(a): a stale rebase dir with only an autostash in it (aborted --autostash rebase) blocks every later pull --rebase
+for d in .git/rebase-merge .git/rebase-apply; do
+    if [ -d "$d" ] && [ ! -f "$d/head-name" ] && [ ! -f "$d/onto" ]; then
+        rm -rf "$d"
+        echo "$TIMESTAMP — removed stale $d (no rebase in progress)" >> "$LOG"
+    fi
+done
+
+# P81(b): conflict resolution by path ownership. During `git pull --rebase`, --ours = origin (what the Mac pushed), --theirs = the
+# commit being replayed (the VM's own output). Mac-owned paths take origin; everything else the VM writes takes the VM's version.
+is_mac_owned() {
+    case "$1" in
+        *_mac.parquet|soccer/data/cache/daily/*|nfl/data/board/*/sim_runs/*|data/odds_archive/nfl/props/season=*/month=*/data_*_mac.parquet) return 0;;
+        *) return 1;;
+    esac
+}
+resolve_conflicts() {   # returns 0 when the rebase finished, 1 when it could not
+    local step
+    for step in 1 2 3 4 5 6 7 8 9 10; do
+        local U; U=$(git diff --name-only --diff-filter=U 2>/dev/null)
+        [ -z "$U" ] && [ ! -d .git/rebase-merge ] && [ ! -d .git/rebase-apply ] && return 0
+        local f
+        for f in $U; do
+            if is_mac_owned "$f"; then git checkout --ours -- "$f" 2>/dev/null; else git checkout --theirs -- "$f" 2>/dev/null; fi
+            git add -- "$f" 2>/dev/null || git rm -q --cached -- "$f" 2>/dev/null
+            echo "$TIMESTAMP — resolved $f ($(is_mac_owned "$f" && echo origin || echo vm))" >> "$LOG"
+        done
+        GIT_EDITOR=true git rebase --continue >> "$LOG" 2>&1 || true
+        [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ] || return 0
+    done
+    return 1
+}
+
 # Stage all changes
 git add -A
 
@@ -54,49 +87,17 @@ fi
 # Commit
 git commit -m "auto: dashboard update $TIMESTAMP" >> "$LOG" 2>&1
 
-# Pull with rebase
+# Pull with rebase (P81: ownership-based conflict resolution)
 if ! git pull --rebase --autostash origin main >> "$LOG" 2>&1; then
-    # Auto-resolve known safe conflict files (always take remote version)
-    SAFE_FILES=(
-        "shared/last_updated.json"
-        "golf/shadow/golf_daily_best_board.parquet"
-        "golf/shadow/golf_shadow_log.parquet"
-        "mlb/logs/p09_shadow_2026.json"
-    )
-    RESOLVED=0
-    for sf in "${SAFE_FILES[@]}"; do
-        if git diff --name-only --diff-filter=U 2>/dev/null | grep -q "$sf"; then
-            git checkout --theirs "$sf" 2>/dev/null
-            git add "$sf" 2>/dev/null
-            RESOLVED=1
-        fi
-    done
-
-    if [ $RESOLVED -eq 1 ]; then
-        # Try to continue rebase after resolving safe files
-        if GIT_EDITOR=true git rebase --continue >> "$LOG" 2>&1; then
-            echo "$TIMESTAMP — auto-resolved safe file conflicts" >> "$LOG"
-        else
-            # Still failing — check if more safe files need resolving in next rebase step
-            for sf in "${SAFE_FILES[@]}"; do
-                if git diff --name-only --diff-filter=U 2>/dev/null | grep -q "$sf"; then
-                    git checkout --theirs "$sf" 2>/dev/null
-                    git add "$sf" 2>/dev/null
-                fi
-            done
-            if GIT_EDITOR=true git rebase --continue >> "$LOG" 2>&1; then
-                echo "$TIMESTAMP — auto-resolved multi-step conflicts" >> "$LOG"
-            else
-                git rebase --abort 2>/dev/null
-                echo "$TIMESTAMP — PUSH FAILED: rebase conflict on non-auto-resolvable file" >> "$LOG"
-                exit 1
-            fi
-        fi
+    if resolve_conflicts; then
+        echo "$TIMESTAMP — auto-resolved rebase conflicts by path ownership" >> "$LOG"
     else
         git rebase --abort 2>/dev/null
-        echo "$TIMESTAMP — PUSH FAILED: rebase conflict (no safe files to auto-resolve)" >> "$LOG"
+        rm -rf .git/rebase-merge .git/rebase-apply
+        echo "$TIMESTAMP — PUSH FAILED: rebase conflict not resolvable by ownership rules" >> "$LOG"
         exit 1
     fi
+fi
 fi
 
 # Check for incoming code changes (from MacBook deploys)
