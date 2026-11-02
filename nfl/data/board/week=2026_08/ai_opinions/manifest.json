@@ -8842,5 +8842,21 @@
     "b9c60db63b1a19ad319f24b33c0defe8": "line_move: hardrockbet_fl spreads Philadelphia Eagles 5.0\u21926.0; line_move: hardrockbet_fl spreads Washington Commanders -5.0\u2192-6.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261031T213809Z.parquet",
+  "sha256": "a6c7c6f2b573718e44b305cccf0ec58ff6e4516bd36b7d3924688e4d4af64e73",
+  "logged_utc": "2026-10-31T21:38:09.697100+00:00",
+  "rows": 910,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "nfl_sim_v1_156cd057",
+  "pilot": true,
+  "window": "late",
+  "games": 13,
+  "no_view_share": 0.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 8.0,
+  "first_kickoff_utc": "2026-11-01T18:00:00Z"
  }
 ]
