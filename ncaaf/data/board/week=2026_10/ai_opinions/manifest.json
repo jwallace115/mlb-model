@@ -1,0 +1,71 @@
+[
+ {
+  "file": "ai_opinions_20261102T003405Z.parquet",
+  "sha256": "40aad2b45a1a216781da80c7bbef4125bd13ebf07a4d46643e8b07a546ac5d27",
+  "logged_utc": "2026-11-02T00:34:05.991492+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-04T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261102T003006Z.parquet",
+   "inputs_digest": "{\"c0ddb68355a79fb70194e95b75c037ca\": \"8e2966ddafd1f9ef\"}",
+   "components": {
+    "c0ddb68355a79fb70194e95b75c037ca": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       369
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -490
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       12.0,
+       -103
+      ],
+      [
+       "Ohio Bobcats",
+       -12.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -111
+      ],
+      [
+       "Under",
+       51.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10: Texas Tech enters the spooky rankings",
+      "Ohio visits Akron in MAC play"
+     ],
+     "kalshi_snap": "snap_20261102T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "c0ddb68355a79fb70194e95b75c037ca": "anchor_morning"
+   }
+  }
+ }
+]
