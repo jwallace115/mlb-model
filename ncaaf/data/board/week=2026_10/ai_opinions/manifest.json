@@ -472,5 +472,248 @@
     "e5c8c0aaad6dc26e9ede547783d854d2": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261103T150403Z.parquet",
+  "sha256": "be37176c2f657e86c489019a90f504eb672f412da1f4bf5aede9bb15033a8556",
+  "logged_utc": "2026-11-03T15:04:03.687359+00:00",
+  "rows": 14,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.786,
+  "revised_rows": 9,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-04T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261103T150011Z.parquet",
+   "inputs_digest": "{\"c0ddb68355a79fb70194e95b75c037ca\": \"d4a48682f8d49305\", \"657053f4734af94664beb750813257bb\": \"6d506d7b75246407\", \"6ee8ad6eb7454d13bebc0806a10cc861\": \"2e70620f6e1c780e\", \"7db0ce3fddd5c735e599b1085c9b5cef\": \"af4d119767b43e2e\", \"e5c8c0aaad6dc26e9ede547783d854d2\": \"5c2a054d762efe7d\"}",
+   "components": {
+    "c0ddb68355a79fb70194e95b75c037ca": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       481
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -614
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       14.5,
+       -106
+      ],
+      [
+       "Ohio Bobcats",
+       -14.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -113
+      ],
+      [
+       "Under",
+       51.0,
+       -103
+      ]
+     ],
+     "news": [
+      "Ohio visits Akron in MAC play"
+     ],
+     "kalshi_snap": "snap_20261103T1507Z.parquet"
+    },
+    "657053f4734af94664beb750813257bb": {
+     "pinnacle_h2h": [
+      [
+       "Buffalo Bulls",
+       0,
+       192
+      ],
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -217
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Buffalo Bulls",
+       6.0,
+       -111
+      ],
+      [
+       "Miami (OH) RedHawks",
+       -6.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -117
+      ],
+      [
+       "Under",
+       44.0,
+       100
+      ]
+     ],
+     "news": [
+      "Miami (OH) hosts Buffalo in MAC action"
+     ],
+     "kalshi_snap": "snap_20261103T1507Z.parquet"
+    },
+    "6ee8ad6eb7454d13bebc0806a10cc861": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       140
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       -162
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       3.0,
+       -101
+      ],
+      [
+       "UMass Minutemen",
+       -3.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -108
+      ],
+      [
+       "Under",
+       49.5,
+       -110
+      ]
+     ],
+     "news": [
+      "MAC matchup features UMass squaring off against Ba"
+     ],
+     "kalshi_snap": "snap_20261103T1507Z.parquet"
+    },
+    "7db0ce3fddd5c735e599b1085c9b5cef": {
+     "pinnacle_h2h": [
+      [
+       "Sacramento State Hornets",
+       0,
+       1413
+      ],
+      [
+       "Toledo Rockets",
+       0,
+       -3207
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Sacramento State Hornets",
+       25.0,
+       -101
+      ],
+      [
+       "Toledo Rockets",
+       -25.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -111
+      ],
+      [
+       "Under",
+       52.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Isaiah Ene helps Sacramento State beat Kent State ",
+      "Kent State Golden Flashes vs. Sacramento State Hor",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Toledo meets Sacramento State in MAC action"
+     ],
+     "kalshi_snap": "snap_20261103T1507Z.parquet"
+    },
+    "e5c8c0aaad6dc26e9ede547783d854d2": {
+     "pinnacle_h2h": [
+      [
+       "Central Michigan Chippewas",
+       0,
+       -101
+      ],
+      [
+       "Eastern Michigan Eagles",
+       0,
+       -114
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Central Michigan Chippewas",
+       2.0,
+       -118
+      ],
+      [
+       "Eastern Michigan Eagles",
+       -2.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -101
+      ],
+      [
+       "Under",
+       44.5,
+       -118
+      ]
+     ],
+     "news": [
+      "Eastern Michigan and Central Michigan meet in Detr"
+     ],
+     "kalshi_snap": "snap_20261103T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "c0ddb68355a79fb70194e95b75c037ca": "anchor_morning",
+    "657053f4734af94664beb750813257bb": "anchor_morning",
+    "6ee8ad6eb7454d13bebc0806a10cc861": "anchor_morning",
+    "7db0ce3fddd5c735e599b1085c9b5cef": "anchor_morning",
+    "e5c8c0aaad6dc26e9ede547783d854d2": "anchor_morning"
+   }
+  }
  }
 ]
