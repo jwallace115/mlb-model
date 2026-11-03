@@ -1,90 +1,100 @@
 # WHY Summary — Week 8
 
-Generated: 2026-11-02T11:58:49.281883+00:00
+Generated: 2026-11-03T11:50:15.816490+00:00
 
 
 ## Graded rows
 
-- ai_nfl / moneyline / L: 6
-- ai_nfl / moneyline / W: 10
+- ai_nfl / moneyline / L: 7
+- ai_nfl / moneyline / W: 11
 - ai_nfl / prop:int / L: 27
-- ai_nfl / prop:int / W: 14
-- ai_nfl / prop:pass_att / L: 42
-- ai_nfl / prop:pass_att / W: 97
-- ai_nfl / prop:pass_cmp / L: 17
-- ai_nfl / prop:pass_cmp / W: 30
-- ai_nfl / prop:pass_td / L: 15
-- ai_nfl / prop:pass_td / W: 18
-- ai_nfl / prop:pass_yds / L: 46
-- ai_nfl / prop:pass_yds / W: 50
-- ai_nfl / prop:rec / L: 130
-- ai_nfl / prop:rec / V: 10
-- ai_nfl / prop:rec / W: 145
-- ai_nfl / prop:rec_yds / L: 88
-- ai_nfl / prop:rec_yds / V: 12
-- ai_nfl / prop:rec_yds / W: 105
-- ai_nfl / prop:rush_att / L: 73
-- ai_nfl / prop:rush_att / W: 129
-- ai_nfl / prop:rush_yds / L: 48
-- ai_nfl / prop:rush_yds / V: 1
-- ai_nfl / prop:rush_yds / W: 71
-- ai_nfl / spread / L: 34
-- ai_nfl / spread / W: 39
-- ai_nfl / total / L: 31
+- ai_nfl / prop:int / W: 18
+- ai_nfl / prop:pass_att / L: 47
+- ai_nfl / prop:pass_att / W: 101
+- ai_nfl / prop:pass_cmp / L: 20
+- ai_nfl / prop:pass_cmp / W: 31
+- ai_nfl / prop:pass_td / L: 17
+- ai_nfl / prop:pass_td / W: 20
+- ai_nfl / prop:pass_yds / L: 48
+- ai_nfl / prop:pass_yds / W: 53
+- ai_nfl / prop:rec / L: 144
+- ai_nfl / prop:rec / V: 16
+- ai_nfl / prop:rec / W: 157
+- ai_nfl / prop:rec_yds / L: 98
+- ai_nfl / prop:rec_yds / V: 17
+- ai_nfl / prop:rec_yds / W: 114
+- ai_nfl / prop:rush_att / L: 76
+- ai_nfl / prop:rush_att / W: 140
+- ai_nfl / prop:rush_yds / L: 52
+- ai_nfl / prop:rush_yds / V: 2
+- ai_nfl / prop:rush_yds / W: 82
+- ai_nfl / spread / L: 35
+- ai_nfl / spread / W: 42
+- ai_nfl / total / L: 32
 - ai_nfl / total / P: 8
-- ai_nfl / total / W: 41
+- ai_nfl / total / W: 42
+- sim_nfl / prop:rec / L: 53
+- sim_nfl / prop:rec / V: 4
+- sim_nfl / prop:rec / W: 72
+- sim_nfl / prop:rush_att / L: 19
+- sim_nfl / prop:rush_att / W: 11
 
 ## why_code_auto (losses)
 
-- ROLE_SHIFT: 142
-- SCRIPT: 141
-- EFFICIENCY: 124
-- NOISE: 30
-- UNDEFINED: 29
+- ROLE_SHIFT: 174
+- SCRIPT: 168
+- EFFICIENCY: 148
+- UNDEFINED: 38
+- NOISE: 28
 - TURNOVERS: 25
-- GARBAGE: 9
-- UNRESOLVED: 8
+- SHARE_OTHER: 23
+- GARBAGE: 11
+- UNRESOLVED: 9
 - NON_OFFENSIVE_TD: 7
 
 ## why_code_auto (wins)
 
-- SCRIPT: 253
-- ROLE_SHIFT: 172
-- EFFICIENCY: 126
-- UNDEFINED: 70
-- NOISE: 39
-- GARBAGE: 32
+- SCRIPT: 276
+- ROLE_SHIFT: 202
+- EFFICIENCY: 170
+- UNDEFINED: 79
+- NOISE: 40
+- GARBAGE: 36
+- SHARE_OTHER: 27
 - TURNOVERS: 14
-- UNRESOLVED: 6
+- UNRESOLVED: 7
 - NON_OFFENSIVE_TD: 5
 
 ## Thesis verdicts
 
-- thesis_source=freeze: 1300 rows
+- thesis_source=freeze: 1408 rows
 - thesis_source=nan: 0 rows
+- thesis_source=none: 153 rows
 
 ## Freeze-join accounting
 
-- Freeze-sourced thesis: 1300
+- Freeze-sourced thesis: 1408
 - Tag-map thesis: 0
-- No thesis: 0
+- No thesis: 153
 
-## Unresolved player names (37 rows)
+## Unresolved player names (55 rows)
 
-- Tez Johnson (10x): markets=['prop:rec_yds', 'prop:rec']
-- Omar Cooper Jr. (4x): markets=['prop:rec_yds', 'prop:rec']
-- Dyami Brown (4x): markets=['prop:rec_yds', 'prop:rec']
+- Tez Johnson (11x): markets=['prop:rec_yds', 'prop:rec']
+- Sam Roush (11x): markets=['prop:rec_yds', 'prop:rec']
+- Omar Cooper Jr. (5x): markets=['prop:rec_yds', 'prop:rec']
+- Dyami Brown (5x): markets=['prop:rec_yds', 'prop:rec']
 - Hollywood Brown (4x): markets=['prop:rec_yds', 'prop:rec']
+- Isaac TeSlaa (3x): markets=['prop:rec_yds', 'prop:rec']
+- Jake Ferguson (3x): markets=['prop:rec_yds', 'prop:rec']
+- Cade Otton (3x): markets=['prop:rec_yds', 'prop:rec']
 - Drew Sample (2x): markets=['prop:rec_yds', 'prop:rec']
 - Carnell Tate (2x): markets=['prop:rec_yds', 'prop:rec']
-- Isaac TeSlaa (2x): markets=['prop:rec_yds', 'prop:rec']
-- Cade Otton (2x): markets=['prop:rec_yds', 'prop:rec']
-- Devontez Walker (2x): markets=['prop:rec_yds', 'prop:rec']
-- Jake Ferguson (2x): markets=['prop:rec_yds', 'prop:rec']
 - Joshua Palmer (2x): markets=['prop:rec_yds', 'prop:rec']
+- Devontez Walker (2x): markets=['prop:rec_yds', 'prop:rec']
 - RJ Harvey (1x): markets=['prop:rush_yds']
+- Emanuel Wilson (1x): markets=['prop:rush_yds']
 
-## PBP vs official stat mismatches (49 rows)
+## PBP vs official stat mismatches (56 rows)
 
 - Bryce Young: prop:pass_att official=41.0 pbp=42.0
 - Cam Ward: prop:pass_att official=40.0 pbp=41.0
@@ -109,13 +119,13 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - Malik Willis: prop:pass_att official=32.0 pbp=33.0
 - Drake Maye: prop:rush_yds official=5.0 pbp=4.0
 - Jahmyr Gibbs: prop:rush_att official=23.0 pbp=24.0
+- Sam Darnold: prop:pass_att official=34.0 pbp=35.0
 - Cam Ward: prop:pass_att official=40.0 pbp=41.0
-- Joe Burrow: prop:pass_att official=48.0 pbp=49.0
 
 ## FLAGGED FOR THE TUESDAY READ
 
 
-### Top 20 picks (404 rows)
+### Top 20 picks (473 rows)
 
 - 7e1062dbb7c1d8cb: spread None → W
 - 7d34418be52e03f9: spread None → W
@@ -324,6 +334,11 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 7f62fe4354bdc01a: spread None → W
 - 3b457a7e3b1d805e: prop:rush_att Jonah Coleman → L
 - 653df5c4f15b0325: total None → L
+- d6030404c7447635: prop:pass_att Sam Darnold → L
+- aaf754ed921be4e3: prop:rec_yds Sam Roush → V
+- 36a2d8afa65d4c52: prop:rec Sam Roush → V
+- 9be122bad7c3836d: prop:rush_att D'Andre Swift → W
+- d9a7a9609201e179: prop:rush_yds D'Andre Swift → W
 - 9acb33b64accb807: prop:pass_yds Baker Mayfield → W
 - 7c9faf183c4125ca: prop:rec_yds Chris Godwin → L
 - ee0998894ea647a3: prop:rec Tez Johnson → L
@@ -349,6 +364,8 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 2e87d2d8b9101271: prop:pass_cmp Kyler Murray → W
 - 09c06284eb77308f: prop:pass_yds Kyler Murray → W
 - dc232c762c82169a: spread None → W
+- ba8c7cbe655cca29: prop:rec Jaxon Smith-Njigba → L
+- e55594dba40e6e83: prop:rush_att D'Andre Swift → W
 - d0985aa9dced56ee: total None → W
 - 80b0264d86610b8b: prop:pass_att Dak Prescott → W
 - 945c8fdf7813e329: prop:pass_att Jacoby Brissett → L
@@ -390,6 +407,7 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - afb8acf77e1b6f98: prop:pass_cmp Kyler Murray → W
 - d1d402d60c90abba: prop:pass_yds Kyler Murray → W
 - 58b58fd8b6fb64fe: prop:rush_att Jahmyr Gibbs → L
+- af26db341ff8101f: prop:rush_att D'Andre Swift → W
 - 7334232ed0593b5c: prop:rec Chris Godwin → L
 - 5f80eb7750e64ee1: prop:rec Tez Johnson → L
 - 7d4c4905bf567fe5: prop:rush_att Bucky Irving → W
@@ -409,6 +427,7 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - e6e511773cc40490: prop:pass_att Justin Herbert → W
 - 493a92531a907491: prop:rec Ladd McConkey → W
 - 525f3ccb2210e480: total None → L
+- aeaf3e0e0971efe7: prop:rush_yds D'Andre Swift → W
 - a6cd5c221347d6a0: prop:pass_att Dak Prescott → W
 - 95313e5f231a79a4: prop:pass_att Jacoby Brissett → L
 - 32da4760fceb0cd6: prop:rush_att Javonte Williams → W
@@ -521,6 +540,66 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - abeff360d425c476: prop:rec Makai Lemon → W
 - c737d4ca347ae97f: spread None → L
 - 4355733119185e57: total None → W
+- 7d3706acee39e0e3: prop:rec Colston Loveland → W
+- f42e41726054448d: prop:rec Jaxon Smith-Njigba → L
+- d0d0f4476b5bafb9: prop:rush_att D'Andre Swift → W
+- fa26d2a0ea5aad29: spread None → L
+- 52f53c1fc8db6fd6: prop:rec Colston Loveland → W
+- f1af31592c98a0d0: prop:rec Sam Roush → V
+- 72c90f29b6646995: prop:rush_att D'Andre Swift → W
+- 8fdd24a36c658a4b: prop:rec Josh Cameron → W
+- 588f0fc1abbbd4e2: prop:rec Ladd McConkey → L
+- ac486fc78926f75f: prop:rec Oronde Gadsden II → W
+- bc508f8d69f7fc52: prop:rec Sam LaPorta → W
+- 6f31c5f4cd928bde: prop:rush_att Aaron Jones → L
+- c23042a3fdc31f67: prop:rec Tory Horton → L
+- 5a4e3e54c89ba15b: prop:rush_att D'Andre Swift → L
+- cc09c867919e3e8a: prop:rush_att Bijan Robinson → L
+- 852fee659d191a49: prop:rec Brevyn Spann-Ford → L
+- 993468371c5516a9: prop:rush_att Javonte Williams → W
+- 32705c212f6c53db: prop:rec Adonai Mitchell → W
+- 713fa86ce3bbfb44: prop:rec Garrett Wilson → L
+- e40ab01db87a4c2d: prop:rec Ja'Marr Chase → L
+- 123ff5cd7af89f59: prop:rush_att Chase Brown → L
+- 50ed08e249adc14f: prop:rush_att Quinshon Judkins → W
+- 385979981b8d9699: prop:rush_att Saquon Barkley → L
+- c03c061eb7931fc7: prop:rec DJ Moore → W
+- 9d4af53a17853eda: prop:rec Jonah Coleman → L
+- 3c8955920bd1cd80: prop:rush_att J.K. Dobbins → L
+- 2ed1bc6755890449: prop:rush_att Jonah Coleman → W
+- 5e83567f7f066346: prop:rec Colston Loveland → W
+- 282ce4303acae3ca: prop:rec Sam Roush → V
+- c1ec1e694215a538: prop:rush_att D'Andre Swift → W
+- 8b308b3b04384740: prop:rush_yds D'Andre Swift → W
+- 93af1f2901efa568: prop:pass_cmp Sam Darnold → W
+- 7ee90941d2b31710: prop:int Caleb Williams → W
+- d12cd55043055956: prop:int Sam Darnold → W
+- 871dbfbcb89fe3e9: prop:pass_td Caleb Williams → W
+- c4a8597d0d06bd7f: prop:pass_td Sam Darnold → L
+- 40e87a33f6ed01e1: prop:rec_yds AJ Barner → W
+- 9cfa7907ae9dfeb7: prop:rec_yds Cooper Kupp → L
+- 649608018db97353: prop:rec_yds D'Andre Swift → W
+- 903db0b31c8831e0: prop:rec_yds Sam Roush → V
+- 3284e05a7fad7bf2: prop:rec_yds Tory Horton → L
+- 0f638584e2201cb3: prop:rec_yds Zach Charbonnet → W
+- d02cf71c1b810dfc: prop:rec Cooper Kupp → W
+- 3b8779a77eeef0d0: prop:rec Kalif Raymond → L
+- f30030b4db5e441c: prop:rec Luther Burden III → L
+- 59275e00d2bb751b: prop:rec Sam Roush → V
+- 8ae35e3540113286: prop:rec Tory Horton → L
+- 0af6633865e19d79: prop:rec Zach Charbonnet → L
+- 66692264bec2c106: prop:rush_yds Caleb Williams → W
+- f5a49188c9ab5ac5: prop:rush_yds Jadarian Price → W
+- 999da96410ed2444: total None → L
+- 10bfc8576dbff83f: prop:rec Jaxon Smith-Njigba → L
+- e94aa20d43790433: prop:rush_att D'Andre Swift → W
+- 1fe85f0ab4007a69: spread None → W
+- 7c3bf99e4a429d62: prop:pass_att Sam Darnold → L
+- 045c7eee519e7582: prop:rec Colston Loveland → W
+- bce01e908b56316b: prop:rush_att D'Andre Swift → W
+- c533b68b9d7dcf02: prop:pass_att Sam Darnold → L
+- 5863da208c121867: prop:rush_att D'Andre Swift → W
+- d299f7409eb07911: prop:rush_yds D'Andre Swift → W
 
 ### 10 largest-|ln(A/L)| losses (10 rows)
 
@@ -535,10 +614,9 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 87b3e77ef3d9b968: prop:rec Chris Godwin A=0.0 L=4.5 |ln|=6.109
 - cf11bb311539f082: prop:rec Chris Godwin A=0.0 L=4.5 |ln|=6.109
 
-### AVAILABILITY / ROLE_SHIFT (314 rows)
+### AVAILABILITY / ROLE_SHIFT (376 rows)
 
 - 8b1d28c49a2645dc: ROLE_SHIFT prop:pass_att Daniel Jones
-- 6d35ba67d21d6a40: ROLE_SHIFT prop:rush_att Jonathan Taylor
 - 4b4d2d5a98bbcb42: ROLE_SHIFT prop:pass_att Jacoby Brissett
 - 80c177e512728739: ROLE_SHIFT prop:pass_cmp Jacoby Brissett
 - 469ef990af8df20a: ROLE_SHIFT prop:rec Trey McBride
@@ -546,9 +624,7 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 7c41db5031dd3843: ROLE_SHIFT prop:rush_att Ollie Gordon II
 - 66076e4c223f77fa: ROLE_SHIFT prop:rush_yds Rhamondre Stevenson
 - d0e198eb43095ed3: ROLE_SHIFT prop:pass_att Justin Herbert
-- 7105b9d5729eed4c: ROLE_SHIFT prop:rush_att Jonathan Taylor
 - 64e2dd8223837554: ROLE_SHIFT prop:pass_att Jacoby Brissett
-- 0b6d789f9faf3217: ROLE_SHIFT prop:rush_att Ashton Jeanty
 - 034f2636a7388d36: ROLE_SHIFT prop:rush_att J.K. Dobbins
 - dbd505cb8a675e11: ROLE_SHIFT prop:rush_att Jonah Coleman
 - 196f950bca11c0af: ROLE_SHIFT prop:rush_yds Jonah Coleman
@@ -562,13 +638,10 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - dfbfe5f58e298050: ROLE_SHIFT prop:rec Makai Lemon
 - c6f0a9718b469a58: ROLE_SHIFT prop:rush_att Saquon Barkley
 - c97e2fd433e04f9e: ROLE_SHIFT prop:rush_att Ollie Gordon II
-- 760c894a3d18b3be: ROLE_SHIFT prop:rush_att Jonathan Taylor
 - 8926369434d5042a: ROLE_SHIFT prop:pass_att Justin Herbert
 - e202bb62058e5c89: ROLE_SHIFT prop:rec_yds Ladd McConkey
 - 1d6428777ddb9ad2: ROLE_SHIFT prop:pass_att Jacoby Brissett
 - a9c757b75b07b967: ROLE_SHIFT prop:rec Trey McBride
-- f94bd6b624351811: ROLE_SHIFT prop:rec Harold Fannin Jr.
-- 1f5f032ac2ff9a5d: ROLE_SHIFT prop:rec KC Concepcion
 - 86d02698c76f4352: ROLE_SHIFT prop:rec_yds Makai Lemon
 - d329cb57c2feb755: ROLE_SHIFT prop:rush_att Saquon Barkley
 - 3f1ac0a4bafa8903: ROLE_SHIFT prop:rec Jonah Coleman
@@ -581,10 +654,7 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 87f7903345eb5fa2: ROLE_SHIFT prop:rush_att Omarion Hampton
 - 0eeab0b357f385a9: ROLE_SHIFT prop:pass_att Jacoby Brissett
 - fc48f46e07e9cc87: ROLE_SHIFT prop:rec Trey McBride
-- 53a6237c87ecf68e: ROLE_SHIFT prop:rush_att Jeremiyah Love
 - 3c8827870ba29c81: ROLE_SHIFT prop:rec Brock Bowers
-- 2793f5373ee2901a: ROLE_SHIFT prop:rec Harold Fannin Jr.
-- 751bf9f16ad87cd6: ROLE_SHIFT prop:rec KC Concepcion
 - 7814b70d97a90841: ROLE_SHIFT prop:rec Makai Lemon
 - 9af83f3b33a6f760: ROLE_SHIFT prop:rush_att Rachaad White
 - 60a94c8ccb8e215e: ROLE_SHIFT prop:rush_att Jonah Coleman
@@ -593,9 +663,7 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 801a6e16a7f5333f: ROLE_SHIFT prop:rush_yds Rhamondre Stevenson
 - 485941d9984a6a7a: ROLE_SHIFT prop:pass_att Jacoby Brissett
 - 2fee226a2c987e53: ROLE_SHIFT prop:rec Trey McBride
-- 22dead0ac708cc4e: ROLE_SHIFT prop:rush_att Jeremiyah Love
 - bae04a2e15f9ebc5: ROLE_SHIFT prop:rec Brock Bowers
-- 9d36deb3be2c5aa7: ROLE_SHIFT prop:rush_yds Kirk Cousins
 - 1f01b844a503fba5: ROLE_SHIFT prop:rec Makai Lemon
 - e3c57cc72552232a: ROLE_SHIFT prop:rush_att Saquon Barkley
 - af40e39b06dc3320: ROLE_SHIFT prop:pass_att Lamar Jackson
@@ -622,8 +690,6 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 31abc00a093b848c: ROLE_SHIFT prop:rec Jonathan Taylor
 - 889d1223e11b7372: ROLE_SHIFT prop:rec Laquon Treadwell
 - 6a879f266a646548: ROLE_SHIFT prop:rec Parker Washington
-- 842881ad730b3746: ROLE_SHIFT prop:rush_att Jonathan Taylor
-- ecf779b75e55c057: ROLE_SHIFT prop:rush_yds Jonathan Taylor
 - 96e6f0306b50b332: ROLE_SHIFT prop:pass_att Justin Herbert
 - fe0787b99aca48e7: ROLE_SHIFT prop:rec_yds Kimani Vidal
 - f0a05d3b979b9733: ROLE_SHIFT prop:rec_yds Kyren Williams
@@ -639,12 +705,20 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 9b69c602520ec732: ROLE_SHIFT prop:rec_yds Jordan Addison
 - 5b674c1c7741aac8: ROLE_SHIFT prop:rec Aaron Jones
 - 2c77df48e33ac47f: ROLE_SHIFT prop:rec Jordan Addison
-- 6e721cdcb0e5dbd2: ROLE_SHIFT prop:rush_att Aaron Jones
-- 0ebd5892951b0d81: ROLE_SHIFT prop:rush_yds Aaron Jones
-- 0b638df1925e90e1: ROLE_SHIFT prop:rush_yds Sione Vaki
-- dc0a815df8791f4f: ROLE_SHIFT prop:rec Jahan Dotson
-- e365a1af22e826c8: ROLE_SHIFT prop:rec Kyle Pitts
-- aa52ccb4fd0cb59a: ROLE_SHIFT prop:rush_yds Kenny Gainwell
+- fdb84c263cea0ee0: ROLE_SHIFT prop:pass_att Caleb Williams
+- ca9cace7661ce875: ROLE_SHIFT prop:pass_cmp Caleb Williams
+- b8abe7d1291ee5cc: ROLE_SHIFT prop:pass_yds Caleb Williams
+- 1c7fe716e6e3687e: ROLE_SHIFT prop:rec_yds Colston Loveland
+- c518dd718b5ff796: ROLE_SHIFT prop:rec_yds Kalif Raymond
+- 40c416d49d3988e3: ROLE_SHIFT prop:rec Colston Loveland
+- 02289135c7165e9b: ROLE_SHIFT prop:rec Kalif Raymond
+- 430070bbf5a3a15d: ROLE_SHIFT prop:rec Luther Burden III
+- cce3f47cff1afc30: ROLE_SHIFT prop:rec Rome Odunze
+- 86ac317f5a251ca6: ROLE_SHIFT prop:rec Tory Horton
+- 52d628638b25a3c2: ROLE_SHIFT prop:rush_att Caleb Williams
+- 43aa4da1897e5f6c: ROLE_SHIFT prop:rush_att D'Andre Swift
+- b68e89928a727512: ROLE_SHIFT prop:rush_yds Roschon Johnson
+- 52b2487d75bd568e: ROLE_SHIFT prop:rush_yds Sam Darnold
 - 7a77d819f1817ad9: ROLE_SHIFT prop:pass_att Jacoby Brissett
 - 74526d2badf49684: ROLE_SHIFT prop:pass_cmp Jacoby Brissett
 - 1c75833724d7b4d6: ROLE_SHIFT prop:pass_yds Jacoby Brissett
@@ -657,9 +731,6 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 364cc26757d43d55: ROLE_SHIFT prop:rec Kendrick Bourne
 - 82217edca1072907: ROLE_SHIFT prop:rec Michael Wilson
 - a98cabc6bbd35a5e: ROLE_SHIFT prop:rec Trey McBride
-- 5c1cc3c9ea91ebe0: ROLE_SHIFT prop:rush_att Jeremiyah Love
-- 933373e5ab12c6da: ROLE_SHIFT prop:rush_yds Dak Prescott
-- b9075d592e6252ff: ROLE_SHIFT prop:rush_yds Jeremiyah Love
 - 079b372ada728bb6: ROLE_SHIFT prop:rec_yds Brock Bowers
 - a1bed10dd96f428a: ROLE_SHIFT prop:rec_yds Garrett Wilson
 - 44861c20717de435: ROLE_SHIFT prop:rec_yds Michael Mayer
@@ -668,11 +739,7 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 6908c20efd8b70cc: ROLE_SHIFT prop:rec Garrett Wilson
 - b8bf50b9c8e70696: ROLE_SHIFT prop:rec Kenyon Sadiq
 - 31471e2301509612: ROLE_SHIFT prop:rec Michael Mayer
-- 55a3dd90ea015a2e: ROLE_SHIFT prop:rush_att Ashton Jeanty
-- 51999a1ea232bee5: ROLE_SHIFT prop:rush_yds Ashton Jeanty
 - db6f9fd9982f7c9c: ROLE_SHIFT prop:rush_yds Geno Smith
-- 08c42ddf60c01065: ROLE_SHIFT prop:rush_yds Kirk Cousins
-- e13275b5ee6ae91a: ROLE_SHIFT prop:rush_yds Mike Washington Jr.
 - 791939fa54e7416e: ROLE_SHIFT prop:rec_yds Gunnar Helm
 - 7ad654b594d32626: ROLE_SHIFT prop:rec_yds Ja'Marr Chase
 - f8bb7e99ba1b1aed: ROLE_SHIFT prop:rec_yds Samaje Perine
@@ -684,14 +751,9 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 1efdda4ec662f161: ROLE_SHIFT prop:rec Samaje Perine
 - 23b4769a7da71cc5: ROLE_SHIFT prop:rec Tony Pollard
 - 13847e27bc87ed76: ROLE_SHIFT prop:rush_yds Cam Ward
-- b02810e47979b9b6: ROLE_SHIFT prop:rec_yds KC Concepcion
-- cb243f786e64c763: ROLE_SHIFT prop:rec_yds Quinshon Judkins
 - a0f1aaa55f144994: ROLE_SHIFT prop:rec Darnell Washington
-- 28aa5baf6877b369: ROLE_SHIFT prop:rec Harold Fannin Jr.
 - 4cba0a21be4a2962: ROLE_SHIFT prop:rec Jaylen Warren
-- cd0f58be7d769f52: ROLE_SHIFT prop:rec KC Concepcion
 - b162fb787c8c2146: ROLE_SHIFT prop:rec Pat Freiermuth
-- e3d9310dc5627191: ROLE_SHIFT prop:rec Quinshon Judkins
 - b6660a681414f207: ROLE_SHIFT prop:pass_att Jayden Daniels
 - fc4d84bfdc50508f: ROLE_SHIFT prop:pass_cmp Jayden Daniels
 - 266c40c58e18d9a6: ROLE_SHIFT prop:rec_yds Antonio Williams
@@ -717,7 +779,6 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 8d5f168ad5d43f15: ROLE_SHIFT prop:rush_att James Cook
 - 2320386a2ddf207f: ROLE_SHIFT prop:rush_att Josh Allen
 - 6d10fec1c6f332f6: ROLE_SHIFT prop:rush_yds Josh Allen
-- defaaf80987bd179: ROLE_SHIFT prop:rush_yds Justice Hill
 - 5d3ecb61ed860ba7: ROLE_SHIFT prop:rush_yds Ray Davis
 - 23f28adebcbd08ef: ROLE_SHIFT prop:rec_yds Cyrus Allen
 - 3716ffc261fb6537: ROLE_SHIFT prop:rec_yds Noah Gray
@@ -727,22 +788,19 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - e31b145a8251bd47: ROLE_SHIFT prop:rush_att Bo Nix
 - cf33ad5dea2692f1: ROLE_SHIFT prop:rush_att J.K. Dobbins
 - 65aa54efc9c051ad: ROLE_SHIFT prop:rush_att Jonah Coleman
-- efad8f31fcceaf85: ROLE_SHIFT prop:rush_att Patrick Mahomes
 - c82b4aead5df572e: ROLE_SHIFT prop:rush_yds Jonah Coleman
-- d054bdd13c21d600: ROLE_SHIFT prop:rush_yds Patrick Mahomes
 - 2da2c27a3c1f5f6d: ROLE_SHIFT prop:rush_att Ollie Gordon II
 - d463562be434eefb: ROLE_SHIFT prop:rush_att Rhamondre Stevenson
 - abb5a164161192d1: ROLE_SHIFT prop:pass_yds Daniel Jones
 - d4e8a1e9d1698193: ROLE_SHIFT prop:pass_att Justin Herbert
-- 0ecbaa2633cb30bc: ROLE_SHIFT prop:rec Harold Fannin Jr.
 - d8b2f6b971012422: ROLE_SHIFT prop:rec Makai Lemon
 - 01ac18eb0fd041e1: ROLE_SHIFT prop:rec Saquon Barkley
 - 3b457a7e3b1d805e: ROLE_SHIFT prop:rush_att Jonah Coleman
+- 9be122bad7c3836d: ROLE_SHIFT prop:rush_att D'Andre Swift
 - ea3a465fc165f987: ROLE_SHIFT prop:rec Brock Bowers
-- 990170f1056857eb: ROLE_SHIFT prop:rush_att Ashton Jeanty
 - 3ef38bef657aeef6: ROLE_SHIFT prop:rush_att Rhamondre Stevenson
+- e55594dba40e6e83: ROLE_SHIFT prop:rush_att D'Andre Swift
 - 945c8fdf7813e329: ROLE_SHIFT prop:pass_att Jacoby Brissett
-- 3ad9952011f61ccf: ROLE_SHIFT prop:rush_yds Mike Washington Jr.
 - 1a4c8bc66e53d594: ROLE_SHIFT prop:rec Makai Lemon
 - f59086fdb6b0ee01: ROLE_SHIFT prop:rush_att Saquon Barkley
 - 6533f1c511ccbb2e: ROLE_SHIFT prop:pass_att Lamar Jackson
@@ -756,6 +814,8 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 858c283cd1084857: ROLE_SHIFT prop:rush_att Jonah Coleman
 - f1639539f4bd4662: ROLE_SHIFT prop:rush_att Rhamondre Stevenson
 - 9e76abc6cb265cf3: ROLE_SHIFT prop:rush_att Omarion Hampton
+- 98fbc5caf863ad57: ROLE_SHIFT prop:pass_att Caleb Williams
+- af26db341ff8101f: ROLE_SHIFT prop:rush_att D'Andre Swift
 - 8e4ef8b100235afe: ROLE_SHIFT prop:pass_att Jacoby Brissett
 - cb8a79831f4b9ca9: ROLE_SHIFT prop:rush_att Braelon Allen
 - 5567213dd78b50ba: ROLE_SHIFT prop:pass_att Jayden Daniels
@@ -767,18 +827,18 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 493a92531a907491: ROLE_SHIFT prop:rec Ladd McConkey
 - b4014c678c074653: ROLE_SHIFT prop:rush_att Omarion Hampton
 - 4b369e2041d0aae5: ROLE_SHIFT prop:rec Aaron Jones
+- 1e1b880878045263: ROLE_SHIFT prop:pass_yds Caleb Williams
+- 4ddb1fd149c6515b: ROLE_SHIFT prop:rush_att D'Andre Swift
 - 95313e5f231a79a4: ROLE_SHIFT prop:pass_att Jacoby Brissett
 - 52c012ef88c264e0: ROLE_SHIFT prop:rec Trey McBride
 - f171c94ae9135044: ROLE_SHIFT prop:rec Braelon Allen
 - 361394284050eda4: ROLE_SHIFT prop:rush_att Braelon Allen
-- e730f6587909e736: ROLE_SHIFT prop:rec Harold Fannin Jr.
 - 25ad41a9674104c8: ROLE_SHIFT prop:rec_yds Makai Lemon
 - d7363131e1dfaf0a: ROLE_SHIFT prop:rec Antonio Williams
 - e8af5de689fbe664: ROLE_SHIFT prop:rec Makai Lemon
 - 1e421986c87961c6: ROLE_SHIFT prop:rush_yds Josh Allen
 - 6b00dc4714a6bab0: ROLE_SHIFT prop:rush_att Bo Nix
 - a450067e049a0fc6: ROLE_SHIFT prop:rush_att Jonah Coleman
-- d3b74c806221e044: ROLE_SHIFT prop:rush_att Jonathan Taylor
 - 5d90ecfe2472aeff: ROLE_SHIFT prop:pass_att Jacoby Brissett
 - 2f14257ab422dd12: ROLE_SHIFT prop:pass_yds Jacoby Brissett
 - af8d47eb8f36cc8b: ROLE_SHIFT prop:rec Trey McBride
@@ -826,9 +886,7 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - 4eb70b20434f97c6: ROLE_SHIFT prop:rush_att Bo Nix
 - 85e388bd5e11d91f: ROLE_SHIFT prop:rush_att J.K. Dobbins
 - 40a0fa46bc3e7456: ROLE_SHIFT prop:rush_att Jonah Coleman
-- 3a8458c9efd534ec: ROLE_SHIFT prop:rush_att Patrick Mahomes
 - be2fcbfe900e0b38: ROLE_SHIFT prop:rush_yds Jonah Coleman
-- d7858058bd1d8665: ROLE_SHIFT prop:rush_yds Patrick Mahomes
 - f80e1a5f1ab3ec21: ROLE_SHIFT prop:rush_att Rhamondre Stevenson
 - fd8111b6328137c3: ROLE_SHIFT prop:rush_att Jonah Coleman
 - 11d3abf1fed2a893: ROLE_SHIFT prop:pass_att Jayden Daniels
@@ -851,5 +909,88 @@ Generated: 2026-11-02T11:58:49.281883+00:00
 - a4b0a676f8631b55: ROLE_SHIFT prop:rush_att Rachaad White
 - 1e7507b7d88176d7: ROLE_SHIFT prop:pass_att Jayden Daniels
 - abeff360d425c476: ROLE_SHIFT prop:rec Makai Lemon
+- 7d3706acee39e0e3: ROLE_SHIFT prop:rec Colston Loveland
+- d0d0f4476b5bafb9: ROLE_SHIFT prop:rush_att D'Andre Swift
+- 52f53c1fc8db6fd6: ROLE_SHIFT prop:rec Colston Loveland
+- 72c90f29b6646995: ROLE_SHIFT prop:rush_att D'Andre Swift
+- c0396172bd10e0ee: ROLE_SHIFT prop:rec Malik Washington
+- edd8eab2ab5b5017: ROLE_SHIFT prop:rush_att Jaylen Wright
+- 4ebb61d33559d3e6: ROLE_SHIFT prop:rush_att Ollie Gordon II
+- 4f372d24f335850c: ROLE_SHIFT prop:rush_att Rhamondre Stevenson
+- b06ea98e1e09b400: ROLE_SHIFT prop:rec Bhayshul Tuten
+- 2fe6115e837b6b59: ROLE_SHIFT prop:rec Brenton Strange
+- 34aa6b3821b61ca2: ROLE_SHIFT prop:rec Jonathan Taylor
+- 7637184c8a254df0: ROLE_SHIFT prop:rec Laquon Treadwell
+- 9ed72d4492aa5861: ROLE_SHIFT prop:rec Parker Washington
+- 0a879f11a3e2f578: ROLE_SHIFT prop:rec Kyren Williams
+- 588f0fc1abbbd4e2: ROLE_SHIFT prop:rec Ladd McConkey
+- a08e24547fcbe898: ROLE_SHIFT prop:rec Omarion Hampton
+- a6944bfd3a5eb5f5: ROLE_SHIFT prop:rush_att Omarion Hampton
+- e7c3ba72a593945a: ROLE_SHIFT prop:rec Aaron Jones
+- b3cd9fd5e9ff7fe9: ROLE_SHIFT prop:rec Jordan Addison
+- f7170d298616f9d9: ROLE_SHIFT prop:rec Colston Loveland
+- 7c0490ff32cba84d: ROLE_SHIFT prop:rec Kalif Raymond
+- c8e1407a2eb1ba04: ROLE_SHIFT prop:rec Luther Burden III
+- ce65d54f16cb16aa: ROLE_SHIFT prop:rec Rome Odunze
+- c23042a3fdc31f67: ROLE_SHIFT prop:rec Tory Horton
+- 5a4e3e54c89ba15b: ROLE_SHIFT prop:rush_att D'Andre Swift
+- 852fee659d191a49: ROLE_SHIFT prop:rec Brevyn Spann-Ford
+- 773e4f7d52e1a4dc: ROLE_SHIFT prop:rec George Pickens
+- b3f06179ca60877a: ROLE_SHIFT prop:rec Kendrick Bourne
+- a52fa0a7fb85d17d: ROLE_SHIFT prop:rec Michael Wilson
+- 32705c212f6c53db: ROLE_SHIFT prop:rec Adonai Mitchell
+- ebd37ef6ed0bc9c4: ROLE_SHIFT prop:rec Brock Bowers
+- 713fa86ce3bbfb44: ROLE_SHIFT prop:rec Garrett Wilson
+- 0e7374b14a0612b1: ROLE_SHIFT prop:rec Kenyon Sadiq
+- 84884184b4a6ebc2: ROLE_SHIFT prop:rec Michael Mayer
+- e573f767cc048195: ROLE_SHIFT prop:rec Chase Brown
+- 4dcfefdaf13b8127: ROLE_SHIFT prop:rec Daniel Bellinger
+- 74bebb88e374aca0: ROLE_SHIFT prop:rec Gunnar Helm
+- e40ab01db87a4c2d: ROLE_SHIFT prop:rec Ja'Marr Chase
+- 907e42938e1e4037: ROLE_SHIFT prop:rec Mike Gesicki
+- f639082157a5135b: ROLE_SHIFT prop:rec Samaje Perine
+- 0384d5943f431981: ROLE_SHIFT prop:rec Tony Pollard
+- 762d6bcbbe553337: ROLE_SHIFT prop:rec Darnell Washington
+- 07bce3b9ca6a3065: ROLE_SHIFT prop:rec Jaylen Warren
+- 5755001de6d216f3: ROLE_SHIFT prop:rec Pat Freiermuth
+- c1f45656174438f5: ROLE_SHIFT prop:rec Antonio Williams
+- 1a5587c467fa3922: ROLE_SHIFT prop:rec Dallas Goedert
+- c61c0d4eea3fe455: ROLE_SHIFT prop:rec Makai Lemon
+- ef249e0a79a0f5e8: ROLE_SHIFT prop:rec Saquon Barkley
+- 7accd52ed476862e: ROLE_SHIFT prop:rec Treylon Burks
+- 422307df35910aa5: ROLE_SHIFT prop:rush_att Rachaad White
+- 385979981b8d9699: ROLE_SHIFT prop:rush_att Saquon Barkley
+- 6282a92dc3d59209: ROLE_SHIFT prop:rec Ja'Kobi Lane
+- 554bcc574ec12701: ROLE_SHIFT prop:rec Justice Hill
+- bb38b9d9d3d9f291: ROLE_SHIFT prop:rec Mark Andrews
+- ac5d113dec419bbd: ROLE_SHIFT prop:rec Ty Johnson
+- f7a14cc568fb6b51: ROLE_SHIFT prop:rush_att James Cook
+- 03a620767071b98e: ROLE_SHIFT prop:rec Emmett Johnson
+- 9d4af53a17853eda: ROLE_SHIFT prop:rec Jonah Coleman
+- f92fb954d7206af3: ROLE_SHIFT prop:rec Noah Gray
+- 3c8955920bd1cd80: ROLE_SHIFT prop:rush_att J.K. Dobbins
+- 2ed1bc6755890449: ROLE_SHIFT prop:rush_att Jonah Coleman
+- 5e83567f7f066346: ROLE_SHIFT prop:rec Colston Loveland
+- c1ec1e694215a538: ROLE_SHIFT prop:rush_att D'Andre Swift
+- 66786bfbb6e5f1b1: ROLE_SHIFT prop:pass_att Caleb Williams
+- 8c043da42a3cb804: ROLE_SHIFT prop:pass_cmp Caleb Williams
+- c7c5d6ac8220b400: ROLE_SHIFT prop:pass_yds Caleb Williams
+- c17b3741ded0bcfd: ROLE_SHIFT prop:rec_yds Colston Loveland
+- 07c08668be5ad2ff: ROLE_SHIFT prop:rec_yds Kalif Raymond
+- 3284e05a7fad7bf2: ROLE_SHIFT prop:rec_yds Tory Horton
+- a8563627e111984c: ROLE_SHIFT prop:rec Colston Loveland
+- 3b8779a77eeef0d0: ROLE_SHIFT prop:rec Kalif Raymond
+- f30030b4db5e441c: ROLE_SHIFT prop:rec Luther Burden III
+- bc52bbdfcef06404: ROLE_SHIFT prop:rec Rome Odunze
+- 8ae35e3540113286: ROLE_SHIFT prop:rec Tory Horton
+- 58b397ec75b6f812: ROLE_SHIFT prop:rush_att Caleb Williams
+- deafaa462dc1c7d3: ROLE_SHIFT prop:rush_att D'Andre Swift
+- f5a49188c9ab5ac5: ROLE_SHIFT prop:rush_yds Jadarian Price
+- 63a451e9a9e2ffd5: ROLE_SHIFT prop:rush_yds Roschon Johnson
+- ad1f43a89b8facd5: ROLE_SHIFT prop:rush_yds Sam Darnold
+- e94aa20d43790433: ROLE_SHIFT prop:rush_att D'Andre Swift
+- 045c7eee519e7582: ROLE_SHIFT prop:rec Colston Loveland
+- bce01e908b56316b: ROLE_SHIFT prop:rush_att D'Andre Swift
+- 5863da208c121867: ROLE_SHIFT prop:rush_att D'Andre Swift
 
-Total flagged: 728
+Total flagged: 859
