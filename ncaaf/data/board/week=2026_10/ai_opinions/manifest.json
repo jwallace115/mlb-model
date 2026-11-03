@@ -246,5 +246,162 @@
     "657053f4734af94664beb750813257bb": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261103T000403Z.parquet",
+  "sha256": "0872c68fee027f5fc6c77f5d9f3c301122717a0d05874825a5f83ba8aaaf4d8b",
+  "logged_utc": "2026-11-03T00:04:03.954846+00:00",
+  "rows": 8,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.75,
+  "revised_rows": 1,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-04T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261103T000009Z.parquet",
+   "inputs_digest": "{\"c0ddb68355a79fb70194e95b75c037ca\": \"2deb5f1c6ce6ff8a\", \"6ee8ad6eb7454d13bebc0806a10cc861\": \"af957fb15f24d5fb\", \"7db0ce3fddd5c735e599b1085c9b5cef\": \"b80efe67fa178209\"}",
+   "components": {
+    "c0ddb68355a79fb70194e95b75c037ca": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       411
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -562
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       14.0,
+       -115
+      ],
+      [
+       "Ohio Bobcats",
+       -14.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -112
+      ],
+      [
+       "Under",
+       51.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Ohio visits Akron in MAC play"
+     ],
+     "kalshi_snap": "snap_20261103T0007Z.parquet"
+    },
+    "6ee8ad6eb7454d13bebc0806a10cc861": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       137
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       -159
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       3.0,
+       -103
+      ],
+      [
+       "UMass Minutemen",
+       -3.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -108
+      ],
+      [
+       "Under",
+       49.5,
+       -110
+      ]
+     ],
+     "news": [
+      "MAC matchup features UMass squaring off against Ba"
+     ],
+     "kalshi_snap": "snap_20261103T0007Z.parquet"
+    },
+    "7db0ce3fddd5c735e599b1085c9b5cef": {
+     "pinnacle_h2h": [
+      [
+       "Sacramento State Hornets",
+       0,
+       1358
+      ],
+      [
+       "Toledo Rockets",
+       0,
+       -3014
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Sacramento State Hornets",
+       25.0,
+       -111
+      ],
+      [
+       "Toledo Rockets",
+       -25.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       100
+      ],
+      [
+       "Under",
+       52.5,
+       -119
+      ]
+     ],
+     "news": [
+      "Isaiah Ene helps Sacramento State beat Kent State ",
+      "Kent State Golden Flashes vs. Sacramento State Hor",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Toledo meets Sacramento State in MAC action"
+     ],
+     "kalshi_snap": "snap_20261103T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "c0ddb68355a79fb70194e95b75c037ca": "line_move: pinnacle spreads Akron Zips 13.0\u219214.0; line_move: pinnacle spreads Ohio Bobcats -13.0\u2192-14.0",
+    "6ee8ad6eb7454d13bebc0806a10cc861": "anchor_morning",
+    "7db0ce3fddd5c735e599b1085c9b5cef": "anchor_morning"
+   }
+  }
  }
 ]
