@@ -403,5 +403,74 @@
     "7db0ce3fddd5c735e599b1085c9b5cef": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261103T011903Z.parquet",
+  "sha256": "899f0eb19190831921e5a85630b79303e9c21e77198f527fd10e52073d01ec30",
+  "logged_utc": "2026-11-03T01:19:03.543933+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 0,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-05T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261103T010006Z.parquet",
+   "inputs_digest": "{\"e5c8c0aaad6dc26e9ede547783d854d2\": \"6ecd3d4c6630c952\"}",
+   "components": {
+    "e5c8c0aaad6dc26e9ede547783d854d2": {
+     "pinnacle_h2h": [
+      [
+       "Central Michigan Chippewas",
+       0,
+       -101
+      ],
+      [
+       "Eastern Michigan Eagles",
+       0,
+       -114
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Central Michigan Chippewas",
+       2.0,
+       -118
+      ],
+      [
+       "Eastern Michigan Eagles",
+       -2.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -101
+      ],
+      [
+       "Under",
+       44.5,
+       -118
+      ]
+     ],
+     "news": [
+      "2027 college football recruits on the rise and how",
+      "Eastern Michigan and Central Michigan meet in Detr"
+     ],
+     "kalshi_snap": "snap_20261103T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "e5c8c0aaad6dc26e9ede547783d854d2": "anchor_morning"
+   }
+  }
  }
 ]
