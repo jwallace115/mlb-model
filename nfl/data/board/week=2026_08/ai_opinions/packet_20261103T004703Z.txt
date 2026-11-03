@@ -1,0 +1,71 @@
+packet built 2026-11-03T00:47Z | snap snap_20261103T003007Z.parquet | props pull 2026-11-03T00:32 | kalshi snap_20261103T0035Z.parquet | injuries injuries_20261103T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: anchor_close
+######## Chicago Bears @ Seattle Seahawks  kick 11-03T01:20Z
+  HR ML: Seahawks -185 / Bears +155 (no-vig home 0.623) | Pinnacle no-vig home 0.618
+  HR spread: Seahawks -3.5 +100 / Bears +3.5 -120 | Pinnacle Seahawks -3.5 (+104) | HR open -3.5 (20261103)
+  HR total: 46.5 O-110/U-110 | Pinnacle 46.5 O-106/U-106 | HR open 46.5
+  Kalshi ML [('Seattle wins', 0.61, 3255728), ('Chicago wins', 0.39, 5582809)] | spread [('Seattle wins by over 3.5 points?', 0.47, 2608868), ('Seattle wins by over 4.5 points?', 0.43, 135060)] | total [('Full Game: over 46.5 points scored?', 0.49, 730440), ('Full Game: over 47.5 points scored?', 0.46, 40540)]
+  -- Chicago Bears injuries (20261103T0030)
+     Out  CB Malik Muhammad II: Muhammad (toe) is inactive for Monday's game against the Seahawks.
+     Out  QB Case Keenum: Keenum (coach's decision) is inactive but will operate as the Bears' emergency third quarterback for Monday night's matchup against the Seahawks.
+     Acti TE Stephen Carlson: The Bears elevated Carlson from their practice squad Monday ahead of the team's matchup versus Seattle.
+     Out  DT Jordan van den Berg: inactive
+     Out  DT Jayden Loving: inactive
+     Out  G  Jordan McFadden: inactive
+     Out  RB Kyle Monangai: inactive
+     Acti TE Colston Loveland: Loveland (neck) does not carry an injury designation into Monday's game against the Seahawks.
+     Inju S  Coby Bryant: Coach Ben Johnson said Wednesday that Bryant (knee) will start running again in the "near future," Courtney Cronin of ESPN.com reports.
+     Acti RB Zavier Scott: Chicago signed Scott from the practice squad to the active roster Tuesday.
+     Acti TE Sam Roush: Roush is expected to get more work on offense after Cole Kmet (knee) landed on injured reserve Friday.
+     Acti WR Kalif Raymond: Raymond did not catch either of his two targets and returned one punt for seven yards Thursday in a 30-24 win over New England.
+     Acti RB Roschon Johnson: Johnson rushed twice for 13 yards in the Bears' 30-24 victory over the Patriots on Thursday.
+     Inju TE Cole Kmet: The Bears placed Kmet (knee) on injured reserve Friday.
+     Acti WR Rome Odunze: Odunze brought in four of five targets for 69 yards in the Bears' 30-24 win over the Patriots on Thursday.
+     Acti RB D'Andre Swift: Swift rushed 22 times for 78 yards and a touchdown and brought in all four targets for 12 yards in the Bears' 30-24 win over the Patriots on Thursday.
+     Acti WR Luther Burden III: Burden brought in all four targets for 130 yards and a touchdown and rushed once for seven yards in the Bears' 30-24 win over the Patriots on Thursday
+     news 11-02T16:56 Super Bowl LXI odds: All 32 teams' odds to win the championship
+     news 11-02T17:17 A child playcaller? The Bears' Ben Johnson was born for this
+     news 11-02T17:50 2026 NFL trade deadline updates: Jeffery Simmons, Quenton Nelson on the move
+     news 11-02T23:20 How to bet Bears-Seahawks: Game pick and four props to play
+     news 11-02T23:57 NFL Week 8's best arrivals, led by Rams' Quentin Lake
+  -- Seattle Seahawks injuries (20261103T0030)
+     Out  DT Brandon Pili: Pili (back) is inactive for Monday night's game against the Bears, John Boyle of the Seahawks' official site reports.
+     Out  LB Uchenna Nwosu: Nwosu (ankle) is inactive for Monday's clash with the Bears, John Boyle of the Seahawks' official site reports.
+     Acti WR Montorie Foster Jr.: The Seahawks elevated Foster from their practice squad Monday ahead of the team's matchup versus the Bears, John Boyle of the team's official site rep
+     Out  QB Drew Lock: Lock (coach's decision) is inactive for Monday's matchup with the Bears, John Boyle of the Seahawks' official site reports.
+     Out  WR Rashid Shaheed: inactive
+     Out  G  Beau Stephens: inactive
+     Out  RB Velus Jones Jr.: inactive
+     Out  OT Charles Cross: inactive
+     Acti RB Emanuel Wilson: Wilson is welcoming back Zach Charbonnet (knee) and Jadarian Price (chest) to the Seahawks backfield for Monday's game against the Bears, John Boyle o
+     Acti RB Jadarian Price: The Seahawks reinstated Price (chest) from injured reserve ahead of Monday's game against the Bears, John Boyle of the team's official site reports.
+     Acti RB Zach Charbonnet: Charbonnet (knee) does not carry an injury designation into Monday's game against the Bears, John Boyle of the Seahawks' official site reports.
+     Acti RB George Holani: Holani turned five carries into 11 yards and caught one of two targets for 12 yards during the Seahawks' 20-3 win over the Chiefs on Sunday.
+     Acti WR Cooper Kupp: Kupp caught both of his targets for 20 yards in a 20-3 win over the Chiefs on Sunday.
+     Acti WR Tory Horton: Horton failed to haul in his lone target and returned two kickoffs for 60 yards during the Seahawks' 20-3 win over the Chiefs on Sunday.
+     news 11-02T15:52 How to bet Bears-Seahawks: Game pick and three props to play
+     news 11-02T16:56 Super Bowl LXI odds: All 32 teams' odds to win the championship
+     news 11-02T17:50 2026 NFL trade deadline updates: Jeffery Simmons, Quenton Nelson on the move
+     news 11-02T23:20 How to bet Bears-Seahawks: Game pick and four props to play
+     news 11-02T23:57 NFL Week 8's best arrivals, led by Rams' Quentin Lake
+  -- props (pull 2026-11-03T00:32)
+     * AJ Barner: atd 0.5 (+260), recyd 30.5 (-115/-115), rec 3.5 (+120/-150)
+     * Caleb Williams: atd 0.5 (+450), paatt 32.5 (-120/-110), cmp 20.5 (-110/-120), int 0.5 (-110/-120), patd 1.5 (+120/-155), payd 228.5 (-115/-115), ruatt 4.5 (-130/+100), ruyd 25.5 (-115/-115)
+     * Colston Loveland: atd 0.5 (+200), recyd 43.5 (-115/-115), rec 4.5 (+115/-145)
+     * Cooper Kupp: atd 0.5 (+325), recyd 29.5 (-115/-115), rec 2.5 (-155/+120)
+     * D'Andre Swift: atd 0.5 (-105), recyd 21.5 (-115/-115), rec 3.5 (+110/-140), ruatt 16.5 (-110/-120), ruyd 60.5 (-115/-115)
+     * Emanuel Wilson: atd 0.5 (+300), ruyd 20.5 (-115/-115)
+     * Eric Saubert: atd 0.5 (+1200), recyd 0.5 (-105/-125), rec 0.5 (-130/+100)
+     * George Holani: atd 0.5 (+600)
+     * Jadarian Price: atd 0.5 (+425), recyd 4.5 (-120/-110), rec 0.5 (-190/+140), ruatt 6.5 (-115/-115), ruyd 28.5 (-115/-115)
+     * Jaxon Smith-Njigba: atd 0.5 (-110), recyd 102.5 (-115/-115), rec 7.5 (-105/-125)
+     * Kalif Raymond: atd 0.5 (+475), recyd 18.5 (-110/-120), rec 2.5 (+135/-180)
+     * Luther Burden III: atd 0.5 (+225), recyd 55.5 (-115/-115), rec 4.5 (+115/-150), ruyd 2.5 (-115/-115)
+     * Rome Odunze: atd 0.5 (+250), recyd 40.5 (-115/-115), rec 3.5 (+130/-170)
+     * Roschon Johnson: atd 0.5 (+350), recyd 2.5 (-115/-115), rec 0.5 (-145/+110), ruyd 10.5 (-110/-120)
+     * Sam Darnold: atd 0.5 (+650), paatt 30.5 (-110/-120), cmp 19.5 (-120/-110), int 0.5 (-120/-110), patd 1.5 (-125/-105), payd 241.5 (-115/-115), ruyd 5.5 (-110/-120)
+     * Sam Roush: atd 0.5 (+600), recyd 9.5 (-115/-115), rec 1.5 (+110/-145)
+     * Tory Horton: atd 0.5 (+350), recyd 24.5 (-115/-115), rec 1.5 (-190/+140)
+     * Zach Charbonnet: atd 0.5 (+130), recyd 7.5 (-120/-110), rec 1.5 (+135/-175), ruatt 7.5 (-110/-120), ruyd 28.5 (-115/-115)

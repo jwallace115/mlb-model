@@ -17585,5 +17585,283 @@
     "7d664fbcd39350e559d83c0068ba7169": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261103T003203Z.parquet",
+  "sha256": "984a4085ecef4f51760c9f695ccd5856dd96b760956c9d28f4929aded98bc8b3",
+  "logged_utc": "2026-11-03T00:32:03.754101+00:00",
+  "rows": 73,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.959,
+  "revised_rows": 52,
+  "oldest_source_age_min": 46.9,
+  "first_kickoff_utc": "2026-11-03T01:20:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261103T003007Z.parquet",
+   "inputs_digest": "{\"7d664fbcd39350e559d83c0068ba7169\": \"789903e3498cfdc2\"}",
+   "components": {
+    "7d664fbcd39350e559d83c0068ba7169": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       155
+      ],
+      [
+       "Seattle Seahawks",
+       0,
+       -185
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Chicago Bears",
+       3.5,
+       -120
+      ],
+      [
+       "Seattle Seahawks",
+       -3.5,
+       100
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.5,
+       -110
+      ],
+      [
+       "Under",
+       46.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       155
+      ],
+      [
+       "Seattle Seahawks",
+       0,
+       -173
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Chicago Bears",
+       3.5,
+       -115
+      ],
+      [
+       "Seattle Seahawks",
+       -3.5,
+       104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -106
+      ],
+      [
+       "Under",
+       46.5,
+       -106
+      ]
+     ],
+     "props_ts": "2026-11-03T00:32:39.904355+00:00",
+     "inj_Seattle Seahawks": "da61f43857f38519",
+     "inj_Chicago Bears": "cdab746935da6f79",
+     "news": [
+      "'A league-changing move!' Kimes reacts to Bears' t",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2027 NFL draft order projections for Round 1, chan",
+      "A child playcaller? The Bears' Ben Johnson was bor",
+      "Bears QB Caleb Williams won't 'spat' custom cleats",
+      "Bears acquire All-Pro DT Jeffery Simmons in trade ",
+      "Bears get Jeffery Simmons: Key intel on blockbuste",
+      "Can Seahawks' Rashid Shaheed become a complementar",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "How Jeffery Simmons landed with the Bears",
+      "How active NFL players continue to redefine all-ti",
+      "How to bet Bears-Seahawks: Game pick and four prop",
+      "How to bet Bears-Seahawks: Game pick and three pro",
+      "Jeffery Simmons traded to Bears: Does dealing mult",
+      "Judging overreactions to NFL Week 8: Days numbered",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Quenton Nelson's arrival reshapes Seahawks' offens",
+      "Quenton Nelson: Cherished time with Colts but exci",
+      "Ranking the top 10 trick plays in Super Bowl histo",
+      "Seahawks' dominant defense faces challenge in Bear",
+      "Source: Bears quarterback Caleb Williams fined aga",
+      "Sources: Bears, Titans used Myles Garrett deal as ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Will Jadarian Price play Monday night against the ",
+      "Zach Charbonnet, Jadarian Price have no game desig"
+     ],
+     "kalshi_snap": "snap_20261103T0005Z.parquet"
+    }
+   },
+   "triggers": {
+    "7d664fbcd39350e559d83c0068ba7169": "injury_change: inj_Seattle Seahawks; injury_change: inj_Chicago Bears"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261103T004703Z.parquet",
+  "sha256": "2d2c975cda459b9d1f44b61c30bb57b4fc2d6302bb161a78fa031c287288ace4",
+  "logged_utc": "2026-11-03T00:47:03.474022+00:00",
+  "rows": 76,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.961,
+  "revised_rows": 68,
+  "oldest_source_age_min": 16.9,
+  "first_kickoff_utc": "2026-11-03T01:20:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261103T003007Z.parquet",
+   "inputs_digest": "{\"7d664fbcd39350e559d83c0068ba7169\": \"74f43d01a5d8b7fe\"}",
+   "components": {
+    "7d664fbcd39350e559d83c0068ba7169": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       155
+      ],
+      [
+       "Seattle Seahawks",
+       0,
+       -185
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Chicago Bears",
+       3.5,
+       -120
+      ],
+      [
+       "Seattle Seahawks",
+       -3.5,
+       100
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.5,
+       -110
+      ],
+      [
+       "Under",
+       46.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       155
+      ],
+      [
+       "Seattle Seahawks",
+       0,
+       -173
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Chicago Bears",
+       3.5,
+       -115
+      ],
+      [
+       "Seattle Seahawks",
+       -3.5,
+       104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -106
+      ],
+      [
+       "Under",
+       46.5,
+       -106
+      ]
+     ],
+     "props_ts": "2026-11-03T00:32:39.904355+00:00",
+     "inj_Seattle Seahawks": "da61f43857f38519",
+     "inj_Chicago Bears": "cdab746935da6f79",
+     "news": [
+      "'A league-changing move!' Kimes reacts to Bears' t",
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2027 NFL draft order projections for Round 1, chan",
+      "A child playcaller? The Bears' Ben Johnson was bor",
+      "Bears QB Caleb Williams won't 'spat' custom cleats",
+      "Bears acquire All-Pro DT Jeffery Simmons in trade ",
+      "Bears get Jeffery Simmons: Key intel on blockbuste",
+      "Can Seahawks' Rashid Shaheed become a complementar",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "How Jeffery Simmons landed with the Bears",
+      "How active NFL players continue to redefine all-ti",
+      "How to bet Bears-Seahawks: Game pick and four prop",
+      "How to bet Bears-Seahawks: Game pick and three pro",
+      "Jeffery Simmons traded to Bears: Does dealing mult",
+      "Judging overreactions to NFL Week 8: Days numbered",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Quenton Nelson's arrival reshapes Seahawks' offens",
+      "Quenton Nelson: Cherished time with Colts but exci",
+      "Ranking the top 10 trick plays in Super Bowl histo",
+      "Seahawks' dominant defense faces challenge in Bear",
+      "Source: Bears quarterback Caleb Williams fined aga",
+      "Sources: Bears, Titans used Myles Garrett deal as ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Will Jadarian Price play Monday night against the ",
+      "Zach Charbonnet, Jadarian Price have no game desig"
+     ],
+     "kalshi_snap": "snap_20261103T0035Z.parquet"
+    }
+   },
+   "triggers": {
+    "7d664fbcd39350e559d83c0068ba7169": "anchor_close"
+   }
+  }
  }
 ]

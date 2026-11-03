@@ -316,3 +316,4 @@
 {"utc":"20261102T0900Z","feed":"nflverse_injuries","file":"injuries.parquet","sha256":"61de1afc2f3830f71cad1c4870c526ee05fbbfe1f023d31ef6fcaae4cc67097c","status":"unchanged"}
 {"utc": "20261102T1230Z", "feed": "espn_depth", "sha256": "8241efb436915b488e456e2c75ffe7748bcf89bd0b1e9a6256c9fe0f47841a63", "status": "written"}
 {"utc": "20261102T1830Z", "feed": "espn_depth", "sha256": "88d071f816523788411265045de83627cb636cf2f8ed18279087b5be57cdb19b", "status": "written"}
+{"utc": "20261103T0030Z", "feed": "espn_depth", "sha256": "0e95bfcfc2c32022985d68fb726fe18648e1251a28bc119b1e69033652c1036e", "status": "written"}
