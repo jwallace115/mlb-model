@@ -919,5 +919,73 @@
     "c0ddb68355a79fb70194e95b75c037ca": "line_move: pinnacle spreads Akron Zips 14.5\u219213.5; line_move: pinnacle spreads Ohio Bobcats -14.5\u2192-13.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261103T210404Z.parquet",
+  "sha256": "563ee71b4c639585bc8c103725903ee632a28505474677035687d86d736545a4",
+  "logged_utc": "2026-11-03T21:04:04.365340+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-04T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261103T210008Z.parquet",
+   "inputs_digest": "{\"c0ddb68355a79fb70194e95b75c037ca\": \"b223f04de67653a9\"}",
+   "components": {
+    "c0ddb68355a79fb70194e95b75c037ca": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       417
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -518
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       13.5,
+       -105
+      ],
+      [
+       "Ohio Bobcats",
+       -13.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -117
+      ],
+      [
+       "Under",
+       51.0,
+       101
+      ]
+     ],
+     "news": [
+      "Ohio visits Akron in MAC play"
+     ],
+     "kalshi_snap": "snap_20261103T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "c0ddb68355a79fb70194e95b75c037ca": "anchor_prekick"
+   }
+  }
  }
 ]
