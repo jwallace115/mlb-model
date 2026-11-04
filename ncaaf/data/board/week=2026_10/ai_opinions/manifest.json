@@ -1604,5 +1604,119 @@
     "6ee8ad6eb7454d13bebc0806a10cc861": "ml_move: pinnacle novig 0.403\u21920.438"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261104T210403Z.parquet",
+  "sha256": "14246dc60d201fc9fa9f8912529dd87c4f850e1a7c2a3cb26d79082de2e906d1",
+  "logged_utc": "2026-11-04T21:04:03.341099+00:00",
+  "rows": 5,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.2,
+  "revised_rows": 4,
+  "oldest_source_age_min": 3.8,
+  "first_kickoff_utc": "2026-11-05T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261104T210012Z.parquet",
+   "inputs_digest": "{\"6ee8ad6eb7454d13bebc0806a10cc861\": \"97e2b3a5c3b4d907\", \"7db0ce3fddd5c735e599b1085c9b5cef\": \"68fc1a9c7f32de00\"}",
+   "components": {
+    "6ee8ad6eb7454d13bebc0806a10cc861": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       120
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       -133
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       2.5,
+       -104
+      ],
+      [
+       "UMass Minutemen",
+       -2.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -106
+      ],
+      [
+       "Under",
+       49.0,
+       -110
+      ]
+     ],
+     "news": [
+      "MAC matchup features UMass squaring off against Ba"
+     ],
+     "kalshi_snap": "snap_20261104T2107Z.parquet"
+    },
+    "7db0ce3fddd5c735e599b1085c9b5cef": {
+     "pinnacle_h2h": [
+      [
+       "Sacramento State Hornets",
+       0,
+       1601
+      ],
+      [
+       "Toledo Rockets",
+       0,
+       -2868
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Sacramento State Hornets",
+       25.0,
+       -102
+      ],
+      [
+       "Toledo Rockets",
+       -25.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -114
+      ],
+      [
+       "Under",
+       52.5,
+       -102
+      ]
+     ],
+     "news": [
+      "Isaiah Ene helps Sacramento State beat Kent State ",
+      "Kent State Golden Flashes vs. Sacramento State Hor",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Toledo meets Sacramento State in MAC action"
+     ],
+     "kalshi_snap": "snap_20261104T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "6ee8ad6eb7454d13bebc0806a10cc861": "anchor_prekick",
+    "7db0ce3fddd5c735e599b1085c9b5cef": "anchor_prekick"
+   }
+  }
  }
 ]
