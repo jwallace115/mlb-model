@@ -1536,5 +1536,73 @@
     "c93b343bc3151a39a9541c0af3b22123": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261104T173403Z.parquet",
+  "sha256": "ac79dad3f80375b76244edd5e89b6db3c97bd693ddfe42e2ff58fbae1fb2706d",
+  "logged_utc": "2026-11-04T17:34:03.258957+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-05T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261104T173007Z.parquet",
+   "inputs_digest": "{\"6ee8ad6eb7454d13bebc0806a10cc861\": \"02f0314096de56e4\"}",
+   "components": {
+    "6ee8ad6eb7454d13bebc0806a10cc861": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       123
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       -136
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       2.5,
+       100
+      ],
+      [
+       "UMass Minutemen",
+       -2.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -101
+      ],
+      [
+       "Under",
+       49.5,
+       -116
+      ]
+     ],
+     "news": [
+      "MAC matchup features UMass squaring off against Ba"
+     ],
+     "kalshi_snap": "snap_20261104T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "6ee8ad6eb7454d13bebc0806a10cc861": "ml_move: pinnacle novig 0.403\u21920.438"
+   }
+  }
  }
 ]
