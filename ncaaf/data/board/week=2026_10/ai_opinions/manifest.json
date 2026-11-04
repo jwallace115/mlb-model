@@ -1191,5 +1191,77 @@
     "657053f4734af94664beb750813257bb": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261104T003403Z.parquet",
+  "sha256": "06f8eee012936f5f4c1f7153d5f3f3907ac515bc9c0fb60bfaa8045d5c2fc202",
+  "logged_utc": "2026-11-04T00:34:03.858477+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-06T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261104T003010Z.parquet",
+   "inputs_digest": "{\"5af84fe49ccd4f304f9af0dce0a0db56\": \"691287a97783e369\"}",
+   "components": {
+    "5af84fe49ccd4f304f9af0dce0a0db56": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       219
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -265
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       7.0,
+       -113
+      ],
+      [
+       "UTSA Roadrunners",
+       -7.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       73.0,
+       -108
+      ],
+      [
+       "Under",
+       73.0,
+       -110
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Florida Atlantic Owls vs. North Texas Mean Green: ",
+      "Florida Atlantic hosts UTSA in AAC matchup",
+      "Tayven Jackson, Jahiem White propel North Texas to"
+     ],
+     "kalshi_snap": "snap_20261104T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "5af84fe49ccd4f304f9af0dce0a0db56": "anchor_morning"
+   }
+  }
  }
 ]
