@@ -1263,5 +1263,75 @@
     "5af84fe49ccd4f304f9af0dce0a0db56": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261104T010403Z.parquet",
+  "sha256": "c86a7ff552ee668bd033ca70966b647477f915a16405a8f1f6bb6b16aeb465a7",
+  "logged_utc": "2026-11-04T01:04:03.638022+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-06T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261104T010007Z.parquet",
+   "inputs_digest": "{\"c93b343bc3151a39a9541c0af3b22123\": \"b2aaf309d9bf1e7b\"}",
+   "components": {
+    "c93b343bc3151a39a9541c0af3b22123": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -675
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       475
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -14.5,
+       -108
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       14.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -118
+      ],
+      [
+       "Under",
+       57.5,
+       -101
+      ]
+     ],
+     "news": [
+      "Hayden Wolfe's field goal in OT lifts Troy to 24-2",
+      "James Madison and Southern Miss meet in Sun Belt p",
+      "Troy Trojans vs. James Madison Dukes: Full Highlig"
+     ],
+     "kalshi_snap": "snap_20261104T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "c93b343bc3151a39a9541c0af3b22123": "anchor_morning"
+   }
+  }
  }
 ]
