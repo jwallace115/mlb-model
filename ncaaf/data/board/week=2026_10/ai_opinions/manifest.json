@@ -1333,5 +1333,208 @@
     "c93b343bc3151a39a9541c0af3b22123": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261104T150404Z.parquet",
+  "sha256": "34eec5e3536a58ad90ace64a60602f8a45e326f9ed9afc22f469be56c91af5ff",
+  "logged_utc": "2026-11-04T15:04:04.789338+00:00",
+  "rows": 11,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.636,
+  "revised_rows": 11,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-05T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261104T150011Z.parquet",
+   "inputs_digest": "{\"7db0ce3fddd5c735e599b1085c9b5cef\": \"dff8c69f615cbc24\", \"e5c8c0aaad6dc26e9ede547783d854d2\": \"442680c9946ee135\", \"5af84fe49ccd4f304f9af0dce0a0db56\": \"d0da7fe1ee63682d\", \"c93b343bc3151a39a9541c0af3b22123\": \"a4f36f728e49227d\"}",
+   "components": {
+    "7db0ce3fddd5c735e599b1085c9b5cef": {
+     "pinnacle_h2h": [
+      [
+       "Sacramento State Hornets",
+       0,
+       1570
+      ],
+      [
+       "Toledo Rockets",
+       0,
+       -2790
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Sacramento State Hornets",
+       25.0,
+       -106
+      ],
+      [
+       "Toledo Rockets",
+       -25.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -112
+      ],
+      [
+       "Under",
+       52.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Isaiah Ene helps Sacramento State beat Kent State ",
+      "Kent State Golden Flashes vs. Sacramento State Hor",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Toledo meets Sacramento State in MAC action"
+     ],
+     "kalshi_snap": "snap_20261104T1507Z.parquet"
+    },
+    "e5c8c0aaad6dc26e9ede547783d854d2": {
+     "pinnacle_h2h": [
+      [
+       "Central Michigan Chippewas",
+       0,
+       100
+      ],
+      [
+       "Eastern Michigan Eagles",
+       0,
+       -110
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Central Michigan Chippewas",
+       1.0,
+       -106
+      ],
+      [
+       "Eastern Michigan Eagles",
+       -1.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -107
+      ],
+      [
+       "Under",
+       44.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Eastern Michigan and Central Michigan meet in Detr"
+     ],
+     "kalshi_snap": "snap_20261104T1507Z.parquet"
+    },
+    "5af84fe49ccd4f304f9af0dce0a0db56": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       222
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -262
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       7.0,
+       -112
+      ],
+      [
+       "UTSA Roadrunners",
+       -7.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       73.0,
+       -111
+      ],
+      [
+       "Under",
+       73.0,
+       -105
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Florida Atlantic hosts UTSA in AAC matchup"
+     ],
+     "kalshi_snap": "snap_20261104T1507Z.parquet"
+    },
+    "c93b343bc3151a39a9541c0af3b22123": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -612
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       459
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -14.0,
+       -107
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       14.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -110
+      ],
+      [
+       "Under",
+       57.5,
+       -106
+      ]
+     ],
+     "news": [
+      "James Madison and Southern Miss meet in Sun Belt p"
+     ],
+     "kalshi_snap": "snap_20261104T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "7db0ce3fddd5c735e599b1085c9b5cef": "anchor_morning",
+    "e5c8c0aaad6dc26e9ede547783d854d2": "anchor_morning",
+    "5af84fe49ccd4f304f9af0dce0a0db56": "anchor_morning",
+    "c93b343bc3151a39a9541c0af3b22123": "anchor_morning"
+   }
+  }
  }
 ]
