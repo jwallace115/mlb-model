@@ -1,6 +1,6 @@
 # WHY Summary — Week 7
 
-Generated: 2026-11-03T11:50:15.124180+00:00
+Generated: 2026-11-04T11:49:21.367550+00:00
 
 
 ## Graded rows
