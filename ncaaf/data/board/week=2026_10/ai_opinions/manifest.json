@@ -1718,5 +1718,73 @@
     "7db0ce3fddd5c735e599b1085c9b5cef": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261104T213404Z.parquet",
+  "sha256": "02b89e02a0398bd4f07f71bb2976e737023433df87e5d58af2b330272a9262e5",
+  "logged_utc": "2026-11-04T21:34:04.663704+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-05T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261104T213008Z.parquet",
+   "inputs_digest": "{\"e5c8c0aaad6dc26e9ede547783d854d2\": \"7bcb5b9bce30ec45\"}",
+   "components": {
+    "e5c8c0aaad6dc26e9ede547783d854d2": {
+     "pinnacle_h2h": [
+      [
+       "Central Michigan Chippewas",
+       0,
+       -108
+      ],
+      [
+       "Eastern Michigan Eagles",
+       0,
+       -102
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Central Michigan Chippewas",
+       -1.0,
+       -106
+      ],
+      [
+       "Eastern Michigan Eagles",
+       1.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -108
+      ],
+      [
+       "Under",
+       44.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Eastern Michigan and Central Michigan meet in Detr"
+     ],
+     "kalshi_snap": "snap_20261104T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "e5c8c0aaad6dc26e9ede547783d854d2": "anchor_prekick"
+   }
+  }
  }
 ]
