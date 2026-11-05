@@ -2332,5 +2332,85 @@
     "722ed661705df150a38e7786949ce241": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261105T143403Z.parquet",
+  "sha256": "c05175075b9cf6fd9131da83c909d42e3b6acd5e1b5562279520bfd923c04a0d",
+  "logged_utc": "2026-11-05T14:34:03.842768+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-07T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T143006Z.parquet",
+   "inputs_digest": "{\"45fdbdbe6ed3d9922fa8b26b8a885f0e\": \"17202f6824fe741a\"}",
+   "components": {
+    "45fdbdbe6ed3d9922fa8b26b8a885f0e": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       330
+      ],
+      [
+       "New Mexico Lobos",
+       0,
+       -411
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       10.5,
+       -114
+      ],
+      [
+       "New Mexico Lobos",
+       -10.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.0,
+       -112
+      ],
+      [
+       "Under",
+       37.0,
+       -104
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Humphrey scores 2 TDs and New Mexico beats San Jos",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Nevada Wolf Pack vs. UCLA Bruins: Full Highlights",
+      "No. 22 New Mexico squares off against Nevada in MW",
+      "No. 7 UCLA blanks Nevada, storms to 8-0 for first ",
+      "No. 7 UCLA storms to 8-0 as 3 first-quarter picks ",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "UCLA into top 5, Ohio State out of top 10, New Mex",
+      "Week 9 College football Power Rankings: How big wi"
+     ],
+     "kalshi_snap": "snap_20261105T1207Z.parquet"
+    }
+   },
+   "triggers": {
+    "45fdbdbe6ed3d9922fa8b26b8a885f0e": "line_move: pinnacle spreads New Mexico Lobos -9.5\u2192-10.5; line_move: pinnacle spreads Nevada Wolf Pack 9.5\u219210.5"
+   }
+  }
  }
 ]
