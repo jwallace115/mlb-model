@@ -2248,5 +2248,89 @@
     "45fdbdbe6ed3d9922fa8b26b8a885f0e": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261105T031903Z.parquet",
+  "sha256": "372f44a6fbc69640386fbf08e1c4ed854ad5c17378ed4713bd3460cea921ff63",
+  "logged_utc": "2026-11-05T03:19:03.896072+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T03:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T030009Z.parquet",
+   "inputs_digest": "{\"722ed661705df150a38e7786949ce241\": \"6af06ccdd8189537\"}",
+   "components": {
+    "722ed661705df150a38e7786949ce241": {
+     "pinnacle_h2h": [
+      [
+       "Arizona Wildcats",
+       0,
+       -318
+      ],
+      [
+       "TCU Horned Frogs",
+       0,
+       264
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Wildcats",
+       -7.5,
+       -107
+      ],
+      [
+       "TCU Horned Frogs",
+       7.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -106
+      ],
+      [
+       "Under",
+       45.5,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "Arizona WR R.J. Mosley taken to hospital with knee",
+      "Arizona Wildcats vs. Texas Tech Red Raiders: Game ",
+      "Big 12 matchup features No. 24 Arizona playing TCU",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Kansas Jayhawks vs. TCU Horned Frogs: Full Highlig",
+      "Max Carroll's pick-6 and Jaden Craig's late touchd",
+      "TCU's Sonny Dykes says boos, calls for him to be f",
+      "Texas Tech starts Castellanos, will use Hammond vs",
+      "Tommy Castellanos gets the start and helps No. 13 ",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "UCLA into top 5, Ohio State out of top 10, New Mex",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac"
+     ],
+     "kalshi_snap": "snap_20261105T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "722ed661705df150a38e7786949ce241": "anchor_morning"
+   }
+  }
  }
 ]
