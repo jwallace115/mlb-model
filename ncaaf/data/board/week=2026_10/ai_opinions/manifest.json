@@ -4614,5 +4614,179 @@
     "796b0be4ed0d775756eff53b5803125a": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261105T213404Z.parquet",
+  "sha256": "a2944c7be172b43cd7a8fd90c7d88727e1649b962273eb703c7079cd4920989c",
+  "logged_utc": "2026-11-05T21:34:04.023857+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 2,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-06T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T213005Z.parquet",
+   "inputs_digest": "{\"5af84fe49ccd4f304f9af0dce0a0db56\": \"133a94e97aee6f5e\", \"028ce5ee2c58281cf935f06edc90d671\": \"cce51b75a3340e64\", \"2a6e2d9ca0d2fc85a4164e9c0f25a05f\": \"58738e07b20ad67a\"}",
+   "components": {
+    "5af84fe49ccd4f304f9af0dce0a0db56": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       239
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -275
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       7.0,
+       -101
+      ],
+      [
+       "UTSA Roadrunners",
+       -7.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       72.5,
+       -102
+      ],
+      [
+       "Under",
+       72.5,
+       -114
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Florida Atlantic hosts UTSA in AAC matchup",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261105T2107Z.parquet"
+    },
+    "028ce5ee2c58281cf935f06edc90d671": {
+     "pinnacle_h2h": [
+      [
+       "Mississippi State Bulldogs",
+       0,
+       -143
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       127
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Mississippi State Bulldogs",
+       -3.0,
+       -101
+      ],
+      [
+       "Vanderbilt Commodores",
+       3.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -108
+      ],
+      [
+       "Under",
+       48.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 9 poll reaction: What's n",
+      "Clark Lea emphasizes adjustments to get Vandy back",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Dominant defense and Manning's 3 TD passes send No",
+      "Jeff Lebby says Mississippi State is eager to face",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Mississippi State Bulldogs vs. Texas Longhorns: Fu",
+      "Mississippi State squares off against Vanderbilt i",
+      "Texas' Sarkisian credits defensive playmakers, Man"
+     ],
+     "kalshi_snap": "snap_20261105T2107Z.parquet"
+    },
+    "2a6e2d9ca0d2fc85a4164e9c0f25a05f": {
+     "pinnacle_h2h": [
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       647
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       -944
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Rutgers Scarlet Knights",
+       17.5,
+       -105
+      ],
+      [
+       "Wisconsin Badgers",
+       -17.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -106
+      ],
+      [
+       "Under",
+       46.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "Wisconsin and Rutgers meet in Big Ten play"
+     ],
+     "kalshi_snap": "snap_20261105T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "5af84fe49ccd4f304f9af0dce0a0db56": "anchor_prekick",
+    "028ce5ee2c58281cf935f06edc90d671": "anchor_morning",
+    "2a6e2d9ca0d2fc85a4164e9c0f25a05f": "anchor_morning"
+   }
+  }
  }
 ]
