@@ -4788,5 +4788,118 @@
     "2a6e2d9ca0d2fc85a4164e9c0f25a05f": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261105T220403Z.parquet",
+  "sha256": "619662fb473749088ba5a247aac9a8cf56954db0e2f120f1bca38f762a2fe89e",
+  "logged_utc": "2026-11-05T22:04:03.556876+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.8,
+  "first_kickoff_utc": "2026-11-06T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T220012Z.parquet",
+   "inputs_digest": "{\"c93b343bc3151a39a9541c0af3b22123\": \"f5d35981c0e74aec\", \"fed311ed6cdb4803798f548f3d867226\": \"5ed2ed789196b45d\"}",
+   "components": {
+    "c93b343bc3151a39a9541c0af3b22123": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -567
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       450
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -13.5,
+       -108
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       13.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -111
+      ],
+      [
+       "Under",
+       57.5,
+       -105
+      ]
+     ],
+     "news": [
+      "James Madison and Southern Miss meet in Sun Belt p"
+     ],
+     "kalshi_snap": "snap_20261105T2107Z.parquet"
+    },
+    "fed311ed6cdb4803798f548f3d867226": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -291
+      ],
+      [
+       "South Alabama Jaguars",
+       0,
+       244
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Ragin Cajuns",
+       -7.5,
+       -102
+      ],
+      [
+       "South Alabama Jaguars",
+       7.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       102
+      ],
+      [
+       "Under",
+       58.0,
+       -119
+      ]
+     ],
+     "news": [
+      "Baker throws 3 TD passes to lead Louisiana Tech ov",
+      "Louisiana Tech Bulldogs vs. South Alabama Jaguars:",
+      "Louisiana hosts South Alabama in Sun Belt action"
+     ],
+     "kalshi_snap": "snap_20261105T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "c93b343bc3151a39a9541c0af3b22123": "anchor_prekick",
+    "fed311ed6cdb4803798f548f3d867226": "anchor_morning"
+   }
+  }
  }
 ]
