@@ -3579,5 +3579,116 @@
     "f3d964c6b45c36f9e6009c47e64f96db": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261105T194903Z.parquet",
+  "sha256": "be91c3eeb559ba65b6577a75b101747d2d9853e388bb4a6e1ac5d91cccb176de",
+  "logged_utc": "2026-11-05T19:49:03.822097+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-06T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T193006Z.parquet",
+   "inputs_digest": "{\"c93b343bc3151a39a9541c0af3b22123\": \"30752d5151788942\", \"5304671601ad3064a66a332cbb09313f\": \"ee79debc9b4bb26f\"}",
+   "components": {
+    "c93b343bc3151a39a9541c0af3b22123": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -565
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       449
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -13.5,
+       -108
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       13.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.5,
+       -107
+      ],
+      [
+       "Under",
+       58.5,
+       -109
+      ]
+     ],
+     "news": [
+      "James Madison and Southern Miss meet in Sun Belt p"
+     ],
+     "kalshi_snap": "snap_20261105T1807Z.parquet"
+    },
+    "5304671601ad3064a66a332cbb09313f": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       -230
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       -6.0,
+       -111
+      ],
+      [
+       "Georgia State Panthers",
+       6.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.0,
+       -110
+      ],
+      [
+       "Under",
+       55.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Appalachian State hosts Georgia State in Sun Belt "
+     ],
+     "kalshi_snap": "snap_20261105T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "c93b343bc3151a39a9541c0af3b22123": "line_move: pinnacle totals Over 57.5\u219258.5; line_move: pinnacle totals Under 57.5\u219258.5",
+    "5304671601ad3064a66a332cbb09313f": "anchor_morning"
+   }
+  }
  }
 ]
