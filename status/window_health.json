@@ -22,18 +22,18 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-05T00:54:39.654266+00:00",
-  "finished_utc": "2026-11-05T00:54:39.654266+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-05T01:17:04.081875+00:00",
+  "finished_utc": "2026-11-05T01:17:04.081875+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle totals Under 40.0\u219239.0; line_move: pinnacle totals Over 40.0\u219239.0; new_props: pull 2026-11-05T00:47:36.988955+00:00; injury_change: inj_Baltimore Ravens; injury_change: inj_Jacks",
-  "freeze_file": "ai_opinions_20261105T004703Z.parquet"
+  "message": "",
+  "freeze_file": null
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-05T00:58:28.626993+00:00",
-  "finished_utc": "2026-11-05T00:58:28.626993+00:00",
+  "started_utc": "2026-11-05T01:19:04.260244+00:00",
+  "finished_utc": "2026-11-05T01:19:04.260244+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
