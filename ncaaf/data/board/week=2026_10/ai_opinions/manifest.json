@@ -2412,5 +2412,385 @@
     "45fdbdbe6ed3d9922fa8b26b8a885f0e": "line_move: pinnacle spreads New Mexico Lobos -9.5\u2192-10.5; line_move: pinnacle spreads Nevada Wolf Pack 9.5\u219210.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261105T150405Z.parquet",
+  "sha256": "784a14bd3ee41d1fbc4753956211cd950cf0a4420677720285632132634946d1",
+  "logged_utc": "2026-11-05T15:04:05.352565+00:00",
+  "rows": 21,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 7,
+  "no_view_share": 0.667,
+  "revised_rows": 18,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-06T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T150011Z.parquet",
+   "inputs_digest": "{\"5af84fe49ccd4f304f9af0dce0a0db56\": \"9420532a75302d90\", \"c93b343bc3151a39a9541c0af3b22123\": \"a1be8aaae95aa432\", \"11da04c7d3fba48caf11a5d8b66b8ccd\": \"a1d2753881308f22\", \"5172093e8533ea39f59c5d2c63c743b9\": \"ad4149d30172014f\", \"59047d3be974c2ec05c7e6282752287b\": \"55e809daf297b101\", \"45fdbdbe6ed3d9922fa8b26b8a885f0e\": \"60937a96c9f379e9\", \"722ed661705df150a38e7786949ce241\": \"5aa5c381820e94df\"}",
+   "components": {
+    "5af84fe49ccd4f304f9af0dce0a0db56": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       218
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -249
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       6.5,
+       101
+      ],
+      [
+       "UTSA Roadrunners",
+       -6.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       72.5,
+       -105
+      ],
+      [
+       "Under",
+       72.5,
+       -111
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Florida Atlantic hosts UTSA in AAC matchup",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261105T1507Z.parquet"
+    },
+    "c93b343bc3151a39a9541c0af3b22123": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -568
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       450
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -13.5,
+       -108
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       13.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -117
+      ],
+      [
+       "Under",
+       57.5,
+       100
+      ]
+     ],
+     "news": [
+      "James Madison and Southern Miss meet in Sun Belt p"
+     ],
+     "kalshi_snap": "snap_20261105T1507Z.parquet"
+    },
+    "11da04c7d3fba48caf11a5d8b66b8ccd": {
+     "pinnacle_h2h": [
+      [
+       "SMU Mustangs",
+       0,
+       -226
+      ],
+      [
+       "Virginia Tech Hokies",
+       0,
+       195
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "SMU Mustangs",
+       -6.0,
+       -109
+      ],
+      [
+       "Virginia Tech Hokies",
+       6.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -108
+      ],
+      [
+       "Under",
+       56.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "AP college football Week 9 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Kickers and a resurgent USC steal the show in Week",
+      "SMU Mustangs vs. Syracuse Orange: Full Highlights",
+      "Steve Angeli, Syracuse strike with 17 seconds left",
+      "Syracuse scores game-winning touchdown with 17 sec",
+      "Virginia Tech visits SMU in ACC matchup",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261105T1507Z.parquet"
+    },
+    "5172093e8533ea39f59c5d2c63c743b9": {
+     "pinnacle_h2h": [
+      [
+       "East Carolina Pirates",
+       0,
+       -131
+      ],
+      [
+       "South Florida Bulls",
+       0,
+       116
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "East Carolina Pirates",
+       -2.5,
+       -111
+      ],
+      [
+       "South Florida Bulls",
+       2.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.5,
+       -106
+      ],
+      [
+       "Under",
+       39.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Engleman runs for 107 yards and a TD in East Carol",
+      "South Florida visits East Carolina in AAC action",
+      "Temple Owls vs. East Carolina Pirates: Full Highli",
+      "Two fumble returns for touchdowns highlight South ",
+      "UAB Blazers vs. South Florida Bulls: Full Highligh"
+     ],
+     "kalshi_snap": "snap_20261105T1507Z.parquet"
+    },
+    "59047d3be974c2ec05c7e6282752287b": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       173
+      ],
+      [
+       "Nebraska Cornhuskers",
+       0,
+       -199
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       4.5,
+       -104
+      ],
+      [
+       "Nebraska Cornhuskers",
+       -4.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -105
+      ],
+      [
+       "Under",
+       50.5,
+       -111
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Illinois struggles but beats Maryland 20-17 on a 2",
+      "Nebraska and Illinois meet in Big Ten action",
+      "Nebraska's Matt Rhule urges calm after fan cursed ",
+      "Notre Dame replaces Purdue with series vs. Illinoi",
+      "Washington Huskies vs. Nebraska Cornhuskers: Full ",
+      "Washington's offense shows up late with Williams a",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261105T1507Z.parquet"
+    },
+    "45fdbdbe6ed3d9922fa8b26b8a885f0e": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       331
+      ],
+      [
+       "New Mexico Lobos",
+       0,
+       -413
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       10.5,
+       -113
+      ],
+      [
+       "New Mexico Lobos",
+       -10.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.5,
+       -109
+      ],
+      [
+       "Under",
+       37.5,
+       -107
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Humphrey scores 2 TDs and New Mexico beats San Jos",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Nevada Wolf Pack vs. UCLA Bruins: Full Highlights",
+      "No. 22 New Mexico squares off against Nevada in MW",
+      "No. 7 UCLA blanks Nevada, storms to 8-0 for first ",
+      "No. 7 UCLA storms to 8-0 as 3 first-quarter picks ",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "UCLA into top 5, Ohio State out of top 10, New Mex",
+      "Week 9 College football Power Rankings: How big wi"
+     ],
+     "kalshi_snap": "snap_20261105T1507Z.parquet"
+    },
+    "722ed661705df150a38e7786949ce241": {
+     "pinnacle_h2h": [
+      [
+       "Arizona Wildcats",
+       0,
+       -315
+      ],
+      [
+       "TCU Horned Frogs",
+       0,
+       262
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Wildcats",
+       -7.5,
+       -106
+      ],
+      [
+       "TCU Horned Frogs",
+       7.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -109
+      ],
+      [
+       "Under",
+       45.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "Arizona WR R.J. Mosley taken to hospital with knee",
+      "Arizona Wildcats vs. Texas Tech Red Raiders: Game ",
+      "Big 12 matchup features No. 24 Arizona playing TCU",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Kansas Jayhawks vs. TCU Horned Frogs: Full Highlig",
+      "Max Carroll's pick-6 and Jaden Craig's late touchd",
+      "TCU's Sonny Dykes says boos, calls for him to be f",
+      "Tommy Castellanos gets the start and helps No. 13 ",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "UCLA into top 5, Ohio State out of top 10, New Mex",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac"
+     ],
+     "kalshi_snap": "snap_20261105T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "5af84fe49ccd4f304f9af0dce0a0db56": "anchor_morning",
+    "c93b343bc3151a39a9541c0af3b22123": "anchor_morning",
+    "11da04c7d3fba48caf11a5d8b66b8ccd": "anchor_morning",
+    "5172093e8533ea39f59c5d2c63c743b9": "anchor_morning",
+    "59047d3be974c2ec05c7e6282752287b": "anchor_morning",
+    "45fdbdbe6ed3d9922fa8b26b8a885f0e": "anchor_morning",
+    "722ed661705df150a38e7786949ce241": "anchor_morning"
+   }
+  }
  }
 ]
