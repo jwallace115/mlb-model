@@ -1,12 +1,17 @@
 {
- "started_utc": "2026-11-05T00:17:04.510538+00:00",
- "finished_utc": "2026-11-05T00:17:04.909135+00:00",
+ "started_utc": "2026-11-05T00:47:03.980414+00:00",
+ "finished_utc": "2026-11-05T00:54:39.680124+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "c75744790b7acf6260c78ba5e739c0e5",
+   "text": "line_move: pinnacle totals Under 40.0\u219239.0; line_move: pinnacle totals Over 40.0\u219239.0; new_props: pull 2026-11-05T00:47:36.988955+00:00; injury_change: inj_Baltimore Ravens; injury_change: inj_Jacksonville Jaguars"
+  }
+ ],
+ "games_read": 1,
+ "frozen_file": "ai_opinions_20261105T004703Z.parquet",
+ "spend_usd": 3.5855,
+ "result": "COMPLETE"
 }

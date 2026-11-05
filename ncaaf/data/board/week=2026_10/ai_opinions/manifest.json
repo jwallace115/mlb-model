@@ -2046,5 +2046,77 @@
     "11da04c7d3fba48caf11a5d8b66b8ccd": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261105T003404Z.parquet",
+  "sha256": "093b532a4287a06b23900f52fa645dd08b48f0a16c16f090f884d48795090442",
+  "logged_utc": "2026-11-05T00:34:04.080929+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-07T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T003009Z.parquet",
+   "inputs_digest": "{\"5172093e8533ea39f59c5d2c63c743b9\": \"e161ab0bb8fc9dfa\"}",
+   "components": {
+    "5172093e8533ea39f59c5d2c63c743b9": {
+     "pinnacle_h2h": [
+      [
+       "East Carolina Pirates",
+       0,
+       -127
+      ],
+      [
+       "South Florida Bulls",
+       0,
+       113
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "East Carolina Pirates",
+       -2.5,
+       -108
+      ],
+      [
+       "South Florida Bulls",
+       2.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.5,
+       -106
+      ],
+      [
+       "Under",
+       39.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Engleman runs for 107 yards and a TD in East Carol",
+      "South Florida visits East Carolina in AAC action",
+      "Temple Owls vs. East Carolina Pirates: Full Highli",
+      "Two fumble returns for touchdowns highlight South ",
+      "UAB Blazers vs. South Florida Bulls: Full Highligh"
+     ],
+     "kalshi_snap": "snap_20261105T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "5172093e8533ea39f59c5d2c63c743b9": "anchor_morning"
+   }
+  }
  }
 ]
