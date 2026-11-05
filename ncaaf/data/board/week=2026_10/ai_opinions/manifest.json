@@ -3305,5 +3305,279 @@
     "8d5eeb24eeb0ac7ff32325a8a8c4b371": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261105T183403Z.parquet",
+  "sha256": "aea7bc04f486b038c366b9f45efffede11e2acd3aa34c4abc476c3a9d4c57fc8",
+  "logged_utc": "2026-11-05T18:34:03.268596+00:00",
+  "rows": 15,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.533,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-07T17:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T183007Z.parquet",
+   "inputs_digest": "{\"59263b8c355e171b2bcd5c1827a36b7e\": \"2b2f5ee1489427c7\", \"841d7821e82447f8a7d8592ec4584eec\": \"c32ed071655c01ec\", \"40065b11db334359a18c868e9af4d7cd\": \"dafb8897d55d3f29\", \"5d0347c41d222ef115610663cac2f865\": \"8a535582bc88d7ab\", \"f3d964c6b45c36f9e6009c47e64f96db\": \"d913653f1cb3fe8e\"}",
+   "components": {
+    "59263b8c355e171b2bcd5c1827a36b7e": {
+     "pinnacle_h2h": [
+      [
+       "Duke Blue Devils",
+       0,
+       -186
+      ],
+      [
+       "NC State Wolfpack",
+       0,
+       162
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Duke Blue Devils",
+       -4.0,
+       -110
+      ],
+      [
+       "NC State Wolfpack",
+       4.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -117
+      ],
+      [
+       "Under",
+       51.0,
+       100
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Duke and NC State meet in ACC action",
+      "Ex-NFL QB Russell Wilson interviews with NC State ",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Multiple Halloween-themed jabs top trolls from CFB",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261105T1807Z.parquet"
+    },
+    "841d7821e82447f8a7d8592ec4584eec": {
+     "pinnacle_h2h": [
+      [
+       "Maryland Terrapins",
+       0,
+       189
+      ],
+      [
+       "Purdue Boilermakers",
+       0,
+       -219
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Maryland Terrapins",
+       6.5,
+       -114
+      ],
+      [
+       "Purdue Boilermakers",
+       -6.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -111
+      ],
+      [
+       "Under",
+       56.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Purdue hosts Maryland in Big Ten action",
+      "Wallace's big rushing day leads Penn State over Pu"
+     ],
+     "kalshi_snap": "snap_20261105T1807Z.parquet"
+    },
+    "40065b11db334359a18c868e9af4d7cd": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas Razorbacks",
+       0,
+       308
+      ],
+      [
+       "Auburn Tigers",
+       0,
+       -380
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas Razorbacks",
+       10.0,
+       100
+      ],
+      [
+       "Auburn Tigers",
+       -10.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -111
+      ],
+      [
+       "Under",
+       53.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "Auburn hosts Arkansas in SEC play",
+      "Auburn's Alex Golesh discusses balancing gameplan,",
+      "Austin Simmons leads No. 23 Missouri to 34-10 win ",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Former MLB star Mark Teixeira wins U.S. House seat",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Missouri Tigers vs. Arkansas Razorbacks: Full High",
+      "Ryan Silverfield says Arkansas must protect the ba"
+     ],
+     "kalshi_snap": "snap_20261105T1807Z.parquet"
+    },
+    "5d0347c41d222ef115610663cac2f865": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       -240
+      ],
+      [
+       "Old Dominion Monarchs",
+       0,
+       205
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       -6.5,
+       -111
+      ],
+      [
+       "Old Dominion Monarchs",
+       6.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -104
+      ],
+      [
+       "Under",
+       44.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Coastal Carolina squares off against Old Dominion "
+     ],
+     "kalshi_snap": "snap_20261105T1807Z.parquet"
+    },
+    "f3d964c6b45c36f9e6009c47e64f96db": {
+     "pinnacle_h2h": [
+      [
+       "Kansas State Wildcats",
+       0,
+       190
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -220
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas State Wildcats",
+       6.5,
+       -109
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -6.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       62.0,
+       -113
+      ],
+      [
+       "Under",
+       62.0,
+       -103
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 9 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Colorado beats Kansas State 27-24 in OT on Wilson'",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "Iowa State knocks off No. 24 Oklahoma State on wal",
+      "Iowa State surprises No. 24 Oklahoma State with an",
+      "Kansas State QB Avery Johnson out vs. Oklahoma Sta",
+      "Konrardy hits field goal as time expires to lift I",
+      "Oklahoma State and Kansas State meet in Big 12 pla"
+     ],
+     "kalshi_snap": "snap_20261105T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "59263b8c355e171b2bcd5c1827a36b7e": "anchor_morning",
+    "841d7821e82447f8a7d8592ec4584eec": "anchor_morning",
+    "40065b11db334359a18c868e9af4d7cd": "anchor_morning",
+    "5d0347c41d222ef115610663cac2f865": "anchor_morning",
+    "f3d964c6b45c36f9e6009c47e64f96db": "anchor_morning"
+   }
+  }
  }
 ]
