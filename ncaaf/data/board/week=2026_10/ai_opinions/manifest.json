@@ -1968,5 +1968,83 @@
     "e5c8c0aaad6dc26e9ede547783d854d2": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261105T000403Z.parquet",
+  "sha256": "d419c67194d63f89ddec41c07e0b721e61ae5cb7814c962966c42f5cab6a6e1c",
+  "logged_utc": "2026-11-05T00:04:03.718758+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.7,
+  "first_kickoff_utc": "2026-11-07T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T000023Z.parquet",
+   "inputs_digest": "{\"11da04c7d3fba48caf11a5d8b66b8ccd\": \"67774e56d31f4704\"}",
+   "components": {
+    "11da04c7d3fba48caf11a5d8b66b8ccd": {
+     "pinnacle_h2h": [
+      [
+       "SMU Mustangs",
+       0,
+       -224
+      ],
+      [
+       "Virginia Tech Hokies",
+       0,
+       193
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "SMU Mustangs",
+       -6.0,
+       -108
+      ],
+      [
+       "Virginia Tech Hokies",
+       6.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -108
+      ],
+      [
+       "Under",
+       56.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "AP college football Week 9 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Kickers and a resurgent USC steal the show in Week",
+      "SMU Mustangs vs. Syracuse Orange: Full Highlights",
+      "Steve Angeli, Syracuse strike with 17 seconds left",
+      "Syracuse scores game-winning touchdown with 17 sec",
+      "Virginia Tech visits SMU in ACC matchup"
+     ],
+     "kalshi_snap": "snap_20261105T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "11da04c7d3fba48caf11a5d8b66b8ccd": "anchor_morning"
+   }
+  }
  }
 ]
