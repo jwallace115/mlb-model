@@ -1,0 +1,1299 @@
+[
+ {
+  "file": "ai_opinions_20261103T162354Z.parquet",
+  "sha256": "838c64b51e5b696f8d8afbc1d7e7a12cb26b5cadd583f34396f4b6ffe4f9f4d5",
+  "logged_utc": "2026-11-03T16:23:54.219862+00:00",
+  "rows": 249,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "reader_v3b",
+  "pilot": false,
+  "window": "open",
+  "games": 15,
+  "no_view_share": 0.514,
+  "revised_rows": 0,
+  "oldest_source_age_min": 143.7,
+  "first_kickoff_utc": "2026-11-06T01:15:00Z",
+  "reader_sha256": "a413d38af2157fcb8a04c1d71cbc17a791cdadaa375e6ec3da56b1e616ba6bfd",
+  "inputs": {
+   "props": "data_2026_11.parquet",
+   "lines": "snap_20261103T160006Z.parquet"
+  }
+ },
+ {
+  "file": "ai_opinions_20261104T033203Z.parquet",
+  "sha256": "891cebff7fa6d16fccf33fe6bf20e44f01d4c5929a2fd9d249ead8850d5df48d",
+  "logged_utc": "2026-11-04T03:32:03.975051+00:00",
+  "rows": 69,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.971,
+  "revised_rows": 0,
+  "oldest_source_age_min": 91.9,
+  "first_kickoff_utc": "2026-11-06T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261104T033006Z.parquet",
+   "inputs_digest": "{\"c75744790b7acf6260c78ba5e739c0e5\": \"f83ddf1504b17110\"}",
+   "components": {
+    "c75744790b7acf6260c78ba5e739c0e5": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       400
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -550
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       10.0,
+       -110
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.5,
+       -110
+      ],
+      [
+       "Under",
+       40.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       385
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -494
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       10.5,
+       -120
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.5,
+       106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.0,
+       -107
+      ],
+      [
+       "Under",
+       40.0,
+       -109
+      ]
+     ],
+     "props_ts": "2026-11-04T02:00:11.403959+00:00",
+     "inj_Baltimore Ravens": "2317bb0d2fdb55ee",
+     "inj_Jacksonville Jaguars": "6c5e3528923b0ef8",
+     "news": [
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Baltimore Ravens vs Buffalo Bills: Game Highlights",
+      "Bills cruise in 2nd half to 36-10 win over Ravens,",
+      "Bills surge in 2nd half in 36-10 win over Baltimor",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Domonique Foxworth wonders whether if Lamar Jackso",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Fantasy football buzz: Despite win, can you trust ",
+      "Fantasy football buzz: Week 8's leading scorers th",
+      "Foyesade Oluokun continues to quietly excel as Jag",
+      "How active NFL players continue to redefine all-ti",
+      "How the Jags are preparing for rainy weather",
+      "Inside the complicated injury history of Ravens' L",
+      "Jags make easy work of Colts with dominating win",
+      "Jaguars DT DaVon Hamilton (quad), S Eric Murray (e",
+      "Jaguars DT DaVon Hamilton likely out for season wi",
+      "Jaguars deliver big plays on both sides of the bal",
+      "Joe Fagnano to put his best foot forward in first ",
+      "Josh Allen looks to renew rivalry with Lamar Jacks",
+      "Josh Allen's halftime words fuel Bills' 2nd-half s",
+      "Judging overreactions to NFL Week 8: Days numbered",
+      "Lamar Jackson set to return in Buffalo",
+      "Lamar Jackson to be placed on IR",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Panthers' Bryce",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL Week 8: Big takeaways, questions and fantasy s",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "No place like home for the Jags",
+      "Ravens QB Jackson to return for Bills clash, calls",
+      "Ravens QB Joe Fagnano (ankle) has chance to play T",
+      "Ravens coach Jesse Minter expects Lamar Jackson ba",
+      "Ravens' Lamar Jackson needs thumb surgery, will be",
+      "Record-setting deal? Trade? A look at Lamar Jackso",
+      "Rookie Joe Fagnano to start Thursday night vs. Jag",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Sizing up wild NFL Week 8: Lamar Jackson's injury,",
+      "Sources: Ray Lewis delivered intense Friday speech",
+      "Steelers' multiple dog-themed jabs at Browns headl",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tracking Jaguars CB/WR Travis Hunter's 2026 season",
+      "What fantasy managers should expect from Ravens pl",
+      "Why Stephen A. doesn't think Lamar Jackson is done",
+      "Why trade deadline rumors are swirling around Jagu"
+     ],
+     "kalshi_snap": "snap_20261104T0305Z.parquet"
+    }
+   },
+   "triggers": {
+    "c75744790b7acf6260c78ba5e739c0e5": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261104T064703Z.parquet",
+  "sha256": "549ed33c0b7562c0ed25d697879290316df35738bdaaf8e855982e10535390d2",
+  "logged_utc": "2026-11-04T06:47:03.831719+00:00",
+  "rows": 69,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.957,
+  "revised_rows": 69,
+  "oldest_source_age_min": 286.9,
+  "first_kickoff_utc": "2026-11-06T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261104T053005Z.parquet",
+   "inputs_digest": "{\"c75744790b7acf6260c78ba5e739c0e5\": \"964ba9dc08c963d5\"}",
+   "components": {
+    "c75744790b7acf6260c78ba5e739c0e5": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       400
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -550
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       10.0,
+       -110
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.5,
+       -110
+      ],
+      [
+       "Under",
+       40.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       385
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -494
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       10.5,
+       -120
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.5,
+       106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.0,
+       -107
+      ],
+      [
+       "Under",
+       40.0,
+       -109
+      ]
+     ],
+     "props_ts": "2026-11-04T06:47:37.462564+00:00",
+     "inj_Baltimore Ravens": "134a6b8597fa2ee4",
+     "inj_Jacksonville Jaguars": "37d6fe1e1b7449b9",
+     "news": [
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Baltimore Ravens vs Buffalo Bills: Game Highlights",
+      "Bills cruise in 2nd half to 36-10 win over Ravens,",
+      "Bills surge in 2nd half in 36-10 win over Baltimor",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Domonique Foxworth wonders whether if Lamar Jackso",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Fantasy football buzz: Despite win, can you trust ",
+      "Fantasy football buzz: Week 8's leading scorers th",
+      "Foyesade Oluokun continues to quietly excel as Jag",
+      "How active NFL players continue to redefine all-ti",
+      "How the Jags are preparing for rainy weather",
+      "Inside the complicated injury history of Ravens' L",
+      "Jags make easy work of Colts with dominating win",
+      "Jaguars DT DaVon Hamilton (quad), S Eric Murray (e",
+      "Jaguars DT DaVon Hamilton likely out for season wi",
+      "Jaguars deliver big plays on both sides of the bal",
+      "Joe Fagnano to put his best foot forward in first ",
+      "Josh Allen looks to renew rivalry with Lamar Jacks",
+      "Josh Allen's halftime words fuel Bills' 2nd-half s",
+      "Judging overreactions to NFL Week 8: Days numbered",
+      "Lamar Jackson set to return in Buffalo",
+      "Lamar Jackson to be placed on IR",
+      "Latest on Baltimore's QB room and kicker situation",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL Week 8: Big takeaways, questions and fantasy s",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "No place like home for the Jags",
+      "Ravens QB Jackson to return for Bills clash, calls",
+      "Ravens QB Joe Fagnano (ankle) has chance to play T",
+      "Ravens coach Jesse Minter expects Lamar Jackson ba",
+      "Ravens' Lamar Jackson needs thumb surgery, will be",
+      "Record-setting deal? Trade? A look at Lamar Jackso",
+      "Rookie Joe Fagnano to start Thursday night vs. Jag",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Sizing up wild NFL Week 8: Lamar Jackson's injury,",
+      "Sources: Ray Lewis delivered intense Friday speech",
+      "Steelers' multiple dog-themed jabs at Browns headl",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tracking Jaguars CB/WR Travis Hunter's 2026 season",
+      "What fantasy managers should expect from Ravens pl",
+      "Why Stephen A. doesn't think Lamar Jackson is done",
+      "Why trade deadline rumors are swirling around Jagu"
+     ],
+     "kalshi_snap": "snap_20261104T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "c75744790b7acf6260c78ba5e739c0e5": "new_props: pull 2026-11-04T06:47:37.462564+00:00; injury_change: inj_Baltimore Ravens; injury_change: inj_Jacksonville Jaguars"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261104T150204Z.parquet",
+  "sha256": "2f7eb55cb2c14845c5d64a65052626f8187dcb26d4641dd7362b4fc60bc6e58d",
+  "logged_utc": "2026-11-04T15:02:04.076441+00:00",
+  "rows": 72,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.944,
+  "revised_rows": 60,
+  "oldest_source_age_min": 61.9,
+  "first_kickoff_utc": "2026-11-06T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261104T150011Z.parquet",
+   "inputs_digest": "{\"c75744790b7acf6260c78ba5e739c0e5\": \"8ccea766ab2c4f3a\"}",
+   "components": {
+    "c75744790b7acf6260c78ba5e739c0e5": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       375
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -525
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       10.0,
+       -105
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.0,
+       -115
+      ],
+      [
+       "Under",
+       40.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       386
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -496
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       10.5,
+       -119
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.5,
+       106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.0,
+       -106
+      ],
+      [
+       "Under",
+       40.0,
+       -110
+      ]
+     ],
+     "props_ts": "2026-11-04T06:47:37.462564+00:00",
+     "inj_Baltimore Ravens": "134a6b8597fa2ee4",
+     "inj_Jacksonville Jaguars": "37d6fe1e1b7449b9",
+     "news": [
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Baltimore Ravens vs Buffalo Bills: Game Highlights",
+      "Bills cruise in 2nd half to 36-10 win over Ravens,",
+      "Bills surge in 2nd half in 36-10 win over Baltimor",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Domonique Foxworth wonders whether if Lamar Jackso",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Fantasy football buzz: Despite win, can you trust ",
+      "Fantasy football buzz: Week 8's leading scorers th",
+      "Foyesade Oluokun continues to quietly excel as Jag",
+      "How active NFL players continue to redefine all-ti",
+      "How the Jags are preparing for rainy weather",
+      "Inside the complicated injury history of Ravens' L",
+      "Jags make easy work of Colts with dominating win",
+      "Jaguars DT DaVon Hamilton (quad), S Eric Murray (e",
+      "Jaguars DT DaVon Hamilton likely out for season wi",
+      "Jaguars deliver big plays on both sides of the bal",
+      "Joe Fagnano to put his best foot forward in first ",
+      "Josh Allen looks to renew rivalry with Lamar Jacks",
+      "Josh Allen's halftime words fuel Bills' 2nd-half s",
+      "Judging overreactions to NFL Week 8: Days numbered",
+      "Lamar Jackson set to return in Buffalo",
+      "Lamar Jackson to be placed on IR",
+      "Latest on Baltimore's QB room and kicker situation",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 8 preview: Picks, predictions, schedule, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL Week 8: Big takeaways, questions and fantasy s",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "No place like home for the Jags",
+      "Ravens QB Jackson to return for Bills clash, calls",
+      "Ravens QB Joe Fagnano (ankle) has chance to play T",
+      "Ravens coach Jesse Minter expects Lamar Jackson ba",
+      "Ravens' Lamar Jackson needs thumb surgery, will be",
+      "Record-setting deal? Trade? A look at Lamar Jackso",
+      "Rookie Joe Fagnano to start Thursday night vs. Jag",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Sizing up wild NFL Week 8: Lamar Jackson's injury,",
+      "Sources: Ray Lewis delivered intense Friday speech",
+      "Steelers' multiple dog-themed jabs at Browns headl",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tracking Jaguars CB/WR Travis Hunter's 2026 season",
+      "What fantasy managers should expect from Ravens pl",
+      "Why Stephen A. doesn't think Lamar Jackson is done",
+      "Why trade deadline rumors are swirling around Jagu"
+     ],
+     "kalshi_snap": "snap_20261104T1435Z.parquet"
+    }
+   },
+   "triggers": {
+    "c75744790b7acf6260c78ba5e739c0e5": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261104T213204Z.parquet",
+  "sha256": "eb15db784cb1cd07fe72e78942468af31e9971480629ac8c940d0a74ee88bcc4",
+  "logged_utc": "2026-11-04T21:32:04.279951+00:00",
+  "rows": 72,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.958,
+  "revised_rows": 71,
+  "oldest_source_age_min": 451.9,
+  "first_kickoff_utc": "2026-11-06T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261104T213008Z.parquet",
+   "inputs_digest": "{\"c75744790b7acf6260c78ba5e739c0e5\": \"783da86e24b3259c\"}",
+   "components": {
+    "c75744790b7acf6260c78ba5e739c0e5": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       375
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -525
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       10.0,
+       -105
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       39.5,
+       -115
+      ],
+      [
+       "Under",
+       39.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       386
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -495
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       10.5,
+       -120
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.5,
+       107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.0,
+       -102
+      ],
+      [
+       "Under",
+       40.0,
+       -114
+      ]
+     ],
+     "props_ts": "2026-11-04T21:32:42.600587+00:00",
+     "inj_Baltimore Ravens": "9bab9294683fcae7",
+     "inj_Jacksonville Jaguars": "f3232352413f14df",
+     "news": [
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Baltimore Ravens vs Buffalo Bills: Game Highlights",
+      "Bills cruise in 2nd half to 36-10 win over Ravens,",
+      "Bills surge in 2nd half in 36-10 win over Baltimor",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Domonique Foxworth wonders whether if Lamar Jackso",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Fantasy football buzz: Week 8's leading scorers th",
+      "Foyesade Oluokun continues to quietly excel as Jag",
+      "How active NFL players continue to redefine all-ti",
+      "How the Jags are preparing for rainy weather",
+      "Inside the complicated injury history of Ravens' L",
+      "Jags make easy work of Colts with dominating win",
+      "Jaguars DT DaVon Hamilton (quad), S Eric Murray (e",
+      "Jaguars DT DaVon Hamilton likely out for season wi",
+      "Jaguars deliver big plays on both sides of the bal",
+      "Joe Fagnano to put his best foot forward in first ",
+      "Josh Allen looks to renew rivalry with Lamar Jacks",
+      "Josh Allen's halftime words fuel Bills' 2nd-half s",
+      "Judging overreactions to NFL Week 8: Days numbered",
+      "Lamar Jackson set to return in Buffalo",
+      "Lamar Jackson to be placed on IR",
+      "Latest on Baltimore's QB room and kicker situation",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 8 betting odds: Lines and totals for ever",
+      "NFL Week 8 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL Week 8: Big takeaways, questions and fantasy s",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "No place like home for the Jags",
+      "Ravens QB Jackson to return for Bills clash, calls",
+      "Ravens QB Joe Fagnano (ankle) has chance to play T",
+      "Ravens coach Jesse Minter expects Lamar Jackson ba",
+      "Ravens' Lamar Jackson needs thumb surgery, will be",
+      "Record-setting deal? Trade? A look at Lamar Jackso",
+      "Rookie Joe Fagnano to start Thursday night vs. Jag",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Sizing up wild NFL Week 8: Lamar Jackson's injury,",
+      "Sources: Ravens QB Huntley (turf toe) to miss rest",
+      "Sources: Ray Lewis delivered intense Friday speech",
+      "Steelers' multiple dog-themed jabs at Browns headl",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tracking Jaguars CB/WR Travis Hunter's 2026 season",
+      "What fantasy managers should expect from Ravens pl",
+      "Why Stephen A. doesn't think Lamar Jackson is done",
+      "Why running-back play may favor Ravens over Jags o",
+      "Why trade deadline rumors are swirling around Jagu"
+     ],
+     "kalshi_snap": "snap_20261104T2105Z.parquet"
+    }
+   },
+   "triggers": {
+    "c75744790b7acf6260c78ba5e739c0e5": "new_props: pull 2026-11-04T21:32:42.600587+00:00; injury_change: inj_Baltimore Ravens; injury_change: inj_Jacksonville Jaguars"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261105T004703Z.parquet",
+  "sha256": "68051747d68a45c83368061f3a38761aa2a612217a9e831278f5bfe76e4599a7",
+  "logged_utc": "2026-11-05T00:47:03.980414+00:00",
+  "rows": 73,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.918,
+  "revised_rows": 65,
+  "oldest_source_age_min": 194.4,
+  "first_kickoff_utc": "2026-11-06T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261105T003009Z.parquet",
+   "inputs_digest": "{\"c75744790b7acf6260c78ba5e739c0e5\": \"38770a535cedd8a1\"}",
+   "components": {
+    "c75744790b7acf6260c78ba5e739c0e5": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       375
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -525
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       10.0,
+       -110
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       39.5,
+       -115
+      ],
+      [
+       "Under",
+       39.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       385
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -495
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       10.5,
+       -120
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.5,
+       107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.0,
+       -111
+      ],
+      [
+       "Under",
+       39.0,
+       -105
+      ]
+     ],
+     "props_ts": "2026-11-05T00:47:36.988955+00:00",
+     "inj_Baltimore Ravens": "56e3968607e99758",
+     "inj_Jacksonville Jaguars": "742767309d5e59ef",
+     "news": [
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Baltimore Ravens vs Buffalo Bills: Game Highlights",
+      "Bills cruise in 2nd half to 36-10 win over Ravens,",
+      "Bills surge in 2nd half in 36-10 win over Baltimor",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Domonique Foxworth wonders whether if Lamar Jackso",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Fantasy football buzz: Week 8's leading scorers th",
+      "Foyesade Oluokun continues to quietly excel as Jag",
+      "How active NFL players continue to redefine all-ti",
+      "Inside the complicated injury history of Ravens' L",
+      "Jags make easy work of Colts with dominating win",
+      "Jaguars DT DaVon Hamilton (quad), S Eric Murray (e",
+      "Jaguars DT DaVon Hamilton likely out for season wi",
+      "Jaguars deliver big plays on both sides of the bal",
+      "Joe Fagnano to put his best foot forward in first ",
+      "Josh Allen's halftime words fuel Bills' 2nd-half s",
+      "Judging overreactions to NFL Week 8: Days numbered",
+      "Lamar Jackson set to return in Buffalo",
+      "Lamar Jackson to be placed on IR",
+      "Latest on Baltimore's QB room and kicker situation",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 8 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL Week 8: Big takeaways, questions and fantasy s",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "No place like home for the Jags",
+      "Ravens QB Jackson to return for Bills clash, calls",
+      "Ravens QB Joe Fagnano (ankle) has chance to play T",
+      "Ravens are down to their No. 3 quarterback with th",
+      "Ravens' Lamar Jackson needs thumb surgery, will be",
+      "Record-setting deal? Trade? A look at Lamar Jackso",
+      "Rookie Joe Fagnano to start Thursday night vs. Jag",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Sizing up wild NFL Week 8: Lamar Jackson's injury,",
+      "Sources: Ravens QB Huntley (turf toe) to miss rest",
+      "Sources: Ravens finalizing trade with Cardinals fo",
+      "Sources: Ray Lewis delivered intense Friday speech",
+      "Steelers' multiple dog-themed jabs at Browns headl",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tracking Jaguars CB/WR Travis Hunter's 2026 season",
+      "What fantasy managers should expect from Ravens pl",
+      "Why McAfee likes Jacoby Brissett trade to Ravens",
+      "Why Stephen A. doesn't think Lamar Jackson is done",
+      "Why running-back play may favor Ravens over Jags o",
+      "Why trade deadline rumors are swirling around Jagu"
+     ],
+     "kalshi_snap": "snap_20261105T0035Z.parquet"
+    }
+   },
+   "triggers": {
+    "c75744790b7acf6260c78ba5e739c0e5": "line_move: pinnacle totals Under 40.0\u219239.0; line_move: pinnacle totals Over 40.0\u219239.0; new_props: pull 2026-11-05T00:47:36.988955+00:00; injury_change: inj_Baltimore Ravens; injury_change: inj_Jacksonville Jaguars"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261105T073203Z.parquet",
+  "sha256": "567f2a5f1b53fca42770e5622d916a53d71b6bba26b7f6288ead380ef349a424",
+  "logged_utc": "2026-11-05T07:32:03.413825+00:00",
+  "rows": 73,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.932,
+  "revised_rows": 71,
+  "oldest_source_age_min": 331.9,
+  "first_kickoff_utc": "2026-11-06T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261105T053005Z.parquet",
+   "inputs_digest": "{\"c75744790b7acf6260c78ba5e739c0e5\": \"f5c062b379d441e6\"}",
+   "components": {
+    "c75744790b7acf6260c78ba5e739c0e5": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       375
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -525
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       10.0,
+       -110
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       39.5,
+       -115
+      ],
+      [
+       "Under",
+       39.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       386
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -495
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       10.5,
+       -120
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.5,
+       107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.0,
+       -115
+      ],
+      [
+       "Under",
+       39.0,
+       -101
+      ]
+     ],
+     "props_ts": "2026-11-05T07:32:34.343719+00:00",
+     "inj_Baltimore Ravens": "bb1837a390aeddd3",
+     "inj_Jacksonville Jaguars": "dd374e122a188501",
+     "news": [
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Baltimore Ravens vs Buffalo Bills: Game Highlights",
+      "Bills cruise in 2nd half to 36-10 win over Ravens,",
+      "Bills surge in 2nd half in 36-10 win over Baltimor",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Domonique Foxworth wonders whether if Lamar Jackso",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Fantasy football buzz: Week 8's leading scorers th",
+      "Foyesade Oluokun continues to quietly excel as Jag",
+      "How active NFL players continue to redefine all-ti",
+      "Inside the complicated injury history of Ravens' L",
+      "Jags make easy work of Colts with dominating win",
+      "Jaguars DT DaVon Hamilton (quad), S Eric Murray (e",
+      "Jaguars DT DaVon Hamilton likely out for season wi",
+      "Jaguars deliver big plays on both sides of the bal",
+      "Joe Fagnano to put his best foot forward in first ",
+      "Josh Allen's halftime words fuel Bills' 2nd-half s",
+      "Judging overreactions to NFL Week 8: Days numbered",
+      "Lamar Jackson to be placed on IR",
+      "Latest on Baltimore's QB room and kicker situation",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 8 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL Week 8: Big takeaways, questions and fantasy s",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "No place like home for the Jags",
+      "Ravens QB Jackson to return for Bills clash, calls",
+      "Ravens QB Joe Fagnano (ankle) has chance to play T",
+      "Ravens are down to their No. 3 quarterback with th",
+      "Ravens look to stabilize crumbling season with QB ",
+      "Ravens' Lamar Jackson needs thumb surgery, will be",
+      "Record-setting deal? Trade? A look at Lamar Jackso",
+      "Rookie Joe Fagnano to start Thursday night vs. Jag",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Sizing up wild NFL Week 8: Lamar Jackson's injury,",
+      "Sources: Ravens QB Huntley (turf toe) to miss rest",
+      "Sources: Ravens finalizing trade with Cardinals fo",
+      "Sources: Ray Lewis delivered intense Friday speech",
+      "Steelers' multiple dog-themed jabs at Browns headl",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tracking Jaguars CB/WR Travis Hunter's 2026 season",
+      "What fantasy managers should expect from Ravens pl",
+      "Why McAfee likes Jacoby Brissett trade to Ravens",
+      "Why Stephen A. doesn't think Lamar Jackson is done",
+      "Why running-back play may favor Ravens over Jags o",
+      "Why trade deadline rumors are swirling around Jagu"
+     ],
+     "kalshi_snap": "snap_20261105T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "c75744790b7acf6260c78ba5e739c0e5": "new_props: pull 2026-11-05T07:32:34.343719+00:00; injury_change: inj_Baltimore Ravens; injury_change: inj_Jacksonville Jaguars"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261105T130203Z.parquet",
+  "sha256": "1d255e91f9899fa29f36a5399e26ad6f4728e20572495a8251aa5ecca0aa20eb",
+  "logged_utc": "2026-11-05T13:02:03.470285+00:00",
+  "rows": 73,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.932,
+  "revised_rows": 71,
+  "oldest_source_age_min": 452.0,
+  "first_kickoff_utc": "2026-11-06T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261105T053005Z.parquet",
+   "inputs_digest": "{\"c75744790b7acf6260c78ba5e739c0e5\": \"31a4cafb90f30ef9\"}",
+   "components": {
+    "c75744790b7acf6260c78ba5e739c0e5": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       375
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -525
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       10.0,
+       -110
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       39.5,
+       -115
+      ],
+      [
+       "Under",
+       39.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       386
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -495
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       10.5,
+       -120
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.5,
+       107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.0,
+       -115
+      ],
+      [
+       "Under",
+       39.0,
+       -101
+      ]
+     ],
+     "props_ts": "2026-11-05T13:02:37.809695+00:00",
+     "inj_Baltimore Ravens": "38ae08c3cf85a968",
+     "inj_Jacksonville Jaguars": "dd374e122a188501",
+     "news": [
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Baltimore Ravens vs Buffalo Bills: Game Highlights",
+      "Bills cruise in 2nd half to 36-10 win over Ravens,",
+      "Bills surge in 2nd half in 36-10 win over Baltimor",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Domonique Foxworth wonders whether if Lamar Jackso",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Fantasy football buzz: Week 8's leading scorers th",
+      "Foyesade Oluokun continues to quietly excel as Jag",
+      "How active NFL players continue to redefine all-ti",
+      "Inside the complicated injury history of Ravens' L",
+      "Jags make easy work of Colts with dominating win",
+      "Jaguars DT DaVon Hamilton (quad), S Eric Murray (e",
+      "Jaguars DT DaVon Hamilton likely out for season wi",
+      "Jaguars deliver big plays on both sides of the bal",
+      "Joe Fagnano to put his best foot forward in first ",
+      "Josh Allen's halftime words fuel Bills' 2nd-half s",
+      "Judging overreactions to NFL Week 8: Days numbered",
+      "Lamar Jackson to be placed on IR",
+      "Latest on Baltimore's QB room and kicker situation",
+      "Millennial minds: How Doyle, Udinski leapt to head",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL Week 8: Big takeaways, questions and fantasy s",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "No place like home for the Jags",
+      "Ravens QB Joe Fagnano (ankle) has chance to play T",
+      "Ravens are down to their No. 3 quarterback with th",
+      "Ravens look to stabilize crumbling season with QB ",
+      "Ravens' Lamar Jackson needs thumb surgery, will be",
+      "Record-setting deal? Trade? A look at Lamar Jackso",
+      "Rookie Joe Fagnano to start Thursday night vs. Jag",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Sizing up wild NFL Week 8: Lamar Jackson's injury,",
+      "Sources: Ravens QB Huntley (turf toe) to miss rest",
+      "Sources: Ravens finalizing trade with Cardinals fo",
+      "Sources: Ray Lewis delivered intense Friday speech",
+      "Steelers' multiple dog-themed jabs at Browns headl",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tracking Jaguars CB/WR Travis Hunter's 2026 season",
+      "What 18 contenders should do at the NFL trade dead",
+      "What fantasy managers should expect from Ravens pl",
+      "What has gone right -- and wrong -- for 10 new NFL",
+      "Why McAfee likes Jacoby Brissett trade to Ravens",
+      "Why Stephen A. doesn't think Lamar Jackson is done",
+      "Why running-back play may favor Ravens over Jags o",
+      "Why trade deadline rumors are swirling around Jagu"
+     ],
+     "kalshi_snap": "snap_20261105T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "c75744790b7acf6260c78ba5e739c0e5": "new_props: pull 2026-11-05T13:02:37.809695+00:00; injury_change: inj_Baltimore Ravens"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261105T150204Z.parquet",
+  "sha256": "23a5313e75f7df886d7c5ef6c60f167d866d4a583b7cbf9ea1ccc12f2fa1e69e",
+  "logged_utc": "2026-11-05T15:02:04.156544+00:00",
+  "rows": 73,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.932,
+  "revised_rows": 67,
+  "oldest_source_age_min": 61.9,
+  "first_kickoff_utc": "2026-11-06T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261105T150011Z.parquet",
+   "inputs_digest": "{\"c75744790b7acf6260c78ba5e739c0e5\": \"a5a692c4d089b2de\"}",
+   "components": {
+    "c75744790b7acf6260c78ba5e739c0e5": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       400
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -550
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       10.0,
+       -110
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       39.5,
+       -115
+      ],
+      [
+       "Under",
+       39.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       409
+      ],
+      [
+       "Jacksonville Jaguars",
+       0,
+       -506
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       10.5,
+       -116
+      ],
+      [
+       "Jacksonville Jaguars",
+       -10.5,
+       105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.0,
+       -116
+      ],
+      [
+       "Under",
+       39.0,
+       103
+      ]
+     ],
+     "props_ts": "2026-11-05T13:02:37.809695+00:00",
+     "inj_Baltimore Ravens": "38ae08c3cf85a968",
+     "inj_Jacksonville Jaguars": "dd374e122a188501",
+     "news": [
+      "2026 NFL trade deadline updates: Jeffery Simmons, ",
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Baltimore Ravens vs Buffalo Bills: Game Highlights",
+      "Bills cruise in 2nd half to 36-10 win over Ravens,",
+      "Bills surge in 2nd half in 36-10 win over Baltimor",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Domonique Foxworth wonders whether if Lamar Jackso",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Fantasy football buzz: Week 8's leading scorers th",
+      "Foyesade Oluokun continues to quietly excel as Jag",
+      "How active NFL players continue to redefine all-ti",
+      "Inside the complicated injury history of Ravens' L",
+      "Jags make easy work of Colts with dominating win",
+      "Jaguars DT DaVon Hamilton (quad), S Eric Murray (e",
+      "Jaguars DT DaVon Hamilton likely out for season wi",
+      "Jaguars deliver big plays on both sides of the bal",
+      "Joe Fagnano to put his best foot forward in first ",
+      "Josh Allen's halftime words fuel Bills' 2nd-half s",
+      "Judging overreactions to NFL Week 8: Days numbered",
+      "Lamar Jackson to be placed on IR",
+      "Latest on Baltimore's QB room and kicker situation",
+      "Millennial minds: How Doyle, Udinski leapt to head",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 8 uniforms: Jaguars, Lions become latest ",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL Week 8: Big takeaways, questions and fantasy s",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "No place like home for the Jags",
+      "Ravens QB Joe Fagnano (ankle) has chance to play T",
+      "Ravens are down to their No. 3 quarterback with th",
+      "Ravens look to stabilize crumbling season with QB ",
+      "Ravens' Lamar Jackson needs thumb surgery, will be",
+      "Record-setting deal? Trade? A look at Lamar Jackso",
+      "Rookie Joe Fagnano to start Thursday night vs. Jag",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Sizing up wild NFL Week 8: Lamar Jackson's injury,",
+      "Sources: Ravens QB Huntley (turf toe) to miss rest",
+      "Sources: Ravens finalizing trade with Cardinals fo",
+      "Sources: Ray Lewis delivered intense Friday speech",
+      "Steelers' multiple dog-themed jabs at Browns headl",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tracking Jaguars CB/WR Travis Hunter's 2026 season",
+      "What 18 contenders should do at the NFL trade dead",
+      "What fantasy managers should expect from Ravens pl",
+      "What has gone right -- and wrong -- for 10 new NFL",
+      "Why McAfee likes Jacoby Brissett trade to Ravens",
+      "Why Stephen A. doesn't think Lamar Jackson is done",
+      "Why running-back play may favor Ravens over Jags o",
+      "Why trade deadline rumors are swirling around Jagu"
+     ],
+     "kalshi_snap": "snap_20261105T1435Z.parquet"
+    }
+   },
+   "triggers": {
+    "c75744790b7acf6260c78ba5e739c0e5": "anchor_morning"
+   }
+  }
+ }
+]

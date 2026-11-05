@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_08_CHI_SEA",
+  "week": 8,
+  "home": "SEA",
+  "away": "CHI",
+  "final_score": {
+    "home": 17,
+    "away": 34
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 173,
+      "plays_trailing_14": 173,
+      "halftime_score": {
+        "home": 17,
+        "away": 34
+      },
+      "garbage_time_plays": 19
+    },
+    "away": {
+      "plays_leading_7": 173,
+      "plays_leading_14": 173,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 17,
+        "away": 34
+      },
+      "garbage_time_plays": 19
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 57,
+      "dropbacks": 38,
+      "rush_attempts": 19,
+      "pass_rate": 0.6666666666666666,
+      "run_rate": 0.33333333333333337,
+      "pass_oe": -4.282421210119801
+    },
+    "away": {
+      "plays": 70,
+      "dropbacks": 35,
+      "rush_attempts": 35,
+      "pass_rate": 0.5,
+      "run_rate": 0.5,
+      "pass_oe": 0.3801734821088072
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 4
+    }
+  },
+  "injuries": [
+    {
+      "player": "R.Johnson",
+      "team": "CHI",
+      "quarter": 3,
+      "play_id": 2529,
+      "desc": "(7:37) 23-R.Johnson right tackle to SEA 12 for no gain (99-L.Williams). SEA-99-L.Williams was injured during the play."
+    },
+    {
+      "player": "J.Price",
+      "team": "SEA",
+      "quarter": 4,
+      "play_id": 3136,
+      "desc": "(13:06) 8-J.Price right end to CHI 16 for 9 yards (1-J.Johnson; 31-D.Thieneman). CHI-1-J.Johnson was injured during the play."
+    },
+    {
+      "player": "J.Price",
+      "team": "SEA",
+      "quarter": 4,
+      "play_id": 3651,
+      "desc": "(6:33) 8-J.Price right tackle to SEA 25 for 3 yards (92-D.Hardy). CHI-93-K.Street was injured during the play. SEA-61-J.Sundell was injured during the play."
+    }
+  ],
+  "ftn": "covered"
+}

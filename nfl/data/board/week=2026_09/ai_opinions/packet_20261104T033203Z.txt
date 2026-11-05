@@ -1,0 +1,74 @@
+packet built 2026-11-04T03:32Z | snap snap_20261104T033006Z.parquet | props pull 2026-11-04T02:00 | kalshi snap_20261104T0305Z.parquet | injuries injuries_20261104T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: anchor_morning
+######## Jacksonville Jaguars @ Baltimore Ravens  kick 11-06T01:15Z
+  HR ML: Ravens +400 / Jaguars -550 (no-vig home 0.191) | Pinnacle no-vig home 0.199
+  HR spread: Ravens +10 -110 / Jaguars -10 -110 | Pinnacle Ravens 10.5 (-120) | HR open 9.0 (20261103)
+  HR total: 40.5 O-110/U-110 | Pinnacle 40.0 O-107/U-109 | HR open 42.5
+  Kalshi ML [('Jacksonville wins', 0.81, 343463), ('Baltimore wins', 0.18, 508261)] | spread [('Jacksonville wins by over 9.5 points?', 0.53, 112428), ('Jacksonville wins by over 10.5 points?', 0.46, 13978)] | total [('Full Game: over 39.5 points scored?', 0.52, 418661), ('Full Game: over 42.5 points scored?', 0.41, 54944)]
+  -- Jacksonville Jaguars injuries (20261104T0030)
+     Acti WR Brian Thomas Jr.: Thomas "has been the area of interest for a lot of other teams" leading up to the Nov. 10 trade deadline, Ian Rapoport of ESPN reports.
+     Ques WR Jakobi Meyers: Meyers (hamstring/ankle) was listed as a limited participant in Tuesday's practice.
+     Ques RB Chris Rodriguez Jr.: Rodriguez (hand) was listed as a limited participant in Tuesday's practice.
+     Ques RB Bhayshul Tuten: The Jaguars listed Tuten (ankle/foot) as a non-participant in Tuesday's practice.
+     Ques S  Antonio Johnson: questionable
+     Acti WR Travis Hunter: Hunter failed to catch his lone target in Sunday's 42-7 win over the Colts. He added five rushing yards on one attempt.
+     Ques LB Branson Combs: questionable
+     Ques CB Jarrian Jones: questionable
+     Inju S  Eric Murray: Jaguars head coach Liam Coen said Monday that Murray (elbow) will miss the remainder of the season, Demetrius Harvey of The Florida Times-Union report
+     Inju DT DaVon Hamilton: Jaguars coach Liam Coen confirmed Monday that Hamilton will miss the remainder of the season after suffering a torn quadriceps in Sunday's win over th
+     Acti WR CJ Williams: 
+     Acti TE Brenton Strange: Strange caught both of his targets for 55 yards during Sunday's 42-7 win over Indianapolis.
+     Acti TE Nate Boerkircher: Boerkircher caught his lone target for a 31-yard touchdown in Sunday's 42-7 win over the Colts.
+     Acti QB Trevor Lawrence: Lawrence completed 10 of 14 passes for 210 yards with three touchdowns and no interceptions while rushing three times for 10 yards in the Jaguars' 42-
+     Acti WR Parker Washington: Washington brought in one of two targets for 16 yards and rushed once for 10 yards in the Jaguars' 42-7 win over the Colts on Sunday.
+     Ques DE Travon Walker: Walker (ribs) is questionable to return to Sunday's game against the Colts.
+     Ques G  Ezra Cleveland: questionable
+     Acti RB LeQuint Allen Jr.: Allen (hamstring) does not carry an injury designation into Sunday's game against the Colts.
+     news 11-03T17:03 Fantasy football D/ST outlook for Weeks 9-12: Fire up Texans, and how 'bout them Cowboys?
+     news 11-03T18:04 Super Bowl LXI odds: All 32 teams' odds to win the championship
+     news 11-03T19:06 Why trade deadline rumors are swirling around Jaguars receiver Brian Thomas Jr.
+     news 11-03T22:00 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-03T23:33 Rookie Joe Fagnano to start Thursday night vs. Jaguars, Jesse Minter says
+  -- Baltimore Ravens injuries (20261104T0030)
+     Acti RB Justice Hill: Hill (groin) was a full participant in Tuesday's practice.
+     Inju PK Tyler Loop: The Ravens placed Loop (groin) on injured reserve Tuesday.
+     Doub QB Tyler Huntley: Ravens head coach Jesse Minter said Tuesday that Huntley (toe) could be a candidate for injured reserve, Sam Cohn of The Baltimore Sunreports.
+     Acti QB Joe Fagnano: Ravens head coach Jesse Minter confirmed Tuesday that Fagnano (ankle) will start Thursday's game against the Jaguars, Jamison Hensley of ESPN.com repo
+     Acti WR Ja'Kobi Lane: Lane caught his only target for 13 yards in Sunday's 36-10 loss to the Bills.
+     Acti WR Rashod Bateman: Bateman caught one of three targets for 22 yards in Sunday's 36-10 loss to the Bills.
+     Ques S  Jaylinn Hawkins: Hawkins (knee) was estimated as a non-participant on Monday's practice reports.
+     Ques OT Roger Rosengarten: questionable
+     Ques G  John Simpson: questionable
+     Ques DT John Jenkins: questionable
+     Acti WR Elijah Sarratt: 
+     Acti WR LaJohntay Wester: Wester went without a target while playing six of the Ravens' 51 snaps on offense in Sunday's 36-10 loss to the Bills. He also returned three kickoffs
+     Acti TE Mark Andrews: Andrews caught three of four targets for 14 yards in Sunday's 36-10 loss to the Bills.
+     Acti WR Zay Flowers: Flowers failed to bring in any of his five targets in the Ravens' 36-10 loss to the Bills on Sunday.
+     Acti RB Derrick Henry: Henry rushed 11 times for 53 yards and a touchdown and brought in both targets for seven yards in the Ravens' 36-10 loss to the Bills on Sunday.
+     Out  QB Lamar Jackson: Ravens head coach Jesse Minter said after Sunday's 36-10 loss to the Bills that Jackson will undergo surgery to address his right thumb injury and wil
+     news 11-03T11:26 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 11-03T17:03 Fantasy football D/ST outlook for Weeks 9-12: Fire up Texans, and how 'bout them Cowboys?
+     news 11-03T21:19 Joe Fagnano to put his best foot forward in first NFL start
+     news 11-03T22:00 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-03T23:33 Rookie Joe Fagnano to start Thursday night vs. Jaguars, Jesse Minter says
+  -- props (pull 2026-11-04T02:00)
+     * Ameer Abdullah: atd 0.5 (+475)
+     * Bhayshul Tuten: atd 0.5 (-110)
+     * Brenton Strange: atd 0.5 (+230), recyd 35.5 (-115/-115), rec 3.5 (-120/-110)
+     * Brian Thomas Jr: atd 0.5 (+500), recyd 10.5 (-115/-115), rec 1.5 (+155/-210)
+     * Chris Rodriguez Jr.: atd 0.5 (-110)
+     * Derrick Henry: atd 0.5 (+125), recyd 7.5 (-115/-115), rec 1.5 (+105/-135), ruatt 18.5 (-105/-125), ruyd 69.5 (-115/-115)
+     * Ja'Kobi Lane: atd 0.5 (+575), recyd 16.5 (-115/-115), rec 1.5 (-120/-110)
+     * Jakobi Meyers: atd 0.5 (+300), recyd 40.5 (-115/-115), rec 3.5 (+120/-155)
+     * Josh Cameron: atd 0.5 (+500), recyd 10.5 (-110/-120), rec 1.5 (+125/-165)
+     * Josh Cuevas: atd 0.5 (+2000), recyd 9.5 (-110/-120), rec 1.5 (+140/-190)
+     * Justice Hill: atd 0.5 (+450), recyd 13.5 (-120/-110), rec 2.5 (+110/-140), ruyd 13.5 (-115/-115)
+     * Mark Andrews: atd 0.5 (+475), recyd 18.5 (-120/-110), rec 2.5 (-125/-105)
+     * Nate Boerkircher: atd 0.5 (+475), recyd 7.5 (-115/-115), rec 1.5 (+145/-200)
+     * Parker Washington: atd 0.5 (+130), recyd 62.5 (-115/-115), rec 4.5 (+100/-130)
+     * Rashod Bateman: atd 0.5 (+700), recyd 14.5 (-120/-110), rec 1.5 (-110/-120)
+     * Travis Hunter: atd 0.5 (+600), recyd 9.5 (-110/-120), rec 1.5 (+175/-250)
+     * Trevor Lawrence: atd 0.5 (+375), paatt 30.5 (-115/-115), cmp 19.5 (-110/-120), int 0.5 (+100/-130), patd 1.5 (-140/+110), payd 237.5 (-115/-115), ruatt 3.5 (+105/-135), ruyd 12.5 (-110/-120)
+     * Zay Flowers: atd 0.5 (+350), recyd 46.5 (-115/-115), rec 4.5 (+125/-165)

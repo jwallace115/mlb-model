@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "1a1782b9fde64acd952ea9fd3aff7d83",
+    "game_date": "2026-11-04",
+    "sport": "NHL",
+    "home_team": "Buffalo Sabres",
+    "away_team": "Ottawa Senators",
+    "commence_time": "2026-11-05T00:40:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.5,
+    "over_price": -115,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-04T13:25:02.959840+00:00"
+  },
+  {
+    "game_id": "bc22bdc8d7cca6b3695672a8ebf84456",
+    "game_date": "2026-11-04",
+    "sport": "NHL",
+    "home_team": "Florida Panthers",
+    "away_team": "Chicago Blackhawks",
+    "commence_time": "2026-11-05T00:40:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.0,
+    "over_price": -105,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-04T13:25:02.959840+00:00"
+  },
+  {
+    "game_id": "7cc07a9c5a886203f238a3fe0b83dfd1",
+    "game_date": "2026-11-04",
+    "sport": "NHL",
+    "home_team": "Seattle Kraken",
+    "away_team": "Calgary Flames",
+    "commence_time": "2026-11-05T03:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.0,
+    "over_price": -111,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-04T13:25:02.959840+00:00"
+  },
+  {
+    "game_id": "a3c2f39dce2dbf9e8cb78acce24cd379",
+    "game_date": "2026-11-04",
+    "sport": "NHL",
+    "home_team": "Los Angeles Kings",
+    "away_team": "San Jose Sharks",
+    "commence_time": "2026-11-05T03:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.0,
+    "over_price": -112,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-04T13:25:02.959840+00:00"
+  }
+]

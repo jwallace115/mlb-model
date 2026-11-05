@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "2a76b31e02d1416de069a995589515fc",
+    "game_date": "2026-11-05",
+    "sport": "NBA",
+    "home_team": "Phoenix Suns",
+    "away_team": "Orlando Magic",
+    "commence_time": "2026-11-06T02:10:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 223.0,
+    "over_price": 103,
+    "under_price": -115,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-05T18:00:05.963778+00:00"
+  },
+  {
+    "game_id": "ac38449dd3dfbe1c9b48164b6a41aa83",
+    "game_date": "2026-11-05",
+    "sport": "NBA",
+    "home_team": "Golden State Warriors",
+    "away_team": "Miami Heat",
+    "commence_time": "2026-11-06T03:10:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 234.0,
+    "over_price": -103,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-05T18:00:05.963778+00:00"
+  }
+]
