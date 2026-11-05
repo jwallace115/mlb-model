@@ -4901,5 +4901,183 @@
     "fed311ed6cdb4803798f548f3d867226": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261105T230403Z.parquet",
+  "sha256": "1385c26fe674cbc047ef29ee227e373251ab1d18406464ecc1c50c8f9640f363",
+  "logged_utc": "2026-11-05T23:04:03.423964+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-07T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T230005Z.parquet",
+   "inputs_digest": "{\"bbb1d38a8f51b761a789459a08fa6ded\": \"fa19e1f0d640c9b4\"}",
+   "components": {
+    "bbb1d38a8f51b761a789459a08fa6ded": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -863
+      ],
+      [
+       "Colorado State Rams",
+       0,
+       604
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -18.0,
+       101
+      ],
+      [
+       "Colorado State Rams",
+       18.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       68.5,
+       -112
+      ],
+      [
+       "Under",
+       68.5,
+       -104
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "AP college football Week 9 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "Boise State rallies past Texas State to remain Gro",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College Football Playoff top 12 projection after W",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Hillstead has a pair of scores, defense dominates ",
+      "No. 20 Boise State rallies to beat Texas State 46-",
+      "Pac-12 matchup features No. 20 Boise State playing",
+      "Predicting the College Football Playoff: Who's mos",
+      "Rasean Jones hauls it in for 12-yard receiving tou",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "UCLA into top 5, Ohio State out of top 10, New Mex",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac"
+     ],
+     "kalshi_snap": "snap_20261105T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "bbb1d38a8f51b761a789459a08fa6ded": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261105T231903Z.parquet",
+  "sha256": "65b4a88f0dee886bfda86117a59fffefd399fc37741e6b7f0f92060d3d23d15a",
+  "logged_utc": "2026-11-05T23:19:03.817394+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-07T23:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T230005Z.parquet",
+   "inputs_digest": "{\"72cab2217ae57cbb00928eab05eb244e\": \"e9896b2474b43569\"}",
+   "components": {
+    "72cab2217ae57cbb00928eab05eb244e": {
+     "pinnacle_h2h": [
+      [
+       "Kentucky Wildcats",
+       0,
+       201
+      ],
+      [
+       "Tennessee Volunteers",
+       0,
+       -234
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kentucky Wildcats",
+       6.5,
+       -102
+      ],
+      [
+       "Tennessee Volunteers",
+       -6.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -111
+      ],
+      [
+       "Under",
+       49.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 9 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College Football Playoff top 12 projection after W",
+      "College football Week 10 best bets: Picks for Tenn",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Cubelic, Harper detail how Kentucky can beat Tenne",
+      "Harper, Cubelic analyze ranked matchups in massive",
+      "Josh Heupel says Vols needs to focus on the little",
+      "Kentucky's Stein praises Heupel, anticipates tough",
+      "Predicting the College Football Playoff: Who's mos",
+      "Stakes are high for No. 8 Kentucky at No. 16 Tenne",
+      "Tennessee hosts Kentucky in top-25 SEC matchup",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "UCLA into top 5, Ohio State out of top 10, New Mex",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "What is selection committee looking for in first C",
+      "Where the odds and rankings agree and disagree on ",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will Stein reacts to Kentucky's ranking in CFP Top",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261105T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "72cab2217ae57cbb00928eab05eb244e": "anchor_morning"
+   }
+  }
  }
 ]
