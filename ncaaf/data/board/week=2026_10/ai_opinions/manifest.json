@@ -5079,5 +5079,77 @@
     "72cab2217ae57cbb00928eab05eb244e": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261105T234903Z.parquet",
+  "sha256": "768c9d03823c0e2106321a0f2cf6091f0cdd15fa111df715f8edfaec8b6bb884",
+  "logged_utc": "2026-11-05T23:49:03.100146+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-06T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261105T233007Z.parquet",
+   "inputs_digest": "{\"5af84fe49ccd4f304f9af0dce0a0db56\": \"4aff654ba120cd1a\"}",
+   "components": {
+    "5af84fe49ccd4f304f9af0dce0a0db56": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       244
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -282
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       7.0,
+       102
+      ],
+      [
+       "UTSA Roadrunners",
+       -7.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       72.0,
+       -113
+      ],
+      [
+       "Under",
+       72.0,
+       -103
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Florida Atlantic hosts UTSA in AAC matchup",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261105T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "5af84fe49ccd4f304f9af0dce0a0db56": "anchor_close"
+   }
+  }
  }
 ]
