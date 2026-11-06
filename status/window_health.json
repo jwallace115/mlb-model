@@ -32,21 +32,21 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-06T20:47:04.527476+00:00",
-  "finished_utc": "2026-11-06T20:47:04.527476+00:00",
-  "result": "no_triggers",
+  "started_utc": "2026-11-06T21:21:27.697294+00:00",
+  "finished_utc": "2026-11-06T21:21:27.697294+00:00",
+  "result": "COMPLETE",
   "step": "window_watch",
-  "message": "",
-  "freeze_file": null
+  "message": "['new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_Atlanta Falcons; injury_change: inj_Cincinnati Bengals', 'new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_Ca",
+  "freeze_file": "ai_opinions_20261106T211703Z.parquet"
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-06T20:58:11.230402+00:00",
-  "finished_utc": "2026-11-06T20:58:11.230402+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-06T21:29:55.357147+00:00",
+  "finished_utc": "2026-11-06T21:29:55.357147+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle spreads Utah Utes -5.0\u2192-4.0; line_move: pinnacle spreads BYU Cougars 5.0\u21924.0', 'line_move: pinnacle totals Over 47.5\u219248.5; line_move: pinnacle totals Under 47.5\u219248.5', 'line_move",
-  "freeze_file": "ai_opinions_20261106T204904Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]

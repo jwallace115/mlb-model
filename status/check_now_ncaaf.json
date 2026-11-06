@@ -1,29 +1,12 @@
 {
- "started_utc": "2026-11-06T20:49:04.157784+00:00",
- "finished_utc": "2026-11-06T20:58:11.250534+00:00",
+ "started_utc": "2026-11-06T21:19:03.723053+00:00",
+ "finished_utc": "2026-11-06T21:29:55.382145+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "8db5a11826fc84a5a6506c9b85979e70",
-   "text": "line_move: pinnacle spreads Utah Utes -5.0\u2192-4.0; line_move: pinnacle spreads BYU Cougars 5.0\u21924.0"
-  },
-  {
-   "game": "c74c1b98aca90ebf335b4028d44c2095",
-   "text": "line_move: pinnacle totals Over 47.5\u219248.5; line_move: pinnacle totals Under 47.5\u219248.5"
-  },
-  {
-   "game": "648b835a42e9a23db353a0f0b326afdb",
-   "text": "line_move: pinnacle spreads Louisiana Tech Bulldogs -4.5\u2192-5.5; line_move: pinnacle spreads Troy Trojans 4.5\u21925.5"
-  },
-  {
-   "game": "61cf0b043d9d95f0a73d0838ff08a24b",
-   "text": "line_move: pinnacle totals Over 44.0\u219243.0; line_move: pinnacle totals Under 44.0\u219243.0"
-  }
- ],
- "games_read": 4,
- "frozen_file": "ai_opinions_20261106T204904Z.parquet",
- "spend_usd": 5.7681,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }

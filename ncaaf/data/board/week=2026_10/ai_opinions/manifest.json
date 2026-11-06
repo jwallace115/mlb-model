@@ -10367,5 +10367,80 @@
     "61cf0b043d9d95f0a73d0838ff08a24b": "line_move: pinnacle totals Over 44.0\u219243.0; line_move: pinnacle totals Under 44.0\u219243.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T210403Z.parquet",
+  "sha256": "585454e2c5d1eb8c6519bbadfae7d6c9f040b86fef6f25bb60c26f1597464b75",
+  "logged_utc": "2026-11-06T21:04:03.437534+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-07T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T210010Z.parquet",
+   "inputs_digest": "{\"11da04c7d3fba48caf11a5d8b66b8ccd\": \"8709731bf92956e6\"}",
+   "components": {
+    "11da04c7d3fba48caf11a5d8b66b8ccd": {
+     "pinnacle_h2h": [
+      [
+       "SMU Mustangs",
+       0,
+       -210
+      ],
+      [
+       "Virginia Tech Hokies",
+       0,
+       186
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "SMU Mustangs",
+       -6.0,
+       -102
+      ],
+      [
+       "Virginia Tech Hokies",
+       6.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -114
+      ],
+      [
+       "Under",
+       56.0,
+       -102
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College football Week 10 best bets: Picks for Tenn",
+      "Connelly on Week 10: His 14 favorite games on load",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Tennessee going 'dark mode' tops best college foot",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "11da04c7d3fba48caf11a5d8b66b8ccd": "anchor_prekick"
+   }
+  }
  }
 ]
