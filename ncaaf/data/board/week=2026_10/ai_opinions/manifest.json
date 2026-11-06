@@ -10145,5 +10145,227 @@
     "d74a875341a00e77cf86ecfb7569edd3": "line_move: pinnacle totals Under 42.0\u219243.0; line_move: pinnacle totals Over 42.0\u219243.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T204904Z.parquet",
+  "sha256": "596788e4b37648dafb792623d4b368e38722f238ad2475f86ef254026c7cb7e9",
+  "logged_utc": "2026-11-06T20:49:04.157784+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.583,
+  "revised_rows": 12,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-07T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T203006Z.parquet",
+   "inputs_digest": "{\"8db5a11826fc84a5a6506c9b85979e70\": \"c062b01d752be22a\", \"c74c1b98aca90ebf335b4028d44c2095\": \"2ad4a8636c285134\", \"648b835a42e9a23db353a0f0b326afdb\": \"bd64ea0c4663e60d\", \"61cf0b043d9d95f0a73d0838ff08a24b\": \"fcf118bb1731a41b\"}",
+   "components": {
+    "8db5a11826fc84a5a6506c9b85979e70": {
+     "pinnacle_h2h": [
+      [
+       "BYU Cougars",
+       0,
+       159
+      ],
+      [
+       "Utah Utes",
+       0,
+       -181
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "BYU Cougars",
+       4.0,
+       -104
+      ],
+      [
+       "Utah Utes",
+       -4.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -111
+      ],
+      [
+       "Under",
+       48.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "Can BYU hand Utah their 1st loss?",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College football Week 10 best bets: Picks for Tenn",
+      "Connelly on Week 10: His 14 favorite games on load",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Miami, Georgia, Utah, Indiana headline CFP's first",
+      "More than bragging rights at stake when No. 3 Utah",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Sources: LJ Martin trending toward return for BYU ",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T2037Z.parquet"
+    },
+    "c74c1b98aca90ebf335b4028d44c2095": {
+     "pinnacle_h2h": [
+      [
+       "Kansas Jayhawks",
+       0,
+       -157
+      ],
+      [
+       "UCF Knights",
+       0,
+       139
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas Jayhawks",
+       -3.0,
+       -113
+      ],
+      [
+       "UCF Knights",
+       3.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -107
+      ],
+      [
+       "Under",
+       48.5,
+       -110
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first "
+     ],
+     "kalshi_snap": "snap_20261106T2037Z.parquet"
+    },
+    "648b835a42e9a23db353a0f0b326afdb": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -214
+      ],
+      [
+       "Troy Trojans",
+       0,
+       185
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -5.5,
+       -110
+      ],
+      [
+       "Troy Trojans",
+       5.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -112
+      ],
+      [
+       "Under",
+       47.5,
+       -104
+      ]
+     ],
+     "kalshi_snap": "snap_20261106T2037Z.parquet"
+    },
+    "61cf0b043d9d95f0a73d0838ff08a24b": {
+     "pinnacle_h2h": [
+      [
+       "Iowa Hawkeyes",
+       0,
+       -132
+      ],
+      [
+       "Northwestern Wildcats",
+       0,
+       117
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa Hawkeyes",
+       -2.5,
+       -110
+      ],
+      [
+       "Northwestern Wildcats",
+       2.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -110
+      ],
+      [
+       "Under",
+       43.0,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly on Week 10: His 14 favorite games on load",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "Iowa starting center Cael Winter expected to miss ",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T2037Z.parquet"
+    }
+   },
+   "triggers": {
+    "8db5a11826fc84a5a6506c9b85979e70": "line_move: pinnacle spreads Utah Utes -5.0\u2192-4.0; line_move: pinnacle spreads BYU Cougars 5.0\u21924.0",
+    "c74c1b98aca90ebf335b4028d44c2095": "line_move: pinnacle totals Over 47.5\u219248.5; line_move: pinnacle totals Under 47.5\u219248.5",
+    "648b835a42e9a23db353a0f0b326afdb": "line_move: pinnacle spreads Louisiana Tech Bulldogs -4.5\u2192-5.5; line_move: pinnacle spreads Troy Trojans 4.5\u21925.5",
+    "61cf0b043d9d95f0a73d0838ff08a24b": "line_move: pinnacle totals Over 44.0\u219243.0; line_move: pinnacle totals Under 44.0\u219243.0"
+   }
+  }
  }
 ]
