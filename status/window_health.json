@@ -30,20 +30,20 @@
   "freeze_file": null
  },
  {
-  "sport": "nfl",
-  "window": "event",
-  "started_utc": "2026-11-06T21:21:27.697294+00:00",
-  "finished_utc": "2026-11-06T21:21:27.697294+00:00",
-  "result": "COMPLETE",
-  "step": "window_watch",
-  "message": "['new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_Atlanta Falcons; injury_change: inj_Cincinnati Bengals', 'new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_Ca",
-  "freeze_file": "ai_opinions_20261106T211703Z.parquet"
- },
- {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-06T21:29:55.357147+00:00",
-  "finished_utc": "2026-11-06T21:29:55.357147+00:00",
+  "started_utc": "2026-11-06T21:43:18.055195+00:00",
+  "finished_utc": "2026-11-06T21:43:18.055195+00:00",
+  "result": "COMPLETE",
+  "step": "window_watch",
+  "message": "['anchor_prekick']",
+  "freeze_file": "ai_opinions_20261106T213404Z.parquet"
+ },
+ {
+  "sport": "nfl",
+  "window": "event",
+  "started_utc": "2026-11-06T21:47:05.127929+00:00",
+  "finished_utc": "2026-11-06T21:47:05.127929+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",

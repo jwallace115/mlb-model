@@ -1,53 +1,12 @@
 {
- "started_utc": "2026-11-06T21:17:03.821705+00:00",
- "finished_utc": "2026-11-06T21:21:27.742468+00:00",
+ "started_utc": "2026-11-06T21:47:04.686766+00:00",
+ "finished_utc": "2026-11-06T21:47:05.227497+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "dc56d980f527ffeef89940133b211b13",
-   "text": "new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_Atlanta Falcons; injury_change: inj_Cincinnati Bengals"
-  },
-  {
-   "game": "014282b888c741b7d70c857c09f40aa7",
-   "text": "new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_Carolina Panthers"
-  },
-  {
-   "game": "e571bab6736f9338130a78a4f75c3231",
-   "text": "new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_Cleveland Browns"
-  },
-  {
-   "game": "415fc42e72888c63e82f7bce24c65391",
-   "text": "new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_Indianapolis Colts; injury_change: inj_Dallas Cowboys"
-  },
-  {
-   "game": "44d8c37868b700e90f816db7c5df5cdd",
-   "text": "new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_Miami Dolphins"
-  },
-  {
-   "game": "e354e6a04b1cb9c96e549b863debb92e",
-   "text": "new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_New York Jets; new_news: 1 availability items"
-  },
-  {
-   "game": "89de07377e0aa8ffaa2ae6a7dc0855cc",
-   "text": "new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_Washington Commanders; injury_change: inj_Los Angeles Rams; new_news: 1 availability items"
-  },
-  {
-   "game": "fe93e6ab1e553c0169936a0a983c324f",
-   "text": "new_props: pull 2026-11-06T21:17:44.001961+00:00; injury_change: inj_Philadelphia Eagles; injury_change: inj_New York Giants"
-  },
-  {
-   "game": "39aeac43cea7b12558b91cdab1255a10",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "ac9d38a18d5c92814233a31aa9a48d78",
-   "text": "anchor_morning"
-  }
- ],
- "games_read": 10,
- "frozen_file": "ai_opinions_20261106T211703Z.parquet",
- "spend_usd": 6.163,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
