@@ -1642,5 +1642,149 @@
     "c75744790b7acf6260c78ba5e739c0e5": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T150203Z.parquet",
+  "sha256": "78f1a1d3af929b18cfe371bede6ac7e78faf252e4fded23bd314b4703c4692a4",
+  "logged_utc": "2026-11-06T15:02:03.642968+00:00",
+  "rows": 70,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.957,
+  "revised_rows": 0,
+  "oldest_source_age_min": 61.8,
+  "first_kickoff_utc": "2026-11-08T14:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261106T150013Z.parquet",
+   "inputs_digest": "{\"dc56d980f527ffeef89940133b211b13\": \"d24d4624de1746eb\"}",
+   "components": {
+    "dc56d980f527ffeef89940133b211b13": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Atlanta Falcons",
+       0,
+       145
+      ],
+      [
+       "Cincinnati Bengals",
+       0,
+       -170
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Atlanta Falcons",
+       3.0,
+       -105
+      ],
+      [
+       "Cincinnati Bengals",
+       -3.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       53.0,
+       -110
+      ],
+      [
+       "Under",
+       53.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Atlanta Falcons",
+       0,
+       147
+      ],
+      [
+       "Cincinnati Bengals",
+       0,
+       -170
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Atlanta Falcons",
+       3.0,
+       101
+      ],
+      [
+       "Cincinnati Bengals",
+       -3.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       102
+      ],
+      [
+       "Under",
+       53.0,
+       -117
+      ]
+     ],
+     "props_ts": "2026-11-05T21:30:06.697992+00:00",
+     "inj_Atlanta Falcons": "8d1fac9fe0a8aab0",
+     "inj_Cincinnati Bengals": "904489358220becf",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Atlanta Falcons vs. Tampa Bay Buccaneers: Game Hig",
+      "Bengals beat Titans in OT",
+      "Bengals defensive end Cashius Howell out indefinit",
+      "Bengals' Burrow is looking to extend 3-game winnin",
+      "Bijan Robinson says win in Madrid could swing Falc",
+      "Buccaneers beat Falcons 16-0 despite failing to co",
+      "Bucs down Falcons without pass completion; Bucky I",
+      "Can the Falcons cover Higgins and Chase?",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Early bets for Week 9: Bengals stay hot? Another C",
+      "Falcons fall to Bucs in rain-soaked shutout",
+      "Falcons' James Pearce back from suspension, expect",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "How active NFL players continue to redefine all-ti",
+      "Ja'Marr Chase's 'competitiveness' comes out at rig",
+      "Joe Burrow throws 5 TD passes, runs for score in O",
+      "Joe Burrow throws 5 TD passes, then runs for score",
+      "Jude Bellingham visits Atlanta Falcons training se",
+      "Millennial minds: How Doyle, Udinski leapt to head",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 8's best arrivals, led by Vikings' Kyler ",
+      "NFL Week 8: Big takeaways, questions and fantasy s",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Sizing up wild NFL Week 8: Lamar Jackson's injury,",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tennessee Titans vs. Cincinnati Bengals: Game High",
+      "Trio brought in to replace All-Pro DE has shined f",
+      "What 18 contenders should do at the NFL trade dead",
+      "What has gone right -- and wrong -- for 10 new NFL",
+      "Which team needs Jonathan Taylor the most?"
+     ],
+     "kalshi_snap": "snap_20261106T1435Z.parquet"
+    }
+   },
+   "triggers": {
+    "dc56d980f527ffeef89940133b211b13": "anchor_morning"
+   }
+  }
  }
 ]
