@@ -1,0 +1,2 @@
+# Allow parquet files in this directory (fired rows for reproducibility)
+!*.parquet

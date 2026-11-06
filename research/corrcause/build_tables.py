@@ -163,9 +163,9 @@ def extract_closes(tape, events_df, bookmakers, home_col="home_team"):
     return pd.DataFrame(rows.values())
 
 
-def extract_openers(tape, events_df, home_col="home_team"):
-    """Extract Pinnacle opener: first snapshot ≥ 12h before commence_time."""
-    pin = tape[(tape["bookmaker"] == "pinnacle") & (tape["event_id"].isin(events_df["event_id"]))].copy()
+def extract_openers(tape, events_df, home_col="home_team", bookmaker="pinnacle"):
+    """Extract opener for a given bookmaker: first snapshot ≥ 12h before commence_time."""
+    pin = tape[(tape["bookmaker"] == bookmaker) & (tape["event_id"].isin(events_df["event_id"]))].copy()
     # Add ct from events_df if not already present
     if "ct" not in pin.columns:
         pin = pin.merge(events_df[["event_id", "ct"]].drop_duplicates("event_id"), on="event_id", how="left")
@@ -188,32 +188,33 @@ def extract_openers(tape, events_df, home_col="home_team"):
     first["is_home"] = first["outcome_name"] == first[home_col]
     first["is_over"] = first["outcome_name"] == "Over"
 
+    pfx = "pin_open" if bookmaker == "pinnacle" else f"soft_{bookmaker}_open"
     rows = {}
     for eid, grp in first.groupby("event_id"):
         r = {"event_id": eid}
         h2h = grp[grp["market"] == "h2h"]
         h = h2h[h2h["is_home"]]
         a = h2h[~h2h["is_home"]]
-        if len(h) > 0: r["pin_open_ml_h"] = h["price"].iloc[0]
-        if len(a) > 0: r["pin_open_ml_a"] = a["price"].iloc[0]
+        if len(h) > 0: r[f"{pfx}_ml_h"] = h["price"].iloc[0]
+        if len(a) > 0: r[f"{pfx}_ml_a"] = a["price"].iloc[0]
 
         tot = grp[grp["market"] == "totals"]
         over = tot[tot["is_over"]]
         under = tot[~tot["is_over"]]
         if len(over) > 0:
-            r["pin_open_total"] = over["point"].iloc[0]
-            r["pin_open_over_price"] = over["price"].iloc[0]
+            r[f"{pfx}_total"] = over["point"].iloc[0]
+            r[f"{pfx}_over_price"] = over["price"].iloc[0]
         if len(under) > 0:
-            r["pin_open_under_price"] = under["price"].iloc[0]
+            r[f"{pfx}_under_price"] = under["price"].iloc[0]
 
         spr = grp[grp["market"] == "spreads"]
         h_spr = spr[spr["is_home"]]
         a_spr = spr[~spr["is_home"]]
         if len(h_spr) > 0:
-            r["pin_open_spread_h"] = h_spr["point"].iloc[0]
-            r["pin_open_spread_h_price"] = h_spr["price"].iloc[0]
+            r[f"{pfx}_spread_h"] = h_spr["point"].iloc[0]
+            r[f"{pfx}_spread_h_price"] = h_spr["price"].iloc[0]
         if len(a_spr) > 0:
-            r["pin_open_spread_a_price"] = a_spr["price"].iloc[0]
+            r[f"{pfx}_spread_a_price"] = a_spr["price"].iloc[0]
         rows[eid] = r
 
     return pd.DataFrame(rows.values())
@@ -302,7 +303,12 @@ def build_nhl_games(seasons):
         inplay[["event_id", "snap", "ct", "bookmaker", "market", "outcome_name", "point", "price",
                 "home_team", "away_team"]],
     ], ignore_index=True)
-    opener_df = extract_openers(combined_for_opener, events)
+    opener_df = extract_openers(combined_for_opener, events, bookmaker="pinnacle")
+    # Per-book openers for NH3 (soft-only ML move)
+    for book in ["draftkings", "fanduel", "betmgm"]:
+        book_opener = extract_openers(combined_for_opener, events, bookmaker=book)
+        if len(book_opener) > 0:
+            opener_df = opener_df.merge(book_opener, on="event_id", how="left")
     print(f"  Openers extracted: {len(opener_df)} ({time.time()-t0:.0f}s)")
 
     # 7. Match outcomes from SBRO
@@ -354,6 +360,31 @@ def build_nhl_games(seasons):
     return games
 
 
+def _load_venue_tz():
+    """Load venue timezone offsets (hours west of UTC, standard time)."""
+    import json, zoneinfo, datetime
+    with open(ROOT / "data" / "venue_timezones.json") as f:
+        raw = json.load(f)
+    # Convert IANA tz to standard-time UTC offset in hours
+    offsets = {}
+    ref = datetime.datetime(2023, 1, 15, 12, 0)  # mid-January = standard time
+    for sport, mapping in raw.items():
+        offsets[sport] = {}
+        for team, tz_name in mapping.items():
+            tz = zoneinfo.ZoneInfo(tz_name)
+            off = tz.utcoffset(ref).total_seconds() / 3600
+            offsets[sport][team] = off
+    return offsets
+
+VENUE_TZ = None
+
+def get_venue_tz():
+    global VENUE_TZ
+    if VENUE_TZ is None:
+        VENUE_TZ = _load_venue_tz()
+    return VENUE_TZ
+
+
 def build_nhl_features(seasons, games):
     print("\n=== Building NHL features ===")
     t0 = time.time()
@@ -371,6 +402,34 @@ def build_nhl_features(seasons, games):
 
     gr = pd.read_parquet(Path.home() / "mlb-model-nhlD/nhl/data/sim/ratings/goalie_ratings.parquet")
     gr["date_dt"] = pd.to_datetime(gr["date"])
+
+    # EN goals: load shots with is_goal and empty_net flags
+    all_shots = {}
+    for s in seasons:
+        base = Path.home() / f"mlb-model-nhlsim1/nhl/data/sim/events/season={s}"
+        all_shots[s] = pd.read_parquet(base / "shots.parquet")
+    shots_combined = pd.concat(all_shots.values(), ignore_index=True)
+
+    # EN goal counts per game per team (for NH6)
+    en_goals = shots_combined[(shots_combined["is_goal"]) & (shots_combined["empty_net"])].copy()
+    total_goals_all = shots_combined[shots_combined["is_goal"]].shape[0]
+    print(f"  EN goals: {len(en_goals)} / {total_goals_all} total goals "
+          f"({100*len(en_goals)/total_goals_all:.1f}%)")
+    for s in seasons:
+        s_shots = all_shots[s]
+        s_en = s_shots[(s_shots["is_goal"]) & (s_shots["empty_net"])]
+        s_total = s_shots[s_shots["is_goal"]]
+        print(f"    season={s}: {len(s_en)} EN / {len(s_total)} goals ({100*len(s_en)/len(s_total):.1f}%)")
+
+    # Build EN-per-game lookup: game_id -> {home_en_for, home_en_against, away_en_for, away_en_against}
+    en_by_game = {}
+    for gid_str, grp in en_goals.groupby("game_id"):
+        home_for = len(grp[grp["shooting_team"] == "home"])
+        away_for = len(grp[grp["shooting_team"] == "away"])
+        en_by_game[gid_str] = {"home_en_for": home_for, "away_en_for": away_for,
+                                "home_en_against": away_for, "away_en_against": home_for}
+
+    tz_offsets = get_venue_tz()
 
     features = []
     for _, g in games.iterrows():
@@ -471,6 +530,50 @@ def build_nhl_features(seasons, games):
                         ]
                         if len(rating) > 0:
                             row[f"{side}_{label}_gsax"] = rating.iloc[-1]["gsax_per_att_rating"]
+
+        # ---- EN GOALS (NH6): net EN goals over prior 15 games ----
+        for side, abbrev in [("home", h_abbrev), ("away", a_abbrev)]:
+            team_prior_15 = season_prior[
+                (season_prior["home"] == abbrev) | (season_prior["away"] == abbrev)
+            ].sort_values("date_dt").tail(15)
+            if len(team_prior_15) >= 10:
+                en_for = 0
+                en_against = 0
+                for _, pg in team_prior_15.iterrows():
+                    pgid_str = str(int(pg["game_id"]))
+                    en = en_by_game.get(pgid_str, {})
+                    is_h = pg["home"] == abbrev
+                    if is_h:
+                        en_for += en.get("home_en_for", 0)
+                        en_against += en.get("home_en_against", 0)
+                    else:
+                        en_for += en.get("away_en_for", 0)
+                        en_against += en.get("away_en_against", 0)
+                row[f"{side}_en_net_15"] = en_for - en_against
+
+        # ---- TIMEZONE features (NH5) ----
+        # TZ offset of current game's home venue
+        nhl_tz = tz_offsets.get("nhl", {})
+        home_tz = nhl_tz.get(g["home_team"], np.nan)
+        row["venue_tz_offset"] = home_tz
+        # For away team: TZ of their LAST game's venue
+        for side, abbrev in [("home", h_abbrev), ("away", a_abbrev)]:
+            team_prior_sched = season_prior[
+                (season_prior["home"] == abbrev) | (season_prior["away"] == abbrev)
+            ].sort_values("date_dt")
+            if len(team_prior_sched) > 0:
+                last_game = team_prior_sched.iloc[-1]
+                # Last game venue = where they played
+                if last_game["home"] == abbrev:
+                    # They were at home, venue = their home
+                    last_venue_team = _NHL_ABBREV_TO_FULL.get(abbrev, abbrev)
+                else:
+                    # They were away, venue = opponent's home
+                    last_venue_team = _NHL_ABBREV_TO_FULL.get(last_game["home"], last_game["home"])
+                last_tz = nhl_tz.get(last_venue_team, np.nan)
+                row[f"{side}_last_venue_tz"] = last_tz
+                if not pd.isna(last_tz) and not pd.isna(home_tz):
+                    row[f"{side}_tz_change"] = home_tz - last_tz  # positive = eastward
 
         # Market behaviour features (from games table directly)
         if not pd.isna(g.get("pin_close_ml_h")) and not pd.isna(g.get("pin_open_ml_h")):
@@ -624,7 +727,12 @@ def build_nba_games(seasons):
 
     # Openers from lines_hourly
     print("  Extracting openers...")
-    opener_df = extract_openers(lh, events)
+    opener_df = extract_openers(lh, events, bookmaker="pinnacle")
+    # Per-book openers for NB3 (soft-only spread move)
+    for book in ["draftkings", "fanduel", "betmgm"]:
+        book_opener = extract_openers(lh, events, bookmaker=book)
+        if len(book_opener) > 0:
+            opener_df = opener_df.merge(book_opener, on="event_id", how="left")
     print(f"  Openers: {len(opener_df)}")
 
     # Outcomes
