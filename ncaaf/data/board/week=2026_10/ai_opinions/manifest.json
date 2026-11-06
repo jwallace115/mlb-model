@@ -6278,5 +6278,123 @@
     "6bfae12b9d44d12ca7dde4f4f4aedc7d": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T034903Z.parquet",
+  "sha256": "911e88ae17562ef818e955fe3d705c84288433ccddb2788675361330b5212b81",
+  "logged_utc": "2026-11-06T03:49:03.266890+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.833,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-08T03:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T033007Z.parquet",
+   "inputs_digest": "{\"d4334cec8f2060f3b8491ca9c7325892\": \"cd2053b3b66c6500\", \"6ce85b1067e9e85cd0d8b3242905ecd7\": \"338c270b2ed7ff9b\"}",
+   "components": {
+    "d4334cec8f2060f3b8491ca9c7325892": {
+     "pinnacle_h2h": [
+      [
+       "Oregon State Beavers",
+       0,
+       -233
+      ],
+      [
+       "Texas State Bobcats",
+       0,
+       200
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oregon State Beavers",
+       -6.5,
+       100
+      ],
+      [
+       "Texas State Bobcats",
+       6.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       71.0,
+       -108
+      ],
+      [
+       "Under",
+       71.0,
+       -108
+      ]
+     ],
+     "news": [
+      "Boise State rallies past Texas State to remain Gro",
+      "Jayden Mandal throws 2 TD passes to Josiah Freeman",
+      "No. 20 Boise State rallies to beat Texas State 46-",
+      "Oregon State and Texas State meet in Pac-12 play",
+      "Rasean Jones hauls it in for 12-yard receiving tou"
+     ],
+     "kalshi_snap": "snap_20261106T0307Z.parquet"
+    },
+    "6ce85b1067e9e85cd0d8b3242905ecd7": {
+     "pinnacle_h2h": [
+      [
+       "UNLV Rebels",
+       0,
+       -211
+      ],
+      [
+       "Wyoming Cowboys",
+       0,
+       183
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "UNLV Rebels",
+       -5.5,
+       -105
+      ],
+      [
+       "Wyoming Cowboys",
+       5.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -117
+      ],
+      [
+       "Under",
+       48.0,
+       101
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "Jackson Arnold throws 3 TD passes, UNLV hands Nort",
+      "MWC matchup features UNLV taking on Wyoming",
+      "Northern Illinois answers as George Dimopoulos hau"
+     ],
+     "kalshi_snap": "snap_20261106T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "d4334cec8f2060f3b8491ca9c7325892": "anchor_morning",
+    "6ce85b1067e9e85cd0d8b3242905ecd7": "anchor_morning"
+   }
+  }
  }
 ]
