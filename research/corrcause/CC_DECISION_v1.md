@@ -101,3 +101,56 @@ seasons; NBA uses lines_hourly due to sparse in-play tape pre-tip coverage).
   NHL resolved at 0. The 2 survivors are consistent with chance (pre-registered: 1–3 expected).
 - Home team null: NHL −0.004, NBA −0.007 → both within ±0.01 as pre-registered
 - Positive control: planted +0.04 detected and survived BH → pipeline works
+
+---
+
+## CC-D4 — April diagnostic pre-registration (2026-11-06)
+
+**Cowork prior:** artefact 60% (stale close or non-regular-season rows), real-but-priced 25%, noise 15%.
+
+**Claude Code prior:** artefact 55% (April close quality is visibly worse in the data; p90 age
+is likely > 100 min), noise 35%, real 10%.
+
+### CC-D4 RESULT
+
+**3a — Close age by month:**
+
+| Month | n | median (min) | p90 (min) | share > 60 min |
+|---|---|---|---|---|
+| Oct | 151 | 9.3 | 9.4 | 0.7% |
+| Nov | 459 | 9.3 | 14.3 | 7.8% |
+| Dec | 440 | 9.3 | 9.4 | 0.9% |
+| Jan | 454 | 9.4 | 9.4 | 0.7% |
+| Feb | 338 | 9.3 | 9.4 | 1.2% |
+| Mar | 473 | 9.3 | 9.4 | 0.8% |
+| **Apr** | **231** | **9.3** | **1,209** | **12.1%** |
+
+April's p90 and share > 60 min are **materially worse** than Nov–Mar. 12.1% of April
+closes are stale (> 60 min old), compared to < 1.5% for Dec–Mar.
+
+**3b — Cell cuts:**
+
+| Cell | Cut | n | mean r |
+|---|---|---|---|
+| T2_NBA_month_4_away_ml | Original | 222 | +0.098 |
+| | (i) close ≤ 15 min | 196 | +0.039 |
+| | (ii) 2023-24 only | 130 | +0.086 |
+| | (iii) Excl. play-in (30 removed) | 192 | **+0.012** |
+| T2_NBA_month_4_over | Original | 192 | +0.112 |
+| | (i) close ≤ 15 min | 188 | +0.109 |
+| | (ii) 2023-24 only | 116 | +0.109 |
+| | (iii) Excl. play-in (0 removed) | 192 | +0.112 |
+
+**T2_NBA_month_str_4_away_ml**: collapses from +0.098 to +0.012 after excluding play-in games.
+The signal was entirely carried by 30 play-in/non-regular-season games. **DEAD-ARTEFACT.**
+
+**T2_NBA_month_str_4_over**: survives all three cuts (r stays +0.109 to +0.112). However,
+it is a single-feature Tier 2 cell with no mechanism, Q, or prior — it remains a HYPOTHESIS
+per registry §5. Not promoted.
+
+**3c — Q for fired April games:**
+- Possessions vs prior-10: mean diff +2.9, median +1.7 (April games have slightly higher pace)
+- Top-5 minutes avg: 32.5 min (no prior-20 baseline to compare against in this output)
+
+**Verdict:** away_ml cell is DEAD-ARTEFACT (play-in contamination). Over cell is noise-or-pace
+but cannot be distinguished from chance without a mechanism. Neither changes the screen conclusion.
