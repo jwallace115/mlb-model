@@ -1,12 +1,17 @@
 {
- "started_utc": "2026-11-06T05:19:03.578028+00:00",
- "finished_utc": "2026-11-06T05:19:03.964439+00:00",
+ "started_utc": "2026-11-06T05:49:04.028685+00:00",
+ "finished_utc": "2026-11-06T05:57:38.726139+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "8d5eeb24eeb0ac7ff32325a8a8c4b371",
+   "text": "line_move: pinnacle spreads Tulane Green Wave 1.5\u21922.5; line_move: pinnacle spreads Tulsa Golden Hurricane -1.5\u2192-2.5"
+  }
+ ],
+ "games_read": 1,
+ "frozen_file": "ai_opinions_20261106T054904Z.parquet",
+ "spend_usd": 4.6299,
+ "result": "COMPLETE"
 }

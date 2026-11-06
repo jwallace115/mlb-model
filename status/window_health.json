@@ -32,8 +32,8 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-06T05:17:04.361621+00:00",
-  "finished_utc": "2026-11-06T05:17:04.361621+00:00",
+  "started_utc": "2026-11-06T05:47:03.915678+00:00",
+  "finished_utc": "2026-11-06T05:47:03.915678+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -42,11 +42,11 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-06T05:19:03.901912+00:00",
-  "finished_utc": "2026-11-06T05:19:03.901912+00:00",
-  "result": "no_triggers",
+  "started_utc": "2026-11-06T05:57:38.712246+00:00",
+  "finished_utc": "2026-11-06T05:57:38.712246+00:00",
+  "result": "COMPLETE",
   "step": "window_watch",
-  "message": "",
-  "freeze_file": null
+  "message": "['line_move: pinnacle spreads Tulane Green Wave 1.5\u21922.5; line_move: pinnacle spreads Tulsa Golden Hurricane -1.5\u2192-2.5']",
+  "freeze_file": "ai_opinions_20261106T054904Z.parquet"
  }
 ]

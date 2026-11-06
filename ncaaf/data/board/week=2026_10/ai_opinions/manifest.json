@@ -6396,5 +6396,74 @@
     "6ce85b1067e9e85cd0d8b3242905ecd7": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T054904Z.parquet",
+  "sha256": "d4e9f2172e654df92e791029b0b4648013f102708e3898df591d838204fc842d",
+  "logged_utc": "2026-11-06T05:49:04.028685+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-07T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T053005Z.parquet",
+   "inputs_digest": "{\"8d5eeb24eeb0ac7ff32325a8a8c4b371\": \"053210a4633b5213\"}",
+   "components": {
+    "8d5eeb24eeb0ac7ff32325a8a8c4b371": {
+     "pinnacle_h2h": [
+      [
+       "Tulane Green Wave",
+       0,
+       116
+      ],
+      [
+       "Tulsa Golden Hurricane",
+       0,
+       -131
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Tulane Green Wave",
+       2.5,
+       -106
+      ],
+      [
+       "Tulsa Golden Hurricane",
+       -2.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -108
+      ],
+      [
+       "Under",
+       50.0,
+       -108
+      ]
+     ],
+     "news": [
+      "AAC matchup features Tulsa squaring off against Tu",
+      "Allstate Playoff Predictor"
+     ],
+     "kalshi_snap": "snap_20261106T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "8d5eeb24eeb0ac7ff32325a8a8c4b371": "line_move: pinnacle spreads Tulane Green Wave 1.5\u21922.5; line_move: pinnacle spreads Tulsa Golden Hurricane -1.5\u2192-2.5"
+   }
+  }
  }
 ]
