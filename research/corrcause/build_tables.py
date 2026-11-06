@@ -712,10 +712,10 @@ def build_nba_features(seasons, games):
                 if col in sf.index:
                     row[col] = sf[col]
 
-        row["home_b2b"] = 1 if row.get("home_rest_days") == 0 else 0
-        row["away_b2b"] = 1 if row.get("away_rest_days") == 0 else 0
-        row["home_3in4"] = 1 if row.get("home_games_last_4", 0) >= 3 else 0
-        row["away_3in4"] = 1 if row.get("away_games_last_4", 0) >= 3 else 0
+        row["home_b2b"] = 1 if row.get("home_rest_days") == 1 else 0
+        row["away_b2b"] = 1 if row.get("away_rest_days") == 1 else 0
+        row["home_3in4"] = 1 if row.get("home_games_last_4", 0) >= 2 else 0
+        row["away_3in4"] = 1 if row.get("away_games_last_4", 0) >= 2 else 0
 
         # Box stat priors
         for side, team in [("home", ht), ("away", at)]:

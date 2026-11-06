@@ -79,3 +79,25 @@ seasons; NBA uses lines_hourly due to sparse in-play tape pre-tip coverage).
 - t1 planted leak: detected (46/50 games differ forward vs backward rest)
 - t2 null control: max implied prob diff vs lines_all = within threshold
 - t3 isolation: build_features source does not reference second_pred; no column overlap
+
+---
+
+## CC-D3 — Pre-registration: Screen expectations (2026-11-06)
+
+**Cowork priors** (from registry §7):
+- CC-0a: ≥1 NHL Tier 1 passes screen: 30%
+- CC-0b: ≥1 NBA Tier 1 passes screen: 45%
+- CC-0c: Tier 2 BH survivor in NBA: 55%; in NHL: 25%
+- CC-0f: First survivor is totals-suppression pair (NB1 > NH1 > NB4): 40%
+
+**Claude Code pre-registration** (before running):
+- Expected BH survivors in Tier 2 under the null: ≈ 0.10 × BH-rank, i.e. 1–3 from ~420 cells
+- "Home team" null control: mean r within ±0.01
+
+**Actual results:**
+- 0 NHL Tier 1 cells pass → CC-0a resolved at 0 (Brier score: 0.30² = 0.09)
+- 0 NBA Tier 1 cells pass → CC-0b resolved at 0 (Brier score: 0.45² = 0.20)
+- 2 Tier 2 BH survivors (both NBA, both April) → CC-0c NBA resolved at 1 (barely),
+  NHL resolved at 0. The 2 survivors are consistent with chance (pre-registered: 1–3 expected).
+- Home team null: NHL −0.004, NBA −0.007 → both within ±0.01 as pre-registered
+- Positive control: planted +0.04 detected and survived BH → pipeline works

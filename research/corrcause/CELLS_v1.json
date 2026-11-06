@@ -1,0 +1,16 @@
+{
+  "NH1": {"total_step": 0.5, "side": "over", "desc": "Total pushed DOWN a full key step"},
+  "NH2": {"total_step": 0.5, "side": "under", "desc": "Total pushed UP a full key step"},
+  "NH3": {"soft_move_pts": 3.0, "pin_move_pts": 1.0, "side": "against_soft", "desc": "Soft-only ML move"},
+  "NH4": {"ml_move_pts": 2.0, "primary_share": 0.6, "team_min_starts": 10, "side": "backup_team", "desc": "Backup-goalie overshoot"},
+  "NH5": {"rest_days": 1, "ot_flag": true, "tz_change": 1, "side": "opponent_ml", "desc": "Post-OT road B2B with travel"},
+  "NH6": {"fav_fair_min": 0.58, "en_net_min": 4, "prior_games": 15, "side": "underdog_ml", "desc": "EN-inflated favourite"},
+  "NH7": {"rest_days": 4, "side": "under", "desc": "Both rested >= 4 days"},
+  "NB1": {"total_drop": 3.0, "side": "over", "desc": "Total suppressed >= 3 pts"},
+  "NB2": {"total_raise": 3.0, "side": "under", "desc": "Total raised >= 3 pts"},
+  "NB3": {"soft_move_pts": 1.5, "pin_move_pts": 0.5, "side": "against_soft", "desc": "Soft-only spread move"},
+  "NB5": {"games_in_4": 3, "tz_east": 2, "side": "opponent_ats", "desc": "Eastbound 3-in-4 road fatigue"},
+  "NB6": {"b2b": true, "ot_flag": true, "side": "opponent_ats", "desc": "OT-fatigue B2B"},
+  "NB7": {"gap_pts": 2.0, "min_games": 40, "window_end": "11-15", "side": "directional", "desc": "Early-season pace anchor"},
+  "NB8": {"home_rest_days": 3, "away_b2b": true, "side": "b2b_team_ats", "desc": "Rest-premium overshoot"}
+}
