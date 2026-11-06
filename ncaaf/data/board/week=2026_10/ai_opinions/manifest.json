@@ -9614,5 +9614,313 @@
     "796b0be4ed0d775756eff53b5803125a": "line_move: pinnacle spreads San Jose State Spartans -10.0\u2192-11.0; line_move: pinnacle spreads Northern Illinois Huskies 10.0\u219211.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T181904Z.parquet",
+  "sha256": "beb38871c01c5b4c36d309c5b749e20b69c7d24ceddc843b2e0d98ada029e0c2",
+  "logged_utc": "2026-11-06T18:19:04.961491+00:00",
+  "rows": 18,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 6,
+  "no_view_share": 0.556,
+  "revised_rows": 15,
+  "oldest_source_age_min": 48.9,
+  "first_kickoff_utc": "2026-11-07T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T173009Z.parquet",
+   "inputs_digest": "{\"5172093e8533ea39f59c5d2c63c743b9\": \"d9f52bdca167af47\", \"55e2553780b7d3d06d1fe7a4ffa9474b\": \"395d63d359465a78\", \"2a6e2d9ca0d2fc85a4164e9c0f25a05f\": \"fa9445c5de5d79c1\", \"241c23f2724f5ca91727a47a91f2facf\": \"2902bc2ecb086b7a\", \"61cf0b043d9d95f0a73d0838ff08a24b\": \"6568f885ba5b3db0\", \"6bfae12b9d44d12ca7dde4f4f4aedc7d\": \"897a30ea06383f06\"}",
+   "components": {
+    "5172093e8533ea39f59c5d2c63c743b9": {
+     "pinnacle_h2h": [
+      [
+       "East Carolina Pirates",
+       0,
+       -109
+      ],
+      [
+       "South Florida Bulls",
+       0,
+       -101
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "East Carolina Pirates",
+       -1.0,
+       -104
+      ],
+      [
+       "South Florida Bulls",
+       1.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.5,
+       -105
+      ],
+      [
+       "Under",
+       39.5,
+       -111
+      ]
+     ],
+     "kalshi_snap": "snap_20261106T1807Z.parquet"
+    },
+    "55e2553780b7d3d06d1fe7a4ffa9474b": {
+     "pinnacle_h2h": [
+      [
+       "North Texas Mean Green",
+       0,
+       -746
+      ],
+      [
+       "Rice Owls",
+       0,
+       539
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Texas Mean Green",
+       -15.5,
+       -107
+      ],
+      [
+       "Rice Owls",
+       15.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       64.0,
+       -114
+      ],
+      [
+       "Under",
+       64.0,
+       -103
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T1807Z.parquet"
+    },
+    "2a6e2d9ca0d2fc85a4164e9c0f25a05f": {
+     "pinnacle_h2h": [
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       638
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       -926
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Rutgers Scarlet Knights",
+       18.5,
+       -110
+      ],
+      [
+       "Wisconsin Badgers",
+       -18.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -116
+      ],
+      [
+       "Under",
+       45.0,
+       100
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove"
+     ],
+     "kalshi_snap": "snap_20261106T1807Z.parquet"
+    },
+    "241c23f2724f5ca91727a47a91f2facf": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       155
+      ],
+      [
+       "Army Black Knights",
+       0,
+       -176
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       4.0,
+       -111
+      ],
+      [
+       "Army Black Knights",
+       -4.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -105
+      ],
+      [
+       "Under",
+       44.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Connelly on Week 10: His 14 favorite games on load"
+     ],
+     "kalshi_snap": "snap_20261106T1807Z.parquet"
+    },
+    "61cf0b043d9d95f0a73d0838ff08a24b": {
+     "pinnacle_h2h": [
+      [
+       "Iowa Hawkeyes",
+       0,
+       -127
+      ],
+      [
+       "Northwestern Wildcats",
+       0,
+       113
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa Hawkeyes",
+       -1.5,
+       -115
+      ],
+      [
+       "Northwestern Wildcats",
+       1.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -101
+      ],
+      [
+       "Under",
+       44.0,
+       -115
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly on Week 10: His 14 favorite games on load",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "Iowa starting center Cael Winter expected to miss ",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T1807Z.parquet"
+    },
+    "6bfae12b9d44d12ca7dde4f4f4aedc7d": {
+     "pinnacle_h2h": [
+      [
+       "Texas Tech Red Raiders",
+       0,
+       -700
+      ],
+      [
+       "West Virginia Mountaineers",
+       0,
+       512
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Texas Tech Red Raiders",
+       -16.0,
+       -109
+      ],
+      [
+       "West Virginia Mountaineers",
+       16.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       65.5,
+       -107
+      ],
+      [
+       "Under",
+       65.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College football takeaways: Lasting impressions fr",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "How every 2027 five-star college football prospect",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "5172093e8533ea39f59c5d2c63c743b9": "line_move: pinnacle spreads South Florida Bulls 2.5\u21921.0; line_move: pinnacle spreads East Carolina Pirates -2.5\u2192-1.0; ml_move: pinnacle novig 0.542\u21920.509",
+    "55e2553780b7d3d06d1fe7a4ffa9474b": "line_move: pinnacle spreads North Texas Mean Green -17.0\u2192-15.5; line_move: pinnacle spreads Rice Owls 17.0\u219215.5",
+    "2a6e2d9ca0d2fc85a4164e9c0f25a05f": "line_move: pinnacle totals Over 46.0\u219245.0; line_move: pinnacle totals Under 46.0\u219245.0",
+    "241c23f2724f5ca91727a47a91f2facf": "line_move: pinnacle spreads Army Black Knights -3.0\u2192-4.0; line_move: pinnacle spreads Air Force Falcons 3.0\u21924.0",
+    "61cf0b043d9d95f0a73d0838ff08a24b": "line_move: pinnacle spreads Iowa Hawkeyes 2.5\u2192-1.5; line_move: pinnacle spreads Northwestern Wildcats -2.5\u21921.5; line_move: pinnacle totals Over 45.5\u219244.0; line_move: pinnacle totals Under 45.5\u219244.0; ml_move: pinnacle novig 0.460\u21920.544",
+    "6bfae12b9d44d12ca7dde4f4f4aedc7d": "line_move: pinnacle spreads West Virginia Mountaineers 17.0\u219216.0; line_move: pinnacle spreads Texas Tech Red Raiders -17.0\u2192-16.0"
+   }
+  }
  }
 ]
