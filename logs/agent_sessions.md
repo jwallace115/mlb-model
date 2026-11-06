@@ -4665,3 +4665,26 @@ SHAs: origin/main = 0cb6c6fad, VM HEAD = 0cb6c6fad, Mac HEAD = 0cb6c6fad. Mac br
 - NB5's 3-in-4 definition (games_last_4 ≥ 2 is likely too broad)
 - Whether lines_hourly close for NBA could include early-game snapshots
 - Soft book ROI uses best-available price, not confirmed close-snapshot price
+
+## 2026-11-07T01:30Z  claude-code (CC-1b corrcause)
+
+### DONE
+- Item 1 (fidelity): extract_openers parameterized for per-book use; NH3 (73 fires), NH5 (13 fires, with TZ), NH6 (132 fires, EN goals 5.4%), NB3 (137 fires), NB5 (283 fires, TZ proxy), NB7 (75 fires, 2023-24 only) all implemented. ATS residual vs Pinnacle fair spread prob. ROI same-point matching, no 1.909 default. Game-clustered SE. Breakdowns.csv (2,941 rows). Power.csv. Fired parquets committed. Tests 6/6 GREEN.
+- Item 3 (April diagnostic): CC-D4 pre-registered. April close age p90=1,209 min, 12.1% >60min. away_ml: DEAD-ARTEFACT (play-in, r collapses +0.098→+0.012). over: survives cuts, HYPOTHESIS. Q: possessions +2.9 vs prior-10.
+- Item 4 (report): REPORT_screen_v1b.md with full Tier 1 table (16 rows), Tier 2 reconciliation (48/96 NHL, 294/324 NBA), controls, power, April diagnostic. REPORT_screen_v1.md retraction block added. CC-D3 CC-0a/0b → OPEN.
+
+### NOT DONE
+- 4 NHL Tier 2 features (soft-Pinnacle divergence, move timing, book dispersion, in-play reset)
+- 3 NBA Tier 2 features (soft-Pinnacle divergence, move timing share, divisional)
+- NB5 game-1-of-stretch venue TZ (uses away home TZ proxy)
+- NB7 2022-23 window (no 2021-22 season data)
+- NB4/NB9 (game_asof)
+- Breakdowns by fav/dog, line band, sample-depth tercile
+- Q tests (no cell passed screen)
+- Close null at 0.005 (achieved 0.05 — different tape sources)
+
+### UNVERIFIED
+- EN-goal rate 5.4% vs expected 2.5-3.5% (may include pulled-goalie situations beyond strict EN)
+- games_last_4 definition in schedule_features (prior-only vs including today)
+- Whether the 55 unmatched events (14 NHL + 41 NBA) affect any cell
+- NB5 TZ proxy accuracy

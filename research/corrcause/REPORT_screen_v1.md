@@ -1,5 +1,17 @@
 # CC-1 Screen Report v1 (2026-11-06)
 
+> **RETRACTION (CC-1b, 2026-11-06):** This report's "0 of 14" claim was
+> computed on mis-built cells. Of 14 runnable cells: 8 ran as registered
+> (NH1/2/4/7, NB1/2/5/8), 2 were mis-built (NB5 used `games_last_4 ≥ 2`
+> without the TZ requirement → 1,715 fires instead of ~283; NH5 omitted
+> the time-zone term), 4 were skipped though CC-D1 called them RUNNABLE
+> (NH3/NH6/NB3/NB7), and 2 were blocked (NB4/NB9). ATS residuals were vs
+> 0.5 instead of Pinnacle fair. ROI imputed −110 when no soft book matched
+> Pinnacle's point. CC-D3's CC-0a/0b "resolved" lines are OPEN (the cells
+> were not all run as registered). See `REPORT_screen_v1b.md` for the
+> corrected results. The corrected conclusion is the same (0 of 14 pass)
+> but the numbers are about the registered objects.
+
 REGISTRY sha256: `ee85d564382bab563c9876156292bae74ab590984cc6b156c096fdd55cc426c1`
 
 ## 1. Inventory + Overlap Summary

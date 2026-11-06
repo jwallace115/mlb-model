@@ -94,9 +94,9 @@ seasons; NBA uses lines_hourly due to sparse in-play tape pre-tip coverage).
 - Expected BH survivors in Tier 2 under the null: ≈ 0.10 × BH-rank, i.e. 1–3 from ~420 cells
 - "Home team" null control: mean r within ±0.01
 
-**Actual results:**
-- 0 NHL Tier 1 cells pass → CC-0a resolved at 0 (Brier score: 0.30² = 0.09)
-- 0 NBA Tier 1 cells pass → CC-0b resolved at 0 (Brier score: 0.45² = 0.20)
+**Actual results (CC-1b corrected):**
+- 0 NHL Tier 1 cells pass → CC-0a OPEN (all 7 NHL cells now run as registered; 0 pass)
+- 0 NBA Tier 1 cells pass → CC-0b OPEN (5 of 7 runnable NBA cells run; NB4/NB9 blocked; 0 pass)
 - 2 Tier 2 BH survivors (both NBA, both April) → CC-0c NBA resolved at 1 (barely),
   NHL resolved at 0. The 2 survivors are consistent with chance (pre-registered: 1–3 expected).
 - Home team null: NHL −0.004, NBA −0.007 → both within ±0.01 as pre-registered
