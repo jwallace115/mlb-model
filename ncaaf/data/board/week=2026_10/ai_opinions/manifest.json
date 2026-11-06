@@ -6106,5 +6106,177 @@
     "43a67a478177d0dc6ef141aacf2bfd2a": "line_move: pinnacle totals Over 43.5\u219242.5; line_move: pinnacle totals Under 43.5\u219242.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T023403Z.parquet",
+  "sha256": "2f17e5b329945dcef8345527ce001de329805abf33bf2f95012cadf49b87a555",
+  "logged_utc": "2026-11-06T02:34:03.604170+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-08T02:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T023007Z.parquet",
+   "inputs_digest": "{\"d74a875341a00e77cf86ecfb7569edd3\": \"01423c9673e0c964\", \"eca05dc53fc3a8dd74622a4b7657bc3b\": \"6b03832d6b2d16a0\", \"6bfae12b9d44d12ca7dde4f4f4aedc7d\": \"fb1f8e3e48e11e38\"}",
+   "components": {
+    "d74a875341a00e77cf86ecfb7569edd3": {
+     "pinnacle_h2h": [
+      [
+       "Fresno State Bulldogs",
+       0,
+       -128
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       113
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Fresno State Bulldogs",
+       -2.5,
+       -107
+      ],
+      [
+       "Utah State Aggies",
+       2.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.0,
+       -115
+      ],
+      [
+       "Under",
+       42.0,
+       -101
+      ]
+     ],
+     "news": [
+      "College football Week 10 best bets: Picks for Tenn",
+      "Fresno State visits Utah State in Pac-12 action",
+      "Jayden Mandal throws 2 TD passes to Josiah Freeman"
+     ],
+     "kalshi_snap": "snap_20261106T0007Z.parquet"
+    },
+    "eca05dc53fc3a8dd74622a4b7657bc3b": {
+     "pinnacle_h2h": [
+      [
+       "Hawaii Rainbow Warriors",
+       0,
+       -347
+      ],
+      [
+       "UTEP Miners",
+       0,
+       285
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Hawaii Rainbow Warriors",
+       -9.5,
+       -102
+      ],
+      [
+       "UTEP Miners",
+       9.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       101
+      ],
+      [
+       "Under",
+       49.5,
+       -117
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel",
+      "Hawaii visits UTEP in MWC action"
+     ],
+     "kalshi_snap": "snap_20261106T0007Z.parquet"
+    },
+    "6bfae12b9d44d12ca7dde4f4f4aedc7d": {
+     "pinnacle_h2h": [
+      [
+       "Texas Tech Red Raiders",
+       0,
+       -894
+      ],
+      [
+       "West Virginia Mountaineers",
+       0,
+       621
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Texas Tech Red Raiders",
+       -17.0,
+       -110
+      ],
+      [
+       "West Virginia Mountaineers",
+       17.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       65.5,
+       -108
+      ],
+      [
+       "Under",
+       65.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 9 poll reaction: What's n",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College football takeaways: Lasting impressions fr",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "How every 2027 five-star college football prospect",
+      "Kickers and a resurgent USC steal the show in Week",
+      "No. 13 Texas Tech and West Virginia meet in Big 12",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "UCLA into top 5, Ohio State out of top 10, New Mex",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "d74a875341a00e77cf86ecfb7569edd3": "anchor_morning",
+    "eca05dc53fc3a8dd74622a4b7657bc3b": "anchor_morning",
+    "6bfae12b9d44d12ca7dde4f4f4aedc7d": "anchor_morning"
+   }
+  }
  }
 ]
