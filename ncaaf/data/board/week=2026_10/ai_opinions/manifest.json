@@ -5151,5 +5151,220 @@
     "5af84fe49ccd4f304f9af0dce0a0db56": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T000403Z.parquet",
+  "sha256": "47df21073154773bfbf41e6b05b890c179f7b47aa1fa430b32c1e5d9ecffba58",
+  "logged_utc": "2026-11-06T00:04:03.613664+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.8,
+  "first_kickoff_utc": "2026-11-08T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T000012Z.parquet",
+   "inputs_digest": "{\"a3f893b3bac8940a6899ae5869fb211c\": \"db4c95b9311bd71f\"}",
+   "components": {
+    "a3f893b3bac8940a6899ae5869fb211c": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -834
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       588
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -17.0,
+       -115
+      ],
+      [
+       "Sam Houston State Bearkats",
+       17.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -104
+      ],
+      [
+       "Under",
+       48.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Jacksonville State hosts Sam Houston in CUSA play",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Multiple Halloween-themed jabs top trolls from CFB"
+     ],
+     "kalshi_snap": "snap_20261106T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "a3f893b3bac8940a6899ae5869fb211c": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261106T001904Z.parquet",
+  "sha256": "2548615c82e68a9d9d20758d505447c684244b289cb9a122fc91f24197e6693f",
+  "logged_utc": "2026-11-06T00:19:04.041677+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 4,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-06T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T000012Z.parquet",
+   "inputs_digest": "{\"c93b343bc3151a39a9541c0af3b22123\": \"1240e0024657e124\", \"00f194290bfcdfebb1d8456057b20614\": \"2df5c0c7fe8fca40\"}",
+   "components": {
+    "c93b343bc3151a39a9541c0af3b22123": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -583
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       461
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -14.0,
+       -103
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       14.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       -109
+      ],
+      [
+       "Under",
+       58.0,
+       -107
+      ]
+     ],
+     "news": [
+      "James Madison and Southern Miss meet in Sun Belt p"
+     ],
+     "kalshi_snap": "snap_20261106T0007Z.parquet"
+    },
+    "00f194290bfcdfebb1d8456057b20614": {
+     "pinnacle_h2h": [
+      [
+       "Alabama Crimson Tide",
+       0,
+       196
+      ],
+      [
+       "LSU Tigers",
+       0,
+       -228
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Alabama Crimson Tide",
+       6.0,
+       -108
+      ],
+      [
+       "LSU Tigers",
+       -6.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -107
+      ],
+      [
+       "Under",
+       52.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 9 poll reaction: What's n",
+      "Alabama 'headed in good direction' for key players",
+      "Alabama getting healthy at the right time",
+      "Alabama's DeBoer discusses Russell's keys to succe",
+      "Allstate Playoff Predictor",
+      "Betting buzz: All the odds to make the CFP ahead o",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College Football Playoff top 12 projection after W",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Country music star Walker Hayes shares Alabama sup",
+      "Finebaum tries to make sense of CFP rankings",
+      "Harper, Cubelic analyze ranked matchups in massive",
+      "How every 2027 five-star college football prospect",
+      "Kiffin 'sad' annual LSU-Alabama game to take hiatu",
+      "LSU hosts Alabama in top-25 SEC matchup",
+      "LSU's Whit Weeks doubtful to return against Alabam",
+      "Lane Kiffin calls the hiatus of LSU-Alabama game '",
+      "Lane Kiffin gives perspective on LSU vs Bama then ",
+      "No. 9 Alabama and No. 15 LSU close out their annua",
+      "Predicting the College Football Playoff: Who's mos",
+      "Stephen A. has a strong message for Alabama ahead ",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "UCLA into top 5, Ohio State out of top 10, New Mex",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "What is selection committee looking for in first C",
+      "Where Stephen A., Mad Dog take issue with CFP rank",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "c93b343bc3151a39a9541c0af3b22123": "anchor_close",
+    "00f194290bfcdfebb1d8456057b20614": "new_news: 1 availability items"
+   }
+  }
  }
 ]
