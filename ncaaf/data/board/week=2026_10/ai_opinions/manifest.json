@@ -9922,5 +9922,228 @@
     "6bfae12b9d44d12ca7dde4f4f4aedc7d": "line_move: pinnacle spreads West Virginia Mountaineers 17.0\u219216.0; line_move: pinnacle spreads Texas Tech Red Raiders -17.0\u2192-16.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T193403Z.parquet",
+  "sha256": "088bd82d55caf2e04b008a2c50ab435b6910459ea78551d601718ea86f61bd67",
+  "logged_utc": "2026-11-06T19:34:03.766615+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.667,
+  "revised_rows": 10,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-07T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T193007Z.parquet",
+   "inputs_digest": "{\"59047d3be974c2ec05c7e6282752287b\": \"9582800c95014148\", \"bbb1d38a8f51b761a789459a08fa6ded\": \"7b201ca63a101cf8\", \"61cf0b043d9d95f0a73d0838ff08a24b\": \"f34aa30d3314ae1b\", \"d74a875341a00e77cf86ecfb7569edd3\": \"86ae184543f2f0fd\"}",
+   "components": {
+    "59047d3be974c2ec05c7e6282752287b": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       170
+      ],
+      [
+       "Nebraska Cornhuskers",
+       0,
+       -190
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       4.5,
+       -108
+      ],
+      [
+       "Nebraska Cornhuskers",
+       -4.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -101
+      ],
+      [
+       "Under",
+       51.5,
+       -115
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Nebraska's Matt Rhule urges calm after fan cursed ",
+      "Notre Dame replaces Purdue with series vs. Illinoi",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Tennessee going 'dark mode' tops best college foot",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T1937Z.parquet"
+    },
+    "bbb1d38a8f51b761a789459a08fa6ded": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -837
+      ],
+      [
+       "Colorado State Rams",
+       0,
+       589
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -17.0,
+       -107
+      ],
+      [
+       "Colorado State Rams",
+       17.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       68.5,
+       -110
+      ],
+      [
+       "Under",
+       68.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac"
+     ],
+     "kalshi_snap": "snap_20261106T1937Z.parquet"
+    },
+    "61cf0b043d9d95f0a73d0838ff08a24b": {
+     "pinnacle_h2h": [
+      [
+       "Iowa Hawkeyes",
+       0,
+       -132
+      ],
+      [
+       "Northwestern Wildcats",
+       0,
+       117
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa Hawkeyes",
+       -2.5,
+       -109
+      ],
+      [
+       "Northwestern Wildcats",
+       2.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -101
+      ],
+      [
+       "Under",
+       44.0,
+       -115
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly on Week 10: His 14 favorite games on load",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "Iowa starting center Cael Winter expected to miss ",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T1937Z.parquet"
+    },
+    "d74a875341a00e77cf86ecfb7569edd3": {
+     "pinnacle_h2h": [
+      [
+       "Fresno State Bulldogs",
+       0,
+       -122
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       108
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Fresno State Bulldogs",
+       -2.5,
+       -101
+      ],
+      [
+       "Utah State Aggies",
+       2.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -108
+      ],
+      [
+       "Under",
+       43.0,
+       -108
+      ]
+     ],
+     "news": [
+      "College football Week 10 best bets: Picks for Tenn"
+     ],
+     "kalshi_snap": "snap_20261106T1937Z.parquet"
+    }
+   },
+   "triggers": {
+    "59047d3be974c2ec05c7e6282752287b": "line_move: pinnacle totals Under 50.5\u219251.5; line_move: pinnacle totals Over 50.5\u219251.5",
+    "bbb1d38a8f51b761a789459a08fa6ded": "line_move: pinnacle spreads Colorado State Rams 18.0\u219217.0; line_move: pinnacle spreads Boise State Broncos -18.0\u2192-17.0",
+    "61cf0b043d9d95f0a73d0838ff08a24b": "line_move: pinnacle spreads Iowa Hawkeyes -1.5\u2192-2.5; line_move: pinnacle spreads Northwestern Wildcats 1.5\u21922.5",
+    "d74a875341a00e77cf86ecfb7569edd3": "line_move: pinnacle totals Under 42.0\u219243.0; line_move: pinnacle totals Over 42.0\u219243.0"
+   }
+  }
  }
 ]
