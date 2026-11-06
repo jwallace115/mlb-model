@@ -44,3 +44,38 @@
 injury PDFs). NB7 runs on 2023-24 only (one DEV season) and is marked EXPLORATORY per registry §4.
 
 REGISTRY_v1.md sha256: `ee85d564382bab563c9876156292bae74ab590984cc6b156c096fdd55cc426c1`
+
+---
+
+## CC-D2 — Pre-registration: Item 1 expected counts and close age (2026-11-06)
+
+**Expected game counts** (from Item 0c):
+- NHL 2022-23: ~1,312 games with outcomes + Pinnacle close
+- NHL 2023-24: ~1,312 games
+- NBA 2022-23: ~1,230 games
+- NBA 2023-24: ~1,230 games
+
+**Expected close age:** < 60 min mean where in-play tape is the close source (NHL both
+seasons; NBA uses lines_hourly due to sparse in-play tape pre-tip coverage).
+
+### Actual results:
+- NHL: 2,624 outcome matches out of 2,638 events (14 unmatched = playoff/preseason fringe).
+  Season 2022: 1,312 outcomes. Season 2023: 1,312 outcomes. **Matches expectation.**
+- NHL Pinnacle close age: mean=17.7 min, median=4.3 min (in-play tape). **Meets bar.**
+- NHL openers (≥12h): 1,907/2,638 = 72.3%. Cells requiring openers have ~72% fill.
+- NBA: 2,505 outcome matches out of 2,546 events.
+  Season 2022: 1,243. Season 2023: 1,262. **Matches expectation.**
+- NBA close age: mean=500 min (skewed by outliers), median=9.3 min (lines_hourly).
+  2,466/2,546 (96.9%) have close age < 60 min. Adequate for the screen.
+- NBA openers: 1,886/2,546 = 74.1%.
+
+**Second prediction data fill:**
+- NHL: 5v5 attempts/60 for 2,624/2,638 games. sh% for 2,624.
+- NBA: possessions for 2,505/2,546 games.
+
+**Tests:** All 6 passed.
+- t1 truncation (NHL): home_rest_days verified correct for 20 random dates
+- t1 truncation (NBA): home_poss_avg10 verified correct for 20 random dates
+- t1 planted leak: detected (46/50 games differ forward vs backward rest)
+- t2 null control: max implied prob diff vs lines_all = within threshold
+- t3 isolation: build_features source does not reference second_pred; no column overlap
