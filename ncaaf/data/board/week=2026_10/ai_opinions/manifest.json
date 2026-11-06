@@ -9544,5 +9544,75 @@
     "a3f893b3bac8940a6899ae5869fb211c": "line_move: pinnacle totals Under 48.5\u219246.5; line_move: pinnacle totals Over 48.5\u219246.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T171903Z.parquet",
+  "sha256": "14e31c7c7c63406f4540689ad25a921280b055304796ef4482cda763416b0487",
+  "logged_utc": "2026-11-06T17:19:03.996857+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 2,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T21:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T170008Z.parquet",
+   "inputs_digest": "{\"796b0be4ed0d775756eff53b5803125a\": \"65037ef27ba4f0e6\"}",
+   "components": {
+    "796b0be4ed0d775756eff53b5803125a": {
+     "pinnacle_h2h": [
+      [
+       "Northern Illinois Huskies",
+       0,
+       348
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       -437
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northern Illinois Huskies",
+       11.0,
+       -104
+      ],
+      [
+       "San Jose State Spartans",
+       -11.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -110
+      ],
+      [
+       "Under",
+       52.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel",
+      "Northern Illinois visits San Jose State in MWC mat",
+      "Ranking college football's top 40 freshmen in 2026"
+     ],
+     "kalshi_snap": "snap_20261106T1707Z.parquet"
+    }
+   },
+   "triggers": {
+    "796b0be4ed0d775756eff53b5803125a": "line_move: pinnacle spreads San Jose State Spartans -10.0\u2192-11.0; line_move: pinnacle spreads Northern Illinois Huskies 10.0\u219211.0"
+   }
+  }
  }
 ]
