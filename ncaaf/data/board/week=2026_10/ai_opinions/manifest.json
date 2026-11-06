@@ -5870,5 +5870,241 @@
     "1ef954bd3305a66136e52ea0786f1593": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T010404Z.parquet",
+  "sha256": "5e65a6eadcabc9866c71d7e8b8548a4aac24e81e26c94bcc59f0c0b8af71ad8c",
+  "logged_utc": "2026-11-06T01:04:04.276384+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-08T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T010007Z.parquet",
+   "inputs_digest": "{\"2dd995baa931f5b063cb50ddbe821d74\": \"f00d8662611cb30f\"}",
+   "components": {
+    "2dd995baa931f5b063cb50ddbe821d74": {
+     "pinnacle_h2h": [
+      [
+       "Liberty Flames",
+       0,
+       -804
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       571
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Liberty Flames",
+       -17.0,
+       102
+      ],
+      [
+       "New Mexico State Aggies",
+       17.0,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -104
+      ],
+      [
+       "Under",
+       46.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "New Mexico State hosts Liberty in CUSA matchup"
+     ],
+     "kalshi_snap": "snap_20261106T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "2dd995baa931f5b063cb50ddbe821d74": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261106T011904Z.parquet",
+  "sha256": "094097bf167efa7d3e308c5191b75516bba7a17dee6f040d6cb47d09f577ab2f",
+  "logged_utc": "2026-11-06T01:19:04.242728+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.333,
+  "revised_rows": 4,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T010007Z.parquet",
+   "inputs_digest": "{\"5b05bf2ff27508703418dcf70079a22f\": \"fce6406d731b16e1\", \"43a67a478177d0dc6ef141aacf2bfd2a\": \"1bf68cb42916a861\"}",
+   "components": {
+    "5b05bf2ff27508703418dcf70079a22f": {
+     "pinnacle_h2h": [
+      [
+       "Minnesota Golden Gophers",
+       0,
+       180
+      ],
+      [
+       "UCLA Bruins",
+       0,
+       -208
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Minnesota Golden Gophers",
+       5.5,
+       -108
+      ],
+      [
+       "UCLA Bruins",
+       -5.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       38.5,
+       -112
+      ],
+      [
+       "Under",
+       38.5,
+       -104
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 9 poll reaction: What's n",
+      "Big Ten matchup features No. 5 UCLA taking on Minn",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College Football Playoff top 12 projection after W",
+      "College football Week 10 best bets: Picks for Tenn",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "Indiana turns to Wilson at QB, survives Minnesota ",
+      "Kickers and a resurgent USC steal the show in Week",
+      "No. 7 UCLA blanks Nevada, storms to 8-0 for first ",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "UCLA into top 5, Ohio State out of top 10, New Mex",
+      "UCLA, still unbeaten and ranked No. 5, hits the ro",
+      "Week 10 Anger Index: Welcome to the sequel, Notre ",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T0007Z.parquet"
+    },
+    "43a67a478177d0dc6ef141aacf2bfd2a": {
+     "pinnacle_h2h": [
+      [
+       "Missouri Tigers",
+       0,
+       127
+      ],
+      [
+       "Texas Longhorns",
+       0,
+       -143
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Missouri Tigers",
+       3.0,
+       -112
+      ],
+      [
+       "Texas Longhorns",
+       -3.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -107
+      ],
+      [
+       "Under",
+       42.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 9 poll reaction: What's n",
+      "Allstate Playoff Predictor",
+      "Austin Simmons leads No. 23 Missouri to 34-10 win ",
+      "Cole's Block Party: Mizzou makes clear case for th",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College Football Playoff top 12 projection after W",
+      "College football takeaways: Lasting impressions fr",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Eliah Drinkwitz details plan for Mizzou's dynamic ",
+      "Harper, Cubelic analyze ranked matchups in massive",
+      "How every 2027 five-star college football prospect",
+      "Kickers and a resurgent USC steal the show in Week",
+      "Longhorns preparing for No. 18 Missouri",
+      "Missouri HC Drinkwitz 'not a candidate at Florida ",
+      "Missouri RB Ahmad Hardy returns nearly 6 months af",
+      "Missouri's Ahmad Hardy returns nearly 6 months aft",
+      "Missouri's Eli Drinkwitz: 'I'm not a candidate' fo",
+      "No. 10 Texas and No. 19 Missouri ready to collide ",
+      "No. 10 Texas visits No. 19 Missouri",
+      "Predicting the College Football Playoff: Who's mos",
+      "Steve Sarkisian sets Texas' identity: 'Tough, hard",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "UCLA into top 5, Ohio State out of top 10, New Mex",
+      "Week 10 Anger Index: Welcome to the sequel, Notre ",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "What is selection committee looking for in first C",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "5b05bf2ff27508703418dcf70079a22f": "line_move: pinnacle totals Over 39.5\u219238.5; line_move: pinnacle totals Under 39.5\u219238.5",
+    "43a67a478177d0dc6ef141aacf2bfd2a": "line_move: pinnacle totals Over 43.5\u219242.5; line_move: pinnacle totals Under 43.5\u219242.5"
+   }
+  }
  }
 ]
