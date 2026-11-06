@@ -10581,5 +10581,153 @@
     "59047d3be974c2ec05c7e6282752287b": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T230403Z.parquet",
+  "sha256": "10b6228e2c5b6318372bb716d5ae5537b547b3f2b1f874dd5053676d43e7f6bb",
+  "logged_utc": "2026-11-06T23:04:03.340998+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 2,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-07T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T230006Z.parquet",
+   "inputs_digest": "{\"45fdbdbe6ed3d9922fa8b26b8a885f0e\": \"c9bde2f5fdc37ef6\"}",
+   "components": {
+    "45fdbdbe6ed3d9922fa8b26b8a885f0e": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       333
+      ],
+      [
+       "New Mexico Lobos",
+       0,
+       -399
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       10.5,
+       -114
+      ],
+      [
+       "New Mexico Lobos",
+       -10.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       38.0,
+       -118
+      ],
+      [
+       "Under",
+       38.0,
+       101
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Tennessee going 'dark mode' tops best college foot",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "Week 9 College football Power Rankings: How big wi"
+     ],
+     "kalshi_snap": "snap_20261106T2307Z.parquet"
+    }
+   },
+   "triggers": {
+    "45fdbdbe6ed3d9922fa8b26b8a885f0e": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261106T231903Z.parquet",
+  "sha256": "fffddba53b2408282152750c039aba814c5659e48fcc1b83b670e3a8e2de1886",
+  "logged_utc": "2026-11-06T23:19:03.866245+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-07T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T230006Z.parquet",
+   "inputs_digest": "{\"11da04c7d3fba48caf11a5d8b66b8ccd\": \"88a36e4d2dd10c51\"}",
+   "components": {
+    "11da04c7d3fba48caf11a5d8b66b8ccd": {
+     "pinnacle_h2h": [
+      [
+       "SMU Mustangs",
+       0,
+       -210
+      ],
+      [
+       "Virginia Tech Hokies",
+       0,
+       186
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "SMU Mustangs",
+       -6.0,
+       -102
+      ],
+      [
+       "Virginia Tech Hokies",
+       6.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -110
+      ],
+      [
+       "Under",
+       56.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College football Week 10 best bets: Picks for Tenn",
+      "Connelly on Week 10: His 14 favorite games on load",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Tennessee going 'dark mode' tops best college foot",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T2307Z.parquet"
+    }
+   },
+   "triggers": {
+    "11da04c7d3fba48caf11a5d8b66b8ccd": "anchor_close"
+   }
+  }
  }
 ]
