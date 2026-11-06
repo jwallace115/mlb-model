@@ -4640,3 +4640,28 @@ SHAs on origin/research/on1: 0af2f1f18..f1ec588bc (4 commits).
 - Whether the --autostash fix survives a real concurrent-write scenario (next push cycle will test it).
 
 SHAs: origin/main = 0cb6c6fad, VM HEAD = 0cb6c6fad, Mac HEAD = 0cb6c6fad. Mac branch = main.
+
+## 2026-11-06T21:45Z  claude-code (CC-1 corrcause)
+
+### DONE
+- Item 0: REGISTRY_v1.md written verbatim (sha256 ee85d564...), INVENTORY_v1.md, OVERLAP_v1.md, CC_DECISION_v1.md with CC-D1. Committed + pushed.
+- Item 1: build_tables.py for NHL (2,624/2,638 outcomes, in-play close mean 17.7 min) and NBA (2,505/2,546, lines_hourly close median 9.3 min). 6/6 tests GREEN (truncation, planted leak, null control, isolation). Committed + pushed.
+- Item 2: cells.py (forward object), CELLS_v1.json, run_screen.py. 0/14 Tier 1 cells pass the SCREEN bar. 2 Tier 2 BH survivors (NBA April, consistent with chance). Null controls PASS (NHL −0.004, NBA −0.007). Positive control PASS (planted +0.04, p=0.0007, survived BH).
+- Item 3: REPORT_screen_v1.md with all numbers. Committed + pushed. Branch: research/cc1. Not merged.
+
+### NOT DONE
+- NH3 (soft-only ML move): needs per-book opener extraction from the in-play tape
+- NH6 (EN-inflated favourite): needs empty-net goal feature computation from state_time
+- NB3 (soft-only spread move): needs per-book spread openers
+- NB7 (early-season pace anchor): needs 2021-22 season pts/game
+- NB4, NB9: blocked on game_asof data for DEV seasons (2022-24)
+- CHECK 5 breakdowns: no cell passed the screen, so not computed
+- Q tests (second predictions): no cell passed the screen
+- Tier 2 April survivors: need mechanism + Q write-up before any CONFIRM look
+
+### UNVERIFIED
+- 14 unmatched NHL events (likely preseason/All-Star)
+- 41 unmatched NBA events (likely playoffs)
+- NB5's 3-in-4 definition (games_last_4 ≥ 2 is likely too broad)
+- Whether lines_hourly close for NBA could include early-game snapshots
+- Soft book ROI uses best-available price, not confirmed close-snapshot price
