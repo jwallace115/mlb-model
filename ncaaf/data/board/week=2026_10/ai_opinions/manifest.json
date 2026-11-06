@@ -10507,5 +10507,79 @@
     "5172093e8533ea39f59c5d2c63c743b9": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T220404Z.parquet",
+  "sha256": "35977f70fcc3a47b620364d5cd16e32bab8aa6daa897003d80aac8a7aff2f802",
+  "logged_utc": "2026-11-06T22:04:04.999090+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-07T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T220012Z.parquet",
+   "inputs_digest": "{\"59047d3be974c2ec05c7e6282752287b\": \"77ed08c434fc5721\"}",
+   "components": {
+    "59047d3be974c2ec05c7e6282752287b": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       169
+      ],
+      [
+       "Nebraska Cornhuskers",
+       0,
+       -190
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       4.5,
+       -108
+      ],
+      [
+       "Nebraska Cornhuskers",
+       -4.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -110
+      ],
+      [
+       "Under",
+       50.5,
+       -106
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Nebraska's Matt Rhule urges calm after fan cursed ",
+      "Notre Dame replaces Purdue with series vs. Illinoi",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Tennessee going 'dark mode' tops best college foot",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261106T2207Z.parquet"
+    }
+   },
+   "triggers": {
+    "59047d3be974c2ec05c7e6282752287b": "anchor_prekick"
+   }
+  }
  }
 ]
