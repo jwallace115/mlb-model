@@ -18294,5 +18294,70 @@
     "72cab2217ae57cbb00928eab05eb244e": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T231903Z.parquet",
+  "sha256": "1fdfcbc63702cfc5ceaed045f3398bab6b8c957c9bd270d7914a1c85cb1ec939",
+  "logged_utc": "2026-11-07T23:19:03.440735+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-08T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T230007Z.parquet",
+   "inputs_digest": "{\"a3f893b3bac8940a6899ae5869fb211c\": \"2ff7d43032bd4284\"}",
+   "components": {
+    "a3f893b3bac8940a6899ae5869fb211c": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -745
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       565
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -16.5,
+       -113
+      ],
+      [
+       "Sam Houston State Bearkats",
+       16.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -112
+      ],
+      [
+       "Under",
+       45.0,
+       -105
+      ]
+     ],
+     "kalshi_snap": "snap_20261107T2307Z.parquet"
+    }
+   },
+   "triggers": {
+    "a3f893b3bac8940a6899ae5869fb211c": "anchor_close"
+   }
+  }
  }
 ]
