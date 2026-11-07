@@ -11876,5 +11876,123 @@
     "8d5eeb24eeb0ac7ff32325a8a8c4b371": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T143404Z.parquet",
+  "sha256": "75ff8f2fba08db188d4082e8e38678e86a1c6e21c4145535ebaf1920c6057221",
+  "logged_utc": "2026-11-07T14:34:04.476525+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 6,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-07T17:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T143006Z.parquet",
+   "inputs_digest": "{\"59263b8c355e171b2bcd5c1827a36b7e\": \"dde57cda14d7206a\", \"841d7821e82447f8a7d8592ec4584eec\": \"0fc4a4aba84590b8\"}",
+   "components": {
+    "59263b8c355e171b2bcd5c1827a36b7e": {
+     "pinnacle_h2h": [
+      [
+       "Duke Blue Devils",
+       0,
+       -184
+      ],
+      [
+       "NC State Wolfpack",
+       0,
+       164
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Duke Blue Devils",
+       -4.0,
+       -109
+      ],
+      [
+       "NC State Wolfpack",
+       4.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -111
+      ],
+      [
+       "Under",
+       51.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Ex-NFL QB Russell Wilson interviews with NC State ",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T1437Z.parquet"
+    },
+    "841d7821e82447f8a7d8592ec4584eec": {
+     "pinnacle_h2h": [
+      [
+       "Maryland Terrapins",
+       0,
+       174
+      ],
+      [
+       "Purdue Boilermakers",
+       0,
+       -195
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Maryland Terrapins",
+       5.0,
+       -105
+      ],
+      [
+       "Purdue Boilermakers",
+       -5.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -104
+      ],
+      [
+       "Under",
+       57.5,
+       -113
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Ranking college football's top 40 freshmen in 2026"
+     ],
+     "kalshi_snap": "snap_20261107T1437Z.parquet"
+    }
+   },
+   "triggers": {
+    "59263b8c355e171b2bcd5c1827a36b7e": "anchor_prekick",
+    "841d7821e82447f8a7d8592ec4584eec": "anchor_prekick"
+   }
+  }
  }
 ]
