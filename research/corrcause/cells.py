@@ -515,9 +515,14 @@ NBA_TIER1 = {
 #  TIER 2 GENERATORS
 # =====================================================================
 
-def generate_tier2_nhl(games, features, config):
-    """NHL Tier 2: 8 market-behaviour features × 3 bins × 4 sides = up to 96 cells."""
+def generate_tier2_nhl(games, features, config, market_features=None):
+    """NHL Tier 2: v1 features + v2 market-behaviour features × bins × sides."""
     gf = games.merge(features, on="event_id", how="left", suffixes=("", "_feat"))
+    if market_features is not None:
+        mf_cols = [c for c in market_features.columns if c != "event_id"]
+        mf_need = [c for c in mf_cols if c not in gf.columns]
+        if mf_need:
+            gf = gf.merge(market_features[["event_id"] + mf_need], on="event_id", how="left")
     cells = []
 
     # Market sides for NHL: ML(H/A), total(O/U)
@@ -557,6 +562,47 @@ def generate_tier2_nhl(games, features, config):
                                        labels=["away_fav", "close", "home_fav"])
         feat_bins["opener_ml_band"] = ["away_fav", "close", "home_fav"]
 
+    # --- V2 market-behaviour features ---
+    # f1: soft-Pinnacle divergence (abs)
+    if "f1_max_div_abs" in gf.columns:
+        valid = gf["f1_max_div_abs"].notna()
+        gf.loc[valid, "f1_divergence_band"] = pd.cut(
+            gf.loc[valid, "f1_max_div_abs"],
+            bins=[0.02, 0.04, 0.07, 1.0], labels=["small", "medium", "large"],
+            include_lowest=True
+        )
+        # Also a "none" bin for games with no divergence ≥ 0.02
+        gf["f1_divergence_flag"] = gf["f1_max_div_abs"].apply(
+            lambda x: "yes" if not pd.isna(x) else "no"
+        )
+        feat_bins["f1_divergence_flag"] = ["yes", "no"]
+        feat_bins["f1_divergence_band"] = ["small", "medium", "large"]
+
+    # f2: move timing share
+    if "f2_timing_share" in gf.columns:
+        valid = gf["f2_timing_share"].notna()
+        gf.loc[valid, "f2_timing_band"] = gf.loc[valid, "f2_timing_share"].apply(
+            lambda x: "early" if x < 0.3 else ("mixed" if x < 0.7 else "late")
+        )
+        feat_bins["f2_timing_band"] = ["early", "mixed", "late"]
+
+    # f3: book-consensus dispersion (terciles)
+    if "f3_dispersion" in gf.columns:
+        valid = gf["f3_dispersion"].notna()
+        if valid.sum() >= 30:
+            terciles = gf.loc[valid, "f3_dispersion"].quantile([1/3, 2/3])
+            gf.loc[valid, "f3_dispersion_band"] = gf.loc[valid, "f3_dispersion"].apply(
+                lambda x: "low" if x <= terciles.iloc[0] else ("mid" if x <= terciles.iloc[1] else "high")
+            )
+            feat_bins["f3_dispersion_band"] = ["low", "mid", "high"]
+
+    # f4: in-play reset (NOT-BETTABLE, diagnostic only)
+    if "f4_ip_reset_delta" in gf.columns:
+        gf["f4_reset_flag"] = gf["f4_ip_reset_delta"].apply(
+            lambda x: "yes" if not pd.isna(x) else "no"
+        )
+        feat_bins["f4_reset_flag"] = ["yes", "no"]
+
     for feat, levels in feat_bins.items():
         for level in levels:
             for side_name, resid_fn, valid_fn in sides:
@@ -566,19 +612,27 @@ def generate_tier2_nhl(games, features, config):
                     continue
                 fired["residual"] = resid_fn(fired)
                 fired["cell_side"] = side_name
+                cell_id = f"T2_NHL_{feat}_{level}_{side_name}"
+                is_f4 = feat.startswith("f4_")
                 cells.append({
-                    "cell_id": f"T2_NHL_{feat}_{level}_{side_name}",
+                    "cell_id": cell_id,
                     "sport": "nhl", "tier": 2,
                     "feature": feat, "level": level, "side": side_name,
                     "n_fired": len(fired), "data": fired,
+                    "not_bettable": is_f4,
                 })
 
     return cells
 
 
-def generate_tier2_nba(games, features, config):
-    """NBA Tier 2: 18 features × 3 bins × 6 sides = up to 324 cells."""
+def generate_tier2_nba(games, features, config, market_features=None):
+    """NBA Tier 2: v1 features + v2 market-behaviour features × bins × sides."""
     gf = games.merge(features, on="event_id", how="left", suffixes=("", "_feat"))
+    if market_features is not None:
+        mf_cols = [c for c in market_features.columns if c != "event_id"]
+        mf_need = [c for c in mf_cols if c not in gf.columns]
+        if mf_need:
+            gf = gf.merge(market_features[["event_id"] + mf_need], on="event_id", how="left")
 
     # Spread fair prob
     gf["pin_spread_fair_h"] = gf.apply(
@@ -664,6 +718,54 @@ def generate_tier2_nba(games, features, config):
     if "weekday" in gf.columns:
         gf["weekday_str"] = gf["weekday"].astype(int).astype(str)
         feat_bins["weekday_str"] = [str(w) for w in sorted(gf["weekday"].dropna().unique().astype(int))]
+
+    # --- V2 market-behaviour features ---
+    # f1: soft-Pinnacle ML divergence
+    if "f1_ml_div_abs" in gf.columns:
+        gf["f1_ml_div_flag"] = gf["f1_ml_div_abs"].apply(
+            lambda x: "yes" if not pd.isna(x) else "no"
+        )
+        feat_bins["f1_ml_div_flag"] = ["yes", "no"]
+        valid = gf["f1_ml_div_abs"].notna()
+        if valid.sum() >= 30:
+            gf.loc[valid, "f1_ml_div_band"] = pd.cut(
+                gf.loc[valid, "f1_ml_div_abs"],
+                bins=[0.02, 0.04, 0.07, 1.0], labels=["small", "medium", "large"],
+                include_lowest=True
+            )
+            feat_bins["f1_ml_div_band"] = ["small", "medium", "large"]
+
+    # f1: soft-Pinnacle spread divergence
+    if "f1_spread_divergence" in gf.columns:
+        gf["f1_spr_div_flag"] = gf["f1_spread_divergence"].apply(
+            lambda x: "yes" if not pd.isna(x) else "no"
+        )
+        feat_bins["f1_spr_div_flag"] = ["yes", "no"]
+
+    # f2: ML timing share
+    if "f2_ml_timing_share" in gf.columns:
+        valid = gf["f2_ml_timing_share"].notna()
+        if valid.sum() >= 30:
+            gf.loc[valid, "f2_ml_timing_band"] = gf.loc[valid, "f2_ml_timing_share"].apply(
+                lambda x: "early" if x < 0.3 else ("mixed" if x < 0.7 else "late")
+            )
+            feat_bins["f2_ml_timing_band"] = ["early", "mixed", "late"]
+
+    # f2: spread timing share
+    if "f2_spread_timing_share" in gf.columns:
+        valid = gf["f2_spread_timing_share"].notna()
+        if valid.sum() >= 30:
+            gf.loc[valid, "f2_spr_timing_band"] = gf.loc[valid, "f2_spread_timing_share"].apply(
+                lambda x: "early" if x < 0.3 else ("mixed" if x < 0.7 else "late")
+            )
+            feat_bins["f2_spr_timing_band"] = ["early", "mixed", "late"]
+
+    # f3: divisional flag
+    if "f3_divisional" in gf.columns:
+        gf["f3_div_flag"] = gf["f3_divisional"].apply(
+            lambda x: "yes" if x == 1 else ("no" if x == 0 else np.nan)
+        )
+        feat_bins["f3_div_flag"] = ["yes", "no"]
 
     cells = []
     for feat, levels in feat_bins.items():

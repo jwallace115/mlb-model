@@ -288,7 +288,7 @@ def null_control(games):
     return mean_r
 
 
-def run_all(sport, games, features, config, tier_list):
+def run_all(sport, games, features, config, tier_list, market_features=None):
     """Run Tier 1 + Tier 2 cells, return results list."""
     results = []
 
@@ -354,9 +354,9 @@ def run_all(sport, games, features, config, tier_list):
     if 2 in tier_list:
         print(f"\n--- {sport.upper()} Tier 2 ---")
         if sport == "nhl":
-            t2_cells = generate_tier2_nhl(games, features, config)
+            t2_cells = generate_tier2_nhl(games, features, config, market_features=market_features)
         else:
-            t2_cells = generate_tier2_nba(games, features, config)
+            t2_cells = generate_tier2_nba(games, features, config, market_features=market_features)
 
         print(f"  Generated {len(t2_cells)} cells")
         for cell in t2_cells:
@@ -372,6 +372,7 @@ def run_all(sport, games, features, config, tier_list):
                 "cell_id": cell["cell_id"], "tier": 2, "sport": sport,
                 "feature": cell["feature"], "level": cell["level"], "side": cell["side"],
                 "n_fired": cell["n_fired"],
+                "not_bettable": cell.get("not_bettable", False),
             }
             if st:
                 r.update({"mean_r": st["mean_r"], "se": st["se"], "p_one": st["p_one"],
@@ -400,7 +401,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--tier", nargs="+", type=int, default=[1, 2])
     parser.add_argument("--sport", nargs="+", default=["nhl", "nba"])
+    parser.add_argument("--v2", action="store_true", help="Use screen_v2 results dir with market features")
     args = parser.parse_args()
+
+    if args.v2:
+        global RESULTS_DIR
+        RESULTS_DIR = ROOT / "results" / "screen_v2"
+        RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
     config = load_config()
     all_results = []
@@ -410,8 +417,15 @@ def main():
         games = pd.read_parquet(DATA_DIR / f"games_{sport}.parquet")
         features = pd.read_parquet(DATA_DIR / f"features_{sport}.parquet")
 
+        # Load v2 market features if available
+        mf_path = DATA_DIR / f"market_features_{sport}.parquet"
+        market_features = pd.read_parquet(mf_path) if mf_path.exists() else None
+        if market_features is not None:
+            print(f"  Loaded market features: {len(market_features)} rows, "
+                  f"{len([c for c in market_features.columns if c != 'event_id'])} features")
+
         null_control(games)
-        results = run_all(sport, games, features, config, args.tier)
+        results = run_all(sport, games, features, config, args.tier, market_features=market_features)
         all_results.extend(results)
 
     # Save
@@ -419,20 +433,40 @@ def main():
     results_df.to_csv(RESULTS_DIR / "all_cells.csv", index=False)
     print(f"\nSaved {len(results_df)} cells to {RESULTS_DIR / 'all_cells.csv'}")
 
-    # BH
+    # BH — two families per addendum §A
     print(f"\n--- BH CORRECTION (α=0.10) ---")
     family_path = Path.home() / "mlb-model/research/nhl_sim/edge_hunt_2026-09-30/hunt_2026-09-30/family.csv"
     ledger = pd.read_csv(family_path)
 
-    cc_mask = results_df["p_one"].notna()
-    cc_pv = results_df.loc[cc_mask, "p_one"].values
-    cc_ids = results_df.loc[cc_mask, "cell_id"].values
+    # Tier 1 family (confirmatory, 16 pre-registered cells)
+    t1_mask = (results_df["tier"] == 1) & results_df["p_one"].notna()
+    t1_pv = results_df.loc[t1_mask, "p_one"].values
+    t1_ids = results_df.loc[t1_mask, "cell_id"].values
+    if len(t1_pv) > 0:
+        bh_thresh_t1, survivors_t1 = bh_correction(t1_pv, alpha=0.10)
+        print(f"  Tier 1 family: {len(t1_pv)}, BH threshold: {bh_thresh_t1:.6f}, "
+              f"Survivors: {survivors_t1.sum()}")
+        if survivors_t1.sum() > 0:
+            for sid, sp in sorted(zip(t1_ids[survivors_t1], t1_pv[survivors_t1]), key=lambda x: x[1]):
+                print(f"    {sid}: p={sp:.6f}")
+    else:
+        bh_thresh_t1 = 0
+        survivors_t1 = np.array([], dtype=bool)
 
-    all_pv = np.concatenate([cc_pv, ledger["p"].values])
-    all_ids = np.concatenate([cc_ids, ledger["id"].values])
+    # Tier 2 + ledger family (exploratory)
+    # Exclude f4 (NOT-BETTABLE) from BH
+    t2_mask = (results_df["tier"] == 2) & results_df["p_one"].notna()
+    if "not_bettable" in results_df.columns:
+        t2_mask = t2_mask & ~results_df["not_bettable"].fillna(False)
+    t2_pv = results_df.loc[t2_mask, "p_one"].values
+    t2_ids = results_df.loc[t2_mask, "cell_id"].values
+
+    all_pv = np.concatenate([t2_pv, ledger["p"].values])
+    all_ids = np.concatenate([t2_ids, ledger["id"].values])
 
     bh_thresh, survivors = bh_correction(all_pv, alpha=0.10)
-    print(f"  Family: {len(all_pv)}, BH threshold: {bh_thresh:.6f}, Survivors: {survivors.sum()}")
+    print(f"  Tier 2 + ledger family: {len(all_pv)}, BH threshold: {bh_thresh:.6f}, "
+          f"Survivors: {survivors.sum()}")
     if survivors.sum() > 0:
         for sid, sp in sorted(zip(all_ids[survivors], all_pv[survivors]), key=lambda x: x[1]):
             print(f"    {sid}: p={sp:.6f}")
@@ -440,15 +474,27 @@ def main():
     family_out = pd.DataFrame({"cell_id": all_ids, "p": all_pv, "bh_survivor": survivors})
     family_out.to_csv(RESULTS_DIR / "family.csv", index=False)
 
+    # Also save Tier 1 family
+    t1_family = pd.DataFrame({"cell_id": t1_ids, "p": t1_pv,
+                               "bh_survivor": survivors_t1 if len(survivors_t1) > 0 else []})
+    t1_family.to_csv(RESULTS_DIR / "family_tier1.csv", index=False)
+
+    # f4 NOT-BETTABLE cells reported separately
+    if "not_bettable" in results_df.columns:
+        nb = results_df[results_df["not_bettable"].fillna(False)]
+        if len(nb) > 0:
+            print(f"\n  NOT-BETTABLE (f4 in-play reset, excluded from BH): {len(nb)} cells")
+            for _, r in nb[nb["p_one"].notna()].sort_values("p_one").head(5).iterrows():
+                print(f"    {r['cell_id']}: n={r['n_fired']}, r={r.get('mean_r', np.nan):+.4f}, "
+                      f"p={r['p_one']:.4f}")
+
     # Power table
     print(f"\n--- POWER ---")
     power_rows = []
     for _, r in results_df[results_df["se"].notna()].iterrows():
         n = r["n_fired"]
         se = r["se"]
-        # MDE at p=0.05 one-sided
         mde_05 = stats.t.ppf(0.95, df=max(n - 1, 1)) * se if n > 1 else np.nan
-        # MDE at BH threshold
         if bh_thresh > 0:
             z_bh = stats.norm.ppf(1 - bh_thresh)
             mde_bh = z_bh * se
@@ -461,9 +507,7 @@ def main():
     power_df = pd.DataFrame(power_rows)
     power_df.to_csv(RESULTS_DIR / "power.csv", index=False)
 
-    # Smallest detectable edge at 60/season floor (120 total)
     if len(power_df) > 0:
-        # Typical SE for n=120 games: ~0.5/sqrt(120) ≈ 0.046
         se_120 = 0.5 / np.sqrt(120)
         mde_120_05 = stats.t.ppf(0.95, df=119) * se_120
         se_240 = 0.5 / np.sqrt(240)

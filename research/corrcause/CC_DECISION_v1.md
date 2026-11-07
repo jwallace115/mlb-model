@@ -213,3 +213,81 @@ totals cell that touched 2024-25 data?
 GATE CHECK: 105 ≥ 80 → **PASS**
 
 REGISTRY_v2_ADDENDUM.md sha256: `f27d476055872bb242139843bbb55dcfad6193317564e934db90fbb56a6f67a6`
+
+---
+
+## CC-D6 — Pre-registration: Tier 2 market-behaviour features (2026-11-06)
+
+**New features (7 total):**
+- NHL f1: soft–Pinnacle ML divergence at close (max |soft_fair_h - pin_fair_h| ≥ 0.02)
+- NHL f2: move timing share (share of Pinnacle opener→close ML move in last 3h; < 0.3 / 0.3–0.7 / ≥ 0.7)
+- NHL f3: book-consensus dispersion at close (SD of soft books' de-vigged home prob; terciles)
+- NHL f4: in-play reset (first in-play Pinnacle ML vs last pre-tip; |Δ| ≥ 0.02; NOT-BETTABLE)
+- NBA f1: soft–Pinnacle ML divergence + spread divergence (≥ 0.5 pts for spread)
+- NBA f2: move timing share (ML + spread, same bins)
+- NBA f3: divisional flag (same-division game)
+
+**Expected cell counts:**
+- NHL: f1 (flag 2 + band 3) × 4 sides + f2 3 × 4 + f3 3 × 4 + f4 2 × 4 = 20 + 12 + 12 + 8 = 52
+- NBA: f1_ml (flag 2 + band 3) × 6 + f1_spr flag 2 × 6 + f2_ml 3 × 6 + f2_spr 3 × 6 + f3 2 × 6 = 30 + 12 + 18 + 18 + 12 = 90
+- Total new: ~142 cells
+
+**Cowork priors:**
+- At least one NHL market-behaviour Tier 2 cell survives BH: 20%
+- At least one NBA market-behaviour Tier 2 cell survives BH: 20%
+
+**Claude Code priors:**
+- NHL market-behaviour Tier 2 BH survivor: 10% (the BH bar is very high; 52 cells with n ≈ 1,200
+  each need r ≈ +0.05 to clear, and market-efficiency research suggests these features are largely
+  priced in; f4 is excluded from BH)
+- NBA market-behaviour Tier 2 BH survivor: 15% (larger sample, more sides, but same structural
+  argument)
+
+**Null control:** home team, same as before (must be within ±0.01)
+**Positive control:** same planted +0.04 positive control from v1b (n ≈ 148, expected below BH;
+  re-checks pipeline integrity)
+
+### CC-D6 RESULT
+
+**Null control:** NHL −0.004, NBA −0.007 → both within ±0.01 → **PASS**
+
+**Tier 1 BH (16 cells, confirmatory):** 0 survivors (threshold: 0.000). No change from v1b.
+
+**Tier 2 + ledger BH (535 cells = 472 Tier 2 + 63 ledger, exploratory α=0.10):**
+- BH threshold: 0.001308
+- 7 survivors: A-03a (p=0.00001), L-004 (p=0.0002), L-003 (p=0.0004),
+  **T2_NHL_f1_divergence_flag_yes_under** (p=0.000442), T2_NBA_month_str_4_away_ml (p=0.000840),
+  T2_NBA_month_str_4_over (p=0.000853), **T2_NHL_f1_divergence_band_small_under** (p=0.001000)
+
+**New BH survivors (NHL f1 divergence):**
+
+| Cell | n | r (2022) | r (2023) | r (pooled) | p | ROI soft | ROI pin | share lg SM |
+|---|---|---|---|---|---|---|---|---|
+| f1_flag=yes_under | 592 | +0.093 | +0.050 | +0.068 | 0.00044 | +0.106 (585p) | +0.105 | 0.172 |
+| f1_band=small_under | 576 | +0.090 | +0.045 | +0.064 | 0.00100 | +0.097 (569p) | +0.097 | 0.202 |
+
+Note: the two cells are nearly overlapping (576 of 592 games in the flag=yes cell also have band=small).
+January is the one negative month (r ≈ −0.06); all other months are positive. No month carries > 20%.
+
+**NOT-BETTABLE (f4 in-play reset, excluded from BH):** 8 cells. Only f4_reset_flag=no_under is notable
+(n=2449, r=+0.022, p=0.015) — but this fires on 93% of games (trivially: "no in-play reset" ≈ all games)
+and its signal is just the overall NHL under bias from the close source. Diagnostic only, as registered.
+
+**f2 timing near-misses:** NHL f2_mixed_under (n=264, r=+0.067, p=0.014), NHL f2_late_under (n=839,
+r=+0.029, p=0.048). Neither survives BH.
+
+**f3 dispersion near-misses:** NHL f3_high_under (n=813, r=+0.037, p=0.019). Does not survive BH.
+
+**NBA v2 market features:** 0 BH survivors. Closest: f2_ml_timing_band_mixed_under (n=369, r=+0.051,
+p=0.024), f1_ml_div_band_medium_under (n=28, r=+0.144, p=0.064, underpowered).
+
+**Priors resolved:**
+- Cowork: NHL market-behaviour Tier 2 BH survivor: 20% → **YES** (2 survivors, same cell overlap).
+  NBA: 20% → **NO**.
+- Claude Code: NHL 10% → WRONG (underestimated); NBA 15% → CORRECT (no survivors).
+
+**v2 features generated:**
+- NHL: 100 cells (52 v2 + 48 v1)
+- NBA: 384 cells (90 v2 + 294 v1)
+- Total Tier 2: 484 cells
+

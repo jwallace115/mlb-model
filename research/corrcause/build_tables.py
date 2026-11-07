@@ -936,6 +936,347 @@ def build_nba_second_pred(seasons, games):
 
 
 # =====================================================================
+#  NHL V2 MARKET-BEHAVIOUR FEATURES (f1–f4)
+# =====================================================================
+
+def _soft_fair_h(games_row):
+    """De-vig all soft books' ML closes, return dict of book -> fair_h prob."""
+    fairs = {}
+    for book in SOFT_BOOKS:
+        ml_h = games_row.get(f"soft_{book}_close_ml_h")
+        ml_a = games_row.get(f"soft_{book}_close_ml_a")
+        if pd.isna(ml_h) or pd.isna(ml_a):
+            continue
+        imp_h = american_to_implied(ml_h)
+        imp_a = american_to_implied(ml_a)
+        if pd.isna(imp_h) or pd.isna(imp_a) or (imp_h + imp_a) == 0:
+            continue
+        fairs[book] = imp_h / (imp_h + imp_a)
+    return fairs
+
+
+def build_nhl_v2_features(seasons, games):
+    """V2 market-behaviour features for NHL: f1 divergence, f2 timing, f3 dispersion, f4 in-play reset."""
+    print("\n=== Building NHL v2 market features ===")
+    t0 = time.time()
+
+    # --- Pre-compute f2 (timing) and f4 (in-play reset) from the tape ---
+    print("  Loading in-play tape for timing/reset...")
+    frames = []
+    for s in seasons:
+        path = Path.home() / f"mlb-model-nhlE/data/odds_archive/nhl/history/inplay/season={s}"
+        files = sorted(path.glob("*.parquet"))
+        frames.extend(pd.read_parquet(f) for f in files)
+    tape = pd.concat(frames, ignore_index=True)
+    tape["snap"] = pd.to_datetime(tape["snapshot_utc"])
+    tape["ct"] = pd.to_datetime(tape["commence_time"])
+
+    # Split pre-tip and in-play
+    pretip = tape[tape["snap"] < tape["ct"]].copy()
+    inplay = tape[tape["snap"] >= tape["ct"]].copy()
+    print(f"  Pre-tip: {len(pretip):,}, In-play: {len(inplay):,}")
+
+    # Also load lines_all for openers (earlier snapshots)
+    lines = pd.read_parquet(
+        Path.home() / "mlb-model/research/nhl_sim/edge_hunt_2026-09-30/lines_all.parquet"
+    )
+    lines["snap"] = pd.to_datetime(lines["snapshot_utc"])
+    lines["ct"] = pd.to_datetime(lines["commence_time"])
+    lines = lines[lines["snap"] < lines["ct"]].copy()
+    combined_pretip = pd.concat([
+        pretip[["event_id", "snap", "ct", "bookmaker", "market", "outcome_name", "price", "home_team"]],
+        lines[["event_id", "snap", "ct", "bookmaker", "market", "outcome_name", "price", "home_team"]],
+    ], ignore_index=True)
+
+    # Pre-compute f2 timing data: for each event, Pinnacle h2h opener, close, and 3h-before-tip snapshot
+    print("  Computing f2 timing per event...")
+    pin_h2h = combined_pretip[
+        (combined_pretip["bookmaker"] == "pinnacle") & (combined_pretip["market"] == "h2h")
+    ].copy()
+    pin_h2h["hours_before"] = (pin_h2h["ct"] - pin_h2h["snap"]).dt.total_seconds() / 3600
+    pin_h2h["is_home"] = pin_h2h["outcome_name"] == pin_h2h["home_team"]
+    pin_h2h_home = pin_h2h[pin_h2h["is_home"]].copy()
+    pin_h2h_home["imp"] = pin_h2h_home["price"].apply(american_to_implied)
+
+    timing_data = {}  # event_id -> {opener_imp, close_imp, snap_3h_imp}
+    for eid, grp in pin_h2h_home.groupby("event_id"):
+        grp = grp.sort_values("snap")
+        if len(grp) < 2:
+            continue
+        # Opener: first snapshot ≥ 12h before
+        openers = grp[grp["hours_before"] >= 12]
+        if len(openers) == 0:
+            continue
+        opener_imp = openers.iloc[0]["imp"]
+        close_imp = grp.iloc[-1]["imp"]
+        total_move = close_imp - opener_imp
+        if abs(total_move) < 0.001:
+            continue  # No movement
+        # 3h snapshot: last snapshot with hours_before > 3
+        before_3h = grp[grp["hours_before"] > 3]
+        if len(before_3h) == 0:
+            snap_3h_imp = opener_imp  # All snapshots within 3h → all move is in last 3h
+        else:
+            snap_3h_imp = before_3h.iloc[-1]["imp"]
+        late_move = close_imp - snap_3h_imp
+        share = late_move / total_move if abs(total_move) > 0.001 else np.nan
+        timing_data[eid] = {"f2_timing_share": share, "f2_total_move": total_move}
+
+    # Pre-compute f4 in-play reset data
+    print("  Computing f4 in-play reset per event...")
+    pin_ip = inplay[
+        (inplay["bookmaker"] == "pinnacle") & (inplay["market"] == "h2h")
+    ].copy()
+    pin_ip["is_home"] = pin_ip["outcome_name"] == pin_ip["home_team"]
+    pin_ip_home = pin_ip[pin_ip["is_home"]].copy()
+    pin_ip_home["imp"] = pin_ip_home["price"].apply(american_to_implied)
+
+    reset_data = {}  # event_id -> {first_ip_imp, last_pretip_imp, delta}
+    for eid, grp in pin_ip_home.groupby("event_id"):
+        first_ip = grp.sort_values("snap").iloc[0]
+        # Last pre-tip for this event
+        pretip_eid = pin_h2h_home[pin_h2h_home["event_id"] == eid]
+        if len(pretip_eid) == 0:
+            continue
+        last_pretip = pretip_eid.sort_values("snap").iloc[-1]
+        first_ip_imp = first_ip["imp"]
+        last_pretip_imp = last_pretip["imp"]
+        if pd.isna(first_ip_imp) or pd.isna(last_pretip_imp):
+            continue
+        # De-vig both
+        # The imp is already raw implied; we need de-vigged. For simplicity, just use the raw
+        # since both are from Pinnacle and the vig is small.
+        # Actually: the prices are American, and I applied american_to_implied which gives raw implied.
+        # For a fair comparison, both are treated the same way.
+        delta = first_ip_imp - last_pretip_imp
+        if abs(delta) >= 0.02:
+            reset_data[eid] = {"f4_first_ip_imp": first_ip_imp, "f4_last_pretip_imp": last_pretip_imp,
+                                "f4_delta": delta}
+
+    print(f"  f2 timing: {len(timing_data)} events, f4 reset: {len(reset_data)} events")
+
+    # --- Now build per-game features ---
+    rows = []
+    for _, g in games.iterrows():
+        eid = g["event_id"]
+        row = {"event_id": eid}
+
+        pin_fair_h = g.get("pin_close_fair_h")
+
+        # f1: soft-Pinnacle divergence at close (ML)
+        if not pd.isna(pin_fair_h):
+            fairs = _soft_fair_h(g)
+            if fairs:
+                max_div = 0.0
+                max_div_sign = 0
+                for book, fair_h in fairs.items():
+                    div = fair_h - pin_fair_h
+                    if abs(div) > abs(max_div):
+                        max_div = div
+                if abs(max_div) >= 0.02:
+                    row["f1_max_divergence"] = max_div
+                    row["f1_max_div_abs"] = abs(max_div)
+
+        # f2: move timing
+        td = timing_data.get(eid)
+        if td:
+            row["f2_timing_share"] = td["f2_timing_share"]
+
+        # f3: book-consensus dispersion at close (ML)
+        if not pd.isna(pin_fair_h):
+            fairs = _soft_fair_h(g)
+            fair_vals = list(fairs.values())
+            if len(fair_vals) >= 3:
+                row["f3_dispersion"] = np.std(fair_vals, ddof=1)
+
+        # f4: in-play reset
+        rd = reset_data.get(eid)
+        if rd:
+            row["f4_ip_reset_delta"] = rd["f4_delta"]
+
+        rows.append(row)
+
+    df = pd.DataFrame(rows)
+    out = DATA_DIR / "market_features_nhl.parquet"
+    df.to_parquet(out, index=False)
+    print(f"  Wrote {out} ({len(df)} rows, {time.time()-t0:.0f}s)")
+
+    # Summary
+    for col in ["f1_max_divergence", "f2_timing_share", "f3_dispersion", "f4_ip_reset_delta"]:
+        if col in df.columns:
+            n = df[col].notna().sum()
+            print(f"    {col}: {n} non-null")
+
+    return df
+
+
+# =====================================================================
+#  NBA V2 MARKET-BEHAVIOUR FEATURES (f1–f3)
+# =====================================================================
+
+NBA_DIVISIONS = {
+    "Atlantic": ["BOS", "BKN", "NYK", "PHI", "TOR"],
+    "Central": ["CHI", "CLE", "DET", "IND", "MIL"],
+    "Southeast": ["ATL", "CHA", "MIA", "ORL", "WAS"],
+    "Northwest": ["DEN", "MIN", "OKC", "POR", "UTA"],
+    "Pacific": ["GSW", "LAC", "LAL", "PHX", "SAC"],
+    "Southwest": ["DAL", "HOU", "MEM", "NOP", "SAS"],
+}
+_TEAM_TO_DIV = {}
+for _div, _teams in NBA_DIVISIONS.items():
+    for _t in _teams:
+        _TEAM_TO_DIV[_t] = _div
+
+
+def build_nba_v2_features(seasons, games):
+    """V2 market-behaviour features for NBA: f1 divergence (spread+ML), f2 timing (spread+ML), f3 divisional."""
+    print("\n=== Building NBA v2 market features ===")
+    t0 = time.time()
+
+    # Print division map
+    print("  NBA Division Map:")
+    for div, teams in NBA_DIVISIONS.items():
+        print(f"    {div}: {', '.join(teams)}")
+
+    # --- Pre-compute f2 timing from lines_hourly ---
+    print("  Loading lines_hourly for timing...")
+    frames = []
+    for s in seasons:
+        path = Path.home() / f"mlb-model/data/odds_archive/nba/history/lines_hourly/season={s}"
+        files = sorted(path.glob("*.parquet"))
+        frames.extend(pd.read_parquet(f) for f in files)
+    lh = pd.concat(frames, ignore_index=True)
+    lh["snap"] = pd.to_datetime(lh["snapshot_utc"])
+    lh["ct"] = pd.to_datetime(lh["commence_time"])
+    lh = lh[lh["snap"] < lh["ct"]].copy()
+    lh["hours_before"] = (lh["ct"] - lh["snap"]).dt.total_seconds() / 3600
+
+    # f2 ML timing
+    print("  Computing f2 ML timing per event...")
+    pin_h2h = lh[
+        (lh["bookmaker"] == "pinnacle") & (lh["market"] == "h2h")
+    ].copy()
+    pin_h2h["is_home"] = pin_h2h["outcome_name"] == pin_h2h["home_team"]
+    pin_h2h_home = pin_h2h[pin_h2h["is_home"]].copy()
+    pin_h2h_home["imp"] = pin_h2h_home["price"].apply(american_to_implied)
+
+    ml_timing = {}
+    for eid, grp in pin_h2h_home.groupby("event_id"):
+        grp = grp.sort_values("snap")
+        if len(grp) < 2:
+            continue
+        openers = grp[grp["hours_before"] >= 12]
+        if len(openers) == 0:
+            continue
+        opener_imp = openers.iloc[0]["imp"]
+        close_imp = grp.iloc[-1]["imp"]
+        total_move = close_imp - opener_imp
+        if abs(total_move) < 0.001:
+            continue
+        before_3h = grp[grp["hours_before"] > 3]
+        snap_3h_imp = before_3h.iloc[-1]["imp"] if len(before_3h) > 0 else opener_imp
+        late_move = close_imp - snap_3h_imp
+        share = late_move / total_move if abs(total_move) > 0.001 else np.nan
+        ml_timing[eid] = share
+
+    # f2 spread timing
+    print("  Computing f2 spread timing per event...")
+    pin_spr = lh[
+        (lh["bookmaker"] == "pinnacle") & (lh["market"] == "spreads")
+    ].copy()
+    pin_spr["is_home"] = pin_spr["outcome_name"] == pin_spr["home_team"]
+    pin_spr_home = pin_spr[pin_spr["is_home"]].copy()
+
+    spr_timing = {}
+    for eid, grp in pin_spr_home.groupby("event_id"):
+        grp = grp.sort_values("snap")
+        if len(grp) < 2:
+            continue
+        openers = grp[grp["hours_before"] >= 12]
+        if len(openers) == 0:
+            continue
+        opener_pt = openers.iloc[0]["point"]
+        close_pt = grp.iloc[-1]["point"]
+        total_move = close_pt - opener_pt
+        if abs(total_move) < 0.25:
+            continue
+        before_3h = grp[grp["hours_before"] > 3]
+        snap_3h_pt = before_3h.iloc[-1]["point"] if len(before_3h) > 0 else opener_pt
+        late_move = close_pt - snap_3h_pt
+        share = late_move / total_move if abs(total_move) > 0.25 else np.nan
+        spr_timing[eid] = share
+
+    print(f"  f2 ML timing: {len(ml_timing)} events, spread timing: {len(spr_timing)} events")
+
+    # --- Build per-game features ---
+    rows = []
+    for _, g in games.iterrows():
+        eid = g["event_id"]
+        row = {"event_id": eid}
+
+        pin_fair_h = g.get("pin_close_fair_h")
+
+        # f1: soft-Pinnacle divergence at close (ML)
+        if not pd.isna(pin_fair_h):
+            fairs = _soft_fair_h(g)
+            if fairs:
+                max_div = 0.0
+                for book, fair_h in fairs.items():
+                    div = fair_h - pin_fair_h
+                    if abs(div) > abs(max_div):
+                        max_div = div
+                if abs(max_div) >= 0.02:
+                    row["f1_ml_divergence"] = max_div
+                    row["f1_ml_div_abs"] = abs(max_div)
+
+        # f1 spread divergence
+        pin_spread_h = g.get("pin_close_spread_h")
+        if not pd.isna(pin_spread_h):
+            soft_spreads = []
+            for book in SOFT_BOOKS:
+                soft_spr = g.get(f"soft_{book}_close_spread_h")
+                if not pd.isna(soft_spr):
+                    soft_spreads.append(soft_spr)
+            if soft_spreads:
+                max_spr_div = max(soft_spreads, key=lambda x: abs(x - pin_spread_h)) - pin_spread_h
+                if abs(max_spr_div) >= 0.5:  # 0.5 points threshold for spreads
+                    row["f1_spread_divergence"] = max_spr_div
+
+        # f2: ML timing
+        ml_t = ml_timing.get(eid)
+        if ml_t is not None and not pd.isna(ml_t):
+            row["f2_ml_timing_share"] = ml_t
+
+        # f2: spread timing
+        spr_t = spr_timing.get(eid)
+        if spr_t is not None and not pd.isna(spr_t):
+            row["f2_spread_timing_share"] = spr_t
+
+        # f3: divisional flag
+        ht = nba_full_to_abbrev(g["home_team"])
+        at = nba_full_to_abbrev(g["away_team"])
+        h_div = _TEAM_TO_DIV.get(ht)
+        a_div = _TEAM_TO_DIV.get(at)
+        if h_div and a_div:
+            row["f3_divisional"] = 1 if h_div == a_div else 0
+
+        rows.append(row)
+
+    df = pd.DataFrame(rows)
+    out = DATA_DIR / "market_features_nba.parquet"
+    df.to_parquet(out, index=False)
+    print(f"  Wrote {out} ({len(df)} rows, {time.time()-t0:.0f}s)")
+
+    for col in ["f1_ml_divergence", "f1_spread_divergence", "f2_ml_timing_share",
+                 "f2_spread_timing_share", "f3_divisional"]:
+        if col in df.columns:
+            n = df[col].notna().sum()
+            print(f"    {col}: {n} non-null")
+
+    return df
+
+
+# =====================================================================
 #  MAIN
 # =====================================================================
 
@@ -943,19 +1284,30 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--sport", required=True, choices=["nhl", "nba"])
     parser.add_argument("--seasons", nargs="+", type=int, required=True)
+    parser.add_argument("--v2-only", action="store_true",
+                        help="Only build v2 market-behaviour features (requires existing games table)")
     args = parser.parse_args()
 
     print(f"Sport: {args.sport}, Seasons: {args.seasons}")
     print(f"Python: {sys.executable}")
 
-    if args.sport == "nhl":
-        games = build_nhl_games(args.seasons)
-        build_nhl_features(args.seasons, games)
-        build_nhl_second_pred(args.seasons, games)
+    if args.v2_only:
+        games = pd.read_parquet(DATA_DIR / f"games_{args.sport}.parquet")
+        if args.sport == "nhl":
+            build_nhl_v2_features(args.seasons, games)
+        else:
+            build_nba_v2_features(args.seasons, games)
     else:
-        games = build_nba_games(args.seasons)
-        build_nba_features(args.seasons, games)
-        build_nba_second_pred(args.seasons, games)
+        if args.sport == "nhl":
+            games = build_nhl_games(args.seasons)
+            build_nhl_features(args.seasons, games)
+            build_nhl_second_pred(args.seasons, games)
+            build_nhl_v2_features(args.seasons, games)
+        else:
+            games = build_nba_games(args.seasons)
+            build_nba_features(args.seasons, games)
+            build_nba_second_pred(args.seasons, games)
+            build_nba_v2_features(args.seasons, games)
 
     print("\nDone.")
 
