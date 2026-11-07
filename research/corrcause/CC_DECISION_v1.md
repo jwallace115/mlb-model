@@ -338,3 +338,31 @@ star playing time — the mechanism's second prediction does not hold.
 Cowork prior (30%) → **CORRECT** (the prior expected it smaller; it was).
 Claude Code prior (25%) → **CORRECT**.
 
+---
+
+## CC-D8 — Pre-registration: Is the NHL divergence→under survivor a stale-quote artefact? (2026-11-07)
+
+**Context:** T2_NHL_f1_divergence_flag_yes_under (n=592, r=+0.068, p=0.00044) survived BH.
+Cowork verification found that `extract_closes` takes each book's last pre-tip snapshot
+SEPARATELY, so "divergence at close" compares quotes that may be hours apart — the flag
+may mean "Pinnacle moved after some soft book stopped quoting", not genuine disagreement.
+Additionally, every NHL under cell sits on a population under residual of +0.022 (n=2,449).
+
+**Cowork priors:**
+- The under excess concentrates in asynchronous / stale rows (artefact): 55%
+- Persists in synchronous fresh rows at ≥ +0.04 over the population base: 30%
+- Neither (noise): 15%
+
+**Claude Code priors:**
+- Artefact (stale quotes drive most of the signal): 50%
+- Persists in synchronous fresh rows at ≥ +0.04 over population base: 20%
+- Noise (effect disappears or is within population base in all cuts): 30%
+
+**Rationale for Claude Code priors:** The extract_closes design is genuinely problematic —
+each book's last snapshot is taken independently, so the "divergence" could easily be
+Pinnacle updating while a soft book went dark hours earlier. However, the effect is in both
+DEV seasons (2022: +0.093, 2023: +0.050), which is harder for pure staleness to explain
+unless the staleness pattern is stable across seasons. The 30% noise prior reflects that
+the population under base (+0.022) already accounts for a third of the pooled r, so the
+incremental signal may be smaller than it looks.
+
