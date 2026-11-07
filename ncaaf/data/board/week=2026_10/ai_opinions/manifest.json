@@ -17305,5 +17305,125 @@
     "72cab2217ae57cbb00928eab05eb244e": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T203403Z.parquet",
+  "sha256": "891d7399b1a963487bd9c143836a05af9c67dd981f0f6d23612ea0bf74d5882b",
+  "logged_utc": "2026-11-07T20:34:03.732527+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.333,
+  "revised_rows": 6,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-07T21:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T203006Z.parquet",
+   "inputs_digest": "{\"028ce5ee2c58281cf935f06edc90d671\": \"7d8b274b4d4e7843\", \"2a6e2d9ca0d2fc85a4164e9c0f25a05f\": \"d2b6dd1c94ea23c7\"}",
+   "components": {
+    "028ce5ee2c58281cf935f06edc90d671": {
+     "pinnacle_h2h": [
+      [
+       "Mississippi State Bulldogs",
+       0,
+       -135
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       122
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Mississippi State Bulldogs",
+       -2.5,
+       -113
+      ],
+      [
+       "Vanderbilt Commodores",
+       2.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -108
+      ],
+      [
+       "Under",
+       48.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Clark Lea emphasizes adjustments to get Vandy back",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Sources: SEC considering luxury tax for excessive "
+     ],
+     "kalshi_snap": "snap_20261107T2037Z.parquet"
+    },
+    "2a6e2d9ca0d2fc85a4164e9c0f25a05f": {
+     "pinnacle_h2h": [
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       709
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       -983
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Rutgers Scarlet Knights",
+       19.5,
+       -105
+      ],
+      [
+       "Wisconsin Badgers",
+       -19.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -116
+      ],
+      [
+       "Under",
+       45.0,
+       -101
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Source: Wisconsin to start freshman QB Ryan Hopkin",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove"
+     ],
+     "kalshi_snap": "snap_20261107T2037Z.parquet"
+    }
+   },
+   "triggers": {
+    "028ce5ee2c58281cf935f06edc90d671": "anchor_close",
+    "2a6e2d9ca0d2fc85a4164e9c0f25a05f": "anchor_close"
+   }
+  }
  }
 ]
