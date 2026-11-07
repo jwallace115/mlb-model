@@ -13,6 +13,7 @@ Outputs (in research/corrcause/data/):
 """
 
 import argparse
+import os
 import sys
 import time
 import unicodedata
@@ -20,6 +21,9 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
+# Env-guarded leak for testing (Item 3): widens one prior-N window to include day D
+_PLANT_LEAK = os.environ.get("CORRCAUSE_PLANT_LEAK") == "1"
 
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data"
@@ -448,7 +452,11 @@ def build_nhl_features(seasons, games):
         a_abbrev = g["a_abbrev"]
 
         # Prior games in same season, strictly before game_date
-        season_prior = sbro[(sbro["season"] == season) & (sbro["date_dt"].dt.date < game_date)]
+        # _PLANT_LEAK: widen to include game_date for home_rest_days (test that truncation catches it)
+        if _PLANT_LEAK:
+            season_prior = sbro[(sbro["season"] == season) & (sbro["date_dt"].dt.date <= game_date)]
+        else:
+            season_prior = sbro[(sbro["season"] == season) & (sbro["date_dt"].dt.date < game_date)]
 
         for side, abbrev in [("home", h_abbrev), ("away", a_abbrev)]:
             team_prior = season_prior[
@@ -827,9 +835,13 @@ def build_nba_features(seasons, games):
 
         # Box stat priors
         for side, team in [("home", ht), ("away", at)]:
+            # _PLANT_LEAK: widen home poss window to include game_date
+            if _PLANT_LEAK and side == "home":
+                date_op = box["date_dt"].dt.date <= game_date
+            else:
+                date_op = box["date_dt"].dt.date < game_date
             tb = box[
-                (box["team"] == team) & (box["season"] == season_str) &
-                (box["date_dt"].dt.date < game_date)
+                (box["team"] == team) & (box["season"] == season_str) & date_op
             ].sort_values("date_dt")
             if len(tb) > 0:
                 last10 = tb.tail(10)

@@ -219,5 +219,117 @@ class TestSecondPredIsolation:
             assert len(overlap) == 0, f"{sport}: overlap {overlap}"
 
 
+class TestPlantedLeakEnvGuard:
+    """Item 3: env-guarded CORRCAUSE_PLANT_LEAK=1 must FAIL truncation;
+    without it, truncation must PASS."""
+
+    def test_planted_leak_fails_truncation(self):
+        """With CORRCAUSE_PLANT_LEAK=1 set, rebuild features and check that
+        truncation detects the leak. Without the env, confirm it passes."""
+        import os
+        import subprocess
+
+        python = "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3"
+        root = Path(__file__).resolve().parent.parent.parent.parent  # repo root
+        check_script = str(root / "research" / "corrcause" / "tests" / "_check_truncation.py")
+
+        # Write a small check script that we'll run in a subprocess
+        check_code = '''
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+import numpy as np
+import pandas as pd
+from pathlib import Path
+
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+
+# Rebuild NHL features with current env
+from research.corrcause.build_tables import build_nhl_features
+games = pd.read_parquet(DATA_DIR / "games_nhl.parquet")
+features = build_nhl_features([2022, 2023], games)
+
+# Run truncation check on home_rest_days
+sbro = pd.read_parquet(
+    Path.home() / "mlb-model/research/nhl_sim/edge_hunt_2026-09-30/inputs/games.parquet"
+)
+sbro["date_dt"] = pd.to_datetime(sbro["date"])
+
+gf = features.merge(
+    games[["event_id", "commence_time", "season", "h_abbrev", "game_id"]],
+    on="event_id", how="left"
+)
+gf["game_date"] = pd.to_datetime(gf["commence_time"]).dt.tz_convert("US/Eastern").dt.date
+
+errors = []
+valid = gf[gf["home_rest_days"].notna()]
+rng = np.random.RandomState(42)
+dates = valid["game_date"].unique()
+sample_dates = rng.choice(dates, size=min(20, len(dates)), replace=False)
+
+for d in sample_dates:
+    day = gf[gf["game_date"] == d]
+    for _, row in day.iterrows():
+        if pd.isna(row.get("game_id")) or pd.isna(row.get("home_rest_days")):
+            continue
+        h = row["h_abbrev"]
+        prior = sbro[
+            (sbro["season"] == row["season"]) & (sbro["date_dt"].dt.date < d) &
+            ((sbro["home"] == h) | (sbro["away"] == h))
+        ].sort_values("date_dt")
+        if len(prior) == 0:
+            continue
+        exp_rest = (d - prior.iloc[-1]["date_dt"].date()).days
+        if row["home_rest_days"] != exp_rest:
+            errors.append(f"{d} {h}: got {row['home_rest_days']}, expected {exp_rest}")
+
+if errors:
+    for e in errors[:10]:
+        print(f"ERROR: {e}", file=sys.stderr)
+    print(f"TRUNCATION_ERRORS={len(errors)}")
+    sys.exit(1)
+else:
+    print("TRUNCATION_ERRORS=0")
+    sys.exit(0)
+'''
+        # Write the check script
+        with open(check_script, "w") as f:
+            f.write(check_code)
+
+        # 1. Run WITH leak: must FAIL
+        env_with = os.environ.copy()
+        env_with["CORRCAUSE_PLANT_LEAK"] = "1"
+        result_with = subprocess.run(
+            [python, check_script],
+            capture_output=True, text=True, env=env_with, timeout=600
+        )
+        print(f"WITH LEAK stdout: {result_with.stdout.strip()}")
+        print(f"WITH LEAK stderr (first 500): {result_with.stderr[:500]}")
+        # Must exit non-zero (truncation detected the leak)
+        leaked_failed = result_with.returncode != 0
+        assert leaked_failed, (
+            "Planted leak (CORRCAUSE_PLANT_LEAK=1) was NOT detected by truncation — "
+            "the leak guard is broken"
+        )
+        print("PASS: planted leak correctly detected (truncation failed as expected)")
+
+        # 2. Run WITHOUT leak: must PASS
+        env_without = os.environ.copy()
+        env_without.pop("CORRCAUSE_PLANT_LEAK", None)
+        result_without = subprocess.run(
+            [python, check_script],
+            capture_output=True, text=True, env=env_without, timeout=600
+        )
+        print(f"WITHOUT LEAK stdout: {result_without.stdout.strip()}")
+        print(f"WITHOUT LEAK stderr (first 500): {result_without.stderr[:500]}")
+        assert result_without.returncode == 0, (
+            f"Truncation FAILED without leak — false positive. "
+            f"stderr: {result_without.stderr[:200]}"
+        )
+        print("PASS: without leak, truncation passes correctly")
+
+        # Cleanup
+        os.remove(check_script)
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
