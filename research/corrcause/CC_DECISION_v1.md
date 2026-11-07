@@ -366,3 +366,30 @@ unless the staleness pattern is stable across seasons. The 30% noise prior refle
 the population under base (+0.022) already accounts for a third of the pooled r, so the
 incremental signal may be smaller than it looks.
 
+### CC-D8 RESULT
+
+**Item 1: Flag anatomy.**
+94.5% of v2-flagged games have driving-book gap = 0 (same API snapshot as Pinnacle).
+Driving-book `book_last_update` age median 0.6 min, 0% > 30 min. Per-book same-snapshot
+rates 95.8-100%. The asynchronous-quote hypothesis is dead. Null control: sync flag agrees
+with v2 flag 99.8% on the 2,416 games where all books quote in the same snapshot.
+
+**Item 2: Under excess.**
+Synchronous-flag under residual: +0.068 (SE 0.021, n=558), **+0.046 over the population
+base** (+0.022). Present in both DEV seasons (2022: +0.087, 2023: +0.055). ROI at best
+sync soft under price: +10.6% (SE 4.2%, n=551). Not driven by stale quotes, backup
+goalies (identical 32% share), or Pinnacle ML moves. January is the one negative month.
+Positive control (home ML on sync rows): -0.003, within +/-0.01.
+
+**Priors graded:**
+
+| Prior | Cowork | Claude Code |
+|---|---|---|
+| Artefact (stale quotes) | 55% | 50% |
+| Persists sync at >=+0.04 | 30% | 20% |
+| Noise | 15% | 30% |
+
+**Outcome: PERSISTS.** The under excess is +0.046 over base in synchronous fresh rows.
+Both priors wrong on the modal prediction (artefact): the data show 94.5% same-snapshot,
+not asynchronous. Cowork's 30% on persistence was closer to reality than Claude Code's 20%.
+

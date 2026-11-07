@@ -4718,3 +4718,34 @@ SHAs: origin/main = 0cb6c6fad, VM HEAD = 0cb6c6fad, Mac HEAD = 0cb6c6fad. Mac br
 - NBA f2 ML timing near-miss (p=0.024) not investigated further
 - Close null: 975/2,534 games exceed 0.005 implied prob diff between tape and lines_all
   (expected from different snapshot times; all < 0.05 structural threshold)
+
+## 2026-11-07T06:00Z  claude-code (CC-3 — NHL divergence stale-quote audit)
+
+### RETURNED
+- Item 1: flag anatomy. 94.5% of v2-flagged games have driving-book gap = 0 (same snapshot).
+  Driving-book blu age median 0.6 min, 0% > 30 min. Null control: sync flag agrees with v2
+  flag 99.8% on 2,416 all-same-snapshot games (threshold 90%). PASS.
+- Item 2: under excess by cut. Sync-flag under residual +0.068 (SE 0.021, n=558), +0.046
+  over population base +0.022. Both DEV seasons positive (2022: +0.087, 2023: +0.055).
+  ROI at sync soft best under: +10.6% (SE 4.2%, n=551). Not driven by backup goalies
+  (32% vs 32% share), not by Pinnacle ML moves, not by sign direction. January negative.
+  Positive control (home ML sync rows): -0.003, within +/-0.01.
+- Item 3: REPORT_cc3.md written, CC-D8 RESULT appended with priors graded.
+
+### WHAT IT MEANS
+The asynchronous-quote hypothesis is dead. The divergence is a genuine real-time price
+disagreement, and the under excess persists in synchronous fresh quotes at +0.046 over
+base. Both pre-registered modal priors (Cowork 55% artefact, Claude Code 50% artefact)
+were wrong. The data loaded in ~15 min (32k parquet files for NHL in-play tape).
+
+### NOT DONE
+- No mechanism, Q, or CONFIRM (per work order)
+- No OOS test (2024-25, 2025-26 not read)
+- January negative month not explained
+- Population under base (+0.022) not investigated for close-extraction artefact
+- Branch not merged (per work order)
+
+### UNVERIFIED
+- Whether blu_age <= 10 min is the right freshness threshold (not tested at 5m or 2m)
+- Whether ROI survives transaction costs and execution slippage
+- Whether betmgm's overrepresentation as driving book (23%) reflects model vs liquidity
