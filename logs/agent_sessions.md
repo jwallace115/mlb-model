@@ -4688,3 +4688,33 @@ SHAs: origin/main = 0cb6c6fad, VM HEAD = 0cb6c6fad, Mac HEAD = 0cb6c6fad. Mac br
 - games_last_4 definition in schedule_features (prior-only vs including today)
 - Whether the 55 unmatched events (14 NHL + 41 NBA) affect any cell
 - NB5 TZ proxy accuracy
+
+## 2026-11-07T03:00Z  claude-code (CC-2 — market-behaviour Tier 2, NB10 CONFIRM, leak test)
+
+### RETURNED
+- Item 0: REGISTRY_v2_ADDENDUM.md written verbatim (sha f27d4760...). CC-D5: GATE OPEN
+  (8 grep hits, no prior April/late-season NBA totals cell touched 2024-25). 105 April 2025
+  games with both Pinnacle total close and outcome (≥ 80 threshold met).
+- Item 1: 7 new features built (NHL f1-f4, NBA f1-f3). 142 new Tier 2 cells. Two BH
+  survivors: T2_NHL_f1_divergence_flag_yes_under (p=0.00044, r=+0.068, ROI +10.6%) and
+  T2_NHL_f1_divergence_band_small_under (p=0.001, r=+0.064). Both same sign both seasons.
+  0 NBA market-behaviour BH survivors. CC-D6 pre-registered and resolved.
+- Item 2: NB10 CONFIRM FAIL. r=+0.041 (same sign but 1/3 of screen), 90% LB = -0.023.
+  Q1 possessions p=0.36, Q2 top-5 minutes p=0.996. NB10 is DEAD. CC-D7 recorded.
+- Item 3: CORRCAUSE_PLANT_LEAK=1 env guard in build_tables.py. Test passes both ways:
+  with leak → 133 truncation errors detected; without → 0. NH3/NB3 fired parquets collapsed
+  (NH3: 85→73, NB3: 213→137). REPORT_screen_v2.md written.
+
+### NOT DONE
+- No mechanism/Q/prior for the NHL f1 divergence cell — HYPOTHESIS only, precondition for
+  any CONFIRM look
+- NHL f4 in-play reset: only 7 fires, unmeasurable
+- Branch NOT merged (per instructions)
+
+### UNVERIFIED
+- NHL f1 divergence ROI may be partly a close-timing artefact (stale soft prices contribute
+  both the divergence detection and the favorable payout)
+- January negative month in f1 cell (r = -0.059, n=82) not investigated
+- NBA f2 ML timing near-miss (p=0.024) not investigated further
+- Close null: 975/2,534 games exceed 0.005 implied prob diff between tape and lines_all
+  (expected from different snapshot times; all < 0.05 structural threshold)
