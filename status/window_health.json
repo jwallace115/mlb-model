@@ -30,23 +30,23 @@
   "freeze_file": null
  },
  {
-  "sport": "nfl",
-  "window": "event",
-  "started_utc": "2026-11-07T19:21:26.013995+00:00",
-  "finished_utc": "2026-11-07T19:21:26.013995+00:00",
-  "result": "COMPLETE",
-  "step": "window_watch",
-  "message": "['new_props: pull 2026-11-07T19:17:48.063289+00:00; injury_change: inj_New Orleans Saints; injury_change: inj_Cleveland Browns', 'new_props: pull 2026-11-07T19:17:48.063289+00:00; injury_change: inj_I",
-  "freeze_file": "ai_opinions_20261107T191704Z.parquet"
- },
- {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-07T19:29:00.471366+00:00",
-  "finished_utc": "2026-11-07T19:29:00.471366+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-07T19:43:46.588484+00:00",
+  "finished_utc": "2026-11-07T19:43:46.588484+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['anchor_close', 'anchor_close', 'anchor_close']",
-  "freeze_file": "ai_opinions_20261107T191903Z.parquet"
+  "message": "",
+  "freeze_file": null
+ },
+ {
+  "sport": "nfl",
+  "window": "event",
+  "started_utc": "2026-11-07T19:47:04.897669+00:00",
+  "finished_utc": "2026-11-07T19:47:04.897669+00:00",
+  "result": "no_triggers",
+  "step": "window_watch",
+  "message": "",
+  "freeze_file": null
  }
 ]
