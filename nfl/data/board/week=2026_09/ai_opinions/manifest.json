@@ -10921,5 +10921,26 @@
     "2922c573ec3df8466c4a34975e446898": "new_props: pull 2026-11-07T19:17:48.063289+00:00; injury_change: inj_New England Patriots"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T230911Z.parquet",
+  "sha256": "ddcce104d57cd732b535cec271dd3917e3191dd5871aaaf7141b4d504107ff2e",
+  "logged_utc": "2026-11-07T23:09:11.656106+00:00",
+  "rows": 975,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "reader_v3b",
+  "pilot": false,
+  "window": "late",
+  "games": 14,
+  "no_view_share": 0.369,
+  "revised_rows": 0,
+  "oldest_source_age_min": 1269.0,
+  "first_kickoff_utc": "2026-11-08T14:30:00Z",
+  "reader_sha256": "a413d38af2157fcb8a04c1d71cbc17a791cdadaa375e6ec3da56b1e616ba6bfd",
+  "inputs": {
+   "props": "data_2026_11.parquet",
+   "lines": "snap_20261107T220008Z.parquet"
+  }
  }
 ]
