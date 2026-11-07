@@ -107,13 +107,30 @@ def _nba_season_str(season_int):
 
 # ============ Vectorized close/opener extraction ============
 
-def extract_closes(tape, events_df, bookmakers, home_col="home_team"):
+def extract_closes(tape, events_df, bookmakers, home_col="home_team", rule_a=False):
     """
     From a pre-tip tape, extract the last snapshot per event/book/market/outcome.
     Returns a wide DataFrame: one row per event, columns for each book's prices.
+
+    rule_a=True (v3 addendum §A): listed_start = MAX commence_time across the
+    event's pre-game snapshots; close = last snapshot with snapshot_utc ≤ listed_start.
+    Guarantees close_age_min ≥ 0 for every game.
     """
     # Filter to events of interest
     tape = tape[tape["event_id"].isin(events_df["event_id"])].copy()
+
+    if rule_a:
+        # Rule A: listed_start = max ct seen on pre-game snapshots per event
+        listed_start = tape.groupby("event_id")["ct"].max().rename("listed_start")
+        tape = tape.merge(listed_start, on="event_id", how="left")
+        # Keep only snapshots at or before the listed start
+        tape = tape[tape["snap"] <= tape["listed_start"]].copy()
+    else:
+        # Legacy: snap < ct (per-row, can produce negative close ages)
+        pass  # already filtered upstream
+
+    if len(tape) == 0:
+        return pd.DataFrame()
 
     # Sort and take last snapshot per group
     tape = tape.sort_values("snap")
@@ -127,9 +144,14 @@ def extract_closes(tape, events_df, bookmakers, home_col="home_team"):
     rows = {}
     for eid, grp in last.groupby("event_id"):
         r = {"event_id": eid, "close_snap": grp["snap"].max()}
-        ct = events_df.loc[events_df["event_id"] == eid, "ct"]
-        if len(ct) > 0:
-            r["close_age_min"] = (ct.iloc[0] - r["close_snap"]).total_seconds() / 60.0
+        if rule_a:
+            ls = grp["listed_start"].iloc[0]
+            r["listed_start"] = ls
+            r["close_age_min"] = (ls - r["close_snap"]).total_seconds() / 60.0
+        else:
+            ct = events_df.loc[events_df["event_id"] == eid, "ct"]
+            if len(ct) > 0:
+                r["close_age_min"] = (ct.iloc[0] - r["close_snap"]).total_seconds() / 60.0
 
         for book in bookmakers:
             bk = grp[grp["bookmaker"] == book]
@@ -267,8 +289,9 @@ def build_nhl_games(seasons):
     inplay = pd.concat(frames, ignore_index=True)
     inplay["snap"] = pd.to_datetime(inplay["snapshot_utc"])
     inplay["ct"] = pd.to_datetime(inplay["commence_time"])
-    inplay = inplay[inplay["snap"] < inplay["ct"]].copy()
-    print(f"  Pre-tip rows: {len(inplay):,} ({time.time()-t0:.0f}s)")
+    # Rule A: do NOT filter snap < ct here — extract_closes handles it with max ct
+    inplay_pretip_legacy = inplay[inplay["snap"] < inplay["ct"]].copy()
+    print(f"  Pre-tip rows (legacy): {len(inplay_pretip_legacy):,} ({time.time()-t0:.0f}s)")
 
     # 2. Lines_all (for openers — has earlier snapshots)
     lines = pd.read_parquet(
@@ -284,20 +307,25 @@ def build_nhl_games(seasons):
     )
     sbro["date_dt"] = pd.to_datetime(sbro["date"])
 
-    # 4. Event list from in-play tape
-    events = inplay[["event_id", "ct", "home_team", "away_team"]].drop_duplicates("event_id")
+    # 4. Event list — use MAX ct (rule A listed start) for the canonical ct
+    ct_max = inplay.groupby("event_id")["ct"].max().rename("ct")
+    events = inplay[["event_id", "home_team", "away_team"]].drop_duplicates("event_id")
+    events = events.merge(ct_max, on="event_id", how="left")
     events["season"] = events["ct"].apply(lambda x: x.year if x.month >= 10 else x.year - 1)
     events = events[events["season"].isin(seasons)].copy()
     print(f"  Events: {len(events)}")
 
-    # 5. Extract closes (Pinnacle + all soft books)
-    print("  Extracting closes...")
+    # 5. Extract closes (Pinnacle + all soft books) — rule A
+    print("  Extracting closes (rule A)...")
     all_books = ["pinnacle"] + SOFT_BOOKS
-    close_df = extract_closes(inplay, events, all_books)
-    close_df = close_df.rename(columns={"close_snap": "close_snap", "close_age_min": "close_age_min"})
-    # Rename pin columns to match convention
+    close_df = extract_closes(inplay, events, all_books, rule_a=True)
     close_df["close_source"] = "inplay_tape"
-    print(f"  Closes extracted: {len(close_df)} ({time.time()-t0:.0f}s)")
+    # Assert rule A: close_age_min >= 0 for every game
+    ca = close_df["close_age_min"].dropna()
+    n_neg = (ca < 0).sum()
+    assert n_neg == 0, f"Rule A violated: {n_neg} games with negative close_age_min"
+    print(f"  Closes extracted: {len(close_df)}, close_age_min median={ca.median():.1f}, "
+          f"p90={ca.quantile(0.9):.1f}, share>60min={( ca > 60).mean():.3f} ({time.time()-t0:.0f}s)")
 
     # 6. Extract openers from combined lines_all + in-play tape
     print("  Extracting openers...")
@@ -703,8 +731,9 @@ def build_nba_games(seasons):
     lh = pd.concat(frames, ignore_index=True)
     lh["snap"] = pd.to_datetime(lh["snapshot_utc"])
     lh["ct"] = pd.to_datetime(lh["commence_time"])
-    lh = lh[lh["snap"] < lh["ct"]].copy()
-    print(f"  Pre-tip rows: {len(lh):,} ({time.time()-t0:.0f}s)")
+    # Rule A: do NOT filter snap < ct here — extract_closes handles it
+    lh_pretip_legacy = lh[lh["snap"] < lh["ct"]].copy()
+    print(f"  Pre-tip rows (legacy): {len(lh_pretip_legacy):,} ({time.time()-t0:.0f}s)")
 
     # In-play tape for season=2023 only
     ip = pd.DataFrame()
@@ -719,19 +748,24 @@ def build_nba_games(seasons):
             ip = ip[ip["snap"] < ip["ct"]].copy()
             print(f"    Pre-tip rows: {len(ip):,}")
 
-    # Event list
-    events = lh[["event_id", "ct", "home_team", "away_team"]].drop_duplicates("event_id")
+    # Event list — use MAX ct (rule A listed start) for the canonical ct
+    ct_max = lh.groupby("event_id")["ct"].max().rename("ct")
+    events = lh[["event_id", "home_team", "away_team"]].drop_duplicates("event_id")
+    events = events.merge(ct_max, on="event_id", how="left")
     events["season_int"] = events["ct"].apply(lambda x: x.year if x.month >= 10 else x.year - 1)
     events = events[events["season_int"].isin(seasons)].copy()
     print(f"  Events: {len(events)}")
 
-    # Use lines_hourly for all NBA closes (the in-play tape for NBA has sparse
-    # pre-tip snapshots and worse close timing than lines_hourly's hourly snapshots)
-    print("  Extracting closes from lines_hourly...")
+    # NBA closes from lines_hourly with rule A
+    print("  Extracting closes from lines_hourly (rule A)...")
     all_books = ["pinnacle"] + SOFT_BOOKS
-    close_df = extract_closes(lh, events, all_books)
+    close_df = extract_closes(lh, events, all_books, rule_a=True)
     close_df["close_source"] = "lines_hourly"
-    print(f"  Closes: {len(close_df)} ({time.time()-t0:.0f}s)")
+    ca = close_df["close_age_min"].dropna()
+    n_neg = (ca < 0).sum()
+    assert n_neg == 0, f"NBA Rule A violated: {n_neg} games with negative close_age_min"
+    print(f"  Closes: {len(close_df)}, close_age_min median={ca.median():.1f}, "
+          f"p90={ca.quantile(0.9):.1f}, share>60min={(ca > 60).mean():.3f} ({time.time()-t0:.0f}s)")
 
     # Openers from lines_hourly
     print("  Extracting openers...")

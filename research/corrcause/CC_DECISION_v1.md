@@ -393,3 +393,87 @@ Positive control (home ML on sync rows): -0.003, within +/-0.01.
 Both priors wrong on the modal prediction (artefact): the data show 94.5% same-snapshot,
 not asynchronous. Cowork's 30% on persistence was closer to reality than Claude Code's 20%.
 
+---
+
+## CC-D9a — Close defect cause (2026-11-07)
+
+The Odds API updates each event's `commence_time` as game time approaches. For NHL, the
+listed start is typically moved forward by ~5–25 min (reflecting that puck drop is after
+the nominal listed time). `build_tables.py` used `events = inplay[...].drop_duplicates("event_id")`
+which takes the FIRST `commence_time` seen (the earliest), but the pre-tip filter `snap < ct`
+uses each row's OWN `ct` (the later, updated value). Result: a snapshot at 03:20 with its
+own `ct=03:25` passes the per-row filter, but the games table records `ct=03:00` (from the
+first snapshot), so `close_age_min = 03:00 - 03:20 = -20 min`.
+
+Evidence from 20 negative-age NHL games: in every case, `tape_ct_min == games_ct` and
+`tape_ct_max > games_ct` (by 8–35 min). The close snapshot falls between the two ct values.
+The defect is NOT in the close selection logic itself but in using an inconsistent ct
+(first-seen vs per-row) for the age computation. NBA shows the same pattern (137/2546 = 5.4%
+negative close ages) because `lines_hourly` also updates `commence_time` across snapshots.
+
+Fix (rule A, v3 addendum §A): `listed_start = MAX commence_time` across the event's
+snapshots; close = last snapshot with `snapshot_utc ≤ listed_start`; `close_age_min =
+listed_start − close_snap` (guaranteed ≥ 0). Applied to both NHL and NBA. After rule A:
+NHL 0 negative (was 1,132), NBA 0 negative (was 137).
+
+---
+
+## CC-D9b — Pre-registration: NHL screen under rule A (2026-11-07)
+
+**Cowork's priors:**
+- NH8's residual under rule A stays ≥ +0.05: 90%
+- No NHL Tier 1 cell changes verdict: 85%
+
+**Claude Code pre-registration:**
+- NH8 (f1_divergence_flag_yes_under) residual under rule A stays ≥ +0.05: 85%.
+  Rationale: CC-3 showed 94.5% of flagged games are same-snapshot; the close snap for
+  those games will barely change under rule A. The 5.5% non-same-snapshot games might
+  shift, but the effect is strong enough (+0.068) that a small resampling won't erase it.
+- No NHL Tier 1 cell changes verdict: 90%. All 7 cells were clearly non-significant
+  (all p > 0.05) and rule A's main effect is tightening the close (removing ~5 min of
+  post-listed-start quotes), which is a small fraction of most cells' data.
+- The two v2 BH survivors (f1_flag_yes_under, f1_band_small_under) both stay BH survivors: 80%.
+
+### CC-D9b RESULT
+
+Rule A close selection produces IDENTICAL close prices to the legacy method for every NHL
+and NBA game. The defect was purely in the `close_age_min` computation (using `first_ct`
+instead of `max_ct` for the subtraction), not in the actual close selection. The `snap < ct`
+per-row filter and `snap <= max_ct` filter select the same last snapshot for every event.
+
+**NHL Tier 1 (7 cells):** all 7 cells unchanged (identical n, r, p). 0 verdict changes.
+**v2 BH survivors (4 NHL T2 cells):** all 4 survive under rule A with identical values.
+v3 adds 0 new NHL BH survivors, removes 0.
+
+**Priors graded:**
+- Cowork: NH8 r ≥ +0.05 (90%) → CORRECT (r = +0.069, identical to v2)
+- Cowork: No Tier 1 verdict change (85%) → CORRECT (0 changes)
+- Claude Code: NH8 r ≥ +0.05 (85%) → CORRECT
+- Claude Code: No Tier 1 verdict change (90%) → CORRECT
+- Claude Code: Both BH survivors stay (80%) → CORRECT (all 4 stay, not just 2)
+
+---
+
+## CC-D10 — Pre-registration: NH8 second predictions on DEV (2026-11-07)
+
+**Cowork priors (ledger CC-4a–4d):**
+- Q1 holds: 40%
+- Q2 holds: 45%
+- Q3 holds: 35%
+- At least one of Q1–Q3: 65%
+
+**Claude Code priors:**
+- Q1 holds (soft over prob excess ≥ +0.005): 50%. Rationale: if the flag marks
+  public-action games, the soft books should be shading their over probability upward
+  relative to Pinnacle (absorbing over action). The +0.005 threshold is modest.
+- Q2 holds (driving book higher on fav > 55%): 35%. Rationale: the direction of the
+  divergence (whether the soft book is higher on home or away) may not align with the
+  favourite — the public action could be on either side of the ML. Less confident.
+- Q3 holds (pace 2% below prior-10): 25%. Rationale: the divergence flag is a market
+  feature, not a pace feature. The connection to realised pace is indirect and I'd expect
+  it to be noisy. Also, 5v5 attempts/60 is a rough pace proxy for NHL.
+- At least one of Q1–Q3: 65%.
+
+**Filter rule (from PART B §C):** Q1 or Q2 → M1; Q3 → M2; none of Q1–Q3 → DROP.
+The Q that passes is carried into CONFIRM and forward.
+
