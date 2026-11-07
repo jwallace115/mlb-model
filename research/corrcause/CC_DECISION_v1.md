@@ -291,3 +291,50 @@ p=0.024), f1_ml_div_band_medium_under (n=28, r=+0.144, p=0.064, underpowered).
 - NBA: 384 cells (90 v2 + 294 v1)
 - Total Tier 2: 484 cells
 
+---
+
+## CC-D7 — NB10 CONFIRM pre-registration (2026-11-06)
+
+**Cell:** NB10 — April regular-season OVER (promoted from T2_NBA_month_str_4_over; addendum §B)
+
+**Rule (frozen, from addendum §B):** NBA regular-season games with Pinnacle closing total,
+tip in April (through 2025-04-13), OVER at the closing point, pushes excluded.
+
+**Pass criteria:**
+1. r (residual vs Pinnacle fair over prob) same sign as screen (+), with game-clustered
+   90% lower bound > 0
+2. ROI at the best same-point soft price > 0
+3. Q holds: possessions in fired games ≥ two teams' prior-10 average + 1.0 (one-sided p < 0.10)
+
+**Cowork prior:** CONFIRM pass 30%. Known public angle; the honest expectation is that 2024-25
+shows it smaller.
+
+**Claude Code prior:** CONFIRM pass 25%. The screen r was +0.112 on 192 games; the MDE at
+n ≈ 95 is +0.085. Even if the true effect is half the screen estimate (~+0.056), the 90% CI
+lower bound will include 0. The public April rest/tank angle has been in circulation for years.
+
+**One run. Whatever it says, nothing is re-run or re-cut.**
+
+### CC-D7 RESULT
+
+**n = 103** (105 matched, 2 pushes excluded)
+
+| Criterion | Value | Threshold | Result |
+|---|---|---|---|
+| r | +0.041 | > 0 | PASS (same sign as screen +0.112) |
+| 90% lower bound | −0.023 | > 0 | **FAIL** |
+| ROI at best soft price | +7.0% (n=95) | > 0 | PASS |
+| ROI at Pinnacle | +5.0% | — | reported |
+| Q1 possessions diff vs prior-10 | +1.4 (SE=1.1) | ≥ +1.0, p < 0.10 | **FAIL** (p=0.36) |
+| Q2 top-5 minutes diff vs prior-20 | −0.8 (SE=0.4) | ≤ −2.0, p < 0.10 | **FAIL** (p=0.996) |
+
+**VERDICT: FAIL.** Criterion 1 (90% LB > 0) and Q1 both fail. The observed r (+0.041) is the
+same sign as the screen (+0.112) but roughly 1/3 the size, and the 90% CI includes 0. The
+possessions Q shows the direction (+1.4) but is noisy. The top-5 minutes show NO reduction in
+star playing time — the mechanism's second prediction does not hold.
+
+**NB10 is DEAD with its id.** No re-run, no re-cut.
+
+Cowork prior (30%) → **CORRECT** (the prior expected it smaller; it was).
+Claude Code prior (25%) → **CORRECT**.
+
