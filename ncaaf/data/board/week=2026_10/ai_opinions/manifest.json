@@ -16212,5 +16212,70 @@
     "2a6e2d9ca0d2fc85a4164e9c0f25a05f": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T184903Z.parquet",
+  "sha256": "682c38d8e7cf20be462c156bb0d7e133a38b66b5e811dc310560ec7ca1eafba9",
+  "logged_utc": "2026-11-07T18:49:03.669516+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T19:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T183008Z.parquet",
+   "inputs_digest": "{\"5304671601ad3064a66a332cbb09313f\": \"7cca998ff8970d07\"}",
+   "components": {
+    "5304671601ad3064a66a332cbb09313f": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       -227
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       200
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       -6.5,
+       -106
+      ],
+      [
+       "Georgia State Panthers",
+       6.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       101
+      ],
+      [
+       "Under",
+       54.5,
+       -117
+      ]
+     ],
+     "kalshi_snap": "snap_20261107T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "5304671601ad3064a66a332cbb09313f": "anchor_close"
+   }
+  }
  }
 ]
