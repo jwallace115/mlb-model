@@ -15898,5 +15898,319 @@
     "c74c1b98aca90ebf335b4028d44c2095": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T180403Z.parquet",
+  "sha256": "5181a2c7e63cfdf70a75d093b3aeb492bc40c0881febdbf6aad9c9c02ea050ca",
+  "logged_utc": "2026-11-07T18:04:03.668488+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.667,
+  "revised_rows": 10,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-07T21:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T180008Z.parquet",
+   "inputs_digest": "{\"b5f8faa111f5c25846fcfc22f1b664a1\": \"b6ab4c0ad1824283\", \"648b835a42e9a23db353a0f0b326afdb\": \"fb2372bf5de1f8ee\", \"55e2553780b7d3d06d1fe7a4ffa9474b\": \"0e97ec1ef1c9b7e4\", \"796b0be4ed0d775756eff53b5803125a\": \"dc4457c6821eeb65\"}",
+   "components": {
+    "b5f8faa111f5c25846fcfc22f1b664a1": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       -201
+      ],
+      [
+       "Missouri State Bears",
+       0,
+       179
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       -5.0,
+       -106
+      ],
+      [
+       "Missouri State Bears",
+       5.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -111
+      ],
+      [
+       "Under",
+       50.0,
+       -105
+      ]
+     ],
+     "kalshi_snap": "snap_20261107T1807Z.parquet"
+    },
+    "648b835a42e9a23db353a0f0b326afdb": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -249
+      ],
+      [
+       "Troy Trojans",
+       0,
+       218
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -7.0,
+       -101
+      ],
+      [
+       "Troy Trojans",
+       7.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -114
+      ],
+      [
+       "Under",
+       47.5,
+       -103
+      ]
+     ],
+     "kalshi_snap": "snap_20261107T1807Z.parquet"
+    },
+    "55e2553780b7d3d06d1fe7a4ffa9474b": {
+     "pinnacle_h2h": [
+      [
+       "North Texas Mean Green",
+       0,
+       -716
+      ],
+      [
+       "Rice Owls",
+       0,
+       547
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Texas Mean Green",
+       -15.5,
+       -103
+      ],
+      [
+       "Rice Owls",
+       15.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       64.0,
+       -116
+      ],
+      [
+       "Under",
+       64.0,
+       -101
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T1807Z.parquet"
+    },
+    "796b0be4ed0d775756eff53b5803125a": {
+     "pinnacle_h2h": [
+      [
+       "Northern Illinois Huskies",
+       0,
+       378
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       -462
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northern Illinois Huskies",
+       12.0,
+       -102
+      ],
+      [
+       "San Jose State Spartans",
+       -12.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -110
+      ],
+      [
+       "Under",
+       52.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel",
+      "Ranking college football's top 40 freshmen in 2026"
+     ],
+     "kalshi_snap": "snap_20261107T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "b5f8faa111f5c25846fcfc22f1b664a1": "anchor_prekick",
+    "648b835a42e9a23db353a0f0b326afdb": "anchor_prekick",
+    "55e2553780b7d3d06d1fe7a4ffa9474b": "anchor_prekick",
+    "796b0be4ed0d775756eff53b5803125a": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261107T181903Z.parquet",
+  "sha256": "361e47190c1cb4e81b16c9257277ff82724070b6727329b9ab3a0e804f1a27d2",
+  "logged_utc": "2026-11-07T18:19:03.317399+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 6,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T21:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T180008Z.parquet",
+   "inputs_digest": "{\"028ce5ee2c58281cf935f06edc90d671\": \"9a3861c912df5c50\", \"2a6e2d9ca0d2fc85a4164e9c0f25a05f\": \"67eb928d7ccc4309\"}",
+   "components": {
+    "028ce5ee2c58281cf935f06edc90d671": {
+     "pinnacle_h2h": [
+      [
+       "Mississippi State Bulldogs",
+       0,
+       -133
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       120
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Mississippi State Bulldogs",
+       -2.5,
+       -111
+      ],
+      [
+       "Vanderbilt Commodores",
+       2.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -108
+      ],
+      [
+       "Under",
+       48.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Clark Lea emphasizes adjustments to get Vandy back",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Sources: SEC considering luxury tax for excessive "
+     ],
+     "kalshi_snap": "snap_20261107T1807Z.parquet"
+    },
+    "2a6e2d9ca0d2fc85a4164e9c0f25a05f": {
+     "pinnacle_h2h": [
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       709
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       -983
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Rutgers Scarlet Knights",
+       19.5,
+       -105
+      ],
+      [
+       "Wisconsin Badgers",
+       -19.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -116
+      ],
+      [
+       "Under",
+       45.0,
+       -101
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Source: Wisconsin to start freshman QB Ryan Hopkin",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove"
+     ],
+     "kalshi_snap": "snap_20261107T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "028ce5ee2c58281cf935f06edc90d671": "anchor_prekick",
+    "2a6e2d9ca0d2fc85a4164e9c0f25a05f": "anchor_prekick"
+   }
+  }
  }
 ]
