@@ -10729,5 +10729,70 @@
     "11da04c7d3fba48caf11a5d8b66b8ccd": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261106T234903Z.parquet",
+  "sha256": "f6cea13b82436485b69e5ce96041d6a3ef03a7f753b9077ba484c65931240724",
+  "logged_utc": "2026-11-06T23:49:03.225987+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261106T233007Z.parquet",
+   "inputs_digest": "{\"5172093e8533ea39f59c5d2c63c743b9\": \"ef7abd7b533da9f9\"}",
+   "components": {
+    "5172093e8533ea39f59c5d2c63c743b9": {
+     "pinnacle_h2h": [
+      [
+       "East Carolina Pirates",
+       0,
+       -112
+      ],
+      [
+       "South Florida Bulls",
+       0,
+       102
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "East Carolina Pirates",
+       -1.0,
+       -106
+      ],
+      [
+       "South Florida Bulls",
+       1.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.5,
+       -105
+      ],
+      [
+       "Under",
+       39.5,
+       -111
+      ]
+     ],
+     "kalshi_snap": "snap_20261106T2337Z.parquet"
+    }
+   },
+   "triggers": {
+    "5172093e8533ea39f59c5d2c63c743b9": "anchor_close"
+   }
+  }
  }
 ]
