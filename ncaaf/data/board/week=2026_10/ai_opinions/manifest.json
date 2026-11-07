@@ -11178,5 +11178,129 @@
     "722ed661705df150a38e7786949ce241": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T031903Z.parquet",
+  "sha256": "48bef09257afdb49723351d68dc0ac56401eb1588b6a3b9a24bea9df0f5097ea",
+  "logged_utc": "2026-11-07T03:19:03.848394+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T030008Z.parquet",
+   "inputs_digest": "{\"5b05bf2ff27508703418dcf70079a22f\": \"12d15169f8ee10f1\", \"d74a875341a00e77cf86ecfb7569edd3\": \"62a547c93b1fe528\"}",
+   "components": {
+    "5b05bf2ff27508703418dcf70079a22f": {
+     "pinnacle_h2h": [
+      [
+       "Minnesota Golden Gophers",
+       0,
+       168
+      ],
+      [
+       "UCLA Bruins",
+       0,
+       -193
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Minnesota Golden Gophers",
+       4.5,
+       -107
+      ],
+      [
+       "UCLA Bruins",
+       -4.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       38.5,
+       -111
+      ],
+      [
+       "Under",
+       38.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College football Week 10 best bets: Picks for Tenn",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "UCLA, still unbeaten and ranked No. 5, hits the ro",
+      "Week 10 Anger Index: Welcome to the sequel, Notre ",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T0307Z.parquet"
+    },
+    "d74a875341a00e77cf86ecfb7569edd3": {
+     "pinnacle_h2h": [
+      [
+       "Fresno State Bulldogs",
+       0,
+       -114
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       102
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Fresno State Bulldogs",
+       -1.5,
+       -104
+      ],
+      [
+       "Utah State Aggies",
+       1.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -108
+      ],
+      [
+       "Under",
+       43.0,
+       -108
+      ]
+     ],
+     "news": [
+      "College football Week 10 best bets: Picks for Tenn"
+     ],
+     "kalshi_snap": "snap_20261107T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "5b05bf2ff27508703418dcf70079a22f": "line_move: pinnacle spreads UCLA Bruins -5.5\u2192-4.5; line_move: pinnacle spreads Minnesota Golden Gophers 5.5\u21924.5",
+    "d74a875341a00e77cf86ecfb7569edd3": "line_move: pinnacle spreads Fresno State Bulldogs -2.5\u2192-1.5; line_move: pinnacle spreads Utah State Aggies 2.5\u21921.5"
+   }
+  }
  }
 ]
