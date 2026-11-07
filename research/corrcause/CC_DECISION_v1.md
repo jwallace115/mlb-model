@@ -477,3 +477,48 @@ v3 adds 0 new NHL BH survivors, removes 0.
 **Filter rule (from PART B §C):** Q1 or Q2 → M1; Q3 → M2; none of Q1–Q3 → DROP.
 The Q that passes is carried into CONFIRM and forward.
 
+### CC-D10 RESULT
+
+**NH8 as registered (rule A, 9 books, same snapshot, blu ≤ 10 min, |Δ| ≥ 0.02, UNDER):**
+n=567, r=+0.068 (SE 0.021), excess over population under base (+0.022): +0.046.
+By season: 2022 +0.090 (n=247), 2023 +0.051 (n=320). ROI at best soft under +10.7%
+(SE 4.2%, n=559). ROI at Pinnacle +10.4%. share_largest_sm=0.176.
+CHECK 5: same sign both seasons; 6/7 months positive (Jan negative −0.018); fav/dog
+split +0.078/+0.066; total band 6.0 negative (−0.005), 5.5 and 6.5+ positive;
+depth tercile all same bucket (low=567 — all fresh books land in one band).
+
+**Q results (DEV, flagged vs unflagged):**
+
+| Q | Threshold | Flagged | Unflagged | Diff | p (one-sided) | Result |
+|---|---|---|---|---|---|---|
+| Q1 (soft−pin over prob) | ≥ +0.005 | +0.0016 | +0.0024 | −0.0008 | 0.773 | **FAIL** |
+| Q2 (driving on fav) | > 55% | 19.6% | — | — | 1.000 | **FAIL** |
+| Q3 (att60 % diff) | ≤ −2% | +0.15% | −0.27% | +0.42% | 0.735 | **FAIL** |
+| Q4 (sh% vs prior-30) | diagnostic | −0.0019 | +0.0005 | −0.0024 | 0.063 | **SOLE** |
+
+**FILTER: FAIL.** None of Q1–Q3 holds. Q4 is the sole explanation: flagged games have
+lower shooting % relative to the prior-30-day league average (p=0.063 two-sided), which
+is consistent with finishing luck driving the under excess, not a priced mechanism.
+
+Q2 is particularly informative: the driving book is higher on the favourite only 19.6%
+of the time — the divergence is overwhelmingly on the underdog side, which directly
+contradicts the M1 (action-balancing) hypothesis that public money on the favourite causes
+the ML shading.
+
+**NH8 is DROPPED.** The screen residual (+0.068) is real in the data but has no mechanism
+that passes the filter. The CONFIRM script (Item 2) is still built — it is useful for
+the framework regardless of NH8's fate.
+
+**Priors graded:**
+
+| Prior | Cowork | Claude Code | Outcome |
+|---|---|---|---|
+| Q1 holds | 40% | 50% | FAIL |
+| Q2 holds | 45% | 35% | FAIL |
+| Q3 holds | 35% | 25% | FAIL |
+| At least one Q1–Q3 | 65% | 65% | FAIL (0 of 3) |
+
+Both Cowork and Claude Code overestimated the probability of at least one mechanism holding.
+The data show that the under excess in flagged games is best explained by below-average
+shooting — which is luck, not structure. Q2's 19.6% was not anticipated by either prior.
+
