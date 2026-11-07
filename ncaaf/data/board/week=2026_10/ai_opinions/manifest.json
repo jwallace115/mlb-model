@@ -18202,5 +18202,97 @@
     "bbb1d38a8f51b761a789459a08fa6ded": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T223406Z.parquet",
+  "sha256": "b143ecfb210dff995d4d4a51c57e76a1434a97700a62b2d6f4ef24c04116285f",
+  "logged_utc": "2026-11-07T22:34:06.403881+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-07T23:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T223011Z.parquet",
+   "inputs_digest": "{\"72cab2217ae57cbb00928eab05eb244e\": \"93f1eeb2f7a8867d\"}",
+   "components": {
+    "72cab2217ae57cbb00928eab05eb244e": {
+     "pinnacle_h2h": [
+      [
+       "Kentucky Wildcats",
+       0,
+       187
+      ],
+      [
+       "Tennessee Volunteers",
+       0,
+       -211
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kentucky Wildcats",
+       6.0,
+       -102
+      ],
+      [
+       "Tennessee Volunteers",
+       -6.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -106
+      ],
+      [
+       "Under",
+       49.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Allstate Playoff Predictor",
+      "Chris Doering expects five SEC teams to compete in",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College football Week 10 best bets: Picks for Tenn",
+      "Connelly on Week 10: His 14 favorite games on load",
+      "Cubelic, Harper detail how Kentucky can beat Tenne",
+      "Harper, Cubelic analyze ranked matchups in massive",
+      "How every 2027 five-star college football prospect",
+      "Illinois coach Bret Bielema takes veiled shot at S",
+      "Kentucky's Stein praises Heupel, anticipates tough",
+      "Matt Barrie on massive Week 10: 'This is the tippi",
+      "No. 13 Tennessee, No. 18 Mizzou lead the Peter Pow",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Run game and limiting mistakes key for No. 6 Wildc",
+      "Sources: SEC considering luxury tax for excessive ",
+      "Stakes are high for No. 8 Kentucky at No. 16 Tenne",
+      "Tennessee going 'dark mode' tops best college foot",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "What could keep each team in CFP rankings from win",
+      "Where the odds and rankings agree and disagree on ",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will Stein reacts to Kentucky's ranking in CFP Top",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T2237Z.parquet"
+    }
+   },
+   "triggers": {
+    "72cab2217ae57cbb00928eab05eb244e": "anchor_close"
+   }
+  }
  }
 ]
