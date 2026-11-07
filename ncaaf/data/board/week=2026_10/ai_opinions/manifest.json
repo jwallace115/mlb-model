@@ -16512,5 +16512,798 @@
     "208e919ada4f5cf6d27af719879d1880": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T194904Z.parquet",
+  "sha256": "649fb47ad7024413feafc48c3a3d72cd794d9aa7297f808ee618453e434bef82",
+  "logged_utc": "2026-11-07T19:49:04.382060+00:00",
+  "rows": 26,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 9,
+  "no_view_share": 0.615,
+  "revised_rows": 24,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T20:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T193009Z.parquet",
+   "inputs_digest": "{\"00f194290bfcdfebb1d8456057b20614\": \"aa4fb7da94fbc234\", \"31cd8c948a11017166206a02f26c2cc8\": \"6e2cb4482e8947e6\", \"18f974d07f56507b33b9e50119c88e28\": \"de97df3ad5e3504f\", \"b1234e330dc3f9fbbe77f969dd074cc7\": \"033c78ed0f507586\", \"db87d6d1c7367ec043155f226c12ebbc\": \"7c795662ef59582b\", \"deb5de88acb22f9a3e969c137fd65cb3\": \"610c14b59e2c08d9\", \"ca349dad8e0e573b453654d24b63e3d1\": \"3631248b93a2ae5c\", \"c2784b24d84fa71e7368fd775914c37d\": \"324d86cbb0174975\", \"cd61922c472fea089e42662bc725f46b\": \"186c27de2649e70f\"}",
+   "components": {
+    "00f194290bfcdfebb1d8456057b20614": {
+     "pinnacle_h2h": [
+      [
+       "Alabama Crimson Tide",
+       0,
+       192
+      ],
+      [
+       "LSU Tigers",
+       0,
+       -217
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Alabama Crimson Tide",
+       6.0,
+       -111
+      ],
+      [
+       "LSU Tigers",
+       -6.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -107
+      ],
+      [
+       "Under",
+       53.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Alabama's Ryan Coleman-Williams among trio to retu",
+      "Allstate Playoff Predictor",
+      "Chris Doering expects five SEC teams to compete in",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly on Week 10: His 14 favorite games on load",
+      "Country music star Walker Hayes shares Alabama sup",
+      "Finebaum tries to make sense of CFP rankings",
+      "Fowler says CFP committee undervalued LSU, preview",
+      "Harper, Cubelic analyze ranked matchups in massive",
+      "How every 2027 five-star college football prospect",
+      "Illinois coach Bret Bielema takes veiled shot at S",
+      "LSU's Whit Weeks doubtful to return against Alabam",
+      "Lane Kiffin gives perspective on LSU vs Bama then ",
+      "Matt Barrie on massive Week 10: 'This is the tippi",
+      "No. 13 Tennessee, No. 18 Mizzou lead the Peter Pow",
+      "No. 14 LSU is built to exploit mismatches against ",
+      "No. 9 Alabama and No. 15 LSU close out their annua",
+      "Peter Burns on Alabama at No. 5: 'Literally relax'",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Sources: SEC considering luxury tax for excessive ",
+      "Stephen A. has a strong message for Alabama ahead ",
+      "Tim Tebow explains why LSU, Alabama are peaking at",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "What could keep each team in CFP rankings from win",
+      "Where Stephen A., Mad Dog take issue with CFP rank",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T1937Z.parquet"
+    },
+    "31cd8c948a11017166206a02f26c2cc8": {
+     "pinnacle_h2h": [
+      [
+       "Charlotte 49ers",
+       0,
+       275
+      ],
+      [
+       "UAB Blazers",
+       0,
+       -321
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Charlotte 49ers",
+       9.0,
+       -112
+      ],
+      [
+       "UAB Blazers",
+       -9.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -111
+      ],
+      [
+       "Under",
+       47.5,
+       -105
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel"
+     ],
+     "kalshi_snap": "snap_20261107T1937Z.parquet"
+    },
+    "18f974d07f56507b33b9e50119c88e28": {
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bearcats",
+       0,
+       320
+      ],
+      [
+       "Houston Cougars",
+       0,
+       -382
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bearcats",
+       10.0,
+       -103
+      ],
+      [
+       "Houston Cougars",
+       -10.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       61.5,
+       -111
+      ],
+      [
+       "Under",
+       61.5,
+       -105
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac"
+     ],
+     "kalshi_snap": "snap_20261107T1937Z.parquet"
+    },
+    "b1234e330dc3f9fbbe77f969dd074cc7": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Southern Eagles",
+       0,
+       -297
+      ],
+      [
+       "Marshall Thundering Herd",
+       0,
+       256
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Southern Eagles",
+       -7.0,
+       -116
+      ],
+      [
+       "Marshall Thundering Herd",
+       7.0,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -104
+      ],
+      [
+       "Under",
+       54.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Ranking college football's top 40 freshmen in 2026"
+     ],
+     "kalshi_snap": "snap_20261107T1937Z.parquet"
+    },
+    "db87d6d1c7367ec043155f226c12ebbc": {
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "Week 10 Anger Index: Welcome to the sequel, Notre ",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac"
+     ],
+     "kalshi_snap": "snap_20261107T1937Z.parquet"
+    },
+    "deb5de88acb22f9a3e969c137fd65cb3": {
+     "pinnacle_h2h": [
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       120
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       -133
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Middle Tennessee Blue Raiders",
+       2.5,
+       -103
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       -2.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -112
+      ],
+      [
+       "Under",
+       53.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Connelly on Week 10: His 14 favorite games on load"
+     ],
+     "kalshi_snap": "snap_20261107T1937Z.parquet"
+    },
+    "ca349dad8e0e573b453654d24b63e3d1": {
+     "pinnacle_h2h": [
+      [
+       "Navy Midshipmen",
+       0,
+       -260
+      ],
+      [
+       "Temple Owls",
+       0,
+       226
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Navy Midshipmen",
+       -7.0,
+       -110
+      ],
+      [
+       "Temple Owls",
+       7.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -115
+      ],
+      [
+       "Under",
+       55.5,
+       -101
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel"
+     ],
+     "kalshi_snap": "snap_20261107T1937Z.parquet"
+    },
+    "c2784b24d84fa71e7368fd775914c37d": {
+     "pinnacle_h2h": [
+      [
+       "Ohio State Buckeyes",
+       0,
+       -299
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       257
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ohio State Buckeyes",
+       -7.5,
+       -108
+      ],
+      [
+       "Oregon Ducks",
+       7.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -109
+      ],
+      [
+       "Under",
+       45.0,
+       -107
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Allstate Playoff Predictor",
+      "Breaking down the Heisman race: How Week 10 could ",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College football Week 10 best bets: Picks for Tenn",
+      "Connelly on Week 10: His 14 favorite games on load",
+      "Finebaum: Ohio State has \u2018no room for error\u2019 to ma",
+      "How every 2027 five-star college football prospect",
+      "Illinois coach Bret Bielema takes veiled shot at S",
+      "Live highlights and top CFP analysis from Week 10'",
+      "Ohio State and Oregon attempt to boost their playo",
+      "Ohio State to stick with Luke Fahey at quarterback",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T1937Z.parquet"
+    },
+    "cd61922c472fea089e42662bc725f46b": {
+     "pinnacle_h2h": [
+      [
+       "Penn State Nittany Lions",
+       0,
+       117
+      ],
+      [
+       "Washington Huskies",
+       0,
+       -129
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Penn State Nittany Lions",
+       2.0,
+       100
+      ],
+      [
+       "Washington Huskies",
+       -2.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -111
+      ],
+      [
+       "Under",
+       46.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Looking to ride 'momentum,' Washington likely to s",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T1937Z.parquet"
+    }
+   },
+   "triggers": {
+    "00f194290bfcdfebb1d8456057b20614": "anchor_close",
+    "31cd8c948a11017166206a02f26c2cc8": "anchor_close",
+    "18f974d07f56507b33b9e50119c88e28": "anchor_close",
+    "b1234e330dc3f9fbbe77f969dd074cc7": "anchor_close",
+    "db87d6d1c7367ec043155f226c12ebbc": "anchor_close",
+    "deb5de88acb22f9a3e969c137fd65cb3": "anchor_close",
+    "ca349dad8e0e573b453654d24b63e3d1": "anchor_close",
+    "c2784b24d84fa71e7368fd775914c37d": "anchor_close",
+    "cd61922c472fea089e42662bc725f46b": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261107T201903Z.parquet",
+  "sha256": "ad8082cc6180d1c08c12fe6fa744a2b1e2124973575c13638d175a1025b8449f",
+  "logged_utc": "2026-11-07T20:19:03.784709+00:00",
+  "rows": 21,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 7,
+  "no_view_share": 0.714,
+  "revised_rows": 20,
+  "oldest_source_age_min": 18.8,
+  "first_kickoff_utc": "2026-11-07T20:45:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T200013Z.parquet",
+   "inputs_digest": "{\"c74c1b98aca90ebf335b4028d44c2095\": \"437ec27bdad9fb2a\", \"b5f8faa111f5c25846fcfc22f1b664a1\": \"ee25420ff1d20673\", \"648b835a42e9a23db353a0f0b326afdb\": \"c3e34bc62e12ebb1\", \"55e2553780b7d3d06d1fe7a4ffa9474b\": \"24ebc4db1bd27922\", \"796b0be4ed0d775756eff53b5803125a\": \"dad9d49030841a1e\", \"bbb1d38a8f51b761a789459a08fa6ded\": \"4e8ba63f79a7888b\", \"72cab2217ae57cbb00928eab05eb244e\": \"0fe2a820fdb39918\"}",
+   "components": {
+    "c74c1b98aca90ebf335b4028d44c2095": {
+     "pinnacle_h2h": [
+      [
+       "Kansas Jayhawks",
+       0,
+       -225
+      ],
+      [
+       "UCF Knights",
+       0,
+       199
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas Jayhawks",
+       -6.0,
+       -109
+      ],
+      [
+       "UCF Knights",
+       6.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -105
+      ],
+      [
+       "Under",
+       48.5,
+       -111
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first "
+     ],
+     "kalshi_snap": "snap_20261107T2007Z.parquet"
+    },
+    "b5f8faa111f5c25846fcfc22f1b664a1": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       -194
+      ],
+      [
+       "Missouri State Bears",
+       0,
+       172
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       -5.0,
+       -101
+      ],
+      [
+       "Missouri State Bears",
+       5.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -111
+      ],
+      [
+       "Under",
+       50.0,
+       -105
+      ]
+     ],
+     "kalshi_snap": "snap_20261107T2007Z.parquet"
+    },
+    "648b835a42e9a23db353a0f0b326afdb": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -252
+      ],
+      [
+       "Troy Trojans",
+       0,
+       221
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -7.0,
+       -101
+      ],
+      [
+       "Troy Trojans",
+       7.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -114
+      ],
+      [
+       "Under",
+       47.5,
+       -103
+      ]
+     ],
+     "kalshi_snap": "snap_20261107T2007Z.parquet"
+    },
+    "55e2553780b7d3d06d1fe7a4ffa9474b": {
+     "pinnacle_h2h": [
+      [
+       "North Texas Mean Green",
+       0,
+       -734
+      ],
+      [
+       "Rice Owls",
+       0,
+       559
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Texas Mean Green",
+       -14.5,
+       -115
+      ],
+      [
+       "Rice Owls",
+       14.5,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       65.0,
+       -111
+      ],
+      [
+       "Under",
+       65.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T2007Z.parquet"
+    },
+    "796b0be4ed0d775756eff53b5803125a": {
+     "pinnacle_h2h": [
+      [
+       "Northern Illinois Huskies",
+       0,
+       378
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       -462
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northern Illinois Huskies",
+       12.0,
+       -102
+      ],
+      [
+       "San Jose State Spartans",
+       -12.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -110
+      ],
+      [
+       "Under",
+       52.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel",
+      "Ranking college football's top 40 freshmen in 2026"
+     ],
+     "kalshi_snap": "snap_20261107T2007Z.parquet"
+    },
+    "bbb1d38a8f51b761a789459a08fa6ded": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -765
+      ],
+      [
+       "Colorado State Rams",
+       0,
+       578
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -16.0,
+       -107
+      ],
+      [
+       "Colorado State Rams",
+       16.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       68.5,
+       -114
+      ],
+      [
+       "Under",
+       68.5,
+       -102
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Sources: QB Maddux Madsen out vs. Rams, Boise Stat",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac"
+     ],
+     "kalshi_snap": "snap_20261107T2007Z.parquet"
+    },
+    "72cab2217ae57cbb00928eab05eb244e": {
+     "pinnacle_h2h": [
+      [
+       "Kentucky Wildcats",
+       0,
+       182
+      ],
+      [
+       "Tennessee Volunteers",
+       0,
+       -206
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kentucky Wildcats",
+       6.0,
+       -107
+      ],
+      [
+       "Tennessee Volunteers",
+       -6.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -106
+      ],
+      [
+       "Under",
+       49.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Allstate Playoff Predictor",
+      "Chris Doering expects five SEC teams to compete in",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "College football Week 10 best bets: Picks for Tenn",
+      "Connelly on Week 10: His 14 favorite games on load",
+      "Cubelic, Harper detail how Kentucky can beat Tenne",
+      "Harper, Cubelic analyze ranked matchups in massive",
+      "How every 2027 five-star college football prospect",
+      "Illinois coach Bret Bielema takes veiled shot at S",
+      "Kentucky's Stein praises Heupel, anticipates tough",
+      "Matt Barrie on massive Week 10: 'This is the tippi",
+      "No. 13 Tennessee, No. 18 Mizzou lead the Peter Pow",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Run game and limiting mistakes key for No. 6 Wildc",
+      "Sources: SEC considering luxury tax for excessive ",
+      "Stakes are high for No. 8 Kentucky at No. 16 Tenne",
+      "Tennessee going 'dark mode' tops best college foot",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "What could keep each team in CFP rankings from win",
+      "Where the odds and rankings agree and disagree on ",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will Stein reacts to Kentucky's ranking in CFP Top",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T2007Z.parquet"
+    }
+   },
+   "triggers": {
+    "c74c1b98aca90ebf335b4028d44c2095": "anchor_close",
+    "b5f8faa111f5c25846fcfc22f1b664a1": "anchor_close",
+    "648b835a42e9a23db353a0f0b326afdb": "anchor_close",
+    "55e2553780b7d3d06d1fe7a4ffa9474b": "anchor_close",
+    "796b0be4ed0d775756eff53b5803125a": "anchor_close",
+    "bbb1d38a8f51b761a789459a08fa6ded": "anchor_prekick",
+    "72cab2217ae57cbb00928eab05eb244e": "anchor_prekick"
+   }
+  }
  }
 ]
