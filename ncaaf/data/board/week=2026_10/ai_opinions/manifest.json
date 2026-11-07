@@ -11101,5 +11101,82 @@
     "45fdbdbe6ed3d9922fa8b26b8a885f0e": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T023403Z.parquet",
+  "sha256": "b74670b9b8439f090c5afba02728274d5d4930770fc272f17293a01c013cd78d",
+  "logged_utc": "2026-11-07T02:34:03.416916+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 2,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-07T03:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T023005Z.parquet",
+   "inputs_digest": "{\"722ed661705df150a38e7786949ce241\": \"f2a3d3d897ada099\"}",
+   "components": {
+    "722ed661705df150a38e7786949ce241": {
+     "pinnacle_h2h": [
+      [
+       "Arizona Wildcats",
+       0,
+       -235
+      ],
+      [
+       "TCU Horned Frogs",
+       0,
+       207
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Wildcats",
+       -6.5,
+       102
+      ],
+      [
+       "TCU Horned Frogs",
+       6.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -107
+      ],
+      [
+       "Under",
+       46.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 9 College Football Playoff, bowl proj",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Connelly's CFP tiers: How 29 contenders stack up a",
+      "TCU's Sonny Dykes says boos, calls for him to be f",
+      "Tennessee going 'dark mode' tops best college foot",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "Week 9 College football Power Rankings: How big wi",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac"
+     ],
+     "kalshi_snap": "snap_20261107T0237Z.parquet"
+    }
+   },
+   "triggers": {
+    "722ed661705df150a38e7786949ce241": "anchor_close"
+   }
+  }
  }
 ]
