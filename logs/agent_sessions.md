@@ -4749,3 +4749,53 @@ were wrong. The data loaded in ~15 min (32k parquet files for NHL in-play tape).
 - Whether blu_age <= 10 min is the right freshness threshold (not tested at 5m or 2m)
 - Whether ROI survives transaction costs and execution slippage
 - Whether betmgm's overrepresentation as driving book (23%) reflects model vs liquidity
+
+## 2026-11-07T07:30Z  claude-code  (CC-4)
+
+### Context
+Branch: research/cc1, worktree ~/mlb-model-cc1. Work order CC-4 (4 items).
+
+### Item 0 — v3 addendum + close rule A (commit 1f06fcb4d)
+- WROTE: REGISTRY_v3_ADDENDUM.md verbatim from PART B (sha256 65a084b4...)
+- DIAGNOSED: close defect cause — commence_time changes across tape snapshots;
+  drop_duplicates took first (earliest) ct but snap<ct filter used per-row (later) ct,
+  producing negative close_age_min for 1,132 NHL / 137 NBA games
+- IMPLEMENTED: close rule A in build_tables.py (listed_start = max ct, snap <= listed_start)
+- REBUILT: games, features, market_features, second_pred for both NHL and NBA
+- FINDING: rule A close selection produces IDENTICAL close prices to legacy. The defect was
+  purely in close_age_min computation. All v2 results are valid.
+- RAN: NHL screen under rule A → screen_v3/. All 7 Tier 1 cells unchanged, all 4 BH
+  survivors unchanged. Side-by-side table built.
+- RAN: all 7 existing tests — all PASS
+- WROTE: CC-D9a (cause), CC-D9b (pre-reg + result), CC-D10 (pre-reg)
+
+### Item 1 — NH8 + Q1-Q4 on DEV (commit 3545e12fc)
+- BUILT: NH8 as PART B §C: n=567, r=+0.068 (SE 0.021), excess +0.046, ROI +10.7%
+- COMPUTED: Q1 FAIL (diff=-0.0008), Q2 FAIL (share_on_fav=19.6%), Q3 FAIL (+0.15%),
+  Q4 SOLE (sh% diff p=0.063)
+- VERDICT: FILTER FAIL — none of Q1-Q3 holds. **NH8 DROPPED.**
+- WROTE: CC-D10 RESULT with priors graded
+
+### Item 2 — CONFIRM script + dry-run (commit a6f209f8a)
+- WROTE: confirm_nh8.py (--season 2023|2024 only, season bounds assert, rule A)
+- BUG FIX: Montréal Canadiens accent encoding (é vs e) → 82 unmatched games initially
+- DRY-RUN: --season 2023 → n=320, r=+0.0510, SE=0.0278 — matches Item 1a to 4 decimals
+- WROTE: tests/test_confirm_nh8_identity.py — 2 tests, both PASS
+- DID NOT RUN: --season 2024 (by design)
+
+### Item 3 — report + record (this commit)
+- WROTE: REPORT_cc4.md with all required sections
+- APPENDED: session log
+
+### NOT DONE
+- CC-5 (the 2024-25 look) — not run, requires Cowork verification + NH8 is DROPPED
+- Merge to main — not done per work order
+- NBA screen_v3 — only NHL was re-screened (the WO specified NHL only for Item 0d)
+
+### UNVERIFIED
+- Whether the close_age_min cosmetic defect affected any prior CC session reporting
+  (close prices were unaffected, so screen stats are valid)
+- CONFIRM script SBRO matching on seasons other than 2023
+- The "44% of closes were 5-30 min after listed start" finding in CC-3 was computed from
+  the defective close_age_min — the actual closes were pre-listed-start, so the finding
+  was wrong (it reported a problem that didn't exist in the close selection)
