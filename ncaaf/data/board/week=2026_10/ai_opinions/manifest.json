@@ -18062,5 +18062,145 @@
     "1ef954bd3305a66136e52ea0786f1593": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T220403Z.parquet",
+  "sha256": "265ed243db4dfcf821de39c18f953a0944ca130e8a6999501ffcc07d8f149808",
+  "logged_utc": "2026-11-07T22:04:03.270482+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-08T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T220008Z.parquet",
+   "inputs_digest": "{\"2dd995baa931f5b063cb50ddbe821d74\": \"7e79218e63553482\"}",
+   "components": {
+    "2dd995baa931f5b063cb50ddbe821d74": {
+     "pinnacle_h2h": [
+      [
+       "Liberty Flames",
+       0,
+       -695
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       534
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Liberty Flames",
+       -15.0,
+       104
+      ],
+      [
+       "New Mexico State Aggies",
+       15.0,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -111
+      ],
+      [
+       "Under",
+       46.5,
+       -105
+      ]
+     ],
+     "kalshi_snap": "snap_20261107T2137Z.parquet"
+    }
+   },
+   "triggers": {
+    "2dd995baa931f5b063cb50ddbe821d74": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261107T221904Z.parquet",
+  "sha256": "9d6e46c1a782e53cca9c08dac4f1cc332b96dceb6c51e1e24e8829ca2dc246e4",
+  "logged_utc": "2026-11-07T22:19:04.671589+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T220008Z.parquet",
+   "inputs_digest": "{\"bbb1d38a8f51b761a789459a08fa6ded\": \"08d75d076df69e65\"}",
+   "components": {
+    "bbb1d38a8f51b761a789459a08fa6ded": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -768
+      ],
+      [
+       "Colorado State Rams",
+       0,
+       579
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -16.0,
+       -108
+      ],
+      [
+       "Colorado State Rams",
+       16.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       68.5,
+       -115
+      ],
+      [
+       "Under",
+       68.5,
+       -102
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Sources: QB Maddux Madsen out vs. Rams, Boise Stat",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac"
+     ],
+     "kalshi_snap": "snap_20261107T2207Z.parquet"
+    }
+   },
+   "triggers": {
+    "bbb1d38a8f51b761a789459a08fa6ded": "anchor_close"
+   }
+  }
  }
 ]
