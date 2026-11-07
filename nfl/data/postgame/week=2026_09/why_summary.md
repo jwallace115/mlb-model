@@ -1,6 +1,6 @@
 # WHY Summary — Week 9
 
-Generated: 2026-11-06T11:50:02.521441+00:00
+Generated: 2026-11-07T11:52:21.483180+00:00
 
 
 ## Graded rows
@@ -32,9 +32,10 @@ Generated: 2026-11-06T11:50:02.521441+00:00
 
 ## why_code_auto (losses)
 
-- ROLE_SHIFT: 17
 - SCRIPT: 11
+- ROLE_SHIFT: 11
 - TURNOVERS: 11
+- SHARE_OTHER: 6
 - EFFICIENCY: 5
 - UNDEFINED: 4
 - UNRESOLVED: 2
@@ -42,9 +43,10 @@ Generated: 2026-11-06T11:50:02.521441+00:00
 
 ## why_code_auto (wins)
 
-- ROLE_SHIFT: 21
 - SCRIPT: 18
 - UNDEFINED: 16
+- ROLE_SHIFT: 14
+- SHARE_OTHER: 7
 - EFFICIENCY: 5
 - UNRESOLVED: 4
 - NOISE: 1
@@ -155,7 +157,7 @@ Generated: 2026-11-06T11:50:02.521441+00:00
 - aeac4c2aa971632f: prop:rec_yds Rashod Bateman A=6.0 L=13.5 |ln|=0.811
 - fa5b0c694b80502b: prop:rec_yds Justice Hill A=7.0 L=13.5 |ln|=0.657
 
-### AVAILABILITY / ROLE_SHIFT (38 rows)
+### AVAILABILITY / ROLE_SHIFT (25 rows)
 
 - 80042cae70fc2064: ROLE_SHIFT prop:rec_yds Brenton Strange
 - 60160fa3e384a74b: ROLE_SHIFT prop:rec_yds Jakobi Meyers
@@ -169,13 +171,6 @@ Generated: 2026-11-06T11:50:02.521441+00:00
 - ecfbc0e10a925a23: ROLE_SHIFT prop:rec Mark Andrews
 - e6c44dce07d7d081: ROLE_SHIFT prop:rec Nate Boerkircher
 - a92b15d7d69bc3df: ROLE_SHIFT prop:rec Travis Hunter
-- ae00ac9ef6c64458: ROLE_SHIFT prop:rush_att Derrick Henry
-- 114db8b3a75b6aec: ROLE_SHIFT prop:rush_att Trevor Lawrence
-- a31480d2b94b6f7e: ROLE_SHIFT prop:rush_yds Derrick Henry
-- a143f5373c0c2aba: ROLE_SHIFT prop:rush_yds Justice Hill
-- 1b826c880d90aa37: ROLE_SHIFT prop:rush_att Derrick Henry
-- b57e32c714c47be8: ROLE_SHIFT prop:rush_att Derrick Henry
-- 59a4c45ecb2233cc: ROLE_SHIFT prop:rush_att Derrick Henry
 - 324c47bf25063d41: ROLE_SHIFT prop:rec_yds Brenton Strange
 - f3623b2113ef64f4: ROLE_SHIFT prop:rec_yds Jakobi Meyers
 - 03f4ed9eeb1f32f9: ROLE_SHIFT prop:rec_yds Josh Cameron
@@ -188,12 +183,6 @@ Generated: 2026-11-06T11:50:02.521441+00:00
 - 2a8d08bd5946e082: ROLE_SHIFT prop:rec Mark Andrews
 - f7d4caad88cff5c9: ROLE_SHIFT prop:rec Nate Boerkircher
 - 6ff42177265f77ff: ROLE_SHIFT prop:rec Travis Hunter
-- bb5b50a00c71f1ac: ROLE_SHIFT prop:rush_att Derrick Henry
-- ea7f08a5376477dc: ROLE_SHIFT prop:rush_att Trevor Lawrence
-- 20811dc80f10811e: ROLE_SHIFT prop:rush_yds Derrick Henry
-- 6497369a21f7c4ee: ROLE_SHIFT prop:rush_yds Justice Hill
 - 6acdb96d086de030: ROLE_SHIFT prop:rec_yds Parker Washington
-- 2ffa8e8f52bdece5: ROLE_SHIFT prop:rush_att Bhayshul Tuten
-- 5e3aad593dbec5f1: ROLE_SHIFT prop:rush_att Derrick Henry
 
-Total flagged: 118
+Total flagged: 105
