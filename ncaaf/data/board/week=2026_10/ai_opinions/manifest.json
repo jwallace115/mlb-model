@@ -17425,5 +17425,135 @@
     "2a6e2d9ca0d2fc85a4164e9c0f25a05f": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T210403Z.parquet",
+  "sha256": "e8e6192a2a11db2d48afa74e162b77d89cb820bb43cf6ff8363003eea304dd2c",
+  "logged_utc": "2026-11-07T21:04:03.162676+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-08T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T210009Z.parquet",
+   "inputs_digest": "{\"a3f893b3bac8940a6899ae5869fb211c\": \"124983c52eaea08f\"}",
+   "components": {
+    "a3f893b3bac8940a6899ae5869fb211c": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -760
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       575
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -16.5,
+       -116
+      ],
+      [
+       "Sam Houston State Bearkats",
+       16.5,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -107
+      ],
+      [
+       "Under",
+       46.0,
+       -109
+      ]
+     ],
+     "kalshi_snap": "snap_20261107T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "a3f893b3bac8940a6899ae5869fb211c": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261107T211904Z.parquet",
+  "sha256": "1ec79cc96f4d70665c60372771abe4af3038a302e985e0541a6c3201039ff5b6",
+  "logged_utc": "2026-11-07T21:19:04.009471+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T22:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T210009Z.parquet",
+   "inputs_digest": "{\"fed311ed6cdb4803798f548f3d867226\": \"bc914a00241e8a2b\"}",
+   "components": {
+    "fed311ed6cdb4803798f548f3d867226": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -272
+      ],
+      [
+       "South Alabama Jaguars",
+       0,
+       236
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Ragin Cajuns",
+       -7.0,
+       -109
+      ],
+      [
+       "South Alabama Jaguars",
+       7.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       100
+      ],
+      [
+       "Under",
+       57.5,
+       -117
+      ]
+     ],
+     "kalshi_snap": "snap_20261107T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "fed311ed6cdb4803798f548f3d867226": "anchor_close"
+   }
+  }
  }
 ]
