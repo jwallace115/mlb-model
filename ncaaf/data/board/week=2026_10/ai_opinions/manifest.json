@@ -11302,5 +11302,73 @@
     "d74a875341a00e77cf86ecfb7569edd3": "line_move: pinnacle spreads Fresno State Bulldogs -2.5\u2192-1.5; line_move: pinnacle spreads Utah State Aggies 2.5\u21921.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T043403Z.parquet",
+  "sha256": "0e253aa12ab99a175c31ac5144f9ccb487ad89103ac6c6a35f295eccef252232",
+  "logged_utc": "2026-11-07T04:34:03.247207+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-08T03:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T043004Z.parquet",
+   "inputs_digest": "{\"d4334cec8f2060f3b8491ca9c7325892\": \"ba74d75519e81ff4\"}",
+   "components": {
+    "d4334cec8f2060f3b8491ca9c7325892": {
+     "pinnacle_h2h": [
+      [
+       "Oregon State Beavers",
+       0,
+       -219
+      ],
+      [
+       "Texas State Bobcats",
+       0,
+       189
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oregon State Beavers",
+       -5.5,
+       -109
+      ],
+      [
+       "Texas State Bobcats",
+       5.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       71.0,
+       -108
+      ],
+      [
+       "Under",
+       71.0,
+       -108
+      ]
+     ],
+     "news": [
+      "Ranking college football's top 40 freshmen in 2026"
+     ],
+     "kalshi_snap": "snap_20261107T0437Z.parquet"
+    }
+   },
+   "triggers": {
+    "d4334cec8f2060f3b8491ca9c7325892": "line_move: pinnacle spreads Texas State Bobcats 6.5\u21925.5; line_move: pinnacle spreads Oregon State Beavers -6.5\u2192-5.5"
+   }
+  }
  }
 ]
