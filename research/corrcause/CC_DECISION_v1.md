@@ -154,3 +154,62 @@ per registry §5. Not promoted.
 
 **Verdict:** away_ml cell is DEAD-ARTEFACT (play-in contamination). Over cell is noise-or-pace
 but cannot be distinguished from chance without a mechanism. Neither changes the screen conclusion.
+
+---
+
+## CC-D5 — CHECK 2 gate for NB10 CONFIRM (2026-11-06)
+
+**Question:** Does any legacy NBA research contain an April / late-season / month-of-season
+totals cell that touched 2024-25 data?
+
+**Grep results (every hit with path + line):**
+
+1. `nba/backtest.py:114` — "Late season (Jan-Apr)" MAE/bias breakdown. General model diagnostic,
+   not a cell. Touches all seasons including 2024-25 but reports aggregate model performance, not
+   a betting hypothesis.
+2. `nba/backtest_h1.py:85` — Same "Late season" diagnostic for H1 totals.
+3. `nba/phase6.py:181` — Same "Late season" diagnostic.
+4. `nba/phase7b/master_summary.txt:243`, `results_7b_c.txt:100`, `master_summary_v2.txt:66` —
+   "A9 — Late season playoff race": **SKIPPED**. Never ran, no results.
+5. `nba/diagnostics.py:177,196` — Ridge coefficients for `days_rest_home` / `days_rest_away`.
+   Rest features in the totals model, not April-specific. General model, not a cell.
+6. `research/nba_layers/legacy_review_2026-09-30/NBA_LEGACY_REVIEW_2026-09-30.md:27-29` — April
+   venue-board analysis touched 2024-25, but this was about ML/ATS team lists (ROAD_WARRIOR,
+   STRONG_HOME), not a month-of-season totals cell. CHECK 2 failed for the venue board on
+   different grounds.
+7. `research/nba_layers/legacy_review_2026-09-30/PREREG_rw_sh_2025_26.md:4-7` — Same venue-board
+   April revalidation. About the team-list selection, not totals.
+8. `research/corrcause/` itself — `T2_NBA_month_str_4_over` screened on DEV 2022-23 + 2023-24
+   only. Did NOT touch 2024-25.
+
+**No cell found.** The legacy NBA research has:
+- General late-season model diagnostics (backtest splits): not cells, not hypotheses
+- A9 (late-season playoff race amplifier): SKIPPED, never produced results
+- Venue-board April analysis: touched 2024-25 but is about team selection for ML/ATS, not a
+  month-of-season totals cell
+- The corrcause Tier 2 April over cell: DEV-only, no 2024-25 data
+
+**Decision: GATE OPEN.** No prior April / late-season / month-of-season NBA totals cell touched
+2024-25 data. Item 2 (NB10 CONFIRM) proceeds.
+
+---
+
+## CC-D5c — Data availability for NB10 CONFIRM (2026-11-06)
+
+**lines_hourly season=2024:**
+- 4,743 total files
+- April 2025 events with Pinnacle totals: 119
+
+**games.parquet (outcomes):**
+- April 2025 games with actual_total: 105
+- All 105 are regular-season (date range: 2025-04-01 to 2025-04-13)
+- 2024-25 regular-season finale: 2025-04-13
+
+**box_stats.parquet:**
+- April 2025 rows: 210 (105 games × 2 teams), all with possessions
+
+**Merged (both Pinnacle total close AND outcome): 105 games**
+
+GATE CHECK: 105 ≥ 80 → **PASS**
+
+REGISTRY_v2_ADDENDUM.md sha256: `f27d476055872bb242139843bbb55dcfad6193317564e934db90fbb56a6f67a6`
