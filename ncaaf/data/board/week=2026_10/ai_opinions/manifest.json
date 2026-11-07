@@ -15062,5 +15062,334 @@
     "5304671601ad3064a66a332cbb09313f": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T170403Z.parquet",
+  "sha256": "dc4fe2598f05d1251e44b4d6b2da9edd2109961a16bc51b455f4a9b99b915ad1",
+  "logged_utc": "2026-11-07T17:04:03.750007+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.667,
+  "revised_rows": 11,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-07T17:45:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T170007Z.parquet",
+   "inputs_digest": "{\"40065b11db334359a18c868e9af4d7cd\": \"4f4e15756514c11f\", \"6ffa2c2d3470751aa022854ec50dcce6\": \"56dada46554b5f01\", \"42e27947d5bad1a1aa037cccf557e9fe\": \"8927d02319e488fc\", \"208e919ada4f5cf6d27af719879d1880\": \"6004df098434c927\"}",
+   "components": {
+    "40065b11db334359a18c868e9af4d7cd": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas Razorbacks",
+       0,
+       318
+      ],
+      [
+       "Auburn Tigers",
+       0,
+       -379
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas Razorbacks",
+       10.0,
+       103
+      ],
+      [
+       "Auburn Tigers",
+       -10.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -117
+      ],
+      [
+       "Under",
+       53.5,
+       100
+      ]
+     ],
+     "news": [
+      "Auburn's Alex Golesh discusses balancing gameplan,",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Former MLB star Mark Teixeira wins U.S. House seat",
+      "Ryan Silverfield says Arkansas must protect the ba",
+      "Sources: SEC considering luxury tax for excessive "
+     ],
+     "kalshi_snap": "snap_20261107T1707Z.parquet"
+    },
+    "6ffa2c2d3470751aa022854ec50dcce6": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas State Red Wolves",
+       0,
+       -647
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       503
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas State Red Wolves",
+       -14.5,
+       -108
+      ],
+      [
+       "UL Monroe Warhawks",
+       14.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -110
+      ],
+      [
+       "Under",
+       52.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel"
+     ],
+     "kalshi_snap": "snap_20261107T1707Z.parquet"
+    },
+    "42e27947d5bad1a1aa037cccf557e9fe": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -106
+      ],
+      [
+       "Kennesaw State Owls",
+       0,
+       -104
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -1.0,
+       -101
+      ],
+      [
+       "Kennesaw State Owls",
+       1.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -105
+      ],
+      [
+       "Under",
+       57.0,
+       -111
+      ]
+     ],
+     "news": [
+      "College football Week 10 best bets: Picks for Tenn",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T1707Z.parquet"
+    },
+    "208e919ada4f5cf6d27af719879d1880": {
+     "pinnacle_h2h": [
+      [
+       "South Carolina Gamecocks",
+       0,
+       -237
+      ],
+      [
+       "Texas A&M Aggies",
+       0,
+       208
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Carolina Gamecocks",
+       -6.5,
+       -113
+      ],
+      [
+       "Texas A&M Aggies",
+       6.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -109
+      ],
+      [
+       "Under",
+       52.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Chris Doering expects five SEC teams to compete in",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "How every 2027 five-star college football prospect",
+      "Mike Elko details Texas A&M's attitude and effort ",
+      "No. 13 Tennessee, No. 18 Mizzou lead the Peter Pow",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Shane Beamer praises Gamecocks' resilience through",
+      "Sources: SEC considering luxury tax for excessive ",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T1707Z.parquet"
+    }
+   },
+   "triggers": {
+    "40065b11db334359a18c868e9af4d7cd": "anchor_close",
+    "6ffa2c2d3470751aa022854ec50dcce6": "anchor_prekick",
+    "42e27947d5bad1a1aa037cccf557e9fe": "anchor_prekick",
+    "208e919ada4f5cf6d27af719879d1880": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261107T171902Z.parquet",
+  "sha256": "64b8bd6dc2a14f24d1a9764a77bcd9084d6434c1ec05dae4aef6b59d4ff26093",
+  "logged_utc": "2026-11-07T17:19:02.995577+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T170007Z.parquet",
+   "inputs_digest": "{\"5d0347c41d222ef115610663cac2f865\": \"382ff2d3e4c856ff\", \"f3d964c6b45c36f9e6009c47e64f96db\": \"35b9df927036408e\"}",
+   "components": {
+    "5d0347c41d222ef115610663cac2f865": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       -246
+      ],
+      [
+       "Old Dominion Monarchs",
+       0,
+       215
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       -6.5,
+       -116
+      ],
+      [
+       "Old Dominion Monarchs",
+       6.5,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -105
+      ],
+      [
+       "Under",
+       44.5,
+       -111
+      ]
+     ],
+     "kalshi_snap": "snap_20261107T1707Z.parquet"
+    },
+    "f3d964c6b45c36f9e6009c47e64f96db": {
+     "pinnacle_h2h": [
+      [
+       "Kansas State Wildcats",
+       0,
+       217
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -248
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas State Wildcats",
+       7.0,
+       -104
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -7.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       64.0,
+       -107
+      ],
+      [
+       "Under",
+       64.0,
+       -109
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "Kansas State QB Avery Johnson out vs. Oklahoma Sta"
+     ],
+     "kalshi_snap": "snap_20261107T1707Z.parquet"
+    }
+   },
+   "triggers": {
+    "5d0347c41d222ef115610663cac2f865": "anchor_close",
+    "f3d964c6b45c36f9e6009c47e64f96db": "anchor_close"
+   }
+  }
  }
 ]
