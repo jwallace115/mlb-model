@@ -16277,5 +16277,240 @@
     "5304671601ad3064a66a332cbb09313f": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T190403Z.parquet",
+  "sha256": "7a51a146dfb6d7c8fc3c1963e9337c4c8dd3248df2301b16bba9ab001e789a4e",
+  "logged_utc": "2026-11-07T19:04:03.595605+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-07T22:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T190007Z.parquet",
+   "inputs_digest": "{\"fed311ed6cdb4803798f548f3d867226\": \"d456a63c3a7ead67\"}",
+   "components": {
+    "fed311ed6cdb4803798f548f3d867226": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -272
+      ],
+      [
+       "South Alabama Jaguars",
+       0,
+       236
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Ragin Cajuns",
+       -7.0,
+       -109
+      ],
+      [
+       "South Alabama Jaguars",
+       7.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       100
+      ],
+      [
+       "Under",
+       57.5,
+       -117
+      ]
+     ],
+     "kalshi_snap": "snap_20261107T1907Z.parquet"
+    }
+   },
+   "triggers": {
+    "fed311ed6cdb4803798f548f3d867226": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261107T191903Z.parquet",
+  "sha256": "e46753c1078e8f3245c2e4b631231784378df0bdb1c3052c4f4aa9f21bfda69b",
+  "logged_utc": "2026-11-07T19:19:03.351610+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.444,
+  "revised_rows": 9,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-07T20:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T190007Z.parquet",
+   "inputs_digest": "{\"6ffa2c2d3470751aa022854ec50dcce6\": \"377d189a30021185\", \"42e27947d5bad1a1aa037cccf557e9fe\": \"946862b287513099\", \"208e919ada4f5cf6d27af719879d1880\": \"98a4f0ccee32f2af\"}",
+   "components": {
+    "6ffa2c2d3470751aa022854ec50dcce6": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas State Red Wolves",
+       0,
+       -654
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       507
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas State Red Wolves",
+       -14.5,
+       -110
+      ],
+      [
+       "UL Monroe Warhawks",
+       14.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -106
+      ],
+      [
+       "Under",
+       53.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel"
+     ],
+     "kalshi_snap": "snap_20261107T1907Z.parquet"
+    },
+    "42e27947d5bad1a1aa037cccf557e9fe": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -107
+      ],
+      [
+       "Kennesaw State Owls",
+       0,
+       -103
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -1.0,
+       -102
+      ],
+      [
+       "Kennesaw State Owls",
+       1.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -108
+      ],
+      [
+       "Under",
+       57.0,
+       -108
+      ]
+     ],
+     "news": [
+      "College football Week 10 best bets: Picks for Tenn",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T1907Z.parquet"
+    },
+    "208e919ada4f5cf6d27af719879d1880": {
+     "pinnacle_h2h": [
+      [
+       "South Carolina Gamecocks",
+       0,
+       -237
+      ],
+      [
+       "Texas A&M Aggies",
+       0,
+       209
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Carolina Gamecocks",
+       -6.5,
+       -113
+      ],
+      [
+       "Texas A&M Aggies",
+       6.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -113
+      ],
+      [
+       "Under",
+       52.5,
+       -103
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Allstate Playoff Predictor",
+      "Chris Doering expects five SEC teams to compete in",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Heisman of Week 9: LaNorris Sellers' throwback, Da",
+      "How every 2027 five-star college football prospect",
+      "Mike Elko details Texas A&M's attitude and effort ",
+      "No. 13 Tennessee, No. 18 Mizzou lead the Peter Pow",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Shane Beamer praises Gamecocks' resilience through",
+      "Sources: SEC considering luxury tax for excessive ",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T1907Z.parquet"
+    }
+   },
+   "triggers": {
+    "6ffa2c2d3470751aa022854ec50dcce6": "anchor_close",
+    "42e27947d5bad1a1aa037cccf557e9fe": "anchor_close",
+    "208e919ada4f5cf6d27af719879d1880": "anchor_close"
+   }
+  }
  }
 ]
