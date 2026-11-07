@@ -11370,5 +11370,76 @@
     "d4334cec8f2060f3b8491ca9c7325892": "line_move: pinnacle spreads Texas State Bobcats 6.5\u21925.5; line_move: pinnacle spreads Oregon State Beavers -6.5\u2192-5.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T053403Z.parquet",
+  "sha256": "a330c559b1632d9fecb87a6a92b6343b67eb3bc12e477e3a1f7ac45b1da86a83",
+  "logged_utc": "2026-11-07T05:34:03.927087+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-07T17:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T053004Z.parquet",
+   "inputs_digest": "{\"841d7821e82447f8a7d8592ec4584eec\": \"969e0672bf309f3a\"}",
+   "components": {
+    "841d7821e82447f8a7d8592ec4584eec": {
+     "pinnacle_h2h": [
+      [
+       "Maryland Terrapins",
+       0,
+       176
+      ],
+      [
+       "Purdue Boilermakers",
+       0,
+       -203
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Maryland Terrapins",
+       6.0,
+       -116
+      ],
+      [
+       "Purdue Boilermakers",
+       -6.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -106
+      ],
+      [
+       "Under",
+       57.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "Ranking college football's top 40 freshmen in 2026"
+     ],
+     "kalshi_snap": "snap_20261107T0537Z.parquet"
+    }
+   },
+   "triggers": {
+    "841d7821e82447f8a7d8592ec4584eec": "line_move: pinnacle totals Under 56.5\u219257.5; line_move: pinnacle totals Over 56.5\u219257.5"
+   }
+  }
  }
 ]
