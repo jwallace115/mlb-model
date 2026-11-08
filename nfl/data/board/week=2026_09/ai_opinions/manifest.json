@@ -14351,5 +14351,162 @@
     "17ad7eff2f7875e20a8109abe40470e3": "new_props: pull 2026-11-08T06:47:46.655912+00:00; injury_change: inj_Minnesota Vikings; injury_change: inj_Buffalo Bills"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261108T113452Z.parquet",
+  "sha256": "78888e1241b986c3b4344733d2b0f8b6cb18e1e01352a22fd0b8dc8a63ceed77",
+  "logged_utc": "2026-11-08T11:34:52.180500+00:00",
+  "rows": 71,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "reader_v3b",
+  "pilot": false,
+  "window": "prekick",
+  "games": 1,
+  "no_view_share": 0.338,
+  "revised_rows": 0,
+  "oldest_source_age_min": 364.8,
+  "first_kickoff_utc": "2026-11-08T14:30:00Z",
+  "reader_sha256": "a413d38af2157fcb8a04c1d71cbc17a791cdadaa375e6ec3da56b1e616ba6bfd",
+  "inputs": {
+   "props": "data_2026_11.parquet",
+   "lines": "snap_20261108T053004Z.parquet"
+  }
+ },
+ {
+  "file": "ai_opinions_20261108T113207Z.parquet",
+  "sha256": "64b100da02e128e2e004d33498857bc62480e6ccf4d66bb8311aca93fb591cbb",
+  "logged_utc": "2026-11-08T11:32:07.583029+00:00",
+  "rows": 71,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.958,
+  "revised_rows": 67,
+  "oldest_source_age_min": 362.0,
+  "first_kickoff_utc": "2026-11-08T14:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261108T053004Z.parquet",
+   "inputs_digest": "{\"dc56d980f527ffeef89940133b211b13\": \"eec94a24bcff1c01\"}",
+   "components": {
+    "dc56d980f527ffeef89940133b211b13": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Atlanta Falcons",
+       0,
+       150
+      ],
+      [
+       "Cincinnati Bengals",
+       0,
+       -175
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Atlanta Falcons",
+       3.0,
+       100
+      ],
+      [
+       "Cincinnati Bengals",
+       -3.0,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       53.0,
+       -110
+      ],
+      [
+       "Under",
+       53.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Atlanta Falcons",
+       0,
+       153
+      ],
+      [
+       "Cincinnati Bengals",
+       0,
+       -174
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Atlanta Falcons",
+       3.0,
+       103
+      ],
+      [
+       "Cincinnati Bengals",
+       -3.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -104
+      ],
+      [
+       "Under",
+       53.0,
+       -110
+      ]
+     ],
+     "props_ts": "2026-11-08T06:47:46.655912+00:00",
+     "inj_Atlanta Falcons": "49077a3123fd0566",
+     "inj_Cincinnati Bengals": "d0c265947a810bd8",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bengals face Falcons S Jessie Bates III, evoking m",
+      "Bengals proving their stardom in Madrid",
+      "Bengals' Burrow is looking to extend 3-game winnin",
+      "Bijan Robinson says win in Madrid could swing Falc",
+      "Can Bijan Robinson get back on track?",
+      "Can the Falcons cover Higgins and Chase?",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Ja'Marr Chase set to face off with Falcons",
+      "James Pearce Jr. listed as questionable",
+      "Joe Burrow makes time for art in Madrid ahead of B",
+      "Jude Bellingham visits Atlanta Falcons training se",
+      "Millennial minds: How Doyle, Udinski leapt to head",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Trio brought in to replace All-Pro DE has shined f",
+      "Week 9 betting preview: Analysis, best bets, TD pr",
+      "What 18 contenders should do at the NFL trade dead",
+      "What has gone right -- and wrong -- for 10 new NFL",
+      "Which team needs Jonathan Taylor the most?"
+     ],
+     "kalshi_snap": "snap_20261108T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "dc56d980f527ffeef89940133b211b13": "anchor_prekick"
+   }
+  }
  }
 ]
