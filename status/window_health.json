@@ -30,20 +30,20 @@
   "freeze_file": null
  },
  {
-  "sport": "ncaaf",
-  "window": "event",
-  "started_utc": "2026-11-08T01:37:50.411821+00:00",
-  "finished_utc": "2026-11-08T01:37:50.411821+00:00",
-  "result": "no_triggers",
-  "step": "window_watch",
-  "message": "",
-  "freeze_file": null
- },
- {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-08T01:47:04.625058+00:00",
-  "finished_utc": "2026-11-08T01:47:04.625058+00:00",
+  "started_utc": "2026-11-08T02:18:03.212786+00:00",
+  "finished_utc": "2026-11-08T02:18:03.212786+00:00",
+  "result": "COMPLETE",
+  "step": "window_watch",
+  "message": "['line_move: hardrockbet_fl spreads Houston Texans -5.0\u2192-6.0; line_move: hardrockbet_fl spreads Los Angeles Chargers 5.0\u21926.0', 'anchor_morning']",
+  "freeze_file": "ai_opinions_20261108T020206Z.parquet"
+ },
+ {
+  "sport": "ncaaf",
+  "window": "event",
+  "started_utc": "2026-11-08T02:24:39.286925+00:00",
+  "finished_utc": "2026-11-08T02:24:39.286925+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",

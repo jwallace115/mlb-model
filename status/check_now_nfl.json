@@ -1,12 +1,21 @@
 {
- "started_utc": "2026-11-08T01:47:04.214139+00:00",
- "finished_utc": "2026-11-08T01:47:04.715867+00:00",
+ "started_utc": "2026-11-08T02:02:06.813893+00:00",
+ "finished_utc": "2026-11-08T02:18:04.847883+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "39aeac43cea7b12558b91cdab1255a10",
+   "text": "line_move: hardrockbet_fl spreads Houston Texans -5.0\u2192-6.0; line_move: hardrockbet_fl spreads Los Angeles Chargers 5.0\u21926.0"
+  },
+  {
+   "game": "17ad7eff2f7875e20a8109abe40470e3",
+   "text": "anchor_morning"
+  }
+ ],
+ "games_read": 2,
+ "frozen_file": "ai_opinions_20261108T020206Z.parquet",
+ "spend_usd": 10.8831,
+ "result": "COMPLETE"
 }
