@@ -20,10 +20,20 @@
   "freeze_file": null
  },
  {
+  "sport": "nfl",
+  "window": "prekick",
+  "started_utc": "2026-11-08T14:53:47.252203+00:00",
+  "finished_utc": "2026-11-08T14:53:47.252203+00:00",
+  "result": "STOP",
+  "step": "reader_v3",
+  "message": "exit -9",
+  "freeze_file": null
+ },
+ {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-08T14:49:04.772348+00:00",
-  "finished_utc": "2026-11-08T14:49:04.772348+00:00",
+  "started_utc": "2026-11-08T15:19:06.579265+00:00",
+  "finished_utc": "2026-11-08T15:19:06.579265+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -32,21 +42,11 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-08T14:52:33.104356+00:00",
-  "finished_utc": "2026-11-08T14:52:33.104356+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-08T15:20:46.573499+00:00",
+  "finished_utc": "2026-11-08T15:20:46.573499+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle totals Under 49.5\u219250.5; line_move: pinnacle totals Over 49.5\u219250.5']",
-  "freeze_file": "ai_opinions_20261108T144703Z.parquet"
- },
- {
-  "sport": "nfl",
-  "window": "prekick",
-  "started_utc": "2026-11-08T14:53:47.252203+00:00",
-  "finished_utc": "2026-11-08T14:53:47.252203+00:00",
-  "result": "STOP",
-  "step": "reader_v3",
-  "message": "exit -9",
+  "message": "",
   "freeze_file": null
  }
 ]
