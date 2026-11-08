@@ -17204,5 +17204,1263 @@
     "17ad7eff2f7875e20a8109abe40470e3": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261108T164704Z.parquet",
+  "sha256": "a8dc6634ec5f6a47152773890a735d091d3e31854c6c3c1f273ed429c0dcde29",
+  "logged_utc": "2026-11-08T16:47:04.276092+00:00",
+  "rows": 804,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 11,
+  "no_view_share": 0.937,
+  "revised_rows": 781,
+  "oldest_source_age_min": 599.3,
+  "first_kickoff_utc": "2026-11-08T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261108T163009Z.parquet",
+   "inputs_digest": "{\"014282b888c741b7d70c857c09f40aa7\": \"a79a3166028268b8\", \"e571bab6736f9338130a78a4f75c3231\": \"06ee418d277f7140\", \"415fc42e72888c63e82f7bce24c65391\": \"531cf0eb5ab55a18\", \"44d8c37868b700e90f816db7c5df5cdd\": \"867bcc504c729ecb\", \"e354e6a04b1cb9c96e549b863debb92e\": \"6f97e83a9092ceb6\", \"89de07377e0aa8ffaa2ae6a7dc0855cc\": \"e8c933d3024e2b61\", \"fe93e6ab1e553c0169936a0a983c324f\": \"12cec4e1cccc4f38\", \"2922c573ec3df8466c4a34975e446898\": \"2a0aff8294692f07\", \"ac9d38a18d5c92814233a31aa9a48d78\": \"fffb626b36dc27a7\", \"9760d8f19f84bfee300a74ceb656c95d\": \"94ebbcc5d5d1e5c8\", \"17ad7eff2f7875e20a8109abe40470e3\": \"1c0b435c6f86a76c\"}",
+   "components": {
+    "014282b888c741b7d70c857c09f40aa7": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       135
+      ],
+      [
+       "Denver Broncos",
+       0,
+       -160
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Carolina Panthers",
+       3.0,
+       -115
+      ],
+      [
+       "Denver Broncos",
+       -3.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       44.5,
+       -110
+      ],
+      [
+       "Under",
+       44.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Carolina Panthers",
+       0,
+       136
+      ],
+      [
+       "Denver Broncos",
+       0,
+       -151
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Carolina Panthers",
+       2.5,
+       109
+      ],
+      [
+       "Denver Broncos",
+       -2.5,
+       -120
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -116
+      ],
+      [
+       "Under",
+       44.5,
+       104
+      ]
+     ],
+     "props_ts": "2026-11-08T16:48:30.409726+00:00",
+     "inj_Carolina Panthers": "03f75f9e89245a84",
+     "inj_Denver Broncos": "8e165a00a7eade79",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "Alex Singleton named AFC Defensive Player of the M",
+      "Broncos set to unleash on Bryce Young",
+      "Could the Panthers make a trade deadline move? 5 p",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "How Gary Kubiak paved the way for his sons, Klint,",
+      "Millennial minds: How Doyle, Udinski leapt to head",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "Panthers defenders: We're in 'great hands' after D",
+      "Panthers place focus on stopping the run vs. Bronc",
+      "Panthers turn to Todd Wash for defensive spark",
+      "Panthers want to improve on defense vs. Broncos",
+      "Sources: Colts among several NFL teams mulling tra",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "Week 9 betting preview: Analysis, best bets, TD pr",
+      "What 18 contenders should do at the NFL trade dead",
+      "Why Broncos rookie Jonah Coleman is primed to be D"
+     ],
+     "kalshi_snap": "snap_20261108T1635Z.parquet"
+    },
+    "e571bab6736f9338130a78a4f75c3231": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cleveland Browns",
+       0,
+       150
+      ],
+      [
+       "New Orleans Saints",
+       0,
+       -185
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cleveland Browns",
+       3.5,
+       -115
+      ],
+      [
+       "New Orleans Saints",
+       -3.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       43.0,
+       -110
+      ],
+      [
+       "Under",
+       43.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cleveland Browns",
+       0,
+       154
+      ],
+      [
+       "New Orleans Saints",
+       0,
+       -172
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cleveland Browns",
+       3.5,
+       -102
+      ],
+      [
+       "New Orleans Saints",
+       -3.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -112
+      ],
+      [
+       "Under",
+       42.5,
+       100
+      ]
+     ],
+     "props_ts": "2026-11-08T16:48:30.409726+00:00",
+     "inj_New Orleans Saints": "54f8297f2b2b6b69",
+     "inj_Cleveland Browns": "a664561c9e09b269",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "3 ways Browns QB Shedeur Sanders can show growth v",
+      "Browns QB Deshaun Watson in concussion protocol; s",
+      "Browns QB Deshaun Watson out of concussion protoco",
+      "Browns and Saints try to stay close to their divis",
+      "Browns to start Sanders at QB vs. Saints with Wats",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Deshaun Watson in the concussion protocol",
+      "Deshaun Watson placed in concussion protocol ahead",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Five things Saints must fix entering Week 9 vs. Br",
+      "Jared Verse says he has spoken to Browns teammates",
+      "Jason McCourty: This is Shedeur Sanders' opportuni",
+      "Millennial minds: How Doyle, Udinski leapt to head",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "Regrading 2025 NFL deadline trades: How Gardner, W",
+      "Saints activate WR Jordyn Tyson, LT Kelvin Banks, ",
+      "Saints release veteran kicker Daniel Carlson after",
+      "Saints shake things up during bye week",
+      "Saints' Jordyn Tyson and Kelvin Banks Jr. return t",
+      "Saints' Jordyn Tyson returns to practice, listed a",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Stephen A.: Shedeur Sanders' Week 9 start is a big",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "What 18 contenders should do at the NFL trade dead",
+      "What has gone right -- and wrong -- for 10 new NFL"
+     ],
+     "kalshi_snap": "snap_20261108T1635Z.parquet"
+    },
+    "415fc42e72888c63e82f7bce24c65391": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       -230
+      ],
+      [
+       "Indianapolis Colts",
+       0,
+       195
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Dallas Cowboys",
+       -4.5,
+       -110
+      ],
+      [
+       "Indianapolis Colts",
+       4.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       51.5,
+       -110
+      ],
+      [
+       "Under",
+       51.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       -225
+      ],
+      [
+       "Indianapolis Colts",
+       0,
+       198
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Dallas Cowboys",
+       -5.5,
+       111
+      ],
+      [
+       "Indianapolis Colts",
+       5.5,
+       -123
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -115
+      ],
+      [
+       "Under",
+       51.0,
+       103
+      ]
+     ],
+     "props_ts": "2026-11-08T16:48:30.409726+00:00",
+     "inj_Indianapolis Colts": "10b212302c7c0d75",
+     "inj_Dallas Cowboys": "1fb8a072fff29726",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "Colts in Daniel Jones trade talks as multiple team",
+      "Colts' Shane Steichen defends Jonathan Taylor usag",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Cowboys laud mental health program put in place af",
+      "Cowboys' Jerry Jones says paying coaches never bee",
+      "Cowboys' offensive production needs to step up",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Forget about Cowboys' D, what happened to the GOTI",
+      "How Gary Kubiak paved the way for his sons, Klint,",
+      "How the Jets trading stars Quinnen Williams and Sa",
+      "Jonathan Taylor 'can't avoid' trade speculation as",
+      "Jonathan Taylor turns trade talk into 'regular sch",
+      "Jonathan Taylor, Colts ready for trade rumors to e",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Deals for Jacoby Brisse",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Quinnen Williams on needing to \"execute\" vs. Colts",
+      "Quinnen Williams says Cowboys must 'execute,' over",
+      "Regrading 2025 NFL deadline trades: How Gardner, W",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Skip Bayless: The Cowboys are a national embarrass",
+      "Source: Colts, Adetomiwa Adebawore agree to 2-year",
+      "Sources: Colts among several NFL teams mulling tra",
+      "Stephen A. sounds off on Cowboys, Colts ahead of W",
+      "The Colts need a win",
+      "The team Domonique Foxworth says needs Jonathan Ta",
+      "Venables lauds Witten after Sooners shine in Oklah",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "Wetzel: $17 billion Cowboys have a penny-pinching ",
+      "Which team needs Jonathan Taylor the most?"
+     ],
+     "kalshi_snap": "snap_20261108T1635Z.parquet"
+    },
+    "44d8c37868b700e90f816db7c5df5cdd": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -325
+      ],
+      [
+       "Miami Dolphins",
+       0,
+       260
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Detroit Lions",
+       -6.5,
+       -115
+      ],
+      [
+       "Miami Dolphins",
+       6.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       50.5,
+       -110
+      ],
+      [
+       "Under",
+       50.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -307
+      ],
+      [
+       "Miami Dolphins",
+       0,
+       264
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Detroit Lions",
+       -6.5,
+       100
+      ],
+      [
+       "Miami Dolphins",
+       6.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -104
+      ],
+      [
+       "Under",
+       50.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-08T16:48:30.409726+00:00",
+     "inj_Miami Dolphins": "e60901eea38466f7",
+     "inj_Detroit Lions": "80394aa9498a6998",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Dan Campbell: Lions owe it to Jack Campbell to sta",
+      "Dolphins coach Hafley brings familiarity with Lion",
+      "Dolphins host Lions with Hafley's team aiming for ",
+      "Dolphins look to get run game back on track",
+      "Dolphins to get rookie OL Kadyn Proctor back from ",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Lions' Jack Campbell has full movement in lower bo",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL survivor power rankings: Why this is the week ",
+      "Regrading 2025 NFL deadline trades: How Gardner, W",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "What 18 contenders should do at the NFL trade dead",
+      "What has gone right -- and wrong -- for 10 new NFL",
+      "Why Dopp backs Williams, St. Brown as Week 9 start",
+      "Why Dopp likes Jameson Williams as a lineup lock i"
+     ],
+     "kalshi_snap": "snap_20261108T1635Z.parquet"
+    },
+    "e354e6a04b1cb9c96e549b863debb92e": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Kansas City Chiefs",
+       0,
+       -575
+      ],
+      [
+       "New York Jets",
+       0,
+       400
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Kansas City Chiefs",
+       -9.5,
+       -110
+      ],
+      [
+       "New York Jets",
+       9.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Kansas City Chiefs",
+       0,
+       -500
+      ],
+      [
+       "New York Jets",
+       0,
+       404
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas City Chiefs",
+       -10.0,
+       112
+      ],
+      [
+       "New York Jets",
+       10.0,
+       -124
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -103
+      ],
+      [
+       "Under",
+       47.5,
+       -109
+      ]
+     ],
+     "props_ts": "2026-11-08T16:48:30.409726+00:00",
+     "inj_Kansas City Chiefs": "edcafceaa31d33e0",
+     "inj_New York Jets": "4d571a955741d968",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "Aaron Glenn says Breece Hall is Jets' starter desp",
+      "Breece Hall proclaims himself ready to play",
+      "Chiefs WR Rashee Rice files for bankruptcy, claims",
+      "Chiefs' Patrick Mahomes hasn't run QB sneak since ",
+      "Chiefs' floundering pass rush starts with Chris Jo",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Geno Smith has been upgrade from Justin Fields for",
+      "How the Jets trading stars Quinnen Williams and Sa",
+      "Jets WR Garrett Wilson (concussion) ruled out Sund",
+      "Jets face uphill battle without Garrett Wilson",
+      "Jets get mixed injury news ahead of Chiefs game",
+      "Jets' Breece Hall says he's ready to play, cites t",
+      "Jets' Garrett Wilson in concussion protocol, Breec",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL survivor power rankings: Why this is the week ",
+      "Regrading 2025 NFL deadline trades: How Gardner, W",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Sources: Colts among several NFL teams mulling tra",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "The Chiefs welcome the Jets to Arrowhead Stadium o",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "What 18 contenders should do at the NFL trade dead"
+     ],
+     "kalshi_snap": "snap_20261108T1635Z.parquet"
+    },
+    "89de07377e0aa8ffaa2ae6a7dc0855cc": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Los Angeles Rams",
+       0,
+       -240
+      ],
+      [
+       "Washington Commanders",
+       0,
+       200
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Los Angeles Rams",
+       -5.0,
+       -110
+      ],
+      [
+       "Washington Commanders",
+       5.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       48.0,
+       -115
+      ],
+      [
+       "Under",
+       48.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Los Angeles Rams",
+       0,
+       -225
+      ],
+      [
+       "Washington Commanders",
+       0,
+       198
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Los Angeles Rams",
+       -4.5,
+       100
+      ],
+      [
+       "Washington Commanders",
+       4.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -113
+      ],
+      [
+       "Under",
+       48.0,
+       101
+      ]
+     ],
+     "props_ts": "2026-11-08T16:48:30.409726+00:00",
+     "inj_Washington Commanders": "df00844e3b065ce4",
+     "inj_Los Angeles Rams": "1949e022f971bc6c",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "Commanders face major challenges against Rams",
+      "Commanders offensive line preparing for challenge ",
+      "Commanders' defensive front faces another setback",
+      "Cooper Kupp's 'I scored a touchdown' story: SB LVI",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Hall of Fame names Doug Williams, Robert Kraft amo",
+      "Harbaugh on Rams DB's 'deli meat' comment on Herbe",
+      "Ian Rapoport gives an update on Myles Garrett's im",
+      "Millennial minds: How Doyle, Udinski leapt to head",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "Rams CB Jaylen Watson needs season-ending shoulder",
+      "Rams aren't expected to make any trades",
+      "Rams battling through injuries to cornerbacks",
+      "Rams' Myles Garrett on track to be activated from ",
+      "Rams' Myles Garrett to be activated from injured r",
+      "Source: Commanders lose another DL with Kinlaw out",
+      "Sources: Colts among several NFL teams mulling tra",
+      "Trey Amos has been making an impact for the Comman",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "What 18 contenders should do at the NFL trade dead",
+      "What turned around Washington's defense?"
+     ],
+     "kalshi_snap": "snap_20261108T1635Z.parquet"
+    },
+    "fe93e6ab1e553c0169936a0a983c324f": {
+     "hardrockbet_fl_h2h": [
+      [
+       "New York Giants",
+       0,
+       -160
+      ],
+      [
+       "Philadelphia Eagles",
+       0,
+       140
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "New York Giants",
+       -3.0,
+       -105
+      ],
+      [
+       "Philadelphia Eagles",
+       3.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       38.0,
+       -110
+      ],
+      [
+       "Under",
+       38.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "New York Giants",
+       0,
+       -153
+      ],
+      [
+       "Philadelphia Eagles",
+       0,
+       138
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New York Giants",
+       -3.0,
+       105
+      ],
+      [
+       "Philadelphia Eagles",
+       3.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.5,
+       -106
+      ],
+      [
+       "Under",
+       37.5,
+       -106
+      ]
+     ],
+     "props_ts": "2026-11-08T16:48:30.409726+00:00",
+     "inj_Philadelphia Eagles": "30c3b33922c45bc7",
+     "inj_New York Giants": "ea5ca9cfd3d16bc5",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "Coach Nick Sirianni feels 'complete support' from ",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Donte Whitner: Ravens made 'catastrophic mistake' ",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Giants try to end 13-game losing streak in Philade",
+      "Giants' Cam Skattebo doubtful vs. Eagles; Malik Na",
+      "Giants' running back situation getting thinner",
+      "Giants, CB Greg Newsome II agree to 3-year, $46M e",
+      "John Harbaugh pushing all the right buttons for Gi",
+      "Millennial minds: How Doyle, Udinski leapt to head",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL trade deadline grades: Deals for Jacoby Brisse",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Nick Sirianni has always felt support from Eagles ",
+      "Pressure heats up for Nick Sirianni as Eagles sear",
+      "Regrading 2025 NFL deadline trades: How Gardner, W",
+      "Rich Eisen marvels at Giants-Eagles QB matchup in ",
+      "Saquon Barkley staying put in Philly",
+      "Sources: Colts among several NFL teams mulling tra",
+      "Sources: Jalen Hurts makes appearance at Eagles fa",
+      "Sources: Slumping Eagles turn to Joe Milton as sta",
+      "The New York Giants 'don't care' that they're NFC ",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "What 18 contenders should do at the NFL trade dead",
+      "What has gone right -- and wrong -- for 10 new NFL",
+      "Where do the Eagles stand a few days away from the",
+      "Which team needs Jonathan Taylor the most?",
+      "Why the Eagles are going with Joe Milton at QB",
+      "With nine games left, is Sirianni the right coach "
+     ],
+     "kalshi_snap": "snap_20261108T1635Z.parquet"
+    },
+    "2922c573ec3df8466c4a34975e446898": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Green Bay Packers",
+       0,
+       145
+      ],
+      [
+       "New England Patriots",
+       0,
+       -170
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Green Bay Packers",
+       3.0,
+       100
+      ],
+      [
+       "New England Patriots",
+       -3.0,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       44.5,
+       -110
+      ],
+      [
+       "Under",
+       44.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Green Bay Packers",
+       0,
+       160
+      ],
+      [
+       "New England Patriots",
+       0,
+       -179
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Green Bay Packers",
+       3.0,
+       111
+      ],
+      [
+       "New England Patriots",
+       -3.0,
+       -123
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -111
+      ],
+      [
+       "Under",
+       44.5,
+       -102
+      ]
+     ],
+     "props_ts": "2026-11-08T16:48:30.409726+00:00",
+     "inj_New England Patriots": "551f1edeb75ecb88",
+     "inj_Green Bay Packers": "b841623de46599a0",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "Bill Belichick again among 5 coaching candidates f",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Hall of Fame names Doug Williams, Robert Kraft amo",
+      "Hunter Henry hopeful to play after limited practic",
+      "Hunter Henry in danger of missing Week 9",
+      "Jordan Love and his wife dress as blind refs for H",
+      "Jordan Love, Drake Maye represent new era in Packe",
+      "Maye wins AFC Offensive Player of the Month for Oc",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "Packers determined to improve rushing attack",
+      "Packers give Micah Parsons boost in return from AC",
+      "Packers open Micah Parsons' practice window; still",
+      "Parsons set to return to practice",
+      "Patriots' TreVeyon Henderson affected by neurologi",
+      "RB Josh Jacobs not anticipating missing more time ",
+      "Regrading 2025 NFL deadline trades: How Gardner, W",
+      "Rob Gronkowski caps Brady-attended Patriots Hall o",
+      "Robert Kraft recovering from back surgery, will mi",
+      "Stephen A.: Right now, the Bears look like the NFL",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "Week 9 betting preview: Analysis, best bets, TD pr",
+      "Weekly Patriots notes: What New England could do a",
+      "What 18 contenders should do at the NFL trade dead"
+     ],
+     "kalshi_snap": "snap_20261108T1635Z.parquet"
+    },
+    "ac9d38a18d5c92814233a31aa9a48d78": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Las Vegas Raiders",
+       0,
+       375
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -550
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Las Vegas Raiders",
+       9.5,
+       -110
+      ],
+      [
+       "San Francisco 49ers",
+       -9.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       52.0,
+       -110
+      ],
+      [
+       "Under",
+       52.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Las Vegas Raiders",
+       0,
+       394
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -485
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Las Vegas Raiders",
+       10.0,
+       -115
+      ],
+      [
+       "San Francisco 49ers",
+       -10.0,
+       104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       105
+      ],
+      [
+       "Under",
+       52.5,
+       -118
+      ]
+     ],
+     "props_ts": "2026-11-08T16:48:30.409726+00:00",
+     "inj_San Francisco 49ers": "96b557fb475b3309",
+     "inj_Las Vegas Raiders": "846dbc2bfe309a27",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "Aiyuk releases statement as he looks to get back i",
+      "Brandon Aiyuk files to be reinstated, plans to rep",
+      "Brandon Aiyuk meets with 49ers, says he's healthy,",
+      "Brock Bowers becoming a key piece of the Raiders' ",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "How Gary Kubiak paved the way for his sons, Klint,",
+      "Is DeForest Buckner's 'nostalgic' return the final",
+      "Is DeForest Buckner's 'nostalgic' trade return the",
+      "Is the 49ers and Brandon Aiyuk saga almost over?",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Deals for Jacoby Brisse",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Nick Bosa back, Christian McCaffrey good to go for",
+      "Nick Bosa prepared to return Sunday",
+      "Niners' Kyle Shanahan says Jauan Jennings told him",
+      "Regrading 2025 NFL deadline trades: How Gardner, W",
+      "Return of 'Kirko Chainz' and In-N-Out runs: Kirk C",
+      "Sources: Colts among several NFL teams mulling tra",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "The Raiders make their return to the Bay Area when",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "Week 9 betting preview: Analysis, best bets, TD pr",
+      "What 18 contenders should do at the NFL trade dead",
+      "What does Brandon Aiyuk's application for reinstat",
+      "What has gone right -- and wrong -- for 10 new NFL",
+      "Where the 49ers stand at WR ahead of Week 9 and th",
+      "Why DeForest Buckner says it's 'Super Bowl or bust"
+     ],
+     "kalshi_snap": "snap_20261108T1635Z.parquet"
+    },
+    "9760d8f19f84bfee300a74ceb656c95d": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -260
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       220
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Chicago Bears",
+       -6.0,
+       -115
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       6.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -248
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       217
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Chicago Bears",
+       -6.0,
+       -106
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       6.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -109
+      ],
+      [
+       "Under",
+       47.5,
+       -103
+      ]
+     ],
+     "props_ts": "2026-11-08T16:48:30.409726+00:00",
+     "inj_Chicago Bears": "506b244c87aee3a4",
+     "inj_Tampa Bay Buccaneers": "9e4278aa9093a6e0",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "Are the Bears the best team in the NFL?",
+      "Bears outduel Seahawks 34-17 on MNF",
+      "Bears' Caleb Williams dims cleat controversy with ",
+      "Cleats, controversy and the choice of Bears QB Cal",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "How Jeffery Simmons' arrival impacts the Bears",
+      "How the Bucs' defense could create problems for Ca",
+      "Inside the evolution of Caleb Williams' MVP candid",
+      "Irving and the Buccaneers visit Swift and the Bear",
+      "Jeffery Simmons stymies QB Sam Darnold, Seahawks i",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Deals for Jacoby Brisse",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Seahawks' offensive line struggles",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Stephen A.: Right now, the Bears look like the NFL",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "What 18 contenders should do at the NFL trade dead"
+     ],
+     "kalshi_snap": "snap_20261108T1635Z.parquet"
+    },
+    "17ad7eff2f7875e20a8109abe40470e3": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Buffalo Bills",
+       0,
+       -175
+      ],
+      [
+       "Minnesota Vikings",
+       0,
+       145
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Buffalo Bills",
+       -3.0,
+       -115
+      ],
+      [
+       "Minnesota Vikings",
+       3.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       44.0,
+       -115
+      ],
+      [
+       "Under",
+       44.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Buffalo Bills",
+       0,
+       -176
+      ],
+      [
+       "Minnesota Vikings",
+       0,
+       151
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Buffalo Bills",
+       -3.0,
+       -114
+      ],
+      [
+       "Minnesota Vikings",
+       3.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -105
+      ],
+      [
+       "Under",
+       44.0,
+       -109
+      ]
+     ],
+     "props_ts": "2026-11-08T16:48:30.409726+00:00",
+     "inj_Minnesota Vikings": "69b99946b7789a10",
+     "inj_Buffalo Bills": "ff9d440ddaf41941",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "Bills have the NFL's most points. Vikings are the ",
+      "Bills prepare for Vikings' blitz-heavy defense",
+      "Bills release C.J. Gardner-Johnson after one-game ",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "How the Bills are planning with illnesses on the O",
+      "Josh Allen-produced short doc on Buffalo storm get",
+      "Justin Jefferson high on Vikings' offensive potent",
+      "Latest on the Vikings' QB situation",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL trade deadline grades: Deals for Jacoby Brisse",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Niners' Kyle Shanahan says Jauan Jennings told him",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Should Vikings stick with Wentz over Murray for re",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Vikings WR Jauan Jennings on rebuffing return to 4",
+      "Vikings to start QB Carson Wentz against Bills wit",
+      "Vikings' QB situation starting to take shape",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "What 18 contenders should do at the NFL trade dead",
+      "What has gone right -- and wrong -- for 10 new NFL",
+      "Which team needs Jonathan Taylor the most?"
+     ],
+     "kalshi_snap": "snap_20261108T1635Z.parquet"
+    }
+   },
+   "triggers": {
+    "014282b888c741b7d70c857c09f40aa7": "injury_change: inj_Carolina Panthers; injury_change: inj_Denver Broncos",
+    "e571bab6736f9338130a78a4f75c3231": "injury_change: inj_New Orleans Saints; injury_change: inj_Cleveland Browns",
+    "415fc42e72888c63e82f7bce24c65391": "injury_change: inj_Indianapolis Colts; injury_change: inj_Dallas Cowboys",
+    "44d8c37868b700e90f816db7c5df5cdd": "injury_change: inj_Miami Dolphins; injury_change: inj_Detroit Lions",
+    "e354e6a04b1cb9c96e549b863debb92e": "injury_change: inj_New York Jets",
+    "89de07377e0aa8ffaa2ae6a7dc0855cc": "injury_change: inj_Washington Commanders",
+    "fe93e6ab1e553c0169936a0a983c324f": "injury_change: inj_New York Giants",
+    "2922c573ec3df8466c4a34975e446898": "injury_change: inj_New England Patriots",
+    "ac9d38a18d5c92814233a31aa9a48d78": "injury_change: inj_San Francisco 49ers",
+    "9760d8f19f84bfee300a74ceb656c95d": "injury_change: inj_Chicago Bears",
+    "17ad7eff2f7875e20a8109abe40470e3": "injury_change: inj_Minnesota Vikings"
+   }
+  }
  }
 ]
