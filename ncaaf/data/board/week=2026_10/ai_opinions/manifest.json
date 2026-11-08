@@ -18359,5 +18359,166 @@
     "a3f893b3bac8940a6899ae5869fb211c": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261107T233405Z.parquet",
+  "sha256": "5698d233731ee888dbb10dbfaddc353dfc6762957d6ff17123bdddcf9896f64d",
+  "logged_utc": "2026-11-07T23:34:05.145791+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.778,
+  "revised_rows": 5,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-08T02:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261107T233009Z.parquet",
+   "inputs_digest": "{\"d74a875341a00e77cf86ecfb7569edd3\": \"4de2ddb3aa09a424\", \"eca05dc53fc3a8dd74622a4b7657bc3b\": \"f7de67787a14ad8e\", \"6bfae12b9d44d12ca7dde4f4f4aedc7d\": \"d9a4123f0480ea16\"}",
+   "components": {
+    "d74a875341a00e77cf86ecfb7569edd3": {
+     "pinnacle_h2h": [
+      [
+       "Fresno State Bulldogs",
+       0,
+       -104
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       -106
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Fresno State Bulldogs",
+       1.0,
+       -110
+      ],
+      [
+       "Utah State Aggies",
+       -1.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -115
+      ],
+      [
+       "Under",
+       43.0,
+       -102
+      ]
+     ],
+     "news": [
+      "College football Week 10 best bets: Picks for Tenn"
+     ],
+     "kalshi_snap": "snap_20261107T2337Z.parquet"
+    },
+    "eca05dc53fc3a8dd74622a4b7657bc3b": {
+     "pinnacle_h2h": [
+      [
+       "Hawaii Rainbow Warriors",
+       0,
+       -278
+      ],
+      [
+       "UTEP Miners",
+       0,
+       241
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Hawaii Rainbow Warriors",
+       -7.0,
+       -102
+      ],
+      [
+       "UTEP Miners",
+       7.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -102
+      ],
+      [
+       "Under",
+       49.0,
+       -114
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel"
+     ],
+     "kalshi_snap": "snap_20261107T2337Z.parquet"
+    },
+    "6bfae12b9d44d12ca7dde4f4f4aedc7d": {
+     "pinnacle_h2h": [
+      [
+       "Texas Tech Red Raiders",
+       0,
+       -691
+      ],
+      [
+       "West Virginia Mountaineers",
+       0,
+       531
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Texas Tech Red Raiders",
+       -16.0,
+       -109
+      ],
+      [
+       "West Virginia Mountaineers",
+       16.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       66.5,
+       -111
+      ],
+      [
+       "Under",
+       66.5,
+       -105
+      ]
+     ],
+     "news": [
+      "College Football Playoff Bubble Watch after Week 9",
+      "College Football Playoff Bubble Watch after first ",
+      "How every 2027 five-star college football prospect",
+      "Ranking college football's top 40 freshmen in 2026",
+      "Top 25 betting lines: No. 4 Notre Dame favored ove",
+      "What could keep each team in CFP rankings from win",
+      "Who's No. 1? CFP committee's first top 25 and brac",
+      "Will college football's top team stand up in Week "
+     ],
+     "kalshi_snap": "snap_20261107T2337Z.parquet"
+    }
+   },
+   "triggers": {
+    "d74a875341a00e77cf86ecfb7569edd3": "anchor_prekick",
+    "eca05dc53fc3a8dd74622a4b7657bc3b": "anchor_prekick",
+    "6bfae12b9d44d12ca7dde4f4f4aedc7d": "anchor_prekick"
+   }
+  }
  }
 ]

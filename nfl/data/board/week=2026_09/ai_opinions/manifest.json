@@ -10942,5 +10942,147 @@
    "props": "data_2026_11.parquet",
    "lines": "snap_20261107T220008Z.parquet"
   }
+ },
+ {
+  "file": "ai_opinions_20261107T234706Z.parquet",
+  "sha256": "e541ccd2bf4e132fa219664353a1fbf10b236f13a8c9685ddda7e8600b5578d5",
+  "logged_utc": "2026-11-07T23:47:06.430619+00:00",
+  "rows": 78,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.923,
+  "revised_rows": 77,
+  "oldest_source_age_min": 554.4,
+  "first_kickoff_utc": "2026-11-08T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261107T233009Z.parquet",
+   "inputs_digest": "{\"e354e6a04b1cb9c96e549b863debb92e\": \"ec84ccbb3e69708f\"}",
+   "components": {
+    "e354e6a04b1cb9c96e549b863debb92e": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Kansas City Chiefs",
+       0,
+       -550
+      ],
+      [
+       "New York Jets",
+       0,
+       400
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Kansas City Chiefs",
+       -8.5,
+       -110
+      ],
+      [
+       "New York Jets",
+       8.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Kansas City Chiefs",
+       0,
+       -532
+      ],
+      [
+       "New York Jets",
+       0,
+       409
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas City Chiefs",
+       -10.0,
+       111
+      ],
+      [
+       "New York Jets",
+       10.0,
+       -125
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       104
+      ],
+      [
+       "Under",
+       48.5,
+       -120
+      ]
+     ],
+     "props_ts": "2026-11-07T14:32:44.682777+00:00",
+     "inj_Kansas City Chiefs": "edcafceaa31d33e0",
+     "inj_New York Jets": "8ae31969f1667f82",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Aaron Glenn says Breece Hall is Jets' starter desp",
+      "Behind Chiefs' late collapse vs. Broncos",
+      "Breece Hall proclaims himself ready to play",
+      "Chiefs WR Rashee Rice files for bankruptcy, claims",
+      "Chiefs' Patrick Mahomes hasn't run QB sneak since ",
+      "Chiefs' Reid says he didn't bench OL Suamataia as ",
+      "Chiefs' floundering pass rush starts with Chris Jo",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "Foyesade Oluokun continues to quietly excel as Jag",
+      "How the Jets trading stars Quinnen Williams and Sa",
+      "Jets WR Garrett Wilson (concussion) ruled out Sund",
+      "Jets face uphill battle without Garrett Wilson",
+      "Jets get mixed injury news ahead of Chiefs game",
+      "Jets' Breece Hall says he's ready to play, cites t",
+      "Jets' Garrett Wilson in concussion protocol, Breec",
+      "Kansas City Chiefs' late collapse vs. Denver Bronc",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 8's best arrivals, led by Rams' Quentin L",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL survivor power rankings: Why this is the week ",
+      "Regrading 2025 NFL deadline trades: How Gardner, W",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Sources: Colts among several NFL teams mulling tra",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "The Chiefs welcome the Jets to Arrowhead Stadium o",
+      "What 18 contenders should do at the NFL trade dead"
+     ],
+     "kalshi_snap": "snap_20261107T2335Z.parquet"
+    }
+   },
+   "triggers": {
+    "e354e6a04b1cb9c96e549b863debb92e": "line_move: hardrockbet_fl spreads New York Jets 9.5\u21928.5; line_move: hardrockbet_fl spreads Kansas City Chiefs -9.5\u2192-8.5"
+   }
+  }
  }
 ]
