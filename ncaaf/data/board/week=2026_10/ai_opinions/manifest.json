@@ -19314,5 +19314,116 @@
     "6bfae12b9d44d12ca7dde4f4f4aedc7d": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261108T024904Z.parquet",
+  "sha256": "017d9c2616db68091ba024d222dc5cacbb21e66f16ff3c71d368db7051d85317",
+  "logged_utc": "2026-11-08T02:49:04.851605+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 6,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-08T03:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261108T023009Z.parquet",
+   "inputs_digest": "{\"d4334cec8f2060f3b8491ca9c7325892\": \"d4ca17ddec594b35\", \"6ce85b1067e9e85cd0d8b3242905ecd7\": \"814a2ac3996c21ac\"}",
+   "components": {
+    "d4334cec8f2060f3b8491ca9c7325892": {
+     "pinnacle_h2h": [
+      [
+       "Oregon State Beavers",
+       0,
+       -206
+      ],
+      [
+       "Texas State Bobcats",
+       0,
+       182
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oregon State Beavers",
+       -5.5,
+       -103
+      ],
+      [
+       "Texas State Bobcats",
+       5.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       71.0,
+       -116
+      ],
+      [
+       "Under",
+       71.0,
+       100
+      ]
+     ],
+     "news": [
+      "Ranking college football's top 40 freshmen in 2026"
+     ],
+     "kalshi_snap": "snap_20261108T0237Z.parquet"
+    },
+    "6ce85b1067e9e85cd0d8b3242905ecd7": {
+     "pinnacle_h2h": [
+      [
+       "UNLV Rebels",
+       0,
+       -164
+      ],
+      [
+       "Wyoming Cowboys",
+       0,
+       147
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "UNLV Rebels",
+       -3.5,
+       -101
+      ],
+      [
+       "Wyoming Cowboys",
+       3.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -114
+      ],
+      [
+       "Under",
+       50.0,
+       -102
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor"
+     ],
+     "kalshi_snap": "snap_20261108T0237Z.parquet"
+    }
+   },
+   "triggers": {
+    "d4334cec8f2060f3b8491ca9c7325892": "anchor_close",
+    "6ce85b1067e9e85cd0d8b3242905ecd7": "anchor_close"
+   }
+  }
  }
 ]
