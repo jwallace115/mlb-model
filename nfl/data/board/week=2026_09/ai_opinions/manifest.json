@@ -12703,5 +12703,142 @@
     "17ad7eff2f7875e20a8109abe40470e3": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261108T043204Z.parquet",
+  "sha256": "1f504bac7e6a99cd6cf90ab5df3791dd48a7d55334bbbc787c11da29c7a0aac2",
+  "logged_utc": "2026-11-08T04:32:04.262239+00:00",
+  "rows": 74,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.959,
+  "revised_rows": 61,
+  "oldest_source_age_min": 222.7,
+  "first_kickoff_utc": "2026-11-09T01:20:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261108T043008Z.parquet",
+   "inputs_digest": "{\"9760d8f19f84bfee300a74ceb656c95d\": \"d9a74e1d386f8df3\"}",
+   "components": {
+    "9760d8f19f84bfee300a74ceb656c95d": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -275
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       220
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Chicago Bears",
+       -6.0,
+       -110
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       6.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -115
+      ],
+      [
+       "Under",
+       47.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -247
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       211
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Chicago Bears",
+       -6.0,
+       -106
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       6.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       100
+      ],
+      [
+       "Under",
+       48.5,
+       -115
+      ]
+     ],
+     "props_ts": "2026-11-08T00:49:21.636349+00:00",
+     "inj_Chicago Bears": "e20fd4de10e27531",
+     "inj_Tampa Bay Buccaneers": "632118a22b50f8a7",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Are the Bears the best team in the NFL?",
+      "Bears outduel Seahawks 34-17 on MNF",
+      "Bears' Caleb Williams dims cleat controversy with ",
+      "Caleb Williams and Jeffery Simmons lead the Bears ",
+      "Cleats, controversy and the choice of Bears QB Cal",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fantasy football D/ST outlook for Weeks 9-12: Fire",
+      "How Jeffery Simmons' arrival impacts the Bears",
+      "How the Bucs' defense could create problems for Ca",
+      "Inside the evolution of Caleb Williams' MVP candid",
+      "Irving and the Buccaneers visit Swift and the Bear",
+      "Jeffery Simmons stymies QB Sam Darnold, Seahawks i",
+      "Jeffery Simmons, Bears' defense handle Seahawks",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Deals for Jacoby Brisse",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Seahawks' offensive line struggles",
+      "Seven things Solak thinks for NFL Week 9: Bucs ato",
+      "Stephen A.: Right now, the Bears look like the NFL",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "What 18 contenders should do at the NFL trade dead"
+     ],
+     "kalshi_snap": "snap_20261108T0435Z.parquet"
+    }
+   },
+   "triggers": {
+    "9760d8f19f84bfee300a74ceb656c95d": "line_move: pinnacle totals Under 47.5\u219248.5; line_move: pinnacle totals Over 47.5\u219248.5"
+   }
+  }
  }
 ]

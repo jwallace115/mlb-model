@@ -1,0 +1,69 @@
+packet built 2026-11-08T04:32Z | snap snap_20261108T043008Z.parquet | props pull 2026-11-08T00:49 | kalshi snap_20261108T0435Z.parquet | injuries injuries_20261108T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: line_move: pinnacle totals Under 47.5→48.5; line_move: pinnacle totals Over 47.5→48.5
+######## Tampa Bay Buccaneers @ Chicago Bears  kick 11-09T01:20Z
+  HR ML: Bears -275 / Buccaneers +220 (no-vig home 0.701) | Pinnacle no-vig home 0.689
+  HR spread: Bears -6 -110 / Buccaneers +6 -110 | Pinnacle Bears -6.0 (-106) | HR open -5.5 (20261103)
+  HR total: 47.5 O-115/U-105 | Pinnacle 48.5 O+100/U-115 | HR open 47.0
+  Kalshi ML [('Tampa Bay wins', 0.29, 88187), ('Chicago wins', 0.71, 506415)] | spread [('Chicago wins by over 6.5 points?', 0.48, 207002), ('Chicago wins by over 5.5 points?', 0.54, 15662)] | total [('Full Game: over 47.5 points scored?', 0.51, 11673), ('Full Game: over 48.5 points scored?', 0.47, 303170)]
+  -- Tampa Bay Buccaneers injuries (20261108T0030)
+     Ques WR Emeka Egbuka: Egbuka (foot) is listed as questionable for Sunday's game in Chicago.
+     Acti RB Kenny Gainwell: Gainwell (hip) was a full practice participant Thursday, Scott Smith of the Buccaneers' official site reports.
+     Inju WR Jalen McMillan: McMillan (knee) isn't expected back until after Tampa Bay's Week 10 bye, Greg Auman of Fox Sports reports.
+     Acti TE Bauer Sharp: Sharp went without a target while playing 19 of the Buccaneers' 60 snaps on offense in Sunday's 16-0 win over the Falcons.
+     Acti WR Tez Johnson: Johnson did not garner a target during Sunday's 16-0 win over the Falcons.
+     Acti WR Ted Hurst III: Hurst failed to catch his lone target in Sunday's 16-0 win over the Falcons.
+     Acti RB Sean Tucker: Tucker didn't play any offensive snaps in Sunday's 16-0 win over the Falcons.
+     Acti TE Cade Otton: Otton wasn't targeted in Sunday's 16-0 win over the Falcons.
+     Out  LB Yaya Diaby: Head coach Todd Bowles said that Diaby (knee) has been diagnosed with an MCL sprain and won't be available for Sunday's game against the Bears, Scott 
+     Acti QB Baker Mayfield: Mayfield failed to complete any of his three pass attempts in the Buccaneers' 16-0 win over the Falcons on Sunday. He also rushed four times for 14 ya
+     Acti WR Chris Godwin Jr.: Godwin failed to catch his lone target in Sunday's 16-0 win over the Falcons.
+     Acti RB Bucky Irving: Irving rushed 27 times for 170 yards and a touchdown in the Buccaneers' 16-0 win over the Falcons on Sunday.
+     Inju CB Josh Hayes: Hayes suffered a small setback in his recovery from a knee injury, Greg Auman of Fox Sports reports.
+     news 11-04T20:00 2026 NFL trade deadline: Players to watch, buzz and goals for all 32 teams
+     news 11-05T20:10 Irving and the Buccaneers visit Swift and the Bears in a matchup of the NFL's top rushing teams
+     news 11-06T00:38 NFL Week 9 arrivals: Trevor Lawrence doubles up on denim, Ethan Burke reps Ovechkin
+     news 11-06T13:28 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-06T15:20 How the Bucs' defense could create problems for Caleb Williams
+  -- Chicago Bears injuries (20261108T0030)
+     Acti RB Salvon Ahmed: The Bears elevated Ahmed from their practice squad to the active roster Saturday ahead of Sunday's matchup against the Buccaneers.
+     Ques CB Tyrique Stevenson Sr.: Stevenson (thumb) is officially listed as questionable for Sunday's game versus the Buccaneers.
+     Ques CB Malik Muhammad II: Muhammad (toe) is officially listed as questionable for Sunday's game versus the Buccaneers.
+     Ques RB Kyle Monangai: Monangai (thumb/toe) is listed as questionable for Sunday's game against the Buccaneers.
+     Inju RB Zavier Scott: The Bears placed Scott (wrist) on injured reserve Thursday.
+     Inju DT Kentavius Street: The Bears placed Street (knee) on injured reserve Wednesday, Adam Jahns of AllCHGO.com reports.
+     Inju OT Braxton Jones: Jones (knee) is out for the rest of the season, Brad Biggs of the Chicago Tribune reports.
+     Acti TE Stephen Carlson: Chicago signed Carlson from its practice squad to its 53-man roster Wednesday, Brendan Sugrue of USA Today reports.
+     Acti TE Sam Roush: Roush went without a target while playing 37 of the Bears' 70 snaps on offense in Monday's 34-17 win over the Seahawks.
+     Acti RB Roschon Johnson: Johnson carried five times for 17 yards and added an 11-yard reception on his lone target in Monday's 34-17 win over the Seahawks.
+     Acti QB Caleb Williams: Williams completed 24 of 34 passes for 247 yards with one touchdown and no interceptions and rushed twice for one yard in the Bears' 34-17 win over th
+     Acti WR Kalif Raymond: Raymond finished Monday's 34-17 win against Seattle with two catches for 14 yards on three targets along with one rush for 39 yards.
+     Acti WR Rome Odunze: Odunze brought in four of six targets for 87 yards in the Bears' 34-17 win over the Seahawks on Monday night.
+     Acti WR Luther Burden III: Burden secured seven of nine targets for 56 yards and a touchdown in the Bears' 34-17 win over the Seahawks on Monday night.
+     Acti TE Colston Loveland: Loveland secured seven of nine targets for 65 yards and lost a fumble in the Bears' 34-17 win over the Seahawks on Monday night.
+     Acti RB D'Andre Swift: Swift rushed 27 times for 69 yards and three touchdowns and brought in two of three targets for 10 yards in the Bears' 34-17 win over the Seahawks on 
+     Acti QB Case Keenum: Keenum (coach's decision) is inactive but will operate as the Bears' emergency third quarterback for Monday night's matchup against the Seahawks.
+     news 11-06T13:28 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-06T15:20 How the Bucs' defense could create problems for Caleb Williams
+     news 11-06T18:25 NFL trade deadline grades: Deals for Jacoby Brissett, Jeffery Simmons, more
+     news 11-07T11:37 2026 NFL trade deadline: Proposing deals for Tony Pollard, Riq Woolen, others
+     news 11-07T12:56 Inside the evolution of Caleb Williams' MVP candidacy
+  -- props (pull 2026-11-08T00:49)
+     * Baker Mayfield: atd 0.5 (+575), paatt 29.5 (-115/-115), cmp 18.5 (-115/-115), int 0.5 (-115/-115), patd 1.5 (+130/-175), payd 211.5 (-115/-115), ruyd 17.5 (-110/-120)
+     * Bucky Irving: atd 0.5 (+105), recyd 14.5 (-110/-120), rec 2.5 (-105/-125), ruatt 15.5 (-110/-120), ruyd 64.5 (-115/-115)
+     * Cade Otton: atd 0.5 (+325), recyd 30.5 (-115/-115), rec 3.5 (+125/-160)
+     * Caleb Williams: atd 0.5 (+300), paatt 31.5 (-115/-115), cmp 20.5 (-130/+100), int 0.5 (+110/-145), patd 1.5 (-150/+115), payd 244.5 (-115/-115), ruyd 19.5 (-110/-120)
+     * Chris Godwin: atd 0.5 (+275), recyd 31.5 (-115/-115), rec 3.5 (-125/-105)
+     * Colston Loveland: atd 0.5 (+155), recyd 52.5 (-115/-115), rec 5.5 (+100/-130)
+     * D'Andre Swift: atd 0.5 (-195), recyd 21.5 (-115/-115), rec 2.5 (-145/+115), ruatt 15.5 (-120/-110), ruyd 62.5 (-115/-115)
+     * Emeka Egbuka: atd 0.5 (+220), recyd 50.5 (-115/-115), rec 3.5 (-145/+110)
+     * Kalif Raymond: atd 0.5 (+375), recyd 15.5 (-115/-115), rec 2.5 (+125/-165)
+     * Kenny Gainwell: atd 0.5 (+350), recyd 9.5 (-115/-115), rec 1.5 (-180/+135), ruatt 6.5 (+105/-135), ruyd 21.5 (-115/-115)
+     * Luther Burden III: atd 0.5 (+155), recyd 65.5 (-115/-115), rec 4.5 (-160/+125)
+     * Rome Odunze: atd 0.5 (+170), recyd 48.5 (-115/-115), rec 3.5 (+130/-175)
+     * Roschon Johnson: atd 0.5 (+260), recyd 3.5 (-110/-120), rec 0.5 (-160/+125), ruatt 4.5 (-135/+105), ruyd 16.5 (-115/-115)
+     * Sam Roush: atd 0.5 (+575)
+     * Sean Tucker: atd 0.5 (+650)
+     * Ted Hurst III: atd 0.5 (+425), recyd 24.5 (-115/-115), rec 1.5 (-135/+105)
+     * Tez Johnson: atd 0.5 (+575), recyd 15.5 (-115/-115), rec 1.5 (+110/-145)
