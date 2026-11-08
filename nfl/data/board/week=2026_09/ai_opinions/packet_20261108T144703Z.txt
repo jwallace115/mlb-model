@@ -1,0 +1,65 @@
+packet built 2026-11-08T14:47Z | snap snap_20261108T143006Z.parquet | props pull 2026-11-08T12:47 | kalshi snap_20261108T1435Z.parquet | injuries injuries_20261108T1230Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: line_move: pinnacle totals Under 49.5→50.5; line_move: pinnacle totals Over 49.5→50.5
+######## Detroit Lions @ Miami Dolphins  kick 11-08T18:00Z
+  HR ML: Dolphins +250 / Lions -300 (no-vig home 0.276) | Pinnacle no-vig home 0.263
+  HR spread: Dolphins +6.5 -110 / Lions -6.5 -110 | Pinnacle Dolphins 6.5 (-109) | HR open 7.0 (20261103)
+  HR total: 50 O-115/U-105 | Pinnacle 50.5 O-104/U-108 | HR open 50.0
+  Kalshi ML [('Miami wins', 0.27, 128260), ('Detroit wins', 0.73, 519880)] | spread [('Detroit wins by over 6.5 points?', 0.49, 266014), ('Detroit wins by over 7.5 points?', 0.42, 62864)] | total [('Full Game: over 50.5 points scored?', 0.48, 15513), ('Full Game: over 49.5 points scored?', 0.52, 15353)]
+  -- Detroit Lions injuries (20261108T1230)
+     Ques WR Amon-Ra St. Brown: St. Brown (ribs) is slated to play in Sunday's game at Miami, Tom Pelissero of Netflix reports.
+     Acti RB Jabari Small: The Lions elevated Small from the practice squad to the active roster Saturday ahead of Sunday's matchup versus the Dolphins.
+     Inju LB Jack Campbell: The Lions moved Campbell (neck) to injured reserve Saturday.
+     Out  C  Cade Mays: Mays (ankle) has been ruled out ahead of Sunday's game against the Dolphins.
+     Out  LB DJ Wonnum: Wonnum (concussion) has been ruled out ahead of Sunday's game against the Dolphins.
+     Out  CB D.J. Reed: Reed (hip) has been ruled out ahead of Sunday's game against the Dolphins.
+     Out  S  Kerby Joseph: Joseph (knee) has been ruled out ahead of Sunday's game against the Dolphins.
+     Ques RB Jacob Saylors: Saylors (neck) is listed as questionable for Sunday's game against the Dolphins.
+     Ques RB Sione Vaki: Vaki (ankle) is listed as questionable for Sunday's game against the Dolphins.
+     Inju LB Jimmy Rolder: Rolder (hamstring) was placed on injured reserve Tuesday.
+     Acti WR Jackson Meeks: 
+     Acti TE Sam LaPorta: LaPorta caught three of five targets for 33 yards in Sunday's 19-15 win over the Vikings. He added two rushing yards on one attempt.
+     Acti WR Jameson Williams: Williams brought in four of six targets for 70 yards and a touchdown in the Lions' 19-15 win over the Vikings on Sunday.
+     Acti QB Jared Goff: Goff completed 18 of 25 passes for 176 yards with a touchdown and an interception and added three carries for no gain in the Lions' 19-15 win over the
+     Acti RB Jahmyr Gibbs: Gibbs rushed 23 times for 153 yards and a touchdown while bringing in two of four targets for 15 yards in the Lions' 19-15 win over the Vikings on Sun
+     Inju RB Isiah Pacheco: Lions coach Dan Campbell said Friday that Pacheco (back) has a chance to return in late December, Justin Rogers of DetroitFootball.net reports.
+     news 11-05T18:32 What 18 contenders should do at the NFL trade deadline: Who could get aggressive?
+     news 11-05T23:23 Dolphins host Lions with Hafley's team aiming for grit that Campbell has built in Detroit
+     news 11-06T00:38 NFL Week 9 arrivals: Trevor Lawrence doubles up on denim, Ethan Burke reps Ovechkin
+     news 11-06T13:28 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-08T11:30 Week 9 NFL highlights: Best plays, moments, touchdowns, more
+  -- Miami Dolphins injuries (20261108T1230)
+     Acti RB Carlos Washington Jr.: Miami elevated Washington from the practice squad to the active roster Saturday ahead of Sunday's tilt against Detroit.
+     Ques DE Malik Herring: Herring (neck) is listed as questionable for Sunday's game against the Lions, David Furones of the South Florida Sun Sentinel reports.
+     Acti TE Will Kacmarek: Kacmarek (hamstring) does not carry an official injury designation ahead of Sunday's game versus the Lions, David Furones of the South Florida Sun Sen
+     Ques RB Kaytron Allen: Allen (quadriceps) is officially listed as questionable for Sunday's game versus the Lions, David Furones of the South Florida Sun Sentinel reports.
+     Ques RB Jaylen Wright: Wright (quad) is listed as questionable for Sunday's game against the Lions, David Furones of the South Florida Sun Sentinel reports.
+     Out  CB Darrell Baker Jr.: Baker (undisclosed) is not ready to return to practice, David Furones of the South Florida Sun Sentinel reports.
+     Acti TE Justin Joly: 
+     Acti WR Malik Washington: Washington caught five of six targets for 40 yards and a touchdown in Sunday's 24-19 loss to New England.
+     Acti WR Kevin Coleman Jr.: Coleman caught all three of his targets for 46 yards and a touchdown during Sunday's 24-19 loss to the Patriots.
+     Acti RB Ollie Gordon II: Gordon carried the ball 19 times for 69 yards in Sunday's 24-19 loss to the Patriots. He failed to catch his only target.
+     Acti QB Malik Willis: Willis completed 21 of 32 passes for 211 yards and two touchdowns with one interception in Sunday's 24-19 loss to New England. He gained two rushing y
+     Acti WR Caleb Douglas: Douglas caught four of six targets for 43 yards in Sunday's 24-19 loss to the Patriots.
+     news 11-06T11:00 Dolphins coach Hafley brings familiarity with Lions
+     news 11-06T13:28 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-06T14:31 Regrading 2025 NFL deadline trades: How Gardner, Williams deals look right now
+     news 11-06T17:24 Dolphins to get rookie OL Kadyn Proctor back from concussion
+     news 11-08T11:30 Week 9 NFL highlights: Best plays, moments, touchdowns, more
+  -- props (pull 2026-11-08T12:47)
+     * Amon-Ra St. Brown: atd 0.5 (-110), recyd 77.5 (-115/-115), rec 6.5 (-105/-125)
+     * Brock Wright: atd 0.5 (+650)
+     * Caleb Douglas: atd 0.5 (+250), recyd 41.5 (-115/-115), rec 3.5 (+125/-165)
+     * Chris Bell: atd 0.5 (+425), recyd 22.5 (-115/-115), rec 2.5 (+135/-180)
+     * Greg Dulcich: atd 0.5 (+300), recyd 40.5 (-115/-115), rec 3.5 (-145/+110)
+     * Isaac TeSlaa: atd 0.5 (+350), recyd 15.5 (-120/-110), rec 1.5 (+105/-135)
+     * Jahmyr Gibbs: atd 0.5 (-375), recyd 32.5 (-115/-115), rec 4.5 (+110/-140), ruatt 20.5 (-110/-120), ruyd 98.5 (-115/-115)
+     * Jameson Williams: atd 0.5 (+165), recyd 52.5 (-115/-115), rec 3.5 (-115/-115)
+     * Jared Goff: atd 0.5 (+900), paatt 31.5 (-110/-120), cmp 21.5 (-125/-105), int 0.5 (+120/-155), patd 2.5 (+160/-225), payd 261.5 (-115/-115)
+     * Kaytron Allen: atd 0.5 (+500)
+     * Malik Washington: atd 0.5 (+220), recyd 42.5 (-115/-115), rec 4.5 (+115/-150)
+     * Malik Willis: atd 0.5 (+210), paatt 27.5 (-110/-120), cmp 17.5 (-115/-115), int 0.5 (-125/-105), patd 1.5 (+145/-195), payd 208.5 (-115/-115), ruatt 5.5 (-120/-110), ruyd 29.5 (-115/-115)
+     * Ollie Gordon II: atd 0.5 (-105), recyd 8.5 (-110/-120), rec 1.5 (-125/-105), ruatt 16.5 (-125/-105), ruyd 69.5 (-115/-115)
+     * Sam LaPorta: atd 0.5 (+170), recyd 49.5 (-115/-115), rec 4.5 (+125/-160)
+     * Sione Vaki: atd 0.5 (+500), ruatt 5.5 (-115/-115), ruyd 17.5 (-110/-120)
