@@ -19165,5 +19165,131 @@
     "fe93e6ab1e553c0169936a0a983c324f": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261108T181706Z.parquet",
+  "sha256": "5615a7cf860d62828ed993e651282671d17529302f973827ad0dd1a9ba248291",
+  "logged_utc": "2026-11-08T18:17:06.347794+00:00",
+  "rows": 81,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.951,
+  "revised_rows": 79,
+  "oldest_source_age_min": 136.9,
+  "first_kickoff_utc": "2026-11-08T21:05:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261108T180013Z.parquet",
+   "inputs_digest": "{\"39aeac43cea7b12558b91cdab1255a10\": \"de7da3de3f4a5042\"}",
+   "components": {
+    "39aeac43cea7b12558b91cdab1255a10": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Houston Texans",
+       0,
+       -250
+      ],
+      [
+       "Los Angeles Chargers",
+       0,
+       200
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Houston Texans",
+       -5.5,
+       -110
+      ],
+      [
+       "Los Angeles Chargers",
+       5.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.5,
+       -110
+      ],
+      [
+       "Under",
+       40.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Houston Texans",
+       0,
+       -221
+      ],
+      [
+       "Los Angeles Chargers",
+       0,
+       195
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Houston Texans",
+       -5.5,
+       102
+      ],
+      [
+       "Los Angeles Chargers",
+       5.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -104
+      ],
+      [
+       "Under",
+       40.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-07T19:17:48.063289+00:00",
+     "inj_Los Angeles Chargers": "a85961ad6d7707b2",
+     "inj_Houston Texans": "b1038902e73f2586",
+     "news": [
+      "2026 NFL trade deadline: Players to watch, buzz an",
+      "C.J. Stroud turned down a big contract. A bigger o",
+      "Can the Texans defense bounce back in Week 9?",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Harbaugh on Rams DB's 'deli meat' comment on Herbe",
+      "Jim Harbaugh thought Justin Herbert played well in",
+      "NFL Week 9 arrivals: Lions show support for Jack C",
+      "NFL Week 9 arrivals: Trevor Lawrence doubles up on",
+      "NFL Week 9 betting odds: Lines and totals for ever",
+      "NFL Week 9 latest intel, buzz questions, fantasy t",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL trade deadline grades: Deals for Jacoby Brisse",
+      "NFL trade deadline grades: Jeffery Simmons, DeFore",
+      "Regrading 2025 NFL deadline trades: How Gardner, W",
+      "Sources: Colts among several NFL teams mulling tra",
+      "Stumbling Texans and winless Chargers meet in a ma",
+      "Texans still show respect for Justin Herbert",
+      "Texans' defense practicing with pee wee drills",
+      "Week 9 NFL highlights: Best plays, moments, touchd"
+     ],
+     "kalshi_snap": "snap_20261108T1805Z.parquet"
+    }
+   },
+   "triggers": {
+    "39aeac43cea7b12558b91cdab1255a10": "anchor_prekick"
+   }
+  }
  }
 ]
