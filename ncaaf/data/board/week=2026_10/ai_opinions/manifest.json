@@ -19002,5 +19002,156 @@
     "1ef954bd3305a66136e52ea0786f1593": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261108T003405Z.parquet",
+  "sha256": "b626f802718692a98cea5a03425383554139f7285a60f75fe86541d3001d1698",
+  "logged_utc": "2026-11-08T00:34:05.346691+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.667,
+  "revised_rows": 7,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-08T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261108T003009Z.parquet",
+   "inputs_digest": "{\"2dd995baa931f5b063cb50ddbe821d74\": \"44aaeab086369b38\", \"d4334cec8f2060f3b8491ca9c7325892\": \"47a1a1b9d77705dc\", \"6ce85b1067e9e85cd0d8b3242905ecd7\": \"6beb797bb9e3aa3b\"}",
+   "components": {
+    "2dd995baa931f5b063cb50ddbe821d74": {
+     "pinnacle_h2h": [
+      [
+       "Liberty Flames",
+       0,
+       -698
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       536
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Liberty Flames",
+       -14.0,
+       -115
+      ],
+      [
+       "New Mexico State Aggies",
+       14.0,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -111
+      ],
+      [
+       "Under",
+       47.0,
+       -106
+      ]
+     ],
+     "kalshi_snap": "snap_20261108T0037Z.parquet"
+    },
+    "d4334cec8f2060f3b8491ca9c7325892": {
+     "pinnacle_h2h": [
+      [
+       "Oregon State Beavers",
+       0,
+       -215
+      ],
+      [
+       "Texas State Bobcats",
+       0,
+       190
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oregon State Beavers",
+       -5.5,
+       -107
+      ],
+      [
+       "Texas State Bobcats",
+       5.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       71.0,
+       -115
+      ],
+      [
+       "Under",
+       71.0,
+       -101
+      ]
+     ],
+     "news": [
+      "Ranking college football's top 40 freshmen in 2026"
+     ],
+     "kalshi_snap": "snap_20261108T0037Z.parquet"
+    },
+    "6ce85b1067e9e85cd0d8b3242905ecd7": {
+     "pinnacle_h2h": [
+      [
+       "UNLV Rebels",
+       0,
+       -165
+      ],
+      [
+       "Wyoming Cowboys",
+       0,
+       148
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "UNLV Rebels",
+       -3.5,
+       -102
+      ],
+      [
+       "Wyoming Cowboys",
+       3.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -117
+      ],
+      [
+       "Under",
+       49.0,
+       100
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor"
+     ],
+     "kalshi_snap": "snap_20261108T0037Z.parquet"
+    }
+   },
+   "triggers": {
+    "2dd995baa931f5b063cb50ddbe821d74": "anchor_close",
+    "d4334cec8f2060f3b8491ca9c7325892": "anchor_prekick",
+    "6ce85b1067e9e85cd0d8b3242905ecd7": "anchor_prekick"
+   }
+  }
  }
 ]
