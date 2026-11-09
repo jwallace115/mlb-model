@@ -51,3 +51,15 @@ Games: 15  |  Confident: 4
 | DAL@IND | home | +0.7 | 5.5 | -110 | +6.2 |
 | LA@WAS | home | -0.5 | 5.5 | -105 | +5.0 |
 
+
+## Week 10 (2026) -- PRIMARY
+Run: 2026-11-09T17:15:27Z  |  Manifest SHA: da59272230201888...
+Games: 14  |  Confident: 4
+
+| Game | Side | Our # | HR Quote | HR Price | Gap |
+|------|------|--------|----------|----------|-----|
+| MIN@GB | away | -1.5 | -3.5 | -105 | -5.0 |
+| BUF@NYJ | home | -2.7 | 8.0 | -110 | +5.3 |
+| JAX@TEN | home | -4.4 | 10.0 | -110 | +5.6 |
+| LA@ARI | home | -0.9 | 7.0 | -105 | +6.1 |
+
