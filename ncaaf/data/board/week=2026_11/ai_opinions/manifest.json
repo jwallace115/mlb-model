@@ -181,5 +181,160 @@
     "8f68604c47a7db841963eb62623db417": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261109T150404Z.parquet",
+  "sha256": "5946da64713564a08e4cc16c9c226aeafc7e1ebdd5a1d01e8eef9060e88cb5a3",
+  "logged_utc": "2026-11-09T15:04:04.752076+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.667,
+  "revised_rows": 9,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-11T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261109T150011Z.parquet",
+   "inputs_digest": "{\"5fc2c0b99e391f74694276d2eb95146c\": \"884f517269f8eaae\", \"c827ec84e911847450bcaf12c21abd11\": \"e4572c0cfa8b85a8\", \"8f68604c47a7db841963eb62623db417\": \"aec8a71a83cc13a1\"}",
+   "components": {
+    "5fc2c0b99e391f74694276d2eb95146c": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       458
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -644
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       14.0,
+       -105
+      ],
+      [
+       "Western Michigan Broncos",
+       -14.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -108
+      ],
+      [
+       "Under",
+       48.0,
+       -110
+      ]
+     ],
+     "news": [
+      "Western Michigan squares off against Akron in MAC "
+     ],
+     "kalshi_snap": "snap_20261109T1507Z.parquet"
+    },
+    "c827ec84e911847450bcaf12c21abd11": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       -220
+      ],
+      [
+       "Kent State Golden Flashes",
+       0,
+       185
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       -5.5,
+       -113
+      ],
+      [
+       "Kent State Golden Flashes",
+       5.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -109
+      ],
+      [
+       "Under",
+       45.0,
+       -109
+      ]
+     ],
+     "news": [
+      "MAC matchup features Bowling Green playing Kent St"
+     ],
+     "kalshi_snap": "snap_20261109T1507Z.parquet"
+    },
+    "8f68604c47a7db841963eb62623db417": {
+     "pinnacle_h2h": [
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -104
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -110
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami (OH) RedHawks",
+       1.0,
+       -109
+      ],
+      [
+       "Ohio Bobcats",
+       -1.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -109
+      ],
+      [
+       "Under",
+       48.5,
+       -109
+      ]
+     ],
+     "news": [
+      "It's Week 10 and everything remains up for grabs i",
+      "Miami (OH) meets Ohio in MAC play"
+     ],
+     "kalshi_snap": "snap_20261109T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "5fc2c0b99e391f74694276d2eb95146c": "anchor_morning",
+    "c827ec84e911847450bcaf12c21abd11": "anchor_morning",
+    "8f68604c47a7db841963eb62623db417": "anchor_morning"
+   }
+  }
  }
 ]
