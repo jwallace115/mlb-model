@@ -1,0 +1,114 @@
+[
+ {
+  "file": "ai_opinions_20261109T003404Z.parquet",
+  "sha256": "bd53712678e82e59b4f4d63dcc568c2d528a8350a10c07f9eb996087b9793e04",
+  "logged_utc": "2026-11-09T00:34:04.404719+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-11T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261109T003007Z.parquet",
+   "inputs_digest": "{\"5fc2c0b99e391f74694276d2eb95146c\": \"aa079bce043fb4cf\", \"c827ec84e911847450bcaf12c21abd11\": \"1dfb86a8815bd850\"}",
+   "components": {
+    "5fc2c0b99e391f74694276d2eb95146c": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       478
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -680
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       14.5,
+       -108
+      ],
+      [
+       "Western Michigan Broncos",
+       -14.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -110
+      ],
+      [
+       "Under",
+       48.0,
+       -110
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 9: Florida State follies spel",
+      "Western Michigan squares off against Akron in MAC "
+     ],
+     "kalshi_snap": "snap_20261109T0007Z.parquet"
+    },
+    "c827ec84e911847450bcaf12c21abd11": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       -220
+      ],
+      [
+       "Kent State Golden Flashes",
+       0,
+       185
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       -5.5,
+       -113
+      ],
+      [
+       "Kent State Golden Flashes",
+       5.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -110
+      ],
+      [
+       "Under",
+       45.0,
+       -110
+      ]
+     ],
+     "news": [
+      "MAC matchup features Bowling Green playing Kent St"
+     ],
+     "kalshi_snap": "snap_20261109T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "5fc2c0b99e391f74694276d2eb95146c": "anchor_morning",
+    "c827ec84e911847450bcaf12c21abd11": "anchor_morning"
+   }
+  }
+ }
+]
