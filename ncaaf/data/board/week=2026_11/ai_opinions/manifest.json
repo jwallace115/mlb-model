@@ -336,5 +336,117 @@
     "8f68604c47a7db841963eb62623db417": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261109T211903Z.parquet",
+  "sha256": "2a54cd65cb258210271df74be8c433c356516f6a84e1508834d22227b9dde8ef",
+  "logged_utc": "2026-11-09T21:19:03.861446+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 4,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-11T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261109T210009Z.parquet",
+   "inputs_digest": "{\"c827ec84e911847450bcaf12c21abd11\": \"012847ac09933eda\", \"8f68604c47a7db841963eb62623db417\": \"a003ba6eb0bd65b2\"}",
+   "components": {
+    "c827ec84e911847450bcaf12c21abd11": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       -218
+      ],
+      [
+       "Kent State Golden Flashes",
+       0,
+       184
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       -5.5,
+       -112
+      ],
+      [
+       "Kent State Golden Flashes",
+       5.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -108
+      ],
+      [
+       "Under",
+       44.0,
+       -110
+      ]
+     ],
+     "news": [
+      "MAC matchup features Bowling Green playing Kent St"
+     ],
+     "kalshi_snap": "snap_20261109T2107Z.parquet"
+    },
+    "8f68604c47a7db841963eb62623db417": {
+     "pinnacle_h2h": [
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -101
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -113
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami (OH) RedHawks",
+       1.0,
+       -108
+      ],
+      [
+       "Ohio Bobcats",
+       -1.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -105
+      ],
+      [
+       "Under",
+       47.5,
+       -113
+      ]
+     ],
+     "news": [
+      "It's Week 10 and everything remains up for grabs i",
+      "Miami (OH) meets Ohio in MAC play"
+     ],
+     "kalshi_snap": "snap_20261109T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "c827ec84e911847450bcaf12c21abd11": "line_move: pinnacle totals Under 45.0\u219244.0; line_move: pinnacle totals Over 45.0\u219244.0",
+    "8f68604c47a7db841963eb62623db417": "line_move: pinnacle totals Under 48.5\u219247.5; line_move: pinnacle totals Over 48.5\u219247.5"
+   }
+  }
  }
 ]
