@@ -1,0 +1,69 @@
+packet built 2026-11-09T22:17Z | snap snap_20261109T220008Z.parquet | props pull 2026-11-08T16:48 | kalshi snap_20261109T2205Z.parquet | injuries injuries_20261109T1830Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: anchor_prekick
+######## Buffalo Bills @ Minnesota Vikings  kick 11-10T01:15Z
+  HR ML: Vikings +160 / Bills -200 (no-vig home 0.366) | Pinnacle no-vig home 0.368
+  HR spread: Vikings +3.5 -115 / Bills -3.5 -105 | Pinnacle Vikings 3.0 (+108) | HR open 3.0 (20261103)
+  HR total: 45 O-110/U-110 | Pinnacle 45.0 O-109/U-103 | HR open 46.5
+  Kalshi ML [('Minnesota wins', 0.36, 2452203), ('Buffalo wins', 0.64, 3022683)] | spread [('Buffalo wins by over 3.5 points?', 0.48, 1317882), ('Buffalo wins by over 4.5 points?', 0.46, 364676)] | total [('Full Game: over 45.5 points scored?', 0.49, 756295), ('Full Game: over 44.5 points scored?', 0.54, 723822)]
+  -- Buffalo Bills injuries (20261109T1830)
+     Ques OT Alec Anderson: Anderson (ankle) is questionable for Monday's tilt versus the Vikings.
+     Ques OT Dion Dawkins: Dawkins (ribs) is officially questionable to suit up against the Vikings in Week 9.
+     Out  WR Tyrell Shavers: Shavers (knee) is listed as questionable ahead of Monday night's game against the Vikings, Maddy Glab of the Bills' official site reports.
+     Acti WR Keon Coleman: Coleman (shoulder) doesn't have a designation for Monday's contest in Minnesota.
+     Acti WR DJ Moore: Moore (shoulder) doesn't have a designation for Monday's contest at Minnesota.
+     Out  WR Joshua Palmer: Palmer (hamstring) has been ruled out for Monday's game in Minnesota, Maddy Glab of the Bills' official site reports.
+     Acti RB Ty Johnson: Johnson (illness) was a full practice participant Friday.
+     Acti TE Dalton Kincaid: Kincaid (chest) was a full participant in Friday's practice.
+     Inju CB Jordan Hancock: Hancock (hamstring) was designated to return from injured reserve by the Bills on Wednesday, Sal Capaccio of WGR Sports Radio 550 Buffalo reports.
+     Ques DT Greg Gaines: questionable
+     Acti TE Dawson Knox: Knox caught one of two targets for six yards in Sunday's 36-10 win over the Ravens.
+     Acti RB Ray Davis: Davis rushed six times for 30 yards in Sunday's 36-10 win over the Ravens.
+     Acti WR Skyler Bell: 
+     Acti WR Greg Dortch: Dortch went without a target while logging four of the Bills' 82 snaps on offense in Sunday's 36-10 win over the Ravens. He returned one kickoff for 2
+     Acti WR Khalil Shakir: Shakir caught five of six targets for 64 yards in Sunday's 36-10 win over the Ravens.
+     Acti RB James Cook III: Cook rushed 21 times for 80 yards and a touchdown while catching two of three targets for 21 yards in Sunday's 36-10 win over the Ravens.
+     Acti QB Josh Allen: Allen completed 21 of 34 passes for 289 yards, two touchdowns and one interception in Sunday's 36-10 win over the Ravens. He added 30 rushing yards an
+     news 11-09T13:28 2026 NFL trade deadline: Proposing deals for Tony Pollard, Riq Woolen, others
+     news 11-09T14:41 How to bet Bills-Vikings: Analysis, best bets and top prop plays
+     news 11-09T16:55 As the 'Peanut Punch' takes over NFL, how do teams counter it?
+     news 11-09T17:14 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-09T17:33 Inside Justin Jefferson's miraculous catch for Vikings versus Bills in 2022
+  -- Minnesota Vikings injuries (20261109T1830)
+     Acti WR Odell Beckham Jr.: The Vikings are signing Beckham from the practice squad to the active roster, Tom Pelissero of NFL Network reports.
+     Out  RB Demond Claiborne: Claiborne (knee) has been ruled out for Monday's battle against Buffalo, Craig Peters of the Vikings' official site reports.
+     Out  WR Jauan Jennings: Jennings (calf) has been ruled out for Monday's contest versus the Bills.
+     Out  QB Kyler Murray: Head coach Kevin O'Connell said Saturday that Murray (hamstring) has been ruled out for Monday's game versus the Bills.
+     Ques S  Jay Ward: questionable
+     Acti QB Max Brosmer: Brosmer is set to back up Carson Wentz against the Bills on Monday, as Kyler Murray (hamstring) won't play, Alec Lewis of The Athletic reports.
+     Acti QB Carson Wentz: Wentz is stated to start Monday night's game against the Bills, Ian Rapoport of NFL Network reports.
+     Acti RB DeeJay Dallas: Dallas was signed to the Vikings' active roster Wednesday, Craig Peters of the team's official website reports.
+     Acti TE T.J. Hockenson: Hockenson caught four of five targets for 58 yards and a touchdown in Sunday's 19-15 loss to the Lions.
+     Acti WR Jordan Addison: Addison caught three of eight targets for 66 yards in Sunday's 19-15 loss to the Lions.
+     Acti RB Aaron Jones Sr.: Jones rushed five times for 22 yards and brought in both targets for 18 yards in the Vikings' 19-15 loss to the Lions on Sunday.
+     Acti RB Jordan Mason: Mason rushed eight times for 20 yards in the Vikings' 19-15 loss to the Lions on Sunday.
+     news 11-09T15:56 Is the NFC North the best division ever? Sizing up wins for Packers, Lions, Bears
+     news 11-09T16:44 NFL trade deadline grades: Deals for Jessie Bates III, Jacoby Brissett, more
+     news 11-09T16:55 As the 'Peanut Punch' takes over NFL, how do teams counter it?
+     news 11-09T17:14 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-09T17:33 Inside Justin Jefferson's miraculous catch for Vikings versus Bills in 2022
+  -- props (pull 2026-11-08T16:48)
+     * Aaron Jones: atd 0.5 (+275), recyd 7.5 (-115/-115), rec 1.5 (-135/+105), ruatt 8.5 (-110/-120), ruyd 31.5 (-115/-115)
+     * Ben Yurosek: atd 0.5 (+750), recyd 3.5 (-110/-120), rec 0.5 (-130/+100)
+     * Carson Wentz: atd 0.5 (+1100), paatt 30.5 (-110/-120), cmp 19.5 (-115/-115), int 0.5 (-125/-105), patd 1.5 (+110/-140), payd 210.5 (-115/-115), ruatt 3.5 (+115/-150), ruyd 7.5 (-115/-115)
+     * DJ Moore: atd 0.5 (+275), recyd 47.5 (-115/-115), rec 3.5 (-125/-105)
+     * Dalton Kincaid: atd 0.5 (+275), recyd 36.5 (-115/-115), rec 3.5 (+115/-145)
+     * Dawson Knox: atd 0.5 (+650), recyd 7.5 (-115/-115), rec 1.5 (+160/-225)
+     * James Cook: atd 0.5 (-110), recyd 8.5 (-120/-110), rec 1.5 (-140/+110), ruatt 18.5 (-105/-125), ruyd 82.5 (-115/-115)
+     * Jordan Addison: atd 0.5 (+250), recyd 39.5 (-115/-115), rec 3.5 (-115/-115)
+     * Jordan Mason: atd 0.5 (+200), ruatt 11.5 (-120/-110), ruyd 47.5 (-115/-115)
+     * Josh Allen: atd 0.5 (-125), paatt 30.5 (-115/-115), cmp 20.5 (-105/-125), int 0.5 (-110/-120), patd 1.5 (+145/-195), payd 237.5 (-115/-115), ruatt 7.5 (-105/-125), ruyd 32.5 (-110/-120)
+     * Justin Jefferson: atd 0.5 (+155), recyd 78.5 (-115/-115), rec 6.5 (-115/-115)
+     * Keon Coleman: atd 0.5 (+400), recyd 28.5 (-115/-115), rec 2.5 (+105/-140)
+     * Khalil Shakir: atd 0.5 (+300), recyd 38.5 (-115/-115), rec 3.5 (-160/+120)
+     * Myles Price: atd 0.5 (+700)
+     * Skyler Bell: atd 0.5 (+900), recyd 5.5 (-110/-120), rec 0.5 (-140/+110)
+     * T.J. Hockenson: atd 0.5 (+200), recyd 41.5 (-115/-115), rec 4.5 (-110/-120)
+     * Tai Felton: atd 0.5 (+475)
+     * Ty Johnson: atd 0.5 (+700), recyd 15.5 (-115/-115), rec 1.5 (-170/+130)
