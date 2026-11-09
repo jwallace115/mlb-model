@@ -353,3 +353,5 @@
 {"utc": "20261108T1830Z", "feed": "espn_depth", "sha256": "16bd99323021b6f63e2dfc64c9388c1deceb0249ba6efe417824a4ee7293a09c", "status": "written"}
 {"utc": "20261109T0030Z", "feed": "espn_depth", "sha256": "a1b0731130d1bb63d331d93e5aa762d0e28fec217ed3ee68ca03be80a5533222", "status": "written"}
 {"utc": "20261109T0630Z", "feed": "espn_depth", "sha256": "78cec557e0c6f6d05d8203cfa6f98b68e13d2a80226a4512c991a079046ca157", "status": "written"}
+{"utc": "20261109T0901Z", "feed": "nflverse_depth", "file": "depth_charts.parquet", "sha256": "a272419e4ca5afa87682c465fb84c1c87d6c0d7fcc80b1e2a2ee360d02a1c543", "max_dt": "2026-11-09T07:02:18+00:00", "rows": 9393, "status": "delta"}
+{"utc":"20261109T0900Z","feed":"nflverse_injuries","file":"injuries.parquet","sha256":"b5898042a88d2cd2c221d60794e9dc869c0f2c86e8cc5910e1f5155a760913cc","status":"written"}
