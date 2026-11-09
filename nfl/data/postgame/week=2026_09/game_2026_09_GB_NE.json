@@ -1,0 +1,128 @@
+{
+  "game_id": "2026_09_GB_NE",
+  "week": 9,
+  "home": "NE",
+  "away": "GB",
+  "final_score": {
+    "home": 27,
+    "away": 45
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 176,
+      "plays_trailing_14": 176,
+      "halftime_score": {
+        "home": 27,
+        "away": 45
+      },
+      "garbage_time_plays": 41
+    },
+    "away": {
+      "plays_leading_7": 176,
+      "plays_leading_14": 176,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 27,
+        "away": 45
+      },
+      "garbage_time_plays": 41
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 62,
+      "dropbacks": 46,
+      "rush_attempts": 16,
+      "pass_rate": 0.7419354838709677,
+      "run_rate": 0.25806451612903225,
+      "pass_oe": 2.665627723739993
+    },
+    "away": {
+      "plays": 65,
+      "dropbacks": 32,
+      "rush_attempts": 33,
+      "pass_rate": 0.49230769230769234,
+      "run_rate": 0.5076923076923077,
+      "pass_oe": 2.900980682327197
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 3,
+      "fumbles_lost": 1,
+      "total": 4
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 7,
+      "touchdowns": 4
+    }
+  },
+  "injuries": [
+    {
+      "player": "S.Williams",
+      "team": "GB",
+      "quarter": 2,
+      "play_id": 2294,
+      "desc": "(1:52) (Shotgun) 10-J.Love pass incomplete short middle to 83-S.Williams (0-C.Gonzalez). NE-7-C.Davis was injured during the play."
+    },
+    {
+      "player": "D.Douglas",
+      "team": "NE",
+      "quarter": 2,
+      "play_id": 2417,
+      "desc": "(1:08) (Shotgun) 10-D.Maye pass incomplete short left to 3-D.Douglas. NE-77-B.Brown was injured during the play."
+    },
+    {
+      "player": "T.Smack",
+      "team": "NE",
+      "quarter": 3,
+      "play_id": 3312,
+      "desc": "28-T.Smack kicks 64 yards from GB 35 to NE 1. 9-C.Kiner to NE 23 for 22 yards (16-B.Melton). NE-36-C.Latu was injured during the play."
+    },
+    {
+      "player": "R.Stevenson",
+      "team": "NE",
+      "quarter": 3,
+      "play_id": 3370,
+      "desc": "(3:29) (Shotgun) 10-D.Maye pass short left to 38-R.Stevenson to NE 37 for 6 yards (58-I.McDuffie). NE-38-R.Stevenson was injured during the play."
+    },
+    {
+      "player": "L.Larison",
+      "team": "NE",
+      "quarter": 3,
+      "play_id": 3453,
+      "desc": "(1:59) (Shotgun) 10-D.Maye pass incomplete deep right to 34-L.Larison (31-N.Niemann). GB-33-E.Williams was injured during the play."
+    },
+    {
+      "player": "E.Raridon",
+      "team": "NE",
+      "quarter": 4,
+      "play_id": 3864,
+      "desc": "(11:45) (Shotgun) 10-D.Maye pass incomplete short left to 82-E.Raridon. NE-66-W.Campbell was injured during the play. ** Injury Update: GB-33-E.Williams has returned to the game."
+    },
+    {
+      "player": "C.Kiner",
+      "team": "NE",
+      "quarter": 4,
+      "play_id": 4373,
+      "desc": "(4:00) 9-C.Kiner left end for 4 yards, TOUCHDOWN. GB-58-I.McDuffie was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

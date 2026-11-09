@@ -1,0 +1,86 @@
+{
+  "game_id": "2026_09_ARI_SEA",
+  "week": 9,
+  "home": "SEA",
+  "away": "ARI",
+  "final_score": {
+    "home": 17,
+    "away": 3
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 156,
+      "plays_leading_14": 156,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 17,
+        "away": 3
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 156,
+      "plays_trailing_14": 156,
+      "halftime_score": {
+        "home": 17,
+        "away": 3
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 61,
+      "dropbacks": 28,
+      "rush_attempts": 33,
+      "pass_rate": 0.45901639344262296,
+      "run_rate": 0.540983606557377,
+      "pass_oe": -8.897113835527783
+    },
+    "away": {
+      "plays": 51,
+      "dropbacks": 33,
+      "rush_attempts": 18,
+      "pass_rate": 0.6470588235294118,
+      "run_rate": 0.3529411764705882,
+      "pass_oe": 4.993742844968472
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 2,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 2,
+      "touchdowns": 0
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Price",
+      "team": "SEA",
+      "quarter": 1,
+      "play_id": 864,
+      "desc": "(3:38) (No Huddle) 8-J.Price right end to ARI 38 for 3 yards (28-A.Wingard). ARI-51-R.Lopez was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

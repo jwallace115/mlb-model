@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_09_TB_CHI",
+  "week": 9,
+  "home": "CHI",
+  "away": "TB",
+  "final_score": {
+    "home": 27,
+    "away": 24
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 27,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 27,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 60,
+      "dropbacks": 38,
+      "rush_attempts": 22,
+      "pass_rate": 0.6333333333333333,
+      "run_rate": 0.3666666666666667,
+      "pass_oe": 8.421360941256507
+    },
+    "away": {
+      "plays": 65,
+      "dropbacks": 36,
+      "rush_attempts": 29,
+      "pass_rate": 0.5538461538461539,
+      "run_rate": 0.4461538461538461,
+      "pass_oe": -13.27032620337472
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 4,
+      "fumbles_lost": 1,
+      "total": 5
+    },
+    "away": {
+      "interceptions": 2,
+      "fumbles_lost": 0,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 1,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "K.Raymond",
+      "team": "CHI",
+      "quarter": 2,
+      "play_id": 1590,
+      "desc": "(5:18) 18-C.Williams pass short right to 14-K.Raymond to TB 39 for 13 yards (94-C.Kancey; 31-A.Winfield). TB-31-A.Winfield was injured during the play."
+    },
+    {
+      "player": "T.Johnson",
+      "team": "TB",
+      "quarter": 3,
+      "play_id": 2357,
+      "desc": "(12:41) 6-B.Mayfield pass deep middle to 15-T.Johnson to CHI 2 for 58 yards (6-K.Gordon). CHI-6-K.Gordon was injured during the play."
+    },
+    {
+      "player": "C.Santos",
+      "team": "TB",
+      "quarter": 3,
+      "play_id": 3100,
+      "desc": "8-C.Santos kicks 63 yards from CHI 35 to TB 2. 44-S.Tucker to TB 26 for 24 yards (92-D.Hardy). TB-44-S.Tucker was injured during the play."
+    },
+    {
+      "player": "L.Burden",
+      "team": "CHI",
+      "quarter": 4,
+      "play_id": 4079,
+      "desc": "(3:48) (Shotgun) 18-C.Williams pass short left to 10-L.Burden to CHI 19 for 4 yards (3-R.Bain; 22-K.Scott). FUMBLES (3-R.Bain), RECOVERED by TB-5-I.Melifonwu at CHI 21. 5-I.Melifonwu to CHI 17 for 4 y"
+    }
+  ],
+  "ftn": "not covered"
+}

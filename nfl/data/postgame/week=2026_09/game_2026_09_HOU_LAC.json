@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_09_HOU_LAC",
+  "week": 9,
+  "home": "LAC",
+  "away": "HOU",
+  "final_score": {
+    "home": 22,
+    "away": 44
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 193,
+      "plays_trailing_14": 193,
+      "halftime_score": {
+        "home": 22,
+        "away": 44
+      },
+      "garbage_time_plays": 48
+    },
+    "away": {
+      "plays_leading_7": 193,
+      "plays_leading_14": 193,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 22,
+        "away": 44
+      },
+      "garbage_time_plays": 48
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 69,
+      "dropbacks": 39,
+      "rush_attempts": 30,
+      "pass_rate": 0.5652173913043478,
+      "run_rate": 0.4347826086956522,
+      "pass_oe": -14.509571731930048
+    },
+    "away": {
+      "plays": 66,
+      "dropbacks": 38,
+      "rush_attempts": 28,
+      "pass_rate": 0.5757575757575758,
+      "run_rate": 0.4242424242424242,
+      "pass_oe": 6.072227662319646
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 7,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "T.Harris",
+      "team": "LAC",
+      "quarter": 3,
+      "play_id": 2643,
+      "desc": "(13:03) 10-J.Herbert pass incomplete deep left to 9-T.Harris (3-K.Lassiter). LAC-9-T.Harris was injured during the play."
+    },
+    {
+      "player": "O.Hampton",
+      "team": "LAC",
+      "quarter": 4,
+      "play_id": 4090,
+      "desc": "(5:56) 8-O.Hampton right tackle to HOU 12 for 32 yards (24-D.Stingley). HOU-24-D.Stingley was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

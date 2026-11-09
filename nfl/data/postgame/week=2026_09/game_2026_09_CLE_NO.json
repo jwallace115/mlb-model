@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_09_CLE_NO",
+  "week": 9,
+  "home": "NO",
+  "away": "CLE",
+  "final_score": {
+    "home": 23,
+    "away": 22
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 22
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 22
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": true
+  },
+  "volume": {
+    "home": {
+      "plays": 72,
+      "dropbacks": 40,
+      "rush_attempts": 32,
+      "pass_rate": 0.5555555555555556,
+      "run_rate": 0.4444444444444444,
+      "pass_oe": 0.41891421015198166
+    },
+    "away": {
+      "plays": 71,
+      "dropbacks": 37,
+      "rush_attempts": 34,
+      "pass_rate": 0.5211267605633803,
+      "run_rate": 0.47887323943661975,
+      "pass_oe": -4.368341224534171
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 0
+    }
+  },
+  "injuries": [
+    {
+      "player": "S.Sanders",
+      "team": "CLE",
+      "quarter": 2,
+      "play_id": 1474,
+      "desc": "(4:36) (Shotgun) 2-S.Sanders scrambles left end to CLE 20 for 1 yard (96-C.Granderson). CLE-58-A.Barber was injured during the play."
+    },
+    {
+      "player": "S.Sanders",
+      "team": "CLE",
+      "quarter": 3,
+      "play_id": 2200,
+      "desc": "(12:02) (Shotgun) 2-S.Sanders scrambles right end to CLE 37 for 11 yards (20-P.Werner). NO-22-M.Emerson was injured during the play."
+    },
+    {
+      "player": "S.Sanders",
+      "team": "CLE",
+      "quarter": 3,
+      "play_id": 2790,
+      "desc": "(1:41) (Shotgun) 2-S.Sanders sacked at CLE 24 for -9 yards (96-C.Granderson). CLE-1-K.Concepcion was injured during the play. Penalty on CLE-55-S.Fano, Offensive Holding, declined."
+    },
+    {
+      "player": "D.Vele",
+      "team": "NO",
+      "quarter": 4,
+      "play_id": 3629,
+      "desc": "(4:31) (No Huddle, Shotgun) 6-T.Shough pass incomplete deep left to 14-D.Vele (33-R.Hickman) [94-M.Graham]. CLE-33-R.Hickman was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}
