@@ -722,5 +722,297 @@
     "8f68604c47a7db841963eb62623db417": "line_move: pinnacle totals Under 47.5\u219246.5; line_move: pinnacle totals Over 47.5\u219246.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261110T150405Z.parquet",
+  "sha256": "092cf34d1d6856a61d6ff15f22fc6faa8ff010d06b95c90df687919825a26a86",
+  "logged_utc": "2026-11-10T15:04:05.673943+00:00",
+  "rows": 18,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 6,
+  "no_view_share": 0.722,
+  "revised_rows": 17,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-11T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261110T150013Z.parquet",
+   "inputs_digest": "{\"5fc2c0b99e391f74694276d2eb95146c\": \"97cbf78fd8525596\", \"c827ec84e911847450bcaf12c21abd11\": \"8be85b65cc62c8be\", \"8f68604c47a7db841963eb62623db417\": \"7b6ff564bb7cff36\", \"a8f5a967982255fd6be0435c3b213b0f\": \"d5e1bac4c155130c\", \"88407c59161b47299b7d8f5d730f916c\": \"b6c254ef13ff1da8\", \"5129a94416920cd3c476cd56af387f47\": \"18fb2758bacb6690\"}",
+   "components": {
+    "5fc2c0b99e391f74694276d2eb95146c": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       500
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -642
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       14.0,
+       103
+      ],
+      [
+       "Western Michigan Broncos",
+       -14.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -106
+      ],
+      [
+       "Under",
+       49.0,
+       -110
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Western Michigan squares off against Akron in MAC "
+     ],
+     "kalshi_snap": "snap_20261110T1507Z.parquet"
+    },
+    "c827ec84e911847450bcaf12c21abd11": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       -206
+      ],
+      [
+       "Kent State Golden Flashes",
+       0,
+       183
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       -5.5,
+       -106
+      ],
+      [
+       "Kent State Golden Flashes",
+       5.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -106
+      ],
+      [
+       "Under",
+       44.0,
+       -110
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "MAC matchup features Bowling Green playing Kent St"
+     ],
+     "kalshi_snap": "snap_20261110T1507Z.parquet"
+    },
+    "8f68604c47a7db841963eb62623db417": {
+     "pinnacle_h2h": [
+      [
+       "Miami (OH) RedHawks",
+       0,
+       105
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -115
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami (OH) RedHawks",
+       1.0,
+       -102
+      ],
+      [
+       "Ohio Bobcats",
+       -1.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -106
+      ],
+      [
+       "Under",
+       46.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Breaking down the CFP race for three conferences a",
+      "CFP 24-team format: What you need to know about th",
+      "It's Week 10 and everything remains up for grabs i",
+      "Miami (OH) meets Ohio in MAC play"
+     ],
+     "kalshi_snap": "snap_20261110T1507Z.parquet"
+    },
+    "a8f5a967982255fd6be0435c3b213b0f": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       118
+      ],
+      [
+       "Buffalo Bulls",
+       0,
+       -136
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       2.5,
+       -104
+      ],
+      [
+       "Buffalo Bulls",
+       -2.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -109
+      ],
+      [
+       "Under",
+       51.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Buffalo squares off against Ball State in MAC acti",
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261110T1507Z.parquet"
+    },
+    "88407c59161b47299b7d8f5d730f916c": {
+     "pinnacle_h2h": [
+      [
+       "Central Michigan Chippewas",
+       0,
+       -1042
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       659
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Central Michigan Chippewas",
+       -18.0,
+       -111
+      ],
+      [
+       "Sacramento State Hornets",
+       18.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -110
+      ],
+      [
+       "Under",
+       44.0,
+       -108
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Central Michigan hosts Sacramento State in MAC act"
+     ],
+     "kalshi_snap": "snap_20261110T1507Z.parquet"
+    },
+    "5129a94416920cd3c476cd56af387f47": {
+     "pinnacle_h2h": [
+      [
+       "Toledo Rockets",
+       0,
+       -659
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       466
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Toledo Rockets",
+       -14.5,
+       -102
+      ],
+      [
+       "UMass Minutemen",
+       14.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -110
+      ],
+      [
+       "Under",
+       52.0,
+       -108
+      ]
+     ],
+     "news": [
+      "Breaking down the CFP race for three conferences a",
+      "CFP 24-team format: What you need to know about th",
+      "MAC matchup features Toledo playing UMass"
+     ],
+     "kalshi_snap": "snap_20261110T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "5fc2c0b99e391f74694276d2eb95146c": "anchor_morning",
+    "c827ec84e911847450bcaf12c21abd11": "anchor_morning",
+    "8f68604c47a7db841963eb62623db417": "anchor_morning",
+    "a8f5a967982255fd6be0435c3b213b0f": "anchor_morning",
+    "88407c59161b47299b7d8f5d730f916c": "anchor_morning",
+    "5129a94416920cd3c476cd56af387f47": "anchor_morning"
+   }
+  }
  }
 ]
