@@ -448,5 +448,164 @@
     "8f68604c47a7db841963eb62623db417": "line_move: pinnacle totals Under 48.5\u219247.5; line_move: pinnacle totals Over 48.5\u219247.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261110T011903Z.parquet",
+  "sha256": "9fcc98beedd5ab12d63279a112794a15a7fe7ff4472c7af8ea2016b41ab35fe0",
+  "logged_utc": "2026-11-10T01:19:03.199840+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.778,
+  "revised_rows": 0,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-12T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261110T010005Z.parquet",
+   "inputs_digest": "{\"a8f5a967982255fd6be0435c3b213b0f\": \"80fce943347c46ab\", \"88407c59161b47299b7d8f5d730f916c\": \"41b0d8678778fa7a\", \"5129a94416920cd3c476cd56af387f47\": \"3f9e29d99f8adc16\"}",
+   "components": {
+    "a8f5a967982255fd6be0435c3b213b0f": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       118
+      ],
+      [
+       "Buffalo Bulls",
+       0,
+       -136
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       2.5,
+       -104
+      ],
+      [
+       "Buffalo Bulls",
+       -2.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -109
+      ],
+      [
+       "Under",
+       51.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Buffalo squares off against Ball State in MAC acti",
+      "CFP 24-team format: What you need to know about th",
+      "Watson's 13-yard TD run in OT lifts UMass over Bal"
+     ],
+     "kalshi_snap": "snap_20261110T0007Z.parquet"
+    },
+    "88407c59161b47299b7d8f5d730f916c": {
+     "pinnacle_h2h": [
+      [
+       "Central Michigan Chippewas",
+       0,
+       -1042
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       659
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Central Michigan Chippewas",
+       -18.0,
+       -111
+      ],
+      [
+       "Sacramento State Hornets",
+       18.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -110
+      ],
+      [
+       "Under",
+       44.0,
+       -108
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Central Michigan hosts Sacramento State in MAC act",
+      "Nick Woodford scores 3 times and Central Michigan "
+     ],
+     "kalshi_snap": "snap_20261110T0007Z.parquet"
+    },
+    "5129a94416920cd3c476cd56af387f47": {
+     "pinnacle_h2h": [
+      [
+       "Toledo Rockets",
+       0,
+       -658
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       466
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Toledo Rockets",
+       -14.5,
+       -102
+      ],
+      [
+       "UMass Minutemen",
+       14.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -106
+      ],
+      [
+       "Under",
+       52.0,
+       -113
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "MAC matchup features Toledo playing UMass"
+     ],
+     "kalshi_snap": "snap_20261110T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "a8f5a967982255fd6be0435c3b213b0f": "anchor_morning",
+    "88407c59161b47299b7d8f5d730f916c": "anchor_morning",
+    "5129a94416920cd3c476cd56af387f47": "anchor_morning"
+   }
+  }
  }
 ]
