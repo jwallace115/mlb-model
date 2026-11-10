@@ -1129,5 +1129,118 @@
     "8f68604c47a7db841963eb62623db417": "line_move: pinnacle totals Under 46.5\u219247.5; line_move: pinnacle totals Over 46.5\u219247.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261110T210403Z.parquet",
+  "sha256": "c745189cd439cb4379118e18042e1dd853c8ebcc14fc483ed27d1caf6b0d9e20",
+  "logged_utc": "2026-11-10T21:04:03.346352+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 4,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-11T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261110T210008Z.parquet",
+   "inputs_digest": "{\"5fc2c0b99e391f74694276d2eb95146c\": \"d961a5207aa7fd78\", \"c827ec84e911847450bcaf12c21abd11\": \"6b38bd87b7f4db46\"}",
+   "components": {
+    "5fc2c0b99e391f74694276d2eb95146c": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       527
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -684
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       15.0,
+       -102
+      ],
+      [
+       "Western Michigan Broncos",
+       -15.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -111
+      ],
+      [
+       "Under",
+       49.0,
+       -105
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Western Michigan squares off against Akron in MAC "
+     ],
+     "kalshi_snap": "snap_20261110T2107Z.parquet"
+    },
+    "c827ec84e911847450bcaf12c21abd11": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       -193
+      ],
+      [
+       "Kent State Golden Flashes",
+       0,
+       172
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       -5.5,
+       102
+      ],
+      [
+       "Kent State Golden Flashes",
+       5.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -106
+      ],
+      [
+       "Under",
+       43.5,
+       -110
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "MAC matchup features Bowling Green playing Kent St"
+     ],
+     "kalshi_snap": "snap_20261110T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "5fc2c0b99e391f74694276d2eb95146c": "anchor_prekick",
+    "c827ec84e911847450bcaf12c21abd11": "anchor_prekick"
+   }
+  }
  }
 ]
