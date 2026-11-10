@@ -363,3 +363,4 @@
 {"utc":"20261110T0900Z","feed":"nflverse_injuries","file":"injuries.parquet","sha256":"b5898042a88d2cd2c221d60794e9dc869c0f2c86e8cc5910e1f5155a760913cc","status":"unchanged"}
 {"utc":"20261110T0900Z","feed":"nflverse_rosters","file":"rosters_weekly.parquet","sha256":"c0e1ea3c366a5604b910df3367874638ccf0ae8cadc1988279eba16acfbfcbfc","status":"written"}
 {"utc": "20261110T1230Z", "feed": "espn_depth", "sha256": "959e1bccc8933472b42062c178bb0b8e91958854ea6ab1d9eec4c4fa20ecaa12", "status": "written"}
+{"utc": "20261110T1830Z", "feed": "espn_depth", "sha256": "d2eb675b2036bdc3b0762b973b4e96797de07f2625d9f115028640df38ecbb7d", "status": "written"}
