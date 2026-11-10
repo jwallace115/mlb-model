@@ -30,26 +30,6 @@
   "freeze_file": null
  },
  {
-  "sport": "ncaaf",
-  "window": "event",
-  "started_utc": "2026-11-10T16:04:04.432764+00:00",
-  "finished_utc": "2026-11-10T16:04:04.432764+00:00",
-  "result": "no_triggers",
-  "step": "window_watch",
-  "message": "",
-  "freeze_file": null
- },
- {
-  "sport": "nfl",
-  "window": "event",
-  "started_utc": "2026-11-10T16:17:06.524462+00:00",
-  "finished_utc": "2026-11-10T16:17:06.524462+00:00",
-  "result": "no_triggers",
-  "step": "window_watch",
-  "message": "",
-  "freeze_file": null
- },
- {
   "sport": "nfl",
   "window": "open",
   "started_utc": "2026-11-10T16:29:24.083857+00:00",
@@ -58,5 +38,25 @@
   "step": "done",
   "message": "",
   "freeze_file": null
+ },
+ {
+  "sport": "nfl",
+  "window": "event",
+  "started_utc": "2026-11-10T16:47:09.637983+00:00",
+  "finished_utc": "2026-11-10T16:47:09.637983+00:00",
+  "result": "no_triggers",
+  "step": "window_watch",
+  "message": "",
+  "freeze_file": null
+ },
+ {
+  "sport": "ncaaf",
+  "window": "event",
+  "started_utc": "2026-11-10T16:56:02.998851+00:00",
+  "finished_utc": "2026-11-10T16:56:02.998851+00:00",
+  "result": "COMPLETE",
+  "step": "window_watch",
+  "message": "['line_move: pinnacle spreads Western Michigan Broncos -14.0\u2192-15.0; line_move: pinnacle spreads Akron Zips 14.0\u219215.0', 'line_move: pinnacle totals Under 46.5\u219247.5; line_move: pinnacle totals Over 46.5",
+  "freeze_file": "ai_opinions_20261110T161905Z.parquet"
  }
 ]

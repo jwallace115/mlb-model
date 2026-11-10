@@ -1014,5 +1014,120 @@
     "5129a94416920cd3c476cd56af387f47": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261110T161905Z.parquet",
+  "sha256": "53c8e3f286101c5f362c4fd2894d23ba1a77f6e955a65ab561b10055ba149e43",
+  "logged_utc": "2026-11-10T16:19:05.352132+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.333,
+  "revised_rows": 6,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-11T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261110T160007Z.parquet",
+   "inputs_digest": "{\"5fc2c0b99e391f74694276d2eb95146c\": \"f3cad9cbba4e36be\", \"8f68604c47a7db841963eb62623db417\": \"0137141165297fda\"}",
+   "components": {
+    "5fc2c0b99e391f74694276d2eb95146c": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       541
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -706
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       15.0,
+       102
+      ],
+      [
+       "Western Michigan Broncos",
+       -15.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -108
+      ],
+      [
+       "Under",
+       49.0,
+       -108
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Western Michigan squares off against Akron in MAC "
+     ],
+     "kalshi_snap": "snap_20261110T1507Z.parquet"
+    },
+    "8f68604c47a7db841963eb62623db417": {
+     "pinnacle_h2h": [
+      [
+       "Miami (OH) RedHawks",
+       0,
+       102
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -113
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami (OH) RedHawks",
+       1.0,
+       -105
+      ],
+      [
+       "Ohio Bobcats",
+       -1.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -107
+      ],
+      [
+       "Under",
+       47.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Breaking down the CFP race for three conferences a",
+      "CFP 24-team format: What you need to know about th",
+      "It's Week 10 and everything remains up for grabs i",
+      "Miami (OH) meets Ohio in MAC play"
+     ],
+     "kalshi_snap": "snap_20261110T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "5fc2c0b99e391f74694276d2eb95146c": "line_move: pinnacle spreads Western Michigan Broncos -14.0\u2192-15.0; line_move: pinnacle spreads Akron Zips 14.0\u219215.0",
+    "8f68604c47a7db841963eb62623db417": "line_move: pinnacle totals Under 46.5\u219247.5; line_move: pinnacle totals Over 46.5\u219247.5"
+   }
+  }
  }
 ]
