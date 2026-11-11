@@ -651,5 +651,161 @@
     "74d39e19225caf211ad2c8eb4110179f": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261111T211704Z.parquet",
+  "sha256": "fe9296927ffa691cdb0379a3078abdd2e4a88f550cc61714003ba584442a17b0",
+  "logged_utc": "2026-11-11T21:17:04.250677+00:00",
+  "rows": 74,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.946,
+  "revised_rows": 74,
+  "oldest_source_age_min": 436.9,
+  "first_kickoff_utc": "2026-11-13T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261111T210008Z.parquet",
+   "inputs_digest": "{\"74d39e19225caf211ad2c8eb4110179f\": \"765193bd51683f16\"}",
+   "components": {
+    "74d39e19225caf211ad2c8eb4110179f": {
+     "hardrockbet_fl_h2h": [
+      [
+       "New York Giants",
+       0,
+       -135
+      ],
+      [
+       "Washington Commanders",
+       0,
+       115
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "New York Giants",
+       -2.5,
+       -110
+      ],
+      [
+       "Washington Commanders",
+       2.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       41.5,
+       -110
+      ],
+      [
+       "Under",
+       41.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "New York Giants",
+       0,
+       -136
+      ],
+      [
+       "Washington Commanders",
+       0,
+       121
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New York Giants",
+       -2.5,
+       -106
+      ],
+      [
+       "Washington Commanders",
+       2.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.0,
+       -108
+      ],
+      [
+       "Under",
+       41.0,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-11T21:17:46.996765+00:00",
+     "inj_New York Giants": "d2038e3ca514a3c5",
+     "inj_Washington Commanders": "c1344f3bcbe491c0",
+     "news": [
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Adam Schefter's players to watch at the trade dead",
+      "As the 'Peanut Punch' takes over NFL, how do teams",
+      "Can Isaiah Likely remain an elite fantasy TE with ",
+      "Commanders face major challenges against Rams",
+      "Commanders running low on time to 'put it all toge",
+      "Commanders stand pat at trade deadline",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Giants 'feel fairly good' about QB J.J. McCarthy (",
+      "Giants QB J.J. McCarthy says he'll be fine after b",
+      "Giants' Cam Skattebo doubtful vs. Eagles; Malik Na",
+      "Giants' Malik Nabers takes issue with Greg Olsen, ",
+      "Giants' Nabers calls Fox analyst Olsen's body lang",
+      "Harbaugh: Giants 'feel fairly good' about McCarthy",
+      "How active NFL players continue to redefine all-ti",
+      "Ian Rapoport gives an update on Myles Garrett's im",
+      "J.J. McCarthy wowing Giants after initial concerns",
+      "John Harbaugh: Giants did pull offer for Jonathan ",
+      "Judging overreactions to NFL Week 9 -- and what th",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 10 betting odds: Lines and totals for eve",
+      "NFL Week 9 arrivals: Caleb Williams rocks Supreme ",
+      "NFL Week 9 arrivals: Efton Chism III welcomes back",
+      "NFL Week 9 arrivals: Justin Jefferson rocks black ",
+      "NFL Week 9 arrivals: Lions show support for Jack C",
+      "NFL Week 9 predictions: Upsets, fantasy sleepers, ",
+      "NFL Week 9 preview: Picks, predictions, schedule, ",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL Week 9: Big takeaways, questions and fantasy s",
+      "NFL trade deadline grades: Deals for Jacoby Brisse",
+      "NFL trade deadline grades: Deals for Jessie Bates ",
+      "NFL trade deadline grades: Deals for Jordan Davis,",
+      "NFL trade deadline grades: Deals for Kirk Cousins,",
+      "New York Giants vs. Philadelphia Eagles: Game High",
+      "Puka Nacua, Myles Garrett lead Rams to 20-13 win o",
+      "Questions on 2026 NFL trade deadline deals: Does K",
+      "Rams outlast Commanders with defensive showcase",
+      "Saints reference Shedeur Sanders quote after win, ",
+      "Sources: Colts among several NFL teams mulling tra",
+      "Sources: Giants called Falcons to ask about Bijan ",
+      "The New York Giants 'don't care' that they're NFC ",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "Who are the winningest NFL coaches of all time?",
+      "Why Giants' trade attempts 'just didn't happen'",
+      "Why the Commanders are running out of time",
+      "Will Isaiah Likely remain an elite fantasy TE with",
+      "Winston, McCarthy combine to lead Giants to 19-11 ",
+      "Winston, McCarthy lead Giants past Eagles in Week "
+     ],
+     "kalshi_snap": "snap_20261111T2105Z.parquet"
+    }
+   },
+   "triggers": {
+    "74d39e19225caf211ad2c8eb4110179f": "new_props: pull 2026-11-11T21:17:46.996765+00:00; injury_change: inj_New York Giants; injury_change: inj_Washington Commanders"
+   }
+  }
  }
 ]
