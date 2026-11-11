@@ -1,0 +1,70 @@
+packet built 2026-11-11T15:02Z | snap snap_20261111T150013Z.parquet | props pull 2026-11-11T14:00 | kalshi snap_20261111T1435Z.parquet | injuries injuries_20261111T1230Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: anchor_morning
+######## Washington Commanders @ New York Giants  kick 11-13T01:15Z
+  HR ML: Giants -135 / Commanders +115 (no-vig home 0.553) | Pinnacle no-vig home 0.561
+  HR spread: Giants -2.5 -110 / Commanders +2.5 -110 | Pinnacle Giants -2.5 (-107) | HR open -2.0 (20261110)
+  HR total: 41.5 O-110/U-110 | Pinnacle 41.0 O-108/U-108 | HR open 42.5
+  Kalshi ML [('Washington wins', 0.43, 312329), ('New York G wins', 0.56, 703140)] | spread [('New York G wins by over 2.5 points?', 0.51, 303282), ('New York G wins by over 3.5 points?', 0.41, 32539)] | total [('Full Game: over 41.5 points scored?', 0.48, 11255), ('Full Game: over 42.5 points scored?', 0.46, 22518)]
+  -- Washington Commanders injuries (20261111T1230)
+     Ques TE Colson Yankoff: Yankoff (knee) did not participate in Tuesday's walkthrough practice.
+     Ques WR Treylon Burks: questionable
+     Acti TE Chig Okonkwo: Okonkwo (hip) was a full participant in Tuesday's practice.
+     Doub G  Lucas Patrick: doubtful
+     Acti WR Antonio Williams: Williams caught three passes for 25 yards on six targets in Sunday's 20-13 loss to the Rams.
+     Acti RB Austin Ekeler: Ekeler rushed eight times for 16 yards and caught two of three targets for 18 yards during Sunday's 20-13 loss to the Rams.
+     Acti QB Athan Kaliakmanis: 
+     Acti WR Van Jefferson: Jefferson caught five of seven targets for 58 yards and a touchdown in Sunday's 20-13 loss to the Rams.
+     Acti WR Stefon Diggs: Diggs caught three of five targets for 51 yards in Sunday's 20-13 loss to the Rams.
+     Acti RB Rachaad White: White carried the ball seven times for 28 yards and caught two of three targets for 41 yards in Sunday's 20-13 loss to the Rams.
+     Acti QB Jayden Daniels: Daniels completed 24 of 35 passes for 274 yards and a touchdown in Sunday's 20-13 loss to the Rams. He also gained 16 rushing yards on four carries an
+     Inju WR Dyami Brown: The Commanders placed Brown (calf) on injured reserve Saturday.
+     Acti TE John Bates: 
+     Inju DT Daron Payne: Payne (foot) underwent season-ending surgery Wednesday, Ben Standig of The Team 980 Washington D.C. reports.
+     Inju RB Jeremy McNichols: McNichols, who suffered a foot injury Sunday against the Eagles that may require surgery, is out for the season, Ian Rapoport of NFL Network reports.
+     Inju DT Javon Kinlaw: Kinlaw underwent season-ending surgery Tuesday to repair his MCL, Nicki Jhabvala of The Athletic reports.
+     Acti RB Robert Henry Jr.: The Commanders claimed Henry off waivers from the Seahawks on Tuesday.
+     news 11-09T17:14 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-10T01:12 NFL Week 9 arrivals: Justin Jefferson rocks black leather trench coat before 'MNF'
+     news 11-10T11:24 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 11-10T13:34 Commanders running low on time to 'put it all together'
+     news 11-10T22:40 Commanders stand pat at trade deadline
+  -- New York Giants injuries (20261111T1230)
+     Acti RB Greg Desrosiers Jr.: Desrosiers carried the ball three times for 20 yards during the Giants' win over the Eagles on Sunday.
+     Ques CB Colton Hood: questionable
+     Acti TE Theo Johnson: Johnson wasn't targeted in Sunday's 19-11 win over the Eagles.
+     Acti WR Darnell Mooney: Mooney (chest) was a full participant in Tuesday's practice, Dan Salomone of the Giants' official site reports.
+     Acti WR Charlie Jones: 
+     Ques QB J.J. McCarthy: McCarthy (hip) was listed as a full participant in Tuesday's practice, Dan Salomone of the Giants' official site reports.
+     Out  RB Cam Skattebo: Skattebo (hamstring) was listed as a full participant in Tuesday's practice, Dan Salomone of the Giants' official site reports.
+     Acti WR Malachi Fields: Fields caught three of five targets for 40 yards in Sunday's 19-11 win over the Eagles.
+     Ques LB Malik Harrison: questionable
+     Ques LB Abdul Carter: questionable
+     Acti TE Thomas Fidone II: 
+     Acti TE Isaiah Likely: Likely caught five of six targets for 53 yards and a touchdown in Sunday's 19-11 win over the Eagles.
+     Acti RB Devin Singletary: Singletary rushed 21 times for 31 yards and caught two of three targets for eight yards in Sunday's 19-11 win over the Eagles.
+     Acti WR Malik Nabers: Nabers caught five of eight targets for 43 yards in Sunday's 19-11 win over the Eagles.
+     Acti WR Jalin Hyatt: The Giants signed Hyatt from their practice squad to their active roster Saturday, Dan Salomone of the team's official site reports.
+     news 11-10T17:29 NFL trade deadline grades: Deals for Jordan Davis, Jessie Bates III, Andre Cisco
+     news 11-11T00:27 Giants' Nabers calls Fox analyst Olsen's body language critique a 'lie'
+     news 11-11T02:53 NFL trade deadline grades: Deals for Kirk Cousins, Josh Downs, Ryan Neuzil
+     news 11-11T04:59 Why Giants' trade attempts 'just didn't happen'
+     news 11-11T11:18 Questions on 2026 NFL trade deadline deals: Does Kirk Cousins lift the Vikings?
+  -- props (pull 2026-11-11T14:00)
+     * Antonio Williams: atd 0.5 (+275), recyd 40.5 (-115/-115), rec 3.5 (-140/+110)
+     * Austin Ekeler: atd 0.5 (+325), recyd 8.5 (-120/-110), rec 1.5 (-110/-120), ruatt 8.5 (+100/-130), ruyd 28.5 (-110/-120)
+     * Cam Skattebo: atd 0.5 (+120), recyd 7.5 (-115/-115), rec 1.5 (+125/-165), ruatt 13.5 (-115/-115), ruyd 50.5 (-115/-115)
+     * Chig Okonkwo: atd 0.5 (+275), recyd 35.5 (-115/-115), rec 3.5 (-160/+125)
+     * Darnell Mooney: atd 0.5 (+700), recyd 15.5 (-115/-115), rec 1.5 (-110/-120)
+     * Devin Singletary: atd 0.5 (+260), recyd 8.5 (-115/-115), rec 1.5 (+115/-150), ruatt 6.5 (-130/+100), ruyd 24.5 (-115/-115)
+     * Isaiah Likely: atd 0.5 (+200), recyd 47.5 (-115/-115), rec 4.5 (-120/-110)
+     * J.J. McCarthy: atd 0.5 (+425), paatt 30.5 (-125/-105), cmp 18.5 (-120/-110), int 0.5 (-135/+105), patd 1.5 (+155/-210), payd 210.5 (-115/-115), ruyd 17.5 (-120/-110)
+     * Jayden Daniels: atd 0.5 (+260), paatt 31.5 (-110/-120), cmp 19.5 (-110/-120), int 0.5 (+100/-130), patd 1.5 (+160/-225), payd 200.5 (-115/-115), ruatt 5.5 (-130/+105), ruyd 35.5 (-110/-120)
+     * Malachi Fields: atd 0.5 (+425), recyd 25.5 (-115/-115), rec 2.5 (+130/-170)
+     * Malik Nabers: atd 0.5 (+160), recyd 68.5 (-115/-115), rec 5.5 (-130/+100)
+     * Rachaad White: atd 0.5 (+165), recyd 13.5 (-110/-120), rec 2.5 (+120/-160), ruatt 10.5 (-120/-110), ruyd 37.5 (-115/-115)
+     * Stefon Diggs: atd 0.5 (+250), recyd 40.5 (-115/-115), rec 3.5 (-165/+125)
+     * Theo Johnson: atd 0.5 (+750), recyd 4.5 (-120/-110), rec 0.5 (-170/+130)
+     * Treylon Burks: atd 0.5 (+450)
+     * Van Jefferson: atd 0.5 (+475)

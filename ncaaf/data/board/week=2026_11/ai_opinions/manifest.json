@@ -1778,5 +1778,257 @@
     "a8f5a967982255fd6be0435c3b213b0f": "line_move: pinnacle spreads Ball State Cardinals 2.5\u21921.0; line_move: pinnacle spreads Buffalo Bulls -2.5\u2192-1.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261111T150404Z.parquet",
+  "sha256": "8ca2f394bc60f77dd404f0a676d4fa1fd938461814380d04e66caaa93fa2d13d",
+  "logged_utc": "2026-11-11T15:04:04.763795+00:00",
+  "rows": 15,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.533,
+  "revised_rows": 13,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-12T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261111T150013Z.parquet",
+   "inputs_digest": "{\"a8f5a967982255fd6be0435c3b213b0f\": \"c06ac8d1fa4ccb5b\", \"88407c59161b47299b7d8f5d730f916c\": \"e9790975038995f2\", \"5129a94416920cd3c476cd56af387f47\": \"b711dc6b3b63933d\", \"9d463c4686f84c78b890f0fcf2ac90c5\": \"60b20a9bd7df636c\", \"6a3fbf6388d7c72076555fc4a4bbedf2\": \"8d59925568f03998\"}",
+   "components": {
+    "a8f5a967982255fd6be0435c3b213b0f": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       101
+      ],
+      [
+       "Buffalo Bulls",
+       0,
+       -112
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       1.0,
+       -105
+      ],
+      [
+       "Buffalo Bulls",
+       -1.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -114
+      ],
+      [
+       "Under",
+       51.0,
+       -102
+      ]
+     ],
+     "news": [
+      "Buffalo squares off against Ball State in MAC acti",
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261111T1507Z.parquet"
+    },
+    "88407c59161b47299b7d8f5d730f916c": {
+     "pinnacle_h2h": [
+      [
+       "Central Michigan Chippewas",
+       0,
+       -984
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       709
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Central Michigan Chippewas",
+       -18.0,
+       -109
+      ],
+      [
+       "Sacramento State Hornets",
+       18.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -109
+      ],
+      [
+       "Under",
+       44.0,
+       -107
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "CFP 24-team format: What you need to know about th",
+      "Central Michigan hosts Sacramento State in MAC act"
+     ],
+     "kalshi_snap": "snap_20261111T1507Z.parquet"
+    },
+    "5129a94416920cd3c476cd56af387f47": {
+     "pinnacle_h2h": [
+      [
+       "Toledo Rockets",
+       0,
+       -576
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       456
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Toledo Rockets",
+       -14.0,
+       -108
+      ],
+      [
+       "UMass Minutemen",
+       14.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -103
+      ],
+      [
+       "Under",
+       52.0,
+       -114
+      ]
+     ],
+     "news": [
+      "Breaking down the CFP race for three conferences a",
+      "CFP 24-team format: What you need to know about th",
+      "MAC matchup features Toledo playing UMass"
+     ],
+     "kalshi_snap": "snap_20261111T1507Z.parquet"
+    },
+    "9d463c4686f84c78b890f0fcf2ac90c5": {
+     "pinnacle_h2h": [
+      [
+       "Memphis Tigers",
+       0,
+       -169
+      ],
+      [
+       "South Florida Bulls",
+       0,
+       149
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Memphis Tigers",
+       -4.0,
+       101
+      ],
+      [
+       "South Florida Bulls",
+       4.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -113
+      ],
+      [
+       "Under",
+       49.5,
+       -103
+      ]
+     ],
+     "news": [
+      "AAC matchup features Memphis against South Florida",
+      "Andrew Conrad's 55-yard FG with 2 seconds left lif",
+      "Breaking down the CFP race for three conferences a",
+      "CFP 24-team format: What you need to know about th",
+      "South Florida Bulls vs. East Carolina Pirates: Ful"
+     ],
+     "kalshi_snap": "snap_20261111T1507Z.parquet"
+    },
+    "6a3fbf6388d7c72076555fc4a4bbedf2": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -413
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       331
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Ragin Cajuns",
+       -11.0,
+       102
+      ],
+      [
+       "UL Monroe Warhawks",
+       11.0,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -107
+      ],
+      [
+       "Under",
+       49.0,
+       -109
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Louisiana visits UL Monroe in Sun Belt action",
+      "Murray kicks 40-yard FG, Howard has game-sealing i",
+      "UL Monroe Warhawks vs. Arkansas State Red Wolves: "
+     ],
+     "kalshi_snap": "snap_20261111T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "a8f5a967982255fd6be0435c3b213b0f": "anchor_morning",
+    "88407c59161b47299b7d8f5d730f916c": "anchor_morning",
+    "5129a94416920cd3c476cd56af387f47": "anchor_morning",
+    "9d463c4686f84c78b890f0fcf2ac90c5": "anchor_morning",
+    "6a3fbf6388d7c72076555fc4a4bbedf2": "anchor_morning"
+   }
+  }
  }
 ]
