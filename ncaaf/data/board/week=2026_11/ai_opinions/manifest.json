@@ -1497,5 +1497,77 @@
     "8f68604c47a7db841963eb62623db417": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261111T010403Z.parquet",
+  "sha256": "5a33118d85e269ccee38d1c1e90c3964daab2a97cb1de6f6c3bef4d521972884",
+  "logged_utc": "2026-11-11T01:04:03.496184+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-13T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261111T010005Z.parquet",
+   "inputs_digest": "{\"9d463c4686f84c78b890f0fcf2ac90c5\": \"d9b47d28558e22c9\"}",
+   "components": {
+    "9d463c4686f84c78b890f0fcf2ac90c5": {
+     "pinnacle_h2h": [
+      [
+       "Memphis Tigers",
+       0,
+       -176
+      ],
+      [
+       "South Florida Bulls",
+       0,
+       151
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Memphis Tigers",
+       -4.0,
+       -102
+      ],
+      [
+       "South Florida Bulls",
+       4.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -114
+      ],
+      [
+       "Under",
+       49.5,
+       -104
+      ]
+     ],
+     "news": [
+      "AAC matchup features Memphis against South Florida",
+      "Andrew Conrad's 55-yard FG with 2 seconds left lif",
+      "Breaking down the CFP race for three conferences a",
+      "CFP 24-team format: What you need to know about th",
+      "South Florida Bulls vs. East Carolina Pirates: Ful"
+     ],
+     "kalshi_snap": "snap_20261111T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "9d463c4686f84c78b890f0fcf2ac90c5": "anchor_morning"
+   }
+  }
  }
 ]
