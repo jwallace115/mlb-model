@@ -1426,5 +1426,76 @@
     "c827ec84e911847450bcaf12c21abd11": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261111T001903Z.parquet",
+  "sha256": "b26b32736b9535fe22241f87b08ebd29bceb6062dd1b65262a353053b99c38d4",
+  "logged_utc": "2026-11-11T00:19:03.900897+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-11T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261111T000009Z.parquet",
+   "inputs_digest": "{\"8f68604c47a7db841963eb62623db417\": \"c1cebb67b26b4a53\"}",
+   "components": {
+    "8f68604c47a7db841963eb62623db417": {
+     "pinnacle_h2h": [
+      [
+       "Miami (OH) RedHawks",
+       0,
+       103
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -113
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami (OH) RedHawks",
+       1.0,
+       -103
+      ],
+      [
+       "Ohio Bobcats",
+       -1.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -102
+      ],
+      [
+       "Under",
+       47.5,
+       -115
+      ]
+     ],
+     "news": [
+      "Breaking down the CFP race for three conferences a",
+      "CFP 24-team format: What you need to know about th",
+      "It's Week 10 and everything remains up for grabs i",
+      "Miami (OH) meets Ohio in MAC play"
+     ],
+     "kalshi_snap": "snap_20261111T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "8f68604c47a7db841963eb62623db417": "anchor_close"
+   }
+  }
  }
 ]
