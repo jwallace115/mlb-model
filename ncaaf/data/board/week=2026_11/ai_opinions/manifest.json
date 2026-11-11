@@ -1640,5 +1640,74 @@
     "6a3fbf6388d7c72076555fc4a4bbedf2": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261111T033404Z.parquet",
+  "sha256": "adbab3a96070b5218057720d422e80f5a3e41e4440af6a62b08626753be835fc",
+  "logged_utc": "2026-11-11T03:34:04.002555+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 1,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-12T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261111T033005Z.parquet",
+   "inputs_digest": "{\"a8f5a967982255fd6be0435c3b213b0f\": \"49cd215088dcf051\"}",
+   "components": {
+    "a8f5a967982255fd6be0435c3b213b0f": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       104
+      ],
+      [
+       "Buffalo Bulls",
+       0,
+       -119
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       2.5,
+       -118
+      ],
+      [
+       "Buffalo Bulls",
+       -2.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -109
+      ],
+      [
+       "Under",
+       51.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Buffalo squares off against Ball State in MAC acti",
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261111T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "a8f5a967982255fd6be0435c3b213b0f": "ml_move: pinnacle novig 0.443\u21920.474"
+   }
+  }
  }
 ]
