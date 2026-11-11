@@ -1569,5 +1569,76 @@
     "9d463c4686f84c78b890f0fcf2ac90c5": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261111T021903Z.parquet",
+  "sha256": "f71e72497cc44a68c1a0ab032bf30690e0f705066015ce14e3400baaff9cb3d6",
+  "logged_utc": "2026-11-11T02:19:03.944755+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-13T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261111T020009Z.parquet",
+   "inputs_digest": "{\"6a3fbf6388d7c72076555fc4a4bbedf2\": \"df3d5e9eb60eee7a\"}",
+   "components": {
+    "6a3fbf6388d7c72076555fc4a4bbedf2": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -420
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       325
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Ragin Cajuns",
+       -11.0,
+       101
+      ],
+      [
+       "UL Monroe Warhawks",
+       11.0,
+       -118
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -108
+      ],
+      [
+       "Under",
+       49.0,
+       -110
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Louisiana visits UL Monroe in Sun Belt action",
+      "Murray kicks 40-yard FG, Howard has game-sealing i",
+      "UL Monroe Warhawks vs. Arkansas State Red Wolves: "
+     ],
+     "kalshi_snap": "snap_20261111T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "6a3fbf6388d7c72076555fc4a4bbedf2": "anchor_morning"
+   }
+  }
  }
 ]
