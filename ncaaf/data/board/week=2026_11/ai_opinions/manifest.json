@@ -2100,5 +2100,164 @@
     "88407c59161b47299b7d8f5d730f916c": "line_move: pinnacle spreads Sacramento State Hornets 18.0\u219217.0; line_move: pinnacle spreads Central Michigan Chippewas -18.0\u2192-17.0; line_move: pinnacle totals Under 44.0\u219243.0; line_move: pinnacle totals Over 44.0\u219243.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261111T213403Z.parquet",
+  "sha256": "ffad309223a10751560f3afc35f324762dee953b968328384155c60667102f2b",
+  "logged_utc": "2026-11-11T21:34:03.194274+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.444,
+  "revised_rows": 9,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-12T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261111T213005Z.parquet",
+   "inputs_digest": "{\"a8f5a967982255fd6be0435c3b213b0f\": \"c53a0a6698b817c6\", \"88407c59161b47299b7d8f5d730f916c\": \"649346b055e004a3\", \"5129a94416920cd3c476cd56af387f47\": \"b873aefe346c6c01\"}",
+   "components": {
+    "a8f5a967982255fd6be0435c3b213b0f": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       102
+      ],
+      [
+       "Buffalo Bulls",
+       0,
+       -113
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       1.0,
+       -104
+      ],
+      [
+       "Buffalo Bulls",
+       -1.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -110
+      ],
+      [
+       "Under",
+       51.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Buffalo squares off against Ball State in MAC acti",
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261111T2107Z.parquet"
+    },
+    "88407c59161b47299b7d8f5d730f916c": {
+     "pinnacle_h2h": [
+      [
+       "Central Michigan Chippewas",
+       0,
+       -899
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       659
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Central Michigan Chippewas",
+       -17.0,
+       -106
+      ],
+      [
+       "Sacramento State Hornets",
+       17.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -104
+      ],
+      [
+       "Under",
+       43.0,
+       -112
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "CFP 24-team format: What you need to know about th",
+      "Central Michigan hosts Sacramento State in MAC act"
+     ],
+     "kalshi_snap": "snap_20261111T2107Z.parquet"
+    },
+    "5129a94416920cd3c476cd56af387f47": {
+     "pinnacle_h2h": [
+      [
+       "Toledo Rockets",
+       0,
+       -566
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       450
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Toledo Rockets",
+       -14.0,
+       -105
+      ],
+      [
+       "UMass Minutemen",
+       14.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -106
+      ],
+      [
+       "Under",
+       52.0,
+       -110
+      ]
+     ],
+     "news": [
+      "Breaking down the CFP race for three conferences a",
+      "CFP 24-team format: What you need to know about th",
+      "MAC matchup features Toledo playing UMass"
+     ],
+     "kalshi_snap": "snap_20261111T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "a8f5a967982255fd6be0435c3b213b0f": "anchor_prekick",
+    "88407c59161b47299b7d8f5d730f916c": "anchor_prekick",
+    "5129a94416920cd3c476cd56af387f47": "anchor_prekick"
+   }
+  }
  }
 ]

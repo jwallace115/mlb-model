@@ -1,17 +1,12 @@
 {
- "started_utc": "2026-11-11T21:17:04.250677+00:00",
- "finished_utc": "2026-11-11T21:22:44.703579+00:00",
+ "started_utc": "2026-11-11T21:47:03.181738+00:00",
+ "finished_utc": "2026-11-11T21:47:03.502882+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "74d39e19225caf211ad2c8eb4110179f",
-   "text": "new_props: pull 2026-11-11T21:17:46.996765+00:00; injury_change: inj_New York Giants; injury_change: inj_Washington Commanders"
-  }
- ],
- "games_read": 1,
- "frozen_file": "ai_opinions_20261111T211704Z.parquet",
- "spend_usd": 14.6139,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
