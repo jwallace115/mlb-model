@@ -2030,5 +2030,75 @@
     "6a3fbf6388d7c72076555fc4a4bbedf2": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261111T161903Z.parquet",
+  "sha256": "644d8e4b23fc2cd8227b32cd032be00a73775beae787adb1012305984bedb85b",
+  "logged_utc": "2026-11-11T16:19:03.909261+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-12T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261111T160007Z.parquet",
+   "inputs_digest": "{\"88407c59161b47299b7d8f5d730f916c\": \"67901e1d6edd83b7\"}",
+   "components": {
+    "88407c59161b47299b7d8f5d730f916c": {
+     "pinnacle_h2h": [
+      [
+       "Central Michigan Chippewas",
+       0,
+       -899
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       659
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Central Michigan Chippewas",
+       -17.0,
+       -106
+      ],
+      [
+       "Sacramento State Hornets",
+       17.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -104
+      ],
+      [
+       "Under",
+       43.0,
+       -112
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "CFP 24-team format: What you need to know about th",
+      "Central Michigan hosts Sacramento State in MAC act"
+     ],
+     "kalshi_snap": "snap_20261111T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "88407c59161b47299b7d8f5d730f916c": "line_move: pinnacle spreads Sacramento State Hornets 18.0\u219217.0; line_move: pinnacle spreads Central Michigan Chippewas -18.0\u2192-17.0; line_move: pinnacle totals Under 44.0\u219243.0; line_move: pinnacle totals Over 44.0\u219243.0"
+   }
+  }
  }
 ]
