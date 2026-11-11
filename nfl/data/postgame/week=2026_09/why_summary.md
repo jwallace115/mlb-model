@@ -1,6 +1,6 @@
 # WHY Summary — Week 9
 
-Generated: 2026-11-10T12:12:26.947594+00:00
+Generated: 2026-11-11T12:11:24.540156+00:00
 
 
 ## Graded rows
@@ -93,18 +93,24 @@ Generated: 2026-11-10T12:12:26.947594+00:00
 - Jaylen Wright (1x): markets=['prop:rush_yds']
 - Audric Estime (1x): markets=['prop:rush_yds']
 
-## PBP vs official stat mismatches (11 rows)
+## PBP vs official stat mismatches (17 rows)
 
 - Shedeur Sanders: prop:pass_att official=31.0 pbp=32.0
+- Jayden Daniels: prop:pass_yds official=273.0 pbp=274.0
 - Shedeur Sanders: prop:pass_att official=31.0 pbp=32.0
+- Jayden Daniels: prop:pass_yds official=273.0 pbp=274.0
 - Justin Herbert: prop:pass_att official=23.0 pbp=24.0
+- Jayden Daniels: prop:pass_yds official=273.0 pbp=274.0
 - Justin Herbert: prop:pass_att official=23.0 pbp=24.0
+- Jayden Daniels: prop:pass_yds official=273.0 pbp=274.0
 - Bo Nix: prop:pass_att official=37.0 pbp=38.0
 - Khalil Shakir: prop:rec_yds official=58.0 pbp=53.0
 - Rhamondre Stevenson: prop:rec_yds official=46.0 pbp=40.0
 - Justin Herbert: prop:pass_att official=23.0 pbp=24.0
+- Chig Okonkwo: prop:rec_yds official=56.0 pbp=57.0
 - Shedeur Sanders: prop:pass_att official=31.0 pbp=32.0
 - Shedeur Sanders: prop:pass_att official=31.0 pbp=32.0
+- Jayden Daniels: prop:pass_yds official=273.0 pbp=274.0
 - Justin Herbert: prop:pass_att official=23.0 pbp=24.0
 
 ## FLAGGED FOR THE TUESDAY READ
