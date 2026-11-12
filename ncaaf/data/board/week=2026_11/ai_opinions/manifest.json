@@ -5402,5 +5402,190 @@
     "4ff5dc819e70afa47904e5b901e4f8bc": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261112T230403Z.parquet",
+  "sha256": "6c09058e2461da3ec9a4efb31d0d3de4a822ca3669c5f15e6bfb2b635b32766a",
+  "logged_utc": "2026-11-12T23:04:03.783766+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.778,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-13T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261112T230006Z.parquet",
+   "inputs_digest": "{\"6a3fbf6388d7c72076555fc4a4bbedf2\": \"b24a0cf15c15b1cc\", \"558ce811ad052f49918a2855f3777baf\": \"d57995b3dad05b01\", \"f9b805187f3809fdadddfa08dfa2a089\": \"5b2b74540f6e0f23\"}",
+   "components": {
+    "6a3fbf6388d7c72076555fc4a4bbedf2": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -384
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       322
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Ragin Cajuns",
+       -10.5,
+       -106
+      ],
+      [
+       "UL Monroe Warhawks",
+       10.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -102
+      ],
+      [
+       "Under",
+       48.0,
+       -114
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Louisiana visits UL Monroe in Sun Belt action",
+      "Murray kicks 40-yard FG, Howard has game-sealing i",
+      "UL Monroe Warhawks vs. Arkansas State Red Wolves: "
+     ],
+     "kalshi_snap": "snap_20261112T2107Z.parquet"
+    },
+    "558ce811ad052f49918a2855f3777baf": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       -117
+      ],
+      [
+       "Marshall Thundering Herd",
+       0,
+       104
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       -2.0,
+       -102
+      ],
+      [
+       "Marshall Thundering Herd",
+       2.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -108
+      ],
+      [
+       "Under",
+       54.0,
+       -108
+      ]
+     ],
+     "news": [
+      "Appalachian State and Marshall meet in Sun Belt pl",
+      "CFP 24-team format: What you need to know about th",
+      "Marshall Thundering Herd vs. Georgia Southern Eagl",
+      "Max Johnson throws 4 TD passes, adds 1 on the grou"
+     ],
+     "kalshi_snap": "snap_20261112T2107Z.parquet"
+    },
+    "f9b805187f3809fdadddfa08dfa2a089": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -593
+      ],
+      [
+       "Oregon State Beavers",
+       0,
+       448
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -14.5,
+       -105
+      ],
+      [
+       "Oregon State Beavers",
+       14.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       63.5,
+       -103
+      ],
+      [
+       "Under",
+       63.5,
+       -114
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "AP college football Week 10 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "Brad Jackson uses his legs for a 27-yard rushing T",
+      "Braden Atkinson doubtful, Maddux Madsen questionab",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "College Football Playoff top 12 projection after W",
+      "Connelly: How Week 10's top games were won, what i",
+      "Cutforth, Riley spark No. 20 Boise State\u2019s 8th str",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Georgia back at No. 1 in AP Top 25 ahead of Utah, ",
+      "It's Week 10 and everything remains up for grabs i",
+      "Oregon State visits No. 17 Boise State in Pac-12 m",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sources: Oregon State QB Braden Atkinson re-signs ",
+      "Texas State steamrolls Oregon State with 600 yards",
+      "The ACC and strength of schedule top this week's A",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "Where is 'College GameDay'? 2026 schedule, locatio",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261112T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "6a3fbf6388d7c72076555fc4a4bbedf2": "anchor_prekick",
+    "558ce811ad052f49918a2855f3777baf": "anchor_morning",
+    "f9b805187f3809fdadddfa08dfa2a089": "anchor_morning"
+   }
+  }
  }
 ]
