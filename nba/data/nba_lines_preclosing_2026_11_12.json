@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "d5c5ae8d56762b45d1ec4b85337878f3",
+    "game_date": "2026-11-12",
+    "sport": "NBA",
+    "home_team": "Washington Wizards",
+    "away_team": "Detroit Pistons",
+    "commence_time": "2026-11-13T00:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 221.5,
+    "over_price": -108,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-12T22:00:07.952616+00:00"
+  },
+  {
+    "game_id": "a98ff1ab79feb59277d989c656f16144",
+    "game_date": "2026-11-12",
+    "sport": "NBA",
+    "home_team": "Philadelphia 76ers",
+    "away_team": "Toronto Raptors",
+    "commence_time": "2026-11-13T00:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 223.5,
+    "over_price": -112,
+    "under_price": -108,
+    "book": "draftkings",
+    "capture_timestamp": "2026-11-12T22:00:07.952616+00:00"
+  },
+  {
+    "game_id": "3c93e4724d36d796aed71c0ca4055b1b",
+    "game_date": "2026-11-12",
+    "sport": "NBA",
+    "home_team": "Minnesota Timberwolves",
+    "away_team": "Dallas Mavericks",
+    "commence_time": "2026-11-13T01:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 226.0,
+    "over_price": -104,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-12T22:00:07.952616+00:00"
+  },
+  {
+    "game_id": "f3f429e773bfb2340ba2bb90f2b9dd1e",
+    "game_date": "2026-11-12",
+    "sport": "NBA",
+    "home_team": "Phoenix Suns",
+    "away_team": "Charlotte Hornets",
+    "commence_time": "2026-11-13T02:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 214.5,
+    "over_price": -105,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-12T22:00:07.952616+00:00"
+  }
+]

@@ -5009,5 +5009,204 @@
     "c2ccf2d604c3a791b12d26ccaaf65c70": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261112T213403Z.parquet",
+  "sha256": "1cd2d254f450e6c18b0dc3978ae912aa43e8d85ac7e58dd5caefd4b4defb4390",
+  "logged_utc": "2026-11-12T21:34:03.972171+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.889,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-14T21:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261112T213006Z.parquet",
+   "inputs_digest": "{\"a21a2f1087d443fa1a1c71e1a03a0fe0\": \"11799028a1ea741e\", \"aa1c9ee516cf122de53e75ffec017edd\": \"4a7d1b7d621d0656\", \"8ad669f4c9b70f38fdb057c114588776\": \"3992e1faa062d07c\"}",
+   "components": {
+    "a21a2f1087d443fa1a1c71e1a03a0fe0": {
+     "pinnacle_h2h": [
+      [
+       "Fresno State Bulldogs",
+       0,
+       298
+      ],
+      [
+       "Texas State Bobcats",
+       0,
+       -366
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Fresno State Bulldogs",
+       9.5,
+       -101
+      ],
+      [
+       "Texas State Bobcats",
+       -9.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.5,
+       -110
+      ],
+      [
+       "Under",
+       59.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Brad Jackson uses his legs for a 27-yard rushing T",
+      "CFP 24-team format: What you need to know about th",
+      "Texas State meets Fresno State in Pac-12 play",
+      "Texas State steamrolls Oregon State with 600 yards",
+      "Utah State keeps Fresno State out of the end zone "
+     ],
+     "kalshi_snap": "snap_20261112T2107Z.parquet"
+    },
+    "aa1c9ee516cf122de53e75ffec017edd": {
+     "pinnacle_h2h": [
+      [
+       "Michigan State Spartans",
+       0,
+       145
+      ],
+      [
+       "Washington Huskies",
+       0,
+       -165
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan State Spartans",
+       3.5,
+       -112
+      ],
+      [
+       "Washington Huskies",
+       -3.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -108
+      ],
+      [
+       "Under",
+       43.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly: How Week 10's top games were won, what i",
+      "Florida cancels Notre Dame series; Irish then add ",
+      "Michigan State makes 5 field goals, forces 4 turno",
+      "Washington takes on Michigan State in Big Ten acti"
+     ],
+     "kalshi_snap": "snap_20261112T2107Z.parquet"
+    },
+    "8ad669f4c9b70f38fdb057c114588776": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma Sooners",
+       0,
+       -107
+      ],
+      [
+       "Ole Miss Rebels",
+       0,
+       -105
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma Sooners",
+       1.0,
+       -112
+      ],
+      [
+       "Ole Miss Rebels",
+       -1.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -103
+      ],
+      [
+       "Under",
+       49.5,
+       -113
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "AP college football Week 10 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "Brent Venables lauds Jason Witten as Sooners shine",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly: How Week 10's top games were won, what i",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Gene Chizik dives into improved Oklahoma timing th",
+      "Gene Chizik's 'Words of Chizdom' to a few teams wh",
+      "Georgia back at No. 1 in AP Top 25 ahead of Utah, ",
+      "Georgia flips script on Trinidad Chambliss, domina",
+      "Gunner Stockton and No. 2 Georgia pound No. 12 Mis",
+      "Gunner Stockton, Georgia dominate Ole Miss 42-7",
+      "In the face of adversity, Oklahoma rises to the ch",
+      "It's Week 10 and everything remains up for grabs i",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "No. 19 Ole Miss and Oklahoma meet in SEC play",
+      "Oklahoma Sooners vs. Florida Gators: Full Highligh",
+      "Oklahoma throttles No. 25 Florida for a 23-7 victo",
+      "Oklahoma's Hansen credits Witten for stepping in a",
+      "Ole Miss fined $250K for fans throwing debris on f",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "Rebels' Pete Golding embraces move to new College ",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "Venables lauds Witten after Sooners shine in Oklah",
+      "Venables relays Witten's immediate impact on Oklah",
+      "What would a 24-team College Football Playoff brac",
+      "Which three-loss SEC team has the strongest CFP re",
+      "Who has the most wins vs. No. 1 college football t",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261112T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "a21a2f1087d443fa1a1c71e1a03a0fe0": "anchor_morning",
+    "aa1c9ee516cf122de53e75ffec017edd": "anchor_morning",
+    "8ad669f4c9b70f38fdb057c114588776": "anchor_morning"
+   }
+  }
  }
 ]
