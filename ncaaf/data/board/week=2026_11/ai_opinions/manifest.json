@@ -5324,5 +5324,83 @@
     "1ce059ad7e592e033a7efe38d7bc7352": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261112T223404Z.parquet",
+  "sha256": "b3e2281e13af41a1a33cb29b7d907b0709397ca0ac063d859b7f71c610bd98ff",
+  "logged_utc": "2026-11-12T22:34:04.050750+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-14T22:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261112T223008Z.parquet",
+   "inputs_digest": "{\"4ff5dc819e70afa47904e5b901e4f8bc\": \"0eaace2ef63dadce\"}",
+   "components": {
+    "4ff5dc819e70afa47904e5b901e4f8bc": {
+     "pinnacle_h2h": [
+      [
+       "Kansas Jayhawks",
+       0,
+       126
+      ],
+      [
+       "West Virginia Mountaineers",
+       0,
+       -142
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas Jayhawks",
+       3.0,
+       -114
+      ],
+      [
+       "West Virginia Mountaineers",
+       -3.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       67.5,
+       -106
+      ],
+      [
+       "Under",
+       67.5,
+       -110
+      ]
+     ],
+     "news": [
+      "'You don't belong there': Stephen A. takes issue w",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "Piening scores late touchdown as UCF stuns Kansas ",
+      "Thomas Castellanos throws 5 TD passes as No. 13 Te",
+      "Tom Luginbill: Texas Tech needs to win out",
+      "UCF Knights vs. Kansas Jayhawks: Full Highlights",
+      "West Virginia Mountaineers vs. Texas Tech Red Raid",
+      "West Virginia and Kansas meet in Big 12 play"
+     ],
+     "kalshi_snap": "snap_20261112T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "4ff5dc819e70afa47904e5b901e4f8bc": "anchor_morning"
+   }
+  }
  }
 ]
