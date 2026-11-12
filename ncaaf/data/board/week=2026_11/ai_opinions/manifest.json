@@ -2589,5 +2589,92 @@
     "bc528be865b10cd4a63a9e642c90d554": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261112T041903Z.parquet",
+  "sha256": "3addde220120539bbc80fe16fc4e240ed96f5ae1ad9c6d34c9715f111a954c00",
+  "logged_utc": "2026-11-12T04:19:03.436746+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-14T03:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261112T040007Z.parquet",
+   "inputs_digest": "{\"73d83d88b3a35eeb4bcf8462ff2070b2\": \"87aca83c410f8eda\"}",
+   "components": {
+    "73d83d88b3a35eeb4bcf8462ff2070b2": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       297
+      ],
+      [
+       "Houston Cougars",
+       0,
+       -363
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       10.0,
+       -113
+      ],
+      [
+       "Houston Cougars",
+       -10.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -113
+      ],
+      [
+       "Under",
+       51.0,
+       -104
+      ]
+     ],
+     "news": [
+      "'You don't belong there': Stephen A. takes issue w",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 10 poll reaction: What's ",
+      "Big 12 matchup features No. 14 Houston squaring of",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "Cincinnati Bearcats vs. Houston Cougars",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Colorado Buffaloes vs. Arizona State Sun Devils: F",
+      "Deion Sanders laments Colorado struggles, says he'",
+      "Deion Sanders says blame for Colorado's 3-6 season",
+      "Georgia back at No. 1 in AP Top 25 ahead of Utah, ",
+      "Jake Fette throws, catches a TD pass in Arizona St",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "Re\u2019Shaun Sanford II breaks tie with long TD run as",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What would a 24-team College Football Playoff brac",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261112T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "73d83d88b3a35eeb4bcf8462ff2070b2": "anchor_morning"
+   }
+  }
  }
 ]
