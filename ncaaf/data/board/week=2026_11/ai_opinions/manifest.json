@@ -3925,5 +3925,177 @@
     "6f50a1eb0425d8adc1f4914bf27289d0": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261112T193403Z.parquet",
+  "sha256": "5cba05a1ad151f81769ee2599f7636f1537dbe595b51a3b05dca10d57284319e",
+  "logged_utc": "2026-11-12T19:34:03.254917+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-14T19:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261112T193006Z.parquet",
+   "inputs_digest": "{\"28a08b75e830f2fbaaeaa3b42c2ebb63\": \"1d482deef143c788\", \"54769e255d6ea468fa2d12ed744eb6f2\": \"f520d02826996ad9\", \"d03caba2636ec407098ec3e1fe18fcf7\": \"611b0665c37a0e1b\"}",
+   "components": {
+    "28a08b75e830f2fbaaeaa3b42c2ebb63": {
+     "pinnacle_h2h": [
+      [
+       "Kansas State Wildcats",
+       0,
+       319
+      ],
+      [
+       "TCU Horned Frogs",
+       0,
+       -395
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas State Wildcats",
+       10.0,
+       100
+      ],
+      [
+       "TCU Horned Frogs",
+       -10.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -107
+      ],
+      [
+       "Under",
+       44.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "Allstate Playoff Predictor",
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Mestemaker and Hawkins lead Oklahoma State's domin",
+      "Oregon's 'Shoe Ducks' jab at Ohio State tops colle",
+      "TCU takes on Kansas State in Big 12 action"
+     ],
+     "kalshi_snap": "snap_20261112T1807Z.parquet"
+    },
+    "54769e255d6ea468fa2d12ed744eb6f2": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       -270
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       228
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       -7.0,
+       -111
+      ],
+      [
+       "Sam Houston State Bearkats",
+       7.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       100
+      ],
+      [
+       "Under",
+       47.0,
+       -116
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Delaware Blue Hens vs. Kennesaw State Owls: Full H",
+      "Kennesaw State visits Sam Houston in CUSA action",
+      "Varnes' 63-yard TD pass to Jesiolowski helps Kenne"
+     ],
+     "kalshi_snap": "snap_20261112T1807Z.parquet"
+    },
+    "d03caba2636ec407098ec3e1fe18fcf7": {
+     "pinnacle_h2h": [
+      [
+       "Rice Owls",
+       0,
+       -134
+      ],
+      [
+       "Tulane Green Wave",
+       0,
+       119
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Rice Owls",
+       -2.5,
+       -112
+      ],
+      [
+       "Tulane Green Wave",
+       2.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       100
+      ],
+      [
+       "Under",
+       48.5,
+       -116
+      ]
+     ],
+     "news": [
+      "AD David Harris slams Tulane's 'unacceptable' effo",
+      "Allstate Playoff Predictor",
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "CFP 24-team format: What you need to know about th",
+      "Jahiem White has 141 yards rushing and 4 TDs, Nort",
+      "Rice Owls vs. North Texas Mean Green: Full Highlig",
+      "Rice and Tulane meet in AAC play",
+      "What would a 24-team College Football Playoff brac"
+     ],
+     "kalshi_snap": "snap_20261112T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "28a08b75e830f2fbaaeaa3b42c2ebb63": "anchor_morning",
+    "54769e255d6ea468fa2d12ed744eb6f2": "anchor_morning",
+    "d03caba2636ec407098ec3e1fe18fcf7": "anchor_morning"
+   }
+  }
  }
 ]
