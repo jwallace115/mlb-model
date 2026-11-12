@@ -2499,5 +2499,95 @@
     "eff5d01c8683ed700c896743f0490989": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261112T030404Z.parquet",
+  "sha256": "9eaf897c5867234474cef6e506788bd04045b313c7b9560bcad47c6389fcde13",
+  "logged_utc": "2026-11-12T03:04:04.455595+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-14T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261112T030010Z.parquet",
+   "inputs_digest": "{\"bc528be865b10cd4a63a9e642c90d554\": \"08495be55cd71768\"}",
+   "components": {
+    "bc528be865b10cd4a63a9e642c90d554": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       322
+      ],
+      [
+       "UCLA Bruins",
+       0,
+       -399
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       10.0,
+       -105
+      ],
+      [
+       "UCLA Bruins",
+       -10.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -119
+      ],
+      [
+       "Under",
+       47.5,
+       102
+      ]
+     ],
+     "news": [
+      "'You don't belong there': Stephen A. takes issue w",
+      "AP college football Week 10 poll reaction: What's ",
+      "Betting buzz: Unbeaten UCLA, Utah shake up odds bo",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "College Football Playoff top 12 projection after W",
+      "Collin Dixon's 2 TD catches help Illinois become b",
+      "Georgia back at No. 1 in AP Top 25 ahead of Utah, ",
+      "Georgia jumps into CFP's top spot, followed by Uta",
+      "Illinois coach Bret Bielema takes veiled shot at S",
+      "Illinois visits No. 4 UCLA in Big Ten matchup",
+      "It's Week 10 and everything remains up for grabs i",
+      "Live highlights and top CFP analysis from Week 10'",
+      "No. 5 UCLA turns up the speed late to stay unbeate",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "UCLA scores two 75-yard TDs to beat Minnesota, rea",
+      "Who has the most wins vs. No. 1 college football t",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261112T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "bc528be865b10cd4a63a9e642c90d554": "anchor_morning"
+   }
+  }
  }
 ]
