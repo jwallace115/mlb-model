@@ -2676,5 +2676,77 @@
     "73d83d88b3a35eeb4bcf8462ff2070b2": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261112T141903Z.parquet",
+  "sha256": "9a15a93f0d3828280a1e2f91e13766c1f9cdf7464ae530bef07fcd43d4f63a75",
+  "logged_utc": "2026-11-12T14:19:03.570756+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-13T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261112T140012Z.parquet",
+   "inputs_digest": "{\"6a3fbf6388d7c72076555fc4a4bbedf2\": \"8d335254f09e2b5c\"}",
+   "components": {
+    "6a3fbf6388d7c72076555fc4a4bbedf2": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -376
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       315
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Ragin Cajuns",
+       -10.0,
+       -111
+      ],
+      [
+       "UL Monroe Warhawks",
+       10.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -102
+      ],
+      [
+       "Under",
+       48.0,
+       -114
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Louisiana visits UL Monroe in Sun Belt action",
+      "Murray kicks 40-yard FG, Howard has game-sealing i",
+      "UL Monroe Warhawks vs. Arkansas State Red Wolves: "
+     ],
+     "kalshi_snap": "snap_20261112T1207Z.parquet"
+    }
+   },
+   "triggers": {
+    "6a3fbf6388d7c72076555fc4a4bbedf2": "line_move: pinnacle spreads UL Monroe Warhawks 11.0\u219210.0; line_move: pinnacle spreads Louisiana Ragin Cajuns -11.0\u2192-10.0"
+   }
+  }
  }
 ]
