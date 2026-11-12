@@ -2418,5 +2418,86 @@
     "5129a94416920cd3c476cd56af387f47": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261112T000403Z.parquet",
+  "sha256": "6c48c46e9a7c77850a87f5054f33b5ba49df78786c7441de0a548f5e75eaf12f",
+  "logged_utc": "2026-11-12T00:04:03.746315+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-14T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261112T000010Z.parquet",
+   "inputs_digest": "{\"eff5d01c8683ed700c896743f0490989\": \"0b5a8866009c7730\"}",
+   "components": {
+    "eff5d01c8683ed700c896743f0490989": {
+     "pinnacle_h2h": [
+      [
+       "Florida State Seminoles",
+       0,
+       144
+      ],
+      [
+       "Pittsburgh Panthers",
+       0,
+       -164
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida State Seminoles",
+       3.5,
+       -113
+      ],
+      [
+       "Pittsburgh Panthers",
+       -3.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -104
+      ],
+      [
+       "Under",
+       53.5,
+       -112
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "FSU hires alum Jeff Purinton as athletic director",
+      "Florida State Seminoles vs. Boston College Eagles:",
+      "Florida State breaks 2-year road losing streak -- ",
+      "Interim HC Rick Stockstill wins debut; FSU ends 3-",
+      "Interim Rick Stockstill cherishes gritty first win",
+      "It's Week 10 and everything remains up for grabs i",
+      "Pittsburgh takes on Florida State in ACC action",
+      "Thomas runs for 2 TDs; FSU beats BC 31-24 to make ",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "Why Florida State chose Jeff Purinton as its new A"
+     ],
+     "kalshi_snap": "snap_20261112T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "eff5d01c8683ed700c896743f0490989": "anchor_morning"
+   }
+  }
  }
 ]
