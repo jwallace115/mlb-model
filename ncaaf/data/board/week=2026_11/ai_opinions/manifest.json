@@ -3569,5 +3569,361 @@
     "b7d77aed1f8f75da7679a059e627dfee": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261112T181904Z.parquet",
+  "sha256": "d9340be1f6a0dc85d0e0d5c3ebce0795555caf3a4d4c3b20e2d055948a69945f",
+  "logged_utc": "2026-11-12T18:19:04.142962+00:00",
+  "rows": 18,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 6,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-14T17:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261112T180011Z.parquet",
+   "inputs_digest": "{\"82eed9ad82fa12a1ace084358d3fd32d\": \"f47a8ec45a6581b3\", \"1742500c43d25085db47873b82f15459\": \"3b614832236d115d\", \"fe42d22bafb7d5f406317697dff44ee6\": \"1b4a79f3194d8ea4\", \"72e1af72402c489444f89a8600abb23f\": \"8b60f5bd0f08ed75\", \"01787a755109adbf19adf48ca4d60ddb\": \"7dfbebb3da4afcb0\", \"6f50a1eb0425d8adc1f4914bf27289d0\": \"cede13acbbf0b041\"}",
+   "components": {
+    "82eed9ad82fa12a1ace084358d3fd32d": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       -557
+      ],
+      [
+       "Georgia Tech Yellow Jackets",
+       0,
+       425
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       -13.5,
+       -113
+      ],
+      [
+       "Georgia Tech Yellow Jackets",
+       13.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -109
+      ],
+      [
+       "Under",
+       48.0,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "ACC matchup features Clemson squaring off against ",
+      "Allstate Playoff Predictor",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Key shakes up Georgia Tech staff, fires DC Semore,",
+      "Louisville Cardinals vs. Georgia Tech Yellow Jacke",
+      "Louisville clinches bowl eligibility with 44-17 ro",
+      "What would a 24-team College Football Playoff brac"
+     ],
+     "kalshi_snap": "snap_20261112T1807Z.parquet"
+    },
+    "1742500c43d25085db47873b82f15459": {
+     "pinnacle_h2h": [
+      [
+       "Nebraska Cornhuskers",
+       0,
+       -661
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       489
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nebraska Cornhuskers",
+       -14.5,
+       -109
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       14.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -111
+      ],
+      [
+       "Under",
+       52.0,
+       -105
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "It's Week 10 and everything remains up for grabs i",
+      "Nebraska and Rutgers meet in Big Ten play",
+      "Nebraska rewards defensive coordinator Rob Aurich ",
+      "Rutgers Scarlet Knights vs. Wisconsin Badgers: Ful",
+      "Rutgers retains coach Greg Schiano in 'best long-t",
+      "Ryan Hopkins shines in his first start as Wisconsi",
+      "Sources: Rutgers star KJ Duff out for season after"
+     ],
+     "kalshi_snap": "snap_20261112T1807Z.parquet"
+    },
+    "fe42d22bafb7d5f406317697dff44ee6": {
+     "pinnacle_h2h": [
+      [
+       "Alabama Crimson Tide",
+       0,
+       -900
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       624
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Alabama Crimson Tide",
+       -17.0,
+       -109
+      ],
+      [
+       "Vanderbilt Commodores",
+       17.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -103
+      ],
+      [
+       "Under",
+       51.0,
+       -113
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "AP college football Week 10 poll reaction: What's ",
+      "Alabama TE Josh Ford out for season with lower-bod",
+      "Alabama trounces LSU 31-13 in Baton Rouge",
+      "Alabama's execution exposes LSU's gap between effo",
+      "Allstate Playoff Predictor",
+      "Analyzing the tape on Bama's Keelon Russell dicing",
+      "Bama's Bray Hubbard introduces the cherished Cross",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "College Football Playoff top 12 projection after W",
+      "Connelly: How Week 10's top games were won, what i",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Georgia back at No. 1 in AP Top 25 ahead of Utah, ",
+      "Georgia jumps into CFP's top spot, followed by Uta",
+      "Goalposts in a river last time: No. 7 Alabama head",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "How every 2027 five-star college football prospect",
+      "It's Week 10 and everything remains up for grabs i",
+      "Kalen DeBoer discusses his thoughts on new CFP for",
+      "LSU flops on fourth downs in 'really disappointing",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "No. 7 Alabama and Vanderbilt meet in SEC play",
+      "Oregon's 'Shoe Ducks' jab at Ohio State tops colle",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "Predicting the College Football Playoff: Who's mos",
+      "Russell passes for 3 TDs to propel No. 9 Alabama p",
+      "SEC Now crew tells fans which two-loss SEC teams w",
+      "SEC Now's initial reaction to the latest CFP ranki",
+      "Sedrick Alexander credits teammates as Vandy TD re",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "Vanderbilt Commodores vs. Mississippi State Bulldo",
+      "Vanderbilt holds off Mississippi State to win its ",
+      "What would a 24-team College Football Playoff brac",
+      "Who has the most wins vs. No. 1 college football t",
+      "Who's No. 1? CFP committee's second top 25 and bra",
+      "Why Jordan Rodgers has an issue with Tennessee's C"
+     ],
+     "kalshi_snap": "snap_20261112T1807Z.parquet"
+    },
+    "72e1af72402c489444f89a8600abb23f": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas State Red Wolves",
+       0,
+       104
+      ],
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       -117
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas State Red Wolves",
+       1.5,
+       -107
+      ],
+      [
+       "Coastal Carolina Chanticleers",
+       -1.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -115
+      ],
+      [
+       "Under",
+       51.0,
+       -101
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Coastal Carolina meets Arkansas State in Sun Belt ",
+      "Murray kicks 40-yard FG, Howard has game-sealing i",
+      "UL Monroe Warhawks vs. Arkansas State Red Wolves: "
+     ],
+     "kalshi_snap": "snap_20261112T1807Z.parquet"
+    },
+    "01787a755109adbf19adf48ca4d60ddb": {
+     "pinnacle_h2h": [
+      [
+       "Charlotte 49ers",
+       0,
+       352
+      ],
+      [
+       "East Carolina Pirates",
+       0,
+       -443
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Charlotte 49ers",
+       11.5,
+       -106
+      ],
+      [
+       "East Carolina Pirates",
+       -11.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -109
+      ],
+      [
+       "Under",
+       45.0,
+       -107
+      ]
+     ],
+     "news": [
+      "AAC matchup features East Carolina squaring off ag",
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "CFP 24-team format: What you need to know about th",
+      "Charlotte 49ers vs. UAB Blazers: Full Highlights",
+      "Ja'Vin Simkins scores twice in 4th quarter and UAB"
+     ],
+     "kalshi_snap": "snap_20261112T1807Z.parquet"
+    },
+    "6f50a1eb0425d8adc1f4914bf27289d0": {
+     "pinnacle_h2h": [
+      [
+       "Temple Owls",
+       0,
+       -132
+      ],
+      [
+       "UAB Blazers",
+       0,
+       117
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Temple Owls",
+       -2.5,
+       -110
+      ],
+      [
+       "UAB Blazers",
+       2.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -111
+      ],
+      [
+       "Under",
+       48.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "CFP 24-team format: What you need to know about th",
+      "Charlotte 49ers vs. UAB Blazers: Full Highlights",
+      "Gutierrez runs for 5 TDs, Navy blows 28-point lead",
+      "Ja'Vin Simkins scores twice in 4th quarter and UAB",
+      "Temple hosts UAB in AAC play"
+     ],
+     "kalshi_snap": "snap_20261112T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "82eed9ad82fa12a1ace084358d3fd32d": "anchor_morning",
+    "1742500c43d25085db47873b82f15459": "anchor_morning",
+    "fe42d22bafb7d5f406317697dff44ee6": "anchor_morning",
+    "72e1af72402c489444f89a8600abb23f": "anchor_morning",
+    "01787a755109adbf19adf48ca4d60ddb": "anchor_morning",
+    "6f50a1eb0425d8adc1f4914bf27289d0": "anchor_morning"
+   }
+  }
  }
 ]
