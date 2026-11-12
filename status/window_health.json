@@ -1,32 +1,12 @@
 [
  {
   "sport": "nfl",
-  "window": "mid",
-  "started_utc": "2026-11-05T22:09:12.453348+00:00",
-  "finished_utc": "2026-11-05T22:09:12.453348+00:00",
-  "result": "STOP",
-  "step": "reader_v3",
-  "message": "exit -9",
-  "freeze_file": null
- },
- {
-  "sport": "nfl",
   "window": "late",
   "started_utc": "2026-11-07T23:15:53.779732+00:00",
   "finished_utc": "2026-11-07T23:15:53.779732+00:00",
   "result": "COMPLETE",
   "step": "done",
   "message": "",
-  "freeze_file": null
- },
- {
-  "sport": "nfl",
-  "window": "prekick",
-  "started_utc": "2026-11-09T22:23:53.557838+00:00",
-  "finished_utc": "2026-11-09T22:23:53.557838+00:00",
-  "result": "STOP",
-  "step": "reader_v3",
-  "message": "exit -9",
   "freeze_file": null
  },
  {
@@ -41,21 +21,41 @@
  },
  {
   "sport": "nfl",
-  "window": "event",
-  "started_utc": "2026-11-12T21:47:04.324122+00:00",
-  "finished_utc": "2026-11-12T21:47:04.324122+00:00",
-  "result": "no_triggers",
-  "step": "window_watch",
-  "message": "",
+  "window": "mid",
+  "started_utc": "2026-11-12T22:08:40.140824+00:00",
+  "finished_utc": "2026-11-12T22:08:40.140824+00:00",
+  "result": "STOP",
+  "step": "reader_v3",
+  "message": "exit -9",
   "freeze_file": null
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-12T21:49:04.668623+00:00",
-  "finished_utc": "2026-11-12T21:49:04.668623+00:00",
-  "result": "no_triggers",
+  "started_utc": "2026-11-12T22:21:22.994797+00:00",
+  "finished_utc": "2026-11-12T22:21:22.994797+00:00",
+  "result": "COMPLETE",
   "step": "window_watch",
+  "message": "['anchor_prekick', 'anchor_morning']",
+  "freeze_file": "ai_opinions_20261112T220403Z.parquet"
+ },
+ {
+  "sport": "nfl",
+  "window": "event",
+  "started_utc": "2026-11-12T22:22:45.429334+00:00",
+  "finished_utc": "2026-11-12T22:22:45.429334+00:00",
+  "result": "COMPLETE",
+  "step": "window_watch",
+  "message": "['anchor_prekick']",
+  "freeze_file": "ai_opinions_20261112T221705Z.parquet"
+ },
+ {
+  "sport": "nfl",
+  "window": "prekick",
+  "started_utc": "2026-11-12T22:29:44.401992+00:00",
+  "finished_utc": "2026-11-12T22:29:44.401992+00:00",
+  "result": "COMPLETE",
+  "step": "done",
   "message": "",
   "freeze_file": null
  }

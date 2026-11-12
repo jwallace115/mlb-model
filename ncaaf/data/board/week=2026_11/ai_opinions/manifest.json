@@ -5208,5 +5208,121 @@
     "8ad669f4c9b70f38fdb057c114588776": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261112T220403Z.parquet",
+  "sha256": "e5ce517b0c8a7c066a609cbced86f9c10881913589761c070fd96fe6c1d5f012",
+  "logged_utc": "2026-11-12T22:04:03.420156+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.8,
+  "first_kickoff_utc": "2026-11-13T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261112T220013Z.parquet",
+   "inputs_digest": "{\"9d463c4686f84c78b890f0fcf2ac90c5\": \"68437259e47261f2\", \"1ce059ad7e592e033a7efe38d7bc7352\": \"4d861088588f7167\"}",
+   "components": {
+    "9d463c4686f84c78b890f0fcf2ac90c5": {
+     "pinnacle_h2h": [
+      [
+       "Memphis Tigers",
+       0,
+       -180
+      ],
+      [
+       "South Florida Bulls",
+       0,
+       161
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Memphis Tigers",
+       -4.0,
+       -105
+      ],
+      [
+       "South Florida Bulls",
+       4.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -107
+      ],
+      [
+       "Under",
+       50.5,
+       -109
+      ]
+     ],
+     "news": [
+      "AAC matchup features Memphis against South Florida",
+      "Breaking down the CFP race for three conferences a",
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261112T2107Z.parquet"
+    },
+    "1ce059ad7e592e033a7efe38d7bc7352": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -905
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       627
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -17.5,
+       -101
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       17.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -109
+      ],
+      [
+       "Under",
+       56.0,
+       -107
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Calwise Jr. powers offense, Jackson Jr. leads defe",
+      "Louisiana Tech Bulldogs vs. Troy Trojans: Full Hig",
+      "Louisiana Tech takes on Southern Miss in Sun Belt "
+     ],
+     "kalshi_snap": "snap_20261112T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "9d463c4686f84c78b890f0fcf2ac90c5": "anchor_prekick",
+    "1ce059ad7e592e033a7efe38d7bc7352": "anchor_morning"
+   }
+  }
  }
 ]
