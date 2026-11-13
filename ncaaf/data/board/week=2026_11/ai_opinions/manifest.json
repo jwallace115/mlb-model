@@ -6807,5 +6807,242 @@
     "ee91eb14cc4d725be5df58f3285bdaa6": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T031903Z.parquet",
+  "sha256": "0d94e298469711890f64fc5a466e4af8d5c37f48c4e632b617719e8cd55a4b55",
+  "logged_utc": "2026-11-13T03:19:03.747458+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-15T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T030008Z.parquet",
+   "inputs_digest": "{\"3b677ea4fddccce26e4468faf7079768\": \"c0bf026689f27762\", \"320a213c475110f032710dcd06c94e8e\": \"3a0b3f1537c0e552\", \"ece9b1bb56a95381f1c485d22bd36dd8\": \"243eb1fa0c076a26\", \"21c985dda7b6b34cc9820a76dfad6172\": \"f1c7bc47702a58f3\"}",
+   "components": {
+    "3b677ea4fddccce26e4468faf7079768": {
+     "pinnacle_h2h": [
+      [
+       "Louisville Cardinals",
+       0,
+       -175
+      ],
+      [
+       "North Carolina Tar Heels",
+       0,
+       153
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisville Cardinals",
+       -3.5,
+       -108
+      ],
+      [
+       "North Carolina Tar Heels",
+       3.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.0,
+       -103
+      ],
+      [
+       "Under",
+       59.0,
+       -114
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "Bill Belichick's ex-girlfriend Jordon Hudson sues ",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "North Carolina hosts Louisville in ACC matchup"
+     ],
+     "kalshi_snap": "snap_20261113T0307Z.parquet"
+    },
+    "320a213c475110f032710dcd06c94e8e": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -170
+      ],
+      [
+       "Texas Tech Red Raiders",
+       0,
+       150
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma State Cowboys",
+       -3.5,
+       -103
+      ],
+      [
+       "Texas Tech Red Raiders",
+       3.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       73.5,
+       -106
+      ],
+      [
+       "Under",
+       73.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "AP college football Week 10 poll reaction: What's ",
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "Big 12 matchup features Oklahoma State squaring of",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "College Football Playoff top 12 projection after W",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Georgia back at No. 1 in AP Top 25 ahead of Utah, ",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "How every 2027 five-star college football prospect",
+      "Oklahoma State hosts No. 10 Texas Tech with Big 12",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "Predicting the College Football Playoff: Who's mos",
+      "The ACC and strength of schedule top this week's A",
+      "The oldest grudge in football",
+      "Thomas Castellanos throws 5 TD passes as No. 13 Te",
+      "Tom Luginbill: Texas Tech needs to win out",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "West Virginia Mountaineers vs. Texas Tech Red Raid",
+      "What would a 24-team College Football Playoff brac",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261113T0307Z.parquet"
+    },
+    "ece9b1bb56a95381f1c485d22bd36dd8": {
+     "pinnacle_h2h": [
+      [
+       "San Diego State Aztecs",
+       0,
+       126
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       -143
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "San Diego State Aztecs",
+       2.5,
+       102
+      ],
+      [
+       "Utah State Aggies",
+       -2.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -108
+      ],
+      [
+       "Under",
+       43.0,
+       -108
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Utah State and San Diego State meet in Pac-12 play",
+      "Utah State keeps Fresno State out of the end zone "
+     ],
+     "kalshi_snap": "snap_20261113T0307Z.parquet"
+    },
+    "21c985dda7b6b34cc9820a76dfad6172": {
+     "pinnacle_h2h": [
+      [
+       "UTEP Miners",
+       0,
+       264
+      ],
+      [
+       "Wyoming Cowboys",
+       0,
+       -318
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "UTEP Miners",
+       8.5,
+       -106
+      ],
+      [
+       "Wyoming Cowboys",
+       -8.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -109
+      ],
+      [
+       "Under",
+       40.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Alejado-Lacaden combo helps send Hawaii past UTEP ",
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "CFP 24-team format: What you need to know about th",
+      "Harris, Holman rushing attack helps Wyoming fight ",
+      "MWC matchup features Wyoming taking on UTEP",
+      "Samuel Harris powers past defense for 42-yard rush"
+     ],
+     "kalshi_snap": "snap_20261113T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "3b677ea4fddccce26e4468faf7079768": "line_move: pinnacle totals Over 60.0\u219259.0; line_move: pinnacle totals Under 60.0\u219259.0",
+    "320a213c475110f032710dcd06c94e8e": "anchor_morning",
+    "ece9b1bb56a95381f1c485d22bd36dd8": "anchor_morning",
+    "21c985dda7b6b34cc9820a76dfad6172": "anchor_morning"
+   }
+  }
  }
 ]
