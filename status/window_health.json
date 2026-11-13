@@ -42,8 +42,8 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-13T18:47:04.543637+00:00",
-  "finished_utc": "2026-11-13T18:47:04.543637+00:00",
+  "started_utc": "2026-11-13T19:17:03.822715+00:00",
+  "finished_utc": "2026-11-13T19:17:03.822715+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -52,11 +52,11 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-13T18:52:52.694252+00:00",
-  "finished_utc": "2026-11-13T18:52:52.694252+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-13T19:19:03.990466+00:00",
+  "finished_utc": "2026-11-13T19:19:03.990466+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle spreads UConn Huskies 3.5\u21925.0; line_move: pinnacle spreads James Madison Dukes -3.5\u2192-5.0', 'new_news: 1 availability items', 'line_move: pinnacle spreads Northern Illinois Huskie",
-  "freeze_file": "ai_opinions_20261113T183404Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]

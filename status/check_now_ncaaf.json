@@ -1,25 +1,12 @@
 {
- "started_utc": "2026-11-13T18:34:04.472939+00:00",
- "finished_utc": "2026-11-13T18:52:52.710198+00:00",
+ "started_utc": "2026-11-13T19:19:03.669931+00:00",
+ "finished_utc": "2026-11-13T19:19:04.041896+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "83b67813ba763c65142b4238e3c44270",
-   "text": "line_move: pinnacle spreads UConn Huskies 3.5\u21925.0; line_move: pinnacle spreads James Madison Dukes -3.5\u2192-5.0"
-  },
-  {
-   "game": "0da9451fe176ce110bdcf79c077bb223",
-   "text": "new_news: 1 availability items"
-  },
-  {
-   "game": "c2ccf2d604c3a791b12d26ccaaf65c70",
-   "text": "line_move: pinnacle spreads Northern Illinois Huskies 6.5\u21925.5; line_move: pinnacle spreads Nevada Wolf Pack -6.5\u2192-5.5"
-  }
- ],
- "games_read": 3,
- "frozen_file": "ai_opinions_20261113T183404Z.parquet",
- "spend_usd": 16.9072,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
