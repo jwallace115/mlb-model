@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "069bea369487ef0cd3017c9ceea68817",
+    "game_date": "2026-11-13",
+    "sport": "NHL",
+    "home_team": "Vancouver Canucks",
+    "away_team": "New York Rangers",
+    "commence_time": "2026-11-14T02:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.5,
+    "over_price": 101,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-13T22:00:06.915985+00:00"
+  },
+  {
+    "game_id": "21cd36d8c877a851efe2016178ff0bd1",
+    "game_date": "2026-11-13",
+    "sport": "NHL",
+    "home_team": "Vegas Golden Knights",
+    "away_team": "Nashville Predators",
+    "commence_time": "2026-11-14T03:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.0,
+    "over_price": -108,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-13T22:00:06.915985+00:00"
+  },
+  {
+    "game_id": "ccdee466b63a2accb1d804d5ca9e4bdc",
+    "game_date": "2026-11-13",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Seattle Kraken",
+    "commence_time": "2026-11-14T18:00:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.5,
+    "over_price": 103,
+    "under_price": -118,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-13T22:00:06.915985+00:00"
+  },
+  {
+    "game_id": "c3f43b11aaf8ba26496727f557330d72",
+    "game_date": "2026-11-13",
+    "sport": "NHL",
+    "home_team": "Chicago Blackhawks",
+    "away_team": "Winnipeg Jets",
+    "commence_time": "2026-11-14T20:40:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.0,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-13T22:00:06.915985+00:00"
+  }
+]
