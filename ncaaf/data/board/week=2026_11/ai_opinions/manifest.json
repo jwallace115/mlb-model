@@ -10651,5 +10651,87 @@
     "67a73e38d3fd93df27dcca8160f796c3": "line_move: pinnacle totals Under 55.5\u219256.5; line_move: pinnacle totals Over 55.5\u219256.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T173403Z.parquet",
+  "sha256": "733cc31469e7d96214b50b4e1bdd2dc2f18efd6d89f9ab3fa777b1e71d1af80f",
+  "logged_utc": "2026-11-13T17:34:03.829201+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-14T03:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T173006Z.parquet",
+   "inputs_digest": "{\"73d83d88b3a35eeb4bcf8462ff2070b2\": \"1ea0024ee3d8f026\"}",
+   "components": {
+    "73d83d88b3a35eeb4bcf8462ff2070b2": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       277
+      ],
+      [
+       "Houston Cougars",
+       0,
+       -325
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       8.0,
+       -105
+      ],
+      [
+       "Houston Cougars",
+       -8.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -116
+      ],
+      [
+       "Under",
+       51.0,
+       100
+      ]
+     ],
+     "news": [
+      "'You don't belong there': Stephen A. takes issue w",
+      "AP college football Week 10 poll reaction: What's ",
+      "Big 12 matchup features No. 14 Houston squaring of",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Deion Sanders says blame for Colorado's 3-6 season",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Georgia back at No. 1 in AP Top 25 ahead of Utah, ",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What would a 24-team College Football Playoff brac",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261113T1737Z.parquet"
+    }
+   },
+   "triggers": {
+    "73d83d88b3a35eeb4bcf8462ff2070b2": "line_move: pinnacle spreads Colorado Buffaloes 9.5\u21928.0; line_move: pinnacle spreads Houston Cougars -9.5\u2192-8.0"
+   }
+  }
  }
 ]
