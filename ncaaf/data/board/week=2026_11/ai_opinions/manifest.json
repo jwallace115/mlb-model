@@ -11094,5 +11094,80 @@
     "ece9b1bb56a95381f1c485d22bd36dd8": "line_move: pinnacle totals Over 43.0\u219244.0; line_move: pinnacle totals Under 43.0\u219244.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T210403Z.parquet",
+  "sha256": "0e33d2cd904f1ab9b6586801a268543a17117080b19189ae7c45f412f2bb7638",
+  "logged_utc": "2026-11-13T21:04:03.879741+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-14T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T210008Z.parquet",
+   "inputs_digest": "{\"eff5d01c8683ed700c896743f0490989\": \"2c18a3f43d4666a2\"}",
+   "components": {
+    "eff5d01c8683ed700c896743f0490989": {
+     "pinnacle_h2h": [
+      [
+       "Florida State Seminoles",
+       0,
+       144
+      ],
+      [
+       "Pittsburgh Panthers",
+       0,
+       -160
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida State Seminoles",
+       3.5,
+       -113
+      ],
+      [
+       "Pittsburgh Panthers",
+       -3.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -113
+      ],
+      [
+       "Under",
+       52.0,
+       -103
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "FSU hires alum Jeff Purinton as athletic director",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "Why Florida State chose Jeff Purinton as its new A"
+     ],
+     "kalshi_snap": "snap_20261113T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "eff5d01c8683ed700c896743f0490989": "anchor_prekick"
+   }
+  }
  }
 ]
