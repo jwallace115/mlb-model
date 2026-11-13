@@ -10913,5 +10913,186 @@
     "c2ccf2d604c3a791b12d26ccaaf65c70": "line_move: pinnacle spreads Northern Illinois Huskies 6.5\u21925.5; line_move: pinnacle spreads Nevada Wolf Pack -6.5\u2192-5.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T194903Z.parquet",
+  "sha256": "aa965cebfd0fe4a22588f972455bd9882567f065184e14c88010d6dd719df538",
+  "logged_utc": "2026-11-13T19:49:03.463552+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.667,
+  "revised_rows": 8,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-14T17:45:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T193006Z.parquet",
+   "inputs_digest": "{\"fe42d22bafb7d5f406317697dff44ee6\": \"67764747b9c95b08\", \"ac00a0cc63f0020c5d00d412dd706834\": \"4a75600d53a720c3\", \"ece9b1bb56a95381f1c485d22bd36dd8\": \"c1786697c0cc52b3\"}",
+   "components": {
+    "fe42d22bafb7d5f406317697dff44ee6": {
+     "pinnacle_h2h": [
+      [
+       "Alabama Crimson Tide",
+       0,
+       -822
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       581
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Alabama Crimson Tide",
+       -16.0,
+       -107
+      ],
+      [
+       "Vanderbilt Commodores",
+       16.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -104
+      ],
+      [
+       "Under",
+       50.5,
+       -112
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Alabama TE Josh Ford out for season with lower-bod",
+      "Analyzing the tape on Bama's Keelon Russell dicing",
+      "Bama's Bray Hubbard introduces the cherished Cross",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly: How Week 10's top games were won, what i",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Georgia jumps into CFP's top spot, followed by Uta",
+      "Goalposts in a river last time: No. 7 Alabama head",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "How every 2027 five-star college football prospect",
+      "Kalen DeBoer discusses his thoughts on new CFP for",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "SEC Now crew tells fans which two-loss SEC teams w",
+      "SEC Now's initial reaction to the latest CFP ranki",
+      "Sedrick Alexander credits teammates as Vandy TD re",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What would a 24-team College Football Playoff brac",
+      "What you need to know about the 2028 recruiting cl",
+      "Who's No. 1? CFP committee's second top 25 and bra",
+      "Why Jordan Rodgers has an issue with Tennessee's C"
+     ],
+     "kalshi_snap": "snap_20261113T1937Z.parquet"
+    },
+    "ac00a0cc63f0020c5d00d412dd706834": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -186
+      ],
+      [
+       "Florida International Panthers",
+       0,
+       162
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -4.0,
+       -108
+      ],
+      [
+       "Florida International Panthers",
+       4.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -101
+      ],
+      [
+       "Under",
+       54.5,
+       -115
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261113T1937Z.parquet"
+    },
+    "ece9b1bb56a95381f1c485d22bd36dd8": {
+     "pinnacle_h2h": [
+      [
+       "San Diego State Aztecs",
+       0,
+       127
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       -143
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "San Diego State Aztecs",
+       2.5,
+       102
+      ],
+      [
+       "Utah State Aggies",
+       -2.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -108
+      ],
+      [
+       "Under",
+       44.0,
+       -108
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261113T1937Z.parquet"
+    }
+   },
+   "triggers": {
+    "fe42d22bafb7d5f406317697dff44ee6": "line_move: pinnacle spreads Vanderbilt Commodores 17.0\u219216.0; line_move: pinnacle spreads Alabama Crimson Tide -17.0\u2192-16.0",
+    "ac00a0cc63f0020c5d00d412dd706834": "line_move: pinnacle spreads Florida International Panthers 5.0\u21924.0; line_move: pinnacle spreads Delaware Blue Hens -5.0\u2192-4.0",
+    "ece9b1bb56a95381f1c485d22bd36dd8": "line_move: pinnacle totals Over 43.0\u219244.0; line_move: pinnacle totals Under 43.0\u219244.0"
+   }
+  }
  }
 ]
