@@ -1,45 +1,12 @@
 {
- "started_utc": "2026-11-13T18:17:03.981688+00:00",
- "finished_utc": "2026-11-13T18:21:05.076155+00:00",
+ "started_utc": "2026-11-13T18:47:04.117005+00:00",
+ "finished_utc": "2026-11-13T18:47:04.632326+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "b8c10fdf1e0ac4e13deee7f7c0af0b0b",
-   "text": "line_move: pinnacle totals Under 50.0\u219249.0; line_move: pinnacle totals Over 50.0\u219249.0"
-  },
-  {
-   "game": "3c71d515b726f1096aabb435badb83fd",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "1057d50949844ddf483da9c8c20354be",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "e5aa20e1364dd639f042af1c2281bbe2",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "be0e03cc42fbc9b6962467b22c7bf9dd",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "5d8d85473b87f772a979ecf294acab94",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "b5700b4d938fd94429f60d4622cc9c0a",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "28800df7e768ecec14f116454d560f9b",
-   "text": "anchor_morning"
-  }
- ],
- "games_read": 8,
- "frozen_file": "ai_opinions_20261113T181703Z.parquet",
- "spend_usd": 16.8684,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }

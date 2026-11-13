@@ -40,23 +40,23 @@
   "freeze_file": null
  },
  {
-  "sport": "ncaaf",
+  "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-13T18:19:03.436739+00:00",
-  "finished_utc": "2026-11-13T18:19:03.436739+00:00",
+  "started_utc": "2026-11-13T18:47:04.543637+00:00",
+  "finished_utc": "2026-11-13T18:47:04.543637+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
   "freeze_file": null
  },
  {
-  "sport": "nfl",
+  "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-13T18:21:05.031635+00:00",
-  "finished_utc": "2026-11-13T18:21:05.031635+00:00",
+  "started_utc": "2026-11-13T18:52:52.694252+00:00",
+  "finished_utc": "2026-11-13T18:52:52.694252+00:00",
   "result": "COMPLETE",
   "step": "window_watch",
-  "message": "['line_move: pinnacle totals Under 50.0\u219249.0; line_move: pinnacle totals Over 50.0\u219249.0', 'anchor_morning', 'anchor_morning', 'anchor_morning', 'anchor_morning', 'anchor_morning', 'anchor_morning', 'a",
-  "freeze_file": "ai_opinions_20261113T181703Z.parquet"
+  "message": "['line_move: pinnacle spreads UConn Huskies 3.5\u21925.0; line_move: pinnacle spreads James Madison Dukes -3.5\u2192-5.0', 'new_news: 1 availability items', 'line_move: pinnacle spreads Northern Illinois Huskie",
+  "freeze_file": "ai_opinions_20261113T183404Z.parquet"
  }
 ]

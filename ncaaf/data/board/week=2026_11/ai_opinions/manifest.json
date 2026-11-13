@@ -10733,5 +10733,185 @@
     "73d83d88b3a35eeb4bcf8462ff2070b2": "line_move: pinnacle spreads Colorado Buffaloes 9.5\u21928.0; line_move: pinnacle spreads Houston Cougars -9.5\u2192-8.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T183404Z.parquet",
+  "sha256": "654566c3e839943a8083c8f76155d09a4968fb16abee83c1c1c0e5f1f85f897d",
+  "logged_utc": "2026-11-13T18:34:04.472939+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 9,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-14T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T183009Z.parquet",
+   "inputs_digest": "{\"83b67813ba763c65142b4238e3c44270\": \"48fc30494cb78e73\", \"0da9451fe176ce110bdcf79c077bb223\": \"24ab111685d284cf\", \"c2ccf2d604c3a791b12d26ccaaf65c70\": \"3d5e45ffd2034b2b\"}",
+   "components": {
+    "83b67813ba763c65142b4238e3c44270": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -203
+      ],
+      [
+       "UConn Huskies",
+       0,
+       176
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -5.0,
+       -107
+      ],
+      [
+       "UConn Huskies",
+       5.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -101
+      ],
+      [
+       "Under",
+       57.5,
+       -115
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261113T1837Z.parquet"
+    },
+    "0da9451fe176ce110bdcf79c077bb223": {
+     "pinnacle_h2h": [
+      [
+       "Indiana Hoosiers",
+       0,
+       -304
+      ],
+      [
+       "USC Trojans",
+       0,
+       254
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Indiana Hoosiers",
+       -9.0,
+       -101
+      ],
+      [
+       "USC Trojans",
+       9.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       100
+      ],
+      [
+       "Under",
+       50.5,
+       -116
+      ]
+     ],
+     "news": [
+      "'You don't belong there': Stephen A. takes issue w",
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Betting buzz: Unexpected line movement on Indiana ",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Hoosier QB? Curt Cignetti not ready to name Indian",
+      "How every 2027 five-star college football prospect",
+      "Indiana drops five spots to No. 9 in CFP top 25",
+      "Josh Hoover not on injury report; RB Richard, DL W",
+      "Josh Hoover not on injury report; RB Turbo Richard",
+      "No. 6 Indiana faces No. 15 USC in high-stakes game",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "The ACC and strength of schedule top this week's A",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What would a 24-team College Football Playoff brac",
+      "What you need to know about the 2028 recruiting cl",
+      "Who's No. 1? CFP committee's second top 25 and bra",
+      "Why Miami, Indiana had their significant drops in "
+     ],
+     "kalshi_snap": "snap_20261113T1837Z.parquet"
+    },
+    "c2ccf2d604c3a791b12d26ccaaf65c70": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       -221
+      ],
+      [
+       "Northern Illinois Huskies",
+       0,
+       191
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       -5.5,
+       -110
+      ],
+      [
+       "Northern Illinois Huskies",
+       5.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -102
+      ],
+      [
+       "Under",
+       47.5,
+       -114
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261113T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "83b67813ba763c65142b4238e3c44270": "line_move: pinnacle spreads UConn Huskies 3.5\u21925.0; line_move: pinnacle spreads James Madison Dukes -3.5\u2192-5.0",
+    "0da9451fe176ce110bdcf79c077bb223": "new_news: 1 availability items",
+    "c2ccf2d604c3a791b12d26ccaaf65c70": "line_move: pinnacle spreads Northern Illinois Huskies 6.5\u21925.5; line_move: pinnacle spreads Nevada Wolf Pack -6.5\u2192-5.5"
+   }
+  }
  }
 ]
