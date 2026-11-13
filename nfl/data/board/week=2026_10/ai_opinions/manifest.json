@@ -1764,5 +1764,154 @@
     "74d39e19225caf211ad2c8eb4110179f": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T150203Z.parquet",
+  "sha256": "c1ff5ee930c995c2f79633592f77a278b99c59610340f85a6243306d1123c1ae",
+  "logged_utc": "2026-11-13T15:02:03.798611+00:00",
+  "rows": 55,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.927,
+  "revised_rows": 0,
+  "oldest_source_age_min": 61.9,
+  "first_kickoff_utc": "2026-11-15T14:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261113T150010Z.parquet",
+   "inputs_digest": "{\"b8c10fdf1e0ac4e13deee7f7c0af0b0b\": \"46b42b3f92c3873b\"}",
+   "components": {
+    "b8c10fdf1e0ac4e13deee7f7c0af0b0b": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -150
+      ],
+      [
+       "New England Patriots",
+       0,
+       130
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Detroit Lions",
+       -3.0,
+       -105
+      ],
+      [
+       "New England Patriots",
+       3.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       50.5,
+       -110
+      ],
+      [
+       "Under",
+       50.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -147
+      ],
+      [
+       "New England Patriots",
+       0,
+       130
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Detroit Lions",
+       -2.5,
+       -115
+      ],
+      [
+       "New England Patriots",
+       2.5,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -108
+      ],
+      [
+       "Under",
+       50.0,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-09T12:32:48.566521+00:00",
+     "inj_Detroit Lions": "90cdb97b262b856c",
+     "inj_New England Patriots": "ce34301413a7086f",
+     "news": [
+      "2026 NFL midseason award rankings: MVP picks, top ",
+      "2026 NFL midseason report: Questions, stats for al",
+      "2027 NFL draft order projections for Round 1, chan",
+      "A big Munich test for the Lions and Patriots as in",
+      "As the 'Peanut Punch' takes over NFL, how do teams",
+      "Cam Skattebo dons custom 'Iron Man' mask for TNF, ",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Detroit Lions vs. Miami Dolphins Game Highlights",
+      "Gonzalez's struggles highlight Patriots' poor play",
+      "Green Bay Packers vs. New England Patriots: Game H",
+      "How active NFL players continue to redefine all-ti",
+      "Intel on NFL playoff races, MVP, Super Bowl and br",
+      "Is the NFC North the best division ever? Sizing up",
+      "Jets trade safety Andre Cisco to injury-plagued Li",
+      "Jordan Love accounts for 4 touchdowns, Packers for",
+      "Judging overreactions to NFL Week 9 -- and what th",
+      "Lions grind past Dolphins 19-9 as Jahmyr Gibbs sco",
+      "Longtime Steelers player, assistant coach Dick Hoa",
+      "NFC North: Bears win division? Cousins has Vikes i",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 10 betting odds: Lines and totals for eve",
+      "NFL Week 10 preview: Picks, predictions, schedule,",
+      "NFL Week 10 uniforms: Titans debut Rivalries look,",
+      "NFL Week 9 arrivals: Caleb Williams rocks Supreme ",
+      "NFL Week 9 arrivals: Efton Chism III welcomes back",
+      "NFL Week 9 arrivals: Justin Jefferson rocks black ",
+      "NFL Week 9 arrivals: Lions show support for Jack C",
+      "NFL Week 9 uniforms: Eagles rock 'Kelly Green,' Ch",
+      "NFL Week 9: Big takeaways, questions and fantasy s",
+      "NFL execs on tight playoff races, MVP, Super Bowl ",
+      "NFL trade deadline grades: Deals for Jordan Davis,",
+      "NFL trade deadline grades: Deals for Kirk Cousins,",
+      "Questions on 2026 NFL trade deadline deals: Does K",
+      "Rhamondre Stevenson trying to play Sunday",
+      "Rob Gronkowski caps Brady-attended Patriots Hall o",
+      "Saints reference Shedeur Sanders quote after win, ",
+      "Source: Pats' Rhamondre Stevenson expected to miss",
+      "Sportsbook liability Joe Burrow overtakes Josh All",
+      "Sunday's top plays from around the NFL",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "Who are the winningest NFL coaches of all time?"
+     ],
+     "kalshi_snap": "snap_20261113T1435Z.parquet"
+    }
+   },
+   "triggers": {
+    "b8c10fdf1e0ac4e13deee7f7c0af0b0b": "anchor_morning"
+   }
+  }
  }
 ]
