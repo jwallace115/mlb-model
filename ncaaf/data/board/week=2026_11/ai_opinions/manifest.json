@@ -11169,5 +11169,87 @@
     "eff5d01c8683ed700c896743f0490989": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T230403Z.parquet",
+  "sha256": "3a44a12326b5b1c6f1423221850f6f5404d641fe0543cf50146df1bdf18a7594",
+  "logged_utc": "2026-11-13T23:04:03.392941+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-14T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T230006Z.parquet",
+   "inputs_digest": "{\"bc528be865b10cd4a63a9e642c90d554\": \"e1077ecc7fb9b590\"}",
+   "components": {
+    "bc528be865b10cd4a63a9e642c90d554": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       342
+      ],
+      [
+       "UCLA Bruins",
+       0,
+       -412
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       10.5,
+       -113
+      ],
+      [
+       "UCLA Bruins",
+       -10.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -110
+      ],
+      [
+       "Under",
+       48.5,
+       -106
+      ]
+     ],
+     "news": [
+      "'You don't belong there': Stephen A. takes issue w",
+      "Betting buzz: Unexpected line movement on Indiana ",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Georgia jumps into CFP's top spot, followed by Uta",
+      "Illinois\u2019 4-game surge meets No. 4 UCLA\u2019s unbeaten",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What you need to know about the 2028 recruiting cl",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261113T2307Z.parquet"
+    }
+   },
+   "triggers": {
+    "bc528be865b10cd4a63a9e642c90d554": "anchor_prekick"
+   }
+  }
  }
 ]
