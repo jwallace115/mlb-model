@@ -10580,5 +10580,76 @@
     "ce88da9d6fd67bac81c1e4a70545de29": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T161903Z.parquet",
+  "sha256": "753bd6bc84ab92b61369c6dfd4d7be89c58921e9946ff9eb195878d35598188e",
+  "logged_utc": "2026-11-13T16:19:03.871648+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-14T20:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T160009Z.parquet",
+   "inputs_digest": "{\"67a73e38d3fd93df27dcca8160f796c3\": \"22bb64578e343183\"}",
+   "components": {
+    "67a73e38d3fd93df27dcca8160f796c3": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Southern Eagles",
+       0,
+       -218
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       188
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Southern Eagles",
+       -5.5,
+       -114
+      ],
+      [
+       "Georgia State Panthers",
+       5.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -109
+      ],
+      [
+       "Under",
+       56.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "CFP 24-team format: What you need to know about th",
+      "Georgia Southern meets Georgia State in Sun Belt p",
+      "Pereira throws 3 TDs, Owens has pick-6 as Georgia "
+     ],
+     "kalshi_snap": "snap_20261113T1607Z.parquet"
+    }
+   },
+   "triggers": {
+    "67a73e38d3fd93df27dcca8160f796c3": "line_move: pinnacle totals Under 55.5\u219256.5; line_move: pinnacle totals Over 55.5\u219256.5"
+   }
+  }
  }
 ]
