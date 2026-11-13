@@ -5587,5 +5587,107 @@
     "f9b805187f3809fdadddfa08dfa2a089": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261112T231903Z.parquet",
+  "sha256": "a2b2469e49f708b4a7f7b252b2e62c25ce0c4fb6888fa023b6d613c6feb47791",
+  "logged_utc": "2026-11-12T23:19:03.206356+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-14T23:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261112T230006Z.parquet",
+   "inputs_digest": "{\"c113a0bd62980b8ec1ce85b27292f699\": \"cc93fcbc882f61d2\"}",
+   "components": {
+    "c113a0bd62980b8ec1ce85b27292f699": {
+     "pinnacle_h2h": [
+      [
+       "Florida Gators",
+       0,
+       147
+      ],
+      [
+       "Kentucky Wildcats",
+       0,
+       -167
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Gators",
+       3.5,
+       -113
+      ],
+      [
+       "Kentucky Wildcats",
+       -3.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -105
+      ],
+      [
+       "Under",
+       53.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "AP college football Week 10 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "Brent Venables lauds Jason Witten as Sooners shine",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "College Football Playoff top 12 projection after W",
+      "Connelly: How Week 10's top games were won, what i",
+      "Florida cancels Notre Dame series; Irish then add ",
+      "Florida set to give QB Aaron Philo another start v",
+      "Florida visits No. 13 Kentucky in SEC matchup",
+      "Former coach Urban Meyer inducted into Florida's r",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Gene Chizik's 'Words of Chizdom' to a few teams wh",
+      "Georgia back at No. 1 in AP Top 25 ahead of Utah, ",
+      "How every 2027 five-star college football prospect",
+      "In the face of adversity, Oklahoma rises to the ch",
+      "It's Week 10 and everything remains up for grabs i",
+      "Kentucky's Will Stein: 'I think it's important tha",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "Morris, defense lead No. 16 Tennessee past No. 8 K",
+      "No. 13 Tennessee sets the tone from the first snap",
+      "Oklahoma Sooners vs. Florida Gators: Full Highligh",
+      "Oklahoma throttles No. 25 Florida for a 23-7 victo",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "Predicting the College Football Playoff: Who's mos",
+      "SEC Now crew tells fans which two-loss SEC teams w",
+      "SEC Now's initial reaction to the latest CFP ranki",
+      "Tennessee wins big over Kentucky at home",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "Venables lauds Witten after Sooners shine in Oklah",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261112T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "c113a0bd62980b8ec1ce85b27292f699": "anchor_morning"
+   }
+  }
  }
 ]
