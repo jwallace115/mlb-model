@@ -7241,5 +7241,172 @@
     "d6d167714ff638b23e84d757ff522414": "new_news: 1 availability items"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T143404Z.parquet",
+  "sha256": "41fe2456d817c106dacce1fbf690045de03c7c68fef1fa67d8d3604987673cf1",
+  "logged_utc": "2026-11-13T14:34:04.185648+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.667,
+  "revised_rows": 7,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-14T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T143005Z.parquet",
+   "inputs_digest": "{\"eff5d01c8683ed700c896743f0490989\": \"8c43d20e732ddee8\", \"67a73e38d3fd93df27dcca8160f796c3\": \"ec89a9b384821535\", \"21c985dda7b6b34cc9820a76dfad6172\": \"8777d0b9869dae04\"}",
+   "components": {
+    "eff5d01c8683ed700c896743f0490989": {
+     "pinnacle_h2h": [
+      [
+       "Florida State Seminoles",
+       0,
+       147
+      ],
+      [
+       "Pittsburgh Panthers",
+       0,
+       -163
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida State Seminoles",
+       3.5,
+       -110
+      ],
+      [
+       "Pittsburgh Panthers",
+       -3.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -110
+      ],
+      [
+       "Under",
+       52.0,
+       -106
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "FSU hires alum Jeff Purinton as athletic director",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Pittsburgh takes on Florida State in ACC action",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "Why Florida State chose Jeff Purinton as its new A"
+     ],
+     "kalshi_snap": "snap_20261113T1437Z.parquet"
+    },
+    "67a73e38d3fd93df27dcca8160f796c3": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Southern Eagles",
+       0,
+       -225
+      ],
+      [
+       "Georgia State Panthers",
+       0,
+       194
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Southern Eagles",
+       -5.5,
+       -116
+      ],
+      [
+       "Georgia State Panthers",
+       5.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -117
+      ],
+      [
+       "Under",
+       55.5,
+       100
+      ]
+     ],
+     "news": [
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "CFP 24-team format: What you need to know about th",
+      "Georgia Southern meets Georgia State in Sun Belt p",
+      "Pereira throws 3 TDs, Owens has pick-6 as Georgia "
+     ],
+     "kalshi_snap": "snap_20261113T1437Z.parquet"
+    },
+    "21c985dda7b6b34cc9820a76dfad6172": {
+     "pinnacle_h2h": [
+      [
+       "UTEP Miners",
+       0,
+       245
+      ],
+      [
+       "Wyoming Cowboys",
+       0,
+       -292
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "UTEP Miners",
+       7.5,
+       -113
+      ],
+      [
+       "Wyoming Cowboys",
+       -7.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -107
+      ],
+      [
+       "Under",
+       40.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "CFP 24-team format: What you need to know about th",
+      "MWC matchup features Wyoming taking on UTEP"
+     ],
+     "kalshi_snap": "snap_20261113T1437Z.parquet"
+    }
+   },
+   "triggers": {
+    "eff5d01c8683ed700c896743f0490989": "line_move: pinnacle totals Over 53.5\u219252.0; line_move: pinnacle totals Under 53.5\u219252.0",
+    "67a73e38d3fd93df27dcca8160f796c3": "line_move: pinnacle totals Over 56.5\u219255.5; line_move: pinnacle totals Under 56.5\u219255.5",
+    "21c985dda7b6b34cc9820a76dfad6172": "line_move: pinnacle spreads UTEP Miners 8.5\u21927.5; line_move: pinnacle spreads Wyoming Cowboys -8.5\u2192-7.5"
+   }
+  }
  }
 ]
