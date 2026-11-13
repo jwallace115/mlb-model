@@ -7160,5 +7160,86 @@
     "ce88da9d6fd67bac81c1e4a70545de29": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T064903Z.parquet",
+  "sha256": "bc6fc44cefb2b7b5c2c83831fb3e308f327806ed8b2421a002320a2fba432fd9",
+  "logged_utc": "2026-11-13T06:49:03.442895+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 79.0,
+  "first_kickoff_utc": "2026-11-14T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T053005Z.parquet",
+   "inputs_digest": "{\"d6d167714ff638b23e84d757ff522414\": \"c868a6c4c611679c\"}",
+   "components": {
+    "d6d167714ff638b23e84d757ff522414": {
+     "pinnacle_h2h": [
+      [
+       "Auburn Tigers",
+       0,
+       -136
+      ],
+      [
+       "Mississippi State Bulldogs",
+       0,
+       120
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Auburn Tigers",
+       -2.5,
+       -113
+      ],
+      [
+       "Mississippi State Bulldogs",
+       2.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -114
+      ],
+      [
+       "Under",
+       50.0,
+       -103
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 10 poll reaction: What's ",
+      "Alex Golesh emphasizes Auburn's focus against Miss",
+      "Auburn visits Mississippi State in SEC play",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Gene Chizik's 'Words of Chizdom' to a few teams wh",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "Kamario Taylor: Easy call to return to Mississippi",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "Sources: Kamario Taylor finalizing deal to return ",
+      "Why Jordan Rodgers has an issue with Tennessee's C"
+     ],
+     "kalshi_snap": "snap_20261113T0607Z.parquet"
+    }
+   },
+   "triggers": {
+    "d6d167714ff638b23e84d757ff522414": "new_news: 1 availability items"
+   }
+  }
  }
 ]
