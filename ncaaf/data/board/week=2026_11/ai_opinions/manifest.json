@@ -6381,5 +6381,75 @@
     "d0cebc10547e648dd7988b83f58081cf": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T011903Z.parquet",
+  "sha256": "73287c12c8ca239975911a6970152f7088d226fc754973990fbbd1f62d23bb9d",
+  "logged_utc": "2026-11-13T01:19:03.857920+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-13T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T010007Z.parquet",
+   "inputs_digest": "{\"6a3fbf6388d7c72076555fc4a4bbedf2\": \"b1b0ad7f6d0146e2\"}",
+   "components": {
+    "6a3fbf6388d7c72076555fc4a4bbedf2": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -358
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       302
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Ragin Cajuns",
+       -10.0,
+       -102
+      ],
+      [
+       "UL Monroe Warhawks",
+       10.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -103
+      ],
+      [
+       "Under",
+       47.5,
+       -113
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Louisiana visits UL Monroe in Sun Belt action"
+     ],
+     "kalshi_snap": "snap_20261113T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "6a3fbf6388d7c72076555fc4a4bbedf2": "anchor_close"
+   }
+  }
  }
 ]
