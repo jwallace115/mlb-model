@@ -1,6 +1,6 @@
 # WHY Summary — Week 9
 
-Generated: 2026-11-12T11:54:43.904321+00:00
+Generated: 2026-11-13T12:16:19.314709+00:00
 
 
 ## Graded rows
@@ -62,36 +62,35 @@ Generated: 2026-11-12T11:54:43.904321+00:00
 
 ## Thesis verdicts
 
-- thesis_source=freeze: 1619 rows
+- thesis_source=freeze: 1620 rows
 - thesis_source=nan: 0 rows
 
 ## Freeze-join accounting
 
-- Freeze-sourced thesis: 1619
+- Freeze-sourced thesis: 1620
 - Tag-map thesis: 0
 - No thesis: 0
 
-## Unresolved player names (51 rows)
+## Unresolved player names (50 rows)
 
 - Roschon Johnson (8x): markets=['prop:rec_yds', 'prop:rec', 'prop:rush_att', 'prop:rush_yds']
-- Austin Hooper (4x): markets=['prop:rec_yds', 'prop:rec']
 - Brian Thomas Jr (4x): markets=['prop:rec_yds', 'prop:rec']
 - Drew Sample (4x): markets=['prop:rec_yds', 'prop:rec']
+- Austin Hooper (4x): markets=['prop:rec_yds', 'prop:rec']
 - Ja'Kobi Lane (3x): markets=['prop:rec', 'prop:rec_yds']
 - Josh Cuevas (3x): markets=['prop:rec', 'prop:rec_yds']
-- Kendre Miller (3x): markets=['prop:rush_att']
 - Skyler Bell (3x): markets=['prop:rec_yds', 'prop:rec']
-- Foster Moreau (2x): markets=['prop:rec_yds', 'prop:rec']
-- Ben Yurosek (2x): markets=['prop:rec_yds', 'prop:rec']
+- Kendre Miller (3x): markets=['prop:rush_att']
 - Jauan Jennings (2x): markets=['prop:rec_yds', 'prop:rec']
-- Theo Johnson (2x): markets=['prop:rec_yds', 'prop:rec']
-- George Pickens (2x): markets=['prop:rec_yds', 'prop:rec']
-- Ladd McConkey (2x): markets=['prop:rec_yds', 'prop:rec']
-- Tim Patrick (2x): markets=['prop:rec_yds', 'prop:rec']
+- Ben Yurosek (2x): markets=['prop:rec_yds', 'prop:rec']
 - Hollywood Brown (2x): markets=['prop:rec_yds', 'prop:rec']
+- Ladd McConkey (2x): markets=['prop:rec_yds', 'prop:rec']
+- Foster Moreau (2x): markets=['prop:rec_yds', 'prop:rec']
+- George Pickens (2x): markets=['prop:rec_yds', 'prop:rec']
+- Theo Johnson (2x): markets=['prop:rec_yds', 'prop:rec']
+- Tim Patrick (2x): markets=['prop:rec_yds', 'prop:rec']
 - MarShawn Lloyd (1x): markets=['prop:rush_yds']
 - Jaylen Wright (1x): markets=['prop:rush_yds']
-- Audric Estime (1x): markets=['prop:rush_yds']
 
 ## PBP vs official stat mismatches (11 rows)
 
