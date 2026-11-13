@@ -7044,5 +7044,121 @@
     "21c985dda7b6b34cc9820a76dfad6172": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T041904Z.parquet",
+  "sha256": "dc58ae241068a823aaa3246d96f45eecdf4557206010d25ea2fe373a9330c0d6",
+  "logged_utc": "2026-11-13T04:19:04.052110+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 0,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-15T03:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T040006Z.parquet",
+   "inputs_digest": "{\"c3c46d55350226dd82d83ecf0b52891a\": \"d45afa6b7e43bcb7\", \"ce88da9d6fd67bac81c1e4a70545de29\": \"56f35d2589c8bc43\"}",
+   "components": {
+    "c3c46d55350226dd82d83ecf0b52891a": {
+     "pinnacle_h2h": [
+      [
+       "Colorado State Rams",
+       0,
+       280
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       -339
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado State Rams",
+       9.5,
+       -111
+      ],
+      [
+       "Washington State Cougars",
+       -9.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       67.0,
+       -103
+      ],
+      [
+       "Under",
+       67.0,
+       -114
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "CFP 24-team format: What you need to know about th",
+      "Cutforth, Riley spark No. 20 Boise State\u2019s 8th str",
+      "Pac-12 matchup features Washington State squaring "
+     ],
+     "kalshi_snap": "snap_20261113T0307Z.parquet"
+    },
+    "ce88da9d6fd67bac81c1e4a70545de29": {
+     "pinnacle_h2h": [
+      [
+       "Hawaii Rainbow Warriors",
+       0,
+       209
+      ],
+      [
+       "North Dakota State Bison",
+       0,
+       -245
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Hawaii Rainbow Warriors",
+       6.5,
+       -105
+      ],
+      [
+       "North Dakota State Bison",
+       -6.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       38.5,
+       -110
+      ],
+      [
+       "Under",
+       38.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "CFP 24-team format: What you need to know about th",
+      "North Dakota State takes on Hawaii in MWC play"
+     ],
+     "kalshi_snap": "snap_20261113T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "c3c46d55350226dd82d83ecf0b52891a": "anchor_morning",
+    "ce88da9d6fd67bac81c1e4a70545de29": "anchor_morning"
+   }
+  }
  }
 ]
