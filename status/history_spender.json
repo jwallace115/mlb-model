@@ -1,11 +1,11 @@
 {
  "latest": {
-  "run_utc": "2026-11-13T06:10:02Z",
-  "finished_utc": "2026-11-13T06:15:37Z",
+  "run_utc": "2026-11-14T06:10:03Z",
+  "finished_utc": "2026-11-14T06:13:32Z",
   "key_fp": "ac6e89a0",
-  "remaining_start": 2940910,
-  "remaining_end": 2940910,
-  "reserve": 194000,
+  "remaining_start": 2936090,
+  "remaining_end": 2936090,
+  "reserve": 186000,
   "spent": 0,
   "calls": 0,
   "stop_reason": "queue finished",
@@ -4093,6 +4093,103 @@
    "remaining_start": 2940910,
    "remaining_end": 2940910,
    "reserve": 194000,
+   "spent": 0,
+   "calls": 0,
+   "stop_reason": "queue finished",
+   "jobs": {
+    "nfl_props": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 1709,
+     "unsupported": 0,
+     "other": 453
+    },
+    "nfl_derivs": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 1709,
+     "unsupported": 0,
+     "other": 453
+    },
+    "nfl_lines_hourly": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 15168,
+     "unsupported": 0,
+     "other": 0
+    },
+    "ncaaf_derivs": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 5273,
+     "unsupported": 0,
+     "other": 157
+    },
+    "ncaaf_lines_hourly": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 13728,
+     "unsupported": 0,
+     "other": 0
+    },
+    "nhl_props": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 8379,
+     "unsupported": 0,
+     "other": 33
+    },
+    "nhl_derivs": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 8379,
+     "unsupported": 0,
+     "other": 33
+    },
+    "nhl_lines_hourly": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 24408,
+     "unsupported": 0,
+     "other": 0
+    },
+    "mlb_props": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 8590,
+     "unsupported": 4,
+     "other": 1230
+    },
+    "mlb_derivs": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 8590,
+     "unsupported": 4,
+     "other": 1230
+    },
+    "mlb_lines_hourly": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 16625,
+     "unsupported": 0,
+     "other": 0
+    },
+    "nhl_inplay": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 77661,
+     "unsupported": 0,
+     "other": 0
+    }
+   }
+  },
+  {
+   "run_utc": "2026-11-14T06:10:03Z",
+   "finished_utc": "2026-11-14T06:13:32Z",
+   "key_fp": "ac6e89a0",
+   "remaining_start": 2936090,
+   "remaining_end": 2936090,
+   "reserve": 186000,
    "spent": 0,
    "calls": 0,
    "stop_reason": "queue finished",
