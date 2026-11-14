@@ -1,17 +1,12 @@
 {
- "started_utc": "2026-11-14T09:47:03.685777+00:00",
- "finished_utc": "2026-11-14T09:53:00.537762+00:00",
+ "started_utc": "2026-11-14T10:17:05.188529+00:00",
+ "finished_utc": "2026-11-14T10:17:05.719013+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "6c932a965110f3f89ec4a5f1a6ac256e",
-   "text": "new_props: pull 2026-11-14T09:47:46.815218+00:00; injury_change: inj_Arizona Cardinals; injury_change: inj_Los Angeles Rams"
-  }
- ],
- "games_read": 1,
- "frozen_file": "ai_opinions_20261114T094703Z.parquet",
- "spend_usd": 18.2349,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
