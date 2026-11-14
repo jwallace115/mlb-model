@@ -11251,5 +11251,80 @@
     "bc528be865b10cd4a63a9e642c90d554": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261113T231903Z.parquet",
+  "sha256": "a69092209220dd9b65a2bd0f34546be60f5255acb1e249c41b34623f3cd553be",
+  "logged_utc": "2026-11-13T23:19:03.244763+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-14T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261113T230006Z.parquet",
+   "inputs_digest": "{\"eff5d01c8683ed700c896743f0490989\": \"f3e25d0ce08f829e\"}",
+   "components": {
+    "eff5d01c8683ed700c896743f0490989": {
+     "pinnacle_h2h": [
+      [
+       "Florida State Seminoles",
+       0,
+       132
+      ],
+      [
+       "Pittsburgh Panthers",
+       0,
+       -147
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida State Seminoles",
+       3.0,
+       -106
+      ],
+      [
+       "Pittsburgh Panthers",
+       -3.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -104
+      ],
+      [
+       "Under",
+       52.5,
+       -112
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "FSU hires alum Jeff Purinton as athletic director",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "Why Florida State chose Jeff Purinton as its new A"
+     ],
+     "kalshi_snap": "snap_20261113T2307Z.parquet"
+    }
+   },
+   "triggers": {
+    "eff5d01c8683ed700c896743f0490989": "anchor_close"
+   }
+  }
  }
 ]
