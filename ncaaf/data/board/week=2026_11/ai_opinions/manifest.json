@@ -20295,5 +20295,217 @@
     "d0cebc10547e648dd7988b83f58081cf": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T221904Z.parquet",
+  "sha256": "f16c733a66784711d05d3536b2d0c5abdf6e161ad8c72cc4c6dbeec70acf193d",
+  "logged_utc": "2026-11-14T22:19:04.260730+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 5,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-14T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T220007Z.parquet",
+   "inputs_digest": "{\"558ce811ad052f49918a2855f3777baf\": \"b13a538e8c21d0ee\", \"f9b805187f3809fdadddfa08dfa2a089\": \"28056d72e7b6ce22\"}",
+   "components": {
+    "558ce811ad052f49918a2855f3777baf": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       -103
+      ],
+      [
+       "Marshall Thundering Herd",
+       0,
+       -108
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       1.0,
+       -108
+      ],
+      [
+       "Marshall Thundering Herd",
+       -1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -103
+      ],
+      [
+       "Under",
+       54.5,
+       -113
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261114T2207Z.parquet"
+    },
+    "f9b805187f3809fdadddfa08dfa2a089": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -677
+      ],
+      [
+       "Oregon State Beavers",
+       0,
+       522
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -16.0,
+       -113
+      ],
+      [
+       "Oregon State Beavers",
+       16.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       66.0,
+       -107
+      ],
+      [
+       "Under",
+       66.0,
+       -109
+      ]
+     ],
+     "news": [
+      "2026 'College GameDay' Week 11: Oregon State vs. B",
+      "Braden Atkinson doubtful, Maddux Madsen questionab",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "How the FAA ground stop threw college football int",
+      "Sources: Oregon State QB Braden Atkinson re-signs ",
+      "The ACC and strength of schedule top this week's A",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Vander Esch and student drill back-to-back kicks f",
+      "Where is 'College GameDay'? 2026 schedule, locatio",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261114T2207Z.parquet"
+    }
+   },
+   "triggers": {
+    "558ce811ad052f49918a2855f3777baf": "anchor_close",
+    "f9b805187f3809fdadddfa08dfa2a089": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261114T223405Z.parquet",
+  "sha256": "c64171baae0e4c8f87db1b9150e2ec43644f4e5f26458dada99717c82e84fb8e",
+  "logged_utc": "2026-11-14T22:34:05.898606+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-14T23:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T223011Z.parquet",
+   "inputs_digest": "{\"c113a0bd62980b8ec1ce85b27292f699\": \"8b86bb40175fcbdd\"}",
+   "components": {
+    "c113a0bd62980b8ec1ce85b27292f699": {
+     "pinnacle_h2h": [
+      [
+       "Florida Gators",
+       0,
+       134
+      ],
+      [
+       "Kentucky Wildcats",
+       0,
+       -149
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Gators",
+       3.0,
+       -108
+      ],
+      [
+       "Kentucky Wildcats",
+       -3.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -105
+      ],
+      [
+       "Under",
+       53.0,
+       -112
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Florida cancels Notre Dame series; Irish then add ",
+      "Florida set to give QB Aaron Philo another start v",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Gene Chizik's 'Words of Chizdom' to a few teams wh",
+      "Heather Dinich picks how many SEC teams make the C",
+      "How every 2027 five-star college football prospect",
+      "Kentucky's Will Stein: 'I think it's important tha",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "SEC Now crew tells fans which two-loss SEC teams w",
+      "SEC Now's initial reaction to the latest CFP ranki",
+      "Tim Tebow calling for bounce back performances fro",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261114T2237Z.parquet"
+    }
+   },
+   "triggers": {
+    "c113a0bd62980b8ec1ce85b27292f699": "anchor_close"
+   }
+  }
  }
 ]
