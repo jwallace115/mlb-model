@@ -11488,5 +11488,85 @@
     "bc528be865b10cd4a63a9e642c90d554": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T023403Z.parquet",
+  "sha256": "7ed0aa6650fa9aa521574e3a2c95c28aeb8360c18bc5c50c0dc9fca61eca11f9",
+  "logged_utc": "2026-11-14T02:34:03.568147+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-14T03:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T023007Z.parquet",
+   "inputs_digest": "{\"73d83d88b3a35eeb4bcf8462ff2070b2\": \"2bfa4c601da09e85\"}",
+   "components": {
+    "73d83d88b3a35eeb4bcf8462ff2070b2": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       263
+      ],
+      [
+       "Houston Cougars",
+       0,
+       -306
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       7.5,
+       -110
+      ],
+      [
+       "Houston Cougars",
+       -7.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -110
+      ],
+      [
+       "Under",
+       52.5,
+       -106
+      ]
+     ],
+     "news": [
+      "'You don't belong there': Stephen A. takes issue w",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Deion Sanders says blame for Colorado's 3-6 season",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Oregon, Houston headline best uniforms of college ",
+      "Power Rankings: How an action-packed Week 10 chang",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What would a 24-team College Football Playoff brac",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261114T0237Z.parquet"
+    }
+   },
+   "triggers": {
+    "73d83d88b3a35eeb4bcf8462ff2070b2": "anchor_close"
+   }
+  }
  }
 ]
