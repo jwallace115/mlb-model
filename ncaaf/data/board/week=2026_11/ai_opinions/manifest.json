@@ -18324,5 +18324,187 @@
     "1ce059ad7e592e033a7efe38d7bc7352": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T191903Z.parquet",
+  "sha256": "3f0461e681368514bc5c4d0be0318f6d619ab6810eef063e1c6124599a3676f0",
+  "logged_utc": "2026-11-14T19:19:03.381317+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.778,
+  "revised_rows": 9,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-14T20:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T190005Z.parquet",
+   "inputs_digest": "{\"ac00a0cc63f0020c5d00d412dd706834\": \"17b135acbeaf92d6\", \"8a0a3acc1b435727e1e571600aecb68f\": \"80c7c8bedf00549d\", \"4c15d7c4261fa1d8b75615a46d4d2ea7\": \"2cf1c2f5ef0e14b2\"}",
+   "components": {
+    "ac00a0cc63f0020c5d00d412dd706834": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -179
+      ],
+      [
+       "Florida International Panthers",
+       0,
+       160
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -4.0,
+       -104
+      ],
+      [
+       "Florida International Panthers",
+       4.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -108
+      ],
+      [
+       "Under",
+       54.5,
+       -108
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261114T1907Z.parquet"
+    },
+    "8a0a3acc1b435727e1e571600aecb68f": {
+     "pinnacle_h2h": [
+      [
+       "Missouri State Bears",
+       0,
+       -118
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       107
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Missouri State Bears",
+       -1.5,
+       -108
+      ],
+      [
+       "New Mexico State Aggies",
+       1.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -110
+      ],
+      [
+       "Under",
+       49.0,
+       -106
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261114T1907Z.parquet"
+    },
+    "4c15d7c4261fa1d8b75615a46d4d2ea7": {
+     "pinnacle_h2h": [
+      [
+       "Tennessee Volunteers",
+       0,
+       -115
+      ],
+      [
+       "Texas A&M Aggies",
+       0,
+       105
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Tennessee Volunteers",
+       -1.0,
+       -110
+      ],
+      [
+       "Texas A&M Aggies",
+       1.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -118
+      ],
+      [
+       "Under",
+       43.5,
+       101
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "How every 2027 five-star college football prospect",
+      "How the FAA ground stop threw college football int",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "No. 9 Tennessee and Texas A&M meet in SEC play",
+      "No. 9 Tennessee eyes Texas A&M trip, wary of anoth",
+      "Nowkhah on Witten's changes to OU, Aggies upset ch",
+      "SEC Now crew tells fans which two-loss SEC teams w",
+      "SEC Now's initial reaction to the latest CFP ranki",
+      "Tennessee RB Daune Morris suffers broken leg in ca",
+      "Tennessee's Carter on facing Bishop in practice: '",
+      "The ACC and strength of schedule top this week's A",
+      "The details behind Ole Miss-Oklahoma being moved t",
+      "Tim Tebow calling for bounce back performances fro",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "What would a 24-team College Football Playoff brac",
+      "What you need to know about the 2028 recruiting cl",
+      "Who's No. 1? CFP committee's second top 25 and bra",
+      "Why Jordan Rodgers has an issue with Tennessee's C"
+     ],
+     "kalshi_snap": "snap_20261114T1907Z.parquet"
+    }
+   },
+   "triggers": {
+    "ac00a0cc63f0020c5d00d412dd706834": "anchor_close",
+    "8a0a3acc1b435727e1e571600aecb68f": "anchor_close",
+    "4c15d7c4261fa1d8b75615a46d4d2ea7": "anchor_close"
+   }
+  }
  }
 ]

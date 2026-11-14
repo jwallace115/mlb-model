@@ -1,41 +1,12 @@
 {
- "started_utc": "2026-11-14T19:17:04.423952+00:00",
- "finished_utc": "2026-11-14T19:29:37.715768+00:00",
+ "started_utc": "2026-11-14T19:47:05.992995+00:00",
+ "finished_utc": "2026-11-14T19:47:06.518543+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "3c71d515b726f1096aabb435badb83fd",
-   "text": "new_props: pull 2026-11-14T19:17:48.241842+00:00; injury_change: inj_Kansas City Chiefs"
-  },
-  {
-   "game": "1057d50949844ddf483da9c8c20354be",
-   "text": "new_props: pull 2026-11-14T19:17:48.241842+00:00; injury_change: inj_New York Jets"
-  },
-  {
-   "game": "e5aa20e1364dd639f042af1c2281bbe2",
-   "text": "new_props: pull 2026-11-14T19:17:48.241842+00:00; injury_change: inj_New Orleans Saints"
-  },
-  {
-   "game": "be0e03cc42fbc9b6962467b22c7bf9dd",
-   "text": "new_props: pull 2026-11-14T19:17:48.241842+00:00; injury_change: inj_Cleveland Browns; injury_change: inj_Houston Texans"
-  },
-  {
-   "game": "5d8d85473b87f772a979ecf294acab94",
-   "text": "new_props: pull 2026-11-14T19:17:48.241842+00:00; injury_change: inj_Green Bay Packers"
-  },
-  {
-   "game": "b5700b4d938fd94429f60d4622cc9c0a",
-   "text": "new_props: pull 2026-11-14T19:17:48.241842+00:00; injury_change: inj_Indianapolis Colts"
-  },
-  {
-   "game": "48e497c230e6c9afcb3b600091d28e17",
-   "text": "new_props: pull 2026-11-14T19:17:48.241842+00:00; injury_change: inj_Pittsburgh Steelers"
-  }
- ],
- "games_read": 7,
- "frozen_file": "ai_opinions_20261114T191704Z.parquet",
- "spend_usd": 20.1405,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
