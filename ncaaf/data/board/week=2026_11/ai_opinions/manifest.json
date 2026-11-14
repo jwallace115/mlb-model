@@ -18012,5 +18012,249 @@
     "a21a2f1087d443fa1a1c71e1a03a0fe0": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T181904Z.parquet",
+  "sha256": "bda2a8a7245eb6af270cb3f1fdae2c135dc00248eb00bb945759946a8b78c209",
+  "logged_utc": "2026-11-14T18:19:04.314246+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.778,
+  "revised_rows": 6,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-14T19:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T180008Z.parquet",
+   "inputs_digest": "{\"28a08b75e830f2fbaaeaa3b42c2ebb63\": \"9458053cf882e179\", \"54769e255d6ea468fa2d12ed744eb6f2\": \"fed2454c3de9ba0f\", \"d6d167714ff638b23e84d757ff522414\": \"1265e46d1825e394\"}",
+   "components": {
+    "28a08b75e830f2fbaaeaa3b42c2ebb63": {
+     "pinnacle_h2h": [
+      [
+       "Kansas State Wildcats",
+       0,
+       433
+      ],
+      [
+       "TCU Horned Frogs",
+       0,
+       -542
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas State Wildcats",
+       14.0,
+       -106
+      ],
+      [
+       "TCU Horned Frogs",
+       -14.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -110
+      ],
+      [
+       "Under",
+       44.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch"
+     ],
+     "kalshi_snap": "snap_20261114T1807Z.parquet"
+    },
+    "54769e255d6ea468fa2d12ed744eb6f2": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       -306
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       263
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       -7.5,
+       -115
+      ],
+      [
+       "Sam Houston State Bearkats",
+       7.5,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -109
+      ],
+      [
+       "Under",
+       44.5,
+       -107
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261114T1807Z.parquet"
+    },
+    "d6d167714ff638b23e84d757ff522414": {
+     "pinnacle_h2h": [
+      [
+       "Auburn Tigers",
+       0,
+       -141
+      ],
+      [
+       "Mississippi State Bulldogs",
+       0,
+       127
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Auburn Tigers",
+       -2.5,
+       -117
+      ],
+      [
+       "Mississippi State Bulldogs",
+       2.5,
+       104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -110
+      ],
+      [
+       "Under",
+       51.0,
+       -106
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "CFP 24-team format: What you need to know about th",
+      "Chris Doering dissects key storylines in three Wee",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch",
+      "Gene Chizik's 'Words of Chizdom' to a few teams wh",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "Kamario Taylor: Easy call to return to Mississippi",
+      "Latest updates on how the FAA ground stop will aff",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "Sources: Kamario Taylor finalizing deal to return ",
+      "Why Jordan Rodgers has an issue with Tennessee's C"
+     ],
+     "kalshi_snap": "snap_20261114T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "28a08b75e830f2fbaaeaa3b42c2ebb63": "anchor_close",
+    "54769e255d6ea468fa2d12ed744eb6f2": "anchor_close",
+    "d6d167714ff638b23e84d757ff522414": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261114T184903Z.parquet",
+  "sha256": "f175c2125282b5faec38c92f0896acc26ab41d3672c653d4499fd043d42af929",
+  "logged_utc": "2026-11-14T18:49:03.492549+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.8,
+  "first_kickoff_utc": "2026-11-14T21:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T183012Z.parquet",
+   "inputs_digest": "{\"d03caba2636ec407098ec3e1fe18fcf7\": \"a42520f4d7180e52\"}",
+   "components": {
+    "d03caba2636ec407098ec3e1fe18fcf7": {
+     "pinnacle_h2h": [
+      [
+       "Rice Owls",
+       0,
+       -158
+      ],
+      [
+       "Tulane Green Wave",
+       0,
+       142
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Rice Owls",
+       -3.0,
+       -113
+      ],
+      [
+       "Tulane Green Wave",
+       3.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -108
+      ],
+      [
+       "Under",
+       48.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "CFP 24-team format: What you need to know about th",
+      "FAA ground stop throws sports world into travel ch",
+      "Oregon, Houston headline best uniforms of college ",
+      "What would a 24-team College Football Playoff brac"
+     ],
+     "kalshi_snap": "snap_20261114T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "d03caba2636ec407098ec3e1fe18fcf7": "anchor_prekick"
+   }
+  }
  }
 ]
