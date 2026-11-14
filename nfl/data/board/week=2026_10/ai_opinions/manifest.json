@@ -8839,5 +8839,26 @@
     "48e497c230e6c9afcb3b600091d28e17": "new_props: pull 2026-11-14T19:17:48.241842+00:00; injury_change: inj_Pittsburgh Steelers"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T230447Z.parquet",
+  "sha256": "7f4917d41b4c72753b62f64640cb95686886552d52a7c698d4241ab191a592cc",
+  "logged_utc": "2026-11-14T23:04:47.013268+00:00",
+  "rows": 919,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "reader_v3b",
+  "pilot": false,
+  "window": "late",
+  "games": 13,
+  "no_view_share": 0.368,
+  "revised_rows": 0,
+  "oldest_source_age_min": 544.6,
+  "first_kickoff_utc": "2026-11-15T14:30:00Z",
+  "reader_sha256": "a413d38af2157fcb8a04c1d71cbc17a791cdadaa375e6ec3da56b1e616ba6bfd",
+  "inputs": {
+   "props": "data_2026_11.parquet",
+   "lines": "snap_20261114T220007Z.parquet"
+  }
  }
 ]
