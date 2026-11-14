@@ -16998,5 +16998,264 @@
     "1742500c43d25085db47873b82f15459": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T170404Z.parquet",
+  "sha256": "878ca551d2b80da4aa6cff6b79fec98d101d80be4bebd2f914ea05ecb72b651d",
+  "logged_utc": "2026-11-14T17:04:04.797431+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.667,
+  "revised_rows": 11,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-14T17:45:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T170007Z.parquet",
+   "inputs_digest": "{\"fe42d22bafb7d5f406317697dff44ee6\": \"aebac9bc60ced496\", \"ac00a0cc63f0020c5d00d412dd706834\": \"bb0a4990e81365ac\", \"8a0a3acc1b435727e1e571600aecb68f\": \"f4e5e884b40e4b26\", \"4c15d7c4261fa1d8b75615a46d4d2ea7\": \"365fdfa6ec119597\"}",
+   "components": {
+    "fe42d22bafb7d5f406317697dff44ee6": {
+     "pinnacle_h2h": [
+      [
+       "Alabama Crimson Tide",
+       0,
+       -702
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       538
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Alabama Crimson Tide",
+       -14.0,
+       -108
+      ],
+      [
+       "Vanderbilt Commodores",
+       14.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -101
+      ],
+      [
+       "Under",
+       48.5,
+       -116
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Alabama TE Josh Ford out for season with lower-bod",
+      "Analyzing the tape on Bama's Keelon Russell dicing",
+      "Bama's Bray Hubbard introduces the cherished Cross",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "Chris Doering dissects key storylines in three Wee",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly: How Week 10's top games were won, what i",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Georgia jumps into CFP's top spot, followed by Uta",
+      "Goalposts in a river last time: No. 7 Alabama head",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "How every 2027 five-star college football prospect",
+      "Kalen DeBoer discusses his thoughts on new CFP for",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "Roman Harper discusses how No. 3 Bama should win v",
+      "SEC Now crew tells fans which two-loss SEC teams w",
+      "SEC Now's initial reaction to the latest CFP ranki",
+      "Sedrick Alexander credits teammates as Vandy TD re",
+      "Sources: Alabama to start QB Austin Mack; Keelon R",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What would a 24-team College Football Playoff brac",
+      "What you need to know about the 2028 recruiting cl",
+      "Who's No. 1? CFP committee's second top 25 and bra",
+      "Why Jordan Rodgers has an issue with Tennessee's C"
+     ],
+     "kalshi_snap": "snap_20261114T1707Z.parquet"
+    },
+    "ac00a0cc63f0020c5d00d412dd706834": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -179
+      ],
+      [
+       "Florida International Panthers",
+       0,
+       160
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -4.0,
+       -104
+      ],
+      [
+       "Florida International Panthers",
+       4.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -101
+      ],
+      [
+       "Under",
+       54.5,
+       -115
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261114T1707Z.parquet"
+    },
+    "8a0a3acc1b435727e1e571600aecb68f": {
+     "pinnacle_h2h": [
+      [
+       "Missouri State Bears",
+       0,
+       -116
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       105
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Missouri State Bears",
+       -1.5,
+       -106
+      ],
+      [
+       "New Mexico State Aggies",
+       1.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -110
+      ],
+      [
+       "Under",
+       49.0,
+       -106
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261114T1707Z.parquet"
+    },
+    "4c15d7c4261fa1d8b75615a46d4d2ea7": {
+     "pinnacle_h2h": [
+      [
+       "Tennessee Volunteers",
+       0,
+       -113
+      ],
+      [
+       "Texas A&M Aggies",
+       0,
+       102
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Tennessee Volunteers",
+       -1.0,
+       -108
+      ],
+      [
+       "Texas A&M Aggies",
+       1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -117
+      ],
+      [
+       "Under",
+       43.5,
+       101
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "5-star tackle Mark Matthews commits to Georgia aft",
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "Bless their hearts: Texas A&M, LSU WBB foes and Ch",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "Connelly: How Week 10's top games were won, what i",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "Heupel breaks down success of new package with Vol",
+      "How every 2027 five-star college football prospect",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "No. 9 Tennessee and Texas A&M meet in SEC play",
+      "No. 9 Tennessee eyes Texas A&M trip, wary of anoth",
+      "Nowkhah on Witten's changes to OU, Aggies upset ch",
+      "SEC Now crew tells fans which two-loss SEC teams w",
+      "SEC Now's initial reaction to the latest CFP ranki",
+      "Tennessee RB Daune Morris suffers broken leg in ca",
+      "Tennessee loses top pass rusher Tyree Weathersby f",
+      "Tennessee's Carter on facing Bishop in practice: '",
+      "The ACC and strength of schedule top this week's A",
+      "Tim Tebow calling for bounce back performances fro",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What would a 24-team College Football Playoff brac",
+      "What you need to know about the 2028 recruiting cl",
+      "Who's No. 1? CFP committee's second top 25 and bra",
+      "Why Jordan Rodgers has an issue with Tennessee's C"
+     ],
+     "kalshi_snap": "snap_20261114T1707Z.parquet"
+    }
+   },
+   "triggers": {
+    "fe42d22bafb7d5f406317697dff44ee6": "anchor_close",
+    "ac00a0cc63f0020c5d00d412dd706834": "anchor_prekick",
+    "8a0a3acc1b435727e1e571600aecb68f": "anchor_prekick",
+    "4c15d7c4261fa1d8b75615a46d4d2ea7": "anchor_prekick"
+   }
+  }
  }
 ]
