@@ -19876,5 +19876,424 @@
     "018349e41d033e3b1fdbc14ce9b09325": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T213403Z.parquet",
+  "sha256": "d969054c32550ca2faf42b3aff992f1297c787c32b4a99df7bcd2710223cc80c",
+  "logged_utc": "2026-11-14T21:34:03.946103+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.75,
+  "revised_rows": 10,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-15T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T213005Z.parquet",
+   "inputs_digest": "{\"13916d6f26b193abfc3367d80f27e64c\": \"e0b8039b2baa000d\", \"5f45291a1a5e01525b2e3aebe791c436\": \"dd9cdb5e5fe6f855\", \"8982b0a852d112b25310aa03f0f104b6\": \"ae52013742cc0fd7\", \"77380a347bae20671e1f8cec27ce658b\": \"fc14f6bf8e1c5f46\"}",
+   "components": {
+    "13916d6f26b193abfc3367d80f27e64c": {
+     "pinnacle_h2h": [
+      [
+       "Iowa Hawkeyes",
+       0,
+       -918
+      ],
+      [
+       "Purdue Boilermakers",
+       0,
+       670
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa Hawkeyes",
+       -17.5,
+       -106
+      ],
+      [
+       "Purdue Boilermakers",
+       17.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -105
+      ],
+      [
+       "Under",
+       48.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "What would a 24-team College Football Playoff brac",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261114T2137Z.parquet"
+    },
+    "5f45291a1a5e01525b2e3aebe791c436": {
+     "pinnacle_h2h": [
+      [
+       "LSU Tigers",
+       0,
+       -194
+      ],
+      [
+       "Texas Longhorns",
+       0,
+       172
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "LSU Tigers",
+       -4.5,
+       -108
+      ],
+      [
+       "Texas Longhorns",
+       4.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -117
+      ],
+      [
+       "Under",
+       46.0,
+       100
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Analyzing where LSU must improve in red zone again",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "Can Lane Kiffin and LSU save their playoff hopes?",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Heather Dinich picks how many SEC teams make the C",
+      "Holly Rowe previews No. 6 Texas vs. No. 21 LSU",
+      "How No. 6 Texas can neutralize No. 21 LSU's defens",
+      "How every 2027 five-star college football prospect",
+      "How the FAA ground stop threw college football int",
+      "LSU-Texas best bets: Will Saturday in Baton Rouge ",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "No. 8 Texas aims to firm up CFP credentials at No.",
+      "SEC Now crew tells fans which two-loss SEC teams w",
+      "SEC Now's initial reaction to the latest CFP ranki",
+      "Texas LB Rasheem Biles values being a threat on an",
+      "The CFP implications of Texas-LSU",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "What would a 24-team College Football Playoff brac",
+      "What you need to know about the 2028 recruiting cl",
+      "Who's No. 1? CFP committee's second top 25 and bra",
+      "Why Stephen A. says the wrong team is favored in T",
+      "Will Muschamp brought 'boom' back to Texas' defens"
+     ],
+     "kalshi_snap": "snap_20261114T2137Z.parquet"
+    },
+    "8982b0a852d112b25310aa03f0f104b6": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -855
+      ],
+      [
+       "UNLV Rebels",
+       0,
+       633
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -17.5,
+       -106
+      ],
+      [
+       "UNLV Rebels",
+       17.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -108
+      ],
+      [
+       "Under",
+       46.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "The ACC and strength of schedule top this week's A",
+      "Top 25 betting lines: LSU favored over Texas, and "
+     ],
+     "kalshi_snap": "snap_20261114T2137Z.parquet"
+    },
+    "77380a347bae20671e1f8cec27ce658b": {
+     "pinnacle_h2h": [
+      [
+       "Stanford Cardinal",
+       0,
+       606
+      ],
+      [
+       "Virginia Tech Hokies",
+       0,
+       -810
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Stanford Cardinal",
+       17.0,
+       101
+      ],
+      [
+       "Virginia Tech Hokies",
+       -17.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       -105
+      ],
+      [
+       "Under",
+       58.0,
+       -111
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second"
+     ],
+     "kalshi_snap": "snap_20261114T2137Z.parquet"
+    }
+   },
+   "triggers": {
+    "13916d6f26b193abfc3367d80f27e64c": "anchor_prekick",
+    "5f45291a1a5e01525b2e3aebe791c436": "anchor_prekick",
+    "8982b0a852d112b25310aa03f0f104b6": "anchor_prekick",
+    "77380a347bae20671e1f8cec27ce658b": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261114T214903Z.parquet",
+  "sha256": "6d6634e0710aa9675ec6f1cdb5a90d9b7c71a345aae0e0faa2716c52e6cc7df3",
+  "logged_utc": "2026-11-14T21:49:03.075955+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.889,
+  "revised_rows": 9,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-14T22:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T213005Z.parquet",
+   "inputs_digest": "{\"109bd435222562d833efa2a511f9b79e\": \"46fd45212fcddb35\", \"aa1c9ee516cf122de53e75ffec017edd\": \"72f4e268172321d0\", \"d0cebc10547e648dd7988b83f58081cf\": \"8f1b78ed7d3ff31b\"}",
+   "components": {
+    "109bd435222562d833efa2a511f9b79e": {
+     "pinnacle_h2h": [
+      [
+       "Arizona State Sun Devils",
+       0,
+       149
+      ],
+      [
+       "UCF Knights",
+       0,
+       -166
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona State Sun Devils",
+       3.5,
+       -110
+      ],
+      [
+       "UCF Knights",
+       -3.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -109
+      ],
+      [
+       "Under",
+       46.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch"
+     ],
+     "kalshi_snap": "snap_20261114T2137Z.parquet"
+    },
+    "aa1c9ee516cf122de53e75ffec017edd": {
+     "pinnacle_h2h": [
+      [
+       "Michigan State Spartans",
+       0,
+       123
+      ],
+      [
+       "Washington Huskies",
+       0,
+       -136
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan State Spartans",
+       2.5,
+       100
+      ],
+      [
+       "Washington Huskies",
+       -2.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -116
+      ],
+      [
+       "Under",
+       43.5,
+       -101
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch",
+      "Florida cancels Notre Dame series; Irish then add "
+     ],
+     "kalshi_snap": "snap_20261114T2137Z.parquet"
+    },
+    "d0cebc10547e648dd7988b83f58081cf": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas Razorbacks",
+       0,
+       252
+      ],
+      [
+       "South Carolina Gamecocks",
+       0,
+       -292
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas Razorbacks",
+       7.5,
+       -115
+      ],
+      [
+       "South Carolina Gamecocks",
+       -7.5,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -116
+      ],
+      [
+       "Under",
+       51.5,
+       100
+      ]
+     ],
+     "news": [
+      "'You don't belong there': Stephen A. takes issue w",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "Chris Doering dissects key storylines in three Wee",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "How every 2027 five-star college football prospect",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "Shane Beamer: 'There's nothing like the SEC Champi",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261114T2137Z.parquet"
+    }
+   },
+   "triggers": {
+    "109bd435222562d833efa2a511f9b79e": "anchor_close",
+    "aa1c9ee516cf122de53e75ffec017edd": "anchor_close",
+    "d0cebc10547e648dd7988b83f58081cf": "anchor_prekick"
+   }
+  }
  }
 ]
