@@ -6020,5 +6020,153 @@
     "48e497c230e6c9afcb3b600091d28e17": "new_props: pull 2026-11-14T06:47:46.388127+00:00; injury_change: inj_Cincinnati Bengals"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T094703Z.parquet",
+  "sha256": "e46a93c83b96c6b8f80aef93bcaa10078ab30510589e88dba68934de3c93aef1",
+  "logged_utc": "2026-11-14T09:47:03.685777+00:00",
+  "rows": 78,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.936,
+  "revised_rows": 61,
+  "oldest_source_age_min": 257.0,
+  "first_kickoff_utc": "2026-11-15T21:05:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261114T053004Z.parquet",
+   "inputs_digest": "{\"6c932a965110f3f89ec4a5f1a6ac256e\": \"9e5cd8e6f9ade00c\"}",
+   "components": {
+    "6c932a965110f3f89ec4a5f1a6ac256e": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Arizona Cardinals",
+       0,
+       375
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -525
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Arizona Cardinals",
+       9.5,
+       -110
+      ],
+      [
+       "Los Angeles Rams",
+       -9.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       39.5,
+       -110
+      ],
+      [
+       "Under",
+       39.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Arizona Cardinals",
+       0,
+       352
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -443
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Cardinals",
+       9.5,
+       -107
+      ],
+      [
+       "Los Angeles Rams",
+       -9.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.5,
+       -112
+      ],
+      [
+       "Under",
+       39.5,
+       -104
+      ]
+     ],
+     "props_ts": "2026-11-14T09:47:46.815218+00:00",
+     "inj_Arizona Cardinals": "142ef373b6af4569",
+     "inj_Los Angeles Rams": "2b37d4edcd6930cd",
+     "news": [
+      "2026 NFL midseason report: Questions, stats for al",
+      "2026 NFL trade deadline winners, losers: Kirk Cous",
+      "2026 NFL trade deadline: Proposing deals for Tony ",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Are the Rams' playoff hopes over after Puka Nacua'",
+      "As the 'Peanut Punch' takes over NFL, how do teams",
+      "Cam Skattebo dons custom 'Iron Man' mask for TNF, ",
+      "Cardinals coach: Carson Beck's been a pro since he",
+      "Cardinals coach: Michael Wilson will miss the rest",
+      "Cardinals to start rookie QB Carson Beck against R",
+      "Cardinals' rookie QB Carson Beck makes his NFL deb",
+      "Carson Beck finds familiarity ahead of NFL debut",
+      "Carson Beck next man up for Cardinals",
+      "Carson Beck starting for the Cardinals",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Does Puka Nacua's injury put the Rams' season in j",
+      "Intel on NFL playoff races, MVP, Super Bowl and br",
+      "Marcus Spears: 'I'm worried about Puka and his lon",
+      "Myles Garrett details range of emotions when he wa",
+      "Myles Garrett listed as questionable vs. Cardinals",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 10 betting odds: Lines and totals for eve",
+      "NFL Week 10 latest intel, buzz questions, fantasy ",
+      "NFL Week 10 preview: Picks, predictions, schedule,",
+      "NFL Week 10 uniforms: Titans debut Rivalries look,",
+      "NFL Week 9 arrivals: Justin Jefferson rocks black ",
+      "NFL Week 9: Big takeaways, questions and fantasy s",
+      "NFL execs on tight playoff races, MVP, Super Bowl ",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Deals for Jessie Bates ",
+      "NFL trade deadline grades: Deals for Jordan Davis,",
+      "NFL trade deadline grades: Deals for Kirk Cousins,",
+      "Questions on 2026 NFL trade deadline deals: Does K",
+      "Rams WR Puka Nacua likely to hit IR with MCL and P",
+      "Rams optimistic about Davante Adams' return after ",
+      "Rams put WR Puka Nacua on IR with knee, toe injuri",
+      "Sean McVay: Rams optimistic WR Davante Adams will ",
+      "Sources: Cardinals' Gardner Minshew has UCL injury",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "Why protected picks aren't common in NFL trades"
+     ],
+     "kalshi_snap": "snap_20261114T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "6c932a965110f3f89ec4a5f1a6ac256e": "new_props: pull 2026-11-14T09:47:46.815218+00:00; injury_change: inj_Arizona Cardinals; injury_change: inj_Los Angeles Rams"
+   }
+  }
  }
 ]
