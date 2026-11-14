@@ -4483,5 +4483,152 @@
     "7627192fd89b05120ab6c712aa23fd81": "horizon_entry: kick in 45h, no prior read"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T033205Z.parquet",
+  "sha256": "77a2426ac3e12545f4dc707206b72b89df88317dadde9f3a0d559d7aa05838f3",
+  "logged_utc": "2026-11-14T03:32:05.390680+00:00",
+  "rows": 73,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.945,
+  "revised_rows": 0,
+  "oldest_source_age_min": 91.9,
+  "first_kickoff_utc": "2026-11-16T01:20:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261114T033007Z.parquet",
+   "inputs_digest": "{\"48e497c230e6c9afcb3b600091d28e17\": \"6495af61d0734370\"}",
+   "components": {
+    "48e497c230e6c9afcb3b600091d28e17": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -185
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       155
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cincinnati Bengals",
+       -3.5,
+       -105
+      ],
+      [
+       "Pittsburgh Steelers",
+       3.5,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       49.0,
+       -115
+      ],
+      [
+       "Under",
+       49.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -180
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       157
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bengals",
+       -3.5,
+       101
+      ],
+      [
+       "Pittsburgh Steelers",
+       3.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -119
+      ],
+      [
+       "Under",
+       48.5,
+       102
+      ]
+     ],
+     "props_ts": "2026-11-09T17:32:50.321503+00:00",
+     "inj_Cincinnati Bengals": "53d623927a23842b",
+     "inj_Pittsburgh Steelers": "178e57d521cfbd61",
+     "news": [
+      "\"White Chocolate\" is set to make his debut",
+      "2026 NFL midseason award rankings: MVP picks, top ",
+      "2026 NFL midseason report: Questions, stats for al",
+      "2026 NFL trade deadline winners, losers: Kirk Cous",
+      "2027 NFL draft order projections for Round 1, chan",
+      "As the 'Peanut Punch' takes over NFL, how do teams",
+      "Bengals confident heading into pivotal Steelers ma",
+      "Bengals nix agreed upon trade with Eagles, sources",
+      "Bengals nix agreed-upon trade with Eagles, sources",
+      "Bengals overcome Falcons in Week 9 blockbuster",
+      "Bengals trade for Eagles LB Arnold Ebiketie, sourc",
+      "Bengals' Zac Taylor apologizes for failed trade wi",
+      "Cam Skattebo dons custom 'Iron Man' mask for TNF, ",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "How active NFL players continue to redefine all-ti",
+      "It's a battle for the AFC North: Steelers at Benga",
+      "Joe Burrow reaching new heights as Bengals face bi",
+      "Judging overreactions to NFL Week 9 -- and what th",
+      "Longtime Steelers player, assistant coach Dick Hoa",
+      "Mike Tomlin: 'Excited' about broadcast role, hasn'",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 10 betting odds: Lines and totals for eve",
+      "NFL Week 10 latest intel, buzz questions, fantasy ",
+      "NFL Week 10 preview: Picks, predictions, schedule,",
+      "NFL Week 10 uniforms: Titans debut Rivalries look,",
+      "NFL Week 9 arrivals: Caleb Williams rocks Supreme ",
+      "NFL Week 9 arrivals: Justin Jefferson rocks black ",
+      "NFL Week 9: Big takeaways, questions and fantasy s",
+      "NFL trade deadline grades: Deals for Jessie Bates ",
+      "NFL trade deadline grades: Deals for Jordan Davis,",
+      "NFL trade deadline grades: Deals for Kirk Cousins,",
+      "Questions on 2026 NFL trade deadline deals: Does K",
+      "Saints reference Shedeur Sanders quote after win, ",
+      "Sportsbook liability Joe Burrow overtakes Josh All",
+      "Steelers and Bengals meet for AFC North lead on Su",
+      "Week 10 betting preview: Analysis, best bets, TD p",
+      "Week 9 NFL highlights: Best plays, moments, touchd",
+      "Who has the edge in Steelers-Bengals?",
+      "Will the Steelers make a significant move before t",
+      "Zac Taylor says Bengals take responsibility for fa"
+     ],
+     "kalshi_snap": "snap_20261114T0305Z.parquet"
+    }
+   },
+   "triggers": {
+    "48e497c230e6c9afcb3b600091d28e17": "anchor_morning"
+   }
+  }
  }
 ]

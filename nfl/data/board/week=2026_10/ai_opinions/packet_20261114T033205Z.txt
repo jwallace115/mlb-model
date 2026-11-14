@@ -1,0 +1,65 @@
+packet built 2026-11-14T03:32Z | snap snap_20261114T033007Z.parquet | props pull 2026-11-14T02:00 | kalshi snap_20261114T0305Z.parquet | injuries injuries_20261114T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: anchor_morning
+######## Pittsburgh Steelers @ Cincinnati Bengals  kick 11-16T01:20Z
+  HR ML: Bengals -185 / Steelers +155 (no-vig home 0.623) | Pinnacle no-vig home 0.623
+  HR spread: Bengals -3.5 -105 / Steelers +3.5 -115 | Pinnacle Bengals -3.5 (+101) | HR open -3.5 (20261110)
+  HR total: 49 O-115/U-105 | Pinnacle 48.5 O-119/U+102 | HR open 48.5
+  Kalshi ML [('Pittsburgh wins', 0.38, 215259), ('Cincinnati wins', 0.62, 185669)] | spread [('Cincinnati wins by over 3.5 points?', 0.49, 116348), ('Cincinnati wins by over 4.5 points?', 0.46, 4273)] | total [('Full Game: over 48.5 points scored?', 0.54, 1122), ('Full Game: over 49.5 points scored?', 0.49, 6199)]
+  -- Pittsburgh Steelers injuries (20261114T0030)
+     Inju DT Derrick Harmon: Harmon (foot) is listed as questionable for Sunday's game against the Bengals, Nick Farabaugh of PennLive.com reports.
+     Inju WR Michael Pittman Jr.: Pittman (foot) is warmed up with his teammates Thursday, though he remains on IR and wasn't wearing a helmet, Nick Farabaugh of PennLive.com reports.
+     Acti WR Ben Skowronek: Skowronek (calf) was a full participant in Wednesday's practice, Teresa Varley of the Steelers' official site reports.
+     Acti QB Will Howard: 
+     Acti QB Drew Allar: 
+     Acti RB Eli Heidenreich: 
+     Acti WR Germie Bernard: Bernard caught all five of his targets for 30 yards during Sunday's 27-6 win against Cleveland.
+     Acti TE Pat Freiermuth: Freiermuth caught both of his targets for 35 yards in Sunday's 27-6 win over the Browns. He added one rushing attempt for a one-yard touchdown.
+     Acti TE Darnell Washington: Washington caught three of five targets for 94 yards during Sunday's 27-6 win over the Browns.
+     Acti RB Rico Dowdle: Dowdle rushed 15 times for 56 yards and a touchdown in the Steelers' 27-6 win over the Browns on Sunday.
+     Acti WR DK Metcalf: Metcalf brought in one of six targets for four yards in the Steelers' 27-6 win over the Browns on Sunday.
+     Acti QB Aaron Rodgers: Rodgers completed 13 of 25 passes for 172 yards with no touchdowns and one interception in the Steelers' 27-6 win over the Browns on Sunday.
+     Acti RB Jaylen Warren: Warren rushed 17 times for 143 yards and a touchdown and brought in one of two targets for no gain in the Steelers' 27-6 win over the Browns on Sunday
+     Acti WR Brandon Smith: The Steelers signed Smith off the practice squad to the active roster Saturday, Teresa Varley of the team's official site reports.
+     Acti QB Mason Rudolph: Rudolph is active for Sunday's game against the Saints in Paris, Teresa Varley of the Steelers' official site reports.
+     news 11-12T23:08 "White Chocolate" is set to make his debut
+     news 11-13T00:00 Steelers and Bengals meet for AFC North lead on Sunday night, both 6-2
+     news 11-13T00:54 Cam Skattebo dons custom 'Iron Man' mask for TNF, leads NFL Week 10 arrivals
+     news 11-13T11:00 It's a battle for the AFC North: Steelers at Bengals Week 10 primer
+     news 11-13T14:11 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+  -- Cincinnati Bengals injuries (20261114T0030)
+     Inju WR Andrei Iosivas: Iosivas (thumb) is listed as doubtful for Sunday's game against Pittsburgh.
+     Out  S  Kyle Dugger: out
+     Inju OT Brian Parker II: The Bengals opened Parker's (undisclosed) 21-day practice window Thursday.
+     Inju CB Jalen Davis: The Bengals designated Davis (hamstring) to return from injured reserve Thursday.
+     Acti WR Dohnte Meyers: Meyers caught two passes for 47 yards on three targets in Sunday's 34-17 win over the Falcons.
+     Acti RB Samaje Perine: Perine rushed 11 times for 43 yards during Sunday's 34-17 win over the Falcons.
+     Acti TE Mike Gesicki: Gesicki caught both of his targets for 11 yards during Sunday's 34-17 win versus Atlanta.
+     Acti RB Chase Brown: Brown carried the ball nine times for 57 yards and caught all three of his targets for 18 yards in Sunday's 34-17 win over the Falcons.
+     Acti WR Tee Higgins: Higgins caught five of six targets for 32 yards and two touchdowns in Sunday's 34-17 win over Atlanta.
+     Acti WR Ja'Marr Chase: Chase caught 10 of 12 targets for 155 yards and a touchdown in Sunday's 34-17 win over the Falcons.
+     Acti QB Joe Burrow: Burrow completed 24 of 29 passes for 271 yards and three touchdowns in Sunday's 34-17 win over the Falcons. He added seven yards and a TD on three car
+     Inju DE Cashius Howell: Howell (wrist) was placed on injured reserve by the Bengals on Tuesday.
+     Acti WR Mitchell Tinsley: 
+     Acti WR Colbie Young: Young went without a target while playing 19 of the Bengals' 74 snaps on offense in Sunday's 43-36 overtime win over the Titans.
+     news 11-13T00:00 Steelers and Bengals meet for AFC North lead on Sunday night, both 6-2
+     news 11-13T00:54 Cam Skattebo dons custom 'Iron Man' mask for TNF, leads NFL Week 10 arrivals
+     news 11-13T11:00 It's a battle for the AFC North: Steelers at Bengals Week 10 primer
+     news 11-13T14:11 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-13T23:09 Bengals confident heading into pivotal Steelers matchup
+  -- props (pull 2026-11-14T02:00)
+     * Aaron Rodgers: atd 0.5 (+1400), paatt 35.5 (-110/-120), cmp 21.5 (-115/-115), int 0.5 (-115/-115), patd 1.5 (-110/-120), payd 239.5 (-115/-115), ruyd 0.5 (-110/-120)
+     * Chase Brown: atd 0.5 (-110), recyd 24.5 (-115/-115), rec 4.5 (+115/-145), ruatt 11.5 (-115/-115), ruyd 46.5 (-115/-115)
+     * DK Metcalf: atd 0.5 (+170), recyd 52.5 (-115/-115), rec 4.5 (+100/-130)
+     * Darnell Washington: atd 0.5 (+220), recyd 28.5 (-115/-115), rec 2.5 (-105/-125)
+     * Dohnte Meyers: atd 0.5 (+400), recyd 19.5 (-115/-115), rec 2.5 (+110/-140)
+     * Germie Bernard: atd 0.5 (+275), recyd 51.5 (-115/-115), rec 4.5 (-135/+100)
+     * Ja'Marr Chase: atd 0.5 (-125), recyd 90.5 (-115/-115), rec 7.5 (-120/-110)
+     * Jaylen Warren: atd 0.5 (+100), recyd 24.5 (-120/-110), rec 2.5 (-170/+125), ruatt 13.5 (-110/-120), ruyd 65.5 (-115/-115)
+     * Joe Burrow: atd 0.5 (+450), paatt 37.5 (-120/-110), cmp 26.5 (-115/-115), int 0.5 (-115/-115), patd 2.5 (+150/-210), payd 289.5 (-115/-115), ruyd 6.5 (-120/-110)
+     * Mike Gesicki: atd 0.5 (+230), recyd 23.5 (-115/-115), rec 2.5 (+115/-150)
+     * Pat Freiermuth: atd 0.5 (+300), recyd 28.5 (-115/-115), rec 2.5 (-165/+125)
+     * Rico Dowdle: atd 0.5 (+175), recyd 13.5 (-115/-115), rec 2.5 (+120/-160), ruatt 7.5 (-110/-120), ruyd 30.5 (-120/-110)
+     * Samaje Perine: atd 0.5 (+250), recyd 4.5 (-115/-115), rec 0.5 (-200/+150), ruatt 6.5 (+105/-135), ruyd 17.5 (-120/-110)
+     * Tee Higgins: atd 0.5 (+110), recyd 75.5 (-115/-115), rec 5.5 (-110/-120)
