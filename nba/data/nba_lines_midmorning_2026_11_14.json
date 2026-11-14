@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "6cb4c8feeadd57aa6ab46ebdee60818a",
+    "game_date": "2026-11-14",
+    "sport": "NBA",
+    "home_team": "New Orleans Pelicans",
+    "away_team": "Denver Nuggets",
+    "commence_time": "2026-11-15T00:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 235.5,
+    "over_price": -106,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-14T13:25:03.074495+00:00"
+  },
+  {
+    "game_id": "2cc2c254049b0bd0a6219f70cbb0b69a",
+    "game_date": "2026-11-14",
+    "sport": "NBA",
+    "home_team": "Cleveland Cavaliers",
+    "away_team": "Dallas Mavericks",
+    "commence_time": "2026-11-15T00:40:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 231.5,
+    "over_price": -106,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-14T13:25:03.074495+00:00"
+  },
+  {
+    "game_id": "a7cb6062530bd69eb6caee84a015abd0",
+    "game_date": "2026-11-14",
+    "sport": "NBA",
+    "home_team": "Memphis Grizzlies",
+    "away_team": "Brooklyn Nets",
+    "commence_time": "2026-11-15T01:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 228.0,
+    "over_price": -107,
+    "under_price": -105,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-14T13:25:03.074495+00:00"
+  },
+  {
+    "game_id": "5773e80d52d3fba36b11be38ded62790",
+    "game_date": "2026-11-14",
+    "sport": "NBA",
+    "home_team": "Minnesota Timberwolves",
+    "away_team": "Chicago Bulls",
+    "commence_time": "2026-11-15T01:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 235.5,
+    "over_price": 100,
+    "under_price": -113,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-14T13:25:03.074495+00:00"
+  },
+  {
+    "game_id": "cb06267ae037a883ae6f71078d6e2aaa",
+    "game_date": "2026-11-14",
+    "sport": "NBA",
+    "home_team": "Miami Heat",
+    "away_team": "Detroit Pistons",
+    "commence_time": "2026-11-15T01:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 229.0,
+    "over_price": -104,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-14T13:25:03.074495+00:00"
+  }
+]
