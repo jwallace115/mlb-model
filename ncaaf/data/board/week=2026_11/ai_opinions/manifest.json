@@ -16480,5 +16480,523 @@
     "54769e255d6ea468fa2d12ed744eb6f2": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T161905Z.parquet",
+  "sha256": "6bfae45079b2cef71afeba83df6a84c5a4bc3ff0365774f461dd0c3e82b95509",
+  "logged_utc": "2026-11-14T16:19:05.193986+00:00",
+  "rows": 21,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 7,
+  "no_view_share": 0.667,
+  "revised_rows": 21,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-14T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T160006Z.parquet",
+   "inputs_digest": "{\"0431ccbcda08ef99781fee8c341c8932\": \"06f2a5a9f555a857\", \"a195a61a5f2a3c5c0ed7ba7b313572e5\": \"3b904c3e842dcbdd\", \"83b67813ba763c65142b4238e3c44270\": \"6cb4acf93bc58b44\", \"862cc541ca98da17b20a964513c18435\": \"79871729663d1910\", \"cf67bd8ed20036fea0a72f8a0d5836e7\": \"4b20ad4f26ce6793\", \"462e4e8a99f44d5c64f36987e966cd13\": \"b3ad0397982c7c78\", \"b7d77aed1f8f75da7679a059e627dfee\": \"44f0e9ddc6747e86\"}",
+   "components": {
+    "0431ccbcda08ef99781fee8c341c8932": {
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bearcats",
+       0,
+       114
+      ],
+      [
+       "Iowa State Cyclones",
+       0,
+       -126
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bearcats",
+       2.5,
+       100
+      ],
+      [
+       "Iowa State Cyclones",
+       -2.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       -102
+      ],
+      [
+       "Under",
+       58.0,
+       -114
+      ]
+     ],
+     "news": [
+      "'You don't belong there': Stephen A. takes issue w",
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second"
+     ],
+     "kalshi_snap": "snap_20261114T1637Z.parquet"
+    },
+    "a195a61a5f2a3c5c0ed7ba7b313572e5": {
+     "pinnacle_h2h": [
+      [
+       "Duke Blue Devils",
+       0,
+       440
+      ],
+      [
+       "Miami Hurricanes",
+       0,
+       -552
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Duke Blue Devils",
+       14.0,
+       -111
+      ],
+      [
+       "Miami Hurricanes",
+       -14.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.0,
+       -110
+      ],
+      [
+       "Under",
+       55.0,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Breaking down the CFP race for three conferences a",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "Connelly: How Week 10's top games were won, what i",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "How every 2027 five-star college football prospect",
+      "It's No. 5 Miami vs. Duke, and QB Darian Mensah vs",
+      "The ACC and strength of schedule top this week's A",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What would a 24-team College Football Playoff brac",
+      "Who's No. 1? CFP committee's second top 25 and bra",
+      "Why Miami, Indiana had their significant drops in "
+     ],
+     "kalshi_snap": "snap_20261114T1637Z.parquet"
+    },
+    "83b67813ba763c65142b4238e3c44270": {
+     "pinnacle_h2h": [
+      [
+       "James Madison Dukes",
+       0,
+       -182
+      ],
+      [
+       "UConn Huskies",
+       0,
+       162
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "James Madison Dukes",
+       -4.5,
+       -104
+      ],
+      [
+       "UConn Huskies",
+       4.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -101
+      ],
+      [
+       "Under",
+       56.5,
+       -116
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261114T1637Z.parquet"
+    },
+    "862cc541ca98da17b20a964513c18435": {
+     "pinnacle_h2h": [
+      [
+       "Maryland Terrapins",
+       0,
+       266
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       -310
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Maryland Terrapins",
+       8.5,
+       -110
+      ],
+      [
+       "Wisconsin Badgers",
+       -8.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.0,
+       -103
+      ],
+      [
+       "Under",
+       41.0,
+       -114
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Ryan Hopkins to remain Wisconsin's starting QB vs.",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi"
+     ],
+     "kalshi_snap": "snap_20261114T1637Z.parquet"
+    },
+    "cf67bd8ed20036fea0a72f8a0d5836e7": {
+     "pinnacle_h2h": [
+      [
+       "NC State Wolfpack",
+       0,
+       118
+      ],
+      [
+       "Syracuse Orange",
+       0,
+       -130
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "NC State Wolfpack",
+       2.5,
+       100
+      ],
+      [
+       "Syracuse Orange",
+       -2.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -117
+      ],
+      [
+       "Under",
+       53.5,
+       100
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "NC State officially hires Philip Rivers as footbal",
+      "Sources: Philip Rivers set to return to NC State, ",
+      "Thamel: It would be a 'shock' if Philip Rivers isn",
+      "Why Philip Rivers coaching NC State makes sense to"
+     ],
+     "kalshi_snap": "snap_20261114T1637Z.parquet"
+    },
+    "462e4e8a99f44d5c64f36987e966cd13": {
+     "pinnacle_h2h": [
+      [
+       "Northwestern Wildcats",
+       0,
+       460
+      ],
+      [
+       "Ohio State Buckeyes",
+       0,
+       -582
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northwestern Wildcats",
+       14.0,
+       102
+      ],
+      [
+       "Ohio State Buckeyes",
+       -14.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -105
+      ],
+      [
+       "Under",
+       45.5,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Betting buzz: Unexpected line movement on Indiana ",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly: How Week 10's top games were won, what i",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "How every 2027 five-star college football prospect",
+      "Northwestern without star QB Aidan Chiles again vs",
+      "Ohio State to stick with Fahey at QB vs. Northwest",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What would a 24-team College Football Playoff brac",
+      "What you need to know about the 2028 recruiting cl",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261114T1637Z.parquet"
+    },
+    "b7d77aed1f8f75da7679a059e627dfee": {
+     "pinnacle_h2h": [
+      [
+       "SMU Mustangs",
+       0,
+       -126
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       0,
+       114
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "SMU Mustangs",
+       -2.0,
+       -111
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       2.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       60.0,
+       -111
+      ],
+      [
+       "Under",
+       60.0,
+       -105
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "Breaking down the CFP race for three conferences a",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "Oregon, Houston headline best uniforms of college ",
+      "The ACC and strength of schedule top this week's A",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261114T1637Z.parquet"
+    }
+   },
+   "triggers": {
+    "0431ccbcda08ef99781fee8c341c8932": "anchor_close",
+    "a195a61a5f2a3c5c0ed7ba7b313572e5": "anchor_close",
+    "83b67813ba763c65142b4238e3c44270": "anchor_close",
+    "862cc541ca98da17b20a964513c18435": "anchor_close",
+    "cf67bd8ed20036fea0a72f8a0d5836e7": "anchor_close",
+    "462e4e8a99f44d5c64f36987e966cd13": "anchor_close",
+    "b7d77aed1f8f75da7679a059e627dfee": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261114T164903Z.parquet",
+  "sha256": "156b778a3501fd991c5008b997fcc04a44509f8c6925be1e6da5eac71e258e48",
+  "logged_utc": "2026-11-14T16:49:03.683299+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 6,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-14T17:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T163010Z.parquet",
+   "inputs_digest": "{\"82eed9ad82fa12a1ace084358d3fd32d\": \"46d1bbe8a1d4d8bf\", \"1742500c43d25085db47873b82f15459\": \"a7133533835ef1e0\"}",
+   "components": {
+    "82eed9ad82fa12a1ace084358d3fd32d": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       -668
+      ],
+      [
+       "Georgia Tech Yellow Jackets",
+       0,
+       516
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       -15.5,
+       -108
+      ],
+      [
+       "Georgia Tech Yellow Jackets",
+       15.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -106
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Key shakes up Georgia Tech staff, fires DC Semore,",
+      "What would a 24-team College Football Playoff brac"
+     ],
+     "kalshi_snap": "snap_20261114T1637Z.parquet"
+    },
+    "1742500c43d25085db47873b82f15459": {
+     "pinnacle_h2h": [
+      [
+       "Nebraska Cornhuskers",
+       0,
+       -647
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       503
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nebraska Cornhuskers",
+       -14.5,
+       -109
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       14.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -104
+      ],
+      [
+       "Under",
+       52.0,
+       -113
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Nebraska rewards defensive coordinator Rob Aurich ",
+      "Rutgers retains coach Greg Schiano in 'best long-t",
+      "Sources: Rutgers star KJ Duff out for season after"
+     ],
+     "kalshi_snap": "snap_20261114T1637Z.parquet"
+    }
+   },
+   "triggers": {
+    "82eed9ad82fa12a1ace084358d3fd32d": "anchor_close",
+    "1742500c43d25085db47873b82f15459": "anchor_close"
+   }
+  }
  }
 ]
