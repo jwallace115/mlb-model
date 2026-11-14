@@ -1,0 +1,70 @@
+packet built 2026-11-14T18:17Z | snap snap_20261114T180008Z.parquet | props pull 2026-11-14T14:00 | kalshi snap_20261114T1805Z.parquet | injuries injuries_20261114T0630Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: new_props: pull 2026-11-14T18:17:49.765162+00:00; new_news: 1 availability items
+######## Kansas City Chiefs @ Atlanta Falcons  kick 11-15T18:00Z
+  HR ML: Falcons +155 / Chiefs -185 (no-vig home 0.377) | Pinnacle no-vig home 0.391
+  HR spread: Falcons +3 +100 / Chiefs -3 -120 | Pinnacle Falcons 3.5 (-127) | HR open 3.0 (20261110)
+  HR total: 47 O-115/U-105 | Pinnacle 47.0 O-109/U-107 | HR open 45.0
+  Kalshi ML [('Kansas City wins', 0.62, 287605), ('Atlanta wins', 0.38, 52911)] | spread [('Kansas City wins by over 2.5 points?', 0.57, 9651), ('Kansas City wins by over 3.5 points?', 0.46, 82563)] | total [('Full Game: over 46.5 points scored?', 0.54, 16271), ('Full Game: over 47.5 points scored?', 0.49, 11404)]
+  -- Kansas City Chiefs injuries (20261114T0630)
+     Out  OT Jaylon Moore: Moore (ankle) has been ruled out ahead of Sunday's game against the Falcons.
+     Out  DT Peter Woods: Woods (neck) has been ruled out ahead of Sunday's game against the Falcons.
+     Ques RB Jaydn Ott: Ott (hamstring) is listed as questionable for Sunday's game against the Falcons.
+     Ques CB Mansoor Delane: Delane (shoulder) is listed as questionable for Sunday's game against Atlanta.
+     Acti QB Patrick Mahomes: Mahomes (elbow) was a full practice participant throughout the week and doesn't have an injury designation for Sunday's game at Atlanta.
+     Ques RB Kenneth Walker III: Walker (groin) is listed as questionable for Sunday's game against the Falcons.
+     Acti WR Josh Downs: Chiefs coach Andy Reid said Friday that Downs looks ready to play in Sunday's game at Atlanta, Charles Goldman of AtoZ Sports reports.
+     Acti RB Emmett Johnson: Coach Andy Reid noted that Johnson would take the bulk of the Chiefs' carries in the event that Kenneth Walker -- who didn't practice Friday due to gr
+     Acti WR Xavier Worthy: Worthy (hamstring) was a full participant in Wednesday's practice for Kansas City.
+     Acti QB Justin Fields: Fields carried twice for minus-one yard and lost a fumble while logging five snaps on offense in Sunday's 35-12 win over the Jets.
+     Acti WR Jalen Royals: Royals caught both of his targets for 18 yards Sunday in a 35-12 rout of the Jets.
+     Acti TE Noah Gray: Gray caught his only target for 11 yards Sunday in a 35-12 win against the Jets.
+     Acti WR Cyrus Allen: Allen failed to catch his only target in Sunday's 35-12 win over the Jets.
+     Acti QB Garrett Nussmeier: 
+     Acti WR Rashee Rice: Rice secured five of seven targets for 49 yards in the Chiefs' 35-12 win over the Jets on Sunday.
+     Acti TE Travis Kelce: Kelce brought in four of six targets for 72 yards in the Chiefs' 35-12 win over the Jets on Sunday. He also rushed once for one yard.
+     news 11-13T14:11 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-13T20:43 Chiefs add WR Josh Downs at NFL trade deadline
+     news 11-13T21:15 Andy Reid delivers injury update on Kenneth Walker III
+     news 11-13T21:16 Chiefs RB Kenneth Walker III (groin) misses practice, status uncertain
+     news 11-14T17:13 Chiefs' Kenneth Walker III (groin) to sit out vs. Falcons
+  -- Atlanta Falcons injuries (20261114T0630)
+     Doub LB Divine Deablo: Deablo (forearm) is listed as doubtful for Sunday's game against the Chiefs, Marc Raimondi of ESPN.com reports.
+     Out  WR Zachariah Branch: Branch (hamstring) has been ruled out for Sunday's game against the Chiefs.
+     Ques LB Josh Woods: questionable
+     Ques LB James Pearce Jr.: questionable
+     Ques DT Gervon Dexter Sr.: questionable
+     Acti RB Khalil Herbert: Herbert carried the ball once for seven yards and caught two of his three targets for two yards during Atlanta's loss to the Bengals on Sunday.
+     Acti WR Olamide Zaccheaus: Zaccheaus caught one of three targets for five yards during the Falcons' 34-17 loss to the Bengals on Sunday in Madrid. He also returned one kickoff f
+     Acti WR Jahan Dotson: Dotson caught two passes for 16 yards on two targets in Sunday's 34-17 loss to the Bengals.
+     Acti QB Jack Strand: 
+     Acti QB Andy Dalton: 
+     Acti TE Kyle Pitts Sr.: Pitts caught three of five targets for 23 yards in Sunday's 34-17 loss to the Bengals.
+     Acti QB Michael Penix Jr.: Penix completed 20 of 31 passes for 162 yards and a touchdown with an interception in Sunday's 34-17 loss to Cincinnati. He added 50 rushing yards on 
+     Acti WR Drake London: London caught all five of his targets for 68 yards in Sunday's 34-17 loss to the Bengals.
+     Acti RB Bijan Robinson: Robinson carried the ball 19 times for 100 yards and a touchdown and caught six of seven targets for 47 yards in Sunday's 34-17 loss to the Bengals.
+     Acti WR Beaux Collins: Collins (hip) is listed as active Sunday against the Bengals in Madrid, Will McFadden of the Falcons' official site reports.
+     Inju RB Brian Robinson Jr.: Robinson (hamstring) was placed on injured reserve Saturday, Marc Raimondi of ESPN.com reports.
+     Inju DE Samson Ebukam: Ebukam (hamstring) was placed on injured reserve by the Falcons on Tuesday, Tori McElhaney of the team's official website reports.
+     news 11-13T05:48 Falcons adjust to major roster changes after trade deadline
+     news 11-13T14:11 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-13T15:24 Falcons sign DE Cameron Thomas, CB C.J. Henderson to multiyear extensions
+     news 11-13T21:32 Falcons sign two players to contract extensions
+     news 11-14T11:00 Falcons insist winning still the goal despite trading Jessie Bates III
+  -- props (pull 2026-11-14T14:00)
+     * Bijan Robinson: atd 0.5 (-230), recyd 28.5 (-115/-115), rec 3.5 (-160/+120), ruatt 19.5 (-115/-115), ruyd 83.5 (-115/-115)
+     * Cyrus Allen: atd 0.5 (+650)
+     * Drake London: atd 0.5 (+140), recyd 72.5 (-115/-115), rec 5.5 (-120/-110)
+     * Jahan Dotson: atd 0.5 (+425), recyd 28.5 (-115/-115), rec 1.5 (-185/+140)
+     * Josh Downs: atd 0.5 (+300), recyd 21.5 (-110/-120), rec 2.5 (+125/-165)
+     * Kenneth Walker III: atd 0.5 (-195)
+     * Khalil Herbert: atd 0.5 (+650), recyd 2.5 (-120/-110), rec 0.5 (-195/+145), ruyd 8.5 (-120/-110)
+     * Kyle Pitts: atd 0.5 (+240), recyd 37.5 (-115/-115), rec 3.5 (-155/+120)
+     * Michael Penix Jr.: atd 0.5 (+900), paatt 31.5 (-115/-115), cmp 20.5 (-105/-125), int 0.5 (-110/-120), patd 1.5 (+125/-160), payd 215.5 (-115/-115), ruyd 7.5 (-120/-110)
+     * Noah Gray: atd 0.5 (+600), recyd 10.5 (-115/-115), rec 1.5 (+125/-165)
+     * Olamide Zaccheaus: atd 0.5 (+700), recyd 8.5 (-115/-115), rec 1.5 (+120/-160)
+     * Patrick Mahomes: atd 0.5 (+550), paatt 32.5 (-125/-105), cmp 21.5 (-125/-105), int 0.5 (+135/-180), patd 1.5 (-130/+100), payd 239.5 (-115/-115), ruatt 2.5 (-140/+105), ruyd 8.5 (-120/-110)
+     * Rashee Rice: atd 0.5 (+175), recyd 55.5 (-115/-115), rec 5.5 (+115/-150)
+     * Travis Kelce: atd 0.5 (+210), recyd 48.5 (-115/-115), rec 4.5 (+120/-160)
+     * Xavier Worthy: atd 0.5 (+275), recyd 26.5 (-115/-115), rec 2.5 (-130/+100)

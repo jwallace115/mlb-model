@@ -17944,5 +17944,73 @@
     "c2ccf2d604c3a791b12d26ccaaf65c70": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T180403Z.parquet",
+  "sha256": "a2137e68436c1634ddb1b1d4bdbf6eecc319d46f5df6e6dfe185469f09d0f772",
+  "logged_utc": "2026-11-14T18:04:03.939349+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-14T21:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T180008Z.parquet",
+   "inputs_digest": "{\"a21a2f1087d443fa1a1c71e1a03a0fe0\": \"9d001b9531752ddd\"}",
+   "components": {
+    "a21a2f1087d443fa1a1c71e1a03a0fe0": {
+     "pinnacle_h2h": [
+      [
+       "Fresno State Bulldogs",
+       0,
+       321
+      ],
+      [
+       "Texas State Bobcats",
+       0,
+       -384
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Fresno State Bulldogs",
+       10.0,
+       -101
+      ],
+      [
+       "Texas State Bobcats",
+       -10.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       60.5,
+       -103
+      ],
+      [
+       "Under",
+       60.5,
+       -113
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261114T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "a21a2f1087d443fa1a1c71e1a03a0fe0": "anchor_prekick"
+   }
+  }
  }
 ]
