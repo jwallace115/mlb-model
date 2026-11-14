@@ -12743,5 +12743,80 @@
     "c3c46d55350226dd82d83ecf0b52891a": "line_move: pinnacle totals Under 67.0\u219266.0; line_move: pinnacle totals Over 67.0\u219266.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T053403Z.parquet",
+  "sha256": "8ef830461354a016d5a6963bd910f7fddc935e4d3dd05f9fb55c287cf266df74",
+  "logged_utc": "2026-11-14T05:34:03.898906+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-14T20:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T053004Z.parquet",
+   "inputs_digest": "{\"d0327c5775ed8cc9854411f8e077af93\": \"488ed4f88df59331\"}",
+   "components": {
+    "d0327c5775ed8cc9854411f8e077af93": {
+     "pinnacle_h2h": [
+      [
+       "California Golden Bears",
+       0,
+       383
+      ],
+      [
+       "Virginia Cavaliers",
+       0,
+       -490
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "California Golden Bears",
+       12.0,
+       -108
+      ],
+      [
+       "Virginia Cavaliers",
+       -12.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -102
+      ],
+      [
+       "Under",
+       47.5,
+       -115
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Oregon, Houston headline best uniforms of college ",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What would a 24-team College Football Playoff brac"
+     ],
+     "kalshi_snap": "snap_20261114T0537Z.parquet"
+    }
+   },
+   "triggers": {
+    "d0327c5775ed8cc9854411f8e077af93": "line_move: pinnacle spreads Virginia Cavaliers -10.0\u2192-12.0; line_move: pinnacle spreads California Golden Bears 10.0\u219212.0"
+   }
+  }
  }
 ]
