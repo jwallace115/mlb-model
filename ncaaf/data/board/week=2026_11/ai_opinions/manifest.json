@@ -13212,5 +13212,226 @@
     "b7d77aed1f8f75da7679a059e627dfee": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T143403Z.parquet",
+  "sha256": "ae1dcfd8efb7b0b915f047700592ea570948aeacbcaad20955e295703625e2f8",
+  "logged_utc": "2026-11-14T14:34:03.694503+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 5,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-14T17:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T143007Z.parquet",
+   "inputs_digest": "{\"82eed9ad82fa12a1ace084358d3fd32d\": \"60d4102563610b94\", \"1742500c43d25085db47873b82f15459\": \"0e454c7c8c219206\"}",
+   "components": {
+    "82eed9ad82fa12a1ace084358d3fd32d": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       -655
+      ],
+      [
+       "Georgia Tech Yellow Jackets",
+       0,
+       508
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       -15.0,
+       -109
+      ],
+      [
+       "Georgia Tech Yellow Jackets",
+       15.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       100
+      ],
+      [
+       "Under",
+       48.0,
+       -117
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Key shakes up Georgia Tech staff, fires DC Semore,",
+      "What would a 24-team College Football Playoff brac"
+     ],
+     "kalshi_snap": "snap_20261114T1437Z.parquet"
+    },
+    "1742500c43d25085db47873b82f15459": {
+     "pinnacle_h2h": [
+      [
+       "Nebraska Cornhuskers",
+       0,
+       -656
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       509
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nebraska Cornhuskers",
+       -14.5,
+       -111
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       14.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -105
+      ],
+      [
+       "Under",
+       52.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "CFP 24-team format: What you need to know about th",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Nebraska rewards defensive coordinator Rob Aurich ",
+      "Rutgers retains coach Greg Schiano in 'best long-t",
+      "Sources: Rutgers star KJ Duff out for season after"
+     ],
+     "kalshi_snap": "snap_20261114T1437Z.parquet"
+    }
+   },
+   "triggers": {
+    "82eed9ad82fa12a1ace084358d3fd32d": "anchor_prekick",
+    "1742500c43d25085db47873b82f15459": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261114T144903Z.parquet",
+  "sha256": "5b9a638cc2f84344e8c1bea6109837ce44f4da7871e41aad4ab9bfcf1e345c28",
+  "logged_utc": "2026-11-14T14:49:03.139895+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-14T17:45:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T143007Z.parquet",
+   "inputs_digest": "{\"fe42d22bafb7d5f406317697dff44ee6\": \"0e1a077b34773416\"}",
+   "components": {
+    "fe42d22bafb7d5f406317697dff44ee6": {
+     "pinnacle_h2h": [
+      [
+       "Alabama Crimson Tide",
+       0,
+       -699
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       536
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Alabama Crimson Tide",
+       -14.0,
+       -108
+      ],
+      [
+       "Vanderbilt Commodores",
+       14.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -105
+      ],
+      [
+       "Under",
+       48.5,
+       -112
+      ]
+     ],
+     "news": [
+      "2026-27 Week 10 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Alabama TE Josh Ford out for season with lower-bod",
+      "Analyzing the tape on Bama's Keelon Russell dicing",
+      "Bama's Bray Hubbard introduces the cherished Cross",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "Chris Doering dissects key storylines in three Wee",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly: How Week 10's top games were won, what i",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Georgia jumps into CFP's top spot, followed by Uta",
+      "Goalposts in a river last time: No. 7 Alabama head",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "How every 2027 five-star college football prospect",
+      "Kalen DeBoer discusses his thoughts on new CFP for",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "Roman Harper discusses how No. 3 Bama should win v",
+      "SEC Now crew tells fans which two-loss SEC teams w",
+      "SEC Now's initial reaction to the latest CFP ranki",
+      "Sedrick Alexander credits teammates as Vandy TD re",
+      "Sources: Alabama to start QB Austin Mack; Keelon R",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Top 25 betting lines: LSU favored over Texas; Indi",
+      "What would a 24-team College Football Playoff brac",
+      "What you need to know about the 2028 recruiting cl",
+      "Who's No. 1? CFP committee's second top 25 and bra",
+      "Why Jordan Rodgers has an issue with Tennessee's C"
+     ],
+     "kalshi_snap": "snap_20261114T1437Z.parquet"
+    }
+   },
+   "triggers": {
+    "fe42d22bafb7d5f406317697dff44ee6": "anchor_prekick"
+   }
+  }
  }
 ]
