@@ -18256,5 +18256,73 @@
     "d03caba2636ec407098ec3e1fe18fcf7": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T190403Z.parquet",
+  "sha256": "b59b84df7b06f3de283f42bfb997cf755410836d20b575d7178b4319a00c6a2a",
+  "logged_utc": "2026-11-14T19:04:03.312562+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-14T22:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T190005Z.parquet",
+   "inputs_digest": "{\"1ce059ad7e592e033a7efe38d7bc7352\": \"57c7376ebb0483f1\"}",
+   "components": {
+    "1ce059ad7e592e033a7efe38d7bc7352": {
+     "pinnacle_h2h": [
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -870
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       642
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisiana Tech Bulldogs",
+       -17.5,
+       102
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       17.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -109
+      ],
+      [
+       "Under",
+       56.0,
+       -107
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261114T1907Z.parquet"
+    }
+   },
+   "triggers": {
+    "1ce059ad7e592e033a7efe38d7bc7352": "anchor_prekick"
+   }
+  }
  }
 ]
