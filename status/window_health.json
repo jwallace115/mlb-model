@@ -40,23 +40,23 @@
   "freeze_file": null
  },
  {
-  "sport": "ncaaf",
-  "window": "event",
-  "started_utc": "2026-11-15T01:38:45.190926+00:00",
-  "finished_utc": "2026-11-15T01:38:45.190926+00:00",
-  "result": "no_triggers",
-  "step": "window_watch",
-  "message": "",
-  "freeze_file": null
- },
- {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-15T01:47:05.219394+00:00",
-  "finished_utc": "2026-11-15T01:47:05.219394+00:00",
-  "result": "no_triggers",
+  "started_utc": "2026-11-15T02:17:21.269622+00:00",
+  "finished_utc": "2026-11-15T02:17:21.269622+00:00",
+  "result": "COMPLETE",
   "step": "window_watch",
-  "message": "",
-  "freeze_file": null
+  "message": "['new_props: pull 2026-11-15T02:04:47.624700+00:00; injury_change: inj_Las Vegas Raiders', 'anchor_morning']",
+  "freeze_file": "ai_opinions_20261115T020206Z.parquet"
+ },
+ {
+  "sport": "ncaaf",
+  "window": "event",
+  "started_utc": "2026-11-15T02:27:12.667126+00:00",
+  "finished_utc": "2026-11-15T02:27:12.667126+00:00",
+  "result": "COMPLETE",
+  "step": "window_watch",
+  "message": "['anchor_close']",
+  "freeze_file": "ai_opinions_20261115T021905Z.parquet"
  }
 ]

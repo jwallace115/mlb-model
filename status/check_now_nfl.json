@@ -1,12 +1,21 @@
 {
- "started_utc": "2026-11-15T01:47:04.764665+00:00",
- "finished_utc": "2026-11-15T01:47:05.311232+00:00",
+ "started_utc": "2026-11-15T02:02:06.172016+00:00",
+ "finished_utc": "2026-11-15T02:17:21.917400+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "6079a5cbabf99b265a17edfc92a1da60",
+   "text": "new_props: pull 2026-11-15T02:04:47.624700+00:00; injury_change: inj_Las Vegas Raiders"
+  },
+  {
+   "game": "35e3bdff558b5d1506251e814986f164",
+   "text": "anchor_morning"
+  }
+ ],
+ "games_read": 2,
+ "frozen_file": "ai_opinions_20261115T020206Z.parquet",
+ "spend_usd": 21.3613,
+ "result": "COMPLETE"
 }
