@@ -21820,5 +21820,133 @@
     "21c985dda7b6b34cc9820a76dfad6172": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261115T024904Z.parquet",
+  "sha256": "f0da7331014555d6a44ccf6899e88412d838b73f75b7e24cb70adcb0dff077cc",
+  "logged_utc": "2026-11-15T02:49:04.876212+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 6,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-15T03:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261115T023009Z.parquet",
+   "inputs_digest": "{\"7b3c2958dadc616a19ce7b9b1dd2a7e4\": \"b82c2ac126a68548\", \"c3c46d55350226dd82d83ecf0b52891a\": \"17d80c1af9aea2cc\"}",
+   "components": {
+    "7b3c2958dadc616a19ce7b9b1dd2a7e4": {
+     "pinnacle_h2h": [
+      [
+       "Arizona Wildcats",
+       0,
+       110
+      ],
+      [
+       "Utah Utes",
+       0,
+       -121
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Wildcats",
+       1.0,
+       104
+      ],
+      [
+       "Utah Utes",
+       -1.0,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -113
+      ],
+      [
+       "Under",
+       55.5,
+       -103
+      ]
+     ],
+     "news": [
+      "'You don't belong there': Stephen A. takes issue w",
+      "Betting buzz: Unexpected line movement on Indiana ",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Georgia jumps into CFP's top spot, followed by Uta",
+      "How the FAA ground stop threw college football int",
+      "No. 2 Utah puts undefeated season on the line in r",
+      "Tom Luginbill: Texas Tech needs to win out",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "What would a 24-team College Football Playoff brac",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261115T0237Z.parquet"
+    },
+    "c3c46d55350226dd82d83ecf0b52891a": {
+     "pinnacle_h2h": [
+      [
+       "Colorado State Rams",
+       0,
+       273
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       -320
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado State Rams",
+       9.5,
+       -115
+      ],
+      [
+       "Washington State Cougars",
+       -9.5,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       65.0,
+       -108
+      ],
+      [
+       "Under",
+       65.0,
+       -108
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 10: Toothless Wolverines on l",
+      "FAA ground stop throws sports world into travel ch",
+      "How the FAA ground stop threw college football int"
+     ],
+     "kalshi_snap": "snap_20261115T0237Z.parquet"
+    }
+   },
+   "triggers": {
+    "7b3c2958dadc616a19ce7b9b1dd2a7e4": "anchor_close",
+    "c3c46d55350226dd82d83ecf0b52891a": "anchor_close"
+   }
+  }
  }
 ]
