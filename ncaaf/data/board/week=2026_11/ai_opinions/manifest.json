@@ -22105,5 +22105,97 @@
     "8ad669f4c9b70f38fdb057c114588776": "anchor_morning; anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261115T171903Z.parquet",
+  "sha256": "c556035c5ccba386f32e68c138e1319e25f52f02a54cdd3413ba309ba39c14a3",
+  "logged_utc": "2026-11-15T17:19:03.417877+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-15T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261115T170006Z.parquet",
+   "inputs_digest": "{\"8ad669f4c9b70f38fdb057c114588776\": \"5f38832904e8f949\"}",
+   "components": {
+    "8ad669f4c9b70f38fdb057c114588776": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma Sooners",
+       0,
+       -128
+      ],
+      [
+       "Ole Miss Rebels",
+       0,
+       116
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma Sooners",
+       -2.5,
+       -107
+      ],
+      [
+       "Ole Miss Rebels",
+       2.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       101
+      ],
+      [
+       "Under",
+       49.0,
+       -117
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "Central Oklahoma AD trolls Ole Miss amid FAA crisi",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Gene Chizik dives into improved Oklahoma timing th",
+      "Gene Chizik's 'Words of Chizdom' to a few teams wh",
+      "Heather Dinich picks how many SEC teams make the C",
+      "How the FAA ground stop threw college football int",
+      "Missouri's Eli Drinkwitz questions need for confer",
+      "Nowkhah on Witten's changes to OU, Aggies upset ch",
+      "Oklahoma AD rips Ole Miss, SEC; Rebels defend trav",
+      "Oklahoma adds Kamieon Compton-Nero to 2028 recruit",
+      "Ole Miss-Oklahoma bumped to Sunday despite Sooners",
+      "Patience starting to run thin for head coaches in ",
+      "Sources: Ole Miss RB Kewan Lacy to miss rest of se",
+      "The details behind Ole Miss-Oklahoma being moved t",
+      "Tim Tebow calling for bounce back performances fro",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "Venables relays Witten's immediate impact on Oklah",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261115T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "8ad669f4c9b70f38fdb057c114588776": "anchor_close"
+   }
+  }
  }
 ]

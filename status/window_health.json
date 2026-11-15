@@ -30,20 +30,20 @@
   "freeze_file": null
  },
  {
-  "sport": "nfl",
-  "window": "prekick",
-  "started_utc": "2026-11-15T15:44:08.916848+00:00",
-  "finished_utc": "2026-11-15T15:44:08.916848+00:00",
-  "result": "STOP",
-  "step": "reader_v3",
-  "message": "exit -9",
-  "freeze_file": null
- },
- {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-15T17:13:26.248640+00:00",
-  "finished_utc": "2026-11-15T17:13:26.248640+00:00",
+  "started_utc": "2026-11-15T17:38:52.711245+00:00",
+  "finished_utc": "2026-11-15T17:38:52.711245+00:00",
+  "result": "COMPLETE",
+  "step": "window_watch",
+  "message": "['anchor_close']",
+  "freeze_file": "ai_opinions_20261115T171903Z.parquet"
+ },
+ {
+  "sport": "nfl",
+  "window": "event",
+  "started_utc": "2026-11-15T17:51:33.928562+00:00",
+  "finished_utc": "2026-11-15T17:51:33.928562+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -51,12 +51,12 @@
  },
  {
   "sport": "nfl",
-  "window": "event",
-  "started_utc": "2026-11-15T17:21:50.182152+00:00",
-  "finished_utc": "2026-11-15T17:21:50.182152+00:00",
-  "result": "COMPLETE",
-  "step": "window_watch",
-  "message": "['anchor_close', 'anchor_close', 'anchor_close', 'anchor_close', 'anchor_close', 'anchor_close', 'anchor_close', 'injury_change: inj_Arizona Cardinals; injury_change: inj_Los Angeles Rams', 'injury_ch",
-  "freeze_file": "ai_opinions_20261115T171703Z.parquet"
+  "window": "prekick",
+  "started_utc": "2026-11-15T17:54:16.711471+00:00",
+  "finished_utc": "2026-11-15T17:54:16.711471+00:00",
+  "result": "STOP",
+  "step": "reader_v3",
+  "message": "exit -9",
+  "freeze_file": null
  }
 ]
