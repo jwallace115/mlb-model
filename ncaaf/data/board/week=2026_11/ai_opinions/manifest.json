@@ -21489,5 +21489,142 @@
     "c3c46d55350226dd82d83ecf0b52891a": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261115T010406Z.parquet",
+  "sha256": "e45451dc50e396b833a469ae89cc23887ee062f0180361105a9a84966a5b171b",
+  "logged_utc": "2026-11-15T01:04:06.931773+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-15T04:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261115T010007Z.parquet",
+   "inputs_digest": "{\"ce88da9d6fd67bac81c1e4a70545de29\": \"675f5fbb21c694bc\"}",
+   "components": {
+    "ce88da9d6fd67bac81c1e4a70545de29": {
+     "pinnacle_h2h": [
+      [
+       "Hawaii Rainbow Warriors",
+       0,
+       221
+      ],
+      [
+       "North Dakota State Bison",
+       0,
+       -253
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Hawaii Rainbow Warriors",
+       6.5,
+       100
+      ],
+      [
+       "North Dakota State Bison",
+       -6.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.5,
+       -108
+      ],
+      [
+       "Under",
+       39.5,
+       -108
+      ]
+     ],
+     "kalshi_snap": "snap_20261115T0107Z.parquet"
+    }
+   },
+   "triggers": {
+    "ce88da9d6fd67bac81c1e4a70545de29": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261115T011905Z.parquet",
+  "sha256": "be8d8519b0586ad48a4ef4d2a781c19dd512b4baf8ffeff89406e977926a3ff7",
+  "logged_utc": "2026-11-15T01:19:05.686159+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-15T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261115T010007Z.parquet",
+   "inputs_digest": "{\"ee91eb14cc4d725be5df58f3285bdaa6\": \"e9b5e2639436e028\"}",
+   "components": {
+    "ee91eb14cc4d725be5df58f3285bdaa6": {
+     "pinnacle_h2h": [
+      [
+       "North Texas Mean Green",
+       0,
+       -129
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       117
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Texas Mean Green",
+       -3.0,
+       102
+      ],
+      [
+       "UTSA Roadrunners",
+       3.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       76.0,
+       -106
+      ],
+      [
+       "Under",
+       76.0,
+       -110
+      ]
+     ],
+     "news": [
+      "Breaking down the CFP race for three conferences a",
+      "College Football Playoff Bubble Watch after Week 1",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "FAA ground stop disrupting air travel for college ",
+      "FAA ground stop throws sports world into travel ch"
+     ],
+     "kalshi_snap": "snap_20261115T0107Z.parquet"
+    }
+   },
+   "triggers": {
+    "ee91eb14cc4d725be5df58f3285bdaa6": "anchor_close"
+   }
+  }
  }
 ]
