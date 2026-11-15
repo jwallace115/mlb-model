@@ -16030,5 +16030,282 @@
     "6079a5cbabf99b265a17edfc92a1da60": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261115T183207Z.parquet",
+  "sha256": "c0d9db652539f545b2a3673be1db1df3538d503322967ed7de80d6672ee3ce94",
+  "logged_utc": "2026-11-15T18:32:07.204164+00:00",
+  "rows": 148,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.939,
+  "revised_rows": 147,
+  "oldest_source_age_min": 74.3,
+  "first_kickoff_utc": "2026-11-15T21:25:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261115T183015Z.parquet",
+   "inputs_digest": "{\"7627192fd89b05120ab6c712aa23fd81\": \"a75635fc8dcfca87\", \"48e497c230e6c9afcb3b600091d28e17\": \"cebcb737d2b9290c\"}",
+   "components": {
+    "7627192fd89b05120ab6c712aa23fd81": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       185
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -225
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Dallas Cowboys",
+       4.0,
+       -105
+      ],
+      [
+       "San Francisco 49ers",
+       -4.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       55.0,
+       -115
+      ],
+      [
+       "Under",
+       55.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       183
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -206
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Dallas Cowboys",
+       4.0,
+       -108
+      ],
+      [
+       "San Francisco 49ers",
+       -4.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -103
+      ],
+      [
+       "Under",
+       56.0,
+       -109
+      ]
+     ],
+     "props_ts": "2026-11-15T18:33:34.268608+00:00",
+     "inj_Dallas Cowboys": "83a907f30061a0e7",
+     "inj_San Francisco 49ers": "93544dd077b0e7af",
+     "news": [
+      "'Great move': Rich Eisen reacts to 49ers' trade fo",
+      "2026 NFL midseason award rankings: MVP picks, top ",
+      "2026 NFL midseason report: Questions, stats for al",
+      "2027 NFL draft order projections for Round 1, chan",
+      "49ers OT Williams, LB Greenlaw questionable, WR Ev",
+      "49ers face questions at corner heading into Week 1",
+      "49ers make a move at WR",
+      "49ers not overlooking Cowboys amid NFC playoff pus",
+      "49ers trade for Colts' Keenan Allen to bolster inj",
+      "Cam Skattebo dons custom 'Iron Man' mask for TNF, ",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Cowboys defense making improvements",
+      "Cowboys host NFC-leading 49ers as they seek elusiv",
+      "Cowboys rave about Quinnen Williams a year after t",
+      "Cowboys' Porter: My absence is because of injury, ",
+      "Fantasy impacts of the NFL trade deadline: Breakin",
+      "Hope for the Cowboys to right the ship",
+      "Intel on NFL playoff races, MVP, Super Bowl and br",
+      "Jerry Rice's 'I scored a touchdown' story: SB XXII",
+      "Keenan Allen set to play in Week 10",
+      "NFL Week 10 betting odds: Lines and totals for eve",
+      "NFL Week 10 latest intel, buzz questions, fantasy ",
+      "NFL Week 10 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 10 preview: Picks, predictions, schedule,",
+      "NFL Week 10 uniforms: Titans debut Rivalries look,",
+      "NFL execs on tight playoff races, MVP, Super Bowl ",
+      "NFL trade deadline grades: Deals for Kirk Cousins,",
+      "Panthers QB Bryce Young leads NFL Week 10 arrivals",
+      "Ranking the top 10 Super Bowl performances by a de",
+      "Seven things Solak thinks for NFL Week 10: Jaguars",
+      "Stephen A. is not having Marcus Spears' Cowboys op",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Veteran WR Keenan Allen feeling energized by trade",
+      "Was it a bigger mistake for the Giants or Cowboys ",
+      "Week 10 NFL highlights: Best plays, moments, touch",
+      "Why Jeff Saturday has 'no hope' for the Cowboys"
+     ],
+     "kalshi_snap": "snap_20261115T1835Z.parquet"
+    },
+    "48e497c230e6c9afcb3b600091d28e17": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -195
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       165
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cincinnati Bengals",
+       -3.5,
+       -110
+      ],
+      [
+       "Pittsburgh Steelers",
+       3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       49.5,
+       -110
+      ],
+      [
+       "Under",
+       49.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -186
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       166
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bengals",
+       -3.5,
+       -107
+      ],
+      [
+       "Pittsburgh Steelers",
+       3.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -104
+      ],
+      [
+       "Under",
+       50.0,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-15T18:33:34.268608+00:00",
+     "inj_Cincinnati Bengals": "2fbae0bf2092671f",
+     "inj_Pittsburgh Steelers": "01e3d736476a2511",
+     "news": [
+      "\"White Chocolate\" is set to make his debut",
+      "2026 NFL midseason award rankings: MVP picks, top ",
+      "2026 NFL midseason report: Questions, stats for al",
+      "2026 NFL trade deadline winners, losers: Kirk Cous",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Are the Chiefs the Bengals' biggest rivals?",
+      "Bengals confident heading into pivotal Steelers ma",
+      "Bengals nix agreed-upon trade with Eagles, sources",
+      "Bengals' Zac Taylor apologizes for failed trade wi",
+      "Cam Skattebo dons custom 'Iron Man' mask for TNF, ",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "It's a battle for the AFC North: Steelers at Benga",
+      "Longtime Steelers player, assistant coach Dick Hoa",
+      "Mike Tomlin: 'Excited' about broadcast role, hasn'",
+      "NFL Week 10 betting odds: Lines and totals for eve",
+      "NFL Week 10 latest intel, buzz questions, fantasy ",
+      "NFL Week 10 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 10 preview: Picks, predictions, schedule,",
+      "NFL Week 10 uniforms: Titans debut Rivalries look,",
+      "NFL reassigns backup refs to work games closer to ",
+      "NFL trade deadline grades: Deals for Kirk Cousins,",
+      "Panthers QB Bryce Young leads NFL Week 10 arrivals",
+      "Questions on 2026 NFL trade deadline deals: Does K",
+      "Ranking the top 10 Super Bowl performances by a de",
+      "Steelers activate DT Derrick Harmon from IR ahead ",
+      "Steelers and Bengals meet for AFC North lead on Su",
+      "Steelers-Bengals odds, analysis, betting tips and ",
+      "Week 10 NFL highlights: Best plays, moments, touch",
+      "Week 10 betting preview: Analysis, best bets, TD p",
+      "Who has the edge in Steelers-Bengals?",
+      "Working double shifts: Four NFL refs to officiate ",
+      "Zac Taylor says Bengals take responsibility for fa"
+     ],
+     "kalshi_snap": "snap_20261115T1835Z.parquet"
+    }
+   },
+   "triggers": {
+    "7627192fd89b05120ab6c712aa23fd81": "anchor_prekick",
+    "48e497c230e6c9afcb3b600091d28e17": "injury_change: inj_Cincinnati Bengals"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261115T185604Z.parquet",
+  "sha256": "d789c428f4d3c5451e5752629a582bc2f09ac8a44a11664feb51994aa6a4a0a0",
+  "logged_utc": "2026-11-15T18:56:04.275514+00:00",
+  "rows": 230,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "reader_v3b",
+  "pilot": false,
+  "window": "prekick",
+  "games": 3,
+  "no_view_share": 0.361,
+  "revised_rows": 0,
+  "oldest_source_age_min": 235.6,
+  "first_kickoff_utc": "2026-11-15T21:05:00Z",
+  "reader_sha256": "a413d38af2157fcb8a04c1d71cbc17a791cdadaa375e6ec3da56b1e616ba6bfd",
+  "inputs": {
+   "props": "data_2026_11.parquet",
+   "lines": "snap_20261115T183015Z.parquet"
+  }
  }
 ]
