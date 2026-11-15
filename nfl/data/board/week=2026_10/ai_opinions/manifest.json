@@ -12652,5 +12652,138 @@
     "5d8d85473b87f772a979ecf294acab94": "injury_change: inj_Green Bay Packers; injury_change: inj_Minnesota Vikings"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261115T134703Z.parquet",
+  "sha256": "56bb5aba9d3a789b67b9a36b356f4fe0fdb296ed6af4dd2593799456499c2e98",
+  "logged_utc": "2026-11-15T13:47:03.603310+00:00",
+  "rows": 68,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.926,
+  "revised_rows": 62,
+  "oldest_source_age_min": 73.2,
+  "first_kickoff_utc": "2026-11-15T14:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261115T130007Z.parquet",
+   "inputs_digest": "{\"b8c10fdf1e0ac4e13deee7f7c0af0b0b\": \"c09ef91837466a9d\"}",
+   "components": {
+    "b8c10fdf1e0ac4e13deee7f7c0af0b0b": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -145
+      ],
+      [
+       "New England Patriots",
+       0,
+       125
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Detroit Lions",
+       -3.0,
+       100
+      ],
+      [
+       "New England Patriots",
+       3.0,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       50.5,
+       -110
+      ],
+      [
+       "Under",
+       50.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -142
+      ],
+      [
+       "New England Patriots",
+       0,
+       129
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Detroit Lions",
+       -2.5,
+       -111
+      ],
+      [
+       "New England Patriots",
+       2.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -111
+      ],
+      [
+       "Under",
+       50.5,
+       -101
+      ]
+     ],
+     "props_ts": "2026-11-15T13:47:55.549328+00:00",
+     "inj_Detroit Lions": "a165b4b54f302f9e",
+     "inj_New England Patriots": "910bc28e9e7b4dc8",
+     "news": [
+      "2026 NFL midseason award rankings: MVP picks, top ",
+      "2026 NFL midseason report: Questions, stats for al",
+      "A big Munich test for the Lions and Patriots as in",
+      "Cam Skattebo dons custom 'Iron Man' mask for TNF, ",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Intel on NFL playoff races, MVP, Super Bowl and br",
+      "Longtime Steelers player, assistant coach Dick Hoa",
+      "NFC North: Bears win division? Cousins has Vikes i",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 10 betting odds: Lines and totals for eve",
+      "NFL Week 10 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 10 preview: Picks, predictions, schedule,",
+      "NFL Week 10 uniforms: Titans debut Rivalries look,",
+      "NFL execs on tight playoff races, MVP, Super Bowl ",
+      "NFL trade deadline grades: Deals for Jordan Davis,",
+      "NFL trade deadline grades: Deals for Kirk Cousins,",
+      "Patriots are 6-0 after a regular-season loss under",
+      "Patriots enjoying themselves in Munich",
+      "Patriots place RB TreVeyon Henderson on IR with st",
+      "Questions on 2026 NFL trade deadline deals: Does K",
+      "Ranking the top 10 Super Bowl performances by a de",
+      "Rhamondre Stevenson trying to play Sunday",
+      "Sportsbook liability Joe Burrow overtakes Josh All",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Untold stories of Detroit Lions WR Amon-Ra St. Bro",
+      "Week 10 betting preview: Analysis, best bets, TD p"
+     ],
+     "kalshi_snap": "snap_20261115T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "b8c10fdf1e0ac4e13deee7f7c0af0b0b": "anchor_close"
+   }
+  }
  }
 ]
