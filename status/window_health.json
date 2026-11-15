@@ -42,18 +42,18 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-15T12:41:09.964354+00:00",
-  "finished_utc": "2026-11-15T12:41:09.964354+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-15T13:18:38.646550+00:00",
+  "finished_utc": "2026-11-15T13:18:38.646550+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['injury_change: inj_Detroit Lions; injury_change: inj_New England Patriots', 'injury_change: inj_New York Jets', 'injury_change: inj_Cleveland Browns', 'injury_change: inj_Green Bay Packers; injury_c",
-  "freeze_file": "ai_opinions_20261115T123205Z.parquet"
+  "message": "",
+  "freeze_file": null
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-15T12:49:07.213996+00:00",
-  "finished_utc": "2026-11-15T12:49:07.213996+00:00",
+  "started_utc": "2026-11-15T13:19:04.214706+00:00",
+  "finished_utc": "2026-11-15T13:19:04.214706+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
