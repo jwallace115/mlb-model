@@ -1,12 +1,49 @@
 {
- "started_utc": "2026-11-15T16:32:09.121985+00:00",
- "finished_utc": "2026-11-15T16:39:07.715440+00:00",
+ "started_utc": "2026-11-15T17:17:03.922085+00:00",
+ "finished_utc": "2026-11-15T17:21:50.218301+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "3c71d515b726f1096aabb435badb83fd",
+   "text": "anchor_close"
+  },
+  {
+   "game": "1057d50949844ddf483da9c8c20354be",
+   "text": "anchor_close"
+  },
+  {
+   "game": "e5aa20e1364dd639f042af1c2281bbe2",
+   "text": "anchor_close"
+  },
+  {
+   "game": "be0e03cc42fbc9b6962467b22c7bf9dd",
+   "text": "anchor_close"
+  },
+  {
+   "game": "5d8d85473b87f772a979ecf294acab94",
+   "text": "anchor_close"
+  },
+  {
+   "game": "b5700b4d938fd94429f60d4622cc9c0a",
+   "text": "anchor_close"
+  },
+  {
+   "game": "28800df7e768ecec14f116454d560f9b",
+   "text": "anchor_close"
+  },
+  {
+   "game": "7627192fd89b05120ab6c712aa23fd81",
+   "text": "injury_change: inj_Dallas Cowboys; injury_change: inj_San Francisco 49ers"
+  },
+  {
+   "game": "48e497c230e6c9afcb3b600091d28e17",
+   "text": "injury_change: inj_Cincinnati Bengals; injury_change: inj_Pittsburgh Steelers"
+  }
+ ],
+ "games_read": 9,
+ "frozen_file": "ai_opinions_20261115T171703Z.parquet",
+ "spend_usd": 24.0191,
+ "result": "COMPLETE"
 }
