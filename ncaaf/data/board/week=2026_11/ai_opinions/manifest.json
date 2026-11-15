@@ -21948,5 +21948,70 @@
     "c3c46d55350226dd82d83ecf0b52891a": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261115T031904Z.parquet",
+  "sha256": "46619c4bf6a6615fd8857f8213b4152ebbba126594742d9bddde0bf06f3801b4",
+  "logged_utc": "2026-11-15T03:19:04.272896+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-15T04:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261115T030012Z.parquet",
+   "inputs_digest": "{\"ce88da9d6fd67bac81c1e4a70545de29\": \"886e855b0ff10cdb\"}",
+   "components": {
+    "ce88da9d6fd67bac81c1e4a70545de29": {
+     "pinnacle_h2h": [
+      [
+       "Hawaii Rainbow Warriors",
+       0,
+       250
+      ],
+      [
+       "North Dakota State Bison",
+       0,
+       -290
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Hawaii Rainbow Warriors",
+       7.5,
+       -115
+      ],
+      [
+       "North Dakota State Bison",
+       -7.5,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.5,
+       -112
+      ],
+      [
+       "Under",
+       39.5,
+       -104
+      ]
+     ],
+     "kalshi_snap": "snap_20261115T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "ce88da9d6fd67bac81c1e4a70545de29": "anchor_close"
+   }
+  }
  }
 ]

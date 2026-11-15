@@ -40,23 +40,23 @@
   "freeze_file": null
  },
  {
-  "sport": "ncaaf",
-  "window": "event",
-  "started_utc": "2026-11-15T02:38:42.890916+00:00",
-  "finished_utc": "2026-11-15T02:38:42.890916+00:00",
-  "result": "no_triggers",
-  "step": "window_watch",
-  "message": "",
-  "freeze_file": null
- },
- {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-15T02:47:05.222092+00:00",
-  "finished_utc": "2026-11-15T02:47:05.222092+00:00",
-  "result": "no_triggers",
+  "started_utc": "2026-11-15T03:17:20.537357+00:00",
+  "finished_utc": "2026-11-15T03:17:20.537357+00:00",
+  "result": "COMPLETE",
   "step": "window_watch",
-  "message": "",
-  "freeze_file": null
+  "message": "['line_move: pinnacle spreads Houston Texans -5.0\u2192-4.0; line_move: pinnacle spreads Cleveland Browns 5.0\u21924.0']",
+  "freeze_file": "ai_opinions_20261115T030206Z.parquet"
+ },
+ {
+  "sport": "ncaaf",
+  "window": "event",
+  "started_utc": "2026-11-15T03:25:49.442025+00:00",
+  "finished_utc": "2026-11-15T03:25:49.442025+00:00",
+  "result": "COMPLETE",
+  "step": "window_watch",
+  "message": "['anchor_close']",
+  "freeze_file": "ai_opinions_20261115T031904Z.parquet"
  }
 ]

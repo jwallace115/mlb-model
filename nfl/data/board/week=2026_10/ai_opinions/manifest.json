@@ -10443,5 +10443,142 @@
     "35e3bdff558b5d1506251e814986f164": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261115T030206Z.parquet",
+  "sha256": "5bf7d1c01927aeb514f6e15402383c7cca85d947d2ee311483eed807155afa9a",
+  "logged_utc": "2026-11-15T03:02:06.425594+00:00",
+  "rows": 68,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.897,
+  "revised_rows": 61,
+  "oldest_source_age_min": 118.5,
+  "first_kickoff_utc": "2026-11-15T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261115T030012Z.parquet",
+   "inputs_digest": "{\"be0e03cc42fbc9b6962467b22c7bf9dd\": \"9e0071fab9ee270f\"}",
+   "components": {
+    "be0e03cc42fbc9b6962467b22c7bf9dd": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cleveland Browns",
+       0,
+       195
+      ],
+      [
+       "Houston Texans",
+       0,
+       -230
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cleveland Browns",
+       4.5,
+       -110
+      ],
+      [
+       "Houston Texans",
+       -4.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.0,
+       -110
+      ],
+      [
+       "Under",
+       40.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cleveland Browns",
+       0,
+       183
+      ],
+      [
+       "Houston Texans",
+       0,
+       -211
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cleveland Browns",
+       4.0,
+       -106
+      ],
+      [
+       "Houston Texans",
+       -4.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -110
+      ],
+      [
+       "Under",
+       40.5,
+       -106
+      ]
+     ],
+     "props_ts": "2026-11-15T01:03:38.215469+00:00",
+     "inj_Cleveland Browns": "8336263d6581297c",
+     "inj_Houston Texans": "e52d4d38f6c333ff",
+     "news": [
+      "2026 NFL midseason award rankings: MVP picks, top ",
+      "2026 NFL midseason report: Questions, stats for al",
+      "2027 NFL draft order projections for Round 1, chan",
+      "A 'confident' C.J. Stroud soaks in five-TD day aga",
+      "Brown's defense to face its toughest matchup",
+      "Browns sticking with Deshaun Watson",
+      "Browns' Jared Verse says he met with team psychiat",
+      "Browns' Monken: Watson over Sanders QB decision ba",
+      "C.J. Stroud has been dialed in lately",
+      "Cam Skattebo dons custom 'Iron Man' mask for TNF, ",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "DE Danielle Hunter, LB Azeez Al-Shaair among Texan",
+      "Deshaun Watson downplays facing Texans as Browns t",
+      "Early bets for Week 10: 49ers triumph in Dallas, l",
+      "Intel on NFL playoff races, MVP, Super Bowl and br",
+      "Minter: Lamar Jackson 'doing everything' to return",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 10 betting odds: Lines and totals for eve",
+      "NFL Week 10 latest intel, buzz questions, fantasy ",
+      "NFL Week 10 preview: Picks, predictions, schedule,",
+      "NFL Week 10 uniforms: Titans debut Rivalries look,",
+      "NFL Week 9 arrivals: Justin Jefferson rocks black ",
+      "NFL execs on tight playoff races, MVP, Super Bowl ",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Deals for Jordan Davis,",
+      "NFL trade deadline grades: Deals for Kirk Cousins,",
+      "Seven things Solak thinks for NFL Week 10: From mi",
+      "Seven things Solak thinks for NFL Week 10: Jaguars",
+      "Texans injuries pile up ahead of matchup vs. Brown",
+      "Why protected picks aren't common in NFL trades"
+     ],
+     "kalshi_snap": "snap_20261115T0305Z.parquet"
+    }
+   },
+   "triggers": {
+    "be0e03cc42fbc9b6962467b22c7bf9dd": "line_move: pinnacle spreads Houston Texans -5.0\u2192-4.0; line_move: pinnacle spreads Cleveland Browns 5.0\u21924.0"
+   }
+  }
  }
 ]
