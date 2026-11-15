@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "488c2bc1e099361f06015cf126f95fd6",
+    "game_date": "2026-11-16",
+    "sport": "NBA",
+    "home_team": "Washington Wizards",
+    "away_team": "Houston Rockets",
+    "commence_time": "2026-11-16T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 222.5,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "draftkings",
+    "capture_timestamp": "2026-11-15T06:05:02.103771+00:00"
+  },
+  {
+    "game_id": "b931a21d34e414ee92b1a4b8e63774aa",
+    "game_date": "2026-11-16",
+    "sport": "NBA",
+    "home_team": "Milwaukee Bucks",
+    "away_team": "Atlanta Hawks",
+    "commence_time": "2026-11-16T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 234.5,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "draftkings",
+    "capture_timestamp": "2026-11-15T06:05:02.103771+00:00"
+  },
+  {
+    "game_id": "f8334b355cf9346d423fa9eb93b425f0",
+    "game_date": "2026-11-16",
+    "sport": "NBA",
+    "home_team": "Sacramento Kings",
+    "away_team": "Oklahoma City Thunder",
+    "commence_time": "2026-11-16T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 222.5,
+    "over_price": -105,
+    "under_price": -115,
+    "book": "draftkings",
+    "capture_timestamp": "2026-11-15T06:05:02.103771+00:00"
+  }
+]
