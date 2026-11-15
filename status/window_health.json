@@ -40,23 +40,23 @@
   "freeze_file": null
  },
  {
-  "sport": "nfl",
-  "window": "event",
-  "started_utc": "2026-11-15T01:20:56.456975+00:00",
-  "finished_utc": "2026-11-15T01:20:56.456975+00:00",
-  "result": "COMPLETE",
-  "step": "window_watch",
-  "message": "['new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_New England Patriots; new_news: 1 availability items', 'new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_Atla",
-  "freeze_file": "ai_opinions_20261115T010205Z.parquet"
- },
- {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-15T01:28:08.781711+00:00",
-  "finished_utc": "2026-11-15T01:28:08.781711+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-15T01:38:45.190926+00:00",
+  "finished_utc": "2026-11-15T01:38:45.190926+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['anchor_close']",
-  "freeze_file": "ai_opinions_20261115T011905Z.parquet"
+  "message": "",
+  "freeze_file": null
+ },
+ {
+  "sport": "nfl",
+  "window": "event",
+  "started_utc": "2026-11-15T01:47:05.219394+00:00",
+  "finished_utc": "2026-11-15T01:47:05.219394+00:00",
+  "result": "no_triggers",
+  "step": "window_watch",
+  "message": "",
+  "freeze_file": null
  }
 ]

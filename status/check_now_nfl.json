@@ -1,57 +1,12 @@
 {
- "started_utc": "2026-11-15T01:02:05.206952+00:00",
- "finished_utc": "2026-11-15T01:20:58.407912+00:00",
+ "started_utc": "2026-11-15T01:47:04.764665+00:00",
+ "finished_utc": "2026-11-15T01:47:05.311232+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "b8c10fdf1e0ac4e13deee7f7c0af0b0b",
-   "text": "new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_New England Patriots; new_news: 1 availability items"
-  },
-  {
-   "game": "3c71d515b726f1096aabb435badb83fd",
-   "text": "new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_Atlanta Falcons; injury_change: inj_Kansas City Chiefs"
-  },
-  {
-   "game": "1057d50949844ddf483da9c8c20354be",
-   "text": "new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_New York Jets; injury_change: inj_Buffalo Bills"
-  },
-  {
-   "game": "e5aa20e1364dd639f042af1c2281bbe2",
-   "text": "new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_New Orleans Saints; injury_change: inj_Carolina Panthers; new_news: 2 availability items"
-  },
-  {
-   "game": "be0e03cc42fbc9b6962467b22c7bf9dd",
-   "text": "new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_Cleveland Browns; injury_change: inj_Houston Texans; new_news: 1 availability items"
-  },
-  {
-   "game": "5d8d85473b87f772a979ecf294acab94",
-   "text": "new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_Green Bay Packers; injury_change: inj_Minnesota Vikings"
-  },
-  {
-   "game": "b5700b4d938fd94429f60d4622cc9c0a",
-   "text": "new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_Miami Dolphins"
-  },
-  {
-   "game": "28800df7e768ecec14f116454d560f9b",
-   "text": "new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_Tennessee Titans; injury_change: inj_Jacksonville Jaguars"
-  },
-  {
-   "game": "6c932a965110f3f89ec4a5f1a6ac256e",
-   "text": "new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_Arizona Cardinals"
-  },
-  {
-   "game": "7627192fd89b05120ab6c712aa23fd81",
-   "text": "new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_Dallas Cowboys; injury_change: inj_San Francisco 49ers"
-  },
-  {
-   "game": "48e497c230e6c9afcb3b600091d28e17",
-   "text": "new_props: pull 2026-11-15T01:03:38.215469+00:00; injury_change: inj_Cincinnati Bengals; injury_change: inj_Pittsburgh Steelers; new_news: 1 availability items"
-  }
- ],
- "games_read": 11,
- "frozen_file": "ai_opinions_20261115T010205Z.parquet",
- "spend_usd": 21.2443,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }

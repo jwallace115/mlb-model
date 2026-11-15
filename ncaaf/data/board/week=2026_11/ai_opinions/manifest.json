@@ -21626,5 +21626,129 @@
     "ee91eb14cc4d725be5df58f3285bdaa6": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261115T014905Z.parquet",
+  "sha256": "474a2e875ceaa6f404cd2716fb34636a2f0e4bfa8a7aa1ec6f6cef8684a5fae0",
+  "logged_utc": "2026-11-15T01:49:05.029521+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-15T02:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261115T013009Z.parquet",
+   "inputs_digest": "{\"320a213c475110f032710dcd06c94e8e\": \"3e7a6f9a6a04fb0f\", \"ece9b1bb56a95381f1c485d22bd36dd8\": \"826ebf2d65bc11b8\"}",
+   "components": {
+    "320a213c475110f032710dcd06c94e8e": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -185
+      ],
+      [
+       "Texas Tech Red Raiders",
+       0,
+       165
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma State Cowboys",
+       -3.5,
+       -113
+      ],
+      [
+       "Texas Tech Red Raiders",
+       3.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       73.5,
+       -112
+      ],
+      [
+       "Under",
+       73.5,
+       -104
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "How every 2027 five-star college football prospect",
+      "Oklahoma State hosts No. 10 Texas Tech with Big 12",
+      "The ACC and strength of schedule top this week's A",
+      "The oldest grudge in football",
+      "Tom Luginbill: Texas Tech needs to win out",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "What would a 24-team College Football Playoff brac",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261115T0137Z.parquet"
+    },
+    "ece9b1bb56a95381f1c485d22bd36dd8": {
+     "pinnacle_h2h": [
+      [
+       "San Diego State Aztecs",
+       0,
+       132
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       -147
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "San Diego State Aztecs",
+       3.0,
+       -109
+      ],
+      [
+       "Utah State Aggies",
+       -3.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       100
+      ],
+      [
+       "Under",
+       44.0,
+       -117
+      ]
+     ],
+     "kalshi_snap": "snap_20261115T0137Z.parquet"
+    }
+   },
+   "triggers": {
+    "320a213c475110f032710dcd06c94e8e": "anchor_close",
+    "ece9b1bb56a95381f1c485d22bd36dd8": "anchor_close"
+   }
+  }
  }
 ]
