@@ -20846,5 +20846,176 @@
     "c83b81cc8d2110c8e4a39eefea4bdc72": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261114T233405Z.parquet",
+  "sha256": "626656d0be72440a1e716785a90c7cff05d5a36907e23f480fac6a4a9f58f01a",
+  "logged_utc": "2026-11-14T23:34:05.058604+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.667,
+  "revised_rows": 9,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-15T00:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261114T233008Z.parquet",
+   "inputs_digest": "{\"018349e41d033e3b1fdbc14ce9b09325\": \"6248c7c669a0832c\", \"320a213c475110f032710dcd06c94e8e\": \"e4c782dbb7c33c8a\", \"ece9b1bb56a95381f1c485d22bd36dd8\": \"1bf61cb160b59df9\"}",
+   "components": {
+    "018349e41d033e3b1fdbc14ce9b09325": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       211
+      ],
+      [
+       "Tulsa Golden Hurricane",
+       0,
+       -240
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       6.5,
+       102
+      ],
+      [
+       "Tulsa Golden Hurricane",
+       -6.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       73.0,
+       -106
+      ],
+      [
+       "Under",
+       73.0,
+       -110
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261114T2337Z.parquet"
+    },
+    "320a213c475110f032710dcd06c94e8e": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -175
+      ],
+      [
+       "Texas Tech Red Raiders",
+       0,
+       157
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma State Cowboys",
+       -3.5,
+       -105
+      ],
+      [
+       "Texas Tech Red Raiders",
+       3.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       73.5,
+       -111
+      ],
+      [
+       "Under",
+       73.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft rankings: Jordan Reid's top 50 pros",
+      "Best bets for Week 11: Picks for Texas A&M, Georgi",
+      "CFP 24-team format: What you need to know about th",
+      "CFP Top 25: Strengths to know for every ranked tea",
+      "College Football Playoff Bubble Watch after Week 1",
+      "College Football Playoff Bubble Watch after second",
+      "Connelly previews Week 11: 32 make-or-break showdo",
+      "Game Day Kickoff: Week 11 and the year of the walk",
+      "Heisman race after Week 10: CJ Carr, new contender",
+      "How every 2027 five-star college football prospect",
+      "Oklahoma State hosts No. 10 Texas Tech with Big 12",
+      "The ACC and strength of schedule top this week's A",
+      "The oldest grudge in football",
+      "Tom Luginbill: Texas Tech needs to win out",
+      "Top 25 betting lines: LSU favored over Texas, and ",
+      "What would a 24-team College Football Playoff brac",
+      "Who's No. 1? CFP committee's second top 25 and bra"
+     ],
+     "kalshi_snap": "snap_20261114T2337Z.parquet"
+    },
+    "ece9b1bb56a95381f1c485d22bd36dd8": {
+     "pinnacle_h2h": [
+      [
+       "San Diego State Aztecs",
+       0,
+       134
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       -148
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "San Diego State Aztecs",
+       3.0,
+       -109
+      ],
+      [
+       "Utah State Aggies",
+       -3.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       100
+      ],
+      [
+       "Under",
+       44.0,
+       -117
+      ]
+     ],
+     "news": [
+      "CFP 24-team format: What you need to know about th"
+     ],
+     "kalshi_snap": "snap_20261114T2337Z.parquet"
+    }
+   },
+   "triggers": {
+    "018349e41d033e3b1fdbc14ce9b09325": "anchor_close",
+    "320a213c475110f032710dcd06c94e8e": "anchor_prekick",
+    "ece9b1bb56a95381f1c485d22bd36dd8": "anchor_prekick"
+   }
+  }
  }
 ]
