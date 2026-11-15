@@ -1,17 +1,12 @@
 {
- "started_utc": "2026-11-15T03:02:06.425594+00:00",
- "finished_utc": "2026-11-15T03:17:21.637996+00:00",
+ "started_utc": "2026-11-15T03:47:03.629833+00:00",
+ "finished_utc": "2026-11-15T03:47:03.980166+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "be0e03cc42fbc9b6962467b22c7bf9dd",
-   "text": "line_move: pinnacle spreads Houston Texans -5.0\u2192-4.0; line_move: pinnacle spreads Cleveland Browns 5.0\u21924.0"
-  }
- ],
- "games_read": 1,
- "frozen_file": "ai_opinions_20261115T030206Z.parquet",
- "spend_usd": 21.4313,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
