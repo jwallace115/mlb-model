@@ -21,16 +21,6 @@
  },
  {
   "sport": "nfl",
-  "window": "prekick",
-  "started_utc": "2026-11-12T22:29:44.401992+00:00",
-  "finished_utc": "2026-11-12T22:29:44.401992+00:00",
-  "result": "COMPLETE",
-  "step": "done",
-  "message": "",
-  "freeze_file": null
- },
- {
-  "sport": "nfl",
   "window": "late",
   "started_utc": "2026-11-14T23:16:00.795571+00:00",
   "finished_utc": "2026-11-14T23:16:00.795571+00:00",
@@ -42,8 +32,8 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-15T10:47:03.679521+00:00",
-  "finished_utc": "2026-11-15T10:47:03.679521+00:00",
+  "started_utc": "2026-11-15T11:17:05.645980+00:00",
+  "finished_utc": "2026-11-15T11:17:05.645980+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -52,11 +42,21 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-15T10:49:03.905337+00:00",
-  "finished_utc": "2026-11-15T10:49:03.905337+00:00",
+  "started_utc": "2026-11-15T11:19:05.043373+00:00",
+  "finished_utc": "2026-11-15T11:19:05.043373+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
+  "freeze_file": null
+ },
+ {
+  "sport": "nfl",
+  "window": "prekick",
+  "started_utc": "2026-11-15T11:28:09.545842+00:00",
+  "finished_utc": "2026-11-15T11:28:09.545842+00:00",
+  "result": "STOP",
+  "step": "reader_v3",
+  "message": "exit -9",
   "freeze_file": null
  }
 ]
