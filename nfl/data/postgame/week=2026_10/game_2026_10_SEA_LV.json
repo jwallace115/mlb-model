@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_10_SEA_LV",
+  "week": 10,
+  "home": "LV",
+  "away": "SEA",
+  "final_score": {
+    "home": 13,
+    "away": 21
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 154,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 13,
+        "away": 21
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 154,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 13,
+        "away": 21
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 59,
+      "dropbacks": 35,
+      "rush_attempts": 24,
+      "pass_rate": 0.5932203389830508,
+      "run_rate": 0.4067796610169492,
+      "pass_oe": -4.336007394022861
+    },
+    "away": {
+      "plays": 55,
+      "dropbacks": 20,
+      "rush_attempts": 35,
+      "pass_rate": 0.36363636363636365,
+      "run_rate": 0.6363636363636364,
+      "pass_oe": -14.2346927413234
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 2,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "A.Jeanty",
+      "team": "LV",
+      "quarter": 1,
+      "play_id": 209,
+      "desc": "(11:31) (Shotgun) 2-A.Jeanty left guard to SEA 20 for 4 yards (3-N.Emmanwori). LV-89-B.Bowers was injured during the play."
+    },
+    {
+      "player": "D.Lock",
+      "team": "SEA",
+      "quarter": 2,
+      "play_id": 1019,
+      "desc": "(10:30) 2-D.Lock pass deep right to 11-J.Smith-Njigba to SEA 46 for 25 yards (11-J.Chinn) [51-M.Koonce]. SEA-72-A.Lucas was injured during the play. PENALTY on SEA-74-J.Jones, Ineligible Downfield Pas"
+    },
+    {
+      "player": "A.Jeanty",
+      "team": "LV",
+      "quarter": 2,
+      "play_id": 1142,
+      "desc": "(8:36) 2-A.Jeanty up the middle to LV 15 for 6 yards (32-D.Thomas; 13-E.Jones). SEA-90-J.Reed was injured during the play."
+    },
+    {
+      "player": "Z.Charbonnet",
+      "team": "SEA",
+      "quarter": 4,
+      "play_id": 2845,
+      "desc": "(14:16) 26-Z.Charbonnet right end to LV 20 for 3 yards (95-K.Paye). LV-97-T.Hemingway was injured during the play. LV-95-K.Paye was injured during the play."
+    },
+    {
+      "player": "Z.Charbonnet",
+      "team": "SEA",
+      "quarter": 4,
+      "play_id": 3323,
+      "desc": "(5:59) (Shotgun) 26-Z.Charbonnet up the middle to SEA 17 for 1 yard (11-J.Chinn; 98-M.Crosby). SEA-89-N.Kallerup was injured during the play. ** Injury Update: LV-95-K.Paye has returned to the game."
+    }
+  ],
+  "ftn": "not covered"
+}

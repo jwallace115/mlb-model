@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_10_KC_ATL",
+  "week": 10,
+  "home": "ATL",
+  "away": "KC",
+  "final_score": {
+    "home": 13,
+    "away": 35
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 187,
+      "plays_trailing_14": 187,
+      "halftime_score": {
+        "home": 13,
+        "away": 35
+      },
+      "garbage_time_plays": 53
+    },
+    "away": {
+      "plays_leading_7": 187,
+      "plays_leading_14": 187,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 13,
+        "away": 35
+      },
+      "garbage_time_plays": 53
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 66,
+      "dropbacks": 46,
+      "rush_attempts": 20,
+      "pass_rate": 0.696969696969697,
+      "run_rate": 0.303030303030303,
+      "pass_oe": -2.6183256672488318
+    },
+    "away": {
+      "plays": 63,
+      "dropbacks": 36,
+      "rush_attempts": 27,
+      "pass_rate": 0.5714285714285714,
+      "run_rate": 0.4285714285714286,
+      "pass_oe": 9.988782304571941
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "T.Kelce",
+      "team": "KC",
+      "quarter": 1,
+      "play_id": 174,
+      "desc": "(13:31) 15-P.Mahomes pass short right to 87-T.Kelce to ATL 47 for 23 yards (23-D.Hellams). KC-87-T.Kelce was injured during the play."
+    },
+    {
+      "player": "E.Johnson",
+      "team": "KC",
+      "quarter": 4,
+      "play_id": 3922,
+      "desc": "(5:11) (Shotgun) 15-P.Mahomes pass short left to 10-E.Johnson to ATL 43 for 9 yards (23-D.Hellams; 53-K.Daniels). KC-52-C.Humphrey was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

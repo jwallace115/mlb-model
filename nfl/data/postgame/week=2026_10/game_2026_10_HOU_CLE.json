@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_10_HOU_CLE",
+  "week": 10,
+  "home": "CLE",
+  "away": "HOU",
+  "final_score": {
+    "home": 27,
+    "away": 24
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 27,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 27,
+        "away": 24
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 67,
+      "dropbacks": 44,
+      "rush_attempts": 23,
+      "pass_rate": 0.6567164179104478,
+      "run_rate": 0.34328358208955223,
+      "pass_oe": 5.041440787600048
+    },
+    "away": {
+      "plays": 63,
+      "dropbacks": 39,
+      "rush_attempts": 24,
+      "pass_rate": 0.6190476190476191,
+      "run_rate": 0.38095238095238093,
+      "pass_oe": 2.0175878236542886
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "W.Marks",
+      "team": "HOU",
+      "quarter": 3,
+      "play_id": 2339,
+      "desc": "(12:21) (Shotgun) 4-W.Marks right tackle to HOU 27 for 3 yards (92-S.Kamara; 5-Q.Williams). HOU-4-W.Marks was injured during the play."
+    },
+    {
+      "player": "C.Stroud",
+      "team": "HOU",
+      "quarter": 4,
+      "play_id": 3460,
+      "desc": "(10:53) (Shotgun) 7-C.Stroud pass deep right intended for 19-X.Hutchinson INTERCEPTED by 28-E.McNeil-Warren at CLE 20. 28-E.McNeil-Warren to HOU 36 for 44 yards (1-T.Dell). HOU-19-X.Hutchinson was inj"
+    }
+  ],
+  "ftn": "not covered"
+}

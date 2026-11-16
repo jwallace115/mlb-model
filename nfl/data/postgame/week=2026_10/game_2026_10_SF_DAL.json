@@ -1,0 +1,86 @@
+{
+  "game_id": "2026_10_SF_DAL",
+  "week": 10,
+  "home": "DAL",
+  "away": "SF",
+  "final_score": {
+    "home": 40,
+    "away": 46
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 40,
+        "away": 46
+      },
+      "garbage_time_plays": 9
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 40,
+        "away": 46
+      },
+      "garbage_time_plays": 9
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 78,
+      "dropbacks": 53,
+      "rush_attempts": 25,
+      "pass_rate": 0.6794871794871795,
+      "run_rate": 0.3205128205128205,
+      "pass_oe": 1.2556405365467072
+    },
+    "away": {
+      "plays": 63,
+      "dropbacks": 34,
+      "rush_attempts": 29,
+      "pass_rate": 0.5396825396825397,
+      "run_rate": 0.46031746031746035,
+      "pass_oe": 1.2704544351436198
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 7,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "B.Purdy",
+      "team": "SF",
+      "quarter": 2,
+      "play_id": 1258,
+      "desc": "(12:50) 13-B.Purdy sacked at SF 39 for -2 yards (sack split by 41-J.Houston and 91-O.Ogbonnia). DAL-91-O.Ogbonnia was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

@@ -1,0 +1,121 @@
+{
+  "game_id": "2026_10_BUF_NYJ",
+  "week": 10,
+  "home": "NYJ",
+  "away": "BUF",
+  "final_score": {
+    "home": 12,
+    "away": 31
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 172,
+      "plays_trailing_14": 172,
+      "halftime_score": {
+        "home": 12,
+        "away": 31
+      },
+      "garbage_time_plays": 17
+    },
+    "away": {
+      "plays_leading_7": 172,
+      "plays_leading_14": 172,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 12,
+        "away": 31
+      },
+      "garbage_time_plays": 17
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 68,
+      "dropbacks": 45,
+      "rush_attempts": 23,
+      "pass_rate": 0.6617647058823529,
+      "run_rate": 0.3382352941176471,
+      "pass_oe": -1.0091936801161085
+    },
+    "away": {
+      "plays": 54,
+      "dropbacks": 22,
+      "rush_attempts": 32,
+      "pass_rate": 0.4074074074074074,
+      "run_rate": 0.5925925925925926,
+      "pass_oe": -7.685525680857676
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 2,
+      "total": 3
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 2,
+      "touchdowns": 0
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "G.Smith",
+      "team": "NYJ",
+      "quarter": 2,
+      "play_id": 1059,
+      "desc": "(13:39) 7-G.Smith sacked at BUF 31 for -6 yards (42-D.Williams). NYJ-64-D.Parham was injured during the play."
+    },
+    {
+      "player": "I.Williams",
+      "team": "NYJ",
+      "quarter": 2,
+      "play_id": 1620,
+      "desc": "(5:03) (Shotgun) 7-G.Smith pass short right to 18-I.Williams to NYJ 44 for 7 yards (52-K.Elarms-Orr; 23-D.Alford). NYJ-18-I.Williams was injured during the play."
+    },
+    {
+      "player": "G.Smith",
+      "team": "NYJ",
+      "quarter": 2,
+      "play_id": 2022,
+      "desc": "(:25) (Shotgun) 7-G.Smith pass incomplete short middle [99-T.Parker]. NYJ-7-G.Smith was injured during the play."
+    },
+    {
+      "player": "G.Wilson",
+      "team": "NYJ",
+      "quarter": 3,
+      "play_id": 2375,
+      "desc": "(11:01) (Shotgun) 10-C.Klubnik pass incomplete short left to 5-G.Wilson (23-D.Alford). BUF-23-D.Alford was injured during the play."
+    },
+    {
+      "player": "G.Dortch",
+      "team": "BUF",
+      "quarter": 4,
+      "play_id": 3324,
+      "desc": "(13:10) (Shotgun) 17-J.Allen pass deep left intended for 19-G.Dortch INTERCEPTED by 1-A.Thomas at NYJ 17. 1-A.Thomas to NYJ 17 for no gain. NYJ-1-A.Thomas was injured during the play."
+    },
+    {
+      "player": "G.Wilson",
+      "team": "NYJ",
+      "quarter": 4,
+      "play_id": 4079,
+      "desc": "(2:50) (No Huddle, Shotgun) 10-C.Klubnik pass short right to 5-G.Wilson to BUF 21 for 7 yards (22-A.Hooker). BUF-1-M.Hairston was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}
