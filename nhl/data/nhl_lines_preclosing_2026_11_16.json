@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "2ef747b5f529d07b71843f1b5240eb38",
+    "game_date": "2026-11-16",
+    "sport": "NHL",
+    "home_team": "New York Rangers",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-11-17T00:30:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.0,
+    "over_price": -112,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-16T22:00:06.776723+00:00"
+  },
+  {
+    "game_id": "f5973475196770206d4e81300ca54634",
+    "game_date": "2026-11-16",
+    "sport": "NHL",
+    "home_team": "Utah Mammoth",
+    "away_team": "Vancouver Canucks",
+    "commence_time": "2026-11-17T02:30:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.5,
+    "over_price": -116,
+    "under_price": 103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-16T22:00:06.776723+00:00"
+  }
+]
