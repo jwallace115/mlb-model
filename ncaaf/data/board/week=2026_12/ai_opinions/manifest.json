@@ -328,5 +328,166 @@
     "792875fa96ecdf75559454c19c011768": "line_move: pinnacle spreads Kent State Golden Flashes 9.5\u21927.5; line_move: pinnacle spreads Miami (OH) RedHawks -9.5\u2192-7.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261116T150404Z.parquet",
+  "sha256": "5d55cba0e775193df1a7cb3bd641320c3bff857e0bd0b0b4a5b9c603991a8357",
+  "logged_utc": "2026-11-16T15:04:04.254729+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 7,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-17T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261116T150012Z.parquet",
+   "inputs_digest": "{\"0d8cfafd3da8fead51df5ec2e33e9382\": \"6ddff5855f97fd8d\", \"5840d479fc52ad2b83d7feb802d4dd23\": \"136d4c87a6c3cf23\", \"792875fa96ecdf75559454c19c011768\": \"d56fed43d6ddfdc5\"}",
+   "components": {
+    "0d8cfafd3da8fead51df5ec2e33e9382": {
+     "pinnacle_h2h": [
+      [
+       "Eastern Michigan Eagles",
+       0,
+       478
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -680
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Eastern Michigan Eagles",
+       14.5,
+       -108
+      ],
+      [
+       "Western Michigan Broncos",
+       -14.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -109
+      ],
+      [
+       "Under",
+       46.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Sizing up college football's best races down the h",
+      "Wake Forest's post-blowout jab at SMU tops college"
+     ],
+     "kalshi_snap": "snap_20261116T1507Z.parquet"
+    },
+    "5840d479fc52ad2b83d7feb802d4dd23": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       351
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -461
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       11.0,
+       -103
+      ],
+      [
+       "Ohio Bobcats",
+       -11.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -109
+      ],
+      [
+       "Under",
+       49.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Buffalo Bulls vs. Ball State Cardinals: Full Highl",
+      "Burch becomes 12th Buffalo player with 1,000 rushi",
+      "Miami (Ohio) flagged for distracting images during",
+      "Sizing up college football's best races down the h"
+     ],
+     "kalshi_snap": "snap_20261116T1507Z.parquet"
+    },
+    "792875fa96ecdf75559454c19c011768": {
+     "pinnacle_h2h": [
+      [
+       "Kent State Golden Flashes",
+       0,
+       297
+      ],
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -378
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kent State Golden Flashes",
+       9.0,
+       -104
+      ],
+      [
+       "Miami (OH) RedHawks",
+       -9.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -111
+      ],
+      [
+       "Under",
+       46.0,
+       -107
+      ]
+     ],
+     "news": [
+      "Kent State Golden Flashes vs. Bowling Green Falcon",
+      "Miami (Ohio) flagged for distracting images during",
+      "Sizing up college football's best races down the h",
+      "Wake Forest's post-blowout jab at SMU tops college"
+     ],
+     "kalshi_snap": "snap_20261116T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "0d8cfafd3da8fead51df5ec2e33e9382": "anchor_morning",
+    "5840d479fc52ad2b83d7feb802d4dd23": "anchor_morning",
+    "792875fa96ecdf75559454c19c011768": "anchor_morning"
+   }
+  }
  }
 ]

@@ -17504,5 +17504,144 @@
     "48e497c230e6c9afcb3b600091d28e17": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261116T150204Z.parquet",
+  "sha256": "f092f8da6abe152a575af787c2f9e84c4cca54fef18733fe5d809879063cbd23",
+  "logged_utc": "2026-11-16T15:02:04.000379+00:00",
+  "rows": 74,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.946,
+  "revised_rows": 73,
+  "oldest_source_age_min": 869.2,
+  "first_kickoff_utc": "2026-11-17T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261116T150012Z.parquet",
+   "inputs_digest": "{\"35e3bdff558b5d1506251e814986f164\": \"43fdf7b080fda204\"}",
+   "components": {
+    "35e3bdff558b5d1506251e814986f164": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       -230
+      ],
+      [
+       "Los Angeles Chargers",
+       0,
+       190
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       -4.5,
+       -110
+      ],
+      [
+       "Los Angeles Chargers",
+       4.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       39.5,
+       -110
+      ],
+      [
+       "Under",
+       39.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       -218
+      ],
+      [
+       "Los Angeles Chargers",
+       0,
+       193
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       -4.5,
+       -106
+      ],
+      [
+       "Los Angeles Chargers",
+       4.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.0,
+       -109
+      ],
+      [
+       "Under",
+       39.0,
+       -103
+      ]
+     ],
+     "props_ts": "2026-11-16T00:32:51.374035+00:00",
+     "inj_Baltimore Ravens": "28f376f531341ff3",
+     "inj_Los Angeles Chargers": "297aef38c1f5b11d",
+     "news": [
+      "2026 NFL midseason report: Questions, stats for al",
+      "2026 NFL trade deadline winners, losers: Kirk Cous",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Broncos say trade with Chargers for LB Henley 'wil",
+      "Cam Skattebo dons custom 'Iron Man' mask for TNF, ",
+      "Chargers' Jim Harbaugh frustrated with Broncos aft",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "Fernando Mendoza steps into starting role in style",
+      "Five reasons why Chargers' offense, Justin Herbert",
+      "GM Joe Hortiz says Chargers were listening to trad",
+      "Get ready for Chargers vs. Ravens on Monday Night ",
+      "How Chargers' Harbaugh, Ravens' Minter can revive ",
+      "Ian Rapoport details Broncos' trade for Daiyan Hen",
+      "Intel on NFL playoff races, MVP, Super Bowl and br",
+      "Ja'Marr Chase steps into 'SNF'  in style, leads NF",
+      "Minter: Lamar Jackson 'doing everything' to return",
+      "NFL Week 10 betting odds: Lines and totals for eve",
+      "NFL Week 10 latest intel, buzz questions, fantasy ",
+      "NFL Week 10 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 10 uniforms: Titans debut Rivalries look,",
+      "NFL execs on tight playoff races, MVP, Super Bowl ",
+      "NFL playoff chance tiers: Where all 32 teams fit i",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL trade deadline grades: Deals for Kirk Cousins,",
+      "Panthers QB Bryce Young leads NFL Week 10 arrivals",
+      "Ravens QB Jacoby Brissett immersed in 'crash cours",
+      "Reunion for Jim Harbaugh and Jesse Minter comes wi",
+      "Source: Ravens, now on third kicker, sign journeym",
+      "Sources: Broncos-Chargers trade nixed due to conce",
+      "Week 10 NFL highlights: Best plays, moments, touch",
+      "When will Lamar Jackson return to the field?",
+      "Will Lamar Jackson be able to return this season a"
+     ],
+     "kalshi_snap": "snap_20261116T1435Z.parquet"
+    }
+   },
+   "triggers": {
+    "35e3bdff558b5d1506251e814986f164": "anchor_morning"
+   }
+  }
  }
 ]
