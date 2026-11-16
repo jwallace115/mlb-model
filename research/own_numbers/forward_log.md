@@ -63,3 +63,17 @@ Games: 14  |  Confident: 4
 | JAX@TEN | home | -4.4 | 10.0 | -110 | +5.6 |
 | LA@ARI | home | -0.9 | 7.0 | -105 | +6.1 |
 
+
+## Week 11 (2026) -- PRIMARY
+Run: 2026-11-16T17:16:40Z  |  Manifest SHA: da59272230201888...
+Games: 13  |  Confident: 6
+
+| Game | Side | Our # | HR Quote | HR Price | Gap |
+|------|------|--------|----------|----------|-----|
+| IND@HOU | away | +6.5 | -11.0 | -110 | -4.5 |
+| MIA@BUF | away | +10.0 | -16.5 | -115 | -6.5 |
+| TEN@DAL | away | +1.2 | -8.0 | -110 | -6.8 |
+| ARI@KC | away | +7.4 | -16.0 | -110 | -8.6 |
+| LV@DEN | away | +2.5 | -10.0 | -115 | -7.5 |
+| CIN@WAS | home | +0.2 | 6.0 | -105 | +6.2 |
+
