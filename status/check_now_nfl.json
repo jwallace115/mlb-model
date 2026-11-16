@@ -1,21 +1,12 @@
 {
- "started_utc": "2026-11-16T00:32:03.753353+00:00",
- "finished_utc": "2026-11-16T00:44:41.228868+00:00",
+ "started_utc": "2026-11-16T01:17:04.402284+00:00",
+ "finished_utc": "2026-11-16T01:18:44.961131+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "48e497c230e6c9afcb3b600091d28e17",
-   "text": "injury_change: inj_Cincinnati Bengals; injury_change: inj_Pittsburgh Steelers"
-  },
-  {
-   "game": "35e3bdff558b5d1506251e814986f164",
-   "text": "injury_change: inj_Los Angeles Chargers"
-  }
- ],
- "games_read": 2,
- "frozen_file": "ai_opinions_20261116T003203Z.parquet",
- "spend_usd": 24.5409,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }

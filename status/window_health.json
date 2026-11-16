@@ -42,19 +42,19 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-16T00:44:39.608549+00:00",
-  "finished_utc": "2026-11-16T00:44:39.608549+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-16T01:18:44.935129+00:00",
+  "finished_utc": "2026-11-16T01:18:44.935129+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['injury_change: inj_Cincinnati Bengals; injury_change: inj_Pittsburgh Steelers', 'injury_change: inj_Los Angeles Chargers']",
-  "freeze_file": "ai_opinions_20261116T003203Z.parquet"
+  "message": "",
+  "freeze_file": null
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-16T00:49:07.348623+00:00",
-  "finished_utc": "2026-11-16T00:49:07.348623+00:00",
-  "result": "busy",
+  "started_utc": "2026-11-16T01:19:03.522472+00:00",
+  "finished_utc": "2026-11-16T01:19:03.522472+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
   "message": "",
   "freeze_file": null
