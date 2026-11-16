@@ -1,0 +1,144 @@
+packet built 2026-11-16T00:32Z | snap snap_20261116T003007Z.parquet | props pull 2026-11-16T00:17 | kalshi snap_20261116T0005Z.parquet | injuries injuries_20261116T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: injury_change: inj_Cincinnati Bengals; injury_change: inj_Pittsburgh Steelers
+######## Pittsburgh Steelers @ Cincinnati Bengals  kick 11-16T01:20Z
+  HR ML: Bengals -210 / Steelers +175 (no-vig home 0.651) | Pinnacle no-vig home 0.648
+  HR spread: Bengals -4 -110 / Steelers +4 -110 | Pinnacle Bengals -3.5 (-113) | HR open -3.5 (20261110)
+  HR total: 49.5 O-110/U-110 | Pinnacle 50.0 O+106/U-119 | HR open 48.5
+  Kalshi ML [('Pittsburgh wins', 0.35, 1540972), ('Cincinnati wins', 0.65, 1022228)] | spread [('Cincinnati wins by over 4.5 points?', 0.47, 64500), ('Cincinnati wins by over 3.5 points?', 0.51, 1133357)] | total [('Full Game: over 49.5 points scored?', 0.49, 366990), ('Full Game: over 50.5 points scored?', 0.46, 14019)]
+  -- Pittsburgh Steelers injuries (20261116T0030)
+     Out  RB Eli Heidenreich: inactive
+     Out  QB Will Howard: inactive
+     Out  CB Sean Murphy-Bunting: inactive
+     Out  QB Drew Allar: inactive
+     Acti TE Pat Freiermuth: Freiermuth (illness) is active for Sunday's game at Cincinnati, Teresa Varley of the Steelers' official site reports.
+     Out  S  DeShon Elliott: Elliott suffered a pregame knee injury and has been ruled out for Sunday's Week 10 matchup against the Bengals.
+     Inju WR Michael Pittman Jr.: Pittman (foot) is warmed up with his teammates Thursday, though he remains on IR and wasn't wearing a helmet, Nick Farabaugh of PennLive.com reports.
+     Acti WR Ben Skowronek: Skowronek (calf) was a full participant in Wednesday's practice, Teresa Varley of the Steelers' official site reports.
+     Acti WR Germie Bernard: Bernard caught all five of his targets for 30 yards during Sunday's 27-6 win against Cleveland.
+     Acti TE Darnell Washington: Washington caught three of five targets for 94 yards during Sunday's 27-6 win over the Browns.
+     Acti RB Rico Dowdle: Dowdle rushed 15 times for 56 yards and a touchdown in the Steelers' 27-6 win over the Browns on Sunday.
+     Acti WR DK Metcalf: Metcalf brought in one of six targets for four yards in the Steelers' 27-6 win over the Browns on Sunday.
+     Acti QB Aaron Rodgers: Rodgers completed 13 of 25 passes for 172 yards with no touchdowns and one interception in the Steelers' 27-6 win over the Browns on Sunday.
+     Acti RB Jaylen Warren: Warren rushed 17 times for 143 yards and a touchdown and brought in one of two targets for no gain in the Steelers' 27-6 win over the Browns on Sunday
+     Acti WR Brandon Smith: The Steelers signed Smith off the practice squad to the active roster Saturday, Teresa Varley of the team's official site reports.
+     Acti QB Mason Rudolph: Rudolph is active for Sunday's game against the Saints in Paris, Teresa Varley of the Steelers' official site reports.
+     news 11-15T18:52 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-15T19:49 Ranking the top 10 Super Bowl performances by a defender
+     news 11-15T20:46 2026 NFL midseason report: Questions, stats for all 32 teams entering second half
+     news 11-15T23:41 Week 10 NFL highlights: Best plays, moments, touchdowns, more
+     news 11-15T23:59 Fernando Mendoza steps into starting role in style, leads NFL Week 10 arrivals
+  -- Cincinnati Bengals injuries (20261116T0030)
+     Out  OT Myles Hinton: Hinton (illness) is inactive for Sunday's Week 10 matchup against the Steelers.
+     Out  DT Landon Robinson: inactive
+     Out  C  Connor Lew: inactive
+     Out  S  Kyle Dugger: inactive
+     Inju WR Andrei Iosivas: Iosivas (thumb) has been downgraded from doubtful to out for Sunday's game against the Steelers.
+     Inju OT Brian Parker II: The Bengals opened Parker's (undisclosed) 21-day practice window Thursday.
+     Inju CB Jalen Davis: The Bengals designated Davis (hamstring) to return from injured reserve Thursday.
+     Acti WR Dohnte Meyers: Meyers caught two passes for 47 yards on three targets in Sunday's 34-17 win over the Falcons.
+     Acti RB Samaje Perine: Perine rushed 11 times for 43 yards during Sunday's 34-17 win over the Falcons.
+     Acti TE Mike Gesicki: Gesicki caught both of his targets for 11 yards during Sunday's 34-17 win versus Atlanta.
+     Acti RB Chase Brown: Brown carried the ball nine times for 57 yards and caught all three of his targets for 18 yards in Sunday's 34-17 win over the Falcons.
+     Acti WR Tee Higgins: Higgins caught five of six targets for 32 yards and two touchdowns in Sunday's 34-17 win over Atlanta.
+     Acti WR Ja'Marr Chase: Chase caught 10 of 12 targets for 155 yards and a touchdown in Sunday's 34-17 win over the Falcons.
+     Acti QB Joe Burrow: Burrow completed 24 of 29 passes for 271 yards and three touchdowns in Sunday's 34-17 win over the Falcons. He added seven yards and a TD on three car
+     Inju DE Cashius Howell: Howell (wrist) was placed on injured reserve by the Bengals on Tuesday.
+     Acti WR Mitchell Tinsley: 
+     Acti WR Colbie Young: Young went without a target while playing 19 of the Bengals' 74 snaps on offense in Sunday's 43-36 overtime win over the Titans.
+     news 11-15T18:01 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 11-15T18:52 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-15T20:46 2026 NFL midseason report: Questions, stats for all 32 teams entering second half
+     news 11-15T23:41 Week 10 NFL highlights: Best plays, moments, touchdowns, more
+     news 11-15T23:59 Fernando Mendoza steps into starting role in style, leads NFL Week 10 arrivals
+  -- props (pull 2026-11-16T00:17)
+     * Aaron Rodgers: atd 0.5 (+1400), paatt 35.5 (-115/-115), cmp 21.5 (-115/-115), int 0.5 (-115/-115), patd 1.5 (-115/-115), payd 240.5 (-115/-115), ruyd 0.5 (-110/-120)
+     * Chase Brown: atd 0.5 (-105), recyd 25.5 (-115/-115), rec 4.5 (+110/-135), ruatt 11.5 (-125/-105), ruyd 45.5 (-110/-120)
+     * DK Metcalf: atd 0.5 (+195), recyd 54.5 (-120/-110), rec 4.5 (+110/-140)
+     * Darnell Washington: atd 0.5 (+230), recyd 31.5 (-115/-115), rec 2.5 (-115/-115)
+     * Dohnte Meyers: atd 0.5 (+425), recyd 20.5 (-115/-115), rec 2.5 (+110/-140)
+     * Drew Sample: atd 0.5 (+850), recyd 4.5 (-115/-115), rec 0.5 (-220/+155)
+     * Germie Bernard: atd 0.5 (+300), recyd 49.5 (-115/-115), rec 4.5 (-135/+105)
+     * Ja'Marr Chase: atd 0.5 (-125), recyd 90.5 (-115/-115), rec 7.5 (-120/-110)
+     * Jaylen Warren: atd 0.5 (+100), recyd 24.5 (-115/-115), rec 2.5 (-160/+120), ruatt 14.5 (+100/-130), ruyd 67.5 (-115/-115)
+     * Joe Burrow: atd 0.5 (+425), paatt 37.5 (-120/-110), cmp 26.5 (-130/+100), int 0.5 (-120/-110), patd 2.5 (+150/-210), payd 293.5 (-115/-115), ruyd 7.5 (-110/-120)
+     * Mike Gesicki: atd 0.5 (+240), recyd 24.5 (-120/-110), rec 2.5 (+105/-135)
+     * Pat Freiermuth: atd 0.5 (+275), recyd 26.5 (-115/-115), rec 2.5 (-140/+110)
+     * Rico Dowdle: atd 0.5 (+185), recyd 13.5 (-115/-115), rec 2.5 (+125/-160), ruatt 7.5 (-105/-125), ruyd 28.5 (-120/-110)
+     * Samaje Perine: atd 0.5 (+250), recyd 4.5 (-115/-115), rec 0.5 (-210/+150), ruatt 5.5 (-135/+105), ruyd 17.5 (-120/-110)
+     * Tee Higgins: atd 0.5 (+115), recyd 76.5 (-115/-115), rec 5.5 (-110/-120)
+
+  WHAT CHANGED: injury_change: inj_Los Angeles Chargers
+######## Los Angeles Chargers @ Baltimore Ravens  kick 11-17T01:15Z
+  HR ML: Ravens -225 / Chargers +185 (no-vig home 0.664) | Pinnacle no-vig home 0.663
+  HR spread: Ravens -4.5 -110 / Chargers +4.5 -110 | Pinnacle Ravens -4.5 (-106) | HR open -5.0 (20261110)
+  HR total: 39 O-110/U-110 | Pinnacle 38.5 O-119/U+102 | HR open 38.5
+  Kalshi ML [('Los Angeles C wins', 0.34, 241279), ('Baltimore wins', 0.67, 159538)] | spread [('Baltimore wins by over 4.5 points?', 0.51, 45598), ('Baltimore wins by over 5.5 points?', 0.47, 7354)] | total [('Full Game: over 38.5 points scored?', 0.53, 6292), ('Full Game: over 39.5 points scored?', 0.48, 4036)]
+  -- Los Angeles Chargers injuries (20261116T0030)
+     Out  WR Ladd McConkey: McConkey (back) won't travel to Baltimore with the Chargers for Monday's game against the Ravens and has been downgraded from questionable to out for 
+     Out  G  Branson Taylor: Taylor (ankle) has been ruled out for Monday's clash against the Ravens.
+     Inju OT Trey Pipkins III: Pipkins (knee), who is on injured reserve, has been deemed questionable for Monday's matchup against the Ravens.
+     Ques G  Kayode Awosika: Awosika (fibula) is questionable for Monday's matchup against the Ravens.
+     Out  S  Kendall Williamson: Williamson (calf) has been ruled out for Monday's matchup against the Ravens.
+     Out  CB Isas Waxter: Waxter (ankle) has been ruled out for Monday's battle against Baltimore.
+     Ques DT Justin Eboigbe: Eboigbe (ankle) is questionable to suit up Monday against Baltimore.
+     Inju LB Denzel Perryman: Perryman (pectoral), who is on IR, is officially questionable to suit up against Baltimore on Monday.
+     Acti RB Keaton Mitchell: Mitchell (hip) does not carry an injury designation into Monday's game against the Ravens.
+     Inju TE David Njoku: Njoku (fibula) is listed as questionable for Monday's game against the Ravens.
+     Doub WR Brenen Thompson: doubtful
+     Acti WR Tre' Harris: Harris (calf) was a full participant in Friday's practice.
+     Acti QB Justin Herbert: Herbert (finger) doesn't appear on the the Chargers' injury report ahead of Monday night's game against the Ravens.
+     Acti WR KeAndre Lambert-Smith: Lambert-Smith registered one catch (on four targets) for 50 yards in Sunday's loss to Houston.
+     Acti RB Kimani Vidal: Vidal rushed seven times for 30 yards in Sunday's 44-22 loss to the Texans. He added one catch for six yards on three targets.
+     Acti TE Oronde Gadsden: Gadsden caught two of three targets for 17 yards during the Chargers' 44-22 loss to the Texans on Sunday.
+     Acti TE Charlie Kolar: Kolar brought in all three of his targets for 31 yards in a 44-22 loss to the Texans on Sunday.
+     Acti WR Theo Wease Jr.: 
+     Acti QB DJ Uiagalelei: Uiagalelei completed two of seven passes for 27 yards and a touchdown after replacing Justin Herbert (finger) in the fourth quarter of Sunday's 44-22 
+     news 11-15T18:01 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 11-15T18:52 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-15T20:46 2026 NFL midseason report: Questions, stats for all 32 teams entering second half
+     news 11-15T23:41 Week 10 NFL highlights: Best plays, moments, touchdowns, more
+     news 11-15T23:59 Fernando Mendoza steps into starting role in style, leads NFL Week 10 arrivals
+  -- Baltimore Ravens injuries (20261116T0030)
+     Inju RB Adam Randall: Randall (neck), who remains on IR, has been tagged as questionable to face the Chargers on Monday.
+     Out  S  Jaylinn Hawkins: Hawkins (knee) has been ruled out for Monday's game against the Chargers.
+     Acti WR Rashod Bateman: Bateman (calf) was listed as a full participant on Friday's practice estimation.
+     Inju QB Lamar Jackson: Jackson (thumb) is "doing well" and is expected to be out for "6-to-10 weeks," per head coach Jesse Minter.
+     Acti QB Kedon Slovis: 
+     Acti WR Elijah Sarratt: 
+     Acti QB Jacoby Brissett: Ahead of Week 10, Ravens head coach Jesse Minter noted "I expect (Brissett) to be our starter" next Monday against the Chargers, Jeff Zrebiec of The A
+     Acti RB Derrick Henry: The Ravens aren't expected to deal Henry before Tuesday's trade deadline, Adam Schefter of ESPN reports.
+     Acti TE Matt Hibner: Hibner logged one reception for five yards on two targets in Thursday's loss to Baltimore.
+     Acti WR Ja'Kobi Lane: Lane did not draw a target Thursday in a loss to Jacksonville.
+     Acti TE Josh Cuevas: Cuevas didn't garner a target in Thursday night's 33-10 loss to the Jaguars.
+     Acti WR Devontez Walker: Walker didn't garner a target in Thursday night's 33-10 loss to the Jaguars.
+     Acti RB Justice Hill: Hill rushed nine times for 85 yards and a touchdown and brought in all three targets for seven yards in the Ravens' 33-10 loss to the Jaguars on Thurs
+     Acti TE Mark Andrews: Andrews secured both targets for 19 yards in the Ravens' 33-10 loss to the Jaguars on Thursday night.
+     Acti QB Joe Fagnano: Fagnano completed 10 of 18 passes for 60 yards with no touchdowns and two interceptions while adding three rushes for 13 yards in the Ravens' 33-10 lo
+     Acti WR Zay Flowers: Flowers brought in three of six targets for six yards and rushed three times for 17 yards in the Ravens' 33-10 loss to the Jaguars on Thursday night.
+     news 11-15T18:01 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 11-15T18:52 Countdown to Super Bowl LXI: Top-10 lists, projections, rankings, more coverage
+     news 11-15T20:46 2026 NFL midseason report: Questions, stats for all 32 teams entering second half
+     news 11-15T23:41 Week 10 NFL highlights: Best plays, moments, touchdowns, more
+     news 11-15T23:59 Fernando Mendoza steps into starting role in style, leads NFL Week 10 arrivals
+  -- props (pull 2026-11-16T00:17)
+     * Brenen Thompson: atd 0.5 (+575)
+     * Charlie Kolar: atd 0.5 (+500)
+     * David Njoku: atd 0.5 (+450)
+     * Derrick Henry: atd 0.5 (-145), recyd 5.5 (-115/-115), rec 1.5 (+155/-210), ruatt 18.5 (-120/-110), ruyd 80.5 (-115/-115)
+     * Ja'Kobi Lane: atd 0.5 (+375), recyd 19.5 (-120/-110), rec 1.5 (-190/+140)
+     * Jacoby Brissett: atd 0.5 (+525), paatt 30.5 (-105/-125), cmp 19.5 (-115/-115), int 0.5 (-115/-115), patd 1.5 (+145/-195), payd 216.5 (-115/-115), ruyd 5.5 (-115/-115)
+     * Josh Cuevas: atd 0.5 (+900), recyd 7.5 (-110/-120), rec 1.5 (+165/-230)
+     * Justice Hill: atd 0.5 (+400), recyd 11.5 (-115/-115), rec 2.5 (+130/-170), ruyd 12.5 (-120/-110)
+     * Justin Herbert: atd 0.5 (+500), paatt 30.5 (-110/-120), cmp 19.5 (-110/-120), int 0.5 (-165/+125), patd 0.5 (-260/+190), payd 202.5 (-115/-115), ruatt 4.5 (-125/-105), ruyd 21.5 (-110/-120)
+     * KeAndre Lambert-Smith: atd 0.5 (+600)
+     * Keaton Mitchell: atd 0.5 (+500), recyd 11.5 (-115/-115), rec 2.5 (+125/-165), ruyd 10.5 (-120/-110)
+     * Kimani Vidal: atd 0.5 (+450), recyd 9.5 (-115/-115), rec 1.5 (-125/-105), ruatt 7.5 (+100/-130), ruyd 20.5 (-120/-110)
+     * Mark Andrews: atd 0.5 (+325), recyd 21.5 (-115/-115), rec 2.5 (-145/+115)
+     * Omarion Hampton: atd 0.5 (+300), recyd 5.5 (-115/-115), rec 1.5 (+140/-190), ruatt 10.5 (-120/-110), ruyd 33.5 (-115/-115)
+     * Oronde Gadsden II: atd 0.5 (+425)
+     * Quentin Johnston: atd 0.5 (+450), recyd 34.5 (-115/-115), rec 2.5 (-130/+100)
+     * Rashod Bateman: atd 0.5 (+450), recyd 23.5 (-115/-115), rec 2.5 (+140/-185)
+     * Tre Harris: atd 0.5 (+325), recyd 37.5 (-115/-115), rec 3.5 (-110/-120)
+     * Zay Flowers: atd 0.5 (+155), recyd 70.5 (-115/-115), rec 5.5 (-125/-105), ruyd 2.5 (-120/-110)
