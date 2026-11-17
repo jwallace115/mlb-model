@@ -1,0 +1,75 @@
+packet built 2026-11-17T00:32Z | snap snap_20261117T003011Z.parquet | props pull 2026-11-16T23:45 | kalshi snap_20261117T0035Z.parquet | injuries injuries_20261117T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: anchor_close
+######## Los Angeles Chargers @ Baltimore Ravens  kick 11-17T01:15Z
+  HR ML: Ravens -230 / Chargers +190 (no-vig home 0.669) | Pinnacle no-vig home 0.664
+  HR spread: Ravens -4.5 -110 / Chargers +4.5 -110 | Pinnacle Ravens -4.5 (-104) | HR open -4.0 (20261117)
+  HR total: 39 O-115/U-105 | Pinnacle 39.0 O-111/U-101 | HR open 39.5
+  Kalshi ML [('Los Angeles C wins', 0.34, 4357942), ('Baltimore wins', 0.68, 7165655)] | spread [('Baltimore wins by over 4.5 points?', 0.49, 1770294), ('Baltimore wins by over 5.5 points?', 0.47, 110555)] | total [('Full Game: over 38.5 points scored?', 0.53, 92995), ('Full Game: over 39.5 points scored?', 0.49, 361306)]
+  -- Los Angeles Chargers injuries (20261117T0030)
+     Out  WR Brenen Thompson: Thompson (hamstring) is inactive for Monday night's game against the Ravens.
+     Out  DT Justin Eboigbe: Eboigbe (ankle) is inactive for Monday's game against the Ravens, Omar Navarro of the Chargers' official site reports.
+     Acti TE David Njoku: Njoku (fibula) is officially listed as active Monday night's game against the Ravens, Omar Navarro of the Chargers' official site reports.
+     Out  CB Isas Waxter: inactive
+     Out  S  Kendall Williamson: inactive
+     Out  WR Ladd McConkey: inactive
+     Out  LB Bud Dupree: inactive
+     Inju OT Trey Pipkins III: Pipkins (knee), who is currently on injured reserve, will not play in Monday's game against the Ravens.
+     Inju G  Branson Taylor: Taylor (ankle) was placed on injured reserve Monday.
+     Acti RB Keaton Mitchell: Mitchell (hip) does not carry an injury designation into Monday's game against the Ravens.
+     Acti WR Tre' Harris: Harris (calf) was a full participant in Friday's practice.
+     Acti QB Justin Herbert: Herbert (finger) doesn't appear on the the Chargers' injury report ahead of Monday night's game against the Ravens.
+     Acti WR KeAndre Lambert-Smith: Lambert-Smith registered one catch (on four targets) for 50 yards in Sunday's loss to Houston.
+     Acti RB Kimani Vidal: Vidal rushed seven times for 30 yards in Sunday's 44-22 loss to the Texans. He added one catch for six yards on three targets.
+     Acti TE Oronde Gadsden: Gadsden caught two of three targets for 17 yards during the Chargers' 44-22 loss to the Texans on Sunday.
+     Acti TE Charlie Kolar: Kolar brought in all three of his targets for 31 yards in a 44-22 loss to the Texans on Sunday.
+     Acti WR Theo Wease Jr.: 
+     news 11-16T15:39 How active NFL players continue to redefine all-time sack list
+     news 11-16T16:21 NFL playoff chance tiers: Where all 32 teams fit in 2026 postseason picture
+     news 11-16T18:04 Five reasons why Chargers' offense, Justin Herbert have struggled in 2026 season
+     news 11-16T20:44 When will the Chargers finally win? Here are the odds and our best bets
+     news 11-16T23:53 Kyle Hamilton rocks Christmas sweater ahead of 'MNF,' leads NFL Week 10 arrivals
+  -- Baltimore Ravens injuries (20261117T0030)
+     Out  QB Kedon Slovis: Slovis (coach's decision) is inactive but serving as the Ravens' emergency No. 3 quarterback Monday night versus the Chargers.
+     Out  DT Aeneas Peebles: inactive
+     Out  CB Chandler Rivers: inactive
+     Out  WR Elijah Sarratt: inactive
+     Out  S  Jaylinn Hawkins: inactive
+     Out  OT Emery Jones Jr.: inactive
+     Inju RB Adam Randall: Randall (neck) was not activated from injured reserve ahead of Monday's game against the Chargers, Brian Wacker of The Baltimore Sun reports.
+     Acti TE Nick Vannett: The Ravens elevated Vannett from the practice squad ahead of Monday's game against the Chargers.
+     Acti WR Chris Moore: The Ravens elevated Moore from the practice squad ahead of Monday's game against the Chargers.
+     Acti WR Rashod Bateman: Bateman (calf) was listed as a full participant on Friday's practice estimation.
+     Inju QB Lamar Jackson: Jackson (thumb) is "doing well" and is expected to be out for "6-to-10 weeks," per head coach Jesse Minter.
+     Acti QB Jacoby Brissett: Ahead of Week 10, Ravens head coach Jesse Minter noted "I expect (Brissett) to be our starter" next Monday against the Chargers, Jeff Zrebiec of The A
+     Acti RB Derrick Henry: The Ravens aren't expected to deal Henry before Tuesday's trade deadline, Adam Schefter of ESPN reports.
+     Acti TE Matt Hibner: Hibner logged one reception for five yards on two targets in Thursday's loss to Baltimore.
+     Acti WR Ja'Kobi Lane: Lane did not draw a target Thursday in a loss to Jacksonville.
+     Acti TE Josh Cuevas: Cuevas didn't garner a target in Thursday night's 33-10 loss to the Jaguars.
+     Acti WR Devontez Walker: Walker didn't garner a target in Thursday night's 33-10 loss to the Jaguars.
+     Acti RB Justice Hill: Hill rushed nine times for 85 yards and a touchdown and brought in all three targets for seven yards in the Ravens' 33-10 loss to the Jaguars on Thurs
+     news 11-16T15:00 Chargers-Ravens odds, best bets: Tips, analysis and our favorite plays
+     news 11-16T15:39 How active NFL players continue to redefine all-time sack list
+     news 11-16T16:21 NFL playoff chance tiers: Where all 32 teams fit in 2026 postseason picture
+     news 11-16T20:44 When will the Chargers finally win? Here are the odds and our best bets
+     news 11-16T23:53 Kyle Hamilton rocks Christmas sweater ahead of 'MNF,' leads NFL Week 10 arrivals
+  -- props (pull 2026-11-16T23:45)
+     * Charlie Kolar: atd 0.5 (+575), recyd 15.5 (-115/-115), rec 1.5 (-140/+110)
+     * David Njoku: atd 0.5 (+700), recyd 11.5 (-115/-115), rec 1.5 (+110/-140)
+     * Derrick Henry: atd 0.5 (-155), recyd 4.5 (-120/-110), rec 1.5 (+165/-230), ruatt 19.5 (-120/-110), ruyd 82.5 (-115/-115)
+     * Ja'Kobi Lane: atd 0.5 (+425), recyd 20.5 (-115/-115), rec 1.5 (-185/+135)
+     * Jacoby Brissett: atd 0.5 (+500), paatt 30.5 (-110/-120), cmp 19.5 (-120/-110), int 0.5 (-110/-120), patd 1.5 (+135/-180), payd 212.5 (-115/-115), ruyd 7.5 (-115/-115)
+     * Josh Cuevas: atd 0.5 (+850), recyd 7.5 (-115/-115), rec 1.5 (+165/-230)
+     * Justice Hill: atd 0.5 (+425), recyd 10.5 (-115/-115), rec 2.5 (+115/-150), ruatt 3.5 (-130/+100), ruyd 12.5 (-120/-110)
+     * Justin Herbert: atd 0.5 (+525), paatt 29.5 (-120/-110), cmp 19.5 (-120/-110), int 0.5 (-160/+120), patd 0.5 (-260/+185), payd 204.5 (-115/-115), ruatt 4.5 (-125/-105), ruyd 20.5 (-115/-115)
+     * KeAndre Lambert-Smith: atd 0.5 (+600), recyd 18.5 (-110/-120), rec 1.5 (-105/-125)
+     * Keaton Mitchell: atd 0.5 (+525), recyd 10.5 (-120/-110), rec 2.5 (+140/-190), ruatt 3.5 (-130/+100), ruyd 12.5 (-115/-115)
+     * Kimani Vidal: atd 0.5 (+475), recyd 9.5 (-110/-120), rec 1.5 (-125/-105), ruatt 6.5 (-110/-120), ruyd 20.5 (-115/-115)
+     * Mark Andrews: atd 0.5 (+350), recyd 24.5 (-115/-115), rec 2.5 (-165/+125)
+     * Omarion Hampton: atd 0.5 (+300), recyd 6.5 (-110/-120), rec 1.5 (+145/-200), ruatt 11.5 (-105/-125), ruyd 34.5 (-115/-115)
+     * Oronde Gadsden II: atd 0.5 (+600), recyd 11.5 (-110/-120), rec 1.5 (-105/-125)
+     * Quentin Johnston: atd 0.5 (+450), recyd 34.5 (-115/-115), rec 2.5 (+100/-135)
+     * Rashod Bateman: atd 0.5 (+475), recyd 24.5 (-115/-115), rec 2.5 (+135/-185)
+     * Tre Harris: atd 0.5 (+325), recyd 42.5 (-115/-115), rec 3.5 (-110/-120)
+     * Zay Flowers: atd 0.5 (+160), recyd 74.5 (-115/-115), rec 5.5 (-150/+115), ruyd 2.5 (-115/-115)
