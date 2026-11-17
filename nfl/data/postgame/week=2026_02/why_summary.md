@@ -1,6 +1,6 @@
 # WHY Summary — Week 2
 
-Generated: 2026-11-16T12:42:04.115591+00:00
+Generated: 2026-11-17T12:18:53.575911+00:00
 
 
 ## Graded rows
