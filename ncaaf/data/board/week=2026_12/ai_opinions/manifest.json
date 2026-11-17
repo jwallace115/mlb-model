@@ -1334,5 +1334,75 @@
     "792875fa96ecdf75559454c19c011768": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261117T221903Z.parquet",
+  "sha256": "5d2b1475724053ccb7110e1a5f1929b8ac1409229d0a639d047487ca9649e747",
+  "logged_utc": "2026-11-17T22:19:03.686863+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-17T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261117T220009Z.parquet",
+   "inputs_digest": "{\"0d8cfafd3da8fead51df5ec2e33e9382\": \"dae8b7afd158c87a\"}",
+   "components": {
+    "0d8cfafd3da8fead51df5ec2e33e9382": {
+     "pinnacle_h2h": [
+      [
+       "Eastern Michigan Eagles",
+       0,
+       602
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -804
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Eastern Michigan Eagles",
+       17.0,
+       -105
+      ],
+      [
+       "Western Michigan Broncos",
+       -17.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -112
+      ],
+      [
+       "Under",
+       46.0,
+       -104
+      ]
+     ],
+     "news": [
+      "Eastern Michigan visits Western Michigan in MAC ma",
+      "Sizing up college football's best races down the h",
+      "Wake Forest's post-blowout jab at SMU tops college"
+     ],
+     "kalshi_snap": "snap_20261117T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "0d8cfafd3da8fead51df5ec2e33e9382": "anchor_close"
+   }
+  }
  }
 ]
