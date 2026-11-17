@@ -695,5 +695,75 @@
     "10cec4ab386b12694dd3cee93d870b47": "line_move: pinnacle spreads Buffalo Bulls -2.5\u2192-1.0; line_move: pinnacle spreads Central Michigan Chippewas 2.5\u21921.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261117T140403Z.parquet",
+  "sha256": "3209e5838b82028f2376748974a46219934c70cf5739f905bfb8f3b1f6cffc1a",
+  "logged_utc": "2026-11-17T14:04:03.929955+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 2,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-18T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261117T140010Z.parquet",
+   "inputs_digest": "{\"792875fa96ecdf75559454c19c011768\": \"6f7084c8246c20d3\"}",
+   "components": {
+    "792875fa96ecdf75559454c19c011768": {
+     "pinnacle_h2h": [
+      [
+       "Kent State Golden Flashes",
+       0,
+       300
+      ],
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -355
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kent State Golden Flashes",
+       9.5,
+       -109
+      ],
+      [
+       "Miami (OH) RedHawks",
+       -9.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -105
+      ],
+      [
+       "Under",
+       45.0,
+       -111
+      ]
+     ],
+     "news": [
+      "Miami (OH) and Kent State meet in MAC action",
+      "Sizing up college football's best races down the h",
+      "Wake Forest's post-blowout jab at SMU tops college"
+     ],
+     "kalshi_snap": "snap_20261117T1207Z.parquet"
+    }
+   },
+   "triggers": {
+    "792875fa96ecdf75559454c19c011768": "line_move: pinnacle totals Over 46.0\u219245.0; line_move: pinnacle totals Under 46.0\u219245.0"
+   }
+  }
  }
 ]
