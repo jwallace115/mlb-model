@@ -557,5 +557,74 @@
     "ef5f5ac74b2228e8521c289fdbc6af93": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261117T013404Z.parquet",
+  "sha256": "a4e192bd110257a40a759df9b70484a38eedce39682663abc84923ab6bded9a3",
+  "logged_utc": "2026-11-17T01:34:04.038313+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-19T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261117T013006Z.parquet",
+   "inputs_digest": "{\"10cec4ab386b12694dd3cee93d870b47\": \"d4bf1c160886a8b6\"}",
+   "components": {
+    "10cec4ab386b12694dd3cee93d870b47": {
+     "pinnacle_h2h": [
+      [
+       "Buffalo Bulls",
+       0,
+       -127
+      ],
+      [
+       "Central Michigan Chippewas",
+       0,
+       111
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Buffalo Bulls",
+       -2.5,
+       -105
+      ],
+      [
+       "Central Michigan Chippewas",
+       2.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -107
+      ],
+      [
+       "Under",
+       45.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Central Michigan visits Buffalo in MAC matchup",
+      "Sizing up college football's best races down the h"
+     ],
+     "kalshi_snap": "snap_20261117T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "10cec4ab386b12694dd3cee93d870b47": "anchor_morning"
+   }
+  }
  }
 ]
