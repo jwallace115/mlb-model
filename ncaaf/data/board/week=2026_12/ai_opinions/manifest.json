@@ -765,5 +765,251 @@
     "792875fa96ecdf75559454c19c011768": "line_move: pinnacle totals Over 46.0\u219245.0; line_move: pinnacle totals Under 46.0\u219245.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261117T150403Z.parquet",
+  "sha256": "ff6c40a9fd5a746c41a6d252590f420c331cd08f263ef09c8c364e7273bd6f44",
+  "logged_utc": "2026-11-17T15:04:03.726477+00:00",
+  "rows": 15,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.6,
+  "revised_rows": 12,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-17T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261117T150009Z.parquet",
+   "inputs_digest": "{\"0d8cfafd3da8fead51df5ec2e33e9382\": \"c0bcfc1805b58b63\", \"5840d479fc52ad2b83d7feb802d4dd23\": \"a21728ac0d534f3b\", \"792875fa96ecdf75559454c19c011768\": \"f65fbbaaab7273b1\", \"ef5f5ac74b2228e8521c289fdbc6af93\": \"cc38a1fdce80e697\", \"10cec4ab386b12694dd3cee93d870b47\": \"76093795946e9ffd\"}",
+   "components": {
+    "0d8cfafd3da8fead51df5ec2e33e9382": {
+     "pinnacle_h2h": [
+      [
+       "Eastern Michigan Eagles",
+       0,
+       519
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -671
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Eastern Michigan Eagles",
+       14.5,
+       -101
+      ],
+      [
+       "Western Michigan Broncos",
+       -14.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -112
+      ],
+      [
+       "Under",
+       46.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Eastern Michigan visits Western Michigan in MAC ma",
+      "Sizing up college football's best races down the h",
+      "Wake Forest's post-blowout jab at SMU tops college"
+     ],
+     "kalshi_snap": "snap_20261117T1507Z.parquet"
+    },
+    "5840d479fc52ad2b83d7feb802d4dd23": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       360
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -437
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       11.0,
+       -104
+      ],
+      [
+       "Ohio Bobcats",
+       -11.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -113
+      ],
+      [
+       "Under",
+       49.5,
+       -103
+      ]
+     ],
+     "news": [
+      "Ohio hosts Ball State in MAC play",
+      "Sizing up college football's best races down the h"
+     ],
+     "kalshi_snap": "snap_20261117T1507Z.parquet"
+    },
+    "792875fa96ecdf75559454c19c011768": {
+     "pinnacle_h2h": [
+      [
+       "Kent State Golden Flashes",
+       0,
+       300
+      ],
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -355
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kent State Golden Flashes",
+       9.5,
+       -109
+      ],
+      [
+       "Miami (OH) RedHawks",
+       -9.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -105
+      ],
+      [
+       "Under",
+       45.0,
+       -111
+      ]
+     ],
+     "news": [
+      "Miami (OH) and Kent State meet in MAC action",
+      "Sizing up college football's best races down the h",
+      "Wake Forest's post-blowout jab at SMU tops college"
+     ],
+     "kalshi_snap": "snap_20261117T1507Z.parquet"
+    },
+    "ef5f5ac74b2228e8521c289fdbc6af93": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       136
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       -157
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       3.0,
+       -104
+      ],
+      [
+       "UMass Minutemen",
+       -3.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -107
+      ],
+      [
+       "Under",
+       46.5,
+       -112
+      ]
+     ],
+     "news": [
+      "UMass and Akron meet in MAC action"
+     ],
+     "kalshi_snap": "snap_20261117T1507Z.parquet"
+    },
+    "10cec4ab386b12694dd3cee93d870b47": {
+     "pinnacle_h2h": [
+      [
+       "Buffalo Bulls",
+       0,
+       -117
+      ],
+      [
+       "Central Michigan Chippewas",
+       0,
+       102
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Buffalo Bulls",
+       -1.0,
+       -112
+      ],
+      [
+       "Central Michigan Chippewas",
+       1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -105
+      ],
+      [
+       "Under",
+       45.5,
+       -113
+      ]
+     ],
+     "news": [
+      "Central Michigan visits Buffalo in MAC matchup",
+      "Sizing up college football's best races down the h"
+     ],
+     "kalshi_snap": "snap_20261117T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "0d8cfafd3da8fead51df5ec2e33e9382": "anchor_morning",
+    "5840d479fc52ad2b83d7feb802d4dd23": "anchor_morning",
+    "792875fa96ecdf75559454c19c011768": "anchor_morning",
+    "ef5f5ac74b2228e8521c289fdbc6af93": "anchor_morning",
+    "10cec4ab386b12694dd3cee93d870b47": "anchor_morning"
+   }
+  }
  }
 ]
