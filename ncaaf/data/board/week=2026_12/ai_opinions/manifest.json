@@ -1080,5 +1080,75 @@
     "5840d479fc52ad2b83d7feb802d4dd23": "line_move: pinnacle spreads Ohio Bobcats -11.0\u2192-10.0; line_move: pinnacle spreads Ball State Cardinals 11.0\u219210.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261117T173404Z.parquet",
+  "sha256": "73109f3e53e4eaa495cf40f45227f8c3f29929ef55c81f6a7de7448656f5414a",
+  "logged_utc": "2026-11-17T17:34:04.812989+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-17T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261117T173009Z.parquet",
+   "inputs_digest": "{\"0d8cfafd3da8fead51df5ec2e33e9382\": \"86d44c22354d89f4\"}",
+   "components": {
+    "0d8cfafd3da8fead51df5ec2e33e9382": {
+     "pinnacle_h2h": [
+      [
+       "Eastern Michigan Eagles",
+       0,
+       514
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -664
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Eastern Michigan Eagles",
+       15.5,
+       -112
+      ],
+      [
+       "Western Michigan Broncos",
+       -15.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -112
+      ],
+      [
+       "Under",
+       46.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Eastern Michigan visits Western Michigan in MAC ma",
+      "Sizing up college football's best races down the h",
+      "Wake Forest's post-blowout jab at SMU tops college"
+     ],
+     "kalshi_snap": "snap_20261117T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "0d8cfafd3da8fead51df5ec2e33e9382": "line_move: pinnacle spreads Eastern Michigan Eagles 14.5\u219215.5; line_move: pinnacle spreads Western Michigan Broncos -14.5\u2192-15.5"
+   }
+  }
  }
 ]
