@@ -1404,5 +1404,119 @@
     "0d8cfafd3da8fead51df5ec2e33e9382": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261117T231903Z.parquet",
+  "sha256": "a0e56d7ddf96fac4a468032a949ef00c76da2b7026582a8dd8cbb423bed58e96",
+  "logged_utc": "2026-11-17T23:19:03.485199+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 6,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-18T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261117T230006Z.parquet",
+   "inputs_digest": "{\"5840d479fc52ad2b83d7feb802d4dd23\": \"7a70bcbb064d563e\", \"792875fa96ecdf75559454c19c011768\": \"ad39768cd1ce67d6\"}",
+   "components": {
+    "5840d479fc52ad2b83d7feb802d4dd23": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       340
+      ],
+      [
+       "Ohio Bobcats",
+       0,
+       -410
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       10.0,
+       -102
+      ],
+      [
+       "Ohio Bobcats",
+       -10.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -113
+      ],
+      [
+       "Under",
+       50.0,
+       -103
+      ]
+     ],
+     "news": [
+      "Ohio hosts Ball State in MAC play",
+      "Sizing up college football's best races down the h"
+     ],
+     "kalshi_snap": "snap_20261117T2107Z.parquet"
+    },
+    "792875fa96ecdf75559454c19c011768": {
+     "pinnacle_h2h": [
+      [
+       "Kent State Golden Flashes",
+       0,
+       308
+      ],
+      [
+       "Miami (OH) RedHawks",
+       0,
+       -365
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kent State Golden Flashes",
+       9.5,
+       -105
+      ],
+      [
+       "Miami (OH) RedHawks",
+       -9.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -111
+      ],
+      [
+       "Under",
+       46.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Miami (OH) and Kent State meet in MAC action",
+      "Sizing up college football's best races down the h",
+      "Wake Forest's post-blowout jab at SMU tops college"
+     ],
+     "kalshi_snap": "snap_20261117T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "5840d479fc52ad2b83d7feb802d4dd23": "anchor_close",
+    "792875fa96ecdf75559454c19c011768": "anchor_close"
+   }
+  }
  }
 ]
