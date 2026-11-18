@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "38779d99fd6274c9008c5cc03fa504ef",
+    "game_date": "2026-11-19",
+    "sport": "NHL",
+    "home_team": "Detroit Red Wings",
+    "away_team": "Boston Bruins",
+    "commence_time": "2026-11-19T00:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -108,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-18T06:05:02.246462+00:00"
+  },
+  {
+    "game_id": "a3e6d9189d7bb72b7c8ada9993fe63f2",
+    "game_date": "2026-11-19",
+    "sport": "NHL",
+    "home_team": "New Jersey Devils",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-11-19T00:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -108,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-18T06:05:02.246462+00:00"
+  },
+  {
+    "game_id": "af8d9e2567d44dcbb4a548272d876b6b",
+    "game_date": "2026-11-19",
+    "sport": "NHL",
+    "home_team": "Utah Mammoth",
+    "away_team": "Colorado Avalanche",
+    "commence_time": "2026-11-19T03:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -106,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-18T06:05:02.246462+00:00"
+  }
+]
