@@ -1961,5 +1961,82 @@
     "10cec4ab386b12694dd3cee93d870b47": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261118T230403Z.parquet",
+  "sha256": "bf53e0ceeb12a3627b4ec8eea1546a5df5b8cf6a69e11d9465e1744e8cd8b39b",
+  "logged_utc": "2026-11-18T23:04:03.719885+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-20T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261118T230006Z.parquet",
+   "inputs_digest": "{\"c62889a44c822eaf71b9cd24f4eee875\": \"4205bced24884ad9\"}",
+   "components": {
+    "c62889a44c822eaf71b9cd24f4eee875": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       111
+      ],
+      [
+       "UCF Knights",
+       0,
+       -125
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       2.5,
+       -111
+      ],
+      [
+       "UCF Knights",
+       -2.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -109
+      ],
+      [
+       "Under",
+       48.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Aiden Flora runs for 216 yards and fuels fast star",
+      "Arizona State Sun Devils vs. UCF Knights: Full Hig",
+      "FAA ground stop throws sports world into travel ch",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UCF meets Iowa State in Big 12 play",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261118T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "c62889a44c822eaf71b9cd24f4eee875": "anchor_morning"
+   }
+  }
  }
 ]
