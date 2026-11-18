@@ -1753,5 +1753,74 @@
     "608ce68eb20e7e5201fb1b804ad26141": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261118T161903Z.parquet",
+  "sha256": "25a2bf8af703e1a6b88459af4696b27dc10d51fde7187a2d96be16d146d74f2c",
+  "logged_utc": "2026-11-18T16:19:03.415891+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-19T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261118T160008Z.parquet",
+   "inputs_digest": "{\"ef5f5ac74b2228e8521c289fdbc6af93\": \"0659d6239149e636\"}",
+   "components": {
+    "ef5f5ac74b2228e8521c289fdbc6af93": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       152
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       -169
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       3.5,
+       -109
+      ],
+      [
+       "UMass Minutemen",
+       -3.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -106
+      ],
+      [
+       "Under",
+       48.0,
+       -110
+      ]
+     ],
+     "news": [
+      "Take a 360-degree look at college football's iconi",
+      "UMass and Akron meet in MAC action"
+     ],
+     "kalshi_snap": "snap_20261118T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "ef5f5ac74b2228e8521c289fdbc6af93": "line_move: pinnacle totals Over 46.5\u219248.0; line_move: pinnacle totals Under 46.5\u219248.0"
+   }
+  }
  }
 ]
