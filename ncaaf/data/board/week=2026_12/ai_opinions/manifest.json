@@ -1518,5 +1518,79 @@
     "792875fa96ecdf75559454c19c011768": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261118T010403Z.parquet",
+  "sha256": "86038dd992d3507455b554e4bafb1bcf654e20bbe32fd0d9f3d0b18f89664a35",
+  "logged_utc": "2026-11-18T01:04:03.702608+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-20T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261118T010005Z.parquet",
+   "inputs_digest": "{\"608ce68eb20e7e5201fb1b804ad26141\": \"b8919abacbf0a2c9\"}",
+   "components": {
+    "608ce68eb20e7e5201fb1b804ad26141": {
+     "pinnacle_h2h": [
+      [
+       "Rice Owls",
+       0,
+       128
+      ],
+      [
+       "Temple Owls",
+       0,
+       -148
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Rice Owls",
+       3.0,
+       -112
+      ],
+      [
+       "Temple Owls",
+       -3.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -107
+      ],
+      [
+       "Under",
+       50.5,
+       -111
+      ]
+     ],
+     "news": [
+      "AAC matchup features Temple against Rice",
+      "FAA ground stop throws sports world into travel ch",
+      "Oregon, Houston headline best uniforms of college ",
+      "Richardson's TD grab makes Tulane's late arrival w",
+      "Rod Robinson II romps for 202 yards, 3 TDs and UAB",
+      "Tulane Green Wave vs. Rice Owls: Full Highlights",
+      "UAB Blazers vs. Temple Owls: Full Highlights"
+     ],
+     "kalshi_snap": "snap_20261118T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "608ce68eb20e7e5201fb1b804ad26141": "anchor_morning"
+   }
+  }
  }
 ]
