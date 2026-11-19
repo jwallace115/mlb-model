@@ -2038,5 +2038,144 @@
     "c62889a44c822eaf71b9cd24f4eee875": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261118T231903Z.parquet",
+  "sha256": "004c44bf9f7508ed074adb9f6df59d0a462a2355dae7c768b4d2a2b49e56d7d5",
+  "logged_utc": "2026-11-18T23:19:03.639367+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-19T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261118T230006Z.parquet",
+   "inputs_digest": "{\"ef5f5ac74b2228e8521c289fdbc6af93\": \"c302d3618e8a2ba4\"}",
+   "components": {
+    "ef5f5ac74b2228e8521c289fdbc6af93": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       135
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       -150
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       3.0,
+       -106
+      ],
+      [
+       "UMass Minutemen",
+       -3.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -101
+      ],
+      [
+       "Under",
+       47.5,
+       -116
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "Take a 360-degree look at college football's iconi",
+      "UMass and Akron meet in MAC action"
+     ],
+     "kalshi_snap": "snap_20261118T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "ef5f5ac74b2228e8521c289fdbc6af93": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261118T234903Z.parquet",
+  "sha256": "6628e56bd36890c3c02ba70b386926487f5d9050dc4d1b176f6dffd25556180c",
+  "logged_utc": "2026-11-18T23:49:03.307378+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-19T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261118T233007Z.parquet",
+   "inputs_digest": "{\"10cec4ab386b12694dd3cee93d870b47\": \"72a42bb73437bdbc\"}",
+   "components": {
+    "10cec4ab386b12694dd3cee93d870b47": {
+     "pinnacle_h2h": [
+      [
+       "Buffalo Bulls",
+       0,
+       -140
+      ],
+      [
+       "Central Michigan Chippewas",
+       0,
+       127
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Buffalo Bulls",
+       -2.5,
+       -114
+      ],
+      [
+       "Central Michigan Chippewas",
+       2.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -111
+      ],
+      [
+       "Under",
+       46.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Central Michigan visits Buffalo in MAC matchup",
+      "Sizing up college football's best races down the h"
+     ],
+     "kalshi_snap": "snap_20261118T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "10cec4ab386b12694dd3cee93d870b47": "anchor_close"
+   }
+  }
  }
 ]

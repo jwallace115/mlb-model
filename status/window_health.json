@@ -42,18 +42,18 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-18T23:16:36.918470+00:00",
-  "finished_utc": "2026-11-18T23:16:36.918470+00:00",
+  "started_utc": "2026-11-18T23:37:38.145301+00:00",
+  "finished_utc": "2026-11-18T23:37:38.145301+00:00",
   "result": "COMPLETE",
   "step": "window_watch",
-  "message": "['anchor_morning']",
-  "freeze_file": "ai_opinions_20261118T230403Z.parquet"
+  "message": "['anchor_close']",
+  "freeze_file": "ai_opinions_20261118T231903Z.parquet"
  },
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-18T23:17:03.929648+00:00",
-  "finished_utc": "2026-11-18T23:17:03.929648+00:00",
+  "started_utc": "2026-11-18T23:47:04.069232+00:00",
+  "finished_utc": "2026-11-18T23:47:04.069232+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
