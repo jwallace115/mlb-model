@@ -2312,5 +2312,193 @@
     "f247efd606eabe7d3d87504bc3af43b4": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261119T020403Z.parquet",
+  "sha256": "54fab3f84bdc7f8d7a3b4e7d7c15175e642e98a07645d7e1ba082bf920c4ca35",
+  "logged_utc": "2026-11-19T02:04:03.686503+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.778,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261119T020009Z.parquet",
+   "inputs_digest": "{\"9cf7e21a18746ad426fd1d901bdd0a88\": \"fc5a9c387649ed43\", \"59cb6c9beeb879b864784348e3803ff8\": \"dea91e6d4d6da50c\", \"e497245c3311ac853201a67404dc82ea\": \"74b47da52a522be9\"}",
+   "components": {
+    "9cf7e21a18746ad426fd1d901bdd0a88": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       -1901
+      ],
+      [
+       "UTEP Miners",
+       0,
+       1089
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       -23.0,
+       -106
+      ],
+      [
+       "UTEP Miners",
+       23.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -113
+      ],
+      [
+       "Under",
+       47.0,
+       -103
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "Air Force rides Kemper Hodges, Evan Medders to 24-",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "Evan Medders shows his speed on an 81-yard rushing",
+      "FAA ground stop throws sports world into travel ch",
+      "MWC matchup features Air Force squaring off agains",
+      "Samuel Harris scores 2 TDs, Wyoming beats UTEP 27-",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UTEP fires head coach Scotty Walden following 8th "
+     ],
+     "kalshi_snap": "snap_20261119T0007Z.parquet"
+    },
+    "59cb6c9beeb879b864784348e3803ff8": {
+     "pinnacle_h2h": [
+      [
+       "Michigan State Spartans",
+       0,
+       576
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       -812
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan State Spartans",
+       16.5,
+       100
+      ],
+      [
+       "Oregon Ducks",
+       -16.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -101
+      ],
+      [
+       "Under",
+       45.0,
+       -115
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Allstate Playoff Predictor",
+      "Big Ten matchup features No. 14 Oregon squaring of",
+      "College football takeaways: Lasting impressions fr",
+      "Dylan Raiola throws for 4 touchdowns and No. 18 Or",
+      "No. 16 Oregon keeps CFP hopes alive with win over ",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Washington Huskies vs. Michigan State Spartans: Fu",
+      "Washington overcomes challenging night of travel t",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261119T0007Z.parquet"
+    },
+    "e497245c3311ac853201a67404dc82ea": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -292
+      ],
+      [
+       "Wyoming Cowboys",
+       0,
+       245
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -7.5,
+       100
+      ],
+      [
+       "Wyoming Cowboys",
+       7.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.5,
+       -110
+      ],
+      [
+       "Under",
+       37.5,
+       -106
+      ]
+     ],
+     "news": [
+      "FAA ground stop throws sports world into travel ch",
+      "Jackson Arnold rallies UNLV past No. 23 New Mexico",
+      "Power Rankings: The top teams hold their positions",
+      "Samuel Harris scores 2 TDs, Wyoming beats UTEP 27-",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "UNLV storms back beat New Mexico with pair of 4th-",
+      "Wyoming hosts New Mexico in MWC matchup"
+     ],
+     "kalshi_snap": "snap_20261119T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "9cf7e21a18746ad426fd1d901bdd0a88": "anchor_morning",
+    "59cb6c9beeb879b864784348e3803ff8": "anchor_morning",
+    "e497245c3311ac853201a67404dc82ea": "anchor_morning"
+   }
+  }
  }
 ]
