@@ -3729,5 +3729,151 @@
     "1f59b6d72003ce254b32c815e73b252d": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261119T184904Z.parquet",
+  "sha256": "95515bfeed475f8a9d1cd4ca620c308642588c53612b1593cb76cc4bc64389f0",
+  "logged_utc": "2026-11-19T18:49:04.242746+00:00",
+  "rows": 8,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.5,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-21T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261119T183007Z.parquet",
+   "inputs_digest": "{\"329bbea44b2c7efcbb9243e25099495e\": \"729fa8e757dac028\", \"75136fdcc4601e9e1208fe20146056dc\": \"ec550296d5bf9afe\", \"e4bb95111547a00a8c70a0459ffbd861\": \"626dfece164ec9e0\"}",
+   "components": {
+    "329bbea44b2c7efcbb9243e25099495e": {
+     "pinnacle_h2h": [
+      [
+       "Houston Cougars",
+       0,
+       -314
+      ],
+      [
+       "West Virginia Mountaineers",
+       0,
+       261
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Houston Cougars",
+       -8.5,
+       -104
+      ],
+      [
+       "West Virginia Mountaineers",
+       8.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       70.5,
+       -108
+      ],
+      [
+       "Under",
+       70.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 11 poll reaction: What's ",
+      "Kansas Jayhawks vs. West Virginia Mountaineers: Fu",
+      "No. 20 Houston meets West Virginia in Big 12 play",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "QB Isaiah Marshall's career rushing day leads Kans",
+      "QB rankings for all 68 Power 4 college football te",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who are the winningest college football coaches of",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "75136fdcc4601e9e1208fe20146056dc": {
+     "pinnacle_h2h": [
+      [
+       "Liberty Flames",
+       0,
+       -865
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       605
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Liberty Flames",
+       -17.0,
+       -110
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       17.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -110
+      ],
+      [
+       "Under",
+       52.5,
+       -106
+      ]
+     ],
+     "news": [
+      "CUSA matchup features No. 22 Liberty taking on Wes",
+      "Davis rushes for 126 yards and TD, helps Liberty c",
+      "Jacksonville State Gamecocks vs. Western Kentucky ",
+      "Roman Gagliano throws 23-yard TD pass to Ziyon But",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "e4bb95111547a00a8c70a0459ffbd861": {
+     "news": [
+      "AP college football Week 11 poll reaction: What's ",
+      "Auburn Tigers vs. Mississippi State Bulldogs: Full",
+      "Auburn causes havoc to beat Mississippi State and ",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Jeff Lebby discusses making staff changes for Miss",
+      "Palode-Gary's 60-yard TD run in the 4th quarter pu",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "329bbea44b2c7efcbb9243e25099495e": "anchor_morning",
+    "75136fdcc4601e9e1208fe20146056dc": "anchor_morning",
+    "e4bb95111547a00a8c70a0459ffbd861": "anchor_morning"
+   }
+  }
  }
 ]

@@ -1056,5 +1056,157 @@
     "66f9e83cf025d58acee12bce18661fb3": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261119T183204Z.parquet",
+  "sha256": "fb450f34098944ca0e300a2de21095688a2a2814d467584b62594353b51d555a",
+  "logged_utc": "2026-11-19T18:32:04.171072+00:00",
+  "rows": 72,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.931,
+  "revised_rows": 72,
+  "oldest_source_age_min": 271.9,
+  "first_kickoff_utc": "2026-11-20T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261119T183007Z.parquet",
+   "inputs_digest": "{\"66f9e83cf025d58acee12bce18661fb3\": \"a44a9e7a8a597063\"}",
+   "components": {
+    "66f9e83cf025d58acee12bce18661fb3": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Houston Texans",
+       0,
+       -800
+      ],
+      [
+       "Indianapolis Colts",
+       0,
+       525
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Houston Texans",
+       -12.0,
+       -110
+      ],
+      [
+       "Indianapolis Colts",
+       12.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       44.0,
+       -110
+      ],
+      [
+       "Under",
+       44.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Houston Texans",
+       0,
+       -705
+      ],
+      [
+       "Indianapolis Colts",
+       0,
+       540
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Houston Texans",
+       -13.0,
+       104
+      ],
+      [
+       "Indianapolis Colts",
+       13.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -105
+      ],
+      [
+       "Under",
+       44.0,
+       -107
+      ]
+     ],
+     "props_ts": "2026-11-19T18:32:59.087544+00:00",
+     "inj_Houston Texans": "fec38b84f9f1ffde",
+     "inj_Indianapolis Colts": "e3eb7bc82af2b0ed",
+     "news": [
+      "2026 NFL midseason report: Questions, stats for al",
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "49ers poke fun at Cowboys multiple times to headli",
+      "Big-time offensive plays highlight top NFL plays o",
+      "Browns' Deshaun Watson relishes 'special' win vs. ",
+      "Citing short week, Colts sticking with Daniel Jone",
+      "Colts' biggest challenge going into Week 11 matchu",
+      "Colts' struggling offense does just enough to beat",
+      "Colts-Texans odds, best bets: Is Houston laying to",
+      "Concerns for four NFL teams on playoff bubble: Cow",
+      "Countdown to Super Bowl LXI: Top-10 lists, project",
+      "DE Danielle Hunter, LB Azeez Al-Shaair among Texan",
+      "Daniel Jones hits 'rock bottom' in win over Dolphi",
+      "Deshaun Watson throws for 312 yards against his ol",
+      "Fernando Mendoza steps into starting role in style",
+      "Houston Texans vs. Cleveland Browns: Game Highligh",
+      "How Houston has banded together through backbreaki",
+      "How active NFL players continue to redefine all-ti",
+      "How an NFL referee crew worked two games in one da",
+      "Inside how one NFL ref crew worked two games in a ",
+      "Ja'Marr Chase steps into 'SNF'  in style, leads NF",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Miami Dolphins vs. Indianapolis Colts Game Highlig",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 10 uniforms: Titans debut Rivalries look,",
+      "NFL Week 10: Big takeaways, questions and fantasy ",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL playoff chance tiers: Where all 32 teams fit i",
+      "NFL survivor power rankings: Why this is the week ",
+      "Panthers QB Bryce Young leads NFL Week 10 arrivals",
+      "Stroud: Texans' home skid and 17-point collapse fu",
+      "TNF: Texans rule out DE Hunter, RB Marks; Colts ru",
+      "Texans DE Hunter, RB Marks to miss TNF; Colts rule",
+      "Texans defense struggles against the Browns",
+      "Texans injuries pile up ahead of matchup vs. Brown",
+      "Texans lose RB Woody Marks to concussion in loss t",
+      "Texans place LB Azeez Al-Shaair, team's leading ta",
+      "Week 10 NFL highlights: Best plays, moments, touch",
+      "Week 10 betting preview: Analysis, best bets, TD p",
+      "Why can't Richardson beat out struggling Jones as ",
+      "Working double shifts: Four NFL refs to officiate "
+     ],
+     "kalshi_snap": "snap_20261119T1805Z.parquet"
+    }
+   },
+   "triggers": {
+    "66f9e83cf025d58acee12bce18661fb3": "new_props: pull 2026-11-19T18:32:59.087544+00:00; injury_change: inj_Houston Texans; injury_change: inj_Indianapolis Colts"
+   }
+  }
  }
 ]
