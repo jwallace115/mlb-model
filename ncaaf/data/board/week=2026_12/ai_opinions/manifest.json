@@ -2500,5 +2500,81 @@
     "e497245c3311ac853201a67404dc82ea": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261119T143404Z.parquet",
+  "sha256": "6ceaee5063ea111ae5805fdc6212c3a92fb6db10bce4cf424d1cec8b53d30596",
+  "logged_utc": "2026-11-19T14:34:04.262312+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 1,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-21T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261119T143005Z.parquet",
+   "inputs_digest": "{\"9cf7e21a18746ad426fd1d901bdd0a88\": \"b6e56976524bf3e1\"}",
+   "components": {
+    "9cf7e21a18746ad426fd1d901bdd0a88": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       -1815
+      ],
+      [
+       "UTEP Miners",
+       0,
+       1053
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       -22.0,
+       -107
+      ],
+      [
+       "UTEP Miners",
+       22.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -106
+      ],
+      [
+       "Under",
+       48.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "Air Force rides Kemper Hodges, Evan Medders to 24-",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "Evan Medders shows his speed on an 81-yard rushing",
+      "MWC matchup features Air Force squaring off agains",
+      "Samuel Harris scores 2 TDs, Wyoming beats UTEP 27-",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UTEP fires head coach Scotty Walden following 8th "
+     ],
+     "kalshi_snap": "snap_20261119T1207Z.parquet"
+    }
+   },
+   "triggers": {
+    "9cf7e21a18746ad426fd1d901bdd0a88": "line_move: pinnacle spreads Air Force Falcons -23.0\u2192-22.0; line_move: pinnacle spreads UTEP Miners 23.0\u219222.0; line_move: pinnacle totals Under 47.0\u219248.0; line_move: pinnacle totals Over 47.0\u219248.0"
+   }
+  }
  }
 ]
