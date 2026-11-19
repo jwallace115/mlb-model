@@ -5373,5 +5373,77 @@
     "608ce68eb20e7e5201fb1b804ad26141": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261119T230403Z.parquet",
+  "sha256": "940063ef2a1ad0d0863c39cdd32205432d9c1003a4d8e04fc26857db05c92b22",
+  "logged_utc": "2026-11-19T23:04:03.585921+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-21T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261119T230005Z.parquet",
+   "inputs_digest": "{\"cbe55180a8bee495fa1520fbc1df314b\": \"797414ad42c59d27\"}",
+   "components": {
+    "cbe55180a8bee495fa1520fbc1df314b": {
+     "pinnacle_h2h": [
+      [
+       "Texas State Bobcats",
+       0,
+       -519
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       401
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Texas State Bobcats",
+       -12.5,
+       -117
+      ],
+      [
+       "Washington State Cougars",
+       12.5,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       62.5,
+       -108
+      ],
+      [
+       "Under",
+       62.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Davian Jackson's late TD run lifts Texas State ove",
+      "Fresno State's kicker finds the end zone on incred",
+      "Kirby Vorhees has 4 of 9 TD runs by Washington Sta",
+      "Kirby Vorhees takes off for FBS season-long 98-yar",
+      "Pac-12 matchup features Texas State playing Washin"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "cbe55180a8bee495fa1520fbc1df314b": "anchor_morning"
+   }
+  }
  }
 ]
