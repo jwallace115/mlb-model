@@ -1,32 +1,12 @@
 [
  {
   "sport": "nfl",
-  "window": "mid",
-  "started_utc": "2026-11-12T22:08:40.140824+00:00",
-  "finished_utc": "2026-11-12T22:08:40.140824+00:00",
-  "result": "STOP",
-  "step": "reader_v3",
-  "message": "exit -9",
-  "freeze_file": null
- },
- {
-  "sport": "nfl",
   "window": "late",
   "started_utc": "2026-11-14T23:16:00.795571+00:00",
   "finished_utc": "2026-11-14T23:16:00.795571+00:00",
   "result": "COMPLETE",
   "step": "done",
   "message": "",
-  "freeze_file": null
- },
- {
-  "sport": "nfl",
-  "window": "prekick",
-  "started_utc": "2026-11-16T22:24:50.162281+00:00",
-  "finished_utc": "2026-11-16T22:24:50.162281+00:00",
-  "result": "STOP",
-  "step": "reader_v3",
-  "message": "exit -9",
   "freeze_file": null
  },
  {
@@ -41,9 +21,29 @@
  },
  {
   "sport": "nfl",
+  "window": "mid",
+  "started_utc": "2026-11-19T22:08:40.337948+00:00",
+  "finished_utc": "2026-11-19T22:08:40.337948+00:00",
+  "result": "STOP",
+  "step": "reader_v3",
+  "message": "exit -9",
+  "freeze_file": null
+ },
+ {
+  "sport": "nfl",
+  "window": "prekick",
+  "started_utc": "2026-11-19T22:32:10.456137+00:00",
+  "finished_utc": "2026-11-19T22:32:10.456137+00:00",
+  "result": "COMPLETE",
+  "step": "done",
+  "message": "",
+  "freeze_file": null
+ },
+ {
+  "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-19T21:51:42.907121+00:00",
-  "finished_utc": "2026-11-19T21:51:42.907121+00:00",
+  "started_utc": "2026-11-19T22:49:00.852736+00:00",
+  "finished_utc": "2026-11-19T22:49:00.852736+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -52,11 +52,11 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-19T21:52:24.601441+00:00",
-  "finished_utc": "2026-11-19T21:52:24.601441+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-19T22:59:01.116614+00:00",
+  "finished_utc": "2026-11-19T22:59:01.116614+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['anchor_prekick']",
-  "freeze_file": "ai_opinions_20261119T213403Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]
