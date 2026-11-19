@@ -4428,5 +4428,877 @@
     "b3f08ccb712c2c765cc2d55b4608a3dd": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261119T210403Z.parquet",
+  "sha256": "647970f89295189de62a1896ca75be6b095c9dc2d98c526829546347e94697b9",
+  "logged_utc": "2026-11-19T21:04:03.779038+00:00",
+  "rows": 41,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 14,
+  "no_view_share": 0.634,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261119T210009Z.parquet",
+   "inputs_digest": "{\"4336f3fcf7e287f1609c1822fef8f63d\": \"7011b5b57552074e\", \"c3b7f980521e9fb576ce8dbd49a9f7de\": \"851f103dc290da8f\", \"1a3e1206e330ec66aa9a0549b4d3409c\": \"b0594f5794a64d62\", \"7f9809c817e27ec2d9f8a24e8e19a8ff\": \"e8c1d49e9bd822f2\", \"6b40f07e146bab0dba574f0d3b07659e\": \"9a1c1a4dfc97e1a9\", \"0cdac6d2b6c2cbfb0f734a8cdfbe086e\": \"da65e9757bb4779a\", \"ae9b81f4814e1d9dae835a13f4245ce3\": \"0e4e5539fb555eee\", \"59e78be3159c6fdb928c6737f6ff68e4\": \"bc8caa809db241e3\", \"3a5bb507e8305c5de6aa0b6c1e43e638\": \"bfb56566bc1efaaf\", \"5c082e013b5328e3db1def552628765f\": \"773eddce7897f81a\", \"0a1a6c2630e51e32d24695f02c0b3f23\": \"42900f33af8f887a\", \"e17410526acddf2500fb788f40901b3f\": \"0c47e40af45ceb8e\", \"cc2b1d4b7378697dc11c744aeb015af9\": \"a3ad717688794557\", \"6d977752327ee29e19d3e1856683efee\": \"a3cd06eadf685ee4\"}",
+   "components": {
+    "4336f3fcf7e287f1609c1822fef8f63d": {
+     "pinnacle_h2h": [
+      [
+       "Army Black Knights",
+       0,
+       -226
+      ],
+      [
+       "East Carolina Pirates",
+       0,
+       194
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Army Black Knights",
+       -5.5,
+       -113
+      ],
+      [
+       "East Carolina Pirates",
+       5.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -107
+      ],
+      [
+       "Under",
+       46.0,
+       -109
+      ]
+     ],
+     "news": [
+      "AAC matchup features Army playing East Carolina",
+      "Ashton Gray scores twice as East Carolina outlasts",
+      "East Carolina Pirates vs. Charlotte 49ers: Full Hi",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "c3b7f980521e9fb576ce8dbd49a9f7de": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas Razorbacks",
+       0,
+       891
+      ],
+      [
+       "Texas Longhorns",
+       0,
+       -1442
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas Razorbacks",
+       20.5,
+       -102
+      ],
+      [
+       "Texas Longhorns",
+       -20.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -111
+      ],
+      [
+       "Under",
+       47.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 11 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "Arch Manning discusses how he was able to recover ",
+      "Arch Manning leads No. 8 Texas to a late score and",
+      "Arch Manning leads game-winning drive as Texas stu",
+      "Arch Manning, Texas stun LSU 22-21",
+      "Block Party: Cubelic almost kicks Harper out of th",
+      "CFP SEC representation probabilities, teams that c",
+      "Chizik breaks down the film for a dive into a Mann",
+      "College Football Playoff top 12 projection after W",
+      "College football takeaways: Lasting impressions fr",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Heather Dinich and Paul Finebaum disagree about Te",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "Joker Johnson boasts Arkansas' resilience vs. Sout",
+      "No. 8 Texas and Arkansas meet in SEC play",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB rankings for all 68 Power 4 college football te",
+      "Ryan Silverfield dedicates win to the fans after A",
+      "SEC fines Arkansas $500K for allowing fans to stor",
+      "Sizing up college football's best races down the h",
+      "South Carolina Gamecocks vs. Arkansas Razorbacks: ",
+      "Take a 360-degree look at college football's iconi",
+      "Texas DL Hero Kanu undergoes season-ending surgery",
+      "Texas' Manning to participate in senior day, mum o",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Turnovers, red-zone struggles doom No. 20 South Ca",
+      "Vols top Matt Stinchcomb's list of top three SEC d",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Wake Forest up to No. 10 in AP poll as top teams a",
+      "Wake Forest's post-blowout jab at SMU tops college",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams will end up in Atlanta for the final S",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "1a3e1206e330ec66aa9a0549b4d3409c": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       170
+      ],
+      [
+       "Texas Tech Red Raiders",
+       0,
+       -195
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       4.5,
+       -105
+      ],
+      [
+       "Texas Tech Red Raiders",
+       -4.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -103
+      ],
+      [
+       "Under",
+       56.0,
+       -113
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 11 poll reaction: What's ",
+      "Anger Index: Why Texas Tech, Tennessee and the Gro",
+      "Bear Bachmeier runs for three TDs, throws for anot",
+      "Bear Bachmeier's TD pass to Jojo Phillips seals BY",
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "College Football Playoff top 12 projection after W",
+      "Monroe Freeling, Lee Hunter top Panthers' rookie r",
+      "No. 10 Texas Tech routs Oklahoma State 52-27",
+      "No. 11 Texas Tech takes on Baylor in Big 12 play",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Texas Tech Red Raiders vs. Oklahoma State Cowboys:",
+      "Texas Tech picks up huge road win over Oklahoma St",
+      "The oldest grudge in football",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "7f9809c817e27ec2d9f8a24e8e19a8ff": {
+     "pinnacle_h2h": [
+      [
+       "Florida State Seminoles",
+       0,
+       -383
+      ],
+      [
+       "NC State Wolfpack",
+       0,
+       311
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida State Seminoles",
+       -10.5,
+       -102
+      ],
+      [
+       "NC State Wolfpack",
+       10.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -112
+      ],
+      [
+       "Under",
+       56.0,
+       -104
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "College football takeaways: Lasting impressions fr",
+      "Florida State hosts NC State in ACC play",
+      "Florida State's first turquoise football uniforms ",
+      "NC State hires Jatavis Sanders as GM under Philip ",
+      "NC State names NFL assistant Jason Michael as OC u",
+      "Philip Rivers at NC State intro: 'I ain't going to",
+      "QB rankings for all 68 Power 4 college football te",
+      "Rivers on NC State: No other college football job ",
+      "Rivers says NC State only college job he would hav",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "What we learned about new NC State coach Philip Ri",
+      "Who are the winningest college football coaches of",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "6b40f07e146bab0dba574f0d3b07659e": {
+     "pinnacle_h2h": [
+      [
+       "Indiana Hoosiers",
+       0,
+       -303
+      ],
+      [
+       "Washington Huskies",
+       0,
+       254
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Indiana Hoosiers",
+       -7.5,
+       -107
+      ],
+      [
+       "Washington Huskies",
+       7.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -106
+      ],
+      [
+       "Under",
+       44.0,
+       -110
+      ]
+     ],
+     "news": [
+      "'Quit complaining': Finebaum is not having Cignett",
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "AP college football Week 11 poll reaction: What's ",
+      "Big Ten matchup features No. 6 Indiana taking on W",
+      "Cignetti: Narrative surrounding Indiana serves as ",
+      "College Football Playoff top 12 projection after W",
+      "Grant Wilson delivers as Indiana boosts CFP, Big T",
+      "Grant Wilson throws 2 TD passes, No. 6 Indiana bea",
+      "Indiana embraces more aggressive offense after win",
+      "Indiana starting guard Brunner out for season with",
+      "Indiana takes down USC 27-13 in pivotal Big Ten sh",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Wake Forest up to No. 10 in AP poll as top teams a",
+      "Wake Forest's post-blowout jab at SMU tops college",
+      "Washington Huskies vs. Michigan State Spartans: Fu",
+      "Washington overcomes challenging night of travel t",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an",
+      "Why Stephen A. takes exception to Curt Cignetti's "
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "0cdac6d2b6c2cbfb0f734a8cdfbe086e": {
+     "pinnacle_h2h": [
+      [
+       "LSU Tigers",
+       0,
+       -106
+      ],
+      [
+       "Tennessee Volunteers",
+       0,
+       -106
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "LSU Tigers",
+       -1.0,
+       -102
+      ],
+      [
+       "Tennessee Volunteers",
+       1.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -108
+      ],
+      [
+       "Under",
+       46.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "AP college football Week 11 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "Alyssa Lang analyzes, raises questions about recen",
+      "Anger Index: Why Texas Tech, Tennessee and the Gro",
+      "Arch Manning leads No. 8 Texas to a late score and",
+      "Arch Manning leads game-winning drive as Texas stu",
+      "Arch Manning, Texas stun LSU 22-21",
+      "Block Party: Cubelic almost kicks Harper out of th",
+      "CFP SEC representation probabilities, teams that c",
+      "College Football Playoff top 12 projection after W",
+      "College football takeaways: Lasting impressions fr",
+      "Gene Chizik advises No. 9 Tennessee and LSU ahead ",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Heather Dinich and Paul Finebaum disagree about Te",
+      "Judge questions LSU's claims the SEC 'hallucinated",
+      "Kiffin understands frustration as LSU's playoff ho",
+      "LSU adds former NBA 2-way guard RJ Luis Jr. despit",
+      "LSU visits No. 9 Tennessee in SEC action",
+      "Lane Kiffin understands frustration as LSU's CFP h",
+      "No. 8 Tennessee run game and defense continue thri",
+      "No. 9 Tennessee hosts LSU in pursuit of SEC title ",
+      "No. 9 Tennessee pulls away late to beat Texas A&M ",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Source: Tennessee leading receiver Mike Matthews o",
+      "Take a 360-degree look at college football's iconi",
+      "Tennessee Volunteers vs. Texas A&M Aggies: Full Hi",
+      "Tennessee leading receiver Mike Matthews out for s",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Vols top Matt Stinchcomb's list of top three SEC d",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Wake Forest up to No. 10 in AP poll as top teams a",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Where Stephen A. finds fault with Lane Kiffin in h",
+      "Which teams will end up in Atlanta for the final S",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an",
+      "Why Stephen A. has 'no problem' with Alabama ranke"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "ae9b81f4814e1d9dae835a13f4245ce3": {
+     "pinnacle_h2h": [
+      [
+       "Michigan Wolverines",
+       0,
+       156
+      ],
+      [
+       "UCLA Bruins",
+       0,
+       -178
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan Wolverines",
+       3.5,
+       -106
+      ],
+      [
+       "UCLA Bruins",
+       -3.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.5,
+       -105
+      ],
+      [
+       "Under",
+       37.5,
+       -111
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "AP college football Week 11 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "Breaking down the major futures for the Big Ten, f",
+      "College Football Playoff top 12 projection after W",
+      "Dylan Raiola throws for 4 touchdowns and No. 18 Or",
+      "Inside the complexities of clock management in col",
+      "Michigan hosts No. 4 UCLA in Big Ten matchup",
+      "Michigan top WR JJ Buchanan (shoulder) likely out ",
+      "No. 16 Oregon keeps CFP hopes alive with win over ",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB rankings for all 68 Power 4 college football te",
+      "Should UCLA be on upset alert at Michigan?",
+      "Sizing up college football's best races down the h",
+      "Sources: Michigan to hire Texas A&M's Trev Alberts",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "UCLA and Michigan hired new coaches this season, b",
+      "UCLA raises banner for first-ever NCAA women's bas",
+      "UCLA-Michigan best bets: Look to the point total a",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Wake Forest up to No. 10 in AP poll as top teams a",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who are the winningest college football coaches of",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "59e78be3159c6fdb928c6737f6ff68e4": {
+     "pinnacle_h2h": [
+      [
+       "Old Dominion Monarchs",
+       0,
+       434
+      ],
+      [
+       "UConn Huskies",
+       0,
+       -572
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Old Dominion Monarchs",
+       13.5,
+       100
+      ],
+      [
+       "UConn Huskies",
+       -13.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -107
+      ],
+      [
+       "Under",
+       47.5,
+       -109
+      ]
+     ],
+     "news": [
+      "UConn hosts Old Dominion",
+      "Wake Forest's post-blowout jab at SMU tops college"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "3a5bb507e8305c5de6aa0b6c1e43e638": {
+     "pinnacle_h2h": [
+      [
+       "Penn State Nittany Lions",
+       0,
+       -2684
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       1385
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Penn State Nittany Lions",
+       -26.0,
+       -107
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       26.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -110
+      ],
+      [
+       "Under",
+       49.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "Allstate Playoff Predictor",
+      "Becht, Hansen combine to push Penn State past Minn",
+      "College football takeaways: Lasting impressions fr",
+      "Penn State squares off against Rutgers in Big Ten ",
+      "QB rankings for all 68 Power 4 college football te",
+      "Who are the winningest college football coaches of",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "5c082e013b5328e3db1def552628765f": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma Sooners",
+       0,
+       -283
+      ],
+      [
+       "Texas A&M Aggies",
+       0,
+       238
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma Sooners",
+       -7.0,
+       -110
+      ],
+      [
+       "Texas A&M Aggies",
+       7.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       38.5,
+       -104
+      ],
+      [
+       "Under",
+       38.5,
+       -112
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "Allstate Playoff Predictor",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Mateer accounts for 181 yards of offense and Oklah",
+      "Matt Stinchcomb says OU showed the 'epitome of com",
+      "Monroe Freeling, Lee Hunter top Panthers' rookie r",
+      "No. 8 Tennessee run game and defense continue thri",
+      "No. 9 Tennessee pulls away late to beat Texas A&M ",
+      "Oklahoma AD rips Ole Miss, SEC; Rebels defend trav",
+      "Oklahoma coach Venables shouts out Love's after Bu",
+      "Oklahoma takes down Ole Miss for 2nd straight win",
+      "Oklahoma, boosted by crowd's ire at postponement, ",
+      "Patience starting to run thin for head coaches in ",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sources: Michigan to hire Texas A&M's Trev Alberts",
+      "Take a 360-degree look at college football's iconi",
+      "Tennessee Volunteers vs. Texas A&M Aggies: Full Hi",
+      "Texas A&M visits Oklahoma in SEC matchup",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "0a1a6c2630e51e32d24695f02c0b3f23": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Southern Eagles",
+       0,
+       -337
+      ],
+      [
+       "Troy Trojans",
+       0,
+       278
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Southern Eagles",
+       -9.5,
+       -103
+      ],
+      [
+       "Troy Trojans",
+       9.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -118
+      ],
+      [
+       "Under",
+       48.0,
+       101
+      ]
+     ],
+     "news": [
+      "Georgia Southern Eagles vs. Georgia State Panthers",
+      "Georgia Southern keeps Georgia State out of end zo",
+      "Trae\u2019von Dunbar has 153 yards rushing and 2 TDs, S",
+      "Troy Trojans vs. South Alabama Jaguars: Full Highl",
+      "Troy hosts Georgia Southern in Sun Belt matchup"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "e17410526acddf2500fb788f40901b3f": {
+     "pinnacle_h2h": [
+      [
+       "Georgia State Panthers",
+       0,
+       112
+      ],
+      [
+       "Marshall Thundering Herd",
+       0,
+       -126
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia State Panthers",
+       2.0,
+       -103
+      ],
+      [
+       "Marshall Thundering Herd",
+       -2.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.0,
+       -110
+      ],
+      [
+       "Under",
+       55.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Appalachian State Mountaineers vs. Marshall Thunde",
+      "Georgia Southern Eagles vs. Georgia State Panthers",
+      "Georgia Southern keeps Georgia State out of end zo",
+      "Henry Hasselbeck has 2 rushing TDs, Appalachian St",
+      "Sun Belt matchup features Georgia State taking on "
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "cc2b1d4b7378697dc11c744aeb015af9": {
+     "pinnacle_h2h": [
+      [
+       "North Dakota State Bison",
+       0,
+       -2817
+      ],
+      [
+       "Northern Illinois Huskies",
+       0,
+       1431
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Dakota State Bison",
+       -25.5,
+       101
+      ],
+      [
+       "Northern Illinois Huskies",
+       25.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -112
+      ],
+      [
+       "Under",
+       43.5,
+       -104
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "DJ Scott, Ray James Jr. rally North Dakota State t",
+      "North Dakota State Bison vs. Hawai'i Rainbow Warri",
+      "North Dakota State hosts Northern Illinois in MWC ",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Turner scores twice and Nevada beats Nothern Illin"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    },
+    "6d977752327ee29e19d3e1856683efee": {
+     "pinnacle_h2h": [
+      [
+       "South Alabama Jaguars",
+       0,
+       -179
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       156
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Alabama Jaguars",
+       -4.0,
+       -105
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       4.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       66.5,
+       -109
+      ],
+      [
+       "Under",
+       66.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Sun Belt matchup features South Alabama squaring o",
+      "Trae\u2019von Dunbar has 153 yards rushing and 2 TDs, S",
+      "Troy Trojans vs. South Alabama Jaguars: Full Highl"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "4336f3fcf7e287f1609c1822fef8f63d": "line_move: pinnacle totals Under 45.0\u219246.0; line_move: pinnacle totals Over 45.0\u219246.0",
+    "c3b7f980521e9fb576ce8dbd49a9f7de": "anchor_morning",
+    "1a3e1206e330ec66aa9a0549b4d3409c": "anchor_morning",
+    "7f9809c817e27ec2d9f8a24e8e19a8ff": "anchor_morning",
+    "6b40f07e146bab0dba574f0d3b07659e": "anchor_morning",
+    "0cdac6d2b6c2cbfb0f734a8cdfbe086e": "anchor_morning",
+    "ae9b81f4814e1d9dae835a13f4245ce3": "anchor_morning",
+    "59e78be3159c6fdb928c6737f6ff68e4": "anchor_morning",
+    "3a5bb507e8305c5de6aa0b6c1e43e638": "anchor_morning",
+    "5c082e013b5328e3db1def552628765f": "anchor_morning",
+    "0a1a6c2630e51e32d24695f02c0b3f23": "anchor_morning",
+    "e17410526acddf2500fb788f40901b3f": "anchor_morning",
+    "cc2b1d4b7378697dc11c744aeb015af9": "anchor_morning",
+    "6d977752327ee29e19d3e1856683efee": "anchor_morning"
+   }
+  }
  }
 ]
