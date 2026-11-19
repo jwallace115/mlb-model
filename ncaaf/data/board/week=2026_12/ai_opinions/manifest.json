@@ -2576,5 +2576,401 @@
     "9cf7e21a18746ad426fd1d901bdd0a88": "line_move: pinnacle spreads Air Force Falcons -23.0\u2192-22.0; line_move: pinnacle spreads UTEP Miners 23.0\u219222.0; line_move: pinnacle totals Under 47.0\u219248.0; line_move: pinnacle totals Over 47.0\u219248.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261119T150405Z.parquet",
+  "sha256": "04c6b93d127d0471ea60a6f3693a06a83992fbcfaa06087d07d2d38e33845443",
+  "logged_utc": "2026-11-19T15:04:05.040235+00:00",
+  "rows": 21,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 7,
+  "no_view_share": 0.714,
+  "revised_rows": 17,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-20T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261119T150011Z.parquet",
+   "inputs_digest": "{\"608ce68eb20e7e5201fb1b804ad26141\": \"ed7f711f341a6803\", \"c62889a44c822eaf71b9cd24f4eee875\": \"b572e135a857f890\", \"a365d6d7dcd55eca42de4791543e3f80\": \"e352c480b137b98d\", \"f247efd606eabe7d3d87504bc3af43b4\": \"c53b60538cf89dad\", \"9cf7e21a18746ad426fd1d901bdd0a88\": \"603402e877d9b679\", \"59cb6c9beeb879b864784348e3803ff8\": \"bb9ba531b5605843\", \"e497245c3311ac853201a67404dc82ea\": \"4c40c32d5673d802\"}",
+   "components": {
+    "608ce68eb20e7e5201fb1b804ad26141": {
+     "pinnacle_h2h": [
+      [
+       "Rice Owls",
+       0,
+       125
+      ],
+      [
+       "Temple Owls",
+       0,
+       -138
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Rice Owls",
+       2.5,
+       102
+      ],
+      [
+       "Temple Owls",
+       -2.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -106
+      ],
+      [
+       "Under",
+       51.5,
+       -111
+      ]
+     ],
+     "news": [
+      "AAC matchup features Temple against Rice",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "Richardson's TD grab makes Tulane's late arrival w",
+      "Rod Robinson II romps for 202 yards, 3 TDs and UAB",
+      "Tulane Green Wave vs. Rice Owls: Full Highlights",
+      "UAB Blazers vs. Temple Owls: Full Highlights"
+     ],
+     "kalshi_snap": "snap_20261119T1507Z.parquet"
+    },
+    "c62889a44c822eaf71b9cd24f4eee875": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       110
+      ],
+      [
+       "UCF Knights",
+       0,
+       -124
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       2.5,
+       -112
+      ],
+      [
+       "UCF Knights",
+       -2.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -109
+      ],
+      [
+       "Under",
+       48.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Aiden Flora runs for 216 yards and fuels fast star",
+      "Arizona State Sun Devils vs. UCF Knights: Full Hig",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UCF meets Iowa State in Big 12 play",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261119T1507Z.parquet"
+    },
+    "a365d6d7dcd55eca42de4791543e3f80": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       532
+      ],
+      [
+       "Toledo Rockets",
+       0,
+       -735
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       15.5,
+       101
+      ],
+      [
+       "Toledo Rockets",
+       -15.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -107
+      ],
+      [
+       "Under",
+       48.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "Sizing up college football's best races down the h",
+      "Toledo hosts Bowling Green in MAC play"
+     ],
+     "kalshi_snap": "snap_20261119T1507Z.parquet"
+    },
+    "f247efd606eabe7d3d87504bc3af43b4": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       412
+      ],
+      [
+       "Duke Blue Devils",
+       0,
+       -536
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       13.0,
+       -101
+      ],
+      [
+       "Duke Blue Devils",
+       -13.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -108
+      ],
+      [
+       "Under",
+       40.5,
+       -108
+      ]
+     ],
+     "news": [
+      "'I'm a winner': Dabo confident in his leadership a",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Allstate Playoff Predictor",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "Clemson QB Reynolds to have MRI on knee; backup Vi",
+      "Clemson QB Tait Reynolds has torn meniscus, Christ",
+      "Darian Mensah dices up ex-team Duke as Miami rebou",
+      "Defiant Dabo Swinney says Clemson's 'gonna win a b",
+      "Duke Blue Devils vs. Miami Hurricanes: Full Highli",
+      "Duke hosts Clemson in ACC action",
+      "Georgia Tech Yellow Jackets vs. Clemson Tigers: Fu",
+      "Haynes, Georgia Tech run for first win at Clemson ",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "Justice Haynes breaks loose for a 53-yard Georgia ",
+      "Mad Dog doesn't believe Dabo when he says Clemson ",
+      "Manny Diaz makes the case for Nate Sheppard to be ",
+      "Mensah, Mallory lead No. 5 Miami past Duke 36-25 a",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Who are the winningest college football coaches of",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261119T1507Z.parquet"
+    },
+    "9cf7e21a18746ad426fd1d901bdd0a88": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       -1815
+      ],
+      [
+       "UTEP Miners",
+       0,
+       1053
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       -22.0,
+       -107
+      ],
+      [
+       "UTEP Miners",
+       22.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -106
+      ],
+      [
+       "Under",
+       48.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "Air Force rides Kemper Hodges, Evan Medders to 24-",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "Evan Medders shows his speed on an 81-yard rushing",
+      "MWC matchup features Air Force squaring off agains",
+      "Samuel Harris scores 2 TDs, Wyoming beats UTEP 27-",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UTEP fires head coach Scotty Walden following 8th "
+     ],
+     "kalshi_snap": "snap_20261119T1507Z.parquet"
+    },
+    "59cb6c9beeb879b864784348e3803ff8": {
+     "pinnacle_h2h": [
+      [
+       "Michigan State Spartans",
+       0,
+       575
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       -811
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan State Spartans",
+       16.5,
+       100
+      ],
+      [
+       "Oregon Ducks",
+       -16.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       100
+      ],
+      [
+       "Under",
+       45.0,
+       -117
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Allstate Playoff Predictor",
+      "Big Ten matchup features No. 14 Oregon squaring of",
+      "College football takeaways: Lasting impressions fr",
+      "Dylan Raiola throws for 4 touchdowns and No. 18 Or",
+      "No. 16 Oregon keeps CFP hopes alive with win over ",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Washington Huskies vs. Michigan State Spartans: Fu",
+      "Washington overcomes challenging night of travel t",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261119T1507Z.parquet"
+    },
+    "e497245c3311ac853201a67404dc82ea": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -292
+      ],
+      [
+       "Wyoming Cowboys",
+       0,
+       245
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -7.5,
+       100
+      ],
+      [
+       "Wyoming Cowboys",
+       7.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.5,
+       -110
+      ],
+      [
+       "Under",
+       37.5,
+       -106
+      ]
+     ],
+     "news": [
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "Jackson Arnold rallies UNLV past No. 23 New Mexico",
+      "Power Rankings: The top teams hold their positions",
+      "Samuel Harris scores 2 TDs, Wyoming beats UTEP 27-",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "UNLV storms back beat New Mexico with pair of 4th-",
+      "Wyoming hosts New Mexico in MWC matchup"
+     ],
+     "kalshi_snap": "snap_20261119T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "608ce68eb20e7e5201fb1b804ad26141": "anchor_morning",
+    "c62889a44c822eaf71b9cd24f4eee875": "anchor_morning",
+    "a365d6d7dcd55eca42de4791543e3f80": "anchor_morning",
+    "f247efd606eabe7d3d87504bc3af43b4": "anchor_morning",
+    "9cf7e21a18746ad426fd1d901bdd0a88": "anchor_morning",
+    "59cb6c9beeb879b864784348e3803ff8": "anchor_morning",
+    "e497245c3311ac853201a67404dc82ea": "anchor_morning"
+   }
+  }
  }
 ]

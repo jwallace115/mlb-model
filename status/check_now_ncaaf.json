@@ -1,17 +1,41 @@
 {
- "started_utc": "2026-11-19T14:34:04.262312+00:00",
- "finished_utc": "2026-11-19T14:49:43.174722+00:00",
+ "started_utc": "2026-11-19T15:04:05.040235+00:00",
+ "finished_utc": "2026-11-19T15:20:55.712590+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
  "triggers": [
   {
+   "game": "608ce68eb20e7e5201fb1b804ad26141",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "c62889a44c822eaf71b9cd24f4eee875",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "a365d6d7dcd55eca42de4791543e3f80",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "f247efd606eabe7d3d87504bc3af43b4",
+   "text": "anchor_morning"
+  },
+  {
    "game": "9cf7e21a18746ad426fd1d901bdd0a88",
-   "text": "line_move: pinnacle spreads Air Force Falcons -23.0\u2192-22.0; line_move: pinnacle spreads UTEP Miners 23.0\u219222.0; line_move: pinnacle totals Under 47.0\u219248.0; line_move: pinnacle totals Over 47.0\u219248.0"
+   "text": "anchor_morning"
+  },
+  {
+   "game": "59cb6c9beeb879b864784348e3803ff8",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "e497245c3311ac853201a67404dc82ea",
+   "text": "anchor_morning"
   }
  ],
- "games_read": 1,
- "frozen_file": "ai_opinions_20261119T143404Z.parquet",
- "spend_usd": 25.4738,
+ "games_read": 7,
+ "frozen_file": "ai_opinions_20261119T150405Z.parquet",
+ "spend_usd": 25.5956,
  "result": "COMPLETE"
 }
