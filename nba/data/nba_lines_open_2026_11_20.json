@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "3c082b72aa002131c276ff5e24bada1b",
+    "game_date": "2026-11-20",
+    "sport": "NBA",
+    "home_team": "Memphis Grizzlies",
+    "away_team": "Golden State Warriors",
+    "commence_time": "2026-11-20T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 225.5,
+    "over_price": -115,
+    "under_price": -106,
+    "book": "draftkings",
+    "capture_timestamp": "2026-11-19T06:05:02.287128+00:00"
+  },
+  {
+    "game_id": "20fa5e2d73cec494c113790161a89aec",
+    "game_date": "2026-11-20",
+    "sport": "NBA",
+    "home_team": "San Antonio Spurs",
+    "away_team": "Los Angeles Clippers",
+    "commence_time": "2026-11-20T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 227.0,
+    "over_price": -105,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-19T06:05:02.287128+00:00"
+  },
+  {
+    "game_id": "006df00e5e48650d849d1bb4cd81565d",
+    "game_date": "2026-11-20",
+    "sport": "NBA",
+    "home_team": "Milwaukee Bucks",
+    "away_team": "Portland Trail Blazers",
+    "commence_time": "2026-11-20T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 225.5,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "draftkings",
+    "capture_timestamp": "2026-11-19T06:05:02.287128+00:00"
+  },
+  {
+    "game_id": "5ee4efd00c1daaebd8249ff44fd6ac9d",
+    "game_date": "2026-11-20",
+    "sport": "NBA",
+    "home_team": "Minnesota Timberwolves",
+    "away_team": "New York Knicks",
+    "commence_time": "2026-11-20T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 217.5,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "draftkings",
+    "capture_timestamp": "2026-11-19T06:05:02.287128+00:00"
+  }
+]
