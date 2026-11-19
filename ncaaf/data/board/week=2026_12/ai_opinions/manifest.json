@@ -3875,5 +3875,558 @@
     "e4bb95111547a00a8c70a0459ffbd861": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261119T200403Z.parquet",
+  "sha256": "53ca569bbcb3b78122e9421d7fea5c26a52b2e489e0c3880191ee8f72f3e4de4",
+  "logged_utc": "2026-11-19T20:04:03.343263+00:00",
+  "rows": 32,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 11,
+  "no_view_share": 0.656,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261119T200008Z.parquet",
+   "inputs_digest": "{\"8e40a0e75da5dc1e30817debee95239d\": \"4276e45753271618\", \"f45e59db6a335d4ffd3741f83a45327a\": \"4a44a10dd19245c9\", \"ba44f7b0a5535ae2369e8ea165fb287f\": \"ed87e2666fcc3b70\", \"d7b3c2454c6b34f734497049e744bab0\": \"89e1d155f1740a07\", \"347054d00e6c0020484eb64f1ad1b58d\": \"9c4b319ef244b01c\", \"bd9d4f32b0b91c0140a3dd9574f8ae13\": \"6a0e3608cb03f393\", \"3099e24c0ab2767eb9c56f6ef5eeefc2\": \"46862762872ce4f8\", \"725c6205de38f91b507a880c139eda54\": \"296ab37e9302857f\", \"2851a39f971851008dbec9970da34737\": \"235a4ba4409cb291\", \"96d5698a996feb547e098ba4b2178c0c\": \"ec2214dee03724a1\", \"b3f08ccb712c2c765cc2d55b4608a3dd\": \"370cad094c10f6bf\"}",
+   "components": {
+    "8e40a0e75da5dc1e30817debee95239d": {
+     "pinnacle_h2h": [
+      [
+       "Florida Gators",
+       0,
+       -509
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       395
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Gators",
+       -13.5,
+       -107
+      ],
+      [
+       "Vanderbilt Commodores",
+       13.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -108
+      ],
+      [
+       "Under",
+       46.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "Allstate Playoff Predictor",
+      "Clark Lea calls for Vandy's biggest improvement to",
+      "Florida Gators vs. Kentucky Wildcats: Full Highlig",
+      "Florida QB Philo returns to starting spot and lead",
+      "Former Vandy QB, Heisman Trophy runner-up Pavia go",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Injured Russell starts, throws 3 TDs as Alabama su",
+      "Kentucky's CFP hopes take hit in upset loss to Gat",
+      "No. 7 Alabama survives a sloppy 21-6 win over Vand",
+      "QB rankings for all 68 Power 4 college football te",
+      "SEC Now discusses No. 3 Bama's defensive dominatio",
+      "SEC matchup features No. 23 Florida taking on Vand",
+      "Sumrall, Philo emotional after Florida's win vs. N",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "What Chizik knows, wants to know about Bama, UF, O",
+      "Who are the winningest college football coaches of",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "f45e59db6a335d4ffd3741f83a45327a": {
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "AP college football Week 11 poll reaction: What's ",
+      "Alabama running back prospect AK Dear no longer wi",
+      "Allstate Playoff Predictor",
+      "Alyssa Lang analyzes, raises questions about recen",
+      "CFP SEC representation probabilities, teams that c",
+      "College Football Playoff top 12 projection after W",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Injured Russell starts, throws 3 TDs as Alabama su",
+      "Inside the complexities of clock management in col",
+      "Is Alabama too high in the CFP rankings?",
+      "No. 7 Alabama survives a sloppy 21-6 win over Vand",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB rankings for all 68 Power 4 college football te",
+      "SEC Now discusses No. 3 Bama's defensive dominatio",
+      "Sizing up college football's best races down the h",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Wake Forest up to No. 10 in AP poll as top teams a",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "What Chizik knows, wants to know about Bama, UF, O",
+      "Which teams will end up in Atlanta for the final S",
+      "Who are the winningest college football coaches of",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an",
+      "Why Stephen A. has 'no problem' with Alabama ranke"
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "ba44f7b0a5535ae2369e8ea165fb287f": {
+     "pinnacle_h2h": [
+      [
+       "Charlotte 49ers",
+       0,
+       1076
+      ],
+      [
+       "Tulsa Golden Hurricane",
+       0,
+       -1869
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Charlotte 49ers",
+       22.5,
+       -103
+      ],
+      [
+       "Tulsa Golden Hurricane",
+       -22.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -103
+      ],
+      [
+       "Under",
+       52.5,
+       -113
+      ]
+     ],
+     "news": [
+      "Ashton Gray scores twice as East Carolina outlasts",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "Charlotte visits Tulsa in AAC matchup",
+      "East Carolina Pirates vs. Charlotte 49ers: Full Hi",
+      "Florida Atlantic Owls vs. Tulsa Golden Hurricane: ",
+      "Hayes leads Tulsa in another offensive eruption, b",
+      "Haynes leads Tulsa in another offensive eruption, "
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "d7b3c2454c6b34f734497049e744bab0": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -410
+      ],
+      [
+       "Missouri State Bears",
+       0,
+       329
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -10.5,
+       -104
+      ],
+      [
+       "Missouri State Bears",
+       10.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -111
+      ],
+      [
+       "Under",
+       52.5,
+       -105
+      ]
+     ],
+     "news": [
+      "Jacksonville State Gamecocks vs. Western Kentucky ",
+      "Jacksonville State hosts Missouri State in CUSA ac",
+      "Joel Boamah's pick-6 in OT lifts Missouri State ov",
+      "New Mexico State Aggies vs. Missouri State Bears: "
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "347054d00e6c0020484eb64f1ad1b58d": {
+     "pinnacle_h2h": [
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -217
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       187
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Middle Tennessee Blue Raiders",
+       -5.5,
+       -113
+      ],
+      [
+       "Sam Houston State Bearkats",
+       5.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -110
+      ],
+      [
+       "Under",
+       48.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Davis rushes for 126 yards and TD, helps Liberty c",
+      "Middle Tennessee and Sam Houston meet in CUSA acti",
+      "Roman Gagliano throws 23-yard TD pass to Ziyon But"
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "bd9d4f32b0b91c0140a3dd9574f8ae13": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       -583
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       441
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       -13.5,
+       -110
+      ],
+      [
+       "UL Monroe Warhawks",
+       13.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -106
+      ],
+      [
+       "Under",
+       50.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Sun Belt matchup features Appalachian State taking"
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "3099e24c0ab2767eb9c56f6ef5eeefc2": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       -105
+      ],
+      [
+       "South Florida Bulls",
+       0,
+       -107
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       -1.0,
+       101
+      ],
+      [
+       "South Florida Bulls",
+       1.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       64.0,
+       -110
+      ],
+      [
+       "Under",
+       64.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Florida Atlantic Owls vs. Tulsa Golden Hurricane: ",
+      "Hayes leads Tulsa in another offensive eruption, b",
+      "Haynes leads Tulsa in another offensive eruption, ",
+      "South Florida visits Florida Atlantic in AAC actio"
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "725c6205de38f91b507a880c139eda54": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       270
+      ],
+      [
+       "Iowa Hawkeyes",
+       0,
+       -326
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       8.5,
+       -105
+      ],
+      [
+       "Iowa Hawkeyes",
+       -8.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -108
+      ],
+      [
+       "Under",
+       40.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "AP college football Week 11 poll reaction: What's ",
+      "Hank Brown, LJ Phillips lead No. 16 Iowa to 28-7 w",
+      "Illinois may turn to third-string QB Boyd after Ho",
+      "No. 13 Iowa and Illinois meet in Big Ten action",
+      "Power Rankings: The top teams hold their positions",
+      "Purdue rolls with FAA ground stop by taking buses ",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest's post-blowout jab at SMU tops college",
+      "Who are the winningest college football coaches of",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "2851a39f971851008dbec9970da34737": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       314
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -388
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       10.0,
+       101
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       -10.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -104
+      ],
+      [
+       "Under",
+       51.0,
+       -112
+      ]
+     ],
+     "news": [
+      "Coastal Carolina visits Louisiana in Sun Belt matc"
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "96d5698a996feb547e098ba4b2178c0c": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -160
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       141
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -3.0,
+       -115
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -117
+      ],
+      [
+       "Under",
+       53.5,
+       100
+      ]
+     ],
+     "news": [
+      "Florida International Panthers vs. Delaware Blue H",
+      "Joel Boamah's pick-6 in OT lifts Missouri State ov",
+      "Minicucci nears pocket perfection sending Delaware",
+      "New Mexico State Aggies vs. Missouri State Bears: ",
+      "New Mexico State hosts Delaware in CUSA matchup",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    },
+    "b3f08ccb712c2c765cc2d55b4608a3dd": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       144
+      ],
+      [
+       "Kennesaw State Owls",
+       0,
+       -164
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       3.5,
+       -112
+      ],
+      [
+       "Kennesaw State Owls",
+       -3.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       100
+      ],
+      [
+       "Under",
+       45.0,
+       -117
+      ]
+     ],
+     "news": [
+      "CUSA matchup features Kennesaw State playing Flori",
+      "Cam Miller's 88-yard pick-6 highlights Kennesaw St",
+      "Florida International Panthers vs. Delaware Blue H",
+      "Minicucci nears pocket perfection sending Delaware"
+     ],
+     "kalshi_snap": "snap_20261119T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "8e40a0e75da5dc1e30817debee95239d": "horizon_entry: kick in 45h, no prior read",
+    "f45e59db6a335d4ffd3741f83a45327a": "anchor_morning",
+    "ba44f7b0a5535ae2369e8ea165fb287f": "anchor_morning",
+    "d7b3c2454c6b34f734497049e744bab0": "anchor_morning",
+    "347054d00e6c0020484eb64f1ad1b58d": "anchor_morning",
+    "bd9d4f32b0b91c0140a3dd9574f8ae13": "anchor_morning",
+    "3099e24c0ab2767eb9c56f6ef5eeefc2": "anchor_morning",
+    "725c6205de38f91b507a880c139eda54": "anchor_morning",
+    "2851a39f971851008dbec9970da34737": "anchor_morning",
+    "96d5698a996feb547e098ba4b2178c0c": "anchor_morning",
+    "b3f08ccb712c2c765cc2d55b4608a3dd": "anchor_morning"
+   }
+  }
  }
 ]
