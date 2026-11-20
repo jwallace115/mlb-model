@@ -6617,5 +6617,141 @@
     "7585fb8b12453a68ca1195319ae44c78": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T030404Z.parquet",
+  "sha256": "6c1daca88d8574547997d014716c2adbe9f931b62707c096ffac6900601ad91b",
+  "logged_utc": "2026-11-20T03:04:04.593067+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T21:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T030008Z.parquet",
+   "inputs_digest": "{\"cc2b1d4b7378697dc11c744aeb015af9\": \"11369f176c37b971\", \"028f0fcc2f6411c4816e543bb7fa226c\": \"fc6891c455d335ed\"}",
+   "components": {
+    "cc2b1d4b7378697dc11c744aeb015af9": {
+     "pinnacle_h2h": [
+      [
+       "North Dakota State Bison",
+       0,
+       -2930
+      ],
+      [
+       "Northern Illinois Huskies",
+       0,
+       1470
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Dakota State Bison",
+       -25.5,
+       -105
+      ],
+      [
+       "Northern Illinois Huskies",
+       25.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -111
+      ],
+      [
+       "Under",
+       44.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "DJ Scott, Ray James Jr. rally North Dakota State t",
+      "North Dakota State Bison vs. Hawai'i Rainbow Warri",
+      "North Dakota State hosts Northern Illinois in MWC ",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261120T0307Z.parquet"
+    },
+    "028f0fcc2f6411c4816e543bb7fa226c": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -877
+      ],
+      [
+       "San Diego State Aztecs",
+       0,
+       612
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -17.0,
+       -108
+      ],
+      [
+       "San Diego State Aztecs",
+       17.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       61.0,
+       -105
+      ],
+      [
+       "Under",
+       61.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "AP college football Week 11 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "College Football Playoff top 12 projection after W",
+      "Cooper DiLeva kicks 3 FGs, throws TD pass off tric",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "No. 15 Boise State hosts San Diego State in Pac-12",
+      "No. 17 Boise State outlasts Oregon State 46-41 to ",
+      "No. 24 Boise State outlasts Oregon State, to host ",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "cc2b1d4b7378697dc11c744aeb015af9": "line_move: pinnacle totals Over 43.5\u219244.5; line_move: pinnacle totals Under 43.5\u219244.5",
+    "028f0fcc2f6411c4816e543bb7fa226c": "anchor_morning"
+   }
+  }
  }
 ]
