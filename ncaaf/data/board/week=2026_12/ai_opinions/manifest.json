@@ -6274,5 +6274,255 @@
     "fa98066b4b400fb6af0672e170cc584a": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T010403Z.parquet",
+  "sha256": "ca8631d374321e2e67a893ef7254074e8a41bb6dc5200508ed9d0ae87c88b8fb",
+  "logged_utc": "2026-11-20T01:04:03.341026+00:00",
+  "rows": 14,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.714,
+  "revised_rows": 6,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T010008Z.parquet",
+   "inputs_digest": "{\"59cb6c9beeb879b864784348e3803ff8\": \"b9f00135dd480340\", \"4336f3fcf7e287f1609c1822fef8f63d\": \"b7793399628a090a\", \"606426f36cb32d1843f6abbe6f683b76\": \"eeb9e0126c4c6479\", \"89cbfaa2179c40fb894d2460061bce34\": \"5cd1fda8e48909ca\", \"9f3f8efae55dbb803964a5107350e263\": \"64ffa02877b1c128\"}",
+   "components": {
+    "59cb6c9beeb879b864784348e3803ff8": {
+     "pinnacle_h2h": [
+      [
+       "Michigan State Spartans",
+       0,
+       645
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       -939
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan State Spartans",
+       17.5,
+       -103
+      ],
+      [
+       "Oregon Ducks",
+       -17.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -104
+      ],
+      [
+       "Under",
+       45.0,
+       -112
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Allstate Playoff Predictor",
+      "Big Ten matchup features No. 14 Oregon squaring of",
+      "College football takeaways: Lasting impressions fr",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "4336f3fcf7e287f1609c1822fef8f63d": {
+     "pinnacle_h2h": [
+      [
+       "Army Black Knights",
+       0,
+       -240
+      ],
+      [
+       "East Carolina Pirates",
+       0,
+       205
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Army Black Knights",
+       -6.5,
+       -105
+      ],
+      [
+       "East Carolina Pirates",
+       6.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -113
+      ],
+      [
+       "Under",
+       46.0,
+       -103
+      ]
+     ],
+     "news": [
+      "AAC matchup features Army playing East Carolina",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "606426f36cb32d1843f6abbe6f683b76": {
+     "pinnacle_h2h": [
+      [
+       "BYU Cougars",
+       0,
+       -217
+      ],
+      [
+       "Kansas Jayhawks",
+       0,
+       188
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "BYU Cougars",
+       -5.5,
+       -113
+      ],
+      [
+       "Kansas Jayhawks",
+       5.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -106
+      ],
+      [
+       "Under",
+       47.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "AP college football Week 11 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "College Football Playoff top 12 projection after W",
+      "No. 12 BYU and Kansas meet in Big 12 play",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "89cbfaa2179c40fb894d2460061bce34": {
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "Auburn Tigers vs. Mississippi State Bulldogs: Full",
+      "Auburn causes havoc to beat Mississippi State and ",
+      "Block Party: Cubelic almost kicks Harper out of th",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "QB rankings for all 68 Power 4 college football te",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "9f3f8efae55dbb803964a5107350e263": {
+     "pinnacle_h2h": [
+      [
+       "UAB Blazers",
+       0,
+       205
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -240
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "UAB Blazers",
+       6.5,
+       -107
+      ],
+      [
+       "UTSA Roadrunners",
+       -6.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -111
+      ],
+      [
+       "Under",
+       50.0,
+       -105
+      ]
+     ],
+     "news": [
+      "North Texas Mean Green vs. UTSA Roadrunners: Full ",
+      "Peterson's 4 TDs help UTSA beat North Texas 35-16 ",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UAB hosts UTSA in AAC matchup"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "59cb6c9beeb879b864784348e3803ff8": "line_move: pinnacle spreads Oregon Ducks -16.5\u2192-17.5; line_move: pinnacle spreads Michigan State Spartans 16.5\u219217.5",
+    "4336f3fcf7e287f1609c1822fef8f63d": "line_move: pinnacle spreads East Carolina Pirates 5.5\u21926.5; line_move: pinnacle spreads Army Black Knights -5.5\u2192-6.5",
+    "606426f36cb32d1843f6abbe6f683b76": "line_move: pinnacle totals Over 48.0\u219247.0; line_move: pinnacle totals Under 48.0\u219247.0",
+    "89cbfaa2179c40fb894d2460061bce34": "horizon_entry: kick in 43h, no prior read",
+    "9f3f8efae55dbb803964a5107350e263": "anchor_morning"
+   }
+  }
  }
 ]

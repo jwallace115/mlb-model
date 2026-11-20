@@ -1,0 +1,36 @@
+packet built 2026-11-20T01:04Z | snap snap_20261120T010008Z.parquet | props pull none | kalshi none | injuries none
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: line_move: pinnacle spreads Oregon Ducks -16.5→-17.5; line_move: pinnacle spreads Michigan State Spartans 16.5→17.5
+######## Oregon Ducks @ Michigan State Spartans  kick 11-21T01:00Z
+  HR ML: Spartans +700 / Ducks -1300 (no-vig home 0.119) | Pinnacle no-vig home 0.129
+  HR spread: Spartans +17.5 -105 / Ducks -17.5 -115 | Pinnacle Spartans 17.5 (-103) | HR open ? ()
+  HR total: 44.5 O-110/U-110 | Pinnacle 45.0 O-104/U-112 | HR open ?
+  -- injuries: NCAAF has no ESPN injury feed
+
+  WHAT CHANGED: line_move: pinnacle spreads East Carolina Pirates 5.5→6.5; line_move: pinnacle spreads Army Black Knights -5.5→-6.5
+######## East Carolina Pirates @ Army Black Knights  kick 11-21T17:00Z
+  HR ML: Knights -275 / Pirates +220 (no-vig home 0.701) | Pinnacle no-vig home 0.683
+  HR spread: Knights -6.5 -110 / Pirates +6.5 -110 | Pinnacle Knights -6.5 (-105) | HR open ? ()
+  HR total: 45.5 O-110/U-110 | Pinnacle 46.0 O-113/U-103 | HR open ?
+  -- injuries: NCAAF has no ESPN injury feed
+
+  WHAT CHANGED: line_move: pinnacle totals Over 48.0→47.0; line_move: pinnacle totals Under 48.0→47.0
+######## BYU Cougars @ Kansas Jayhawks  kick 11-21T17:00Z
+  HR ML: Jayhawks +175 / Cougars -220 (no-vig home 0.346) | Pinnacle no-vig home 0.337
+  HR spread: Jayhawks +5.5 -110 / Cougars -5.5 -110 | Pinnacle Jayhawks 5.5 (-102) | HR open ? ()
+  HR total: 47.5 O-105/U-110 | Pinnacle 47.0 O-106/U-111 | HR open ?
+  -- injuries: NCAAF has no ESPN injury feed
+
+  WHAT CHANGED: horizon_entry: kick in 43h, no prior read
+######## Samford Bulldogs @ Auburn Tigers  kick 11-21T20:30Z
+  HR spread: Tigers -48.5 -105 / Bulldogs +48.5 -115 | Pinnacle Tigers ? (?) | HR open ? ()
+  HR total: 60.5 O-105/U-120 | Pinnacle ? O?/U? | HR open ?
+  -- injuries: NCAAF has no ESPN injury feed
+
+  WHAT CHANGED: anchor_morning
+######## UTSA Roadrunners @ UAB Blazers  kick 11-22T01:00Z
+  HR ML: Blazers +200 / Roadrunners -260 (no-vig home 0.316) | Pinnacle no-vig home 0.317
+  HR spread: Blazers +5.5 -105 / Roadrunners -5.5 -115 | Pinnacle Blazers 6.5 (-107) | HR open ? ()
+  HR total: 50.5 O-120/U+100 | Pinnacle 50.0 O-111/U-105 | HR open ?
+  -- injuries: NCAAF has no ESPN injury feed
