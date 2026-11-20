@@ -5531,5 +5531,306 @@
     "37f01277971fbdbe6d2b8f77fa63dd52": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T000405Z.parquet",
+  "sha256": "c07e34024dba4a1588f20d1c740db0f67c7112aa74a172f2744ab7dac554c5cb",
+  "logged_utc": "2026-11-20T00:04:05.094044+00:00",
+  "rows": 15,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.533,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.8,
+  "first_kickoff_utc": "2026-11-20T00:35:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T000017Z.parquet",
+   "inputs_digest": "{\"608ce68eb20e7e5201fb1b804ad26141\": \"125406640588b116\", \"9470f469f957e9eddae9392cb23b4623\": \"7d6873634b024a7f\", \"a36fd3d086dffefb5fc58b14fb6255fc\": \"b9356d5ce0f2ce70\", \"8d53f308424d388c9003e02cac8b4cf6\": \"0a7210a485110677\", \"89e434722afd075e5488a6b9310325e9\": \"2cbb42f159a71837\"}",
+   "components": {
+    "608ce68eb20e7e5201fb1b804ad26141": {
+     "pinnacle_h2h": [
+      [
+       "Rice Owls",
+       0,
+       127
+      ],
+      [
+       "Temple Owls",
+       0,
+       -141
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Rice Owls",
+       3.0,
+       -114
+      ],
+      [
+       "Temple Owls",
+       -3.0,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -106
+      ],
+      [
+       "Under",
+       52.5,
+       -110
+      ]
+     ],
+     "news": [
+      "AAC matchup features Temple against Rice",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "Richardson's TD grab makes Tulane's late arrival w",
+      "Rod Robinson II romps for 202 yards, 3 TDs and UAB",
+      "Tulane Green Wave vs. Rice Owls: Full Highlights",
+      "UAB Blazers vs. Temple Owls: Full Highlights"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "9470f469f957e9eddae9392cb23b4623": {
+     "pinnacle_h2h": [
+      [
+       "Arizona Wildcats",
+       0,
+       -288
+      ],
+      [
+       "Kansas State Wildcats",
+       0,
+       242
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Wildcats",
+       -7.5,
+       101
+      ],
+      [
+       "Kansas State Wildcats",
+       7.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -103
+      ],
+      [
+       "Under",
+       52.5,
+       -114
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "Allstate Playoff Predictor",
+      "Dampier accounts for 4 TDs, No. 2 Utah remains und",
+      "No. 19 Arizona and Kansas State meet in Big 12 act",
+      "No. 2 Utah survives, stays unbeaten on late 70-yar",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "QB rankings for all 68 Power 4 college football te",
+      "TCU beats Kansas State 20-10 after Wildcats' fligh",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Utah survives, takes down Arizona to remain undefe",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who are the winningest college football coaches of",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "a36fd3d086dffefb5fc58b14fb6255fc": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas State Red Wolves",
+       0,
+       416
+      ],
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -542
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas State Red Wolves",
+       14.0,
+       -108
+      ],
+      [
+       "Louisiana Tech Bulldogs",
+       -14.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -117
+      ],
+      [
+       "Under",
+       53.0,
+       100
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "Arkansas State fires Butch Jones, names Jalen Orti",
+      "Blake Baker, Jordan McRae, Jadon Mayfield spark Lo",
+      "Louisiana Tech takes on Arkansas State in Sun Belt",
+      "Sources: Arkansas State tells Butch Jones he's out",
+      "Southern Miss Golden Eagles vs. Louisiana Tech Bul"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "8d53f308424d388c9003e02cac8b4cf6": {
+     "pinnacle_h2h": [
+      [
+       "Miami Hurricanes",
+       0,
+       -1355
+      ],
+      [
+       "Virginia Tech Hokies",
+       0,
+       851
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami Hurricanes",
+       -20.5,
+       -109
+      ],
+      [
+       "Virginia Tech Hokies",
+       20.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       61.0,
+       -106
+      ],
+      [
+       "Under",
+       61.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "AP college football Week 11 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "Breaking down the major futures for the Big Ten, f",
+      "College Football Playoff top 12 projection after W",
+      "College football takeaways: Lasting impressions fr",
+      "Darian Mensah dices up ex-team Duke as Miami rebou",
+      "Ford, Stanford defense propel Cardinal to 40-22 vi",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "Mensah, Mallory lead No. 5 Miami past Duke 36-25 a",
+      "No. 5 Miami (FL) takes on Virginia Tech in ACC act",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB rankings for all 68 Power 4 college football te",
+      "Stanford Cardinal vs. Virginia Tech Hokies: Full H",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Wake Forest up to No. 10 in AP poll as top teams a",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Where is 'College GameDay'? 2026 schedule, locatio",
+      "Who are the winningest college football coaches of",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "89e434722afd075e5488a6b9310325e9": {
+     "pinnacle_h2h": [
+      [
+       "San Jose State Spartans",
+       0,
+       212
+      ],
+      [
+       "UNLV Rebels",
+       0,
+       -249
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "San Jose State Spartans",
+       7.0,
+       -112
+      ],
+      [
+       "UNLV Rebels",
+       -7.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -112
+      ],
+      [
+       "Under",
+       46.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "Jackson Arnold rallies UNLV past No. 23 New Mexico",
+      "San Jose State hosts UNLV in MWC matchup",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UNLV storms back beat New Mexico with pair of 4th-"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "608ce68eb20e7e5201fb1b804ad26141": "anchor_close",
+    "9470f469f957e9eddae9392cb23b4623": "anchor_morning",
+    "a36fd3d086dffefb5fc58b14fb6255fc": "anchor_morning",
+    "8d53f308424d388c9003e02cac8b4cf6": "anchor_morning",
+    "89e434722afd075e5488a6b9310325e9": "anchor_morning"
+   }
+  }
  }
 ]
