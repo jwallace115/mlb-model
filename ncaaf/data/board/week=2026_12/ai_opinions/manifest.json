@@ -10610,5 +10610,89 @@
     "6e36f5c3c55edcb31749b0de4a146d14": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T171903Z.parquet",
+  "sha256": "6852a52409b559a72c45b64cc61e6291592e2c81308dc69e55d659b9dcdb864f",
+  "logged_utc": "2026-11-20T17:19:03.705277+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-21T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T170006Z.parquet",
+   "inputs_digest": "{\"59cb6c9beeb879b864784348e3803ff8\": \"d6fe4f5e32062617\"}",
+   "components": {
+    "59cb6c9beeb879b864784348e3803ff8": {
+     "pinnacle_h2h": [
+      [
+       "Michigan State Spartans",
+       0,
+       650
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       -884
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan State Spartans",
+       17.5,
+       -107
+      ],
+      [
+       "Oregon Ducks",
+       -17.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -106
+      ],
+      [
+       "Under",
+       44.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Allstate Playoff Predictor",
+      "Big Ten matchup features No. 14 Oregon squaring of",
+      "College football takeaways: Lasting impressions fr",
+      "Connelly on Week 12: Test for Tennessee; Big Ten f",
+      "Power Rankings: The top teams hold their positions",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T1737Z.parquet"
+    }
+   },
+   "triggers": {
+    "59cb6c9beeb879b864784348e3803ff8": "line_move: pinnacle totals Over 45.0\u219244.0; line_move: pinnacle totals Under 45.0\u219244.0"
+   }
+  }
  }
 ]

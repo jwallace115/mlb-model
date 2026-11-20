@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "43b2e285559dbe2bb5ddc1665bccddf2",
+    "game_date": "2026-11-20",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Edmonton Oilers",
+    "commence_time": "2026-11-21T18:00:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 6.5,
+    "over_price": 105,
+    "under_price": -120,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-20T18:00:05.802708+00:00"
+  },
+  {
+    "game_id": "b9678f4fdeb3125258b4679e9785fffb",
+    "game_date": "2026-11-20",
+    "sport": "NHL",
+    "home_team": "Calgary Flames",
+    "away_team": "Chicago Blackhawks",
+    "commence_time": "2026-11-21T20:30:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 6.0,
+    "over_price": -101,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-20T18:00:05.802708+00:00"
+  },
+  {
+    "game_id": "627813427faf8d3b73ff1fe4be6bc7d6",
+    "game_date": "2026-11-20",
+    "sport": "NHL",
+    "home_team": "Florida Panthers",
+    "away_team": "Buffalo Sabres",
+    "commence_time": "2026-11-21T23:00:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 6.0,
+    "over_price": -118,
+    "under_price": 103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-20T18:00:05.802708+00:00"
+  },
+  {
+    "game_id": "d393852cc4dc6ab621ca0cd1f6ccaccc",
+    "game_date": "2026-11-20",
+    "sport": "NHL",
+    "home_team": "Nashville Predators",
+    "away_team": "Pittsburgh Penguins",
+    "commence_time": "2026-11-21T23:00:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 6.5,
+    "over_price": -101,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-20T18:00:05.802708+00:00"
+  }
+]
