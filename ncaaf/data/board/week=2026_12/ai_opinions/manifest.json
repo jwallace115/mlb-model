@@ -10766,5 +10766,80 @@
     "561b0188c024ce49bdd77391f44dc605": "line_move: pinnacle totals Under 51.0\u219252.0; line_move: pinnacle totals Over 51.0\u219252.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T200403Z.parquet",
+  "sha256": "500cb9b506e1d1a56f015c905519448400e6e806986bdb0734e4e40d7a4846ef",
+  "logged_utc": "2026-11-20T20:04:03.949616+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 33.9,
+  "first_kickoff_utc": "2026-11-20T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T193011Z.parquet",
+   "inputs_digest": "{\"c62889a44c822eaf71b9cd24f4eee875\": \"578b147a42435ed4\"}",
+   "components": {
+    "c62889a44c822eaf71b9cd24f4eee875": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       -117
+      ],
+      [
+       "UCF Knights",
+       0,
+       106
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       -1.0,
+       -112
+      ],
+      [
+       "UCF Knights",
+       1.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -113
+      ],
+      [
+       "Under",
+       48.5,
+       -103
+      ]
+     ],
+     "news": [
+      "Florida State going turquoise tops best uniforms o",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UCF meets Iowa State in Big 12 play",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261120T2007Z.parquet"
+    }
+   },
+   "triggers": {
+    "c62889a44c822eaf71b9cd24f4eee875": "anchor_prekick"
+   }
+  }
  }
 ]
