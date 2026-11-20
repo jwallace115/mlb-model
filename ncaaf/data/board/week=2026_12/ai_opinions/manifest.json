@@ -10967,5 +10967,186 @@
     "f247efd606eabe7d3d87504bc3af43b4": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T223403Z.parquet",
+  "sha256": "f0f0be3f89b18e1220a66908c632ef1f5397d92f6301573c320e5b3982c15d45",
+  "logged_utc": "2026-11-20T22:34:03.447422+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 4,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-20T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T223007Z.parquet",
+   "inputs_digest": "{\"c62889a44c822eaf71b9cd24f4eee875\": \"ae8af44d3f2bc326\", \"9cf7e21a18746ad426fd1d901bdd0a88\": \"b003a144633a359e\", \"59cb6c9beeb879b864784348e3803ff8\": \"58281937c0fe86d3\"}",
+   "components": {
+    "c62889a44c822eaf71b9cd24f4eee875": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       -115
+      ],
+      [
+       "UCF Knights",
+       0,
+       106
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       -1.0,
+       -110
+      ],
+      [
+       "UCF Knights",
+       1.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -115
+      ],
+      [
+       "Under",
+       49.5,
+       -101
+      ]
+     ],
+     "news": [
+      "Florida State going turquoise tops best uniforms o",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UCF meets Iowa State in Big 12 play",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261120T2237Z.parquet"
+    },
+    "9cf7e21a18746ad426fd1d901bdd0a88": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       -1838
+      ],
+      [
+       "UTEP Miners",
+       0,
+       1153
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       -22.0,
+       -110
+      ],
+      [
+       "UTEP Miners",
+       22.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -108
+      ],
+      [
+       "Under",
+       49.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "MWC matchup features Air Force squaring off agains",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UTEP fires head coach Scotty Walden following 8th "
+     ],
+     "kalshi_snap": "snap_20261120T2237Z.parquet"
+    },
+    "59cb6c9beeb879b864784348e3803ff8": {
+     "pinnacle_h2h": [
+      [
+       "Michigan State Spartans",
+       0,
+       656
+      ],
+      [
+       "Oregon Ducks",
+       0,
+       -893
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan State Spartans",
+       17.5,
+       -105
+      ],
+      [
+       "Oregon Ducks",
+       -17.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -102
+      ],
+      [
+       "Under",
+       43.0,
+       -114
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Big Ten matchup features No. 14 Oregon squaring of",
+      "College football takeaways: Lasting impressions fr",
+      "Connelly on Week 12: Test for Tennessee; Big Ten f",
+      "Power Rankings: The top teams hold their positions",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T2237Z.parquet"
+    }
+   },
+   "triggers": {
+    "c62889a44c822eaf71b9cd24f4eee875": "anchor_close",
+    "9cf7e21a18746ad426fd1d901bdd0a88": "anchor_prekick",
+    "59cb6c9beeb879b864784348e3803ff8": "anchor_prekick"
+   }
+  }
  }
 ]
