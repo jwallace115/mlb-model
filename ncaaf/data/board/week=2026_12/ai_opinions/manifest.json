@@ -5445,5 +5445,91 @@
     "cbe55180a8bee495fa1520fbc1df314b": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261119T233404Z.parquet",
+  "sha256": "bc481376f6b2ca86296cab7a329d22e2ba5e3f6c32acb80b85be1cdb2ca8fb6b",
+  "logged_utc": "2026-11-19T23:34:04.012136+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-21T23:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261119T233006Z.parquet",
+   "inputs_digest": "{\"37f01277971fbdbe6d2b8f77fa63dd52\": \"7c52466ba6019a28\"}",
+   "components": {
+    "37f01277971fbdbe6d2b8f77fa63dd52": {
+     "pinnacle_h2h": [
+      [
+       "Maryland Terrapins",
+       0,
+       629
+      ],
+      [
+       "USC Trojans",
+       0,
+       -910
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Maryland Terrapins",
+       17.0,
+       -101
+      ],
+      [
+       "USC Trojans",
+       -17.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -112
+      ],
+      [
+       "Under",
+       57.5,
+       -104
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 11 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "Grant Wilson delivers as Indiana boosts CFP, Big T",
+      "Grant Wilson throws 2 TD passes, No. 6 Indiana bea",
+      "Indiana takes down USC 27-13 in pivotal Big Ten sh",
+      "No. 18 USC and Maryland meet in Big Ten action",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sources: Urban Meyer not a candidate for open Mary",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261119T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "37f01277971fbdbe6d2b8f77fa63dd52": "anchor_morning"
+   }
+  }
  }
 ]
