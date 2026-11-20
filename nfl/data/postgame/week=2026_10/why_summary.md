@@ -1,6 +1,6 @@
 # WHY Summary — Week 10
 
-Generated: 2026-11-19T12:27:57.693791+00:00
+Generated: 2026-11-20T12:17:33.797342+00:00
 
 
 ## Graded rows
