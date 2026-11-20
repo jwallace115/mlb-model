@@ -6753,5 +6753,280 @@
     "028f0fcc2f6411c4816e543bb7fa226c": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T041903Z.parquet",
+  "sha256": "8e21f14666f816faee08508cb9f9c295e73d2c767d7421d49095d3a4257bf9f5",
+  "logged_utc": "2026-11-20T04:19:03.976741+00:00",
+  "rows": 15,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.667,
+  "revised_rows": 4,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-21T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T040007Z.parquet",
+   "inputs_digest": "{\"329bbea44b2c7efcbb9243e25099495e\": \"5073eee5e80f1644\", \"89e434722afd075e5488a6b9310325e9\": \"62c64b4e23c97242\", \"ecfec2fe1db57f88e603f9947add1e26\": \"c1744d809f85d78a\", \"430ea047c8a027987881d51f810a6cf8\": \"90c2c0878fd2b5fa\", \"6e36f5c3c55edcb31749b0de4a146d14\": \"fab937e0175eedad\"}",
+   "components": {
+    "329bbea44b2c7efcbb9243e25099495e": {
+     "pinnacle_h2h": [
+      [
+       "Houston Cougars",
+       0,
+       -295
+      ],
+      [
+       "West Virginia Mountaineers",
+       0,
+       247
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Houston Cougars",
+       -7.5,
+       -102
+      ],
+      [
+       "West Virginia Mountaineers",
+       7.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       70.5,
+       -108
+      ],
+      [
+       "Under",
+       70.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 11 poll reaction: What's ",
+      "No. 20 Houston meets West Virginia in Big 12 play",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "QB rankings for all 68 Power 4 college football te",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T0307Z.parquet"
+    },
+    "89e434722afd075e5488a6b9310325e9": {
+     "pinnacle_h2h": [
+      [
+       "San Jose State Spartans",
+       0,
+       212
+      ],
+      [
+       "UNLV Rebels",
+       0,
+       -249
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "San Jose State Spartans",
+       7.0,
+       -112
+      ],
+      [
+       "UNLV Rebels",
+       -7.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Allstate Playoff Predictor",
+      "San Jose State hosts UNLV in MWC matchup",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261120T0307Z.parquet"
+    },
+    "ecfec2fe1db57f88e603f9947add1e26": {
+     "pinnacle_h2h": [
+      [
+       "Arizona State Sun Devils",
+       0,
+       124
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -140
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona State Sun Devils",
+       2.5,
+       103
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -2.5,
+       -118
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       59.5,
+       -110
+      ],
+      [
+       "Under",
+       59.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft: Dolphins, Titans, Eagles, Jets, Ch",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "AP college football Week 11 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "No. 10 Texas Tech routs Oklahoma State 52-27",
+      "Oklahoma State and Arizona State meet in Big 12 ac",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Texas Tech Red Raiders vs. Oklahoma State Cowboys:",
+      "Texas Tech picks up huge road win over Oklahoma St",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261120T0307Z.parquet"
+    },
+    "430ea047c8a027987881d51f810a6cf8": {
+     "pinnacle_h2h": [
+      [
+       "Hawaii Rainbow Warriors",
+       0,
+       189
+      ],
+      [
+       "Nevada Wolf Pack",
+       0,
+       -219
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Hawaii Rainbow Warriors",
+       5.5,
+       -106
+      ],
+      [
+       "Nevada Wolf Pack",
+       -5.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -112
+      ],
+      [
+       "Under",
+       40.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Nevada meets Hawaii in MWC play",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261120T0307Z.parquet"
+    },
+    "6e36f5c3c55edcb31749b0de4a146d14": {
+     "pinnacle_h2h": [
+      [
+       "Oregon State Beavers",
+       0,
+       -321
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       267
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oregon State Beavers",
+       -9.5,
+       -101
+      ],
+      [
+       "Utah State Aggies",
+       9.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -104
+      ],
+      [
+       "Under",
+       50.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Cooper DiLeva kicks 3 FGs, throws TD pass off tric",
+      "No. 17 Boise State outlasts Oregon State 46-41 to ",
+      "No. 24 Boise State outlasts Oregon State, to host ",
+      "Patience starting to run thin for head coaches in ",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Utah State visits Oregon State in Pac-12 matchup"
+     ],
+     "kalshi_snap": "snap_20261120T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "329bbea44b2c7efcbb9243e25099495e": "line_move: pinnacle spreads West Virginia Mountaineers 8.5\u21927.5; line_move: pinnacle spreads Houston Cougars -8.5\u2192-7.5",
+    "89e434722afd075e5488a6b9310325e9": "line_move: pinnacle totals Under 46.5\u219247.5; line_move: pinnacle totals Over 46.5\u219247.5",
+    "ecfec2fe1db57f88e603f9947add1e26": "anchor_morning",
+    "430ea047c8a027987881d51f810a6cf8": "anchor_morning",
+    "6e36f5c3c55edcb31749b0de4a146d14": "anchor_morning"
+   }
+  }
  }
 ]
