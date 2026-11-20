@@ -1,12 +1,37 @@
 {
- "started_utc": "2026-11-20T14:19:05.022303+00:00",
- "finished_utc": "2026-11-20T14:19:05.720619+00:00",
+ "started_utc": "2026-11-20T14:34:03.952197+00:00",
+ "finished_utc": "2026-11-20T14:50:10.616153+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "c62889a44c822eaf71b9cd24f4eee875",
+   "text": "line_move: pinnacle spreads Iowa State Cyclones 1.0\u2192-1.5; line_move: pinnacle spreads UCF Knights -1.0\u21921.5"
+  },
+  {
+   "game": "a365d6d7dcd55eca42de4791543e3f80",
+   "text": "line_move: pinnacle totals Over 48.5\u219246.5; line_move: pinnacle totals Under 48.5\u219246.5"
+  },
+  {
+   "game": "9cf7e21a18746ad426fd1d901bdd0a88",
+   "text": "line_move: pinnacle totals Over 48.0\u219247.0; line_move: pinnacle totals Under 48.0\u219247.0"
+  },
+  {
+   "game": "e497245c3311ac853201a67404dc82ea",
+   "text": "line_move: pinnacle spreads New Mexico Lobos -7.5\u2192-9.0; line_move: pinnacle spreads Wyoming Cowboys 7.5\u21929.0"
+  },
+  {
+   "game": "1f59b6d72003ce254b32c815e73b252d",
+   "text": "line_move: pinnacle totals Over 43.5\u219242.5; line_move: pinnacle totals Under 43.5\u219242.5"
+  },
+  {
+   "game": "b3f08ccb712c2c765cc2d55b4608a3dd",
+   "text": "ml_move: pinnacle novig 0.397\u21920.432"
+  }
+ ],
+ "games_read": 6,
+ "frozen_file": "ai_opinions_20261120T143403Z.parquet",
+ "spend_usd": 26.5636,
+ "result": "COMPLETE"
 }

@@ -7028,5 +7028,316 @@
     "6e36f5c3c55edcb31749b0de4a146d14": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T143403Z.parquet",
+  "sha256": "ac254ee3a820bb7a4cf50aa49dccea96032764a39b0a3f31e2643e3d6d40074d",
+  "logged_utc": "2026-11-20T14:34:03.952197+00:00",
+  "rows": 18,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 6,
+  "no_view_share": 0.667,
+  "revised_rows": 14,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-20T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T143006Z.parquet",
+   "inputs_digest": "{\"c62889a44c822eaf71b9cd24f4eee875\": \"756862ac6b7414c2\", \"a365d6d7dcd55eca42de4791543e3f80\": \"8056ecb2230127bd\", \"9cf7e21a18746ad426fd1d901bdd0a88\": \"02111e5b9759dec9\", \"e497245c3311ac853201a67404dc82ea\": \"ad299e040cad9620\", \"1f59b6d72003ce254b32c815e73b252d\": \"2bd7ba119e380226\", \"b3f08ccb712c2c765cc2d55b4608a3dd\": \"3be38c304a7e4b58\"}",
+   "components": {
+    "c62889a44c822eaf71b9cd24f4eee875": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       -110
+      ],
+      [
+       "UCF Knights",
+       0,
+       100
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       -1.5,
+       -102
+      ],
+      [
+       "UCF Knights",
+       1.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -105
+      ],
+      [
+       "Under",
+       48.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UCF meets Iowa State in Big 12 play",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261120T1437Z.parquet"
+    },
+    "a365d6d7dcd55eca42de4791543e3f80": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       547
+      ],
+      [
+       "Toledo Rockets",
+       0,
+       -715
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       16.5,
+       -105
+      ],
+      [
+       "Toledo Rockets",
+       -16.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -105
+      ],
+      [
+       "Under",
+       46.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "Sizing up college football's best races down the h",
+      "Toledo hosts Bowling Green in MAC play"
+     ],
+     "kalshi_snap": "snap_20261120T1437Z.parquet"
+    },
+    "9cf7e21a18746ad426fd1d901bdd0a88": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       -1712
+      ],
+      [
+       "UTEP Miners",
+       0,
+       1093
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       -22.0,
+       -102
+      ],
+      [
+       "UTEP Miners",
+       22.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -111
+      ],
+      [
+       "Under",
+       47.0,
+       -105
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "MWC matchup features Air Force squaring off agains",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "UTEP fires head coach Scotty Walden following 8th "
+     ],
+     "kalshi_snap": "snap_20261120T1437Z.parquet"
+    },
+    "e497245c3311ac853201a67404dc82ea": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -338
+      ],
+      [
+       "Wyoming Cowboys",
+       0,
+       287
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -9.0,
+       -108
+      ],
+      [
+       "Wyoming Cowboys",
+       9.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.5,
+       -113
+      ],
+      [
+       "Under",
+       37.5,
+       -103
+      ]
+     ],
+     "news": [
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "Power Rankings: The top teams hold their positions",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Wyoming hosts New Mexico in MWC matchup"
+     ],
+     "kalshi_snap": "snap_20261120T1437Z.parquet"
+    },
+    "1f59b6d72003ce254b32c815e73b252d": {
+     "pinnacle_h2h": [
+      [
+       "North Carolina Tar Heels",
+       0,
+       105
+      ],
+      [
+       "Virginia Cavaliers",
+       0,
+       -118
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Carolina Tar Heels",
+       1.5,
+       -107
+      ],
+      [
+       "Virginia Cavaliers",
+       -1.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -109
+      ],
+      [
+       "Under",
+       42.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "ACC matchup features Virginia against North Caroli",
+      "ACC suspends Louisville LB Clark, UNC DB Smith ove",
+      "Bill Belichick, Robert Kraft named Hall of Fame fi",
+      "Pawn shop fighting 'Gold Digger' trademark filed b",
+      "QB rankings for all 68 Power 4 college football te",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261120T1437Z.parquet"
+    },
+    "b3f08ccb712c2c765cc2d55b4608a3dd": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       125
+      ],
+      [
+       "Kennesaw State Owls",
+       0,
+       -141
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       3.0,
+       -113
+      ],
+      [
+       "Kennesaw State Owls",
+       -3.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       101
+      ],
+      [
+       "Under",
+       45.0,
+       -117
+      ]
+     ],
+     "news": [
+      "CUSA matchup features Kennesaw State playing Flori"
+     ],
+     "kalshi_snap": "snap_20261120T1437Z.parquet"
+    }
+   },
+   "triggers": {
+    "c62889a44c822eaf71b9cd24f4eee875": "line_move: pinnacle spreads Iowa State Cyclones 1.0\u2192-1.5; line_move: pinnacle spreads UCF Knights -1.0\u21921.5",
+    "a365d6d7dcd55eca42de4791543e3f80": "line_move: pinnacle totals Over 48.5\u219246.5; line_move: pinnacle totals Under 48.5\u219246.5",
+    "9cf7e21a18746ad426fd1d901bdd0a88": "line_move: pinnacle totals Over 48.0\u219247.0; line_move: pinnacle totals Under 48.0\u219247.0",
+    "e497245c3311ac853201a67404dc82ea": "line_move: pinnacle spreads New Mexico Lobos -7.5\u2192-9.0; line_move: pinnacle spreads Wyoming Cowboys 7.5\u21929.0",
+    "1f59b6d72003ce254b32c815e73b252d": "line_move: pinnacle totals Over 43.5\u219242.5; line_move: pinnacle totals Under 43.5\u219242.5",
+    "b3f08ccb712c2c765cc2d55b4608a3dd": "ml_move: pinnacle novig 0.397\u21920.432"
+   }
+  }
  }
 ]
