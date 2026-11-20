@@ -11148,5 +11148,79 @@
     "59cb6c9beeb879b864784348e3803ff8": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T230404Z.parquet",
+  "sha256": "3f49b22baaf1b1f6f7e215cfcd81311ff16e3e467099a97ea4de70dac0dd8048",
+  "logged_utc": "2026-11-20T23:04:04.055311+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-21T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T230006Z.parquet",
+   "inputs_digest": "{\"e497245c3311ac853201a67404dc82ea\": \"9889ba806a9db586\"}",
+   "components": {
+    "e497245c3311ac853201a67404dc82ea": {
+     "pinnacle_h2h": [
+      [
+       "New Mexico Lobos",
+       0,
+       -353
+      ],
+      [
+       "Wyoming Cowboys",
+       0,
+       299
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "New Mexico Lobos",
+       -9.0,
+       -114
+      ],
+      [
+       "Wyoming Cowboys",
+       9.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.5,
+       -115
+      ],
+      [
+       "Under",
+       37.5,
+       -101
+      ]
+     ],
+     "news": [
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "Power Rankings: The top teams hold their positions",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Wyoming hosts New Mexico in MWC matchup"
+     ],
+     "kalshi_snap": "snap_20261120T2307Z.parquet"
+    }
+   },
+   "triggers": {
+    "e497245c3311ac853201a67404dc82ea": "anchor_prekick"
+   }
+  }
  }
 ]
