@@ -6524,5 +6524,98 @@
     "9f3f8efae55dbb803964a5107350e263": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T020403Z.parquet",
+  "sha256": "19fc0fa361b980383d6dfb4f8de9eafb7875a5b862dfee7e74dd0a811b0e9c16",
+  "logged_utc": "2026-11-20T02:04:03.900468+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-22T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T020010Z.parquet",
+   "inputs_digest": "{\"7585fb8b12453a68ca1195319ae44c78\": \"bb57fab864700c7c\"}",
+   "components": {
+    "7585fb8b12453a68ca1195319ae44c78": {
+     "pinnacle_h2h": [
+      [
+       "TCU Horned Frogs",
+       0,
+       232
+      ],
+      [
+       "Utah Utes",
+       0,
+       -275
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "TCU Horned Frogs",
+       7.0,
+       -103
+      ],
+      [
+       "Utah Utes",
+       -7.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -109
+      ],
+      [
+       "Under",
+       46.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "AP college football Week 11 poll reaction: What's ",
+      "Breaking down the major futures for the Big Ten, f",
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "College Football Playoff top 12 projection after W",
+      "Dampier accounts for 4 TDs, No. 2 Utah remains und",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "No. 2 Utah survives, stays unbeaten on late 70-yar",
+      "No. 2 Utah visits TCU, close to Big 12 title game ",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB rankings for all 68 Power 4 college football te",
+      "TCU beats Kansas State 20-10 after Wildcats' fligh",
+      "TCU hosts No. 2 Utah in Big 12 matchup",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Utah survives, takes down Arizona to remain undefe",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Wake Forest up to No. 10 in AP poll as top teams a",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "7585fb8b12453a68ca1195319ae44c78": "anchor_morning"
+   }
+  }
  }
 ]
