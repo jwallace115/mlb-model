@@ -1,37 +1,269 @@
 {
- "started_utc": "2026-11-20T14:34:03.952197+00:00",
- "finished_utc": "2026-11-20T14:50:10.616153+00:00",
+ "started_utc": "2026-11-20T15:04:03.633207+00:00",
+ "finished_utc": "2026-11-20T15:21:17.671313+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
  "triggers": [
   {
    "game": "c62889a44c822eaf71b9cd24f4eee875",
-   "text": "line_move: pinnacle spreads Iowa State Cyclones 1.0\u2192-1.5; line_move: pinnacle spreads UCF Knights -1.0\u21921.5"
+   "text": "anchor_morning"
   },
   {
    "game": "a365d6d7dcd55eca42de4791543e3f80",
-   "text": "line_move: pinnacle totals Over 48.5\u219246.5; line_move: pinnacle totals Under 48.5\u219246.5"
+   "text": "anchor_morning"
+  },
+  {
+   "game": "f247efd606eabe7d3d87504bc3af43b4",
+   "text": "anchor_morning"
   },
   {
    "game": "9cf7e21a18746ad426fd1d901bdd0a88",
-   "text": "line_move: pinnacle totals Over 48.0\u219247.0; line_move: pinnacle totals Under 48.0\u219247.0"
+   "text": "anchor_morning"
+  },
+  {
+   "game": "59cb6c9beeb879b864784348e3803ff8",
+   "text": "anchor_morning"
   },
   {
    "game": "e497245c3311ac853201a67404dc82ea",
-   "text": "line_move: pinnacle spreads New Mexico Lobos -7.5\u2192-9.0; line_move: pinnacle spreads Wyoming Cowboys 7.5\u21929.0"
+   "text": "anchor_morning"
+  },
+  {
+   "game": "03a07ec7a62fbc2d6bf4748aafd30303",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "4336f3fcf7e287f1609c1822fef8f63d",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "606426f36cb32d1843f6abbe6f683b76",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "561b0188c024ce49bdd77391f44dc605",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "01aaf98c4f62bba0a964a9b400666516",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "8e40a0e75da5dc1e30817debee95239d",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "ffbcf81433c3067468208b6d5b91aa83",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "af2b2232df20a470d516dbe474a63132",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "ce564e264da03668e25badeb960753cc",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "b40838a45d9aeb25fb42668402caae13",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "79d5d7992b8c0600feda74e2225553fe",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "d0761a1e0c66eaf4608f5c61ac79b3c2",
+   "text": "anchor_morning"
   },
   {
    "game": "1f59b6d72003ce254b32c815e73b252d",
-   "text": "line_move: pinnacle totals Over 43.5\u219242.5; line_move: pinnacle totals Under 43.5\u219242.5"
+   "text": "anchor_morning"
+  },
+  {
+   "game": "329bbea44b2c7efcbb9243e25099495e",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "75136fdcc4601e9e1208fe20146056dc",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "e4bb95111547a00a8c70a0459ffbd861",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "f45e59db6a335d4ffd3741f83a45327a",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "ba44f7b0a5535ae2369e8ea165fb287f",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "d7b3c2454c6b34f734497049e744bab0",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "347054d00e6c0020484eb64f1ad1b58d",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "bd9d4f32b0b91c0140a3dd9574f8ae13",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "3099e24c0ab2767eb9c56f6ef5eeefc2",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "725c6205de38f91b507a880c139eda54",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "2851a39f971851008dbec9970da34737",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "96d5698a996feb547e098ba4b2178c0c",
+   "text": "anchor_morning"
   },
   {
    "game": "b3f08ccb712c2c765cc2d55b4608a3dd",
-   "text": "ml_move: pinnacle novig 0.397\u21920.432"
+   "text": "anchor_morning"
+  },
+  {
+   "game": "c3b7f980521e9fb576ce8dbd49a9f7de",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "89cbfaa2179c40fb894d2460061bce34",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "1a3e1206e330ec66aa9a0549b4d3409c",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "7f9809c817e27ec2d9f8a24e8e19a8ff",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "6b40f07e146bab0dba574f0d3b07659e",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "0cdac6d2b6c2cbfb0f734a8cdfbe086e",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "ae9b81f4814e1d9dae835a13f4245ce3",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "59e78be3159c6fdb928c6737f6ff68e4",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "3a5bb507e8305c5de6aa0b6c1e43e638",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "5c082e013b5328e3db1def552628765f",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "0a1a6c2630e51e32d24695f02c0b3f23",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "e17410526acddf2500fb788f40901b3f",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "cc2b1d4b7378697dc11c744aeb015af9",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "6d977752327ee29e19d3e1856683efee",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "cbe55180a8bee495fa1520fbc1df314b",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "37f01277971fbdbe6d2b8f77fa63dd52",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "9470f469f957e9eddae9392cb23b4623",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "a36fd3d086dffefb5fc58b14fb6255fc",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "8d53f308424d388c9003e02cac8b4cf6",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "89e434722afd075e5488a6b9310325e9",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "4e40d05a5d98ac108cd15278646a545d",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "f23bc59387b6db63ad3de8b6bcc541fc",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "a05c0d32b35dfd5cca63a61af28b9739",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "0bb0c3e15e4a8004f708162c14c5575d",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "44e73391c2ac535ab552aac4bdcfa3b3",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "fa98066b4b400fb6af0672e170cc584a",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "9f3f8efae55dbb803964a5107350e263",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "7585fb8b12453a68ca1195319ae44c78",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "028f0fcc2f6411c4816e543bb7fa226c",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "ecfec2fe1db57f88e603f9947add1e26",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "430ea047c8a027987881d51f810a6cf8",
+   "text": "anchor_morning"
+  },
+  {
+   "game": "6e36f5c3c55edcb31749b0de4a146d14",
+   "text": "anchor_morning"
   }
  ],
- "games_read": 6,
- "frozen_file": "ai_opinions_20261120T143403Z.parquet",
- "spend_usd": 26.5636,
+ "games_read": 64,
+ "frozen_file": "ai_opinions_20261120T150403Z.parquet",
+ "spend_usd": 27.298,
  "result": "COMPLETE"
 }
