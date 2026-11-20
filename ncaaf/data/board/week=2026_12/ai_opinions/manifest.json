@@ -5832,5 +5832,447 @@
     "89e434722afd075e5488a6b9310325e9": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T003405Z.parquet",
+  "sha256": "0fe089fdbe91fdcbb63810446e6d47d078b11e28cc5635a77acae2676f0da602",
+  "logged_utc": "2026-11-20T00:34:05.179973+00:00",
+  "rows": 20,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 7,
+  "no_view_share": 0.65,
+  "revised_rows": 2,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-21T20:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T003007Z.parquet",
+   "inputs_digest": "{\"3a5bb507e8305c5de6aa0b6c1e43e638\": \"f610de0b8d9c9dd3\", \"4e40d05a5d98ac108cd15278646a545d\": \"e37b7a8a08f35674\", \"f23bc59387b6db63ad3de8b6bcc541fc\": \"3a041e1c426371d3\", \"a05c0d32b35dfd5cca63a61af28b9739\": \"d4cef1308d30fe86\", \"0bb0c3e15e4a8004f708162c14c5575d\": \"b3d2967f30ff4b06\", \"44e73391c2ac535ab552aac4bdcfa3b3\": \"94ee73505d48d4a8\", \"fa98066b4b400fb6af0672e170cc584a\": \"419934c4c1072d81\"}",
+   "components": {
+    "3a5bb507e8305c5de6aa0b6c1e43e638": {
+     "pinnacle_h2h": [
+      [
+       "Penn State Nittany Lions",
+       0,
+       -2684
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       1385
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Penn State Nittany Lions",
+       -26.0,
+       -107
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       26.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -110
+      ],
+      [
+       "Under",
+       49.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Allstate Playoff Predictor",
+      "College football takeaways: Lasting impressions fr",
+      "Hall of Famer Jack Ham returning to broadcast boot",
+      "Penn State squares off against Rutgers in Big Ten ",
+      "QB rankings for all 68 Power 4 college football te",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "4e40d05a5d98ac108cd15278646a545d": {
+     "pinnacle_h2h": [
+      [
+       "California Golden Bears",
+       0,
+       118
+      ],
+      [
+       "Stanford Cardinal",
+       0,
+       -133
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "California Golden Bears",
+       2.5,
+       -104
+      ],
+      [
+       "Stanford Cardinal",
+       -2.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -104
+      ],
+      [
+       "Under",
+       56.5,
+       -112
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "Cal hosts Stanford in ACC matchup",
+      "Patience starting to run thin for head coaches in ",
+      "QB rankings for all 68 Power 4 college football te",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "f23bc59387b6db63ad3de8b6bcc541fc": {
+     "pinnacle_h2h": [
+      [
+       "Colorado State Rams",
+       0,
+       878
+      ],
+      [
+       "Fresno State Bulldogs",
+       0,
+       -1413
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado State Rams",
+       20.5,
+       -104
+      ],
+      [
+       "Fresno State Bulldogs",
+       -20.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       66.5,
+       -108
+      ],
+      [
+       "Under",
+       66.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "Davian Jackson's late TD run lifts Texas State ove",
+      "Kirby Vorhees has 4 of 9 TD runs by Washington Sta",
+      "Kirby Vorhees takes off for FBS season-long 98-yar",
+      "Pac-12 matchup features Fresno State playing Color",
+      "Patience starting to run thin for head coaches in ",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "a05c0d32b35dfd5cca63a61af28b9739": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Bulldogs",
+       0,
+       -747
+      ],
+      [
+       "South Carolina Gamecocks",
+       0,
+       539
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Bulldogs",
+       -15.0,
+       -105
+      ],
+      [
+       "South Carolina Gamecocks",
+       15.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -114
+      ],
+      [
+       "Under",
+       51.0,
+       -102
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "AP college football Week 11 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "Alyssa Lang analyzes, raises questions about recen",
+      "Block Party: Cubelic almost kicks Harper out of th",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "CFP SEC representation probabilities, teams that c",
+      "College Football Playoff top 12 projection after W",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Inside the complexities of clock management in col",
+      "Monroe Freeling, Lee Hunter top Panthers' rookie r",
+      "No. 1 Georgia looks to take a step toward SEC hist",
+      "Patience starting to run thin for head coaches in ",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB rankings for all 68 Power 4 college football te",
+      "SEC Now crew dissects No. 1 Georgia's dominant gro",
+      "SEC fines Arkansas $500K for allowing fans to stor",
+      "SEC matchup features No. 1 Georgia taking on South",
+      "Shane Beamer discusses priming for No. 1 UGA, toug",
+      "South Carolina star QB LaNorris Sellers set to pla",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Wake Forest up to No. 10 in AP poll as top teams a",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Which teams will end up in Atlanta for the final S",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an",
+      "Will Georgia or the field win CFP title?"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "0bb0c3e15e4a8004f708162c14c5575d": {
+     "pinnacle_h2h": [
+      [
+       "Kentucky Wildcats",
+       0,
+       171
+      ],
+      [
+       "Missouri Tigers",
+       0,
+       -196
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kentucky Wildcats",
+       4.5,
+       -106
+      ],
+      [
+       "Missouri Tigers",
+       -4.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -108
+      ],
+      [
+       "Under",
+       48.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "AP college football Week 11 poll reaction: What's ",
+      "Alyssa Lang analyzes, raises questions about recen",
+      "Anger Index: Why Texas Tech, Tennessee and the Gro",
+      "Block Party: Cubelic almost kicks Harper out of th",
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Kentucky's CFP hopes take hit in upset loss to Gat",
+      "Missouri hosts No. 17 Kentucky in SEC play",
+      "Power Rankings: The top teams hold their positions",
+      "QB rankings for all 68 Power 4 college football te",
+      "SEC Now reviews Mizzou, UK recent outings, preview",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "UK's Will Stein discusses late adjustments, physic",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "44e73391c2ac535ab552aac4bdcfa3b3": {
+     "pinnacle_h2h": [
+      [
+       "Louisville Cardinals",
+       0,
+       -536
+      ],
+      [
+       "Pittsburgh Panthers",
+       0,
+       412
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Louisville Cardinals",
+       -13.5,
+       -111
+      ],
+      [
+       "Pittsburgh Panthers",
+       13.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -111
+      ],
+      [
+       "Under",
+       50.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "ACC suspends Louisville LB Clark, UNC DB Smith ove",
+      "Anger Index: Why Texas Tech, Tennessee and the Gro",
+      "College football takeaways: Lasting impressions fr",
+      "Louisville Cardinals vs. North Carolina Tar Heels:",
+      "Louisville holds off UNC in game that ends with br",
+      "Louisville's win vs. UNC ends in brawl as Belichic",
+      "Mack's late INT helps Louisville hold off UNC 16-1",
+      "No. 21 Louisville meets Pittsburgh in ACC play",
+      "Patience starting to run thin for head coaches in ",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    },
+    "fa98066b4b400fb6af0672e170cc584a": {
+     "pinnacle_h2h": [
+      [
+       "Notre Dame Fighting Irish",
+       0,
+       -1409
+      ],
+      [
+       "SMU Mustangs",
+       0,
+       876
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Notre Dame Fighting Irish",
+       -21.0,
+       101
+      ],
+      [
+       "SMU Mustangs",
+       21.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -109
+      ],
+      [
+       "Under",
+       56.0,
+       -107
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "AP college football Week 11 poll reaction: What's ",
+      "Allstate Playoff Predictor",
+      "College Football Playoff top 12 projection after W",
+      "Gio Lopez leads No. 11 Wake Forest to 49-7 rout of",
+      "No. 3 Notre Dame hosts SMU in Week 12",
+      "No. 3 Notre Dame must battle emotions of Senior Ni",
+      "Power Rankings: The top teams hold their positions",
+      "Predicting the College Football Playoff: Who's mos",
+      "QB rankings for all 68 Power 4 college football te",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Wake Forest up to No. 10 in AP poll as top teams a",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261120T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "3a5bb507e8305c5de6aa0b6c1e43e638": "new_news: 1 availability items",
+    "4e40d05a5d98ac108cd15278646a545d": "anchor_morning",
+    "f23bc59387b6db63ad3de8b6bcc541fc": "anchor_morning",
+    "a05c0d32b35dfd5cca63a61af28b9739": "anchor_morning",
+    "0bb0c3e15e4a8004f708162c14c5575d": "anchor_morning",
+    "44e73391c2ac535ab552aac4bdcfa3b3": "anchor_morning",
+    "fa98066b4b400fb6af0672e170cc584a": "anchor_morning"
+   }
+  }
  }
 ]
