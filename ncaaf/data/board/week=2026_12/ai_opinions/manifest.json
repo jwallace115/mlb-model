@@ -10694,5 +10694,77 @@
     "59cb6c9beeb879b864784348e3803ff8": "line_move: pinnacle totals Over 45.0\u219244.0; line_move: pinnacle totals Under 45.0\u219244.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T193404Z.parquet",
+  "sha256": "d44dc11638ebbd8e83756e5322e2b9e3871608f3b315ba9849cd1e08b9fbfe16",
+  "logged_utc": "2026-11-20T19:34:04.450073+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T193011Z.parquet",
+   "inputs_digest": "{\"561b0188c024ce49bdd77391f44dc605\": \"3389769f5945d3ad\"}",
+   "components": {
+    "561b0188c024ce49bdd77391f44dc605": {
+     "pinnacle_h2h": [
+      [
+       "Boston College Eagles",
+       0,
+       125
+      ],
+      [
+       "Syracuse Orange",
+       0,
+       -141
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boston College Eagles",
+       2.5,
+       103
+      ],
+      [
+       "Syracuse Orange",
+       -2.5,
+       -118
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -111
+      ],
+      [
+       "Under",
+       52.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Boston College hosts Syracuse in ACC matchup",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261120T1937Z.parquet"
+    }
+   },
+   "triggers": {
+    "561b0188c024ce49bdd77391f44dc605": "line_move: pinnacle totals Under 51.0\u219252.0; line_move: pinnacle totals Over 51.0\u219252.0"
+   }
+  }
  }
 ]
