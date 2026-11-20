@@ -42,8 +42,8 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-20T01:21:20.317107+00:00",
-  "finished_utc": "2026-11-20T01:21:20.317107+00:00",
+  "started_utc": "2026-11-20T01:47:03.565346+00:00",
+  "finished_utc": "2026-11-20T01:47:03.565346+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
@@ -52,11 +52,11 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-20T01:21:35.835335+00:00",
-  "finished_utc": "2026-11-20T01:21:35.835335+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-20T01:49:04.154401+00:00",
+  "finished_utc": "2026-11-20T01:49:04.154401+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle spreads Oregon Ducks -16.5\u2192-17.5; line_move: pinnacle spreads Michigan State Spartans 16.5\u219217.5', 'line_move: pinnacle spreads East Carolina Pirates 5.5\u21926.5; line_move: pinnacle ",
-  "freeze_file": "ai_opinions_20261120T010403Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]
