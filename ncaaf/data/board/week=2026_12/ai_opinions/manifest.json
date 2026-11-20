@@ -10841,5 +10841,131 @@
     "c62889a44c822eaf71b9cd24f4eee875": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261120T214905Z.parquet",
+  "sha256": "d50d02569deda10dee790d9236fa37c8e8e71b83bfd355a7ea057145b609f5bb",
+  "logged_utc": "2026-11-20T21:49:05.346087+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 4,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-21T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261120T213007Z.parquet",
+   "inputs_digest": "{\"a365d6d7dcd55eca42de4791543e3f80\": \"c417b04691086640\", \"f247efd606eabe7d3d87504bc3af43b4\": \"c46b089d28acae85\"}",
+   "components": {
+    "a365d6d7dcd55eca42de4791543e3f80": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       563
+      ],
+      [
+       "Toledo Rockets",
+       0,
+       -741
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       16.5,
+       101
+      ],
+      [
+       "Toledo Rockets",
+       -16.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -107
+      ],
+      [
+       "Under",
+       46.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "Sizing up college football's best races down the h",
+      "Toledo hosts Bowling Green in MAC play"
+     ],
+     "kalshi_snap": "snap_20261120T2207Z.parquet"
+    },
+    "f247efd606eabe7d3d87504bc3af43b4": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       388
+      ],
+      [
+       "Duke Blue Devils",
+       0,
+       -477
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       11.0,
+       100
+      ],
+      [
+       "Duke Blue Devils",
+       -11.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.0,
+       -113
+      ],
+      [
+       "Under",
+       41.0,
+       -104
+      ]
+     ],
+     "news": [
+      "'I'm a winner': Dabo confident in his leadership a",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "Defiant Dabo Swinney says Clemson's 'gonna win a b",
+      "Duke hosts Clemson in ACC action",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "Mad Dog doesn't believe Dabo when he says Clemson ",
+      "Manny Diaz makes the case for Nate Sheppard to be ",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261120T2207Z.parquet"
+    }
+   },
+   "triggers": {
+    "a365d6d7dcd55eca42de4791543e3f80": "anchor_prekick",
+    "f247efd606eabe7d3d87504bc3af43b4": "anchor_prekick"
+   }
+  }
  }
 ]
