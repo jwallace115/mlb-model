@@ -17652,5 +17652,205 @@
     "5c082e013b5328e3db1def552628765f": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T180404Z.parquet",
+  "sha256": "8526ca00c00e3829bcc185e9122cf6af999a650ae40f4aa6a9f7a4abf061619f",
+  "logged_utc": "2026-11-21T18:04:04.634149+00:00",
+  "rows": 11,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.455,
+  "revised_rows": 11,
+  "oldest_source_age_min": 33.9,
+  "first_kickoff_utc": "2026-11-21T21:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T173007Z.parquet",
+   "inputs_digest": "{\"0a1a6c2630e51e32d24695f02c0b3f23\": \"588039ff04aec977\", \"e17410526acddf2500fb788f40901b3f\": \"46d723a13f1f4fb2\", \"cc2b1d4b7378697dc11c744aeb015af9\": \"4bf4d7868e5a191f\", \"6d977752327ee29e19d3e1856683efee\": \"fbf41e6d760d1e4f\"}",
+   "components": {
+    "0a1a6c2630e51e32d24695f02c0b3f23": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Southern Eagles",
+       0,
+       -334
+      ],
+      [
+       "Troy Trojans",
+       0,
+       284
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Southern Eagles",
+       -9.5,
+       -105
+      ],
+      [
+       "Troy Trojans",
+       9.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       100
+      ],
+      [
+       "Under",
+       48.0,
+       -117
+      ]
+     ],
+     "news": [
+      "Troy hosts Georgia Southern in Sun Belt matchup"
+     ],
+     "kalshi_snap": "snap_20261121T1807Z.parquet"
+    },
+    "e17410526acddf2500fb788f40901b3f": {
+     "pinnacle_h2h": [
+      [
+       "Georgia State Panthers",
+       0,
+       125
+      ],
+      [
+       "Marshall Thundering Herd",
+       0,
+       -139
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia State Panthers",
+       3.0,
+       -109
+      ],
+      [
+       "Marshall Thundering Herd",
+       -3.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -107
+      ],
+      [
+       "Under",
+       56.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Sun Belt matchup features Georgia State taking on "
+     ],
+     "kalshi_snap": "snap_20261121T1807Z.parquet"
+    },
+    "cc2b1d4b7378697dc11c744aeb015af9": {
+     "pinnacle_h2h": [
+      [
+       "North Dakota State Bison",
+       0,
+       -2893
+      ],
+      [
+       "Northern Illinois Huskies",
+       0,
+       1612
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Dakota State Bison",
+       -26.0,
+       -106
+      ],
+      [
+       "Northern Illinois Huskies",
+       26.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -114
+      ],
+      [
+       "Under",
+       44.5,
+       -102
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "North Dakota State hosts Northern Illinois in MWC ",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261121T1807Z.parquet"
+    },
+    "6d977752327ee29e19d3e1856683efee": {
+     "pinnacle_h2h": [
+      [
+       "South Alabama Jaguars",
+       0,
+       -199
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       177
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Alabama Jaguars",
+       -5.0,
+       -107
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       5.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       65.5,
+       -107
+      ],
+      [
+       "Under",
+       65.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Sun Belt matchup features South Alabama squaring o"
+     ],
+     "kalshi_snap": "snap_20261121T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "0a1a6c2630e51e32d24695f02c0b3f23": "anchor_prekick",
+    "e17410526acddf2500fb788f40901b3f": "anchor_prekick",
+    "cc2b1d4b7378697dc11c744aeb015af9": "anchor_prekick",
+    "6d977752327ee29e19d3e1856683efee": "anchor_prekick"
+   }
+  }
  }
 ]
