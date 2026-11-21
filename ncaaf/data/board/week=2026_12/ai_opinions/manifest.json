@@ -20068,5 +20068,148 @@
     "9f3f8efae55dbb803964a5107350e263": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T221904Z.parquet",
+  "sha256": "aa17fd930a528812a37c49a3b0d6b1a62483af32f9f430bb0bb79e9137f0ff6d",
+  "logged_utc": "2026-11-21T22:19:04.186022+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-21T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T220007Z.parquet",
+   "inputs_digest": "{\"cbe55180a8bee495fa1520fbc1df314b\": \"b18af1bfff21523c\"}",
+   "components": {
+    "cbe55180a8bee495fa1520fbc1df314b": {
+     "pinnacle_h2h": [
+      [
+       "Texas State Bobcats",
+       0,
+       -532
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       426
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Texas State Bobcats",
+       -13.5,
+       -113
+      ],
+      [
+       "Washington State Cougars",
+       13.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       61.5,
+       -105
+      ],
+      [
+       "Under",
+       61.5,
+       -111
+      ]
+     ],
+     "kalshi_snap": "snap_20261121T2207Z.parquet"
+    }
+   },
+   "triggers": {
+    "cbe55180a8bee495fa1520fbc1df314b": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261121T223407Z.parquet",
+  "sha256": "9c44e591f68a4ae14c492339a09db3973a9de17c4794a63051020abea929d90a",
+  "logged_utc": "2026-11-21T22:34:07.135993+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T23:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T223011Z.parquet",
+   "inputs_digest": "{\"37f01277971fbdbe6d2b8f77fa63dd52\": \"facec6b0a6fc68f7\"}",
+   "components": {
+    "37f01277971fbdbe6d2b8f77fa63dd52": {
+     "pinnacle_h2h": [
+      [
+       "Maryland Terrapins",
+       0,
+       679
+      ],
+      [
+       "USC Trojans",
+       0,
+       -932
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Maryland Terrapins",
+       17.5,
+       -101
+      ],
+      [
+       "USC Trojans",
+       -17.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -113
+      ],
+      [
+       "Under",
+       57.5,
+       -103
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "Florida State going turquoise tops best uniforms o",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sources: Urban Meyer not a candidate for open Mary",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261121T2237Z.parquet"
+    }
+   },
+   "triggers": {
+    "37f01277971fbdbe6d2b8f77fa63dd52": "anchor_close"
+   }
+  }
  }
 ]

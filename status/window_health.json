@@ -1,16 +1,6 @@
 [
  {
   "sport": "nfl",
-  "window": "late",
-  "started_utc": "2026-11-14T23:16:00.795571+00:00",
-  "finished_utc": "2026-11-14T23:16:00.795571+00:00",
-  "result": "COMPLETE",
-  "step": "done",
-  "message": "",
-  "freeze_file": null
- },
- {
-  "sport": "nfl",
   "window": "open",
   "started_utc": "2026-11-17T16:31:14.699919+00:00",
   "finished_utc": "2026-11-17T16:31:14.699919+00:00",
@@ -41,22 +31,32 @@
  },
  {
   "sport": "nfl",
-  "window": "event",
-  "started_utc": "2026-11-21T22:17:05.886563+00:00",
-  "finished_utc": "2026-11-21T22:17:05.886563+00:00",
-  "result": "no_triggers",
-  "step": "window_watch",
-  "message": "",
+  "window": "late",
+  "started_utc": "2026-11-21T22:43:41.378125+00:00",
+  "finished_utc": "2026-11-21T22:43:41.378125+00:00",
+  "result": "STOP",
+  "step": "reader_v3",
+  "message": "exit -9",
   "freeze_file": null
+ },
+ {
+  "sport": "nfl",
+  "window": "event",
+  "started_utc": "2026-11-21T22:49:44.865462+00:00",
+  "finished_utc": "2026-11-21T22:49:44.865462+00:00",
+  "result": "COMPLETE",
+  "step": "window_watch",
+  "message": "['line_move: hardrockbet_fl totals Over 46.0\u219247.0; line_move: hardrockbet_fl totals Under 46.0\u219247.0; line_move: pinnacle totals Over 46.0\u219247.5; line_move: pinnacle totals Under 46.0\u219247.5']",
+  "freeze_file": "ai_opinions_20261121T223208Z.parquet"
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-21T22:17:33.772013+00:00",
-  "finished_utc": "2026-11-21T22:17:33.772013+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-21T22:54:43.703770+00:00",
+  "finished_utc": "2026-11-21T22:54:43.703770+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['anchor_prekick']",
-  "freeze_file": "ai_opinions_20261121T220403Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]

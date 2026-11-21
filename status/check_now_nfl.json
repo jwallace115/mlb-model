@@ -1,12 +1,17 @@
 {
- "started_utc": "2026-11-21T22:17:05.157346+00:00",
- "finished_utc": "2026-11-21T22:17:06.006781+00:00",
+ "started_utc": "2026-11-21T22:32:08.475038+00:00",
+ "finished_utc": "2026-11-21T22:49:44.892284+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "41e2dd69bddd65d7e823d9ed61cc2afc",
+   "text": "line_move: hardrockbet_fl totals Over 46.0\u219247.0; line_move: hardrockbet_fl totals Under 46.0\u219247.0; line_move: pinnacle totals Over 46.0\u219247.5; line_move: pinnacle totals Under 46.0\u219247.5"
+  }
+ ],
+ "games_read": 1,
+ "frozen_file": "ai_opinions_20261121T223208Z.parquet",
+ "spend_usd": 31.7629,
+ "result": "COMPLETE"
 }
