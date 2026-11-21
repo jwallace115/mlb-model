@@ -4585,5 +4585,160 @@
     "8ba112fabf4e87639338a5f437c5abfe": "new_props: pull 2026-11-21T00:34:27.439087+00:00; injury_change: inj_New York Giants; injury_change: inj_Jacksonville Jaguars"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T034703Z.parquet",
+  "sha256": "8ca9b9014d0fd7f2f5b9a8a50459d3ffabcc651781b5ba2513e248ac3138e73f",
+  "logged_utc": "2026-11-21T03:47:03.463710+00:00",
+  "rows": 71,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.944,
+  "revised_rows": 0,
+  "oldest_source_age_min": 106.9,
+  "first_kickoff_utc": "2026-11-23T01:20:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261121T033005Z.parquet",
+   "inputs_digest": "{\"60e1d27b083a335b722c2c852ea85612\": \"b9626ca66b3183c1\"}",
+   "components": {
+    "60e1d27b083a335b722c2c852ea85612": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Minnesota Vikings",
+       0,
+       145
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -170
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Minnesota Vikings",
+       3.0,
+       100
+      ],
+      [
+       "San Francisco 49ers",
+       -3.0,
+       -120
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.5,
+       -115
+      ],
+      [
+       "Under",
+       46.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Minnesota Vikings",
+       0,
+       153
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -174
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Minnesota Vikings",
+       3.0,
+       104
+      ],
+      [
+       "San Francisco 49ers",
+       -3.0,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -114
+      ],
+      [
+       "Under",
+       46.0,
+       100
+      ]
+     ],
+     "props_ts": "2026-11-16T15:02:56.392995+00:00",
+     "inj_San Francisco 49ers": "3157a4882940ac48",
+     "inj_Minnesota Vikings": "076cbc4f02490aec",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "49ers WR Mike Evans' Achilles tendinitis injury ex",
+      "49ers defense left frustrated after win over Cowbo",
+      "49ers outlast Cowboys in back-and-forth thriller",
+      "49ers poke fun at Cowboys multiple times to headli",
+      "49ers preparing for Vikings dominant defense",
+      "49ers put up big numbers vs. Cowboys, tout 'incred",
+      "Big-time offensive plays highlight top NFL plays o",
+      "Can the Vikings make a Super Bowl run with Kirk Co",
+      "Early bets for Week 11: Will Broncos keep Raiders ",
+      "How Stephen A. is looking at Vikings-49ers matchup",
+      "How Vikings brought Mexico City's elevation to Min",
+      "How Vikings got Kirk Cousins ready to win on short",
+      "How active NFL players continue to redefine all-ti",
+      "Ja'Marr Chase steps into 'SNF'  in style, leads NF",
+      "Judging overreactions to NFL Week 10: Playoff spin",
+      "Justin Jefferson getting back into a flow with Kir",
+      "Kirk Cousins emotional after win in Vikings return",
+      "Kirk Cousins has efficient day in Vikes' return",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "McCaffrey's TDs of 74 and 66 yards and Samuel's 70",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 10: Big takeaways, questions and fantasy ",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL offseason free agent and trade acquisitions th",
+      "NFL playoff chance tiers: Where all 32 teams fit i",
+      "Nick Bosa looks to end defensive struggles",
+      "Niners' Nick Bosa on 4-game sack drought: 'Don't t",
+      "Police investigate man's death after alleged alter",
+      "Seven things Solak thinks for NFL Week 11: Takes o",
+      "Sources: Brandon Aiyuk contacted Jayden Daniels to",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Vikings WR Jordan Addison needs thumb surgery, is ",
+      "Vikings take on Mexico City",
+      "Vikings' Cousins channeling Dantonio's 'slow down'",
+      "Vikings-49ers matchup in Mexico features the best ",
+      "Week 10 NFL highlights: Best plays, moments, touch",
+      "Week 11 betting preview: Analysis, best bets, TD p",
+      "What Stephen A. is looking to see from Vikings in ",
+      "Why Stephen A. is picking the Vikings to beat the ",
+      "Why the 'Get Up' crew is concerned about Packers a",
+      "Why the 49ers are practicing in Colorado before Vi"
+     ],
+     "kalshi_snap": "snap_20261121T0335Z.parquet"
+    }
+   },
+   "triggers": {
+    "60e1d27b083a335b722c2c852ea85612": "anchor_morning"
+   }
+  }
  }
 ]
