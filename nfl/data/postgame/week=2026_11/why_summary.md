@@ -1,6 +1,6 @@
 # WHY Summary — Week 11
 
-Generated: 2026-11-20T12:17:33.911039+00:00
+Generated: 2026-11-21T12:16:23.929611+00:00
 
 
 ## Graded rows
@@ -32,19 +32,21 @@ Generated: 2026-11-20T12:17:33.911039+00:00
 
 ## why_code_auto (losses)
 
-- ROLE_SHIFT: 14
+- ROLE_SHIFT: 13
 - SCRIPT: 11
 - EFFICIENCY: 9
 - GARBAGE: 4
 - NOISE: 1
+- SHARE_OTHER: 1
 
 ## why_code_auto (wins)
 
 - SCRIPT: 32
-- ROLE_SHIFT: 18
+- ROLE_SHIFT: 15
 - EFFICIENCY: 13
 - UNDEFINED: 8
 - GARBAGE: 6
+- SHARE_OTHER: 3
 - NOISE: 1
 
 ## Thesis verdicts
@@ -151,16 +153,14 @@ Generated: 2026-11-20T12:17:33.911039+00:00
 - d3e7e2aa3fac78c1: prop:rec_yds Ashton Dulin A=30.0 L=14.5 |ln|=0.727
 - f68d918db653ca9d: prop:rec_yds Anthony Gould A=48.0 L=23.5 |ln|=0.714
 
-### AVAILABILITY / ROLE_SHIFT (32 rows)
+### AVAILABILITY / ROLE_SHIFT (28 rows)
 
 - 996d2e30bfafc450: ROLE_SHIFT prop:rec_yds Ashton Dulin
 - 8dee517f52d0c423: ROLE_SHIFT prop:rec_yds Dalton Schultz
 - 4d66f43e01f4a069: ROLE_SHIFT prop:rec Ashton Dulin
 - 8dcd3691f53246c2: ROLE_SHIFT prop:rec Dalton Schultz
 - 191eb80dd4f6c017: ROLE_SHIFT prop:rec Jonathan Taylor
-- b38532f67faa8937: ROLE_SHIFT prop:rush_att Daniel Jones
 - b7b71871988103ef: ROLE_SHIFT prop:rush_yds C.J. Stroud
-- ac254d4a25c046ad: ROLE_SHIFT prop:rush_yds Daniel Jones
 - c6464bf678219a70: ROLE_SHIFT prop:rush_att David Montgomery
 - ddeda002f1d91e76: ROLE_SHIFT prop:rush_att David Montgomery
 - 311817cf8ae38b81: ROLE_SHIFT prop:rush_att David Montgomery
@@ -177,13 +177,11 @@ Generated: 2026-11-20T12:17:33.911039+00:00
 - 6f663c6ab51d313b: ROLE_SHIFT prop:rec Foster Moreau
 - 92e66db79b104876: ROLE_SHIFT prop:rec Jonathan Taylor
 - 2040b60c00e97d1b: ROLE_SHIFT prop:rec Xavier Hutchinson
-- 62cf2912fdb9ccc6: ROLE_SHIFT prop:rush_att Daniel Jones
 - 46136791b2f626f6: ROLE_SHIFT prop:rush_att David Montgomery
 - a95803ff7352071f: ROLE_SHIFT prop:rush_yds C.J. Stroud
-- 2d283844ec19fb18: ROLE_SHIFT prop:rush_yds Daniel Jones
 - e7f8d4f2aa14efd5: ROLE_SHIFT prop:rec Xavier Hutchinson
 - 07e38ba74fdf298a: ROLE_SHIFT prop:rush_att David Montgomery
 - f2adcb548b327928: ROLE_SHIFT prop:rec Xavier Hutchinson
 - ea6846e377a966d1: ROLE_SHIFT prop:rush_att David Montgomery
 
-Total flagged: 112
+Total flagged: 108
