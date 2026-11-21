@@ -11995,5 +11995,73 @@
     "a05c0d32b35dfd5cca63a61af28b9739": "line_move: pinnacle totals Under 51.0\u219252.0; line_move: pinnacle totals Over 51.0\u219252.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T041903Z.parquet",
+  "sha256": "dc6e6b5ae21eaf62e99b2d6bb3d828fc73f15a85dd965ff7c535b1cb6714b0be",
+  "logged_utc": "2026-11-21T04:19:03.688008+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-21T21:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T040007Z.parquet",
+   "inputs_digest": "{\"e17410526acddf2500fb788f40901b3f\": \"f8d333d56a4cb5bc\"}",
+   "components": {
+    "e17410526acddf2500fb788f40901b3f": {
+     "pinnacle_h2h": [
+      [
+       "Georgia State Panthers",
+       0,
+       124
+      ],
+      [
+       "Marshall Thundering Herd",
+       0,
+       -140
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia State Panthers",
+       3.0,
+       -109
+      ],
+      [
+       "Marshall Thundering Herd",
+       -3.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -104
+      ],
+      [
+       "Under",
+       55.5,
+       -113
+      ]
+     ],
+     "news": [
+      "Sun Belt matchup features Georgia State taking on "
+     ],
+     "kalshi_snap": "snap_20261121T0407Z.parquet"
+    }
+   },
+   "triggers": {
+    "e17410526acddf2500fb788f40901b3f": "line_move: pinnacle spreads Georgia State Panthers 2.0\u21923.0; line_move: pinnacle spreads Marshall Thundering Herd -2.0\u2192-3.0"
+   }
+  }
  }
 ]
