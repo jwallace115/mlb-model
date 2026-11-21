@@ -20000,5 +20000,73 @@
     "fa98066b4b400fb6af0672e170cc584a": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T220403Z.parquet",
+  "sha256": "1ebee4739e1a383a4962ff4fab7f3d380a0c0650c00e0fd02b842c01d4fe2874",
+  "logged_utc": "2026-11-21T22:04:03.488271+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 1,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-22T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T220007Z.parquet",
+   "inputs_digest": "{\"9f3f8efae55dbb803964a5107350e263\": \"057467a17956af70\"}",
+   "components": {
+    "9f3f8efae55dbb803964a5107350e263": {
+     "pinnacle_h2h": [
+      [
+       "UAB Blazers",
+       0,
+       161
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -180
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "UAB Blazers",
+       3.5,
+       102
+      ],
+      [
+       "UTSA Roadrunners",
+       -3.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       100
+      ],
+      [
+       "Under",
+       50.0,
+       -117
+      ]
+     ],
+     "news": [
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261121T2207Z.parquet"
+    }
+   },
+   "triggers": {
+    "9f3f8efae55dbb803964a5107350e263": "anchor_prekick"
+   }
+  }
  }
 ]
