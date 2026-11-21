@@ -1,12 +1,45 @@
 {
- "started_utc": "2026-11-21T01:49:03.120996+00:00",
- "finished_utc": "2026-11-21T01:58:48.919748+00:00",
+ "started_utc": "2026-11-21T02:04:03.162705+00:00",
+ "finished_utc": "2026-11-21T02:19:31.855035+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "1f59b6d72003ce254b32c815e73b252d",
+   "text": "line_move: pinnacle totals Under 42.5\u219241.5; line_move: pinnacle totals Over 42.5\u219241.5"
+  },
+  {
+   "game": "75136fdcc4601e9e1208fe20146056dc",
+   "text": "line_move: pinnacle totals Under 52.5\u219253.5; line_move: pinnacle totals Over 52.5\u219253.5"
+  },
+  {
+   "game": "2851a39f971851008dbec9970da34737",
+   "text": "line_move: pinnacle totals Under 51.0\u219250.0; line_move: pinnacle totals Over 51.0\u219250.0"
+  },
+  {
+   "game": "1a3e1206e330ec66aa9a0549b4d3409c",
+   "text": "line_move: pinnacle totals Under 56.0\u219257.0; line_move: pinnacle totals Over 56.0\u219257.0"
+  },
+  {
+   "game": "6d977752327ee29e19d3e1856683efee",
+   "text": "line_move: pinnacle spreads South Alabama Jaguars -4.0\u2192-5.0; line_move: pinnacle spreads Southern Mississippi Golden Eagles 4.0\u21925.0"
+  },
+  {
+   "game": "a36fd3d086dffefb5fc58b14fb6255fc",
+   "text": "line_move: pinnacle totals Under 53.0\u219255.0; line_move: pinnacle totals Over 53.0\u219255.0"
+  },
+  {
+   "game": "4e40d05a5d98ac108cd15278646a545d",
+   "text": "line_move: pinnacle totals Under 56.5\u219255.0; line_move: pinnacle totals Over 56.5\u219255.0"
+  },
+  {
+   "game": "a05c0d32b35dfd5cca63a61af28b9739",
+   "text": "line_move: pinnacle totals Under 51.0\u219252.0; line_move: pinnacle totals Over 51.0\u219252.0"
+  }
+ ],
+ "games_read": 8,
+ "frozen_file": "ai_opinions_20261121T020403Z.parquet",
+ "spend_usd": 28.5216,
+ "result": "COMPLETE"
 }

@@ -11553,5 +11553,447 @@
     "e497245c3311ac853201a67404dc82ea": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T020403Z.parquet",
+  "sha256": "7a98a3c0dbaabac585fa88326946479abd4f86b6519099a77ad09253ceed8821",
+  "logged_utc": "2026-11-21T02:04:03.162705+00:00",
+  "rows": 24,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 8,
+  "no_view_share": 0.583,
+  "revised_rows": 19,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T17:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T020008Z.parquet",
+   "inputs_digest": "{\"1f59b6d72003ce254b32c815e73b252d\": \"b69e0fe8b778cf8a\", \"75136fdcc4601e9e1208fe20146056dc\": \"91781720a8523d5d\", \"2851a39f971851008dbec9970da34737\": \"6969892a1d43181d\", \"1a3e1206e330ec66aa9a0549b4d3409c\": \"d10c8994d94590bd\", \"6d977752327ee29e19d3e1856683efee\": \"85a0f187ce297270\", \"a36fd3d086dffefb5fc58b14fb6255fc\": \"badec9b016fd3951\", \"4e40d05a5d98ac108cd15278646a545d\": \"42405147677b249b\", \"a05c0d32b35dfd5cca63a61af28b9739\": \"510e5af26fa4fd76\"}",
+   "components": {
+    "1f59b6d72003ce254b32c815e73b252d": {
+     "pinnacle_h2h": [
+      [
+       "North Carolina Tar Heels",
+       0,
+       104
+      ],
+      [
+       "Virginia Cavaliers",
+       0,
+       -117
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Carolina Tar Heels",
+       1.5,
+       -107
+      ],
+      [
+       "Virginia Cavaliers",
+       -1.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -110
+      ],
+      [
+       "Under",
+       41.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "ACC matchup features Virginia against North Caroli",
+      "ACC suspends Louisville LB Clark, UNC DB Smith ove",
+      "Bill Belichick, Robert Kraft named Hall of Fame fi",
+      "Florida State going turquoise tops best uniforms o",
+      "Pawn shop fighting 'Gold Digger' trademark filed b",
+      "QB rankings for all 68 Power 4 college football te",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261121T0207Z.parquet"
+    },
+    "75136fdcc4601e9e1208fe20146056dc": {
+     "pinnacle_h2h": [
+      [
+       "Liberty Flames",
+       0,
+       -921
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       635
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Liberty Flames",
+       -17.5,
+       -108
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       17.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -110
+      ],
+      [
+       "Under",
+       53.5,
+       -106
+      ]
+     ],
+     "news": [
+      "CUSA matchup features No. 22 Liberty taking on Wes",
+      "Which teams have the best odds to make the College",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261121T0207Z.parquet"
+    },
+    "2851a39f971851008dbec9970da34737": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       309
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -381
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       10.0,
+       -102
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       -10.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -104
+      ],
+      [
+       "Under",
+       50.0,
+       -112
+      ]
+     ],
+     "news": [
+      "Coastal Carolina visits Louisiana in Sun Belt matc"
+     ],
+     "kalshi_snap": "snap_20261121T0207Z.parquet"
+    },
+    "1a3e1206e330ec66aa9a0549b4d3409c": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       175
+      ],
+      [
+       "Texas Tech Red Raiders",
+       0,
+       -201
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       4.5,
+       -102
+      ],
+      [
+       "Texas Tech Red Raiders",
+       -4.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.0,
+       -105
+      ],
+      [
+       "Under",
+       57.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 11 poll reaction: What's ",
+      "Anger Index: Why Texas Tech, Tennessee and the Gro",
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "Connelly on Week 12: Test for Tennessee; Big Ten f",
+      "Monroe Freeling, Lee Hunter top Panthers' rookie r",
+      "No. 11 Texas Tech takes on Baylor in Big 12 play",
+      "Power Rankings: The top teams hold their positions",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261121T0207Z.parquet"
+    },
+    "6d977752327ee29e19d3e1856683efee": {
+     "pinnacle_h2h": [
+      [
+       "South Alabama Jaguars",
+       0,
+       -199
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       173
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Alabama Jaguars",
+       -5.0,
+       -107
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       5.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       66.5,
+       -105
+      ],
+      [
+       "Under",
+       66.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Sun Belt matchup features South Alabama squaring o"
+     ],
+     "kalshi_snap": "snap_20261121T0207Z.parquet"
+    },
+    "a36fd3d086dffefb5fc58b14fb6255fc": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas State Red Wolves",
+       0,
+       433
+      ],
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       -569
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas State Red Wolves",
+       14.0,
+       101
+      ],
+      [
+       "Louisiana Tech Bulldogs",
+       -14.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.0,
+       -106
+      ],
+      [
+       "Under",
+       55.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "Arkansas State fires Butch Jones, names Jalen Orti",
+      "Louisiana Tech takes on Arkansas State in Sun Belt",
+      "Sources: Arkansas State tells Butch Jones he's out"
+     ],
+     "kalshi_snap": "snap_20261121T0207Z.parquet"
+    },
+    "4e40d05a5d98ac108cd15278646a545d": {
+     "pinnacle_h2h": [
+      [
+       "California Golden Bears",
+       0,
+       119
+      ],
+      [
+       "Stanford Cardinal",
+       0,
+       -134
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "California Golden Bears",
+       2.5,
+       -103
+      ],
+      [
+       "Stanford Cardinal",
+       -2.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.0,
+       -111
+      ],
+      [
+       "Under",
+       55.0,
+       -105
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "Cal hosts Stanford in ACC matchup",
+      "QB rankings for all 68 Power 4 college football te",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261121T0207Z.parquet"
+    },
+    "a05c0d32b35dfd5cca63a61af28b9739": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Bulldogs",
+       0,
+       -745
+      ],
+      [
+       "South Carolina Gamecocks",
+       0,
+       538
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Bulldogs",
+       -15.0,
+       -104
+      ],
+      [
+       "South Carolina Gamecocks",
+       15.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       101
+      ],
+      [
+       "Under",
+       52.0,
+       -118
+      ]
+     ],
+     "news": [
+      "2026-27 Week 11 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "AP college football Week 11 poll reaction: What's ",
+      "Alshon Jeffery discusses energy around No. 21 Sout",
+      "Alyssa Lang analyzes, raises questions about recen",
+      "Block Party: Cubelic almost kicks Harper out of th",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "CFP SEC representation probabilities, teams that c",
+      "Connelly on Week 12: Test for Tennessee; Big Ten f",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Inside the complexities of clock management in col",
+      "Jeremiah Donati dives into South Carolina's renova",
+      "Monroe Freeling, Lee Hunter top Panthers' rookie r",
+      "No. 1 Georgia looks to take a step toward SEC hist",
+      "Power Rankings: The top teams hold their positions",
+      "QB rankings for all 68 Power 4 college football te",
+      "SEC Now crew dissects No. 1 Georgia's dominant gro",
+      "SEC matchup features No. 1 Georgia taking on South",
+      "Shane Beamer discusses priming for No. 1 UGA, toug",
+      "South Carolina star QB LaNorris Sellers set to pla",
+      "Tebow praises South Carolina QB Sellers' athletici",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Wake Forest up to No. 10 in AP poll as top teams a",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Which teams will end up in Atlanta for the final S",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an",
+      "Will Georgia or the field win CFP title?"
+     ],
+     "kalshi_snap": "snap_20261121T0207Z.parquet"
+    }
+   },
+   "triggers": {
+    "1f59b6d72003ce254b32c815e73b252d": "line_move: pinnacle totals Under 42.5\u219241.5; line_move: pinnacle totals Over 42.5\u219241.5",
+    "75136fdcc4601e9e1208fe20146056dc": "line_move: pinnacle totals Under 52.5\u219253.5; line_move: pinnacle totals Over 52.5\u219253.5",
+    "2851a39f971851008dbec9970da34737": "line_move: pinnacle totals Under 51.0\u219250.0; line_move: pinnacle totals Over 51.0\u219250.0",
+    "1a3e1206e330ec66aa9a0549b4d3409c": "line_move: pinnacle totals Under 56.0\u219257.0; line_move: pinnacle totals Over 56.0\u219257.0",
+    "6d977752327ee29e19d3e1856683efee": "line_move: pinnacle spreads South Alabama Jaguars -4.0\u2192-5.0; line_move: pinnacle spreads Southern Mississippi Golden Eagles 4.0\u21925.0",
+    "a36fd3d086dffefb5fc58b14fb6255fc": "line_move: pinnacle totals Under 53.0\u219255.0; line_move: pinnacle totals Over 53.0\u219255.0",
+    "4e40d05a5d98ac108cd15278646a545d": "line_move: pinnacle totals Under 56.5\u219255.0; line_move: pinnacle totals Over 56.5\u219255.0",
+    "a05c0d32b35dfd5cca63a61af28b9739": "line_move: pinnacle totals Under 51.0\u219252.0; line_move: pinnacle totals Over 51.0\u219252.0"
+   }
+  }
  }
 ]
