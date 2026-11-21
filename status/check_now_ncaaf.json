@@ -1,77 +1,25 @@
 {
- "started_utc": "2026-11-21T16:19:04.886478+00:00",
- "finished_utc": "2026-11-21T16:43:42.743885+00:00",
+ "started_utc": "2026-11-21T17:04:05.217799+00:00",
+ "finished_utc": "2026-11-21T17:18:32.341316+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
  "triggers": [
   {
-   "game": "03a07ec7a62fbc2d6bf4748aafd30303",
-   "text": "anchor_close"
-  },
-  {
-   "game": "4336f3fcf7e287f1609c1822fef8f63d",
-   "text": "anchor_close"
-  },
-  {
-   "game": "606426f36cb32d1843f6abbe6f683b76",
-   "text": "anchor_close"
-  },
-  {
-   "game": "561b0188c024ce49bdd77391f44dc605",
-   "text": "anchor_close"
-  },
-  {
-   "game": "01aaf98c4f62bba0a964a9b400666516",
-   "text": "anchor_close"
-  },
-  {
-   "game": "8e40a0e75da5dc1e30817debee95239d",
-   "text": "anchor_close"
-  },
-  {
-   "game": "ffbcf81433c3067468208b6d5b91aa83",
-   "text": "anchor_close"
-  },
-  {
-   "game": "af2b2232df20a470d516dbe474a63132",
-   "text": "anchor_close"
-  },
-  {
-   "game": "ce564e264da03668e25badeb960753cc",
-   "text": "anchor_close"
-  },
-  {
-   "game": "b40838a45d9aeb25fb42668402caae13",
-   "text": "anchor_close"
-  },
-  {
-   "game": "79d5d7992b8c0600feda74e2225553fe",
-   "text": "anchor_close"
-  },
-  {
-   "game": "d0761a1e0c66eaf4608f5c61ac79b3c2",
-   "text": "anchor_close"
-  },
-  {
-   "game": "f45e59db6a335d4ffd3741f83a45327a",
+   "game": "2851a39f971851008dbec9970da34737",
    "text": "anchor_prekick"
   },
   {
-   "game": "ba44f7b0a5535ae2369e8ea165fb287f",
+   "game": "96d5698a996feb547e098ba4b2178c0c",
    "text": "anchor_prekick"
   },
   {
-   "game": "d7b3c2454c6b34f734497049e744bab0",
-   "text": "anchor_prekick"
-  },
-  {
-   "game": "347054d00e6c0020484eb64f1ad1b58d",
+   "game": "b3f08ccb712c2c765cc2d55b4608a3dd",
    "text": "anchor_prekick"
   }
  ],
- "games_read": 16,
- "frozen_file": "ai_opinions_20261121T161904Z.parquet",
- "spend_usd": 30.658,
+ "games_read": 3,
+ "frozen_file": "ai_opinions_20261121T170405Z.parquet",
+ "spend_usd": 30.7461,
  "result": "COMPLETE"
 }

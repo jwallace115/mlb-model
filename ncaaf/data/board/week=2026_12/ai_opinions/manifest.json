@@ -16771,5 +16771,160 @@
     "725c6205de38f91b507a880c139eda54": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T170405Z.parquet",
+  "sha256": "eb3ea1b45ea39dc4cfad81c6ef0b23d759a4fab297e27ac445117c9c3e3fd52a",
+  "logged_utc": "2026-11-21T17:04:05.217799+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.444,
+  "revised_rows": 9,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T20:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T170008Z.parquet",
+   "inputs_digest": "{\"2851a39f971851008dbec9970da34737\": \"b548d3bb974f806e\", \"96d5698a996feb547e098ba4b2178c0c\": \"5af60a150a4e830c\", \"b3f08ccb712c2c765cc2d55b4608a3dd\": \"80683fe5f8eef3d4\"}",
+   "components": {
+    "2851a39f971851008dbec9970da34737": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       310
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -369
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       10.0,
+       -102
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       -10.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -109
+      ],
+      [
+       "Under",
+       49.0,
+       -107
+      ]
+     ],
+     "news": [
+      "Coastal Carolina visits Louisiana in Sun Belt matc"
+     ],
+     "kalshi_snap": "snap_20261121T1707Z.parquet"
+    },
+    "96d5698a996feb547e098ba4b2178c0c": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -155
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       139
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -3.0,
+       -111
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -111
+      ],
+      [
+       "Under",
+       53.5,
+       -105
+      ]
+     ],
+     "news": [
+      "New Mexico State hosts Delaware in CUSA matchup",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261121T1707Z.parquet"
+    },
+    "b3f08ccb712c2c765cc2d55b4608a3dd": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       121
+      ],
+      [
+       "Kennesaw State Owls",
+       0,
+       -133
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       2.5,
+       101
+      ],
+      [
+       "Kennesaw State Owls",
+       -2.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       101
+      ],
+      [
+       "Under",
+       45.0,
+       -118
+      ]
+     ],
+     "news": [
+      "CUSA matchup features Kennesaw State playing Flori"
+     ],
+     "kalshi_snap": "snap_20261121T1707Z.parquet"
+    }
+   },
+   "triggers": {
+    "2851a39f971851008dbec9970da34737": "anchor_prekick",
+    "96d5698a996feb547e098ba4b2178c0c": "anchor_prekick",
+    "b3f08ccb712c2c765cc2d55b4608a3dd": "anchor_prekick"
+   }
+  }
  }
 ]
