@@ -12063,5 +12063,632 @@
     "e17410526acddf2500fb788f40901b3f": "line_move: pinnacle spreads Georgia State Panthers 2.0\u21923.0; line_move: pinnacle spreads Marshall Thundering Herd -2.0\u2192-3.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T140403Z.parquet",
+  "sha256": "5c77aed8bc9ac086579f224e04284d1cc3e2e31fd22ca1f37cd4d7d097ad31d4",
+  "logged_utc": "2026-11-21T14:04:03.882047+00:00",
+  "rows": 35,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 12,
+  "no_view_share": 0.657,
+  "revised_rows": 31,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T16:59:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T140010Z.parquet",
+   "inputs_digest": "{\"03a07ec7a62fbc2d6bf4748aafd30303\": \"c3c1474261d65073\", \"4336f3fcf7e287f1609c1822fef8f63d\": \"5f927dca920388ec\", \"606426f36cb32d1843f6abbe6f683b76\": \"9f26ae0e9cabc599\", \"561b0188c024ce49bdd77391f44dc605\": \"20fd0506dadbfad7\", \"01aaf98c4f62bba0a964a9b400666516\": \"93a5a560417b3517\", \"8e40a0e75da5dc1e30817debee95239d\": \"61ea1fa397606c26\", \"ffbcf81433c3067468208b6d5b91aa83\": \"dc672da4bcf49d0c\", \"af2b2232df20a470d516dbe474a63132\": \"171c28db9026e6e7\", \"ce564e264da03668e25badeb960753cc\": \"53ccf7182b6291f0\", \"b40838a45d9aeb25fb42668402caae13\": \"552feee11617ca3d\", \"79d5d7992b8c0600feda74e2225553fe\": \"5f6a91f416a2c53d\", \"d0761a1e0c66eaf4608f5c61ac79b3c2\": \"d8b356b09b61f880\"}",
+   "components": {
+    "03a07ec7a62fbc2d6bf4748aafd30303": {
+     "pinnacle_h2h": [
+      [
+       "Nebraska Cornhuskers",
+       0,
+       152
+      ],
+      [
+       "Ohio State Buckeyes",
+       0,
+       -169
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nebraska Cornhuskers",
+       3.5,
+       -106
+      ],
+      [
+       "Ohio State Buckeyes",
+       -3.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -110
+      ],
+      [
+       "Under",
+       41.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft: Dolphins, Titans, Eagles, Jets, Ch",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "AP college football Week 11 poll reaction: What's ",
+      "Breaking down the major futures for the Big Ten, f",
+      "Can Nebraska's Matt Rhule end his drought against ",
+      "Connelly on Week 12: Test for Tennessee; Big Ten f",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "Nebraska hosts No. 16 Ohio State in Big Ten matchu",
+      "Ohio State's club team might be the Buckeyes' most",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an",
+      "Why Jordan Reid has the Titans taking Jeremiah Smi"
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    },
+    "4336f3fcf7e287f1609c1822fef8f63d": {
+     "pinnacle_h2h": [
+      [
+       "Army Black Knights",
+       0,
+       -225
+      ],
+      [
+       "East Carolina Pirates",
+       0,
+       198
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Army Black Knights",
+       -6.0,
+       -105
+      ],
+      [
+       "East Carolina Pirates",
+       6.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -101
+      ],
+      [
+       "Under",
+       46.0,
+       -115
+      ]
+     ],
+     "news": [
+      "AAC matchup features Army playing East Carolina",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    },
+    "606426f36cb32d1843f6abbe6f683b76": {
+     "pinnacle_h2h": [
+      [
+       "BYU Cougars",
+       0,
+       -203
+      ],
+      [
+       "Kansas Jayhawks",
+       0,
+       181
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "BYU Cougars",
+       -5.5,
+       -104
+      ],
+      [
+       "Kansas Jayhawks",
+       5.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -105
+      ],
+      [
+       "Under",
+       47.0,
+       -111
+      ]
+     ],
+     "news": [
+      "AP college football Week 11 poll reaction: What's ",
+      "Connelly on Week 12: Test for Tennessee; Big Ten f",
+      "No. 12 BYU and Kansas meet in Big 12 play",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    },
+    "561b0188c024ce49bdd77391f44dc605": {
+     "pinnacle_h2h": [
+      [
+       "Boston College Eagles",
+       0,
+       135
+      ],
+      [
+       "Syracuse Orange",
+       0,
+       -150
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boston College Eagles",
+       3.0,
+       -107
+      ],
+      [
+       "Syracuse Orange",
+       -3.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -111
+      ],
+      [
+       "Under",
+       52.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Boston College hosts Syracuse in ACC matchup",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sizing up college football's best races down the h",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    },
+    "01aaf98c4f62bba0a964a9b400666516": {
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bearcats",
+       0,
+       -154
+      ],
+      [
+       "Colorado Buffaloes",
+       0,
+       138
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bearcats",
+       -3.0,
+       -107
+      ],
+      [
+       "Colorado Buffaloes",
+       3.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -110
+      ],
+      [
+       "Under",
+       56.5,
+       -106
+      ]
+     ],
+     "news": [
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "Cincinnati and Colorado meet in Big 12 play",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    },
+    "8e40a0e75da5dc1e30817debee95239d": {
+     "pinnacle_h2h": [
+      [
+       "Florida Gators",
+       0,
+       -508
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       410
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Gators",
+       -13.5,
+       -109
+      ],
+      [
+       "Vanderbilt Commodores",
+       13.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -105
+      ],
+      [
+       "Under",
+       47.0,
+       -111
+      ]
+     ],
+     "news": [
+      "Clark Lea calls for Vandy's biggest improvement to",
+      "Former Vandy QB, Heisman Trophy runner-up Pavia go",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "QB rankings for all 68 Power 4 college football te",
+      "SEC matchup features No. 23 Florida taking on Vand",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "What Chizik knows, wants to know about Bama, UF, O",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    },
+    "ffbcf81433c3067468208b6d5b91aa83": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Tech Yellow Jackets",
+       0,
+       962
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       0,
+       -1450
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Tech Yellow Jackets",
+       21.0,
+       -101
+      ],
+      [
+       "Wake Forest Demon Deacons",
+       -21.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -106
+      ],
+      [
+       "Under",
+       56.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "AP college football Week 11 poll reaction: What's ",
+      "Connelly on Week 12: Test for Tennessee; Big Ten f",
+      "Georgia Tech hosts No. 10 Wake Forest in ACC match",
+      "No. 10 Wake Forest visits Georgia Tech, looking to",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sam Hartman's next drive: 'The Bachelor' questions",
+      "Sizing up college football's best races down the h",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Wake Forest up to No. 10 in AP poll as top teams a",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    },
+    "af2b2232df20a470d516dbe474a63132": {
+     "pinnacle_h2h": [
+      [
+       "Memphis Tigers",
+       0,
+       -140
+      ],
+      [
+       "Navy Midshipmen",
+       0,
+       126
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Memphis Tigers",
+       -2.5,
+       -112
+      ],
+      [
+       "Navy Midshipmen",
+       2.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       68.5,
+       -107
+      ],
+      [
+       "Under",
+       68.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Navy hosts No. 24 Memphis in AAC play",
+      "Sizing up college football's best races down the h",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    },
+    "ce564e264da03668e25badeb960753cc": {
+     "pinnacle_h2h": [
+      [
+       "Minnesota Golden Gophers",
+       0,
+       116
+      ],
+      [
+       "Northwestern Wildcats",
+       0,
+       -128
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Minnesota Golden Gophers",
+       2.5,
+       -104
+      ],
+      [
+       "Northwestern Wildcats",
+       -2.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -108
+      ],
+      [
+       "Under",
+       41.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 11 poll reaction: What's ",
+      "Northwestern meets Minnesota in Big Ten play",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    },
+    "b40838a45d9aeb25fb42668402caae13": {
+     "pinnacle_h2h": [
+      [
+       "North Texas Mean Green",
+       0,
+       -246
+      ],
+      [
+       "Tulane Green Wave",
+       0,
+       215
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Texas Mean Green",
+       -6.5,
+       -112
+      ],
+      [
+       "Tulane Green Wave",
+       6.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -105
+      ],
+      [
+       "Under",
+       56.5,
+       -111
+      ]
+     ],
+     "news": [
+      "North Texas QB Tayven Jackson out with upper-body ",
+      "North Texas meets Tulane in AAC play",
+      "Sizing up college football's best races down the h"
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    },
+    "79d5d7992b8c0600feda74e2225553fe": {
+     "pinnacle_spreads": [
+      [
+       "Ole Miss Rebels",
+       -50.0,
+       -111
+      ],
+      [
+       "Wofford Terriers",
+       50.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       60.0,
+       -110
+      ],
+      [
+       "Under",
+       60.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 11 poll reaction: What's ",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "What Chizik knows, wants to know about Bama, UF, O",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    },
+    "d0761a1e0c66eaf4608f5c61ac79b3c2": {
+     "pinnacle_h2h": [
+      [
+       "Purdue Boilermakers",
+       0,
+       185
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       -209
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Purdue Boilermakers",
+       6.0,
+       -116
+      ],
+      [
+       "Wisconsin Badgers",
+       -6.0,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -107
+      ],
+      [
+       "Under",
+       46.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Purdue rolls with FAA ground stop by taking buses ",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Wisconsin meets Purdue in Big Ten action",
+      "Wisconsin safety Matt Jung to have season-ending a"
+     ],
+     "kalshi_snap": "snap_20261121T1407Z.parquet"
+    }
+   },
+   "triggers": {
+    "03a07ec7a62fbc2d6bf4748aafd30303": "anchor_prekick",
+    "4336f3fcf7e287f1609c1822fef8f63d": "anchor_prekick",
+    "606426f36cb32d1843f6abbe6f683b76": "anchor_prekick",
+    "561b0188c024ce49bdd77391f44dc605": "anchor_prekick",
+    "01aaf98c4f62bba0a964a9b400666516": "anchor_prekick",
+    "8e40a0e75da5dc1e30817debee95239d": "anchor_prekick",
+    "ffbcf81433c3067468208b6d5b91aa83": "anchor_prekick",
+    "af2b2232df20a470d516dbe474a63132": "anchor_prekick",
+    "ce564e264da03668e25badeb960753cc": "anchor_prekick",
+    "b40838a45d9aeb25fb42668402caae13": "anchor_prekick",
+    "79d5d7992b8c0600feda74e2225553fe": "anchor_prekick",
+    "d0761a1e0c66eaf4608f5c61ac79b3c2": "anchor_prekick"
+   }
+  }
  }
 ]
