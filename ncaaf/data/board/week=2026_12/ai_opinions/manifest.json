@@ -19080,5 +19080,345 @@
     "3a5bb507e8305c5de6aa0b6c1e43e638": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T201903Z.parquet",
+  "sha256": "889b758fe9a96a15497716a4478c7c9c785c9fecd435dc001f6c838d3182c175",
+  "logged_utc": "2026-11-21T20:19:03.442424+00:00",
+  "rows": 20,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 7,
+  "no_view_share": 0.6,
+  "revised_rows": 16,
+  "oldest_source_age_min": 18.8,
+  "first_kickoff_utc": "2026-11-21T20:45:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T200013Z.parquet",
+   "inputs_digest": "{\"5c082e013b5328e3db1def552628765f\": \"f782dc4f14a4bb9a\", \"0a1a6c2630e51e32d24695f02c0b3f23\": \"bf0c0993b8e9e38a\", \"e17410526acddf2500fb788f40901b3f\": \"a956f9ce83725cd5\", \"cc2b1d4b7378697dc11c744aeb015af9\": \"b7d52f33cfb2937c\", \"6d977752327ee29e19d3e1856683efee\": \"4b507871655f1f48\", \"cbe55180a8bee495fa1520fbc1df314b\": \"615702aca6a73626\", \"37f01277971fbdbe6d2b8f77fa63dd52\": \"9c2044acc5371f81\"}",
+   "components": {
+    "5c082e013b5328e3db1def552628765f": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma Sooners",
+       0,
+       -269
+      ],
+      [
+       "Texas A&M Aggies",
+       0,
+       233
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma Sooners",
+       -7.0,
+       -104
+      ],
+      [
+       "Texas A&M Aggies",
+       7.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.0,
+       -108
+      ],
+      [
+       "Under",
+       37.0,
+       -108
+      ]
+     ],
+     "news": [
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Matt Stinchcomb says OU showed the 'epitome of com",
+      "Monroe Freeling, Lee Hunter top Panthers' rookie r",
+      "Oklahoma coach Venables shouts out Love's after Bu",
+      "QB rankings for all 68 Power 4 college football te",
+      "Saturday Spin: Manning's return to Texas, Stockton",
+      "Sources: Michigan to hire Texas A&M's Trev Alberts",
+      "Sources: Texas A&M expected to bench Marcel Reed, ",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "UGA's resilience, OU's efficiency highlight best o",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261121T2007Z.parquet"
+    },
+    "0a1a6c2630e51e32d24695f02c0b3f23": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Southern Eagles",
+       0,
+       -308
+      ],
+      [
+       "Troy Trojans",
+       0,
+       264
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Southern Eagles",
+       -8.0,
+       -105
+      ],
+      [
+       "Troy Trojans",
+       8.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -104
+      ],
+      [
+       "Under",
+       47.5,
+       -112
+      ]
+     ],
+     "kalshi_snap": "snap_20261121T2007Z.parquet"
+    },
+    "e17410526acddf2500fb788f40901b3f": {
+     "pinnacle_h2h": [
+      [
+       "Georgia State Panthers",
+       0,
+       137
+      ],
+      [
+       "Marshall Thundering Herd",
+       0,
+       -152
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia State Panthers",
+       3.0,
+       101
+      ],
+      [
+       "Marshall Thundering Herd",
+       -3.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -105
+      ],
+      [
+       "Under",
+       56.5,
+       -111
+      ]
+     ],
+     "kalshi_snap": "snap_20261121T2007Z.parquet"
+    },
+    "cc2b1d4b7378697dc11c744aeb015af9": {
+     "pinnacle_h2h": [
+      [
+       "North Dakota State Bison",
+       0,
+       -2959
+      ],
+      [
+       "Northern Illinois Huskies",
+       0,
+       1638
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Dakota State Bison",
+       -26.0,
+       -109
+      ],
+      [
+       "Northern Illinois Huskies",
+       26.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -115
+      ],
+      [
+       "Under",
+       46.0,
+       -102
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261121T2007Z.parquet"
+    },
+    "6d977752327ee29e19d3e1856683efee": {
+     "pinnacle_h2h": [
+      [
+       "South Alabama Jaguars",
+       0,
+       -192
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       171
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Alabama Jaguars",
+       -5.0,
+       -103
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       5.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       65.5,
+       -102
+      ],
+      [
+       "Under",
+       65.5,
+       -114
+      ]
+     ],
+     "kalshi_snap": "snap_20261121T2007Z.parquet"
+    },
+    "cbe55180a8bee495fa1520fbc1df314b": {
+     "pinnacle_h2h": [
+      [
+       "Texas State Bobcats",
+       0,
+       -534
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       427
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Texas State Bobcats",
+       -13.5,
+       -110
+      ],
+      [
+       "Washington State Cougars",
+       13.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       61.5,
+       -104
+      ],
+      [
+       "Under",
+       61.5,
+       -112
+      ]
+     ],
+     "kalshi_snap": "snap_20261121T2007Z.parquet"
+    },
+    "37f01277971fbdbe6d2b8f77fa63dd52": {
+     "pinnacle_h2h": [
+      [
+       "Maryland Terrapins",
+       0,
+       667
+      ],
+      [
+       "USC Trojans",
+       0,
+       -913
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Maryland Terrapins",
+       17.5,
+       -105
+      ],
+      [
+       "USC Trojans",
+       -17.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -106
+      ],
+      [
+       "Under",
+       57.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "Florida State going turquoise tops best uniforms o",
+      "QB rankings for all 68 Power 4 college football te",
+      "Sources: Urban Meyer not a candidate for open Mary",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261121T2007Z.parquet"
+    }
+   },
+   "triggers": {
+    "5c082e013b5328e3db1def552628765f": "anchor_close",
+    "0a1a6c2630e51e32d24695f02c0b3f23": "anchor_close",
+    "e17410526acddf2500fb788f40901b3f": "anchor_close",
+    "cc2b1d4b7378697dc11c744aeb015af9": "anchor_close",
+    "6d977752327ee29e19d3e1856683efee": "anchor_close",
+    "cbe55180a8bee495fa1520fbc1df314b": "anchor_prekick",
+    "37f01277971fbdbe6d2b8f77fa63dd52": "anchor_prekick"
+   }
+  }
  }
 ]
