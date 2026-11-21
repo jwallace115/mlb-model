@@ -17852,5 +17852,570 @@
     "6d977752327ee29e19d3e1856683efee": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T183403Z.parquet",
+  "sha256": "8d8e7361fc050e9da0359c90219ada60538adfe13530c2b6765a8b7bd78f12b2",
+  "logged_utc": "2026-11-21T18:34:03.779618+00:00",
+  "rows": 20,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 7,
+  "no_view_share": 0.65,
+  "revised_rows": 15,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T19:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T183007Z.parquet",
+   "inputs_digest": "{\"f45e59db6a335d4ffd3741f83a45327a\": \"fcc255f60715ec28\", \"ba44f7b0a5535ae2369e8ea165fb287f\": \"5445a14c36c8e3ba\", \"d7b3c2454c6b34f734497049e744bab0\": \"0a0167546c426e57\", \"347054d00e6c0020484eb64f1ad1b58d\": \"c720fe216e39ddf7\", \"c3b7f980521e9fb576ce8dbd49a9f7de\": \"b8ae7111f43290f7\", \"5c082e013b5328e3db1def552628765f\": \"9b468140b1be57f2\", \"a05c0d32b35dfd5cca63a61af28b9739\": \"c588874bbb287e3e\"}",
+   "components": {
+    "f45e59db6a335d4ffd3741f83a45327a": {
+     "pinnacle_spreads": [
+      [
+       "Alabama Crimson Tide",
+       -46.5,
+       -114
+      ],
+      [
+       "Chattanooga Mocs",
+       46.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -111
+      ],
+      [
+       "Under",
+       56.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Alabama running back prospect AK Dear no longer wi",
+      "Alyssa Lang analyzes, raises questions about recen",
+      "CFP SEC representation probabilities, teams that c",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Inside the complexities of clock management in col",
+      "Is Alabama too high in the CFP rankings?",
+      "Kalen DeBoer says this is his most complete Alabam",
+      "No. 7 Alabama goes for its 4th straight win when i",
+      "QB rankings for all 68 Power 4 college football te",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "What Chizik knows, wants to know about Bama, UF, O",
+      "Which teams have the best odds to make the College",
+      "Which teams will end up in Atlanta for the final S",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an",
+      "Why Stephen A. has 'no problem' with Alabama ranke"
+     ],
+     "kalshi_snap": "snap_20261121T1837Z.parquet"
+    },
+    "ba44f7b0a5535ae2369e8ea165fb287f": {
+     "pinnacle_h2h": [
+      [
+       "Charlotte 49ers",
+       0,
+       1115
+      ],
+      [
+       "Tulsa Golden Hurricane",
+       0,
+       -1759
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Charlotte 49ers",
+       22.5,
+       -106
+      ],
+      [
+       "Tulsa Golden Hurricane",
+       -22.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -101
+      ],
+      [
+       "Under",
+       52.0,
+       -116
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 11: Paying tribute to our fou"
+     ],
+     "kalshi_snap": "snap_20261121T1837Z.parquet"
+    },
+    "d7b3c2454c6b34f734497049e744bab0": {
+     "pinnacle_h2h": [
+      [
+       "Jacksonville State Gamecocks",
+       0,
+       -427
+      ],
+      [
+       "Missouri State Bears",
+       0,
+       353
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville State Gamecocks",
+       -11.5,
+       100
+      ],
+      [
+       "Missouri State Bears",
+       11.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -112
+      ],
+      [
+       "Under",
+       52.5,
+       -104
+      ]
+     ],
+     "kalshi_snap": "snap_20261121T1837Z.parquet"
+    },
+    "347054d00e6c0020484eb64f1ad1b58d": {
+     "pinnacle_h2h": [
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -207
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       183
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Middle Tennessee Blue Raiders",
+       -6.0,
+       100
+      ],
+      [
+       "Sam Houston State Bearkats",
+       6.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -102
+      ],
+      [
+       "Under",
+       48.0,
+       -114
+      ]
+     ],
+     "kalshi_snap": "snap_20261121T1837Z.parquet"
+    },
+    "c3b7f980521e9fb576ce8dbd49a9f7de": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas Razorbacks",
+       0,
+       837
+      ],
+      [
+       "Texas Longhorns",
+       0,
+       -1213
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas Razorbacks",
+       19.0,
+       -109
+      ],
+      [
+       "Texas Longhorns",
+       -19.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -111
+      ],
+      [
+       "Under",
+       46.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Bayless: I'm closing my eyes and taking Arch Manni",
+      "Block Party: Cubelic almost kicks Harper out of th",
+      "CFP SEC representation probabilities, teams that c",
+      "Chizik breaks down the film for a dive into a Mann",
+      "Connelly on Week 12: Test for Tennessee; Big Ten f",
+      "Former Texas QB Colt McCoy stresses consistency, a",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "No. 5 Texas' November dominance spells trouble for",
+      "QB rankings for all 68 Power 4 college football te",
+      "Saturday Spin: Manning's return to Texas, Stockton",
+      "Take a 360-degree look at college football's iconi",
+      "Texas win streak has the Longhorns aiming for play",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Vols top Matt Stinchcomb's list of top three SEC d",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Which teams will end up in Atlanta for the final S",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261121T1837Z.parquet"
+    },
+    "5c082e013b5328e3db1def552628765f": {
+     "pinnacle_h2h": [
+      [
+       "Oklahoma Sooners",
+       0,
+       -269
+      ],
+      [
+       "Texas A&M Aggies",
+       0,
+       233
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oklahoma Sooners",
+       -7.0,
+       -104
+      ],
+      [
+       "Texas A&M Aggies",
+       7.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.0,
+       -108
+      ],
+      [
+       "Under",
+       37.0,
+       -108
+      ]
+     ],
+     "news": [
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Matt Stinchcomb says OU showed the 'epitome of com",
+      "Monroe Freeling, Lee Hunter top Panthers' rookie r",
+      "Oklahoma coach Venables shouts out Love's after Bu",
+      "QB rankings for all 68 Power 4 college football te",
+      "Saturday Spin: Manning's return to Texas, Stockton",
+      "Sources: Michigan to hire Texas A&M's Trev Alberts",
+      "Sources: Texas A&M expected to bench Marcel Reed, ",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "UGA's resilience, OU's efficiency highlight best o",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261121T1837Z.parquet"
+    },
+    "a05c0d32b35dfd5cca63a61af28b9739": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Bulldogs",
+       0,
+       -732
+      ],
+      [
+       "South Carolina Gamecocks",
+       0,
+       557
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Bulldogs",
+       -15.0,
+       -104
+      ],
+      [
+       "South Carolina Gamecocks",
+       15.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       102
+      ],
+      [
+       "Under",
+       52.0,
+       -119
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Alshon Jeffery discusses energy around No. 21 Sout",
+      "Alyssa Lang analyzes, raises questions about recen",
+      "Block Party: Cubelic almost kicks Harper out of th",
+      "Bottom 10 after Week 11: Paying tribute to our fou",
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "CFP SEC representation probabilities, teams that c",
+      "Connelly on Week 12: Test for Tennessee; Big Ten f",
+      "Georgia AG asks SEC to take action against LSU's '",
+      "Inside the complexities of clock management in col",
+      "Jeremiah Donati dives into South Carolina's renova",
+      "Monroe Freeling, Lee Hunter top Panthers' rookie r",
+      "No. 1 Georgia has all the tools to dismantle No. 2",
+      "No. 1 Georgia looks to take a step toward SEC hist",
+      "QB rankings for all 68 Power 4 college football te",
+      "SEC Now crew dissects No. 1 Georgia's dominant gro",
+      "Saturday Spin: Manning's return to Texas, Stockton",
+      "Shane Beamer discusses priming for No. 1 UGA, toug",
+      "Shane Beamer joins SEC Nation ahead of South Carol",
+      "Smith and Sellers reviews South Carolina's roller ",
+      "South Carolina legend Alshon Jeffery discusses Geo",
+      "South Carolina star QB LaNorris Sellers set to pla",
+      "Tebow praises South Carolina QB Sellers' athletici",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "UGA's resilience, OU's efficiency highlight best o",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Which teams will end up in Atlanta for the final S",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an",
+      "Will Georgia or the field win CFP title?"
+     ],
+     "kalshi_snap": "snap_20261121T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "f45e59db6a335d4ffd3741f83a45327a": "anchor_close",
+    "ba44f7b0a5535ae2369e8ea165fb287f": "anchor_close",
+    "d7b3c2454c6b34f734497049e744bab0": "anchor_close",
+    "347054d00e6c0020484eb64f1ad1b58d": "anchor_close",
+    "c3b7f980521e9fb576ce8dbd49a9f7de": "new_news: 1 availability items",
+    "5c082e013b5328e3db1def552628765f": "new_news: 1 availability items",
+    "a05c0d32b35dfd5cca63a61af28b9739": "new_news: 1 availability items"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261121T184903Z.parquet",
+  "sha256": "a9dbe671003f7d02da73f0aa4db3bccd798c32557c09c6c047cb04283236e708",
+  "logged_utc": "2026-11-21T18:49:03.402859+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 9,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-21T19:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T183007Z.parquet",
+   "inputs_digest": "{\"bd9d4f32b0b91c0140a3dd9574f8ae13\": \"ccacb5fd1f215648\", \"3099e24c0ab2767eb9c56f6ef5eeefc2\": \"ebb49fc820c8c41e\", \"725c6205de38f91b507a880c139eda54\": \"b7354c5e7ca39341\"}",
+   "components": {
+    "bd9d4f32b0b91c0140a3dd9574f8ae13": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       -594
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       468
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       -13.5,
+       -116
+      ],
+      [
+       "UL Monroe Warhawks",
+       13.5,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -101
+      ],
+      [
+       "Under",
+       50.5,
+       -115
+      ]
+     ],
+     "kalshi_snap": "snap_20261121T1837Z.parquet"
+    },
+    "3099e24c0ab2767eb9c56f6ef5eeefc2": {
+     "pinnacle_h2h": [
+      [
+       "Florida Atlantic Owls",
+       0,
+       111
+      ],
+      [
+       "South Florida Bulls",
+       0,
+       -122
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Atlantic Owls",
+       1.5,
+       103
+      ],
+      [
+       "South Florida Bulls",
+       -1.5,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       64.5,
+       -101
+      ],
+      [
+       "Under",
+       64.5,
+       -115
+      ]
+     ],
+     "news": [
+      "Florida State going turquoise tops best uniforms o"
+     ],
+     "kalshi_snap": "snap_20261121T1837Z.parquet"
+    },
+    "725c6205de38f91b507a880c139eda54": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       272
+      ],
+      [
+       "Iowa Hawkeyes",
+       0,
+       -318
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       9.0,
+       -110
+      ],
+      [
+       "Iowa Hawkeyes",
+       -9.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.0,
+       -112
+      ],
+      [
+       "Under",
+       41.0,
+       -104
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Connelly on Week 12: Test for Tennessee; Big Ten f",
+      "Purdue rolls with FAA ground stop by taking buses ",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261121T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "bd9d4f32b0b91c0140a3dd9574f8ae13": "anchor_close",
+    "3099e24c0ab2767eb9c56f6ef5eeefc2": "anchor_close",
+    "725c6205de38f91b507a880c139eda54": "anchor_close"
+   }
+  }
  }
 ]
