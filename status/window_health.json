@@ -40,23 +40,23 @@
   "freeze_file": null
  },
  {
-  "sport": "nfl",
+  "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-21T18:47:05.607563+00:00",
-  "finished_utc": "2026-11-21T18:47:05.607563+00:00",
+  "started_utc": "2026-11-21T19:10:06.767939+00:00",
+  "finished_utc": "2026-11-21T19:10:06.767939+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
   "freeze_file": null
  },
  {
-  "sport": "ncaaf",
+  "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-21T18:59:45.317381+00:00",
-  "finished_utc": "2026-11-21T18:59:45.317381+00:00",
+  "started_utc": "2026-11-21T19:22:20.652885+00:00",
+  "finished_utc": "2026-11-21T19:22:20.652885+00:00",
   "result": "COMPLETE",
   "step": "window_watch",
-  "message": "['anchor_close', 'anchor_close', 'anchor_close']",
-  "freeze_file": "ai_opinions_20261121T184903Z.parquet"
+  "message": "['new_props: pull 2026-11-21T19:18:06.606208+00:00; injury_change: inj_Kansas City Chiefs', 'new_props: pull 2026-11-21T19:18:06.606208+00:00; injury_change: inj_Buffalo Bills; injury_change: inj_Miam",
+  "freeze_file": "ai_opinions_20261121T191703Z.parquet"
  }
 ]

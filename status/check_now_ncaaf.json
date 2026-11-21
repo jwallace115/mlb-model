@@ -1,25 +1,12 @@
 {
- "started_utc": "2026-11-21T18:49:03.402859+00:00",
- "finished_utc": "2026-11-21T18:59:45.338076+00:00",
+ "started_utc": "2026-11-21T19:04:03.265448+00:00",
+ "finished_utc": "2026-11-21T19:10:06.791509+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "bd9d4f32b0b91c0140a3dd9574f8ae13",
-   "text": "anchor_close"
-  },
-  {
-   "game": "3099e24c0ab2767eb9c56f6ef5eeefc2",
-   "text": "anchor_close"
-  },
-  {
-   "game": "725c6205de38f91b507a880c139eda54",
-   "text": "anchor_close"
-  }
- ],
- "games_read": 3,
- "frozen_file": "ai_opinions_20261121T184903Z.parquet",
- "spend_usd": 31.0984,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }

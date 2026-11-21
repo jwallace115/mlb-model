@@ -1,12 +1,41 @@
 {
- "started_utc": "2026-11-21T18:47:05.139359+00:00",
- "finished_utc": "2026-11-21T18:47:05.706253+00:00",
+ "started_utc": "2026-11-21T19:17:03.488375+00:00",
+ "finished_utc": "2026-11-21T19:22:21.591764+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "403a88701352da05b0710a9e883b803e",
+   "text": "new_props: pull 2026-11-21T19:18:06.606208+00:00; injury_change: inj_Kansas City Chiefs"
+  },
+  {
+   "game": "4c5b1c0843a260278e95eb93e7787576",
+   "text": "new_props: pull 2026-11-21T19:18:06.606208+00:00; injury_change: inj_Buffalo Bills; injury_change: inj_Miami Dolphins"
+  },
+  {
+   "game": "3ea90704fb576633bd1e2fa5aafd9ea3",
+   "text": "new_props: pull 2026-11-21T19:18:06.606208+00:00; injury_change: inj_New Orleans Saints"
+  },
+  {
+   "game": "5e63079b678f8c13419adc169fff02d3",
+   "text": "new_props: pull 2026-11-21T19:18:06.606208+00:00; injury_change: inj_Tennessee Titans"
+  },
+  {
+   "game": "41e2dd69bddd65d7e823d9ed61cc2afc",
+   "text": "new_props: pull 2026-11-21T19:18:06.606208+00:00; injury_change: inj_Tampa Bay Buccaneers"
+  },
+  {
+   "game": "cbe45bafcc2615fc1d96cbc12840377a",
+   "text": "new_props: pull 2026-11-21T19:18:06.606208+00:00; injury_change: inj_Pittsburgh Steelers"
+  },
+  {
+   "game": "4b20b742b6168aaca4f25d87f11b1526",
+   "text": "new_props: pull 2026-11-21T19:18:06.606208+00:00; injury_change: inj_New York Jets"
+  }
+ ],
+ "games_read": 7,
+ "frozen_file": "ai_opinions_20261121T191703Z.parquet",
+ "spend_usd": 31.3652,
+ "result": "COMPLETE"
 }
