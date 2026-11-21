@@ -430,3 +430,4 @@
 {"utc":"20261120T0900Z","feed":"nflverse_rosters","file":"rosters_weekly.parquet","sha256":"241457564107d0b179fd1b521b78d4e288c5a44e8208ddfa53f112b114516cbc","status":"written"}
 {"utc": "20261120T1230Z", "feed": "espn_depth", "sha256": "767beaff72dfc908eca950711933c86f87a880bd7c47803424b294406b006d44", "status": "unchanged"}
 {"utc": "20261120T1830Z", "feed": "espn_depth", "sha256": "65318eba85b6d991232dfda5a6aceb32cd03115156883c89a5bff26fc8f7e00a", "status": "written"}
+{"utc": "20261121T0030Z", "feed": "espn_depth", "sha256": "277b58cce3621f5de8aef6a9a8d584e680adf81d37e9902d69cd31acc24992a8", "status": "written"}
