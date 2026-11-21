@@ -18417,5 +18417,153 @@
     "725c6205de38f91b507a880c139eda54": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T191904Z.parquet",
+  "sha256": "920a5be07e95aba37bf377f6c7d01169647fc2b445d29e15c5aeef65cabda4ea",
+  "logged_utc": "2026-11-21T19:19:04.209670+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.889,
+  "revised_rows": 9,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-21T20:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T190009Z.parquet",
+   "inputs_digest": "{\"2851a39f971851008dbec9970da34737\": \"4476ec4833783452\", \"96d5698a996feb547e098ba4b2178c0c\": \"8c414a98d08d0707\", \"b3f08ccb712c2c765cc2d55b4608a3dd\": \"80e621afc0cb4554\"}",
+   "components": {
+    "2851a39f971851008dbec9970da34737": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       310
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -369
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       10.0,
+       -102
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       -10.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -109
+      ],
+      [
+       "Under",
+       49.0,
+       -107
+      ]
+     ],
+     "kalshi_snap": "snap_20261121T1907Z.parquet"
+    },
+    "96d5698a996feb547e098ba4b2178c0c": {
+     "pinnacle_h2h": [
+      [
+       "Delaware Blue Hens",
+       0,
+       -136
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       123
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Delaware Blue Hens",
+       -2.5,
+       -114
+      ],
+      [
+       "New Mexico State Aggies",
+       2.5,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -108
+      ],
+      [
+       "Under",
+       53.5,
+       -108
+      ]
+     ],
+     "news": [
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261121T1907Z.parquet"
+    },
+    "b3f08ccb712c2c765cc2d55b4608a3dd": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       109
+      ],
+      [
+       "Kennesaw State Owls",
+       0,
+       -120
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       2.5,
+       -111
+      ],
+      [
+       "Kennesaw State Owls",
+       -2.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       100
+      ],
+      [
+       "Under",
+       45.0,
+       -117
+      ]
+     ],
+     "kalshi_snap": "snap_20261121T1907Z.parquet"
+    }
+   },
+   "triggers": {
+    "2851a39f971851008dbec9970da34737": "anchor_close",
+    "96d5698a996feb547e098ba4b2178c0c": "anchor_close",
+    "b3f08ccb712c2c765cc2d55b4608a3dd": "anchor_close"
+   }
+  }
  }
 ]
