@@ -12690,5 +12690,82 @@
     "d0761a1e0c66eaf4608f5c61ac79b3c2": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261121T143403Z.parquet",
+  "sha256": "346016da347ddf4cc159fb3371928228c8e27ff2fb7e562a8337c54edc22da55",
+  "logged_utc": "2026-11-21T14:34:03.247394+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-21T17:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261121T143006Z.parquet",
+   "inputs_digest": "{\"1f59b6d72003ce254b32c815e73b252d\": \"f52ed460c14192b4\"}",
+   "components": {
+    "1f59b6d72003ce254b32c815e73b252d": {
+     "pinnacle_h2h": [
+      [
+       "North Carolina Tar Heels",
+       0,
+       101
+      ],
+      [
+       "Virginia Cavaliers",
+       0,
+       -111
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Carolina Tar Heels",
+       1.5,
+       -110
+      ],
+      [
+       "Virginia Cavaliers",
+       -1.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -110
+      ],
+      [
+       "Under",
+       41.5,
+       -106
+      ]
+     ],
+     "news": [
+      "ACC matchup features Virginia against North Caroli",
+      "ACC suspends Louisville LB Clark, UNC DB Smith ove",
+      "Bill Belichick, Robert Kraft named Hall of Fame fi",
+      "Florida State going turquoise tops best uniforms o",
+      "Pawn shop fighting 'Gold Digger' trademark filed b",
+      "QB rankings for all 68 Power 4 college football te",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261121T1437Z.parquet"
+    }
+   },
+   "triggers": {
+    "1f59b6d72003ce254b32c815e73b252d": "anchor_prekick"
+   }
+  }
  }
 ]
