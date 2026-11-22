@@ -16044,5 +16044,144 @@
    "props": "data_2026_11.parquet",
    "lines": "snap_20261122T220007Z.parquet"
   }
+ },
+ {
+  "file": "ai_opinions_20261122T223205Z.parquet",
+  "sha256": "2df109d052deb4c2c88cf088a3e3aba941b8fe83126966ad81b67be99318b851",
+  "logged_utc": "2026-11-22T22:32:05.492984+00:00",
+  "rows": 76,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.947,
+  "revised_rows": 68,
+  "oldest_source_age_min": 181.9,
+  "first_kickoff_utc": "2026-11-23T01:20:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261122T223009Z.parquet",
+   "inputs_digest": "{\"60e1d27b083a335b722c2c852ea85612\": \"50d1211df1a2aa08\"}",
+   "components": {
+    "60e1d27b083a335b722c2c852ea85612": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Minnesota Vikings",
+       0,
+       175
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -210
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Minnesota Vikings",
+       4.0,
+       -105
+      ],
+      [
+       "San Francisco 49ers",
+       -4.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       45.5,
+       -110
+      ],
+      [
+       "Under",
+       45.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Minnesota Vikings",
+       0,
+       181
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -204
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Minnesota Vikings",
+       3.5,
+       105
+      ],
+      [
+       "San Francisco 49ers",
+       -3.5,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -112
+      ],
+      [
+       "Under",
+       45.0,
+       100
+      ]
+     ],
+     "props_ts": "2026-11-22T18:33:51.529131+00:00",
+     "inj_San Francisco 49ers": "773b8996bebb38bb",
+     "inj_Minnesota Vikings": "419aeb885e86ff1d",
+     "news": [
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "49ers WR Mike Evans' Achilles tendinitis injury ex",
+      "49ers preparing for Vikings dominant defense",
+      "Best bets for Vikings-49ers: Tips, analysis and ou",
+      "Can the Vikings make a Super Bowl run with Kirk Co",
+      "How Vikings brought Mexico City's elevation to Min",
+      "In Mexico City, 49ers' Fred Warner can represent h",
+      "Justin Jefferson getting back into a flow with Kir",
+      "Kirk Cousins on pace to make history as 1st QB to ",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL offseason free agent and trade acquisitions th",
+      "Nick Bosa looks to end defensive struggles",
+      "Niners' Nick Bosa on 4-game sack drought: 'Don't t",
+      "Police investigate man's death after alleged alter",
+      "Sources: Brandon Aiyuk contacted Jayden Daniels to",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Vikings take on Mexico City",
+      "Vikings' Cousins channeling Dantonio's 'slow down'",
+      "Vikings-49ers matchup in Mexico features the best ",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Week 11 betting preview: Analysis, best bets, TD p",
+      "What Stephen A. is looking to see from Vikings in ",
+      "Why Stephen A. is picking the Vikings to beat the ",
+      "Why the 49ers are practicing in Colorado before Vi"
+     ],
+     "kalshi_snap": "snap_20261122T2205Z.parquet"
+    }
+   },
+   "triggers": {
+    "60e1d27b083a335b722c2c852ea85612": "anchor_prekick"
+   }
+  }
  }
 ]
