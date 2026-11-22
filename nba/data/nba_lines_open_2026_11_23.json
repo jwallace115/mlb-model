@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "15a079f55e23d26237844224f258c972",
+    "game_date": "2026-11-23",
+    "sport": "NBA",
+    "home_team": "Chicago Bulls",
+    "away_team": "Denver Nuggets",
+    "commence_time": "2026-11-23T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 237.5,
+    "over_price": -107,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-22T06:05:02.070195+00:00"
+  },
+  {
+    "game_id": "1e7b9477c6c55aea5efd9c1a47039f5c",
+    "game_date": "2026-11-23",
+    "sport": "NBA",
+    "home_team": "Utah Jazz",
+    "away_team": "Dallas Mavericks",
+    "commence_time": "2026-11-23T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 225.5,
+    "over_price": -108,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-22T06:05:02.070195+00:00"
+  },
+  {
+    "game_id": "335ad5604b51b7742fd1dee92d78da35",
+    "game_date": "2026-11-23",
+    "sport": "NBA",
+    "home_team": "Washington Wizards",
+    "away_team": "Orlando Magic",
+    "commence_time": "2026-11-23T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 221.0,
+    "over_price": -109,
+    "under_price": -105,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-22T06:05:02.070195+00:00"
+  },
+  {
+    "game_id": "031fa761cc38e1b5afd9309b731b38b2",
+    "game_date": "2026-11-23",
+    "sport": "NBA",
+    "home_team": "New York Knicks",
+    "away_team": "Indiana Pacers",
+    "commence_time": "2026-11-23T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 218.0,
+    "over_price": -103,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-22T06:05:02.070195+00:00"
+  },
+  {
+    "game_id": "b8c5bdb50209c7d050400c7d28c32e30",
+    "game_date": "2026-11-23",
+    "sport": "NBA",
+    "home_team": "Golden State Warriors",
+    "away_team": "Boston Celtics",
+    "commence_time": "2026-11-23T01:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 212.5,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "draftkings",
+    "capture_timestamp": "2026-11-22T06:05:02.070195+00:00"
+  }
+]

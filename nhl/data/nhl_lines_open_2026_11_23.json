@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "d58a81d96dc96c937a865548f3a1a7c5",
+    "game_date": "2026-11-23",
+    "sport": "NHL",
+    "home_team": "Dallas Stars",
+    "away_team": "Pittsburgh Penguins",
+    "commence_time": "2026-11-23T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -115,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-22T06:05:02.216230+00:00"
+  },
+  {
+    "game_id": "7472170e7ddebcf27cc4e03a8b32edcc",
+    "game_date": "2026-11-23",
+    "sport": "NHL",
+    "home_team": "St Louis Blues",
+    "away_team": "Edmonton Oilers",
+    "commence_time": "2026-11-23T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -110,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-22T06:05:02.216230+00:00"
+  },
+  {
+    "game_id": "3a8553e25e16a66e676afc349395fec6",
+    "game_date": "2026-11-23",
+    "sport": "NHL",
+    "home_team": "Vancouver Canucks",
+    "away_team": "Chicago Blackhawks",
+    "commence_time": "2026-11-23T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "fanduel",
+    "capture_timestamp": "2026-11-22T06:05:02.216230+00:00"
+  }
+]
