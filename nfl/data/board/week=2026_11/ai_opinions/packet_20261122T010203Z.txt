@@ -1,0 +1,771 @@
+packet built 2026-11-22T01:02Z | snap snap_20261122T010006Z.parquet | props pull 2026-11-21T19:18 | kalshi snap_20261122T0035Z.parquet | injuries injuries_20261122T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Arizona Cardinals; new_news: 1 availability items
+######## Arizona Cardinals @ Kansas City Chiefs  kick 11-22T18:00Z
+  HR ML: Chiefs -1800 / Cardinals +900 (no-vig home 0.905) | Pinnacle no-vig home 0.895
+  HR spread: Chiefs -16 -110 / Cardinals +16 -110 | Pinnacle Chiefs -16.5 (+111) | HR open -16.0 (20261117)
+  HR total: 40.5 O-110/U-110 | Pinnacle 41.0 O+100/U-115 | HR open 41.0
+  Kalshi ML [('Kansas City wins', 0.92, 129897), ('Arizona wins', 0.08, 257295)] | spread [('Kansas City wins by over 16.5 points?', 0.47, 491101), ('Kansas City wins by over 17.5 points?', 0.43, 3274)] | total [('Full Game: over 40.5 points scored?', 0.51, 23616), ('Full Game: over 41.5 points scored?', 0.46, 340049)]
+  -- Arizona Cardinals injuries (20261122T0030)
+     Out  QB Carson Beck: Beck (back) has been ruled out for Sunday's game at Kansas City, Darren Urban of the Cardinals' official site reports.
+     Out  G  Jon Gaines II: Gaines (ankle) has been ruled out for Sunday's game against the Chiefs.
+     Inju DT Zachary Carter: Carter (knee) has been ruled out for Sunday's game against the Chiefs, Zach Gershman of the Cardinals' official site reports.
+     Acti QB Josh Johnson: Johnson is expected to start Sunday's game against the Chiefs, Theo Mackie of The Arizona Republic reports.
+     Inju RB James Conner: Cardinals head coach Mike LaFleur said Wednesday that he has no new updates on the status of Conner (foot), who is still "working to return to perform
+     Acti WR Harrison Wallace III: Wallace recorded a nine-yard reception on his lone target in Sunday's 34-6 loss to the Rams.
+     Inju QB Gardner Minshew II: Minshew (elbow) underwent UCL reconstructive surgery Monday, Jeremy Fowler of ESPN.com reports.
+     Inju LB Jordan Burch: The Cardinals placed Burch (knee) on injured reserve Tuesday.
+     Acti TE Elijah Higgins: Higgins played 24 of 35 offensive snaps (68.6 percent) but didn't get a target during the Cardinals' 34-6 loss to the Rams on Sunday.
+     Acti WR Devin Duvernay: Duvernay caught two of three targets for 35 yards during the Cardinals' 34-6 loss to the Rams on Sunday.
+     Acti WR Reggie Virgil: Virgil was on the field for 16 of the Cardinals' 35 offensive snaps (45.7 percent), but the rookie fifth-rounder didn't get a target during Sunday's 3
+     Inju S  Andrew Wingard: Wingard (wrist) was placed on injured reserve by the Cardinals on Tuesday.
+     Acti WR Simi Fehoko: Fehoko finished Sunday's 34-6 loss to the Rams with one catch on two targets for 21 yards. He also recorded a tackle.
+     Acti RB Bam Knight: Knight turned five carries into 19 yards, failed to haul in either of his two targets and recorded a tackle during the Cardinals' 34-6 loss to the Ram
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T19:59 Mike LaFleur: Cardinals proceeding as if Josh Johnson will start
+     news 11-20T21:59 Draft buzz: Interest in Oklahoma State's Drew Mestemaker could spur draft trade
+     news 11-21T21:41 Cardinals rule out rookie Carson Beck, turn to 40-year-old Josh Johnson vs. Chiefs
+     news 11-21T23:11 Cardinals going through carousel of QBs
+  -- Kansas City Chiefs injuries (20261122T0030)
+     Ques DT Omarr Norman-Lott: Norman-Lott (knee) is questionable for Sunday's game against Arizona.
+     Out  OT Jaylon Moore: Moore (ankle) has been ruled out for Sunday's game against the Cardinals.
+     Out  G  Trey Smith: Smith (concussion) has been ruled out for Sunday's game against the Cardinals.
+     Acti TE Travis Kelce: Kelce (ankle/calf) doesn't have an injury designation for Sunday's game against the Cardinals.
+     Acti RB Emmett Johnson: With Kenneth Walker (groin) ruled out for Sunday's game against the Cardinals, Johnson is in line to handle workhorse duties for the second straight w
+     Ques DT Peter Woods: questionable
+     Out  RB Kenneth Walker III: Walker (groin) has been ruled out for Sunday's game against the Cardinals.
+     Inju TE Jared Wiley: The Chiefs placed Wiley (ankle) on injured reserve Wednesday, Matt Derrick of ChiefsDigest.com reports.
+     Acti RB Jaydn Ott: Ott (hamstring) was a full participant in Wednesday's practice.
+     Acti TE Jake Briningstool: Briningstool caught one of two targets for 20 yards in Sunday's 35-13 win against the Jets on Sunday.
+     Acti TE Noah Gray: Gray caught one of three targets for six yards during Sunday's 35-13 win over the Falcons.
+     Acti QB Garrett Nussmeier: 
+     Acti WR Andrew Armstrong: Armstrong caught his only target for a 43-yard touchdown in Sunday's 35-13 win over the Falcons.
+     Acti WR Cyrus Allen: Allen caught two of four targets for 44 yards and a touchdown in Sunday's 35-13 win over the Falcons.
+     Acti WR Xavier Worthy: Worthy failed to catch any of his three targets in Sunday's 35-13 win over the Falcons.
+     Acti WR Josh Downs: Downs secured four of five targets for 53 yards and a touchdown, fumbled once but recovered and returned three punts for 10 yards in the Chiefs' 35-13
+     Acti WR Rashee Rice: Rice brought in five of six targets for 82 yards in the Chiefs' 35-13 win over the Falcons on Sunday.
+     Acti QB Patrick Mahomes: Mahomes completed 22 of 35 passes for 348 yards with five touchdowns and no interceptions while adding two rushes for 15 yards in the Chiefs' 35-13 wi
+     news 11-19T21:25 Chiefs are flying high but can ill afford to overlook the lowly Cardinals when they meet Sunday
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T11:42 NFL offseason free agent and trade acquisitions that have and have not worked
+     news 11-20T20:29 Chiefs' Kenneth Walker III, two linemen out vs. Cardinals
+     news 11-21T04:05 Josh Downs prepares for second game as a Chief
+  -- props (pull 2026-11-21T19:18)
+     * Bam Knight: atd 0.5 (+375), recyd 8.5 (-110/-120), rec 1.5 (-135/+105), ruyd 24.5 (-115/-115)
+     * Cyrus Allen: atd 0.5 (+475), recyd 12.5 (-120/-110), rec 1.5 (+150/-210)
+     * Devin Duvernay: atd 0.5 (+1000), recyd 8.5 (-120/-110), rec 1.5 (+135/-175)
+     * Elijah Higgins: atd 0.5 (+700), recyd 13.5 (-115/-115), rec 1.5 (-160/+120)
+     * Emmett Johnson: atd 0.5 (-230), recyd 28.5 (-110/-120), rec 3.5 (-110/-120), ruatt 19.5 (-130/+100), ruyd 87.5 (-115/-115)
+     * Jaydn Ott: atd 0.5 (+575)
+     * Josh Downs: atd 0.5 (+220), recyd 37.5 (-115/-115), rec 3.5 (+110/-145)
+     * Noah Gray: atd 0.5 (+475), recyd 12.5 (-115/-115), rec 1.5 (-110/-120)
+     * Patrick Mahomes: atd 0.5 (+475), paatt 31.5 (-115/-115), cmp 21.5 (-105/-125), int 0.5 (+130/-175), patd 1.5 (-195/+145), payd 249.5 (-115/-115), ruyd 9.5 (-110/-120)
+     * Rashee Rice: atd 0.5 (+150), recyd 53.5 (-115/-115), rec 4.5 (-110/-120)
+     * Reggie Virgil: atd 0.5 (+700), recyd 13.5 (-110/-120), rec 1.5 (+100/-135)
+     * Simi Fehoko: atd 0.5 (+800), recyd 14.5 (-110/-120), rec 1.5 (+100/-130)
+     * Travis Kelce: atd 0.5 (+190), recyd 40.5 (-115/-115), rec 3.5 (-115/-115)
+     * Trey McBride: atd 0.5 (+275), recyd 50.5 (-115/-115), rec 6.5 (+115/-150)
+     * Tyler Allgeier: atd 0.5 (+300), recyd 7.5 (-115/-115), rec 1.5 (-125/-105), ruatt 9.5 (-115/-115), ruyd 27.5 (-120/-110)
+     * Xavier Worthy: atd 0.5 (+375), recyd 24.5 (-115/-115), rec 2.5 (+100/-130)
+
+  WHAT CHANGED: new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Carolina Panthers; injury_change: inj_Baltimore Ravens
+######## Baltimore Ravens @ Carolina Panthers  kick 11-22T18:00Z
+  HR ML: Panthers -145 / Ravens +125 (no-vig home 0.571) | Pinnacle no-vig home 0.57
+  HR spread: Panthers -2.5 -115 / Ravens +2.5 -105 | Pinnacle Panthers -2.5 (-113) | HR open -2.5 (20261117)
+  HR total: 43.5 O-110/U-110 | Pinnacle 43.5 O-106/U-108 | HR open 44.5
+  Kalshi ML [('Carolina wins', 0.57, 562957), ('Baltimore wins', 0.42, 150748)] | spread [('Carolina wins by over 2.5 points?', 0.52, 58458), ('Carolina wins by over 3.5 points?', 0.43, 8004)] | total [('Full Game: over 43.5 points scored?', 0.51, 3046), ('Full Game: over 44.5 points scored?', 0.46, 1907)]
+  -- Baltimore Ravens injuries (20261122T0030)
+     Acti TE Nick Vannett: The Ravens elevated Vannett from the practice squad to the active roster Saturday.
+     Out  S  Jaylinn Hawkins: Ravens coach Jesse Minter announced Friday that Hawkins (knee) has been ruled out for Sunday's matchup against the Panthers.
+     Out  DT Nnamdi Madubuike: Ravens coach Jesse Minter announced Friday that Madubuike (hamstring) has been ruled out for Sunday's matchup against the Panthers.
+     Out  CB Marlon Humphrey: Ravens head coach Jesse Minter said that Humphrey won't play Sunday against the Panthers after the defensive back made a derogatory comment about the 
+     Acti RB Adam Randall: The Ravens reinstated Randall (neck/hamstring) from injured reserve Wednesday, Ryan Mink of the team's official site reports.
+     Acti RB Rasheen Ali: Ali played all 19 of his snaps on special teams in Monday's 23-20 loss to the Chargers.
+     Inju QB Lamar Jackson: The Ravens believe "there's a chance" that Jackson (thumb) could return for their Week 16 matchup with the Browns, assuming all goes well in his recov
+     Acti TE Josh Cuevas: Cuevas caught all three of his targets for 37 yards during Monday night's 23-20 loss to the Chargers.
+     Acti RB Justice Hill: Hill turned three carries into four yards and added five catches on seven targets for 34 yards during the Ravens' 23-20 loss to the Chargers on Monday
+     Acti WR Elijah Sarratt: 
+     Acti WR Rashod Bateman: Bateman brought in three of five targets for 42 yards in the Ravens' 23-20 loss to the Chargers on Monday night.
+     Acti WR Ja'Kobi Lane: Lane brought in three of 11 targets for 61 yards in the Ravens' 23-20 loss to the Chargers on Monday night.
+     Acti TE Mark Andrews: Andrews brought in all eight targets for 82 yards in the Ravens' 23-20 loss to the Chargers on Monday.
+     Acti WR Zay Flowers: Flowers brought in six of seven targets for 74 yards and lost a fumble in the Ravens' 23-20 loss to the Chargers on Monday night.
+     Acti QB Jacoby Brissett: Brissett completed 33 of 49 passes for 340 yards with no touchdowns and one interception and added two rushes for two yards in the Ravens' 23-20 loss 
+     Acti RB Derrick Henry: Henry rushed 10 times for 10 yards and two touchdowns and brought in all five targets for 10 yards in the Ravens' 23-20 loss to the Chargers on Monday
+     Acti QB Kedon Slovis: Slovis (coach's decision) is inactive but serving as the Ravens' emergency No. 3 quarterback Monday night versus the Chargers.
+     news 11-20T21:04 Fantasy buzz: Does anything change in Indy with Richardson under center?
+     news 11-20T21:46 Ravens heading into SNF without three defensive starters
+     news 11-20T21:59 Ravens rule out DT Nnamdi Madubuike (hamstring) vs Panthers
+     news 11-21T13:35 Carmelo Anthony calls out Ravens' Humphrey over Baltimore 'criminals' remark
+     news 11-21T18:12 Ravens' DC supports decision to set Marlon Humphrey as inactive vs. Panthers
+  -- Carolina Panthers injuries (20261122T0030)
+     Ques CB Mike Jackson: The Panthers activated Jackson (groin) from injured reserve Saturday, Darin Gantt of the team's official site reports.
+     Inju RB Jonathon Brooks: Brooks (groin) has been downgraded to out for Sunday's game against the Ravens.
+     Inju S  Isaiah Simmons: Simmons (knee) has been ruled out ahead of Sunday's game against the Ravens, Mike Kaye of ESPN.com reports.
+     Ques TE Tommy Tremble: Tremble (knee) is listed as questionable for Sunday's game against the Ravens.
+     Out  LB Bobby Okereke: Okereke (foot) is out for Sunday's matchup against the Ravens, Mike Kaye of ESPN.com reports.
+     Ques TE Darren Waller: Waller (knee) is listed as questionable for Sunday's game against the Ravens, Joe Person of The Athletic reports.
+     Acti QB Bryce Young: Young was listed with a sore foot on Wednesday's injury report but was a full participant in the Panthers' first Week 11 practice.
+     Acti WR Xavier Legette: Legette didn't produce any output in the boxscore during Carolina's win over the Saints on Sunday.
+     Acti WR John Metchie III: Metchie caught his only target for four yards Sunday in a 20-17 win against New Orleans.
+     Acti RB Trevor Etienne: Etienne took three carries for one yard and caught both of his two targets for nine yards during Sunday's 20-17 win at New Orleans. He also returned t
+     Acti RB AJ Dillon: 
+     Acti TE Ja'Tavion Sanders: 
+     Acti QB Haynes King: 
+     Acti WR Jalen Coker: Coker failed to catch any of his four targets in Sunday's 20-17 win over the Saints.
+     Acti WR Tetairoa McMillan: McMillan caught three of seven targets for 35 yards in Sunday's 20-17 win over New Orleans.
+     Acti RB Chuba Hubbard: Hubbard carried the ball 27 times for 92 yards and two touchdowns and caught all five of his targets for 80 yards in Sunday's 20-17 win over the Saint
+     Inju G  Brady Christensen: Christensen (hamstring) has been downgraded to out for Sunday's game against the Saints, Joe Person of The Athletic reports.
+     news 11-20T00:49 Panthers aim to hold NFC South lead while Ravens look to keep playoffs hopes alive, end 5-game skid
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T11:42 NFL offseason free agent and trade acquisitions that have and have not worked
+     news 11-20T17:46 How the Panthers plan to slow down Derrick Henry
+     news 11-21T18:12 Ravens' DC supports decision to set Marlon Humphrey as inactive vs. Panthers
+  -- props (pull 2026-11-21T14:00)
+     * Bryce Young: atd 0.5 (+475), paatt 32.5 (-115/-115), cmp 20.5 (-115/-115), int 0.5 (-105/-125), patd 1.5 (-110/-120), payd 234.5 (-115/-115), ruyd 7.5 (-110/-120)
+     * Chuba Hubbard: atd 0.5 (-145), recyd 18.5 (-115/-115), rec 3.5 (+115/-150), ruatt 17.5 (-110/-120), ruyd 71.5 (-115/-115)
+     * Darren Waller: atd 0.5 (+325), recyd 26.5 (-115/-115), rec 2.5 (-110/-120)
+     * Derrick Henry: atd 0.5 (-140), recyd 7.5 (-115/-115), rec 1.5 (-135/+105), ruatt 16.5 (-115/-115), ruyd 63.5 (-115/-115)
+     * Ja'Kobi Lane: atd 0.5 (+375), recyd 35.5 (-115/-115), rec 2.5 (-135/+105)
+     * Jacoby Brissett: atd 0.5 (+575), paatt 34.5 (-120/-110), cmp 22.5 (-115/-115), int 0.5 (-105/-125), patd 1.5 (+135/-185), payd 227.5 (-115/-115), ruyd 6.5 (-110/-120)
+     * Jalen Coker: atd 0.5 (+230), recyd 43.5 (-115/-115), rec 3.5 (-120/-110)
+     * John Metchie III: atd 0.5 (+475)
+     * Josh Cuevas: atd 0.5 (+750), recyd 11.5 (-110/-120), rec 1.5 (+120/-155)
+     * Justice Hill: atd 0.5 (+475), recyd 14.5 (-110/-120), rec 2.5 (-150/+115), ruyd 13.5 (-110/-120)
+     * Mark Andrews: atd 0.5 (+325), recyd 33.5 (-115/-115), rec 3.5 (-165/+125)
+     * Mitchell Evans: atd 0.5 (+375)
+     * Rashod Bateman: atd 0.5 (+475), recyd 25.5 (-115/-115), rec 2.5 (+120/-155)
+     * Tetairoa McMillan: atd 0.5 (+180), recyd 63.5 (-115/-115), rec 4.5 (-115/-115)
+     * Tommy Tremble: atd 0.5 (+375), recyd 21.5 (-110/-120), rec 2.5 (-110/-120)
+     * Xavier Legette: atd 0.5 (+650)
+     * Zay Flowers: atd 0.5 (+175), recyd 68.5 (-115/-115), rec 6.5 (+110/-145)
+
+  WHAT CHANGED: new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Buffalo Bills; injury_change: inj_Miami Dolphins
+######## Miami Dolphins @ Buffalo Bills  kick 11-22T18:00Z
+  HR ML: Bills -1800 / Dolphins +900 (no-vig home 0.905) | Pinnacle no-vig home 0.901
+  HR spread: Bills -16.5 -115 / Dolphins +16.5 -105 | Pinnacle Bills -17.0 (+107) | HR open -16.5 (20261117)
+  HR total: 45 O-110/U-110 | Pinnacle 44.5 O-109/U-105 | HR open 46.0
+  Kalshi ML [('Miami wins', 0.08, 453898), ('Buffalo wins', 0.92, 302358)] | spread [('Buffalo wins by over 16.5 points?', 0.49, 40629), ('Buffalo wins by over 17.5 points?', 0.45, 4624)] | total [('Full Game: over 45.5 points scored?', 0.47, 8356), ('Full Game: over 44.5 points scored?', 0.51, 2921)]
+  -- Miami Dolphins injuries (20261122T0030)
+     Ques CB Darrell Baker Jr.: The Dolphins activated Baker (knee) from the reserve/PUP list Saturday.
+     Doub S  Jaylin Simpson: Simpson (knee) is listed as doubtful for Sunday's game against the Bills, David Furones of the South Florida Sun Sentinel reports.
+     Out  P  Bradley Pinion: Pinion (groin) has been ruled out ahead of Sunday's game against the Bills, David Furones of the South Florida Sun Sentinel reports.
+     Ques C  Aaron Brewer: Brewer (concussion) is listed as questionable for Sunday's game against the Bills, David Furones of the South Florida Sun Sentinel reports.
+     Ques CB Marcellas Dial Jr.: questionable
+     Out  WR Jared Wayne: Wayne (quadriceps) has been ruled out for Sunday's game against the Bills, David Furones of the South Florida Sun Sentinel reports.
+     Acti WR Chris Bell: Bell (knee) doesn't have an injury designation for Sunday's game against the Bills.
+     Acti WR Caleb Douglas: Douglas (shoulder) will play Sunday against the Bills, David Furones of the South Florida Sun Sentinel reports.
+     Doub S  Dante Trader Jr.: Trader (shoulder/groin) is doubtful for Sunday's game against the Bills, Barry Jackson of the Miami Herald reports.
+     Inju DT Jordan Phillips: Phillips underwent surgery on his injured bicep Wednesday, David Furones of the South Florida Sun Sentinel reports.
+     Acti WR Kevin Coleman Jr.: Coleman logged one catch for six yards on six targets in Sunday's Week 10 loss to Indianapolis.
+     Acti QB Brady Cook: Cook was signed to the Dolphins' active roster Tuesday.
+     Inju DT Zeek Biggers: Biggers (knee) was placed on injured reserve by the Dolphins on Tuesday.
+     Acti RB Jaylen Wright: Wright turned three carries into minus-2 yards, caught both of his targets for 17 yards and returned four kickoffs for 88 yards during the Dolphins' 2
+     Acti RB Kaytron Allen: Allen turned his lone carry into zero yards and hauled in his lone target for minus-4 yards during the Dolphins' 24-22 loss to the Colts on Sunday.
+     Acti TE Justin Joly: 
+     news 11-19T17:37 Midseason reports on every NFL team's offensive coordinator, playcaller
+     news 11-19T22:24 Bills get chance to feast on another backup QB with Kyle McCord and Miami Dolphins up next
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T20:47 Tom Brady tops list of athletes who became owners
+     news 11-20T21:59 Draft buzz: Interest in Oklahoma State's Drew Mestemaker could spur draft trade
+  -- Buffalo Bills injuries (20261122T0030)
+     Ques DT Ed Oliver: Oliver (oblique) is listed as questionable for Sunday's game against the Dolphins.
+     Acti TE Dawson Knox: Knox will likely be the Bills' top tight end against the Dolphins on Sunday, given that Dalton Kincaid (thumb/ankle) is listed as doubtful for that co
+     Ques S  Damar Hamlin: Hamlin (toe) is listed as questionable for Sunday's game against Miami.
+     Ques TE Jackson Hawes: Hawes (shoulder) is questionable for Sunday's game against the Dolphins.
+     Acti RB Ray Davis: Davis (hamstring) doesn't have an injury designation for Sunday's game against the Dolphins.
+     Out  LB Dorian Williams: Williams (calf) has been ruled out for Sunday's matchup against the Dolphins, Maddy Glab of the Bills' official site reports.
+     Out  CB Christian Benford: Benford (groin) is out for Sunday's matchup against the Dolphins, Maddy Glab of the Bills' official site reports.
+     Doub TE Dalton Kincaid: Kincaid (thumb/ankle) is listed as doubtful for Sunday's game against the Dolphins, Matt Parrino reports.
+     Ques DT T.J. Sanders: questionable
+     Acti WR Tyrell Shavers: Bills head coach Joe Brady said Wednesday that Shavers (knee) has been reinstated from the PUP list, Katherine Fitzgerald of The Buffalo News reports.
+     Acti RB Ty Johnson: Johnson caught his only target for four yards in a 31-12 win over the Jets on Sunday.
+     Inju G  Ar'maj Reed-Adams: The Bills placed Reed-Adams (back) on injured reserve Tuesday.
+     Acti WR Keon Coleman: Coleman caught one of three targets for 11 yards during Sunday's 31-12 win over the Jets.
+     Acti WR Khalil Shakir: Shakir caught two of three targets for 26 yards in Sunday's 31-12 win over the Jets.
+     Acti WR DJ Moore: Moore caught four of six targets for 90 yards and a touchdown while rushing once for four yards in Sunday's 31-12 win over the Jets.
+     Acti QB Josh Allen: Allen completed 11 of 21 passes for 196 yards, one touchdown and one interception while rushing five times for five yards and two touchdowns in Sunday
+     news 11-19T17:37 Midseason reports on every NFL team's offensive coordinator, playcaller
+     news 11-19T22:24 Bills get chance to feast on another backup QB with Kyle McCord and Miami Dolphins up next
+     news 11-19T23:39 Will the Bills activate Tre'Davious White this week?
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T21:49 Bills TE Dalton Kincaid doubtful to play vs. Dolphins
+  -- props (pull 2026-11-21T19:18)
+     * Caleb Douglas: atd 0.5 (+375), recyd 48.5 (-115/-115), rec 3.5 (-135/+105)
+     * Chris Bell: atd 0.5 (+700), recyd 16.5 (-110/-120), rec 1.5 (-120/-110)
+     * DJ Moore: atd 0.5 (+170), recyd 47.5 (-115/-115), rec 3.5 (-105/-125)
+     * Dawson Knox: atd 0.5 (+300), recyd 17.5 (-115/-115), rec 1.5 (-190/+140)
+     * Greg Dulcich: atd 0.5 (+500), recyd 25.5 (-115/-115), rec 2.5 (-110/-120)
+     * Jackson Hawes: atd 0.5 (+600)
+     * James Cook: atd 0.5 (-190), recyd 8.5 (-115/-115), rec 1.5 (+110/-145), ruatt 18.5 (-120/-110), ruyd 91.5 (-115/-115)
+     * Jaylen Wright: atd 0.5 (+800), ruyd 4.5 (-125/-105)
+     * Josh Allen: atd 0.5 (-175), paatt 26.5 (-115/-115), cmp 18.5 (+100/-130), int 0.5 (+130/-175), patd 1.5 (-140/+110), payd 228.5 (-115/-115), ruatt 5.5 (-130/+100), ruyd 23.5 (-120/-110)
+     * Keleki Latu: atd 0.5 (+650)
+     * Keon Coleman: atd 0.5 (+250), recyd 29.5 (-115/-115), rec 2.5 (+115/-150)
+     * Kevin Coleman Jr.: atd 0.5 (+1300), recyd 3.5 (-115/-115), rec 0.5 (-140/+110)
+     * Khalil Shakir: atd 0.5 (+210), recyd 37.5 (-115/-115), rec 3.5 (+130/-175)
+     * Kyle McCord: atd 0.5 (+1000), paatt 30.5 (-115/-115), cmp 16.5 (-125/-105), int 0.5 (-175/+130), patd 0.5 (-155/+120), payd 185.5 (-115/-115), ruyd 6.5 (-110/-120)
+     * Malik Washington: atd 0.5 (+425), recyd 28.5 (-115/-115), rec 3.5 (+115/-150)
+     * Ollie Gordon II: atd 0.5 (+105), recyd 15.5 (-115/-115), rec 2.5 (-150/+115), ruatt 15.5 (+100/-130), ruyd 53.5 (-115/-115)
+     * Ray Davis: atd 0.5 (+650), ruyd 20.5 (-120/-110)
+     * Ty Johnson: atd 0.5 (+475), recyd 13.5 (-115/-115), rec 1.5 (-135/+105)
+
+  WHAT CHANGED: new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Chicago Bears
+######## New Orleans Saints @ Chicago Bears  kick 11-22T18:00Z
+  HR ML: Bears -700 / Saints +475 (no-vig home 0.834) | Pinnacle no-vig home 0.826
+  HR spread: Bears -11.5 -110 / Saints +11.5 -110 | Pinnacle Bears -11.5 (-109) | HR open -12.0 (20261117)
+  HR total: 48.5 O-110/U-110 | Pinnacle 48.5 O-104/U-111 | HR open 49.0
+  Kalshi ML [('New Orleans wins', 0.15, 130895), ('Chicago wins', 0.84, 227895)] | spread [('Chicago wins by over 10.5 points?', 0.53, 48333), ('Chicago wins by over 13.5 points?', 0.46, 32905)] | total [('Full Game: over 48.5 points scored?', 0.51, 6882), ('Full Game: over 49.5 points scored?', 0.46, 4609)]
+  -- New Orleans Saints injuries (20261122T0030)
+     Out  OT Asim Richards: Richards (knee) has been ruled out ahead of Sunday's game against the Bears.
+     Out  C  Erik McCoy: McCoy (biceps) has been ruled out ahead of Sunday's game against the Bears.
+     Out  OT Taliese Fuaga: Fuaga (knee) has been ruled out ahead of Sunday's game against the Bears.
+     Out  CB Martin Emerson Jr.: Emerson (concussion) has been ruled out for Sunday's game against the Bears.
+     Ques LB Pete Werner: Werner (hamstring) is listed as questionable for Sunday's game against the Bears.
+     Acti WR Jordyn Tyson: Tyson (chest) doesn't have a designation for Sunday's game at Chicago.
+     Acti QB Tyler Shough: Shough is no longer wearing a protect glove on his left (non-throwing) hand at Thursday's practice, Nick Underhill of NewOrleans.Football reports.
+     Acti RB CJ Donaldson: Donaldson (shoulder) was a full participant in Wednesday's practice.
+     Ques CB Decamerion Richardson: questionable
+     Acti WR Bryce Lance: Lance returned three kickoffs for 55 yards during the Saints' 20-17 loss to the Panthers on Sunday.
+     Acti TE Noah Fant: Fant failed to haul in his lone target during the Saints' 20-17 loss to the Panthers on Sunday.
+     Acti WR Devaughn Vele: Vele caught both of his targets for 14 yards during the Saints' 20-17 loss to the Panthers on Sunday.
+     Acti QB Zach Wilson: 
+     Acti TE Juwan Johnson: Johnson caught two passes for 28 yards on three targets in Sunday's 20-17 loss to the Panthers.
+     Acti RB Audric Estime: Estime carried the ball seven times for six yards and caught his only target for five yards in Sunday's 20-17 loss to Carolina.
+     Acti RB Travis Etienne Jr.: Etienne carried the ball eight times for 14 yards and caught three of five targets for 20 yards in Sunday's 20-17 loss to the Panthers.
+     Acti WR Chris Olave: Olave caught three of four targets for 30 yards in Sunday's 20-17 loss to the Panthers.
+     Acti RB Alvin Kamara: Kamra rushed two times for four yards and a touchdown in Sunday's 20-17 loss to the Panthers. He added three catches for 10 yards and an additional to
+     Inju DT Christen Miller: The Saints placed Miller (knee) on injured reserve Saturday.
+     news 11-19T21:25 Pass rush part of the focus for the Saints and Bears going into Sunday's game
+     news 11-20T00:34 Justin Reid requests his release from the team
+     news 11-20T00:35 Saints, Justin Reid 'working through' potential release
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T22:05 Justin Reid posts Saints farewell as team releases safety
+  -- Chicago Bears injuries (20261122T0030)
+     Acti RB Salvon Ahmed: The Bears elevated Ahmed from the practice squad Saturday.
+     Acti RB D'Andre Swift: Swift will be rejoined in the Bears backfield by Kyle Monangai (toe) on Sunday against the Saints, Larry Mayer of the team's official site reports.
+     Out  CB Kyler Gordon: Gordon (shoulder) has been ruled out for Sunday's game against the Saints.
+     Ques WR Zavion Thomas: Thomas (ankle) is listed as questionable for Sunday's matchup against the Saints.
+     Acti RB Kyle Monangai: Monangai (toe) doesn't have a designation for Sunday's game against the Saints.
+     Acti WR Luther Burden III: Bears head coach Ben Johnson confirmed Tuesday that Burden has cleared concussion protocol, Patrick Finley of the Chicago Sun-Times reports.
+     Acti TE Sam Roush: Roush caught both of his two targets for 23 yards during Sunday's 27-24 win versus the Buccaneers.
+     Acti RB Roschon Johnson: Johnson recorded two tackles on special teams during the Bears' 27-24 win over the Buccaneers on Sunday.
+     Acti WR Kalif Raymond: Raymond caught four passes for 32 yards on seven targets in Sunday night's 27-24 win over the Bucs.
+     Acti TE Colston Loveland: Loveland caught four of six targets for 54 yards in Sunday's 27-24 win over the Buccaneers.
+     Acti WR Rome Odunze: Odunze caught four of seven targets for 60 yards and a touchdown in Sunday's 27-24 win over the Buccaneers.
+     Acti QB Caleb Williams: Williams completed 22 of 37 passes for 279 yards, two touchdowns and four interceptions in Sunday's 27-24 win over the Buccaneers. He also rushed five
+     Acti QB Case Keenum: Keenum (coach's decision) is inactive but serving as the Bears' emergency No. 3 quarterback for Sunday Night Football versus the Buccaneers.
+     Inju RB Zavier Scott: The Bears placed Scott (wrist) on injured reserve Thursday.
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T01:56 Jeffery Simmons expects to play through knee injury
+     news 11-20T04:40 Bears' Jeffery Simmons says knee injury a non-issue, expects to play vs. Saints
+     news 11-20T17:15 Jeffery Simmons making an impact on Bears defense
+     news 11-20T20:03 Bears rule out CB Kyler Gordon; RB Kyle Monangai cleared to return
+  -- props (pull 2026-11-21T19:18)
+     * Alvin Kamara: atd 0.5 (+350), recyd 14.5 (-120/-110), rec 2.5 (-125/-105), ruyd 6.5 (-115/-115)
+     * Audric Estime: atd 0.5 (+475), ruatt 5.5 (-120/-110), ruyd 18.5 (-115/-115)
+     * CJ Donaldson: atd 0.5 (+575)
+     * Caleb Williams: atd 0.5 (+260), paatt 30.5 (-110/-120), cmp 19.5 (-130/+100), int 0.5 (+115/-150), patd 2.5 (+160/-220), payd 244.5 (-115/-115), ruatt 4.5 (-110/-120), ruyd 17.5 (-115/-115)
+     * Chris Olave: atd 0.5 (+230), recyd 67.5 (-115/-115), rec 5.5 (+110/-140)
+     * Colston Loveland: atd 0.5 (+115), recyd 51.5 (-115/-115), rec 4.5 (-115/-115)
+     * D'Andre Swift: atd 0.5 (-170), recyd 14.5 (-115/-115), rec 2.5 (+120/-160), ruatt 15.5 (-105/-125), ruyd 64.5 (-115/-115)
+     * Devaughn Vele: atd 0.5 (+425), recyd 21.5 (-120/-110), rec 2.5 (+125/-170)
+     * Jordyn Tyson: atd 0.5 (+325), recyd 56.5 (-115/-115), rec 5.5 (+120/-155)
+     * Juwan Johnson: atd 0.5 (+450), recyd 20.5 (-120/-110), rec 2.5 (+130/-175)
+     * Kalif Raymond: atd 0.5 (+275), recyd 20.5 (-115/-115), rec 2.5 (+110/-135)
+     * Kyle Monangai: atd 0.5 (+110), recyd 5.5 (-115/-115), rec 0.5 (-225/+165), ruatt 10.5 (-110/-120), ruyd 46.5 (-115/-115)
+     * Luther Burden III: atd 0.5 (+135), recyd 59.5 (-115/-115), rec 4.5 (-105/-125)
+     * Noah Fant: atd 0.5 (+850), recyd 7.5 (-110/-120), rec 1.5 (+155/-210)
+     * Rome Odunze: atd 0.5 (+155), recyd 45.5 (-115/-115), rec 2.5 (-175/+130)
+     * Sam Roush: atd 0.5 (+600), recyd 6.5 (-110/-120), rec 0.5 (-150/+115)
+     * Travis Etienne Jr.: atd 0.5 (+230), recyd 14.5 (-110/-120), rec 2.5 (-105/-125), ruatt 8.5 (-115/-115), ruyd 29.5 (-115/-115)
+     * Tyler Shough: atd 0.5 (+400), paatt 36.5 (-110/-120), cmp 22.5 (-120/-110), int 0.5 (-175/+130), patd 1.5 (+165/-230), payd 235.5 (-115/-115), ruyd 18.5 (-115/-115)
+
+  WHAT CHANGED: new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Dallas Cowboys; injury_change: inj_Tennessee Titans
+######## Tennessee Titans @ Dallas Cowboys  kick 11-22T18:00Z
+  HR ML: Cowboys -400 / Titans +325 (no-vig home 0.773) | Pinnacle no-vig home 0.756
+  HR spread: Cowboys -7.5 -115 / Titans +7.5 -105 | Pinnacle Cowboys -8.0 (+102) | HR open -8.0 (20261117)
+  HR total: 55 O-115/U-105 | Pinnacle 55.5 O+103/U-118 | HR open 54.5
+  Kalshi ML [('Tennessee wins', 0.23, 127672), ('Dallas wins', 0.77, 103641)] | spread [('Dallas wins by over 7.5 points?', 0.51, 31857), ('Dallas wins by over 6.5 points?', 0.56, 14613)] | total [('Full Game: over 55.5 points scored?', 0.47, 6945), ('Full Game: over 54.5 points scored?', 0.53, 11309)]
+  -- Tennessee Titans injuries (20261122T0030)
+     Acti RB Michael Carter: The Titans elevated Carter from the practice squad to the active roster Saturday, Jim Wyatt of the Titans' official site reports.
+     Inju RB Tyjae Spears: The Titans placed Spears (knee) on injured reserve Saturday, Jim Wyatt of the Titans' official site reports.
+     Ques WR Carnell Tate: Tate (shoulder) is questionable for Sunday's game against the Cowboys but is "considered likely" to be cleared to play, Matt Zenitz of CBS Sports repo
+     Ques CB Micah Robinson: questionable
+     Ques LB Anthony Hill Jr.: Hill (neck) is questionable to face the Cowboys on Sunday.
+     Inju G  Fernando Carmona: The Titans designated Carmona (ankle) for return from injured reserve Wednesday, Jim Wyatt of the team's official site reports.
+     Inju WR Wan'Dale Robinson: Coach Robert Saleh said Wednesday that Robinson (ankle) -- who was placed on IR on Tuesady -- is out for the rest of the season, Terry McCormick of Ti
+     Acti RB Julius Chestnut: Chestnut played all 25 of his snaps on special teams in Sunday's 40-23 win over the Jaguars.
+     Acti WR Xavier Restrepo: Restrepo, whom the Titans signed off their practice squad Tuesday, could be in store for more playing time out of the slot moving forward after Tennes
+     Acti WR Chimere Dike: Dike caught two passes for 16 yards on three targets in Sunday's 40-23 loss to the Jaguars. He added five rushing yards on one attempt.
+     Acti TE Daniel Bellinger: Bellinger caught two of three targets for six yards and a touchdown in Sunday's 40-23 loss to the Jaguars.
+     Acti WR Calvin Ridley: Ridley played four offensive snaps and didn't show up on the box score otherwise during the Titans' 40-23 loss to the Jaguars on Sunday.
+     Acti RB Nicholas Singleton: 
+     Acti TE Gunnar Helm: Helm caught all four of his targets for 23 yards in Sunday's 40-23 loss to the Jaguars.
+     Acti WR Elic Ayomanor: Ayomanor caught five of 10 targets for 79 yards in Sunday's 40-23 loss to the Jaguars.
+     Acti RB Tony Pollard: Pollard carried the ball nine times for 33 yards and caught eight of nine targets for 66 yards and a touchdown in Sunday's 40-23 loss to the Jaguars.
+     news 11-20T07:46 Titans' Calvin Ridley facing misdemeanor assault charge over airport incident
+     news 11-20T11:00 Titans defense crumbling post-Jeffery Simmons, Amani Hooker trades
+     news 11-20T11:42 NFL offseason free agent and trade acquisitions that have and have not worked
+     news 11-20T21:59 Draft buzz: Interest in Oklahoma State's Drew Mestemaker could spur draft trade
+     news 11-21T18:31 Titans DL Jaylen Harrell hospitalized after car accident in Tampa
+  -- Dallas Cowboys injuries (20261122T0030)
+     Acti RB Jashaun Corbin: Corbin was elevated from the Cowboys' practice squad to the active roster Saturday, Tommy Yarrish of the team's official site reports.
+     Inju S  Jalen Thompson: Thompson (hamstring) has been downgraded to out for Sunday's game against the Titans, Tommy Yarrish of the Cowboys' official site reports.
+     Inju CB DaRon Bland: The Cowboys placed Bland (ankle) on injured reserve Saturday, Tommy Yarrish of the team's official site reports.
+     Out  S  P.J. Locke: Locke (concussion) has been ruled out for Sunday's game against the Titans, Tommy Yarrish of the Cowboys' official site reports.
+     Ques TE Luke Schoonmaker: Schoonmaker (illness) is questionable for Sunday's game against the Titans, Tommy Yarrish of the Cowboys' official site reports.
+     Out  WR Jonathan Mingo: Mingo (ankle/foot) has been ruled out for Sunday's game against the Titans, Tommy Yarrish of the Cowboys' official site reports.
+     Ques LB Jaishawn Barham: questionable
+     Acti WR KaVontae Turpin: Turpin is expected to resume return duties on both kickoffs and punts Sunday against the Titans, Calvin Watkins of The Dallas Morning News reports.
+     Out  TE Jake Ferguson: Ferguson didn't practice Wednesday due to knee and ankle injuries and won't be available for Sunday's game against the Titans, Todd Archer of ESPN.com
+     Acti TE Brevyn Spann-Ford: Spann-Ford caught one of three targets for 26 yards during the Cowboys' 46-40 loss to the 49ers on Sunday.
+     Acti RB Israel Abanikanda: Abanikanda reverted to the Cowboys' practice squad Monday, per the NFL's transaction log.
+     Out  G  Tyler Booker: Booker suffered a high-ankle sprain in Sunday's 46-40 loss to the 49ers, Calvin Watkins of The Dallas Morning News  reports.
+     Acti RB Javonte Williams: Williams rushed 16 times for 63 yards and brought in his only target for four yards in the Cowboys' 46-40 loss to the 49ers on Sunday.
+     Acti WR CeeDee Lamb: Lamb secured seven of 13 targets for 72 yards and a touchdown in the Cowboys' 46-40 loss to the 49ers on Sunday.
+     Acti QB Dak Prescott: Prescott completed 30 of 51 passes for 343 yards with five touchdowns and one interception while rushing four times for seven yards in the Cowboys' 46
+     Acti WR George Pickens: Pickens brought in 11 of 18 targets for 145 yards and three touchdowns in the Cowboys' 46-40 loss to the 49ers on Sunday.
+     Acti WR Ryan Flournoy: Flournoy tallied six catches for 71 yards and one touchdown on seven targets during Sunday's loss to San Francisco. He also recovered a fumble.
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T12:12 With Titans, Eagles up next, it's now or never for Cowboys
+     news 11-20T20:24 Cowboys' Mike Pettine feels for DC Christian Parker, but focused on Titans
+     news 11-20T21:03 Cowboys look to get back on track
+     news 11-20T22:37 Police investigate man's death after alleged altercation at 49ers-Cowboys game
+  -- props (pull 2026-11-21T19:18)
+     * Brevyn Spann-Ford: atd 0.5 (+250), recyd 20.5 (-115/-115), rec 2.5 (+105/-135)
+     * Calvin Ridley: atd 0.5 (+700)
+     * Cam Ward: atd 0.5 (+425), paatt 35.5 (-120/-110), cmp 22.5 (-125/-105), int 0.5 (+110/-145), patd 1.5 (-105/-125), payd 238.5 (-115/-115), ruyd 15.5 (-115/-115)
+     * Carnell Tate: atd 0.5 (+175), recyd 66.5 (-115/-115), rec 5.5 (+110/-145)
+     * CeeDee Lamb: atd 0.5 (-170), recyd 93.5 (-115/-115), rec 7.5 (-105/-125)
+     * Chimere Dike: atd 0.5 (+325), recyd 19.5 (-115/-115), rec 2.5 (+110/-145)
+     * Dak Prescott: atd 0.5 (+475), paatt 35.5 (-125/-105), cmp 23.5 (-130/+100), int 0.5 (+145/-190), patd 2.5 (-115/-115), payd 279.5 (-115/-115), ruyd 7.5 (-115/-115)
+     * Daniel Bellinger: atd 0.5 (+600), recyd 9.5 (-115/-115), rec 1.5 (+105/-135)
+     * Elic Ayomanor: atd 0.5 (+275), recyd 43.5 (-115/-115), rec 3.5 (-125/-105)
+     * George Pickens: atd 0.5 (-125), recyd 69.5 (-115/-115), rec 5.5 (+100/-130)
+     * Gunnar Helm: atd 0.5 (+275), recyd 25.5 (-115/-115), rec 2.5 (-150/+115)
+     * Hunter Luepke: atd 0.5 (+500)
+     * James Mitchell: atd 0.5 (+650)
+     * Javonte Williams: atd 0.5 (-250), recyd 10.5 (-120/-110), rec 2.5 (+135/-175), ruatt 19.5 (-125/-105), ruyd 77.5 (-115/-115)
+     * KaVontae Turpin: atd 0.5 (+450), recyd 7.5 (-115/-115), rec 1.5 (+155/-210)
+     * Luke Schoonmaker: atd 0.5 (+575)
+     * Ryan Flournoy: atd 0.5 (+175), recyd 40.5 (-115/-115), rec 3.5 (-115/-115)
+     * Tony Pollard: atd 0.5 (-140), recyd 20.5 (-110/-120), rec 3.5 (+100/-130), ruatt 16.5 (-105/-125), ruyd 70.5 (-115/-115)
+     * Xavier Restrepo: atd 0.5 (+700), recyd 8.5 (-115/-115), rec 1.5 (+140/-190)
+
+  WHAT CHANGED: new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Detroit Lions
+######## Tampa Bay Buccaneers @ Detroit Lions  kick 11-22T18:00Z
+  HR ML: Lions -230 / Buccaneers +190 (no-vig home 0.669) | Pinnacle no-vig home 0.669
+  HR spread: Lions -4 -115 / Buccaneers +4 -105 | Pinnacle Lions -4.5 (-102) | HR open -6.5 (20261117)
+  HR total: 47 O-110/U-110 | Pinnacle 47.5 O-106/U-108 | HR open 46.5
+  Kalshi ML [('Tampa Bay wins', 0.32, 493035), ('Detroit wins', 0.69, 534698)] | spread [('Detroit wins by over 4.5 points?', 0.49, 45027), ('Detroit wins by over 3.5 points?', 0.54, 4426)] | total [('Full Game: over 46.5 points scored?', 0.54, 90882), ('Full Game: over 47.5 points scored?', 0.5, 2520)]
+  -- Tampa Bay Buccaneers injuries (20261122T0030)
+     Ques QB Baker Mayfield: Mayfield (thumb) is dealing with a plantar fascia injury in his foot, and he would wear a special orthotic and new cleats to stabilize his foot if he'
+     Inju CB Josh Hayes: Hayes (knee) has been ruled out for Sunday's game against the Lions.
+     Ques LB Yaya Diaby: Diaby (knee) is questionable for Sunday's game against the Lions.
+     Out  S  Antoine Winfield Jr.: Winfield (ankle) has been ruled out for Sunday's game against the Lions.
+     Acti QB Jalon Daniels: Head coach Todd Bowles expressed optimism Friday that Baker Mayfield (foot/thumb) will start against the Lions on Sunday, which would leave Daniels as
+     Acti QB Easton Stick: The Buccaneers signed Stick off their practice squad Monday, Scott Smith of the team's official site reports.
+     Acti WR Kameron Johnson: Johnson played all 17 of his snaps on special teams and recorded one tackle in Sunday's 27-24 loss to the Bears.
+     Acti WR Ted Hurst III: Hurst failed to haul in his lone target during the Buccaneers' 27-24 loss to the Bears on Sunday.
+     Acti WR Tez Johnson: Johnson caught two passes for 76 yards on five targets in Sunday night's 27-24 loss to the Bears.
+     Acti RB Sean Tucker: Tucker didn't log any offensive snaps in a loss to the Bears on Sunday. He returned four kickoffs for 92 yards.
+     Acti TE Cade Otton: Otton caught four of eight targets for 25 yards in Sunday night's 27-24 loss to the Bears.
+     Acti RB Bucky Irving: Head coach Todd Bowles said Monday that the Buccaneers "will try and lessen the load" on Irving following their Week 10 bye, Rick Stroud of the Tampa 
+     Inju WR Jalen McMillan: Head coach Todd Bowles suggested Monday that McMillan (knee) isn't likely to immediately return to action following the Buccaneers' Week 10 bye, Rick 
+     Acti WR Chris Godwin Jr.: Godwin caught two of three targets for 16 yards and added a 12-yard rush during Sunday night's 27-24 loss to the Bears.
+     Acti RB Kenny Gainwell: Gainwell rushed five times for 16 yards and caught all three of his targets for 60 yards in Sunday's 27-24 loss to the Bears.
+     Acti WR Emeka Egbuka: Egbuka (foot) caught three of five targets for 38 yards and added a one-yard run in Sunday's 27-24 loss to the Bears.
+     news 11-18T17:48 NFL Week 11 latest intel, buzz questions, news, fantasy tips: What we're hearing
+     news 11-19T17:37 Midseason reports on every NFL team's offensive coordinator, playcaller
+     news 11-19T21:21 Bucs QB Baker Mayfield hopes to play Sunday despite foot injury: 'I feel ready'
+     news 11-19T23:23 Lions moving on after Hutchinson joins Campbell on IR and they face Bucs aiming for 6th straight win
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+  -- Detroit Lions injuries (20261122T0030)
+     Inju C  Cade Mays: ir
+     Ques CB D.J. Reed: Reed (hip) is listed as questionable for Sunday's game against the Buccaneers.
+     Ques RB Sione Vaki: Vaki (ankle) is questionable for Sunday's game against the Buccaneers.
+     Inju DE Aidan Hutchinson: The Lions placed Hutchinson (knee) on injured reserve Wednesday.
+     Ques DT Tyler Lacy: questionable
+     Ques CB Ennis Rakestraw Jr.: questionable
+     Ques CB Khalil Dorsey: questionable
+     Ques LB Joe Bachie: questionable
+     Acti TE Tyler Conklin: Conklin went without a target while playing 22 of the Lions' 71 offensive snaps in Sunday's 35-10 win over the Patriots in Munich.
+     Acti RB Jacob Saylors: Saylors rushed twice for nine yards while adding 26 yards as a kick returner during Sunday's 35-10 win over the Patriots.
+     Acti TE Brock Wright: Wright caught both of his targets for 11 yards during the Lions' 35-10 win over the Patriots on Sunday in Munich.
+     Acti TE Sam LaPorta: LaPorta caught one of four targets for 16 yards in Sunday's 35-10 win over the Patriots in Munch.
+     Acti WR Jameson Williams: Williams caught four of seven targets for 50 yards in Sunday's 35-10 win over the Patriots in Munich.
+     Acti WR Amon-Ra St. Brown: St. Brown caught four of five targets for 98 yards and two touchdowns in Sunday's 35-10 win over the Patriots in Munich.
+     Acti WR Isaac TeSlaa: TeSlaa caught two of five targets for 19 yards and a touchdown during the Lions' 35-10 win over the Patriots on Sunday in Munich. He also recorded a t
+     Acti RB Jahmyr Gibbs: Gibbs carried the ball 22 times for 153 yards and two touchdowns while catching seven of eight targets for 99 yards in Sunday's 35-10 win over the Pat
+     Acti QB Jared Goff: Goff completed 20 of 31 passes for 303 yards and three touchdowns with two interceptions in Sunday's 35-10 win over the Patriots in Munich. He added t
+     news 11-17T16:35 Lions plan for Kerby Joseph to make season debut Sunday, per Dan Campbell
+     news 11-19T17:37 Midseason reports on every NFL team's offensive coordinator, playcaller
+     news 11-19T23:23 Lions moving on after Hutchinson joins Campbell on IR and they face Bucs aiming for 6th straight win
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T11:51 Fantasy football last-minute pickups: Flournoy, Ayomanor among top candidates
+  -- props (pull 2026-11-21T19:18)
+     * Amon-Ra St. Brown: atd 0.5 (-135), recyd 82.5 (-115/-115), rec 7.5 (+105/-135)
+     * Baker Mayfield: atd 0.5 (+600), paatt 31.5 (-110/-120), cmp 19.5 (+100/-130), int 0.5 (-125/-105), patd 1.5 (+130/-175), payd 213.5 (-115/-115), ruyd 7.5 (-115/-115)
+     * Bucky Irving: atd 0.5 (+100), recyd 15.5 (-110/-120), rec 2.5 (-130/+100), ruatt 16.5 (-105/-125), ruyd 64.5 (-115/-115)
+     * Cade Otton: atd 0.5 (+375), recyd 30.5 (-115/-115), rec 3.5 (+115/-145)
+     * Chris Godwin: atd 0.5 (+325), recyd 32.5 (-115/-115), rec 3.5 (+110/-140)
+     * Emeka Egbuka: atd 0.5 (+220), recyd 45.5 (-115/-115), rec 4.5 (+125/-165)
+     * Isaac TeSlaa: atd 0.5 (+450), recyd 15.5 (-115/-115), rec 1.5 (+130/-170)
+     * Jahmyr Gibbs: atd 0.5 (-250), recyd 33.5 (-115/-115), rec 3.5 (-155/+120), ruatt 19.5 (-110/-120), ruyd 84.5 (-115/-115)
+     * Jameson Williams: atd 0.5 (+220), recyd 50.5 (-115/-115), rec 3.5 (-130/+100)
+     * Jared Goff: atd 0.5 (+1100), paatt 32.5 (-120/-110), cmp 21.5 (-115/-115), int 0.5 (+115/-150), patd 1.5 (-170/+130), payd 250.5 (-115/-115), ruyd 0.5 (-105/-125)
+     * Kenny Gainwell: atd 0.5 (+375), recyd 11.5 (-120/-110), rec 2.5 (+135/-190), ruyd 16.5 (-115/-115)
+     * Sam LaPorta: atd 0.5 (+220), recyd 33.5 (-115/-115), rec 3.5 (+105/-135)
+     * Sean Tucker: atd 0.5 (+650)
+     * Sione Vaki: atd 0.5 (+525), ruyd 15.5 (-115/-115)
+     * Ted Hurst III: atd 0.5 (+650), recyd 7.5 (-115/-115), rec 0.5 (-170/+130)
+     * Tez Johnson: atd 0.5 (+425), recyd 20.5 (-115/-115), rec 1.5 (-115/-115)
+
+  WHAT CHANGED: new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Philadelphia Eagles; injury_change: inj_Pittsburgh Steelers; new_news: 1 availability items
+######## Pittsburgh Steelers @ Philadelphia Eagles  kick 11-22T18:00Z
+  HR ML: Eagles +170 / Steelers -210 (no-vig home 0.353) | Pinnacle no-vig home 0.351
+  HR spread: Eagles +3.5 -110 / Steelers -3.5 -110 | Pinnacle Eagles 4.5 (-126) | HR open 4.5 (20261117)
+  HR total: 37.5 O-110/U-110 | Pinnacle 37.5 O-105/U-109 | HR open 38.5
+  Kalshi ML [('Pittsburgh wins', 0.65, 159570), ('Philadelphia wins', 0.35, 57954)] | spread [('Pittsburgh wins by over 3.5 points?', 0.49, 18752), ('Pittsburgh wins by over 4.5 points?', 0.46, 146065)] | total [('Full Game: over 37.5 points scored?', 0.49, 9088), ('Full Game: over 38.5 points scored?', 0.46, 14269)]
+  -- Pittsburgh Steelers injuries (20261122T0030)
+     Acti RB Max Hurleman: The Steelers elevated Hurleman from the practice squad Saturday.
+     Inju WR Michael Pittman Jr.: Pittman (foot) is not expected to be activated from injured reserve for Sunday's game against the Eagles, Brooke Pryor of ESPN reports.
+     Ques WR Roman Wilson: The Steelers activated Wilson (hand) from injured reserve Saturday, Ian Rapoport of NFL Network reports.
+     Out  LB Nick Herbig: Herbig (hip) has been downgraded from questionable to out for Sunday's game against the Eagles, Burt Lauten of the Steelers' official site reports.
+     Ques S  DeShon Elliott: Elliott (knee) is questionable for Sunday's game against Philadelphia, Brooke Pryor of ESPN.com reports.
+     Ques LB Patrick Queen: Queen (hand) is questionable for Sunday's game against the Eagles, Brooke Pryor of ESPN.com reports.
+     Inju G  Gennings Dunker: The Steelers designated Dunker (knee) for return to practice from injured reserve Wednesday, Teresa Varley of the team's official site reports.
+     Inju G  Mason McCormick: The Steelers placed McCormick (ankle) on injured reserve Wednesday, Teresa Varley of the team's official site reports.
+     Acti WR Germie Bernard: Bernard failed to reel in any of his three targets while notching a 10-yard rush during Sunday night's 38-18 loss to the Bengals.
+     Acti TE Darnell Washington: Washington caught one pass for five yards on two targets in Sunday night's loss to the Bengals.
+     Acti QB Drew Allar: 
+     Acti RB Eli Heidenreich: 
+     Acti QB Mason Rudolph: Rudolph completed one of three pass attempts for two yards and rushed once for nine yards in Sunday's 38-18 loss to the Bengals.
+     Acti WR DK Metcalf: Metcalf brought in two of six targets for 54 yards and a touchdown and added a two-point conversion catch in the Steelers' 38-18 loss to the Bengals o
+     Acti RB Jaylen Warren: Warren rushed seven times for 15 yards and brought in five of six targets for 26 yards in the Steelers' 38-18 loss to the Bengals on Sunday night. He 
+     Acti RB Rico Dowdle: Dowdle rushed five times for 26 yards and caught both of his targets for eight yards during Sunday's 38-18 defeat at Cincinnati.
+     Acti TE Pat Freiermuth: Freiermuth recorded two catches (on three targets) for 35 yards and one touchdown during Sunday's 38-18 loss in Cincinnati.
+     Acti QB Aaron Rodgers: Rodgers completed 15 of 29 passes for 143 yards, two touchdowns and no interceptions and rushed two times for minus-1 yard during Sunday's 38-18 loss 
+     Acti QB Will Howard: Howard (coach's decision) is inactive and serving as Pittsburgh's emergency third quarterback Sunday night versus Cincinnati.
+     news 11-20T00:22 The Steelers last won in Philadelphia in 1965. Can they top an Eagles team on 7-game losing streak?
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-21T04:58 Can play-action be the answer for the Steelers' offense?
+     news 11-21T11:00 How Steelers' wide receiver corps gets big boost in Week 11
+     news 11-21T20:54 Steelers activate WR Roman Wilson off IR for Eagles game
+  -- Philadelphia Eagles injuries (20261122T0030)
+     Inju LB Zack Baun: Baun (back) was placed on the Eagles' injured reserve Saturday.
+     Ques RB Will Shipley: The Eagles activated Shipley (foot) from injured reserve Saturday, but he remains questionable for Sunday's game against the Steelers.
+     Inju WR Dontayvion Wicks: The Eagles placed Wicks (ankle/foot) on injured reserve Saturday.
+     Acti WR Britain Covey: Covey (knee) does not have an injury designation for Sunday's game against the Steelers.
+     Acti WR Makai Lemon: Lemon will operate as the Eagles' WR2 against the Steelers on Sunday due to the return of DeVonta Smith (hamstring).
+     Acti RB Saquon Barkley: Barkley (hamstring) told EJ Smith of PHLY Sports on Friday that he "feels better physically" after the team's Week 10 bye, and the running back doesn'
+     Doub LB Smael Mondon Jr.: doubtful
+     Acti WR DeVonta Smith: Smith (hamstring) practiced fully Thursday.
+     Acti QB Tanner McKee: McKee will remain in a backup role for Sunday's game against the Steelers after head coach Nick Sirianni announced Wednesday that Joe Milton will serv
+     Acti QB Joe Milton: Head coach Nick Sirianni confirmed that Milton will remain the Eagles' starting quarterback for Sunday's game against the Steelers, according to NFL r
+     Acti RB Jaydon Blue: The Eagles signed Blue from their practice squad to their active roster Tuesday.
+     Acti TE Zach Ertz: The Eagles signed Ertz from the practice squad to the active roster Monday.
+     Acti WR Elijah Moore: Moore caught one of two targets for minus-3 yards during the Eagles' 19-11 loss to the Giants on Sunday.
+     Acti WR Darius Cooper: Cooper caught just two of eight targets for 25 yards in Sunday's 19-11 loss to the Giants.
+     Acti RB Elijah Mitchell: Mitchell reverted to the Eagles' practice squad Monday.
+     Acti TE Eli Stowers: Stowers failed to catch his only target in Sunday's 19-11 loss to the Giants.
+     Acti TE Dallas Goedert: Goedert caught five of six targets for 50 yards in Sunday's 19-11 loss to the Giants.
+     news 11-19T17:37 Midseason reports on every NFL team's offensive coordinator, playcaller
+     news 11-20T00:22 The Steelers last won in Philadelphia in 1965. Can they top an Eagles team on 7-game losing streak?
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T21:53 Eagles heading into SNF with a promising roster
+     news 11-21T11:00 Edge Jonathan Greenard loves to makes plays, despite Eagles' standing
+  -- props (pull 2026-11-21T19:18)
+     * Aaron Rodgers: atd 0.5 (+1750), paatt 32.5 (-110/-120), cmp 19.5 (-105/-125), int 0.5 (-105/-125), patd 1.5 (+145/-195), payd 209.5 (-115/-115), ruyd 0.5 (+115/-150)
+     * DK Metcalf: atd 0.5 (+250), recyd 42.5 (-115/-115), rec 3.5 (-115/-115)
+     * Dallas Goedert: atd 0.5 (+400), recyd 31.5 (-115/-115), rec 3.5 (-110/-120)
+     * Darius Cooper: atd 0.5 (+600), recyd 16.5 (-115/-115), rec 1.5 (-105/-125)
+     * Darnell Washington: atd 0.5 (+300), recyd 17.5 (-115/-115), rec 1.5 (-175/+130)
+     * DeVonta Smith: atd 0.5 (+325), recyd 54.5 (-115/-115), rec 4.5 (-150/+115)
+     * Germie Bernard: atd 0.5 (+425), recyd 25.5 (-115/-115), rec 3.5 (+125/-160)
+     * Jaylen Warren: atd 0.5 (+130), recyd 21.5 (-115/-115), rec 2.5 (-130/+100), ruatt 14.5 (+100/-130), ruyd 66.5 (-115/-115)
+     * Joe Milton: atd 0.5 (+300), paatt 30.5 (-125/-105), cmp 18.5 (-110/-120), int 0.5 (-170/+130), patd 0.5 (-175/+130), payd 187.5 (-115/-115), ruatt 6.5 (-135/+105), ruyd 36.5 (-110/-120)
+     * Makai Lemon: atd 0.5 (+475), recyd 26.5 (-115/-115), rec 3.5 (+120/-160)
+     * Michael Pittman Jr.: atd 0.5 (+475), recyd 16.5 (-115/-115), rec 1.5 (-170/+130)
+     * Pat Freiermuth: atd 0.5 (+350), recyd 20.5 (-115/-115), rec 2.5 (-120/-110)
+     * Rico Dowdle: atd 0.5 (+210), recyd 9.5 (-115/-115), rec 1.5 (-190/+140), ruatt 9.5 (-110/-120), ruyd 39.5 (-115/-115)
+     * Saquon Barkley: atd 0.5 (+120), recyd 9.5 (-115/-115), rec 1.5 (-140/+110), ruatt 14.5 (-110/-120), ruyd 55.5 (-115/-115)
+
+  WHAT CHANGED: new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Los Angeles Chargers; injury_change: inj_New York Jets
+######## New York Jets @ Los Angeles Chargers  kick 11-22T21:05Z
+  HR ML: Chargers -170 / Jets +145 (no-vig home 0.607) | Pinnacle no-vig home 0.611
+  HR spread: Chargers -3 -120 / Jets +3 +100 | Pinnacle Chargers -3.0 (-114) | HR open -3.5 (20261117)
+  HR total: 42 O-110/U-110 | Pinnacle 41.5 O-118/U+103 | HR open 40.5
+  Kalshi ML [('New York J wins', 0.4, 109548), ('Los Angeles C wins', 0.6, 76873)] | spread [('Los Angeles C wins by over 2.5 points?', 0.56, 12715), ('Los Angeles C wins by over 3.5 points?', 0.46, 51961)] | total [('Full Game: over 42.5 points scored?', 0.49, 2518), ('Full Game: over 41.5 points scored?', 0.53, 3360)]
+  -- New York Jets injuries (20261122T0030)
+     Acti WR Sterling Shepard: The Jets elevated Shepard from the practice squad to the active roster Saturday, Zack Rosenblatt of The Athletic reports.
+     Acti RB Breece Hall: Head coach Aaron Glenn told reporters Friday that Hall could see a bump in touches for Sunday's game against the Chargers, Howie Kussoy of the New Yor
+     Ques G  Dylan Parham: Parham (knee) is listed as questionable for Sunday's game against the Chargers.
+     Ques DT Harrison Phillips: Phillips (ankle) is listed as questionable for Sunday's game against the Chargers.
+     Inju DT David Onyemata: Onyemata (abdomen) has been ruled out for Sunday's game against the Chargers, Brian Costello of the New York Post reports.
+     Ques LB Trevin Wallace: Wallace (groin) is questionable for Sunday's game against the Chargers.
+     Acti QB Geno Smith: Smith (ankle) doesn't have an injury designation for Sunday's game against the Chargers.
+     Acti TE Mason Taylor: With Omar Cooper (ankle) ruled out, coach Aaron Glenn said Friday that Taylor could see more pass-catching opportunities Sunday against the Chargers.
+     Acti TE Kenyon Sadiq: With Omar Cooper (ankle) ruled out, coach Aaron Glenn said Friday that Sadiq could see more pass-catching opportunities Sunday against the Chargers.
+     Acti WR Adonai Mitchell: With Omar Cooper (ankle) ruled out, Mitchell is expected to play an elevated role on offense Sunday against the Chargers.
+     Out  WR Isaiah Williams: Williams (ribs) won't play in Sunday's game against the Chargers.
+     Out  WR Omar Cooper Jr.: Coach Aaron Glenn said Friday that Cooper (ankle/hip) will be out for Sunday's game against the Chargers, Brian Costello of the New York Post reports.
+     Ques DE Joseph Ossai: questionable
+     Acti RB Isaiah Davis: Davis didn't touch the ball on offense in Sunday's 31-12 loss to the Bills.
+     Acti TE Jelani Woods: 
+     Acti WR Tim Patrick: 
+     Acti RB Braelon Allen: Allen rushed eight times for 40 yards and caught his only target for six yards in Sunday's 31-12 loss to the Bills.
+     Acti QB Cade Klubnik: Klubnik completed 11 of 20 passes for 137 yards, no touchdowns and one interception in Sunday's 31-12 loss to the Bills. He added three rushing attemp
+     Acti WR Garrett Wilson: Wilson (concussion) caught seven of 14 targets for 106 yards and lost a fumble in Sunday's 31-12 loss to the Bills.
+     news 11-19T21:55 Jets look to turn around offensive struggles
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T21:59 Draft buzz: Interest in Oklahoma State's Drew Mestemaker could spur draft trade
+     news 11-20T22:11 Reeling Jets head to LA to face Chargers, who are coming off their first win of the season
+     news 11-20T22:13 Jets QB Geno Smith (ankle) cleared to start vs. Chargers
+  -- Los Angeles Chargers injuries (20261122T0030)
+     Ques OT Trey Pipkins III: questionable
+     Ques CB Isas Waxter: Waxter (ankle) is listed as questionable for Sunday's game against the Jets, Omar Navarro of the Chargers' official site reports.
+     Inju CB Rodney Shelley: Shelly (ankle) has been ruled out ahead of Sunday's game against the Jets, Omar Navarro of the Chargers' official site reports.
+     Out  S  Kendall Williamson: Williamson (calf) has been ruled out ahead of Sunday's game against the Jets, Omar Navarro of the Chargers' official site reports.
+     Ques CB Tarheeb Still: Still (ankle) is questionable for Sunday's game against the Jets.
+     Out  LB Daiyan Henley: Henley (knee) has been ruled out for Sunday's game against the Jets.
+     Doub WR Brenen Thompson: Thompson (hamstring) is listed as doubtful for Sunday's game against the Jets.
+     Acti RB Omarion Hampton: Offensive coordinator Mike McDaniel told reporters Friday that his "expectation" is that Hampton is the lead back for the Chargers, Omar Navarro of th
+     Ques TE Charlie Kolar: Kolar (concussion) is questionable for Sunday's game against the Jets.
+     Ques WR Ladd McConkey: McConkey (back) is listed as questionable for Sunday's game against the Jets.
+     Acti TE David Njoku: Njoku played 19 offensive snaps but didn't get a target during Monday's 23-20 win over the Ravens on Monday.
+     Acti TE Oronde Gadsden: Gadsden hauled in his lone target for seven yards in Monday's 23-20 win over Baltimore.
+     Acti RB Kimani Vidal: Vidal turned two carries into zero yards, brought in both of his targets for 14 yards and returned one kickoff for 32 yards during the Chargers' 23-20
+     Acti RB Keaton Mitchell: Mitchell turned three carries into four yards, failed to haul in his lone target and returned two kickoffs for 30 yards during the Chargers' 23-20 win
+     Acti WR Quentin Johnston: Johnston brought in his sole target for six yards in the Chargers' 23-20 win over the Ravens on Monday night.
+     Acti WR Tre' Harris: Harris secured all five targets for 86 yards in the Chargers' 23-20 win over the Ravens on Monday night.
+     Acti QB Justin Herbert: Herbert completed 12 of 18 passes for 129 yards with no touchdowns or interceptions and rushed seven times for 51 yards and a touchdown in the Charger
+     Inju G  Branson Taylor: Taylor (ankle) was placed on injured reserve Monday.
+     news 11-20T11:42 NFL offseason free agent and trade acquisitions that have and have not worked
+     news 11-20T13:45 Fantasy buzz: Stroud has Houston fans over the moon, Colts continue to crumble
+     news 11-20T21:04 Fantasy buzz: Does anything change in Indy with Richardson under center?
+     news 11-20T21:59 Draft buzz: Interest in Oklahoma State's Drew Mestemaker could spur draft trade
+     news 11-20T22:11 Reeling Jets head to LA to face Chargers, who are coming off their first win of the season
+  -- props (pull 2026-11-21T19:18)
+     * Adonai Mitchell: atd 0.5 (+230), recyd 46.5 (-115/-115), rec 3.5 (+130/-170)
+     * Braelon Allen: atd 0.5 (+260), recyd 6.5 (-120/-110), rec 1.5 (+115/-150), ruatt 8.5 (-115/-115), ruyd 33.5 (-115/-115)
+     * Breece Hall: atd 0.5 (+175), recyd 21.5 (-115/-115), rec 2.5 (-135/+105), ruatt 13.5 (-115/-115), ruyd 49.5 (-115/-115)
+     * Charlie Kolar: atd 0.5 (+375)
+     * David Njoku: atd 0.5 (+375)
+     * Garrett Wilson: atd 0.5 (+170), recyd 65.5 (-115/-115), rec 5.5 (-115/-115)
+     * Geno Smith: atd 0.5 (+1200), paatt 30.5 (-110/-120), cmp 20.5 (+100/-130), int 0.5 (-115/-115), patd 1.5 (+140/-185), payd 217.5 (-115/-115), ruyd 3.5 (-120/-110)
+     * Justin Herbert: atd 0.5 (+325), paatt 27.5 (-125/-105), cmp 18.5 (+100/-130), int 0.5 (+125/-165), patd 1.5 (+135/-180), payd 201.5 (-115/-115), ruyd 22.5 (-120/-110)
+     * Keaton Mitchell: atd 0.5 (+425), ruyd 11.5 (-115/-115)
+     * Kenyon Sadiq: atd 0.5 (+475), recyd 23.5 (-115/-115), rec 2.5 (+135/-175)
+     * Kimani Vidal: atd 0.5 (+425), ruyd 13.5 (-115/-115)
+     * Ladd McConkey: atd 0.5 (+210)
+     * Mason Taylor: atd 0.5 (+425), recyd 19.5 (-115/-115), rec 2.5 (-110/-120)
+     * Omarion Hampton: atd 0.5 (+110), recyd 6.5 (-115/-115), rec 1.5 (+135/-180), ruatt 15.5 (-115/-115), ruyd 63.5 (-115/-115)
+     * Oronde Gadsden II: atd 0.5 (+375)
+     * Quentin Johnston: atd 0.5 (+325)
+     * Tim Patrick: atd 0.5 (+700)
+     * Tre Harris: atd 0.5 (+210)
+
+  WHAT CHANGED: new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Denver Broncos; injury_change: inj_Las Vegas Raiders
+######## Las Vegas Raiders @ Denver Broncos  kick 11-22T21:25Z
+  HR ML: Broncos -650 / Raiders +450 (no-vig home 0.827) | Pinnacle no-vig home 0.82
+  HR spread: Broncos -10.5 -110 / Raiders +10.5 -110 | Pinnacle Broncos -10.5 (-108) | HR open -10.0 (20261117)
+  HR total: 40.5 O-110/U-110 | Pinnacle 41.0 O-107/U-107 | HR open 40.0
+  Kalshi ML [('Las Vegas wins', 0.17, 316770), ('Denver wins', 0.82, 183338)] | spread [('Denver wins by over 10.5 points?', 0.48, 32250), ('Denver wins by over 9.5 points?', 0.54, 111656)] | total [('Full Game: over 40.5 points scored?', 0.52, 10953), ('Full Game: over 41.5 points scored?', 0.47, 439)]
+  -- Las Vegas Raiders injuries (20261122T0030)
+     Acti TE Carter Runyon: The Raiders elevated Runyon from the practice squad Saturday.
+     Ques DT Folorunso Fatukasi: Fatukasi (toe) is listed as questionable for Sunday's game against the Broncos, Paul Gutierrez of the Raiders' official site reports.
+     Out  DT Tonka Hemingway: Hemingway (upper body) has been ruled out ahead of Sunday's game against the Broncos, Paul Gutierrez of the Raiders' official site reports.
+     Acti TE Ian Thomas: 
+     Ques TE Brock Bowers: Coach Klint Kubiak said Friday that Bowers (ankle) is slated to be listed as questionable for Sunday's game against the Broncos, Sam Warren of The Ath
+     Ques PK Matt Gay: Gay (hip) was spotted at practice Friday, Sam Warren of The Athletic reports.
+     Acti WR Dont'e Thornton Jr.: Thornton (back) was a full participant in Las Vegas' practice Wednesday, Sam Warren of The Athletic reports.
+     Acti WR Jack Bech: Bech caught two of seven targets for 10 yards during the Raiders' 21-13 loss to the Seahawks on Sunday.
+     Acti WR Dareke Young: Young went without a target while playing one of the Raiders' 59 snaps on offense in Sunday's 21-13 loss to the Seahawks. He also brought back one kic
+     Acti WR Jalen Nailor: Nailor recorded one reception for minus-1 yard on four targets in Sunday's 21-13 loss to the Seahawks.
+     Acti RB Dylan Laube: Laube played all 22 of his snaps on special teams in Sunday's 21-13 loss to the Seahawks and returned two kickoffs for 46 yards and one punt for zero 
+     Acti TE Michael Mayer: Mayer caught two of three targets for 16 yards in Sunday's 21-13 loss to the Seahawks.
+     Acti WR Tre Tucker: Tucker caught one pass for nine yards on two targets in Sunday's 21-13 loss to the Seahawks.
+     Acti QB Fernando Mendoza: Mendoza completed 17 of 29 passes for 143 yards, no touchdowns and no interceptions and rushed six times for 22 yards and one TD during Sunday's 21-13
+     Acti RB Mike Washington Jr.: Washington compiled eight rushes for 23 yards and secured his only target for four yards during Sunday's 21-13 defeat to the Seahawks.
+     news 11-20T05:24 Why Raiders' run defense remains a concern
+     news 11-20T11:42 NFL offseason free agent and trade acquisitions that have and have not worked
+     news 11-21T11:00 Why is the Raiders' defense struggling, and how can it improve?
+     news 11-21T12:51 Raiders TE Brock Bowers (ankle, quad) listed as questionable
+     news 11-21T15:27 Raiders' Mark Davis unhappy with 'unfair' image of his father in 'Madden' movie
+  -- Denver Broncos injuries (20261122T0030)
+     Inju TE Caleb Lohner: Lohner (foot) has been ruled out ahead of Sunday's game against the Raiders, Aric DiLalla of the Broncos' official site reports.
+     Ques S  Brandon Jones: Jones (hamstring) is listed as questionable for Sunday's game against the Raiders, Aric DiLalla of the Broncos' official site reports.
+     Acti WR Jaylen Waddle: Waddle (concussion) doesn't carry an injury designation for Sunday's game against the Raiders after practicing fully this week.
+     Acti TE Adam Trautman: Trautman caught two of three passes for 15 yards during the Broncos' 26-21 win over the Panthers on Sunday.
+     Acti WR Marvin Mims Jr.: Mims caught one of two targets for zero yards, added a five-yard carry and returned three punts for 22 yards during the Broncos' 26-21 win over the Pa
+     Acti WR Troy Franklin: Franklin brought in three of four targets for 31 yards during the Broncos' 26-21 win over the Panthers on Sunday.
+     Acti TE Evan Engram: Engram caught four of five targets for 33 yards in Sunday's 26-21 win over the Panthers.
+     Acti WR Lil'Jordan Humphrey: 
+     Acti TE Dallen Bentley: 
+     Acti QB Sam Ehlinger: 
+     Acti RB J.K. Dobbins: Dobbins rushed four times for 18 yards and caught his only target for four yards during Sunday's 26-21 win over Carolina.
+     Acti WR Pat Bryant: Bryant caught four of five targets for 56 yards and a touchdown in Sunday's 26-21 win over Carolina.
+     Acti WR Courtland Sutton: Sutton caught five of nine targets for 45 yards and a touchdown in Sunday's 26-21 win over the Panthers.
+     Acti RB Jonah Coleman: Coleman carried the ball 17 times for 57 yards and a touchdown and caught all four of his targets for 31 yards in Sunday's 26-21 win over the Panthers
+     Acti QB Bo Nix: Nix completed 25 of 37 passes for 237 yards and two touchdowns with one interception in Sunday's 26-21 win over the Panthers. He added two rushing yar
+     Inju DE Eyioma Uwazurike: The Broncos placed Uwazurike (shoulder) on injured reserve Saturday, Aric DiLalla of the team's official site reports.
+     news 11-20T11:42 NFL offseason free agent and trade acquisitions that have and have not worked
+     news 11-20T14:18 Can the Broncos continue winning run vs. the Raiders?
+     news 11-20T15:56 Peyton Manning enshrined in ESPN Fantasy Football Hall of Fame
+     news 11-20T20:47 Tom Brady tops list of athletes who became owners
+     news 11-20T23:46 Broncos looking to put pressure on Mendoza
+  -- props (pull 2026-11-21T14:00)
+     * Ashton Jeanty: atd 0.5 (+200), recyd 28.5 (-115/-115), rec 3.5 (-145/+110), ruatt 9.5 (-130/+100), ruyd 31.5 (-115/-115)
+     * Bo Nix: atd 0.5 (+325), paatt 30.5 (-115/-115), cmp 21.5 (+105/-135), int 0.5 (+140/-185), patd 1.5 (-125/-105), payd 214.5 (-115/-115), ruatt 4.5 (+110/-145), ruyd 10.5 (-115/-115)
+     * Brock Bowers: atd 0.5 (+300), recyd 54.5 (-115/-115), rec 4.5 (-120/-110)
+     * Courtland Sutton: atd 0.5 (+220), recyd 34.5 (-115/-115), rec 3.5 (+105/-135)
+     * Evan Engram: atd 0.5 (+375), recyd 21.5 (-110/-120), rec 2.5 (+100/-130)
+     * Fernando Mendoza: atd 0.5 (+500), paatt 30.5 (-115/-115), cmp 17.5 (-120/-110), int 0.5 (-150/+115), patd 0.5 (-165/+125), payd 172.5 (-115/-115), ruatt 4.5 (-110/-120), ruyd 16.5 (-120/-110)
+     * J.K. Dobbins: atd 0.5 (+240), ruyd 24.5 (-115/-115)
+     * Jack Bech: atd 0.5 (+650)
+     * Jalen Nailor: atd 0.5 (+600)
+     * Jaylen Waddle: atd 0.5 (+195), recyd 42.5 (-115/-115), rec 3.5 (-135/+105)
+     * Jonah Coleman: atd 0.5 (-150), recyd 21.5 (-120/-110), rec 3.5 (+105/-135), ruatt 16.5 (-105/-125), ruyd 70.5 (-115/-115)
+     * Marvin Mims Jr.: atd 0.5 (+525), recyd 9.5 (-115/-115), rec 1.5 (+145/-200)
+     * Michael Mayer: atd 0.5 (+450)
+     * Mike Washington Jr.: atd 0.5 (+350), ruatt 8.5 (-130/+100), ruyd 24.5 (-120/-110)
+     * Nate Adkins: atd 0.5 (+600)
+     * Pat Bryant: atd 0.5 (+300), recyd 27.5 (-110/-120), rec 2.5 (-105/-125)
+     * Tre Tucker: atd 0.5 (+450)
+
+  WHAT CHANGED: new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Jacksonville Jaguars
+######## Jacksonville Jaguars @ New York Giants  kick 11-22T21:25Z
+  HR ML: Giants +220 / Jaguars -275 (no-vig home 0.299) | Pinnacle no-vig home 0.29
+  HR spread: Giants +5 -105 / Jaguars -5 -115 | Pinnacle Giants 6.0 (-114) | HR open 5.5 (20261117)
+  HR total: 46 O-110/U-110 | Pinnacle 46.5 O-102/U-112 | HR open 46.5
+  Kalshi ML [('New York G wins', 0.29, 157347), ('Jacksonville wins', 0.7, 100094)] | spread [('Jacksonville wins by over 4.5 points?', 0.54, 1113), ('Jacksonville wins by over 5.5 points?', 0.51, 51463)] | total [('Full Game: over 45.5 points scored?', 0.52, 8864), ('Full Game: over 46.5 points scored?', 0.47, 36276)]
+  -- Jacksonville Jaguars injuries (20261122T0030)
+     Inju DE B.J. Green II: Green (forearm) has been ruled out for Sunday's game against the Giants.
+     Out  DE Danny Striggow: Striggow (concussion) is listed as questionable for Sunday's game against the Giants.
+     Acti RB LeQuint Allen Jr.: Allen (hamstring) doesn't have an injury designation for Sunday's game against the Giants.
+     Acti RB Chris Rodriguez Jr.: Rodriguez (hand) doesn't have an injury designation for Sunday's game against the Giants.
+     Acti WR Jakobi Meyers: Meyers (ankle) doesn't have an injury designation for Sunday's game against the Giants.
+     Acti RB Bhayshul Tuten: Tuten (ankle/foot) was present for the stretching portion of Friday's practice before moving to a side field, Ryan O'Halloran of The Florida Times-Uni
+     Ques DE Matt Dickerson: questionable
+     Out  C  Robert Hainsey: Jaguars head coach Liam Coen announced Wednesday that Hainsey (knee) is out for Sunday's game against the Giants, Ryan O'Halloran of The Florida Times
+     Acti WR Travis Hunter: Hunter caught both of his targets for 16 yards, recorded a three-yard carry and contributed five tackles (three solo) and an interception during the J
+     Acti WR CJ Williams: 
+     Acti WR Josh Cameron: Cameron caught all three of his targets for 67 yards and a touchdown in Sunday's 40-23, Week 10 win over Tennessee. He also returned five kickoffs for
+     Acti WR Brian Thomas Jr.: Thomas caught three of four targets for 29 yards in Sunday's 40-23 win over the Titans.
+     Acti WR Parker Washington: Washington caught seven of nine targets for 152 yards and a touchdown in Sunday's 40-23 win over the Titans.
+     Acti QB Trevor Lawrence: Lawrence completed 25 of 35 passes for 352 yards and three touchdowns with one interception in Sunday's 40-23 win over the Titans. He added 27 yards o
+     Acti TE Brenton Strange: Strange caught two of three targets for nine yards and a touchdown in Sunday's 40-23 win over the Titans.
+     news 11-19T17:37 Midseason reports on every NFL team's offensive coordinator, playcaller
+     news 11-19T21:25 Jaguars visit the Giants in a matchup of two unexpected division leaders
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T11:00 How Bhayshul Tuten became the clear No. 1 running back for the Jaguars
+     news 11-20T22:59 How good has Trevor Lawrence been this year?
+  -- New York Giants injuries (20261122T0030)
+     Acti TE Isaiah Likely: Likely (undisclosed) wasn't spotted at Friday's practice, Dan Duggan of The Athletic reports.
+     Inju RB Tyrone Tracy Jr.: Tracy (hamstring) could be reinstated from injured reserve when first eligible ahead of the Giants' Week 13 game against the 49ers, Dan Duggan of The 
+     Acti QB Jameis Winston: Winston carried twice for one yard in Thursday's 24-21 loss to the Commanders.
+     Acti WR Xavier Gipson: Gipson was signed by the Giants off of Philadelphia's practice squad Monday, Pat Leonard of the New York Daily News reports.
+     Acti TE Thomas Fidone II: 
+     Acti TE Theo Johnson: Johnson logged one catch (on three targets) for eight yards Thursday in a loss to the Commanders.
+     Acti WR Darnell Mooney: Mooney caught two of five targets for eight yards Thursday in a loss to Washington.
+     Acti RB Devin Singletary: Singletary played just five snaps on offense and took one carry for three yards in Thursday's 24-21 loss to the Commanders.
+     Acti WR Malachi Fields: Fields brought in three of four targets for 62 yards in the Giants' 24-21 loss to the Commanders on Thursday.
+     Acti QB J.J. McCarthy: McCarthy completed 23 of 36 passes for 293 yards with a touchdown and an interception while adding six rushes for 34 yards in the Giants' 24-21 loss t
+     Acti WR Malik Nabers: Nabers secured five of seven targets for 44 yards and lost a fumble in the Giants' 24-21 loss to the Commanders on Thursday.
+     Acti RB Cam Skattebo: Skattebo rushed 18 times for 78 yards and two touchdowns and brought in three of four targets for 44 yards in the Giants' 24-21 loss to the Commanders
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T03:05 Will J.J. McCarthy be able to stand against the Jaguars
+     news 11-20T21:02 Giants looking for more respect around the NFL
+     news 11-21T01:15 Giants see Week 11 matchup vs. Jaguars as a big opportunity
+     news 11-21T11:00 Giants' Abdul Carter on lack of sacks: 'I've got to do more'
+  -- props (pull 2026-11-21T14:00)
+     * Bhayshul Tuten: atd 0.5 (-115), recyd 13.5 (-115/-115), rec 1.5 (-185/+135), ruatt 17.5 (-115/-115), ruyd 71.5 (-115/-115)
+     * Brenton Strange: atd 0.5 (+300), recyd 32.5 (-115/-115), rec 2.5 (-170/+130)
+     * Brian Thomas Jr: atd 0.5 (+525), recyd 13.5 (-115/-115), rec 1.5 (+135/-180)
+     * Cam Skattebo: atd 0.5 (+100), recyd 13.5 (-120/-110), rec 2.5 (+125/-170), ruatt 15.5 (-115/-115), ruyd 54.5 (-115/-115)
+     * Chris Rodriguez Jr.: atd 0.5 (+260), ruyd 20.5 (-110/-120)
+     * Darnell Mooney: atd 0.5 (+575), recyd 15.5 (-115/-115), rec 1.5 (-105/-125)
+     * Devin Singletary: atd 0.5 (+475), ruyd 10.5 (-115/-115)
+     * Isaiah Likely: atd 0.5 (+220), recyd 51.5 (-115/-115), rec 5.5 (+115/-150)
+     * J.J. McCarthy: atd 0.5 (+450), paatt 31.5 (-110/-120), cmp 19.5 (-105/-125), int 0.5 (-150/+115), patd 1.5 (+155/-210), payd 213.5 (-115/-115), ruyd 16.5 (-115/-115)
+     * Jakobi Meyers: atd 0.5 (+240), recyd 41.5 (-115/-115), rec 3.5 (+120/-160)
+     * Josh Cameron: atd 0.5 (+575), recyd 12.5 (-110/-120), rec 1.5 (+145/-200)
+     * Malachi Fields: atd 0.5 (+450), recyd 29.5 (-115/-115), rec 2.5 (+110/-145)
+     * Malik Nabers: atd 0.5 (+180), recyd 67.5 (-115/-115), rec 5.5 (-130/+100)
+     * Nate Boerkircher: atd 0.5 (+475), recyd 11.5 (-115/-115), rec 1.5 (+120/-155)
+     * Parker Washington: atd 0.5 (+135), recyd 64.5 (-115/-115), rec 4.5 (+115/-150)
+     * Theo Johnson: atd 0.5 (+650), recyd 7.5 (-120/-110), rec 0.5 (-230/+165)
+     * Travis Hunter: atd 0.5 (+575), recyd 8.5 (-115/-115), rec 1.5 (+155/-210)
+     * Trevor Lawrence: atd 0.5 (+450), paatt 30.5 (-115/-115), cmp 19.5 (-110/-120), int 0.5 (-110/-120), patd 1.5 (-145/+115), payd 232.5 (-115/-115), ruatt 3.5 (+115/-150), ruyd 8.5 (-120/-110)
+
+  WHAT CHANGED: new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_San Francisco 49ers
+######## Minnesota Vikings @ San Francisco 49ers  kick 11-23T01:20Z
+  HR ML: 49ers -175 / Vikings +145 (no-vig home 0.609) | Pinnacle no-vig home 0.618
+  HR spread: 49ers -3.5 -105 / Vikings +3.5 -115 | Pinnacle 49ers -3.0 (-119) | HR open -3.0 (20261117)
+  HR total: 46.5 O-110/U-110 | Pinnacle 46.0 O-110/U-104 | HR open 46.5
+  Kalshi ML [('San Francisco wins', 0.61, 581377), ('Minnesota wins', 0.39, 1253568)] | spread [('San Francisco wins by over 3.5 points?', 0.48, 121455), ('San Francisco wins by over 4.5 points?', 0.45, 12062)] | total [('Full Game: over 46.5 points scored?', 0.49, 132348), ('Full Game: over 47.5 points scored?', 0.46, 1345)]
+  -- Minnesota Vikings injuries (20261122T0030)
+     Acti TE Gavin Bartholomew: Bartholomew should revert to a backup role with T.J. Hockenson returning from a wrist injury for Sunday's game against the 49ers, Craig Peters of the 
+     Acti WR Jeshaun Jones: Jones (shoulder) does not have an injury designation for Sunday's game against the 49ers in Mexico City.
+     Ques CB Isaiah Rodgers: Rodgers (quadriceps) is listed as questionable for Sunday's game against the 49ers in Mexico City.
+     Out  QB Kyler Murray: Murray (hamstring) has been ruled out for Sunday night's game against the 49ers.
+     Acti TE T.J. Hockenson: Hockenson (wrist) doesn't have an injury designation for Sunday night's game against the 49ers.
+     Inju LB Bo Richter: The Vikings placed Richter (foot) on injured reserve Wednesday.
+     Acti WR Jauan Jennings: Jennings (calf) practiced in full Wednesday.
+     Ques S  Jay Ward: questionable
+     Out  WR Jordan Addison: Head coach Kevin O'Connell said Wednesday that Addison underwent thumb surgery earlier this week and won't be placed on injured reserve, Alec Lewis of
+     Acti WR Myles Price: Price is set for an increase in offensive workload with Jordan Addison (thumb) sidelined, Kevin Seifert of ESPN.com reports.
+     Acti WR Tai Felton: Felton is on track to operate in a more prominent role in Week 11 versus the 49ers, Kevin Seifert of ESPN.com reports.
+     Acti QB Max Brosmer: 
+     Acti RB Aaron Jones Sr.: Jones carried the ball 11 times for 47 yards and a touchdown and caught his only target for eight yards in Sunday's 30-10 win over the Packers.
+     Acti RB Jordan Mason: Mason carried the ball 16 times for 59 yards and failed to catch his only target in Sunday's 30-10 win over the Packers.
+     Acti QB Kirk Cousins: Cousins completed 21 of 31 passes for 207 yards and two touchdowns with one interception in Sunday's 30-10 win over the Packers. He added 11 rushing y
+     Acti WR Justin Jefferson: Jefferson caught nine of 13 targets for 74 yards in Sunday's 30-10 win over the Packers.
+     Acti QB Carson Wentz: Wentz (ankle) doesn't have an injury designation for Sunday's game at Green Bay, but Kirk Cousins will be Minnesota's starting quarterback.
+     Acti RB DeeJay Dallas: Dallas caught his only target for a two-yard gain in Monday's Week 9 loss to the Bills.
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T11:42 NFL offseason free agent and trade acquisitions that have and have not worked
+     news 11-20T15:47 Why Stephen A. is picking the Vikings to beat the 49ers on SNF
+     news 11-20T22:03 Vikings take on Mexico City
+     news 11-21T01:05 How Vikings brought Mexico City's elevation to Minnesota
+  -- San Francisco 49ers injuries (20261122T0030)
+     Inju CB Nate Hobbs: Hobbs (groin) is questionable for Sunday's game against the Vikings in Mexico City.
+     Ques LB Dre Greenlaw: Greenlaw (neck) is listed as questionable for Sunday's game against the Vikings in Mexico City.
+     Ques RB Jordan James: James (calf) is questionable for Sunday's game against the Vikings in Mexico City.
+     Ques QB Mac Jones: Jones (illness) is listed as questionable for Sunday's game against the Vikings in Mexico City.
+     Ques WR Mike Evans: Head coach Kyle Shanahan said Friday that the 49ers will make a decision on Evans' (Achilles) Week 11 status Saturday after listing the wide receiver 
+     Out  RB Isaac Guerendo: Guerendo (pectoral) was working off to the side during practice Thursday, Nick Wagoner of ESPN.com reports.
+     Inju WR Christian Kirk: Kirk announced Wednesday via his personal Instagram account that he recently underwent meniscus surgery.
+     Ques CB Upton Stout: questionable
+     Ques DE Khalid Kareem: questionable
+     Ques LB Luke Gifford: questionable
+     Inju WR De'Zhaun Stribling: Stribling (ankle) was doing some work on the side at Wednesday's practice, Nick Wagoner of ESPN.com reports.
+     Out  WR Brandon Aiyuk: Aiyuk's agent, Drew Rosenhaus, said Tuesday that the receiver is "100 percent healthy" and fully recovered from his November 2024 right knee surgery a
+     Acti WR Jacob Cowing: Cowing did not draw any targets during Sunday's 46-40 win at Dallas.
+     Acti WR Demarcus Robinson: Robinson played 21 of 65 offensive snaps (32.3 percent) but didn't show up on the box score otherwise during the 49ers' 46-40 win over the Cowboys on 
+     Acti WR Jordan Watkins: Watkins caught two passes for 49 yards on three targets in Sunday's 46-40 win over the Cowboys.
+     Acti QB Kurtis Rourke: 
+     Acti WR Keenan Allen: Allen brought in five of seven targets for 61 yards in the 49ers' 46-40 win over the Cowboys on Sunday.
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T11:42 NFL offseason free agent and trade acquisitions that have and have not worked
+     news 11-20T22:37 Police investigate man's death after alleged altercation at 49ers-Cowboys game
+     news 11-20T22:42 49ers preparing for Vikings dominant defense
+     news 11-21T11:57 In Mexico City, 49ers' Fred Warner can represent his heritage and boost DPOY case
+  -- props (pull 2026-11-21T14:00)
+     * Aaron Jones: atd 0.5 (+160), recyd 9.5 (-115/-115), rec 1.5 (-175/+130), ruatt 8.5 (-105/-125), ruyd 29.5 (-115/-115)
+     * Brock Purdy: atd 0.5 (+425), paatt 30.5 (-120/-110), cmp 20.5 (-110/-120), int 0.5 (-120/-110), patd 1.5 (-120/-110), payd 244.5 (-115/-115), ruyd 16.5 (-115/-115)
+     * Christian McCaffrey: atd 0.5 (-175), recyd 33.5 (-115/-115), rec 3.5 (-140/+110), ruatt 13.5 (+100/-130), ruyd 51.5 (-115/-115)
+     * Deebo Samuel: atd 0.5 (+350), recyd 25.5 (-115/-115), rec 2.5 (-110/-120), ruyd 8.5 (-110/-120)
+     * George Kittle: atd 0.5 (+180), recyd 47.5 (-115/-115), rec 4.5 (+115/-145)
+     * Jauan Jennings: atd 0.5 (+425), recyd 19.5 (-115/-115), rec 2.5 (+105/-140)
+     * Jordan Mason: atd 0.5 (+210), recyd 3.5 (-115/-115), rec 0.5 (-220/+160), ruatt 12.5 (+100/-130), ruyd 43.5 (-110/-120)
+     * Justin Jefferson: atd 0.5 (+115), recyd 85.5 (-115/-115), rec 7.5 (+105/-135)
+     * Kaelon Black: atd 0.5 (+275), ruatt 7.5 (-110/-120), ruyd 28.5 (-115/-115)
+     * Keenan Allen: atd 0.5 (+275)
+     * Kirk Cousins: atd 0.5 (+1000), paatt 34.5 (-120/-110), cmp 22.5 (-115/-115), int 0.5 (-165/+125), patd 1.5 (+105/-135), payd 232.5 (-115/-115), ruyd 1.5 (-120/-110)
+     * Mike Evans: atd 0.5 (+160), recyd 47.5 (-115/-115), rec 3.5 (-125/-105)
+     * Myles Price: atd 0.5 (+600), recyd 8.5 (-120/-110), rec 0.5 (-225/+160)
+     * T.J. Hockenson: atd 0.5 (+220), recyd 46.5 (-115/-115), rec 4.5 (-150/+115)
+     * Tai Felton: atd 0.5 (+575), recyd 14.5 (-115/-115), rec 1.5 (-105/-125)

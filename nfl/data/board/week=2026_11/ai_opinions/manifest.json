@@ -9139,5 +9139,1259 @@
     "41e2dd69bddd65d7e823d9ed61cc2afc": "line_move: hardrockbet_fl totals Over 46.0\u219247.0; line_move: hardrockbet_fl totals Under 46.0\u219247.0; line_move: pinnacle totals Over 46.0\u219247.5; line_move: pinnacle totals Under 46.0\u219247.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261122T010203Z.parquet",
+  "sha256": "9dc47c4971f16789b5770f8b7ff9101b849c97360508cb9d1e448798cf04e56f",
+  "logged_utc": "2026-11-22T01:02:03.704003+00:00",
+  "rows": 779,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 11,
+  "no_view_share": 0.937,
+  "revised_rows": 739,
+  "oldest_source_age_min": 661.9,
+  "first_kickoff_utc": "2026-11-22T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261122T010006Z.parquet",
+   "inputs_digest": "{\"403a88701352da05b0710a9e883b803e\": \"a3e694978f5bbf42\", \"4527f57f5bc32742d8194af1ccf7da7e\": \"6835a4701ac26d4e\", \"4c5b1c0843a260278e95eb93e7787576\": \"7087aa376b8fa4e8\", \"3ea90704fb576633bd1e2fa5aafd9ea3\": \"03cba2497209cc55\", \"5e63079b678f8c13419adc169fff02d3\": \"51eb21b288ae8884\", \"41e2dd69bddd65d7e823d9ed61cc2afc\": \"73109bc9bdeb90c4\", \"cbe45bafcc2615fc1d96cbc12840377a\": \"0db0a4606432c04e\", \"4b20b742b6168aaca4f25d87f11b1526\": \"b8c7ecde6545437a\", \"1940706a79cbcbafacdcbf231069716b\": \"7c1417301620194d\", \"8ba112fabf4e87639338a5f437c5abfe\": \"2ab97866fd6a77bc\", \"60e1d27b083a335b722c2c852ea85612\": \"f9c0e292d823f548\"}",
+   "components": {
+    "403a88701352da05b0710a9e883b803e": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Arizona Cardinals",
+       0,
+       900
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       -1800
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Arizona Cardinals",
+       16.0,
+       -110
+      ],
+      [
+       "Kansas City Chiefs",
+       -16.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.5,
+       -110
+      ],
+      [
+       "Under",
+       40.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Arizona Cardinals",
+       0,
+       817
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       -1281
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona Cardinals",
+       16.5,
+       -125
+      ],
+      [
+       "Kansas City Chiefs",
+       -16.5,
+       111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.0,
+       100
+      ],
+      [
+       "Under",
+       41.0,
+       -115
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_Kansas City Chiefs": "aef48c13e7e28738",
+     "inj_Arizona Cardinals": "b5d66e50c579874b",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Cardinals going through carousel of QBs",
+      "Cardinals rule out rookie Carson Beck, turn to 40-",
+      "Chiefs are flying high but can ill afford to overl",
+      "Chiefs' Kenneth Walker III, two linemen out vs. Ca",
+      "Draft buzz: Interest in Oklahoma State's Drew Mest",
+      "Emmett Johnson, Jaxon Smith-Njigba shine in big of",
+      "How active NFL players continue to redefine all-ti",
+      "Josh Downs prepares for second game as a Chief",
+      "Kansas City Chiefs tight end Travis Kelce's top mo",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Midseason reports on every NFL team's offensive co",
+      "Mike LaFleur: Cardinals proceeding as if Josh John",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL offseason free agent and trade acquisitions th",
+      "NFL survivor power rankings: Why this is the week ",
+      "Source: Cardinals' Gardner Minshew has surgery to ",
+      "Week 11 betting preview: Analysis, best bets, TD p",
+      "Week 11 offers another impressive milestone for Tr"
+     ],
+     "kalshi_snap": "snap_20261122T0105Z.parquet"
+    },
+    "4527f57f5bc32742d8194af1ccf7da7e": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       125
+      ],
+      [
+       "Carolina Panthers",
+       0,
+       -145
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       2.5,
+       -105
+      ],
+      [
+       "Carolina Panthers",
+       -2.5,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       43.5,
+       -110
+      ],
+      [
+       "Under",
+       43.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       126
+      ],
+      [
+       "Carolina Panthers",
+       0,
+       -142
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       2.5,
+       100
+      ],
+      [
+       "Carolina Panthers",
+       -2.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -106
+      ],
+      [
+       "Under",
+       43.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_Carolina Panthers": "311b1e2f398a61a7",
+     "inj_Baltimore Ravens": "18f5bce7dc7c3528",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Can Ravens keep the Marlon Humphrey controversy fr",
+      "Carmelo Anthony calls out Ravens' Humphrey over Ba",
+      "Chargers bully the Ravens at the line of scrimmage",
+      "Chargers relieved after beating Ravens for first w",
+      "Chargers stun Ravens, pick up first win on MNF",
+      "Fan makes a fantastic catch to send himself to Sup",
+      "Fantasy buzz: Breaking down 11 key fantasy footbal",
+      "Fantasy buzz: Does anything change in Indy with Ri",
+      "Fantasy buzz: Henry has confusing night, Hampton b",
+      "Fantasy buzz: Kirk Cousins, Stefon Diggs bring rel",
+      "Fantasy buzz: Stroud has Houston fans over the moo",
+      "How active NFL players continue to redefine all-ti",
+      "How the Panthers plan to slow down Derrick Henry",
+      "Humphrey sent home from Ravens facility",
+      "Is Chuba Hubbard the biggest X factor to spark a P",
+      "Jesse Minter on the Ravens' identity after losing ",
+      "Justin Herbert, defense help lift Chargers past Ra",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Kyle Hamilton says Ravens 'disgracing' standards a",
+      "Kyle Hamilton: Right now, we're disgracing Ravens'",
+      "Midseason reports on every NFL team's offensive co",
+      "Minter: Ravens working to jump-start running game,",
+      "Monroe Freeling, Lee Hunter top Panthers' rookie r",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL offseason free agent and trade acquisitions th",
+      "Panthers aim to hold NFC South lead while Ravens l",
+      "Panthers monitoring statuses of their tight ends",
+      "Panthers secondary set for boost with return of CB",
+      "Ravens fall to the Chargers on MNF",
+      "Ravens heading into SNF without three defensive st",
+      "Ravens rule out DT Nnamdi Madubuike (hamstring) vs",
+      "Ravens send CB Humphrey home, say he'll be inactiv",
+      "Ravens' DC supports decision to set Marlon Humphre",
+      "Ravens' Flowers 'super frustrated' by latest late-",
+      "Ravens' Humphrey apologizes for quip that Baltimor",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "The NFL's current worst team? Lamar-less Ravens ma"
+     ],
+     "kalshi_snap": "snap_20261122T0105Z.parquet"
+    },
+    "4c5b1c0843a260278e95eb93e7787576": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Buffalo Bills",
+       0,
+       -1800
+      ],
+      [
+       "Miami Dolphins",
+       0,
+       900
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Buffalo Bills",
+       -16.5,
+       -115
+      ],
+      [
+       "Miami Dolphins",
+       16.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       45.0,
+       -110
+      ],
+      [
+       "Under",
+       45.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Buffalo Bills",
+       0,
+       -1415
+      ],
+      [
+       "Miami Dolphins",
+       0,
+       879
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Buffalo Bills",
+       -17.0,
+       107
+      ],
+      [
+       "Miami Dolphins",
+       17.0,
+       -120
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -109
+      ],
+      [
+       "Under",
+       44.5,
+       -105
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_Buffalo Bills": "cf56fbbc8a36ce37",
+     "inj_Miami Dolphins": "abf9df8e32d0ccb9",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL draft: Dolphins, Titans, Eagles, Jets, Ch",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Bills TE Dalton Kincaid doubtful to play vs. Dolph",
+      "Bills get chance to feast on another backup QB wit",
+      "Dolphins cut kicker Zane Gonzalez a day after cost",
+      "Dolphins rookies shine in loss",
+      "Draft buzz: Interest in Oklahoma State's Drew Mest",
+      "How active NFL players continue to redefine all-ti",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Miami Dolphins backup QB Kyle McCord showed poise ",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL survivor power rankings: Why this is the week ",
+      "Source: Jordan Phillips latest Dolphins DT to suff",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tom Brady tops list of athletes who became owners",
+      "Whether it's against backup QBs or not, the Bills'",
+      "Will the Bills activate Tre'Davious White this wee"
+     ],
+     "kalshi_snap": "snap_20261122T0105Z.parquet"
+    },
+    "3ea90704fb576633bd1e2fa5aafd9ea3": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -700
+      ],
+      [
+       "New Orleans Saints",
+       0,
+       475
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Chicago Bears",
+       -11.5,
+       -110
+      ],
+      [
+       "New Orleans Saints",
+       11.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       48.5,
+       -110
+      ],
+      [
+       "Under",
+       48.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -605
+      ],
+      [
+       "New Orleans Saints",
+       0,
+       455
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Chicago Bears",
+       -11.5,
+       -109
+      ],
+      [
+       "New Orleans Saints",
+       11.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -104
+      ],
+      [
+       "Under",
+       48.5,
+       -111
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_Chicago Bears": "b1a372888f7b1744",
+     "inj_New Orleans Saints": "158211ab8d302f3f",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Bears QB Caleb Williams has moved on from 4-INT ga",
+      "Bears rule out CB Kyler Gordon; RB Kyle Monangai c",
+      "Bears' Jeffery Simmons says knee injury a non-issu",
+      "How active NFL players continue to redefine all-ti",
+      "Jeffery Simmons expects to play through knee injur",
+      "Jeffery Simmons making an impact on Bears defense",
+      "Justin Reid posts Saints farewell as team releases",
+      "Justin Reid requests his release from the team",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL survivor power rankings: Why this is the week ",
+      "Pass rush part of the focus for the Saints and Bea",
+      "Saints, Justin Reid 'working through' potential re",
+      "Seven things Solak thinks for NFL Week 11: Takes o",
+      "Three-win Saints, Kellen Moore face defining stret",
+      "Week 11 betting preview: Analysis, best bets, TD p"
+     ],
+     "kalshi_snap": "snap_20261122T0105Z.parquet"
+    },
+    "5e63079b678f8c13419adc169fff02d3": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       -400
+      ],
+      [
+       "Tennessee Titans",
+       0,
+       325
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Dallas Cowboys",
+       -7.5,
+       -115
+      ],
+      [
+       "Tennessee Titans",
+       7.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       55.0,
+       -115
+      ],
+      [
+       "Under",
+       55.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       -361
+      ],
+      [
+       "Tennessee Titans",
+       0,
+       295
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Dallas Cowboys",
+       -8.0,
+       102
+      ],
+      [
+       "Tennessee Titans",
+       8.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       103
+      ],
+      [
+       "Under",
+       55.5,
+       -118
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_Dallas Cowboys": "4b998d71cd5767a1",
+     "inj_Tennessee Titans": "0acfb516516d914f",
+     "news": [
+      "'A walking atrocity!' Stephen A. can't even laugh ",
+      "'Get Up' crew confused by Cowboys DC losing playca",
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL draft: Dolphins, Titans, Eagles, Jets, Ch",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Cowboys DC acknowledges disappointment of losing p",
+      "Cowboys discussing new role for DC Parker, Jones s",
+      "Cowboys face last-place Titans with new play-calle",
+      "Cowboys look to get back on track",
+      "Cowboys make change to defensive play-calling duti",
+      "Cowboys' Mike Pettine feels for DC Christian Parke",
+      "Cowboys' Parker: I'm still DC, have 'job to do' af",
+      "Draft buzz: Interest in Oklahoma State's Drew Mest",
+      "How Christian Parker is handling his demotion",
+      "How active NFL players continue to redefine all-ti",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL offseason free agent and trade acquisitions th",
+      "NFL survivor power rankings: Why this is the week ",
+      "No quick fix for Cowboys' defense, and 2027 looks ",
+      "Pettine to take over defensive playcalling for Cow",
+      "Police investigate man's death after alleged alter",
+      "Rookies added to Titans' roster",
+      "Sources: Pettine to take over defensive playcallin",
+      "Stephen A. calls for change with Cowboys after los",
+      "Titans DL Jaylen Harrell hospitalized after car ac",
+      "Titans WR Wan'Dale Robinson out for season with an",
+      "Titans defense crumbling post-Jeffery Simmons, Ama",
+      "Titans put WR Wan'Dale Robinson on IR due to ankle",
+      "Titans' Calvin Ridley facing misdemeanor assault c",
+      "Why Jeff Saturday opposes Cowboys making a midseas",
+      "Why Jordan Reid has the Titans taking Jeremiah Smi",
+      "Why Stephen A. can't defend Cowboys DC Christian P",
+      "With Titans, Eagles up next, it's now or never for"
+     ],
+     "kalshi_snap": "snap_20261122T0105Z.parquet"
+    },
+    "41e2dd69bddd65d7e823d9ed61cc2afc": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -230
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       190
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Detroit Lions",
+       -4.0,
+       -115
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       4.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.0,
+       -110
+      ],
+      [
+       "Under",
+       47.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -224
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       193
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Detroit Lions",
+       -4.5,
+       -102
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       4.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -106
+      ],
+      [
+       "Under",
+       47.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_Detroit Lions": "8df5938da2f798a2",
+     "inj_Tampa Bay Buccaneers": "3e1cbee2058d483c",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Bucs QB Baker Mayfield hopes to play Sunday despit",
+      "Fantasy football last-minute pickups: Flournoy, Ay",
+      "How active NFL players continue to redefine all-ti",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Lions moving on after Hutchinson joins Campbell on",
+      "Lions plan for Kerby Joseph to make season debut S",
+      "Lions' Dan Campbell says Aidan Hutchinson injury w",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "Seven things Solak thinks for NFL Week 11: Takes o",
+      "Sources: Lions' Aidan Hutchinson out for season wi",
+      "Sources: Patriots fear Drake Maye has broken ankle",
+      "Week 11 betting preview: Analysis, best bets, TD p"
+     ],
+     "kalshi_snap": "snap_20261122T0105Z.parquet"
+    },
+    "cbe45bafcc2615fc1d96cbc12840377a": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Philadelphia Eagles",
+       0,
+       170
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       -210
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Philadelphia Eagles",
+       3.5,
+       -110
+      ],
+      [
+       "Pittsburgh Steelers",
+       -3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       37.5,
+       -110
+      ],
+      [
+       "Under",
+       37.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Philadelphia Eagles",
+       0,
+       176
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       -203
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Philadelphia Eagles",
+       4.5,
+       -126
+      ],
+      [
+       "Pittsburgh Steelers",
+       -4.5,
+       112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.5,
+       -105
+      ],
+      [
+       "Under",
+       37.5,
+       -109
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_Philadelphia Eagles": "8e68fb922bf87d23",
+     "inj_Pittsburgh Steelers": "ac161c022e9a11a9",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL draft: Dolphins, Titans, Eagles, Jets, Ch",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Arrest warrants issued for robbery of Steelers' Ma",
+      "Can play action be the answer for the Steelers off",
+      "Can play-action be the answer for the Steelers' of",
+      "Eagles heading into SNF with a promising roster",
+      "Eagles' Sirianni sticking with Milton as QB1, Mann",
+      "Edge Jonathan Greenard loves to makes plays, despi",
+      "Hall of Famer Jack Ham returning to broadcast boot",
+      "How Steelers' wide receiver corps gets big boost i",
+      "How active NFL players continue to redefine all-ti",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Midseason reports on every NFL team's offensive co",
+      "Mike McCarthy on Steelers' blowout loss: 'Needs to",
+      "Mike McCarthy's response to Bengals loss",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "Nick Sirianni: Joe Milton getting starting QB nod ",
+      "Sources: Mason McCormick avoided ankle fracture; S",
+      "Sources: Steelers G Mason McCormick avoided fractu",
+      "Steelers activate WR Roman Wilson off IR for Eagle",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "The Steelers last won in Philadelphia in 1965. Can",
+      "Why the Eagles are sticking with Sean Mannion as p"
+     ],
+     "kalshi_snap": "snap_20261122T0105Z.parquet"
+    },
+    "4b20b742b6168aaca4f25d87f11b1526": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       -170
+      ],
+      [
+       "New York Jets",
+       0,
+       145
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Los Angeles Chargers",
+       -3.0,
+       -120
+      ],
+      [
+       "New York Jets",
+       3.0,
+       100
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       42.0,
+       -110
+      ],
+      [
+       "Under",
+       42.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       -170
+      ],
+      [
+       "New York Jets",
+       0,
+       149
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Los Angeles Chargers",
+       -3.0,
+       -114
+      ],
+      [
+       "New York Jets",
+       3.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -118
+      ],
+      [
+       "Under",
+       41.5,
+       103
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_Los Angeles Chargers": "6877f583e2224c8b",
+     "inj_New York Jets": "255e005ddcb439bd",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL draft: Dolphins, Titans, Eagles, Jets, Ch",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Aaron Glenn gives up defensive playcalling",
+      "Chargers bully the Ravens at the line of scrimmage",
+      "Chargers relieved after beating Ravens for first w",
+      "Chargers stun Ravens, pick up first win on MNF",
+      "Draft buzz: Interest in Oklahoma State's Drew Mest",
+      "Fan makes a fantastic catch to send himself to Sup",
+      "Fantasy buzz: Breaking down 11 key fantasy footbal",
+      "Fantasy buzz: Does anything change in Indy with Ri",
+      "Fantasy buzz: Henry has confusing night, Hampton b",
+      "Fantasy buzz: Kirk Cousins, Stefon Diggs bring rel",
+      "Fantasy buzz: Stroud has Houston fans over the moo",
+      "Geno Smith plans to play despite ankle injury",
+      "Herbert credits Chargers locker room for sticking ",
+      "How active NFL players continue to redefine all-ti",
+      "Jets QB Geno Smith (ankle) cleared to start vs. Ch",
+      "Jets QB Geno Smith (ankle) intends to play vs. Cha",
+      "Jets look to turn around offensive struggles",
+      "Justin Herbert, defense help lift Chargers past Ra",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Kyle Hamilton says Ravens 'disgracing' standards a",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL flexes Raiders-Browns to replace Pats-Chargers",
+      "NFL offseason free agent and trade acquisitions th",
+      "Reeling Jets head to LA to face Chargers, who are ",
+      "Sources: Jets QB Geno Smith avoided major ankle in",
+      "Super Bowl LXI odds: All 32 teams' odds to win the"
+     ],
+     "kalshi_snap": "snap_20261122T0105Z.parquet"
+    },
+    "1940706a79cbcbafacdcbf231069716b": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -650
+      ],
+      [
+       "Las Vegas Raiders",
+       0,
+       450
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Denver Broncos",
+       -10.5,
+       -110
+      ],
+      [
+       "Las Vegas Raiders",
+       10.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.5,
+       -110
+      ],
+      [
+       "Under",
+       40.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -571
+      ],
+      [
+       "Las Vegas Raiders",
+       0,
+       434
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Denver Broncos",
+       -10.5,
+       -108
+      ],
+      [
+       "Las Vegas Raiders",
+       10.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.0,
+       -107
+      ],
+      [
+       "Under",
+       41.0,
+       -107
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_Denver Broncos": "4f1c1fcd6482737a",
+     "inj_Las Vegas Raiders": "11b76878fbc9442e",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Broncos looking to put pressure on Mendoza",
+      "Broncos sign cornerback Riley Moss to four-year ex",
+      "Can the Broncos continue winning run vs. the Raide",
+      "Christian Bale: You don't get many people like Al ",
+      "How active NFL players continue to redefine all-ti",
+      "Kurt Warner: Fernando Mendoza played 'too fast' in",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL flexes Raiders-Browns to replace Pats-Chargers",
+      "NFL offseason free agent and trade acquisitions th",
+      "NFL survivor power rankings: Why this is the week ",
+      "Peyton Manning enshrined in ESPN Fantasy Football ",
+      "Raiders TE Brock Bowers (ankle, quad) listed as qu",
+      "Raiders rookie Fernando Mendoza to face another el",
+      "Raiders' Mark Davis unhappy with 'unfair' image of",
+      "Seven things Solak thinks for NFL Week 11: Takes o",
+      "Sources: Broncos sign CB Riley Moss to four-year e",
+      "Tom Brady tops list of athletes who became owners",
+      "Vance Joseph demands better from Broncos defense",
+      "What Broncos are doing to try to make Bo Nix more ",
+      "Why Raiders' run defense remains a concern",
+      "Why is the Raiders' defense struggling, and how ca"
+     ],
+     "kalshi_snap": "snap_20261122T0105Z.parquet"
+    },
+    "8ba112fabf4e87639338a5f437c5abfe": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Jacksonville Jaguars",
+       0,
+       -275
+      ],
+      [
+       "New York Giants",
+       0,
+       220
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Jacksonville Jaguars",
+       -5.0,
+       -115
+      ],
+      [
+       "New York Giants",
+       5.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.0,
+       -110
+      ],
+      [
+       "Under",
+       46.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Jacksonville Jaguars",
+       0,
+       -277
+      ],
+      [
+       "New York Giants",
+       0,
+       234
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville Jaguars",
+       -6.0,
+       101
+      ],
+      [
+       "New York Giants",
+       6.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -102
+      ],
+      [
+       "Under",
+       46.5,
+       -112
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_New York Giants": "f5680a67ae96f6fe",
+     "inj_Jacksonville Jaguars": "a34ec846ccbb03a2",
+     "news": [
+      "'I'd cut Jameis Winston this morning': Whitner not",
+      "'Protect yourself': Stephen A. implores Skattebo t",
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Giants RB Cam Skattebo to nix backflips in wake of",
+      "Giants looking for more respect around the NFL",
+      "Giants schedule turns tough",
+      "Giants see Week 11 matchup vs. Jaguars as a big op",
+      "Giants' Abdul Carter on lack of sacks: 'I've got t",
+      "How Bhayshul Tuten became the clear No. 1 running ",
+      "How active NFL players continue to redefine all-ti",
+      "How good has Trevor Lawrence been this year?",
+      "Jaguars getting welcomed reinforcements",
+      "Jaguars rule starting center Robert Hainsey (knee)",
+      "Jaguars visit the Giants in a matchup of two unexp",
+      "Kyle Brandt dismisses notion Jags will blow out Gi",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "Will J.J. McCarthy be able to stand against the Ja"
+     ],
+     "kalshi_snap": "snap_20261122T0105Z.parquet"
+    },
+    "60e1d27b083a335b722c2c852ea85612": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Minnesota Vikings",
+       0,
+       145
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -175
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Minnesota Vikings",
+       3.5,
+       -115
+      ],
+      [
+       "San Francisco 49ers",
+       -3.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.5,
+       -110
+      ],
+      [
+       "Under",
+       46.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Minnesota Vikings",
+       0,
+       154
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -176
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Minnesota Vikings",
+       3.0,
+       106
+      ],
+      [
+       "San Francisco 49ers",
+       -3.0,
+       -119
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -110
+      ],
+      [
+       "Under",
+       46.0,
+       -104
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_San Francisco 49ers": "92da6521c0d681d5",
+     "inj_Minnesota Vikings": "419aeb885e86ff1d",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "49ers WR Mike Evans' Achilles tendinitis injury ex",
+      "49ers preparing for Vikings dominant defense",
+      "Can the Vikings make a Super Bowl run with Kirk Co",
+      "How Stephen A. is looking at Vikings-49ers matchup",
+      "How Vikings brought Mexico City's elevation to Min",
+      "How Vikings got Kirk Cousins ready to win on short",
+      "How active NFL players continue to redefine all-ti",
+      "In Mexico City, 49ers' Fred Warner can represent h",
+      "Justin Jefferson getting back into a flow with Kir",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL offseason free agent and trade acquisitions th",
+      "Nick Bosa looks to end defensive struggles",
+      "Niners' Nick Bosa on 4-game sack drought: 'Don't t",
+      "Police investigate man's death after alleged alter",
+      "Seven things Solak thinks for NFL Week 11: Takes o",
+      "Sources: Brandon Aiyuk contacted Jayden Daniels to",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Vikings take on Mexico City",
+      "Vikings' Cousins channeling Dantonio's 'slow down'",
+      "Vikings-49ers matchup in Mexico features the best ",
+      "Week 11 betting preview: Analysis, best bets, TD p",
+      "What Stephen A. is looking to see from Vikings in ",
+      "Why Stephen A. is picking the Vikings to beat the ",
+      "Why the 'Get Up' crew is concerned about Packers a",
+      "Why the 49ers are practicing in Colorado before Vi"
+     ],
+     "kalshi_snap": "snap_20261122T0105Z.parquet"
+    }
+   },
+   "triggers": {
+    "403a88701352da05b0710a9e883b803e": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Arizona Cardinals; new_news: 1 availability items",
+    "4527f57f5bc32742d8194af1ccf7da7e": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Carolina Panthers; injury_change: inj_Baltimore Ravens",
+    "4c5b1c0843a260278e95eb93e7787576": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Buffalo Bills; injury_change: inj_Miami Dolphins",
+    "3ea90704fb576633bd1e2fa5aafd9ea3": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Chicago Bears",
+    "5e63079b678f8c13419adc169fff02d3": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Dallas Cowboys; injury_change: inj_Tennessee Titans",
+    "41e2dd69bddd65d7e823d9ed61cc2afc": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Detroit Lions",
+    "cbe45bafcc2615fc1d96cbc12840377a": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Philadelphia Eagles; injury_change: inj_Pittsburgh Steelers; new_news: 1 availability items",
+    "4b20b742b6168aaca4f25d87f11b1526": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Los Angeles Chargers; injury_change: inj_New York Jets",
+    "1940706a79cbcbafacdcbf231069716b": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Denver Broncos; injury_change: inj_Las Vegas Raiders",
+    "8ba112fabf4e87639338a5f437c5abfe": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_Jacksonville Jaguars",
+    "60e1d27b083a335b722c2c852ea85612": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_San Francisco 49ers"
+   }
+  }
  }
 ]

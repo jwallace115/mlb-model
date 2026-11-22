@@ -21179,5 +21179,87 @@
     "6e36f5c3c55edcb31749b0de4a146d14": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261122T011904Z.parquet",
+  "sha256": "205e7fff94962b21b295526de2248574ceca43542bac06e7f59fb40c75f7eca4",
+  "logged_utc": "2026-11-22T01:19:04.580954+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-22T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261122T010006Z.parquet",
+   "inputs_digest": "{\"7585fb8b12453a68ca1195319ae44c78\": \"2ab5e9e27cdac06e\"}",
+   "components": {
+    "7585fb8b12453a68ca1195319ae44c78": {
+     "pinnacle_h2h": [
+      [
+       "TCU Horned Frogs",
+       0,
+       268
+      ],
+      [
+       "Utah Utes",
+       0,
+       -313
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "TCU Horned Frogs",
+       7.5,
+       101
+      ],
+      [
+       "Utah Utes",
+       -7.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -103
+      ],
+      [
+       "Under",
+       46.5,
+       -113
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "Breaking down the major futures for the Big Ten, f",
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "Florida State going turquoise tops best uniforms o",
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "No. 2 Utah visits TCU, close to Big 12 title game ",
+      "QB rankings for all 68 Power 4 college football te",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261122T0107Z.parquet"
+    }
+   },
+   "triggers": {
+    "7585fb8b12453a68ca1195319ae44c78": "anchor_close"
+   }
+  }
  }
 ]
