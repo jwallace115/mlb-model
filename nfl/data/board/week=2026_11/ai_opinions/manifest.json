@@ -10637,5 +10637,132 @@
     "3a60ed1d20004aa4d4772b2c1a2272e7": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261122T031704Z.parquet",
+  "sha256": "8760b92897700cdf0e03379f3e3481ee3560fb1a744f5239143c5898ab20dd8c",
+  "logged_utc": "2026-11-22T03:17:04.574797+00:00",
+  "rows": 70,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.943,
+  "revised_rows": 67,
+  "oldest_source_age_min": 134.0,
+  "first_kickoff_utc": "2026-11-22T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261122T030009Z.parquet",
+   "inputs_digest": "{\"41e2dd69bddd65d7e823d9ed61cc2afc\": \"154f6476e19c41e8\"}",
+   "components": {
+    "41e2dd69bddd65d7e823d9ed61cc2afc": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -220
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       180
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Detroit Lions",
+       -4.0,
+       -110
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       4.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.0,
+       -110
+      ],
+      [
+       "Under",
+       47.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -212
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       184
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Detroit Lions",
+       -3.5,
+       -111
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       3.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -106
+      ],
+      [
+       "Under",
+       47.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_Detroit Lions": "8df5938da2f798a2",
+     "inj_Tampa Bay Buccaneers": "3e1cbee2058d483c",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Bucs QB Baker Mayfield hopes to play Sunday despit",
+      "Fantasy football last-minute pickups: Flournoy, Ay",
+      "How active NFL players continue to redefine all-ti",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Lions moving on after Hutchinson joins Campbell on",
+      "Lions plan for Kerby Joseph to make season debut S",
+      "Lions' Dan Campbell says Aidan Hutchinson injury w",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "Seven things Solak thinks for NFL Week 11: Takes o",
+      "Sources: Lions' Aidan Hutchinson out for season wi",
+      "Sources: Patriots fear Drake Maye has broken ankle",
+      "Week 11 betting preview: Analysis, best bets, TD p"
+     ],
+     "kalshi_snap": "snap_20261122T0305Z.parquet"
+    }
+   },
+   "triggers": {
+    "41e2dd69bddd65d7e823d9ed61cc2afc": "line_move: pinnacle spreads Tampa Bay Buccaneers 4.5\u21923.5; line_move: pinnacle spreads Detroit Lions -4.5\u2192-3.5"
+   }
+  }
  }
 ]
