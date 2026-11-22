@@ -15647,5 +15647,381 @@
     "60e1d27b083a335b722c2c852ea85612": "injury_change: inj_San Francisco 49ers"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261122T203203Z.parquet",
+  "sha256": "3360a820eb0d8f4eac70b22a65dd828ae9b9c3bba9fd54036a9ea55d1b38d9b1",
+  "logged_utc": "2026-11-22T20:32:03.588386+00:00",
+  "rows": 77,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.935,
+  "revised_rows": 72,
+  "oldest_source_age_min": 61.8,
+  "first_kickoff_utc": "2026-11-22T21:05:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261122T203005Z.parquet",
+   "inputs_digest": "{\"4b20b742b6168aaca4f25d87f11b1526\": \"a7d73fe750e07a3b\"}",
+   "components": {
+    "4b20b742b6168aaca4f25d87f11b1526": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       -180
+      ],
+      [
+       "New York Jets",
+       0,
+       150
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Los Angeles Chargers",
+       -3.5,
+       -105
+      ],
+      [
+       "New York Jets",
+       3.5,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       43.0,
+       -110
+      ],
+      [
+       "Under",
+       43.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       -168
+      ],
+      [
+       "New York Jets",
+       0,
+       150
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Los Angeles Chargers",
+       -3.0,
+       -111
+      ],
+      [
+       "New York Jets",
+       3.0,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -110
+      ],
+      [
+       "Under",
+       43.0,
+       -103
+      ]
+     ],
+     "props_ts": "2026-11-22T20:32:28.778378+00:00",
+     "inj_Los Angeles Chargers": "8ebf0c59a7289c4a",
+     "inj_New York Jets": "f7baaef8e4feb331",
+     "news": [
+      "2027 NFL draft: Dolphins, Titans, Eagles, Jets, Ch",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Draft buzz: Interest in Oklahoma State's Drew Mest",
+      "Fantasy buzz: Breaking down 11 key fantasy footbal",
+      "Fantasy buzz: Does anything change in Indy with Ri",
+      "Fantasy buzz: Henry has confusing night, Hampton b",
+      "Fantasy buzz: Kirk Cousins, Stefon Diggs bring rel",
+      "Fantasy buzz: Stroud has Houston fans over the moo",
+      "Geno Smith plans to play despite ankle injury",
+      "Jets QB Geno Smith (ankle) cleared to start vs. Ch",
+      "Jets QB Geno Smith (ankle) intends to play vs. Cha",
+      "Jets look to turn around offensive struggles",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL flexes Raiders-Browns to replace Pats-Chargers",
+      "NFL offseason free agent and trade acquisitions th",
+      "Reeling Jets head to LA to face Chargers, who are ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Why the Jets' next two games have major implicatio"
+     ],
+     "kalshi_snap": "snap_20261122T2005Z.parquet"
+    }
+   },
+   "triggers": {
+    "4b20b742b6168aaca4f25d87f11b1526": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261122T204703Z.parquet",
+  "sha256": "0dd1e5703435359c04d7174be9ba7bcc21277979366cc2e930facc2d0e455c72",
+  "logged_utc": "2026-11-22T20:47:03.762230+00:00",
+  "rows": 146,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.959,
+  "revised_rows": 132,
+  "oldest_source_age_min": 17.0,
+  "first_kickoff_utc": "2026-11-22T21:25:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261122T203005Z.parquet",
+   "inputs_digest": "{\"1940706a79cbcbafacdcbf231069716b\": \"4f8ab051c4c4420f\", \"8ba112fabf4e87639338a5f437c5abfe\": \"c0bd65e43d243320\"}",
+   "components": {
+    "1940706a79cbcbafacdcbf231069716b": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -750
+      ],
+      [
+       "Las Vegas Raiders",
+       0,
+       500
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Denver Broncos",
+       -12.0,
+       -110
+      ],
+      [
+       "Las Vegas Raiders",
+       12.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       41.0,
+       -115
+      ],
+      [
+       "Under",
+       41.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -673
+      ],
+      [
+       "Las Vegas Raiders",
+       0,
+       520
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Denver Broncos",
+       -11.5,
+       -111
+      ],
+      [
+       "Las Vegas Raiders",
+       11.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.0,
+       -114
+      ],
+      [
+       "Under",
+       41.0,
+       102
+      ]
+     ],
+     "props_ts": "2026-11-22T20:32:28.778378+00:00",
+     "inj_Denver Broncos": "6d629208f1324fa9",
+     "inj_Las Vegas Raiders": "563b28515b1b78de",
+     "news": [
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Broncos looking to put pressure on Mendoza",
+      "Broncos sign cornerback Riley Moss to four-year ex",
+      "Can the Broncos continue winning run vs. the Raide",
+      "Christian Bale: You don't get many people like Al ",
+      "Kurt Warner: Fernando Mendoza played 'too fast' in",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL flexes Raiders-Browns to replace Pats-Chargers",
+      "NFL offseason free agent and trade acquisitions th",
+      "NFL survivor power rankings: Why this is the week ",
+      "Peyton Manning enshrined in ESPN Fantasy Football ",
+      "Raiders TE Brock Bowers (ankle, quad) listed as qu",
+      "Raiders rookie Fernando Mendoza to face another el",
+      "Raiders' Mark Davis unhappy with 'unfair' image of",
+      "Sources: Broncos sign CB Riley Moss to four-year e",
+      "Tom Brady tops list of athletes who became owners",
+      "Tom Jackson, Broncos star LB and Hall of Fame broa",
+      "Vance Joseph demands better from Broncos defense",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Why Raiders' run defense remains a concern",
+      "Why is the Raiders' defense struggling, and how ca"
+     ],
+     "kalshi_snap": "snap_20261122T2035Z.parquet"
+    },
+    "8ba112fabf4e87639338a5f437c5abfe": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Jacksonville Jaguars",
+       0,
+       -300
+      ],
+      [
+       "New York Giants",
+       0,
+       230
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Jacksonville Jaguars",
+       -6.5,
+       -115
+      ],
+      [
+       "New York Giants",
+       6.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       44.5,
+       -110
+      ],
+      [
+       "Under",
+       44.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Jacksonville Jaguars",
+       0,
+       -279
+      ],
+      [
+       "New York Giants",
+       0,
+       241
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville Jaguars",
+       -6.0,
+       -109
+      ],
+      [
+       "New York Giants",
+       6.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -106
+      ],
+      [
+       "Under",
+       45.0,
+       -106
+      ]
+     ],
+     "props_ts": "2026-11-22T20:32:28.778378+00:00",
+     "inj_New York Giants": "41a3650d540631e2",
+     "inj_Jacksonville Jaguars": "5229c7ad515be046",
+     "news": [
+      "'I'd cut Jameis Winston this morning': Whitner not",
+      "'Protect yourself': Stephen A. implores Skattebo t",
+      "'Receiving Trust': Behind Lawrence and Washington'",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Giants RB Cam Skattebo to nix backflips in wake of",
+      "Giants looking for more respect around the NFL",
+      "Giants schedule turns tough",
+      "Giants see Week 11 matchup vs. Jaguars as a big op",
+      "Giants' Abdul Carter on lack of sacks: 'I've got t",
+      "How Bhayshul Tuten became the clear No. 1 running ",
+      "How good has Trevor Lawrence been this year?",
+      "Jaguars getting welcomed reinforcements",
+      "Jaguars rule starting center Robert Hainsey (knee)",
+      "Jaguars visit the Giants in a matchup of two unexp",
+      "Kyle Brandt dismisses notion Jags will blow out Gi",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Will J.J. McCarthy be able to stand against the Ja"
+     ],
+     "kalshi_snap": "snap_20261122T2035Z.parquet"
+    }
+   },
+   "triggers": {
+    "1940706a79cbcbafacdcbf231069716b": "anchor_close",
+    "8ba112fabf4e87639338a5f437c5abfe": "anchor_close"
+   }
+  }
  }
 ]
