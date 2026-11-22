@@ -21261,5 +21261,81 @@
     "7585fb8b12453a68ca1195319ae44c78": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261122T014904Z.parquet",
+  "sha256": "51d1d2f41f80b0626a064129dea8cdc99854c320180a3dd5a623a8aa44069954",
+  "logged_utc": "2026-11-22T01:49:04.813443+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-22T02:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261122T013009Z.parquet",
+   "inputs_digest": "{\"028f0fcc2f6411c4816e543bb7fa226c\": \"20ba238b3bb99738\"}",
+   "components": {
+    "028f0fcc2f6411c4816e543bb7fa226c": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -1176
+      ],
+      [
+       "San Diego State Aztecs",
+       0,
+       817
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -20.5,
+       -107
+      ],
+      [
+       "San Diego State Aztecs",
+       20.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       61.0,
+       -105
+      ],
+      [
+       "Under",
+       61.0,
+       -111
+      ]
+     ],
+     "news": [
+      "Heisman of Week 11: Duke's Nate Sheppard has enter",
+      "Top 25 betting lines: UGA big faves over Gamecocks",
+      "Wake Forest surges into CFP top 12; top 4 unchange",
+      "Week 12 Game Day Kickoff: Appreciating Jeremiah Sm",
+      "Which teams have the best odds to make the College",
+      "Who could be the postseason and CFP X factors?",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of ",
+      "Who's on the move? CFP committee's third top 25 an"
+     ],
+     "kalshi_snap": "snap_20261122T0137Z.parquet"
+    }
+   },
+   "triggers": {
+    "028f0fcc2f6411c4816e543bb7fa226c": "anchor_close"
+   }
+  }
  }
 ]
