@@ -11899,5 +11899,349 @@
     "3a60ed1d20004aa4d4772b2c1a2272e7": "new_props: pull 2026-11-22T06:48:07.521333+00:00; injury_change: inj_Washington Commanders; injury_change: inj_Cincinnati Bengals"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261122T123204Z.parquet",
+  "sha256": "952d5a412bd8722d000080411eb4f57ebeea680a9c6737e5da7707dd8d051926",
+  "logged_utc": "2026-11-22T12:32:04.157953+00:00",
+  "rows": 224,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.938,
+  "revised_rows": 210,
+  "oldest_source_age_min": 343.9,
+  "first_kickoff_utc": "2026-11-22T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261122T120009Z.parquet",
+   "inputs_digest": "{\"41e2dd69bddd65d7e823d9ed61cc2afc\": \"ea5732e11efea86f\", \"8ba112fabf4e87639338a5f437c5abfe\": \"c78ca4b55e30b61c\", \"60e1d27b083a335b722c2c852ea85612\": \"7659fa0a7eca260c\"}",
+   "components": {
+    "41e2dd69bddd65d7e823d9ed61cc2afc": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -210
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       175
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Detroit Lions",
+       -3.5,
+       -110
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Detroit Lions",
+       0,
+       -204
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       0,
+       177
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Detroit Lions",
+       -3.5,
+       -106
+      ],
+      [
+       "Tampa Bay Buccaneers",
+       3.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -106
+      ],
+      [
+       "Under",
+       47.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-22T12:33:11.114755+00:00",
+     "inj_Detroit Lions": "95451171251cbdb4",
+     "inj_Tampa Bay Buccaneers": "d4e449185d6ed88a",
+     "news": [
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Bucs QB Baker Mayfield hopes to play Sunday despit",
+      "Fantasy football last-minute pickups: Flournoy, Ay",
+      "How active NFL players continue to redefine all-ti",
+      "Lions moving on after Hutchinson joins Campbell on",
+      "Lions plan for Kerby Joseph to make season debut S",
+      "Lions' Dan Campbell says Aidan Hutchinson injury w",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "Seven things Solak thinks for NFL Week 11: Takes o",
+      "Sources: Bucs' Baker Mayfield has plantar fasciiti",
+      "Week 11 betting preview: Analysis, best bets, TD p"
+     ],
+     "kalshi_snap": "snap_20261122T0535Z.parquet"
+    },
+    "8ba112fabf4e87639338a5f437c5abfe": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Jacksonville Jaguars",
+       0,
+       -275
+      ],
+      [
+       "New York Giants",
+       0,
+       225
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Jacksonville Jaguars",
+       -6.0,
+       -110
+      ],
+      [
+       "New York Giants",
+       6.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       45.0,
+       -110
+      ],
+      [
+       "Under",
+       45.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Jacksonville Jaguars",
+       0,
+       -275
+      ],
+      [
+       "New York Giants",
+       0,
+       232
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville Jaguars",
+       -6.0,
+       102
+      ],
+      [
+       "New York Giants",
+       6.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -106
+      ],
+      [
+       "Under",
+       45.0,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-22T06:48:07.521333+00:00",
+     "inj_New York Giants": "41a3650d540631e2",
+     "inj_Jacksonville Jaguars": "1f890f4ad16165fb",
+     "news": [
+      "'I'd cut Jameis Winston this morning': Whitner not",
+      "'Protect yourself': Stephen A. implores Skattebo t",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Giants RB Cam Skattebo to nix backflips in wake of",
+      "Giants looking for more respect around the NFL",
+      "Giants schedule turns tough",
+      "Giants see Week 11 matchup vs. Jaguars as a big op",
+      "Giants' Abdul Carter on lack of sacks: 'I've got t",
+      "How Bhayshul Tuten became the clear No. 1 running ",
+      "How active NFL players continue to redefine all-ti",
+      "How good has Trevor Lawrence been this year?",
+      "Jaguars getting welcomed reinforcements",
+      "Jaguars rule starting center Robert Hainsey (knee)",
+      "Jaguars visit the Giants in a matchup of two unexp",
+      "Kyle Brandt dismisses notion Jags will blow out Gi",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "Will J.J. McCarthy be able to stand against the Ja"
+     ],
+     "kalshi_snap": "snap_20261122T0535Z.parquet"
+    },
+    "60e1d27b083a335b722c2c852ea85612": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Minnesota Vikings",
+       0,
+       145
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -170
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Minnesota Vikings",
+       3.5,
+       -115
+      ],
+      [
+       "San Francisco 49ers",
+       -3.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.5,
+       -110
+      ],
+      [
+       "Under",
+       46.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Minnesota Vikings",
+       0,
+       149
+      ],
+      [
+       "San Francisco 49ers",
+       0,
+       -170
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Minnesota Vikings",
+       3.0,
+       105
+      ],
+      [
+       "San Francisco 49ers",
+       -3.0,
+       -118
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -110
+      ],
+      [
+       "Under",
+       46.0,
+       -104
+      ]
+     ],
+     "props_ts": "2026-11-22T12:33:11.114755+00:00",
+     "inj_San Francisco 49ers": "600217289aa1ed00",
+     "inj_Minnesota Vikings": "419aeb885e86ff1d",
+     "news": [
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "49ers WR Mike Evans' Achilles tendinitis injury ex",
+      "49ers preparing for Vikings dominant defense",
+      "Best bets for Vikings-49ers: Tips, analysis and ou",
+      "Can the Vikings make a Super Bowl run with Kirk Co",
+      "How Stephen A. is looking at Vikings-49ers matchup",
+      "How Vikings brought Mexico City's elevation to Min",
+      "How Vikings got Kirk Cousins ready to win on short",
+      "How active NFL players continue to redefine all-ti",
+      "In Mexico City, 49ers' Fred Warner can represent h",
+      "Justin Jefferson getting back into a flow with Kir",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL offseason free agent and trade acquisitions th",
+      "Nick Bosa looks to end defensive struggles",
+      "Niners' Nick Bosa on 4-game sack drought: 'Don't t",
+      "Police investigate man's death after alleged alter",
+      "Seven things Solak thinks for NFL Week 11: Takes o",
+      "Sources: Brandon Aiyuk contacted Jayden Daniels to",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Vikings take on Mexico City",
+      "Vikings' Cousins channeling Dantonio's 'slow down'",
+      "Vikings-49ers matchup in Mexico features the best ",
+      "Week 11 betting preview: Analysis, best bets, TD p",
+      "What Stephen A. is looking to see from Vikings in ",
+      "Why Stephen A. is picking the Vikings to beat the ",
+      "Why the 'Get Up' crew is concerned about Packers a",
+      "Why the 49ers are practicing in Colorado before Vi"
+     ],
+     "kalshi_snap": "snap_20261122T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "41e2dd69bddd65d7e823d9ed61cc2afc": "new_props: pull 2026-11-22T12:33:11.114755+00:00; injury_change: inj_Tampa Bay Buccaneers",
+    "8ba112fabf4e87639338a5f437c5abfe": "line_move: hardrockbet_fl spreads New York Giants 5.0\u21926.0; line_move: hardrockbet_fl spreads Jacksonville Jaguars -5.0\u2192-6.0",
+    "60e1d27b083a335b722c2c852ea85612": "new_props: pull 2026-11-22T12:33:11.114755+00:00; injury_change: inj_San Francisco 49ers"
+   }
+  }
  }
 ]
