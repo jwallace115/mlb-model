@@ -10393,5 +10393,249 @@
     "60e1d27b083a335b722c2c852ea85612": "new_props: pull 2026-11-22T01:03:07.316742+00:00; injury_change: inj_San Francisco 49ers"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261122T021704Z.parquet",
+  "sha256": "e620624851b29146aa7e71b76c879af6e567440e1c0a05feb3677d456eab12a2",
+  "logged_utc": "2026-11-22T02:17:04.146801+00:00",
+  "rows": 143,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.93,
+  "revised_rows": 74,
+  "oldest_source_age_min": 736.9,
+  "first_kickoff_utc": "2026-11-22T21:25:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261122T020006Z.parquet",
+   "inputs_digest": "{\"8ba112fabf4e87639338a5f437c5abfe\": \"f157f240c9facf2c\", \"3a60ed1d20004aa4d4772b2c1a2272e7\": \"f66873450b116bd5\"}",
+   "components": {
+    "8ba112fabf4e87639338a5f437c5abfe": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Jacksonville Jaguars",
+       0,
+       -275
+      ],
+      [
+       "New York Giants",
+       0,
+       220
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Jacksonville Jaguars",
+       -5.0,
+       -115
+      ],
+      [
+       "New York Giants",
+       5.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       45.5,
+       -110
+      ],
+      [
+       "Under",
+       45.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Jacksonville Jaguars",
+       0,
+       -277
+      ],
+      [
+       "New York Giants",
+       0,
+       234
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville Jaguars",
+       -6.0,
+       102
+      ],
+      [
+       "New York Giants",
+       6.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -107
+      ],
+      [
+       "Under",
+       45.0,
+       -107
+      ]
+     ],
+     "props_ts": "2026-11-22T01:03:07.316742+00:00",
+     "inj_New York Giants": "f5680a67ae96f6fe",
+     "inj_Jacksonville Jaguars": "a34ec846ccbb03a2",
+     "news": [
+      "'I'd cut Jameis Winston this morning': Whitner not",
+      "'Protect yourself': Stephen A. implores Skattebo t",
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Giants RB Cam Skattebo to nix backflips in wake of",
+      "Giants looking for more respect around the NFL",
+      "Giants schedule turns tough",
+      "Giants see Week 11 matchup vs. Jaguars as a big op",
+      "Giants' Abdul Carter on lack of sacks: 'I've got t",
+      "How Bhayshul Tuten became the clear No. 1 running ",
+      "How active NFL players continue to redefine all-ti",
+      "How good has Trevor Lawrence been this year?",
+      "Jaguars getting welcomed reinforcements",
+      "Jaguars rule starting center Robert Hainsey (knee)",
+      "Jaguars visit the Giants in a matchup of two unexp",
+      "Kyle Brandt dismisses notion Jags will blow out Gi",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "Will J.J. McCarthy be able to stand against the Ja"
+     ],
+     "kalshi_snap": "snap_20261122T0205Z.parquet"
+    },
+    "3a60ed1d20004aa4d4772b2c1a2272e7": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -300
+      ],
+      [
+       "Washington Commanders",
+       0,
+       240
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cincinnati Bengals",
+       -6.5,
+       -110
+      ],
+      [
+       "Washington Commanders",
+       6.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       54.5,
+       -110
+      ],
+      [
+       "Under",
+       54.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -285
+      ],
+      [
+       "Washington Commanders",
+       0,
+       240
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bengals",
+       -6.5,
+       101
+      ],
+      [
+       "Washington Commanders",
+       6.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.0,
+       -106
+      ],
+      [
+       "Under",
+       55.0,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-17T01:17:50.998007+00:00",
+     "inj_Washington Commanders": "a1a64779578186b3",
+     "inj_Cincinnati Bengals": "c8a79d49469bbebc",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Back at practice again, Bengals QB Burrow optimist",
+      "Bengals offense will be biggest test yet for Comma",
+      "Bengals, Reds pay tribute to Fiona the hippo after",
+      "Can the Bengals succeed in the postseason with a p",
+      "Commanders RB Jacory Croskey-Merritt set to resume",
+      "Commanders confident in Jayden Daniels",
+      "Commanders' defense preparing for high-flying Beng",
+      "How active NFL players continue to redefine all-ti",
+      "How will the Commanders blitz fare against Joe Bur",
+      "Is Burrow's illness any cause for concern?",
+      "Joe Burrow, Bengals gearing up for MNF",
+      "Kyle Hamilton rocks Christmas sweater ahead of 'MN",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL offseason free agent and trade acquisitions th",
+      "Sam Hartman's next drive: 'The Bachelor' questions",
+      "Seven things Solak thinks for NFL Week 11: Takes o",
+      "Sources: Brandon Aiyuk contacted Jayden Daniels to",
+      "Washington Commanders unveil 'Beer Spear' ahead of",
+      "Why Amarius Mims is an underrated key to Bengals' ",
+      "Why Stephen A. thinks 'special' Joe Burrow is the ",
+      "Will Ben Sinnott repeat his performance?"
+     ],
+     "kalshi_snap": "snap_20261122T0205Z.parquet"
+    }
+   },
+   "triggers": {
+    "8ba112fabf4e87639338a5f437c5abfe": "line_move: pinnacle totals Over 46.5\u219245.0; line_move: pinnacle totals Under 46.5\u219245.0",
+    "3a60ed1d20004aa4d4772b2c1a2272e7": "anchor_morning"
+   }
+  }
  }
 ]

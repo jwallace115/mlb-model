@@ -1,0 +1,136 @@
+packet built 2026-11-22T02:17Z | snap snap_20261122T020006Z.parquet | props pull 2026-11-22T01:03 | kalshi snap_20261122T0205Z.parquet | injuries injuries_20261122T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: line_move: pinnacle totals Over 46.5→45.0; line_move: pinnacle totals Under 46.5→45.0
+######## Jacksonville Jaguars @ New York Giants  kick 11-22T21:25Z
+  HR ML: Giants +220 / Jaguars -275 (no-vig home 0.299) | Pinnacle no-vig home 0.29
+  HR spread: Giants +5 -105 / Jaguars -5 -115 | Pinnacle Giants 6.0 (-114) | HR open 5.5 (20261117)
+  HR total: 45.5 O-110/U-110 | Pinnacle 45.0 O-107/U-107 | HR open 46.5
+  Kalshi ML [('New York G wins', 0.29, 164552), ('Jacksonville wins', 0.7, 103863)] | spread [('Jacksonville wins by over 4.5 points?', 0.54, 1745), ('Jacksonville wins by over 5.5 points?', 0.51, 56110)] | total [('Full Game: over 45.5 points scored?', 0.49, 8928), ('Full Game: over 46.5 points scored?', 0.47, 36851)]
+  -- Jacksonville Jaguars injuries (20261122T0030)
+     Inju DE B.J. Green II: Green (forearm) has been ruled out for Sunday's game against the Giants.
+     Out  DE Danny Striggow: Striggow (concussion) is listed as questionable for Sunday's game against the Giants.
+     Acti RB LeQuint Allen Jr.: Allen (hamstring) doesn't have an injury designation for Sunday's game against the Giants.
+     Acti RB Chris Rodriguez Jr.: Rodriguez (hand) doesn't have an injury designation for Sunday's game against the Giants.
+     Acti WR Jakobi Meyers: Meyers (ankle) doesn't have an injury designation for Sunday's game against the Giants.
+     Acti RB Bhayshul Tuten: Tuten (ankle/foot) was present for the stretching portion of Friday's practice before moving to a side field, Ryan O'Halloran of The Florida Times-Uni
+     Ques DE Matt Dickerson: questionable
+     Out  C  Robert Hainsey: Jaguars head coach Liam Coen announced Wednesday that Hainsey (knee) is out for Sunday's game against the Giants, Ryan O'Halloran of The Florida Times
+     Acti WR Travis Hunter: Hunter caught both of his targets for 16 yards, recorded a three-yard carry and contributed five tackles (three solo) and an interception during the J
+     Acti WR CJ Williams: 
+     Acti WR Josh Cameron: Cameron caught all three of his targets for 67 yards and a touchdown in Sunday's 40-23, Week 10 win over Tennessee. He also returned five kickoffs for
+     Acti WR Brian Thomas Jr.: Thomas caught three of four targets for 29 yards in Sunday's 40-23 win over the Titans.
+     Acti WR Parker Washington: Washington caught seven of nine targets for 152 yards and a touchdown in Sunday's 40-23 win over the Titans.
+     Acti QB Trevor Lawrence: Lawrence completed 25 of 35 passes for 352 yards and three touchdowns with one interception in Sunday's 40-23 win over the Titans. He added 27 yards o
+     Acti TE Brenton Strange: Strange caught two of three targets for nine yards and a touchdown in Sunday's 40-23 win over the Titans.
+     news 11-19T17:37 Midseason reports on every NFL team's offensive coordinator, playcaller
+     news 11-19T21:25 Jaguars visit the Giants in a matchup of two unexpected division leaders
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T11:00 How Bhayshul Tuten became the clear No. 1 running back for the Jaguars
+     news 11-20T22:59 How good has Trevor Lawrence been this year?
+  -- New York Giants injuries (20261122T0030)
+     Acti TE Isaiah Likely: Likely (undisclosed) wasn't spotted at Friday's practice, Dan Duggan of The Athletic reports.
+     Inju RB Tyrone Tracy Jr.: Tracy (hamstring) could be reinstated from injured reserve when first eligible ahead of the Giants' Week 13 game against the 49ers, Dan Duggan of The 
+     Acti QB Jameis Winston: Winston carried twice for one yard in Thursday's 24-21 loss to the Commanders.
+     Acti WR Xavier Gipson: Gipson was signed by the Giants off of Philadelphia's practice squad Monday, Pat Leonard of the New York Daily News reports.
+     Acti TE Thomas Fidone II: 
+     Acti TE Theo Johnson: Johnson logged one catch (on three targets) for eight yards Thursday in a loss to the Commanders.
+     Acti WR Darnell Mooney: Mooney caught two of five targets for eight yards Thursday in a loss to Washington.
+     Acti RB Devin Singletary: Singletary played just five snaps on offense and took one carry for three yards in Thursday's 24-21 loss to the Commanders.
+     Acti WR Malachi Fields: Fields brought in three of four targets for 62 yards in the Giants' 24-21 loss to the Commanders on Thursday.
+     Acti QB J.J. McCarthy: McCarthy completed 23 of 36 passes for 293 yards with a touchdown and an interception while adding six rushes for 34 yards in the Giants' 24-21 loss t
+     Acti WR Malik Nabers: Nabers secured five of seven targets for 44 yards and lost a fumble in the Giants' 24-21 loss to the Commanders on Thursday.
+     Acti RB Cam Skattebo: Skattebo rushed 18 times for 78 yards and two touchdowns and brought in three of four targets for 44 yards in the Giants' 24-21 loss to the Commanders
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T03:05 Will J.J. McCarthy be able to stand against the Jaguars
+     news 11-20T21:02 Giants looking for more respect around the NFL
+     news 11-21T01:15 Giants see Week 11 matchup vs. Jaguars as a big opportunity
+     news 11-21T11:00 Giants' Abdul Carter on lack of sacks: 'I've got to do more'
+  -- props (pull 2026-11-22T01:03)
+     * Bhayshul Tuten: atd 0.5 (-115), recyd 13.5 (-115/-115), rec 1.5 (-185/+135), ruatt 17.5 (-105/-125), ruyd 70.5 (-115/-115)
+     * Brenton Strange: atd 0.5 (+300), recyd 32.5 (-115/-115), rec 2.5 (-170/+130)
+     * Brian Thomas Jr: atd 0.5 (+525), recyd 12.5 (-115/-115), rec 1.5 (+135/-180)
+     * Cam Skattebo: atd 0.5 (+100), recyd 13.5 (-120/-110), rec 2.5 (+125/-170), ruatt 15.5 (-120/-110), ruyd 54.5 (-115/-115)
+     * Chris Rodriguez Jr.: atd 0.5 (+260), ruyd 20.5 (-110/-120)
+     * Darnell Mooney: atd 0.5 (+575), recyd 15.5 (-115/-115), rec 1.5 (-105/-125)
+     * Devin Singletary: atd 0.5 (+475), ruyd 10.5 (-115/-115)
+     * Isaiah Likely: atd 0.5 (+220), recyd 48.5 (-115/-115), rec 5.5 (+115/-145)
+     * J.J. McCarthy: atd 0.5 (+450), paatt 31.5 (-110/-120), cmp 19.5 (-110/-120), int 0.5 (-150/+115), patd 1.5 (+155/-210), payd 212.5 (-115/-115), ruyd 16.5 (-115/-115)
+     * Jakobi Meyers: atd 0.5 (+240), recyd 41.5 (-115/-115), rec 3.5 (+120/-160)
+     * Josh Cameron: atd 0.5 (+575), recyd 12.5 (-110/-120), rec 1.5 (+145/-200)
+     * Malachi Fields: atd 0.5 (+450), recyd 29.5 (-115/-115), rec 2.5 (+110/-145)
+     * Malik Nabers: atd 0.5 (+180), recyd 67.5 (-115/-115), rec 5.5 (-130/+100)
+     * Nate Boerkircher: atd 0.5 (+475), recyd 11.5 (-115/-115), rec 1.5 (+120/-155)
+     * Parker Washington: atd 0.5 (+135), recyd 64.5 (-115/-115), rec 4.5 (+115/-150)
+     * Theo Johnson: atd 0.5 (+650), recyd 7.5 (-115/-115), rec 0.5 (-190/+140)
+     * Travis Hunter: atd 0.5 (+575), recyd 8.5 (-110/-120), rec 1.5 (+155/-210)
+     * Trevor Lawrence: atd 0.5 (+450), paatt 30.5 (-120/-110), cmp 19.5 (-110/-120), int 0.5 (-110/-120), patd 1.5 (-145/+115), payd 232.5 (-115/-115), ruatt 3.5 (+115/-150), ruyd 9.5 (-120/-110)
+
+  WHAT CHANGED: anchor_morning
+######## Cincinnati Bengals @ Washington Commanders  kick 11-24T01:15Z
+  HR ML: Commanders +240 / Bengals -300 (no-vig home 0.282) | Pinnacle no-vig home 0.284
+  HR spread: Commanders +6.5 -110 / Bengals -6.5 -110 | Pinnacle Commanders 6.5 (-113) | HR open 6.0 (20261117)
+  HR total: 54.5 O-110/U-110 | Pinnacle 55.0 O-106/U-108 | HR open 53.0
+  Kalshi ML [('Washington wins', 0.28, 46995), ('Cincinnati wins', 0.72, 90208)] | spread [('Cincinnati wins by over 6.5 points?', 0.48, 64978), ('Cincinnati wins by over 7.5 points?', 0.42, 1847)] | total [('Full Game: over 54.5 points scored?', 0.52, 7088), ('Full Game: over 55.5 points scored?', 0.46, 0)]
+  -- Cincinnati Bengals injuries (20261122T0030)
+     Inju WR Andrei Iosivas: Iosivas (thumb) is listed as doubtful for Monday's game against the Commanders.
+     Acti QB Joe Burrow: Burrow (illness) does not have an injury designation ahead of Monday's game against the Commanders.
+     Inju LB Oren Burks: The Bengals placed Burks (groin) on injured reserve Saturday.
+     Out  G  Dalton Risner: out
+     Ques S  Kyle Dugger: Dugger (quadriceps) was a full participant in Friday's practice.
+     Inju LB Swayze Bozeman: The Bengals designated Bozeman (forearm) for return from injured reserve Thursday.
+     Ques CB Dax Hill: Hill (illness) did not participate in practice Thursday, Paul Dehner Jr. of The Athletic reports.
+     Acti WR Tee Higgins: Higgins (knee) was a full participant in Thursday's practice, Paul Dehner Jr. of The Athletic reports.
+     Ques G  Dylan Fairchild: questionable
+     Acti QB Joe Flacco: Flacco took the field for the Bengals' final possession of Sunday's 38-18 win over the Steelers, attempting no passes while handing off to running bac
+     Acti TE Drew Sample: Sample caught all three of his targets for 15 yards and a touchdown in Sunday's 38-18 win against Pittsburgh.
+     Acti WR Dohnte Meyers: Meyers caught both of his targets for 20 yards and a touchdown while also adding 58 yards as a kick returner during Sunday night's 38-18 win over the 
+     Acti RB Samaje Perine: Perine turned six carries into 14 yards and a touchdown and hauled in all four of his targets for 25 yards during the Bengals' 38-18 win over the Stee
+     Acti RB Tahj Brooks: Brooks carried three times for 12 yards while taking the field for three of the Bengals' 66 offensive snaps in Sunday's 38-18 win over the Steelers.
+     Acti TE Mike Gesicki: Gesicki caught one pass for nine yards in Sunday night's 38-18 win over the Steelers.
+     Acti RB Chase Brown: Brown rushed 10 times for 44 yards and brought in eight of nine targets for 39 yards for two touchdowns in the Bengals' 38-18 win over the Steelers on
+     Acti WR Ja'Marr Chase: Chase brought in 11 of 14 targets for 231 yards in the Bengals' 38-18 win over the Steelers on Sunday night. He also committed a fumble that stayed wi
+     news 11-20T03:35 Bengals offense will be biggest test yet for Commanders' improving defense
+     news 11-20T16:14 Why Stephen A. thinks 'special' Joe Burrow is the MVP front-runner
+     news 11-21T01:08 Joe Burrow, Bengals gearing up for MNF
+     news 11-21T11:00 Why Amarius Mims is an underrated key to Bengals' success
+     news 11-21T12:51 Back at practice again, Bengals QB Burrow optimistic he'll be at full strength
+  -- Washington Commanders injuries (20261122T0030)
+     Inju RB Jacory Croskey-Merritt: Croskey-Merritt (groin) is slated to be activated from IR in time to play in Monday's game against the Bengals, Matt Zenitz of CBS Sports reports.
+     Ques CB Amik Robertson: questionable
+     Ques G  Lucas Patrick: questionable
+     Acti WR Treylon Burks: Burks (foot) does not carry an injury designation into Monday's game against the Bengals.
+     Ques RB Rachaad White: White (heel) is listed as questionable for Monday's game versus the Bengals.
+     Inju OT Laremy Tunsil: Tunsil (triceps) is progressing well in his recovery but is not expected to return by the end of the 2026 regular season, Tashan Reed of The Washingto
+     Acti TE Colson Yankoff: Yankoff (knee) was a full participant at practice Thursday.
+     Acti WR Luke McCaffrey: McCaffrey returned two punts for 13 yards and three kickoffs for 58 yards in Thursday's 24-21 win over the Giants.
+     Acti QB Athan Kaliakmanis: 
+     Acti TE Ben Sinnott: Sinnott caught all four of his targets for 42 yards and a touchdown Thursday in a 24-21 victory against the Giants.
+     Acti WR Antonio Williams: Williams secured both targets for 42 yards and a touchdown in the Commanders' 24-21 win over the Giants on Thursday.
+     Acti RB Austin Ekeler: Ekeler rushed nine times for 26 yards and brought in all four targets for 26 yards in the Commanders' 24-21 win over the Giants on Thursday.
+     Acti WR Stefon Diggs: Diggs secured six of 10 targets for 83 yards and a touchdown in the Commanders' 24-21 win over the Giants on Thursday.
+     Acti QB Jayden Daniels: Daniels completed 23 of 33 passes for 249 yards with three touchdowns and two interceptions and rushed 11 times for 28 yards in the Commanders' 24-21 
+     Acti TE Chig Okonkwo: Okonkwo (back) returned to Thursday's eventual 24-21 win at the Giants, finishing with four catches (on eight targets) for 24 yards.
+     news 11-20T01:01 NFL Week 11 arrivals: C.J. Stroud leads the way ahead of Colts-Texans
+     news 11-20T03:35 Bengals offense will be biggest test yet for Commanders' improving defense
+     news 11-20T11:42 NFL offseason free agent and trade acquisitions that have and have not worked
+     news 11-20T22:18 Commanders confident in Jayden Daniels
+     news 11-21T12:51 Back at practice again, Bengals QB Burrow optimistic he'll be at full strength
+  -- props (pull 2026-11-21T14:00)
+     * Antonio Williams: atd 0.5 (+240), recyd 35.5 (-115/-115), rec 3.5 (-110/-120)
+     * Austin Ekeler: atd 0.5 (+260)
+     * Ben Sinnott: atd 0.5 (+650)
+     * Chase Brown: atd 0.5 (-125), recyd 26.5 (-115/-115), rec 4.5 (+110/-140), ruatt 11.5 (-120/-110), ruyd 44.5 (-115/-115)
+     * Chig Okonkwo: atd 0.5 (+240), recyd 43.5 (-115/-115), rec 4.5 (+100/-130)
+     * Dohnte Meyers: atd 0.5 (+350)
+     * Drew Sample: atd 0.5 (+525), recyd 6.5 (-115/-115), rec 1.5 (+155/-220)
+     * Ja'Marr Chase: atd 0.5 (-160), recyd 95.5 (-115/-115), rec 7.5 (-150/+115)
+     * Jack Endries: atd 0.5 (+650)
+     * Jayden Daniels: atd 0.5 (+220), paatt 31.5 (-110/-120), cmp 20.5 (-110/-120), int 0.5 (+115/-145), patd 1.5 (-125/-105), payd 224.5 (-115/-115), ruyd 41.5 (-115/-115)
+     * Joe Burrow: atd 0.5 (+400), paatt 37.5 (-115/-115), cmp 27.5 (-105/-125), int 0.5 (+115/-150), patd 2.5 (-120/-110), payd 302.5 (-115/-115), ruyd 7.5 (-115/-115)
+     * Mike Gesicki: atd 0.5 (+190), recyd 24.5 (-115/-115), rec 2.5 (+105/-135)
+     * Rachaad White: atd 0.5 (+140)
+     * Samaje Perine: atd 0.5 (+220), recyd 5.5 (-120/-110), rec 0.5 (-220/+155), ruatt 6.5 (+100/-130), ruyd 20.5 (-110/-120)
+     * Stefon Diggs: atd 0.5 (+170), recyd 46.5 (-115/-115), rec 4.5 (-110/-120)
+     * Tee Higgins: atd 0.5 (-105), recyd 75.5 (-115/-115), rec 5.5 (-105/-125)
+     * Treylon Burks: atd 0.5 (+300), recyd 29.5 (-115/-115), rec 2.5 (+130/-175)
