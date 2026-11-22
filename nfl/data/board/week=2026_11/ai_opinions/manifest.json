@@ -15137,5 +15137,159 @@
     "cbe45bafcc2615fc1d96cbc12840377a": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261122T182214Z.parquet",
+  "sha256": "b8d39ba92627d9eb0b3d23a81ad54af7354e36326a9dea7b14b2aa5bf1837744",
+  "logged_utc": "2026-11-22T18:22:14.021323+00:00",
+  "rows": 231,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "reader_v3b",
+  "pilot": false,
+  "window": "prekick",
+  "games": 3,
+  "no_view_share": 0.381,
+  "revised_rows": 0,
+  "oldest_source_age_min": 92.6,
+  "first_kickoff_utc": "2026-11-22T21:05:00Z",
+  "reader_sha256": "a413d38af2157fcb8a04c1d71cbc17a791cdadaa375e6ec3da56b1e616ba6bfd",
+  "inputs": {
+   "props": "data_2026_11.parquet",
+   "lines": "snap_20261122T180010Z.parquet"
+  }
+ },
+ {
+  "file": "ai_opinions_20261122T181704Z.parquet",
+  "sha256": "830a20b77137ce529a2bcc92c62725e39e4467024955a18d2872621346a3af89",
+  "logged_utc": "2026-11-22T18:17:04.771935+00:00",
+  "rows": 77,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.935,
+  "revised_rows": 75,
+  "oldest_source_age_min": 87.5,
+  "first_kickoff_utc": "2026-11-22T21:05:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261122T180010Z.parquet",
+   "inputs_digest": "{\"4b20b742b6168aaca4f25d87f11b1526\": \"c8e37313b3686a5f\"}",
+   "components": {
+    "4b20b742b6168aaca4f25d87f11b1526": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       -180
+      ],
+      [
+       "New York Jets",
+       0,
+       150
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Los Angeles Chargers",
+       -3.0,
+       -120
+      ],
+      [
+       "New York Jets",
+       3.0,
+       100
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       43.0,
+       -110
+      ],
+      [
+       "Under",
+       43.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Los Angeles Chargers",
+       0,
+       -165
+      ],
+      [
+       "New York Jets",
+       0,
+       148
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Los Angeles Chargers",
+       -3.0,
+       -110
+      ],
+      [
+       "New York Jets",
+       3.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -114
+      ],
+      [
+       "Under",
+       43.0,
+       101
+      ]
+     ],
+     "props_ts": "2026-11-22T16:49:35.679599+00:00",
+     "inj_Los Angeles Chargers": "8ebf0c59a7289c4a",
+     "inj_New York Jets": "f7baaef8e4feb331",
+     "news": [
+      "2027 NFL draft: Dolphins, Titans, Eagles, Jets, Ch",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Draft buzz: Interest in Oklahoma State's Drew Mest",
+      "Fantasy buzz: Breaking down 11 key fantasy footbal",
+      "Fantasy buzz: Does anything change in Indy with Ri",
+      "Fantasy buzz: Henry has confusing night, Hampton b",
+      "Fantasy buzz: Kirk Cousins, Stefon Diggs bring rel",
+      "Fantasy buzz: Stroud has Houston fans over the moo",
+      "Geno Smith plans to play despite ankle injury",
+      "Jets QB Geno Smith (ankle) cleared to start vs. Ch",
+      "Jets QB Geno Smith (ankle) intends to play vs. Cha",
+      "Jets look to turn around offensive struggles",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL flexes Raiders-Browns to replace Pats-Chargers",
+      "NFL offseason free agent and trade acquisitions th",
+      "Reeling Jets head to LA to face Chargers, who are ",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Why the Jets' next two games have major implicatio"
+     ],
+     "kalshi_snap": "snap_20261122T1805Z.parquet"
+    }
+   },
+   "triggers": {
+    "4b20b742b6168aaca4f25d87f11b1526": "anchor_prekick"
+   }
+  }
  }
 ]
