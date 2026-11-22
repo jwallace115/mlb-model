@@ -21337,5 +21337,192 @@
     "028f0fcc2f6411c4816e543bb7fa226c": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261122T023403Z.parquet",
+  "sha256": "a7b0a808aebd16b3fbf274e73e8e32d4d125d847f9f83605b69587520ac38981",
+  "logged_utc": "2026-11-22T02:34:03.723615+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-22T03:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261122T023008Z.parquet",
+   "inputs_digest": "{\"ecfec2fe1db57f88e603f9947add1e26\": \"cc3ceef31621530d\"}",
+   "components": {
+    "ecfec2fe1db57f88e603f9947add1e26": {
+     "pinnacle_h2h": [
+      [
+       "Arizona State Sun Devils",
+       0,
+       133
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -148
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona State Sun Devils",
+       3.0,
+       -107
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -3.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       60.0,
+       -115
+      ],
+      [
+       "Under",
+       60.0,
+       -101
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "2027 NFL draft: Dolphins, Titans, Eagles, Jets, Ch",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "CFB Week 12 best bets: Breaking down the numbers f",
+      "Draft buzz: Interest in Oklahoma State's Drew Mest",
+      "QB rankings for all 68 Power 4 college football te",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on College Football Playoff bubble after the",
+      "Who's on College Football Playoff bubble ahead of "
+     ],
+     "kalshi_snap": "snap_20261122T0207Z.parquet"
+    }
+   },
+   "triggers": {
+    "ecfec2fe1db57f88e603f9947add1e26": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261122T024903Z.parquet",
+  "sha256": "08010792e9a0fcc79cc0c83b92f0fb50f6166f81233223b5e78e1511559038a9",
+  "logged_utc": "2026-11-22T02:49:03.208563+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-22T03:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261122T023008Z.parquet",
+   "inputs_digest": "{\"430ea047c8a027987881d51f810a6cf8\": \"5174d9f494e5d2d1\", \"6e36f5c3c55edcb31749b0de4a146d14\": \"4180ac650479ff1d\"}",
+   "components": {
+    "430ea047c8a027987881d51f810a6cf8": {
+     "pinnacle_h2h": [
+      [
+       "Hawaii Rainbow Warriors",
+       0,
+       237
+      ],
+      [
+       "Nevada Wolf Pack",
+       0,
+       -273
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Hawaii Rainbow Warriors",
+       7.0,
+       -102
+      ],
+      [
+       "Nevada Wolf Pack",
+       -7.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -112
+      ],
+      [
+       "Under",
+       40.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261122T0237Z.parquet"
+    },
+    "6e36f5c3c55edcb31749b0de4a146d14": {
+     "pinnacle_h2h": [
+      [
+       "Oregon State Beavers",
+       0,
+       -264
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       229
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oregon State Beavers",
+       -7.0,
+       -103
+      ],
+      [
+       "Utah State Aggies",
+       7.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -103
+      ],
+      [
+       "Under",
+       52.0,
+       -113
+      ]
+     ],
+     "news": [
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261122T0237Z.parquet"
+    }
+   },
+   "triggers": {
+    "430ea047c8a027987881d51f810a6cf8": "anchor_close",
+    "6e36f5c3c55edcb31749b0de4a146d14": "anchor_close"
+   }
+  }
  }
 ]
