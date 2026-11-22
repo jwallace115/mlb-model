@@ -1,17 +1,12 @@
 {
- "started_utc": "2026-11-22T03:17:04.574797+00:00",
- "finished_utc": "2026-11-22T03:21:00.079502+00:00",
+ "started_utc": "2026-11-22T03:47:03.361677+00:00",
+ "finished_utc": "2026-11-22T03:47:03.748697+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "41e2dd69bddd65d7e823d9ed61cc2afc",
-   "text": "line_move: pinnacle spreads Tampa Bay Buccaneers 4.5\u21923.5; line_move: pinnacle spreads Detroit Lions -4.5\u2192-3.5"
-  }
- ],
- "games_read": 1,
- "frozen_file": "ai_opinions_20261122T031704Z.parquet",
- "spend_usd": 32.5565,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }

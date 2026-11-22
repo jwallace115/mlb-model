@@ -42,18 +42,18 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-22T03:21:00.038912+00:00",
-  "finished_utc": "2026-11-22T03:21:00.038912+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-22T03:47:03.664326+00:00",
+  "finished_utc": "2026-11-22T03:47:03.664326+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle spreads Tampa Bay Buccaneers 4.5\u21923.5; line_move: pinnacle spreads Detroit Lions -4.5\u2192-3.5']",
-  "freeze_file": "ai_opinions_20261122T031704Z.parquet"
+  "message": "",
+  "freeze_file": null
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-22T03:22:45.145980+00:00",
-  "finished_utc": "2026-11-22T03:22:45.145980+00:00",
+  "started_utc": "2026-11-22T03:50:27.993104+00:00",
+  "finished_utc": "2026-11-22T03:50:27.993104+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
