@@ -21068,5 +21068,116 @@
     "ecfec2fe1db57f88e603f9947add1e26": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261122T003403Z.parquet",
+  "sha256": "0953f24eb398a995946a1c50178f11383907077876e963b06693b1350c98554e",
+  "logged_utc": "2026-11-22T00:34:03.931852+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 4,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-22T03:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261122T003007Z.parquet",
+   "inputs_digest": "{\"430ea047c8a027987881d51f810a6cf8\": \"f4547988d3a3634a\", \"6e36f5c3c55edcb31749b0de4a146d14\": \"3720537308919789\"}",
+   "components": {
+    "430ea047c8a027987881d51f810a6cf8": {
+     "pinnacle_h2h": [
+      [
+       "Hawaii Rainbow Warriors",
+       0,
+       231
+      ],
+      [
+       "Nevada Wolf Pack",
+       0,
+       -265
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Hawaii Rainbow Warriors",
+       7.0,
+       -107
+      ],
+      [
+       "Nevada Wolf Pack",
+       -7.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -112
+      ],
+      [
+       "Under",
+       40.5,
+       -104
+      ]
+     ],
+     "news": [
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261122T0037Z.parquet"
+    },
+    "6e36f5c3c55edcb31749b0de4a146d14": {
+     "pinnacle_h2h": [
+      [
+       "Oregon State Beavers",
+       0,
+       -262
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       228
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oregon State Beavers",
+       -7.0,
+       -103
+      ],
+      [
+       "Utah State Aggies",
+       7.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -109
+      ],
+      [
+       "Under",
+       51.0,
+       -107
+      ]
+     ],
+     "news": [
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261122T0037Z.parquet"
+    }
+   },
+   "triggers": {
+    "430ea047c8a027987881d51f810a6cf8": "anchor_prekick",
+    "6e36f5c3c55edcb31749b0de4a146d14": "anchor_prekick"
+   }
+  }
  }
 ]
