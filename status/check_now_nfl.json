@@ -1,53 +1,12 @@
 {
- "started_utc": "2026-11-22T06:47:03.949085+00:00",
- "finished_utc": "2026-11-22T06:57:01.976363+00:00",
+ "started_utc": "2026-11-22T07:17:05.505955+00:00",
+ "finished_utc": "2026-11-22T07:17:06.124190+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "403a88701352da05b0710a9e883b803e",
-   "text": "new_props: pull 2026-11-22T06:48:07.521333+00:00; injury_change: inj_Kansas City Chiefs; injury_change: inj_Arizona Cardinals"
-  },
-  {
-   "game": "4527f57f5bc32742d8194af1ccf7da7e",
-   "text": "new_props: pull 2026-11-22T06:48:07.521333+00:00; injury_change: inj_Carolina Panthers; injury_change: inj_Baltimore Ravens"
-  },
-  {
-   "game": "4c5b1c0843a260278e95eb93e7787576",
-   "text": "new_props: pull 2026-11-22T06:48:07.521333+00:00; injury_change: inj_Miami Dolphins"
-  },
-  {
-   "game": "5e63079b678f8c13419adc169fff02d3",
-   "text": "new_props: pull 2026-11-22T06:48:07.521333+00:00; injury_change: inj_Tennessee Titans"
-  },
-  {
-   "game": "41e2dd69bddd65d7e823d9ed61cc2afc",
-   "text": "new_props: pull 2026-11-22T06:48:07.521333+00:00; injury_change: inj_Detroit Lions"
-  },
-  {
-   "game": "4b20b742b6168aaca4f25d87f11b1526",
-   "text": "new_props: pull 2026-11-22T06:48:07.521333+00:00; injury_change: inj_Los Angeles Chargers; injury_change: inj_New York Jets"
-  },
-  {
-   "game": "1940706a79cbcbafacdcbf231069716b",
-   "text": "new_props: pull 2026-11-22T06:48:07.521333+00:00; injury_change: inj_Denver Broncos; injury_change: inj_Las Vegas Raiders"
-  },
-  {
-   "game": "8ba112fabf4e87639338a5f437c5abfe",
-   "text": "new_props: pull 2026-11-22T06:48:07.521333+00:00; injury_change: inj_New York Giants; injury_change: inj_Jacksonville Jaguars"
-  },
-  {
-   "game": "60e1d27b083a335b722c2c852ea85612",
-   "text": "new_props: pull 2026-11-22T06:48:07.521333+00:00; injury_change: inj_San Francisco 49ers"
-  },
-  {
-   "game": "3a60ed1d20004aa4d4772b2c1a2272e7",
-   "text": "new_props: pull 2026-11-22T06:48:07.521333+00:00; injury_change: inj_Washington Commanders; injury_change: inj_Cincinnati Bengals"
-  }
- ],
- "games_read": 10,
- "frozen_file": "ai_opinions_20261122T064703Z.parquet",
- "spend_usd": 32.9324,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
