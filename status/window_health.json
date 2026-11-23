@@ -42,19 +42,19 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-23T00:44:10.618115+00:00",
-  "finished_utc": "2026-11-23T00:44:10.618115+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-23T01:18:58.217024+00:00",
+  "finished_utc": "2026-11-23T01:18:58.217024+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['injury_change: inj_San Francisco 49ers; injury_change: inj_Minnesota Vikings']",
-  "freeze_file": "ai_opinions_20261123T003203Z.parquet"
+  "message": "",
+  "freeze_file": null
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-23T00:49:06.685987+00:00",
-  "finished_utc": "2026-11-23T00:49:06.685987+00:00",
-  "result": "busy",
+  "started_utc": "2026-11-23T01:19:03.959233+00:00",
+  "finished_utc": "2026-11-23T01:19:03.959233+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
   "message": "",
   "freeze_file": null
