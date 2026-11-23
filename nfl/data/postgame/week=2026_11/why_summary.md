@@ -1,74 +1,121 @@
 # WHY Summary — Week 11
 
-Generated: 2026-11-22T12:09:15.749196+00:00
+Generated: 2026-11-23T12:45:26.965833+00:00
 
 
 ## Graded rows
 
-- ai_nfl / moneyline / L: 1
-- ai_nfl / moneyline / W: 1
-- ai_nfl / prop:int / L: 4
-- ai_nfl / prop:pass_att / L: 2
-- ai_nfl / prop:pass_att / W: 7
-- ai_nfl / prop:pass_cmp / L: 2
-- ai_nfl / prop:pass_cmp / W: 5
-- ai_nfl / prop:pass_td / L: 2
-- ai_nfl / prop:pass_td / W: 2
-- ai_nfl / prop:pass_yds / W: 14
-- ai_nfl / prop:rec / L: 11
-- ai_nfl / prop:rec / V: 1
-- ai_nfl / prop:rec / W: 13
-- ai_nfl / prop:rec_yds / L: 12
-- ai_nfl / prop:rec_yds / V: 1
-- ai_nfl / prop:rec_yds / W: 12
-- ai_nfl / prop:rush_att / L: 4
-- ai_nfl / prop:rush_att / W: 12
-- ai_nfl / prop:rush_yds / L: 3
-- ai_nfl / prop:rush_yds / W: 8
-- ai_nfl / spread / L: 3
-- ai_nfl / spread / W: 5
-- ai_nfl / total / L: 1
-- ai_nfl / total / W: 1
+- ai_nfl / moneyline / L: 8
+- ai_nfl / moneyline / W: 9
+- ai_nfl / prop:int / L: 15
+- ai_nfl / prop:int / V: 1
+- ai_nfl / prop:int / W: 17
+- ai_nfl / prop:pass_att / L: 69
+- ai_nfl / prop:pass_att / V: 1
+- ai_nfl / prop:pass_att / W: 86
+- ai_nfl / prop:pass_cmp / L: 14
+- ai_nfl / prop:pass_cmp / W: 15
+- ai_nfl / prop:pass_td / L: 8
+- ai_nfl / prop:pass_td / W: 11
+- ai_nfl / prop:pass_yds / L: 38
+- ai_nfl / prop:pass_yds / W: 41
+- ai_nfl / prop:rec / L: 69
+- ai_nfl / prop:rec / V: 7
+- ai_nfl / prop:rec / W: 71
+- ai_nfl / prop:rec_yds / L: 49
+- ai_nfl / prop:rec_yds / V: 7
+- ai_nfl / prop:rec_yds / W: 47
+- ai_nfl / prop:rush_att / L: 72
+- ai_nfl / prop:rush_att / W: 111
+- ai_nfl / prop:rush_yds / L: 26
+- ai_nfl / prop:rush_yds / W: 42
+- ai_nfl / spread / L: 21
+- ai_nfl / spread / W: 33
+- ai_nfl / total / L: 20
+- ai_nfl / total / P: 1
+- ai_nfl / total / W: 33
 
 ## why_code_auto (losses)
 
-- ROLE_SHIFT: 13
-- SCRIPT: 11
-- EFFICIENCY: 9
-- GARBAGE: 4
-- NOISE: 1
+- SCRIPT: 165
+- ROLE_SHIFT: 97
+- EFFICIENCY: 55
+- GARBAGE: 20
+- UNDEFINED: 19
+- NOISE: 16
+- NON_OFFENSIVE_TD: 8
+- TURNOVERS: 5
 - SHARE_OTHER: 1
 
 ## why_code_auto (wins)
 
-- SCRIPT: 32
-- ROLE_SHIFT: 15
-- EFFICIENCY: 13
-- UNDEFINED: 8
-- GARBAGE: 6
+- SCRIPT: 181
+- ROLE_SHIFT: 122
+- EFFICIENCY: 54
+- UNDEFINED: 53
+- NOISE: 37
+- GARBAGE: 21
+- TURNOVERS: 11
+- NON_OFFENSIVE_TD: 6
 - SHARE_OTHER: 3
-- NOISE: 1
 
 ## Thesis verdicts
 
-- thesis_source=freeze: 125 rows
+- thesis_source=freeze: 927 rows
 - thesis_source=nan: 0 rows
 
 ## Freeze-join accounting
 
-- Freeze-sourced thesis: 125
+- Freeze-sourced thesis: 927
 - Tag-map thesis: 0
 - No thesis: 0
 
-## Unresolved player names (2 rows)
+## Unresolved player names (15 rows)
 
+- Brock Bowers (7x): markets=['prop:rec_yds', 'prop:rec']
+- Dalton Kincaid (2x): markets=['prop:rec_yds', 'prop:rec']
 - Drew Ogletree (2x): markets=['prop:rec_yds', 'prop:rec']
+- Nate Boerkircher (2x): markets=['prop:rec_yds', 'prop:rec']
+- Carson Beck (1x): markets=['prop:pass_att']
+- Ja'Kobi Lane (1x): markets=['prop:rec_yds']
+
+## PBP vs official stat mismatches (20 rows)
+
+- Trevor Lawrence: prop:pass_att official=47.0 pbp=48.0
+- Chuba Hubbard: prop:rush_att official=27.0 pbp=28.0
+- Chuba Hubbard: prop:rush_att official=27.0 pbp=28.0
+- Trevor Lawrence: prop:pass_att official=47.0 pbp=48.0
+- Chuba Hubbard: prop:rush_att official=27.0 pbp=28.0
+- Chuba Hubbard: prop:rush_att official=27.0 pbp=28.0
+- Dak Prescott: prop:pass_att official=33.0 pbp=34.0
+- Chuba Hubbard: prop:rush_att official=27.0 pbp=28.0
+- Chuba Hubbard: prop:rush_att official=27.0 pbp=28.0
+- Chuba Hubbard: prop:rush_att official=27.0 pbp=28.0
+- Dak Prescott: prop:pass_att official=33.0 pbp=34.0
+- Chuba Hubbard: prop:rush_att official=27.0 pbp=28.0
+- Dak Prescott: prop:pass_att official=33.0 pbp=34.0
+- Trevor Lawrence: prop:pass_att official=47.0 pbp=48.0
+- Chuba Hubbard: prop:rush_att official=27.0 pbp=28.0
+- Trevor Lawrence: prop:pass_att official=47.0 pbp=48.0
+- Chuba Hubbard: prop:rush_att official=27.0 pbp=28.0
+- Trevor Lawrence: prop:pass_att official=47.0 pbp=48.0
+- Trevor Lawrence: prop:pass_att official=47.0 pbp=48.0
+- Trevor Lawrence: prop:pass_att official=47.0 pbp=48.0
 
 ## FLAGGED FOR THE TUESDAY READ
 
 
-### Top 20 picks (70 rows)
+### Top 20 picks (431 rows)
 
+- 20dfce945ee276c7: total None → P
+- 1ebc954135e86859: prop:rec Dalton Kincaid → V
+- 4ae010ec10c3654f: prop:rec Malik Washington → W
+- f837d1e7ea5cdaf3: spread None → L
+- b133789b2ef33aff: spread None → L
+- bed7b378292aa8dd: total None → L
+- c10f6a198798dca3: prop:rec George Kittle → W
+- be2d282d607f5b5c: prop:rush_yds Aaron Jones → W
+- d6a71644d9e21ef7: prop:rush_yds Kirk Cousins → W
 - ab89a472ba46783c: prop:int Daniel Jones → L
 - e8310387ae972e16: prop:pass_td Daniel Jones → W
 - 8b9d8173159eeda8: prop:rec_yds Jonathan Taylor → W
@@ -139,28 +186,388 @@ Generated: 2026-11-22T12:09:15.749196+00:00
 - f2adcb548b327928: prop:rec Xavier Hutchinson → L
 - ea6846e377a966d1: prop:rush_att David Montgomery → W
 - f2f1e9acdabc20e0: spread None → W
+- 0582496ca9a4ed6d: prop:pass_att Caleb Williams → W
+- d2718c3cc2de71c9: prop:pass_att Tyler Shough → W
+- 144b7ed5125da7dc: prop:int Tyler Shough → W
+- f2dd259289023923: prop:rush_att D'Andre Swift → L
+- 35d92bcca5cf29de: prop:pass_att Patrick Mahomes → L
+- 12e985f5770b00a9: prop:int Carson Beck → V
+- 299709dc5a603a45: prop:pass_yds Patrick Mahomes → L
+- ce5e24af121b0810: prop:rush_att Tyler Allgeier → W
+- 891e2ae227cfd0bd: prop:rush_att Bucky Irving → L
+- c43299f47c9d3df8: prop:rush_att Jahmyr Gibbs → W
+- 1470644fee1e0c09: spread None → W
+- 7138694767eb832f: prop:pass_att Bryce Young → W
+- 3d47677d7e9b21ea: prop:rush_att Chuba Hubbard → W
+- 15efc8de488e42c9: spread None → L
+- ff3ecad8545e5dd6: prop:pass_att Josh Allen → L
+- 19a7fdde1a5370f2: prop:pass_att Kyle McCord → W
+- 0c002d62e4f29a9a: prop:int Kyle McCord → W
+- 5635fed43af3bdf4: prop:pass_yds Josh Allen → L
+- 06706440be414237: prop:rush_att James Cook → W
+- 49141b45ca66a901: prop:rush_att Ollie Gordon II → W
+- 5770e63ad0b0c35c: prop:int Fernando Mendoza → W
+- 1a8209825fb524af: prop:rec Ashton Jeanty → W
+- 2d1babbcf457fb77: prop:rush_att Jonah Coleman → W
+- 7c8cd8e1bf49abf3: prop:pass_att Patrick Mahomes → L
+- 929a5b9c76f9d076: prop:rush_att Tyler Allgeier → W
+- 374b3efe147ce305: spread None → W
+- 240b464754bc4f18: prop:pass_att Jacoby Brissett → W
+- 1922fc075c6a4c71: prop:rec Mark Andrews → L
+- fd29da79ea38e072: prop:rush_att Chuba Hubbard → W
+- aea49c170403b95f: prop:pass_att Justin Herbert → W
+- e244e6db90d8e270: prop:rush_att Omarion Hampton → L
+- b223d173ce794233: prop:pass_att Josh Allen → L
+- d5533257f3024437: prop:pass_att Kyle McCord → W
+- e3b3c721a06a575d: prop:rush_att James Cook → W
+- 411c48d1301d2cfc: prop:rush_att Ollie Gordon II → W
+- bbbfb4f57e78e542: prop:pass_att Cam Ward → L
+- 8f3e1bcb71781296: prop:rec Tony Pollard → L
+- 83ba6d235887fcee: prop:rush_att Tony Pollard → L
+- cb833aba696a5d24: prop:pass_att J.J. McCarthy → W
+- c3a347c4a36e4122: prop:rush_att Joe Milton → L
+- 68f59567e8e5a72a: prop:pass_att Bo Nix → L
+- 7377364985456ab1: prop:pass_yds Fernando Mendoza → L
+- a148d6bd7e9a9bca: prop:rush_att Jonah Coleman → W
+- 6ef03356a6125e6f: prop:pass_att Tyler Shough → W
+- 864127cf299c41a0: prop:pass_att Patrick Mahomes → L
+- b8658ed8360b791a: prop:rush_att Emmett Johnson → W
+- bd7c856881e452e1: prop:pass_yds Baker Mayfield → W
+- 228b914900b11715: prop:rush_att Bucky Irving → L
+- 77451eb8539566cf: prop:rush_att Jahmyr Gibbs → W
+- 8ae3e0f486c7d449: prop:rush_yds Bucky Irving → L
+- 6ed29cfad389908d: prop:pass_att Jacoby Brissett → W
+- ce9fb60b7e45785d: prop:rush_att Chuba Hubbard → W
+- 6395f72c97e28da8: prop:rush_att Derrick Henry → W
+- 953516efe4c5f502: prop:rec_yds Adonai Mitchell → L
+- 0842b6ce2bfb440e: prop:rush_att Omarion Hampton → L
+- 9d65bc23be7853f9: prop:pass_att Josh Allen → L
+- e47efaf82355bc0a: prop:rush_att James Cook → W
+- 8deb53f043c53c81: prop:rush_att Ollie Gordon II → W
+- 1acb6ea01b55d0b9: prop:rec George Pickens → W
+- 9fa4ee2a1ebde7a2: prop:rec Tony Pollard → L
+- 424f4d48c5c65083: prop:pass_yds Kirk Cousins → L
+- e96ea41d1b403ad7: prop:rec Justin Jefferson → L
+- a7ecfddff290d4da: prop:rec Tai Felton → W
+- f6bc7099a98b376c: total None → W
+- e7a6cee11f46bdb1: prop:pass_yds Fernando Mendoza → L
+- 726649f5ec842724: prop:rush_att Jonah Coleman → W
+- 5d5415771fce9254: prop:pass_att Caleb Williams → W
+- 17aa44c3e1fe1711: prop:pass_att Tyler Shough → W
+- 4ebeb2c05d4ba6ac: prop:pass_att Patrick Mahomes → L
+- f1617bfe6ea303a6: prop:rush_att Emmett Johnson → W
+- d4ad55d52a4cbd9a: prop:rush_att Bucky Irving → L
+- 2f246958686f3ef7: prop:rush_att Jahmyr Gibbs → W
+- 97b87a1d48dec99a: prop:pass_att Jacoby Brissett → W
+- e575bc2084d1b27f: prop:rush_att Chuba Hubbard → W
+- 581ecc153c856307: prop:pass_att Justin Herbert → W
+- 1c717fa1031635a6: prop:rec Adonai Mitchell → L
+- 4abaed1d3e1d4129: prop:rec Kenyon Sadiq → W
+- f7fe07fc44fdab5e: prop:rush_att Omarion Hampton → L
+- 9b934b12484494ad: prop:pass_att Josh Allen → L
+- 92c4cf29809a9310: prop:pass_att Kyle McCord → W
+- b06bef2e1e8d7583: prop:rush_att James Cook → W
+- 20eed2ebef66c0ea: prop:pass_att Cam Ward → L
+- 2020711cf311906a: prop:pass_att J.J. McCarthy → W
+- 781457979b14f9ef: total None → W
+- 153e7e93e8aca77e: prop:pass_att Bo Nix → L
+- 1c7ec517709661ab: prop:pass_yds Fernando Mendoza → L
+- 60f91e7d09bfbdee: prop:rush_att Jonah Coleman → W
+- e102b57e45c02628: total None → L
+- 5f5ab23366a472f5: prop:pass_yds Baker Mayfield → W
+- cc1def5c0b4e7522: spread None → W
+- 2ce9080fa0a41132: prop:rush_att Chuba Hubbard → W
+- 952502dae7916063: prop:pass_yds Justin Herbert → W
+- c5a32a5c3b51d9e4: prop:rec_yds Adonai Mitchell → L
+- c19d6e4aa47cb34e: prop:rush_att Omarion Hampton → L
+- 657b4ab6efd372ac: prop:pass_att Josh Allen → L
+- 100939e326f1f39f: prop:pass_att Kyle McCord → W
+- d22e2b5c57d19fb8: prop:pass_yds Josh Allen → L
+- f9b077f6e5a8bf7e: prop:rush_att James Cook → W
+- 246964a227e35f28: prop:rush_att Ollie Gordon II → W
+- 70068549ffe4bf99: prop:pass_att Cam Ward → L
+- af8fee6bb1fe4c89: prop:pass_cmp Cam Ward → L
+- 05c6600f1e68858a: prop:rec Elic Ayomanor → L
+- 74c1d251278c13ee: prop:pass_yds Aaron Rodgers → L
+- e651cfe23ab8152f: prop:pass_yds Joe Milton → W
+- 6dd345ac265559ae: prop:pass_cmp Fernando Mendoza → L
+- 69b5f31139351532: prop:pass_yds Fernando Mendoza → L
+- 0c193338cd737499: prop:rush_att Jonah Coleman → W
+- b96cfe19f669bb5d: spread None → W
+- 4f2663b21e4d58ee: prop:pass_att Caleb Williams → W
+- ab61b6a76eadc512: prop:pass_att Tyler Shough → W
+- 7e9d343c1847730d: prop:pass_att Patrick Mahomes → L
+- 49e14f1751df92f2: prop:rush_att Emmett Johnson → W
+- 00b0cd654f236bcf: spread None → W
+- 6bb31dba3d70ab1c: prop:rush_att Bucky Irving → L
+- 080340ea529ab1ce: prop:rush_att Jahmyr Gibbs → W
+- b53a94cb24cd7c0a: prop:pass_att Jacoby Brissett → W
+- 7b994801b69d4f52: prop:rush_att Chuba Hubbard → W
+- ae606c08587d749e: prop:pass_att Justin Herbert → W
+- 3b26ddffab997f9b: prop:pass_yds Justin Herbert → W
+- ff767b7cc8cffd34: prop:rush_att Omarion Hampton → L
+- 70860f77306a8a7e: total None → L
+- 6e55eb5c97f46a91: prop:pass_att Josh Allen → L
+- 68d16f5a701f9d69: prop:rush_att James Cook → W
+- a1b4cb73d8c054a3: prop:rec Justin Jefferson → L
+- bded1d1ea8f6e653: prop:pass_yds Jared Goff → W
+- eac39c612786ac86: prop:rush_att Bucky Irving → L
+- f75798cc1d3e2060: prop:rush_att Jahmyr Gibbs → W
+- eaab7232939a934f: prop:rush_yds Baker Mayfield → L
+- fe7ea692586178c0: prop:pass_att Caleb Williams → W
+- cd54d1e2a516ba85: prop:pass_att Tyler Shough → W
+- 9c214e8f67ba755a: prop:rush_att D'Andre Swift → L
+- 8f837c23e8b2923a: prop:rush_att Travis Etienne Jr. → L
+- a376418247994b96: prop:pass_att Patrick Mahomes → L
+- fafb8a9920d75192: prop:rush_att Emmett Johnson → W
+- 3f15b1b74fb614fb: prop:rush_yds Emmett Johnson → W
+- 162042969d7c5665: prop:rush_att Bucky Irving → L
+- e41bcef0ff1f2eb0: prop:rush_yds Baker Mayfield → L
+- 33d93ba4cdb445c3: prop:pass_att Justin Herbert → W
+- 39d16af8eb3ed87a: prop:rec_yds Adonai Mitchell → L
+- 3a2b3a4bcf74b65d: prop:rec Mason Taylor → L
+- 08118d65f7647079: prop:rush_att Breece Hall → W
+- 4441a2b05e0ad235: prop:pass_att Josh Allen → L
+- b8c2aeb6bcbe6f2e: prop:pass_att Kyle McCord → W
+- 6be2a5a24b8bee7c: prop:int Kyle McCord → W
+- 34a66194314f71bb: prop:pass_yds Josh Allen → L
+- 059a116aa7c125c6: prop:pass_att Cam Ward → L
+- 574c26e6a257f5de: prop:rush_att Javonte Williams → W
+- a3e2f462de53c416: prop:pass_yds Aaron Rodgers → L
+- daf57de0995fc2ad: prop:pass_att Baker Mayfield → W
+- 42058514966b4076: prop:rush_att Bucky Irving → L
+- 4723b650d4b591d7: total None → L
+- 22d8074ec4b494b9: prop:pass_att Fernando Mendoza → L
+- 934779b24b293cf9: prop:pass_yds Fernando Mendoza → L
+- 7523547499c0d19c: prop:pass_att Caleb Williams → W
+- 7855c83c9da236fd: prop:pass_att Tyler Shough → W
+- 9313b7b74df4f05b: prop:rush_att D'Andre Swift → L
+- c41b2e2afdf8f720: prop:pass_att Patrick Mahomes → L
+- 8b958aa16d6fee7d: prop:rush_att Emmett Johnson → W
+- 5ea64f92629d216e: prop:rush_yds Emmett Johnson → W
+- 41d26680d50006b8: prop:rec_yds Jahmyr Gibbs → L
+- 68cfcb51cfae80ef: prop:rush_att Jahmyr Gibbs → W
+- 760e85edcdabf40d: prop:pass_att Jacoby Brissett → W
+- 93c0e634cbf0d372: prop:rush_att Chuba Hubbard → W
+- 2be2b315648abc93: prop:rec_yds Adonai Mitchell → L
+- d49f973f1f4167db: prop:pass_att Josh Allen → L
+- 94c1ab4136267d33: prop:int Kyle McCord → W
+- 9e42de5f4c9dae6b: prop:rush_att James Cook → W
+- e60cfa587682f812: prop:pass_att Cam Ward → L
+- 5a6be11d668d6c3f: prop:rec Tony Pollard → L
+- 906049166a7f4e28: prop:rush_att Tony Pollard → L
+- 1572d8af1218789c: prop:rec Justin Jefferson → L
+- 04ad67bf239f6c67: prop:pass_att J.J. McCarthy → W
+- c17d1045eced1afb: prop:rush_att Cam Skattebo → L
+- b8a5773d40567997: prop:rush_yds J.J. McCarthy → W
+- b423a8860007ef1c: total None → W
+- 130c11311367694f: prop:rec_yds Jahmyr Gibbs → L
+- 1d0c1168c2d6a4f6: prop:rush_att Bucky Irving → L
+- d6b573a79551b384: spread None → L
+- 9f088ad5f8d68280: total None → W
+- 99a128f0bfbb8b8b: prop:pass_att Fernando Mendoza → L
+- 6201fcb257946c09: prop:pass_yds Fernando Mendoza → L
+- ed4df7910c91e16b: prop:rush_att Jonah Coleman → W
+- f3c5211354832bf7: total None → L
+- 6fc7a0163eaf2eb6: prop:pass_att Patrick Mahomes → L
+- 0fcdd8b488420198: prop:rush_att Emmett Johnson → W
+- d31a2cb4af80d1f7: prop:pass_att Jacoby Brissett → W
+- 17260b2dd095fc95: prop:rush_att Chuba Hubbard → W
+- a99196273a7fbef9: prop:pass_att Justin Herbert → W
+- e70d84aecc9f6c5c: prop:pass_yds Justin Herbert → W
+- 9280e823235d21cc: prop:rec_yds Adonai Mitchell → L
+- e667862c71b22932: prop:rush_att Breece Hall → W
+- 50950f53c0278e81: prop:rush_att Omarion Hampton → L
+- 79cb6eaaae224410: prop:pass_att Josh Allen → L
+- 0e5ffbed1aef4099: prop:pass_att Kyle McCord → W
+- 30dd2dc9d41f2a32: prop:int Kyle McCord → W
+- 53055e91636fc844: prop:pass_yds Josh Allen → L
+- e68cc94eaca0bf49: prop:rush_att James Cook → W
+- 25bb618bbf53af76: prop:rec Justin Jefferson → L
+- 1c1d6b2333b22e9f: prop:pass_att Baker Mayfield → L
+- d00ec6c9f54ba082: prop:pass_yds Baker Mayfield → W
+- 2ebac28dc73966f4: prop:rec Jahmyr Gibbs → W
+- eb0558d87e1bec5e: prop:rush_att Bucky Irving → L
+- ff19b9781cdb09c4: prop:rush_att Jahmyr Gibbs → L
+- eb4ebfb94f2d4a08: spread None → W
+- aa9f18f9334e3128: total None → L
+- e0a5f3e59ecd38b7: prop:pass_att Brock Purdy → W
+- 94d188872f08fae9: prop:pass_att Kirk Cousins → W
+- d025aa7b3f63c3b5: total None → W
+- c6b120f1fca6ff44: prop:pass_att J.J. McCarthy → W
+- 1c40574c41d6250c: prop:pass_att Trevor Lawrence → L
+- 7eda66e30685c3e6: prop:rush_att Bhayshul Tuten → L
+- cfa2a50461d924c0: spread None → W
+- 25e3c2e8a4976c03: prop:pass_att Bo Nix → L
+- ee49d79577ccb09e: prop:pass_att Fernando Mendoza → W
+- 9be800d085d11e5f: prop:rush_att Jonah Coleman → W
+- 2faee21689bffa33: prop:rush_yds Jonah Coleman → W
+- 158ac63ae0b18366: prop:pass_att Tyler Shough → W
+- 02a40298236ab470: prop:pass_att Josh Johnson → W
+- 7c8aca06a1eb6f1d: prop:pass_att Patrick Mahomes → L
+- 4b2411cd3bbc8cd5: prop:rush_att Emmett Johnson → W
+- f2e5cd8565f7884c: prop:rush_att Bucky Irving → L
+- ad862a2e729fc200: prop:rush_att Jahmyr Gibbs → W
+- 3e88bc245f15d5cc: prop:pass_att Jacoby Brissett → L
+- 758fcfac0775cce7: prop:rush_att Chuba Hubbard → W
+- d02dd196b7e92582: prop:rec Kenyon Sadiq → W
+- 8da91b10d0932ab3: total None → W
+- e61a308188bd4241: prop:pass_att Josh Allen → L
+- 44fed7845a61e6c0: prop:pass_att Kyle McCord → W
+- 8956962c4239aa28: prop:pass_yds Josh Allen → L
+- 3353ea89791e75ba: prop:rush_att James Cook → W
+- 9a526cf47ce38f1c: prop:pass_att Cam Ward → L
+- 646643fc0a30a6f4: prop:pass_att Bo Nix → L
+- 4ab4c478d0abf109: prop:pass_yds Fernando Mendoza → L
+- 8e3b1527fb6f5816: prop:rec_yds Brock Bowers → V
+- a586a5f9e854cdac: prop:rec Brock Bowers → V
+- 8a6a57866ad9380a: prop:rush_att Jonah Coleman → W
+- 85c38a314bbbf5b7: prop:pass_att Patrick Mahomes → L
+- c5ac9c4b25addde8: prop:pass_yds Josh Johnson → W
+- c45b9cafa7b18fd0: prop:rush_att Emmett Johnson → W
+- 9ff7c16b64637501: prop:rec Kenny Gainwell → W
+- 46a324a91b92d9d5: prop:rush_att Bucky Irving → L
+- b9e192be3016b828: prop:rush_att Jahmyr Gibbs → W
+- be608ea27bcd675f: prop:pass_att Jacoby Brissett → W
+- 119b95a2c4c7fb52: prop:rush_att Chuba Hubbard → W
+- 0a3046b0190cb1c8: prop:rec_yds Adonai Mitchell → L
+- c29964e21ce83496: prop:rush_att Breece Hall → W
+- 1822256d38feda8d: prop:rush_att Omarion Hampton → L
+- d9a5922296a91a3c: prop:pass_att Josh Allen → L
+- b59892b45b99b4d7: prop:rush_att James Cook → W
+- f9b2dbd2b7edeaa9: prop:rec_yds George Pickens → W
+- 8de1ba79d623be4b: prop:rec CeeDee Lamb → W
+- 62a0c91e7ef478ca: prop:pass_att Caleb Williams → W
+- ab0d873445e5beef: prop:pass_att Tyler Shough → W
+- 4017144bd6c95da8: prop:pass_att Patrick Mahomes → L
+- cc4631456b571b9f: prop:rush_att Emmett Johnson → W
+- 6bafaafbe0810359: spread None → L
+- 8df75334937eb31a: prop:pass_yds Jared Goff → W
+- 5f4f5b0defcd6297: prop:rush_att Bucky Irving → L
+- 9f0c30577d45d0af: prop:rush_att Jahmyr Gibbs → W
+- 135d2779f5ba3248: prop:pass_att Josh Allen → L
+- d2e44e2949936840: prop:pass_att Kyle McCord → W
+- ac247b45ef571a5b: prop:rush_att James Cook → W
+- 13f5afcb441fd54c: prop:rush_att Ollie Gordon II → W
+- 31bc7dc47a37faa7: prop:pass_att Cam Ward → L
+- ef861c935bc43ddf: prop:rec Brevyn Spann-Ford → L
+- 78cc1f3b1f8476d6: prop:rec CeeDee Lamb → W
+- e32e7a87f67e89a8: prop:rec George Pickens → W
+- 1134e39c19926bd6: prop:rush_att Javonte Williams → L
+- c998644c5416379f: prop:pass_att Aaron Rodgers → L
+- 71923ba31b1fedab: prop:pass_yds Aaron Rodgers → L
+- b3aef4b202f1d675: prop:rush_att Saquon Barkley → W
+- 48337d106c9ef18f: prop:pass_att Justin Herbert → W
+- 68ae2b81b280c4b6: prop:pass_yds Justin Herbert → W
+- 99f88c9e71ec6519: prop:rec_yds Adonai Mitchell → L
+- 30e3d751b43df229: prop:rec Mason Taylor → L
+- e2566e9a29161a12: prop:rush_att Breece Hall → W
+- 00a5421cbe0df35d: prop:pass_cmp Fernando Mendoza → L
+- 0454dc5755c58f41: prop:int Fernando Mendoza → L
+- 34903a9fee3c2d2f: prop:rush_yds Mike Washington Jr. → L
+- 682f07c224f37649: prop:rec_yds Braelon Allen → L
+- 33dd9e657640a5d2: prop:rec Mason Taylor → W
+- ba3ff4c53b3817d5: prop:rush_att Omarion Hampton → W
+- c8b05ed3f17d772d: prop:pass_td J.J. McCarthy → W
+- 99c0abbfe126df69: prop:pass_td Trevor Lawrence → W
+- acd141e3394237bc: prop:pass_yds J.J. McCarthy → W
+- 5c00bb311868f598: prop:rec_yds Brian Thomas Jr → L
+- d4500612f68322a0: prop:rec_yds Isaiah Likely → W
+- 7fac3926b41c2677: prop:rec_yds Josh Cameron → L
+- bbd96e04394c4fec: prop:rec_yds Malachi Fields → W
+- 508cf23d9a2a8e4d: prop:rec_yds Travis Hunter → W
+- 17ebd236fbe2b1b1: prop:rec Bhayshul Tuten → L
+- ed7cda7558f7fa8c: prop:rec Darnell Mooney → W
+- b71777b2aedca047: prop:rec Malik Nabers → L
+- b90884a6e7c90292: prop:rec Parker Washington → L
+- 267e7d645e726111: prop:rec Theo Johnson → L
+- 388e4f5441ef0bd7: prop:rush_yds Chris Rodriguez Jr. → L
+- 885c584693236788: prop:pass_att Bo Nix → L
+- 38c14abad74954b5: prop:pass_yds Fernando Mendoza → L
+- 5e9ba8f9b1d735b7: prop:rec_yds Michael Mayer → L
+- 7d67634c37cedaeb: prop:rec Brock Bowers → V
+- 0c1e4b84e33875b1: prop:rush_att Jonah Coleman → W
+- 63374bc5e2cd27df: prop:pass_yds Kirk Cousins → L
+- 000e12bb8f759354: prop:rec Justin Jefferson → L
+- 2699971d7886c9e1: prop:rec Tai Felton → W
+- a483275553836dc8: total None → W
+- 54cc0ce6d9b47f6b: prop:pass_att J.J. McCarthy → W
+- 71fe7626aca996d0: prop:rec Parker Washington → W
+- bbe3d9827862dc0f: prop:rush_att Bhayshul Tuten → L
+- 4b6bf71bfa94cdc2: spread None → W
+- 787f871ba8560374: prop:int Geno Smith → L
+- aa662bb50475debc: prop:rec Adonai Mitchell → L
+- cd72c198558326c2: prop:rec Mason Taylor → L
+- 175fb6c301027da5: prop:rush_att Breece Hall → W
+- 96d7429cd4bb00a3: spread None → W
+- 5fb47760162ba30f: prop:pass_att Bo Nix → L
+- 88ebf3baf1a05192: prop:pass_yds Fernando Mendoza → L
+- 177fc29c161c0f4a: prop:rush_att Jonah Coleman → W
+- e618cca97b53b426: prop:pass_att J.J. McCarthy → W
+- ba928941bd97bb3e: prop:pass_att Trevor Lawrence → L
+- b71a08901145810e: spread None → W
+- 75dd270dc0ad6f19: prop:pass_att Kirk Cousins → L
+- 2324dd05aab8d755: prop:pass_td Brock Purdy → L
+- 6cf21ee4e3646bb1: prop:pass_td Kirk Cousins → W
+- a57b4d9d1047777f: prop:pass_yds Kirk Cousins → L
+- b5e7010e562d3aa5: prop:rec_yds Jauan Jennings → W
+- f6f424e2249b4354: prop:rec_yds Jordan Mason → W
+- adb12935ca25c75c: prop:rec Aaron Jones → W
+- 36317c8018f87cbd: prop:rec George Kittle → W
+- 2144e0778ea1015f: prop:rec Jauan Jennings → L
+- 8e16247026ef1bc3: prop:rec Jordan Watkins → W
+- c7df5ba60dececcd: prop:rec Justin Jefferson → W
+- 8070c7f5c3c51221: prop:rec Tai Felton → L
+- 088a11dc3ad0a87f: prop:rush_att Aaron Jones → W
+- ac32a99f9927e7d3: prop:rush_att Christian McCaffrey → W
+- 81d39dd6172f5c78: prop:rush_att Kaelon Black → W
+- 2b73b81db6849d98: prop:rush_yds Aaron Jones → L
+- 9329de47a3cebbb5: prop:rush_yds Jordan Mason → W
+- 37cdf63b5f4e73a1: prop:rush_yds Kaelon Black → W
+- bd4da79ab25fefd4: prop:rush_yds Kirk Cousins → W
+- c8d34be1a98be803: spread None → L
+- a2c06e6d2b2dd216: prop:pass_att Brock Purdy → W
+- f74fd34a726d2e2c: prop:rec_yds Justin Jefferson → L
+- 9d340d356ad843c8: prop:rec Justin Jefferson → L
+- a49a300787dfa3f1: total None → W
+- 8f38973bd8595ddb: prop:pass_att Brock Purdy → W
+- 1757e6f93683a9d8: prop:int Kirk Cousins → W
+- eed53088e7163e7e: prop:rush_att Christian McCaffrey → L
+- df6fb3f7aa8fa813: spread None → L
+- bbb1d958d28625d9: prop:pass_att Brock Purdy → W
+- ed80d60679a796fc: prop:rec_yds Myles Price → W
+- b2073e055da4adbd: prop:rec_yds Tai Felton → W
+- d8da6f52bbf2bbb2: spread None → L
 
 ### 10 largest-|ln(A/L)| losses (10 rows)
 
-- 23821c4a11bbce7d: prop:rec Tyler Warren A=1.0 L=4.5 |ln|=1.504
-- 36da0fc5d40aaf2e: prop:rec_yds Foster Moreau A=8.0 L=2.5 |ln|=1.163
-- 8dee517f52d0c423: prop:rec_yds Dalton Schultz A=11.0 L=30.5 |ln|=1.020
-- c09b22152be81fcd: prop:rec_yds Xavier Hutchinson A=13.0 L=35.5 |ln|=1.005
-- 62cf2912fdb9ccc6: prop:rush_att Daniel Jones A=1.0 L=2.5 |ln|=0.916
-- 2fd19afedf5207ed: prop:rush_att Seth McGowan A=3.0 L=7.5 |ln|=0.916
-- a95803ff7352071f: prop:rush_yds C.J. Stroud A=27.0 L=11.5 |ln|=0.853
-- 8797652168ba517e: prop:rec_yds Anthony Gould A=48.0 L=20.5 |ln|=0.851
-- d3e7e2aa3fac78c1: prop:rec_yds Ashton Dulin A=30.0 L=14.5 |ln|=0.727
-- f68d918db653ca9d: prop:rec_yds Anthony Gould A=48.0 L=23.5 |ln|=0.714
+- 44380d7e93d782a0: prop:rush_yds J.K. Dobbins A=0.0 L=22.5 |ln|=7.719
+- 9bad4b2e70d46d62: prop:rush_att Josh Allen A=0.0 L=6.5 |ln|=6.477
+- 5a6be11d668d6c3f: prop:rec Tony Pollard A=0.0 L=3.5 |ln|=5.858
+- 8f3e1bcb71781296: prop:rec Tony Pollard A=0.0 L=2.5 |ln|=5.521
+- 9fa4ee2a1ebde7a2: prop:rec Tony Pollard A=0.0 L=2.5 |ln|=5.521
+- d51f925222e3c72d: prop:rec Tony Pollard A=0.0 L=2.5 |ln|=5.521
+- 5e9ba8f9b1d735b7: prop:rec_yds Michael Mayer A=4.0 L=31.5 |ln|=2.064
+- 18b7e6eaff198e89: prop:rush_yds Baker Mayfield A=36.0 L=7.5 |ln|=1.569
+- f821ce22e7e475c7: prop:rush_yds Baker Mayfield A=36.0 L=7.5 |ln|=1.569
+- e6559ac3abe383fb: prop:rec_yds Jack Bech A=88.0 L=18.5 |ln|=1.560
 
-### AVAILABILITY / ROLE_SHIFT (28 rows)
+### AVAILABILITY / ROLE_SHIFT (219 rows)
 
+- 945d5d87a0a4e9bd: ROLE_SHIFT prop:rec_yds Aaron Jones
+- b6d0f72290550e3b: ROLE_SHIFT prop:rec Aaron Jones
+- 9138520e362a3351: ROLE_SHIFT prop:rec Christian McCaffrey
+- c10f6a198798dca3: ROLE_SHIFT prop:rec George Kittle
+- 3664a4e183f6b8a8: ROLE_SHIFT prop:rec Justin Jefferson
+- 39cf15c6fa16c007: ROLE_SHIFT prop:rush_att Kaelon Black
 - 996d2e30bfafc450: ROLE_SHIFT prop:rec_yds Ashton Dulin
 - 8dee517f52d0c423: ROLE_SHIFT prop:rec_yds Dalton Schultz
 - 4d66f43e01f4a069: ROLE_SHIFT prop:rec Ashton Dulin
 - 8dcd3691f53246c2: ROLE_SHIFT prop:rec Dalton Schultz
 - 191eb80dd4f6c017: ROLE_SHIFT prop:rec Jonathan Taylor
 - b7b71871988103ef: ROLE_SHIFT prop:rush_yds C.J. Stroud
+- 5855a19b6c89c400: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- 59d4bdde9b6304f8: ROLE_SHIFT prop:pass_cmp J.J. McCarthy
 - c6464bf678219a70: ROLE_SHIFT prop:rush_att David Montgomery
 - ddeda002f1d91e76: ROLE_SHIFT prop:rush_att David Montgomery
 - 311817cf8ae38b81: ROLE_SHIFT prop:rush_att David Montgomery
@@ -183,5 +590,188 @@ Generated: 2026-11-22T12:09:15.749196+00:00
 - 07e38ba74fdf298a: ROLE_SHIFT prop:rush_att David Montgomery
 - f2adcb548b327928: ROLE_SHIFT prop:rec Xavier Hutchinson
 - ea6846e377a966d1: ROLE_SHIFT prop:rush_att David Montgomery
+- f2dd259289023923: ROLE_SHIFT prop:rush_att D'Andre Swift
+- ce5e24af121b0810: ROLE_SHIFT prop:rush_att Tyler Allgeier
+- 00acb6ed83b9a67d: ROLE_SHIFT prop:pass_att Fernando Mendoza
+- 2d1babbcf457fb77: ROLE_SHIFT prop:rush_att Jonah Coleman
+- 91ea3151cca315ce: ROLE_SHIFT prop:rush_yds Jonah Coleman
+- 929a5b9c76f9d076: ROLE_SHIFT prop:rush_att Tyler Allgeier
+- 9938471a19a62065: ROLE_SHIFT prop:rec Kenny Gainwell
+- 0b65cb2da708fa98: ROLE_SHIFT prop:rec Justice Hill
+- 1922fc075c6a4c71: ROLE_SHIFT prop:rec Mark Andrews
+- bbbfb4f57e78e542: ROLE_SHIFT prop:pass_att Cam Ward
+- cb833aba696a5d24: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- de748efd2cc6164f: ROLE_SHIFT prop:rush_yds J.J. McCarthy
+- 7377364985456ab1: ROLE_SHIFT prop:pass_yds Fernando Mendoza
+- a148d6bd7e9a9bca: ROLE_SHIFT prop:rush_att Jonah Coleman
+- c07424e0a717e14b: ROLE_SHIFT prop:rush_yds Jonah Coleman
+- ff30d69eb809269a: ROLE_SHIFT prop:rush_att D'Andre Swift
+- 47d2ac1beb1e8595: ROLE_SHIFT prop:rush_att Travis Etienne Jr.
+- b8658ed8360b791a: ROLE_SHIFT prop:rush_att Emmett Johnson
+- 8e387470e1fb1fa4: ROLE_SHIFT prop:rush_att Tyler Allgeier
+- ae991a97a6aab589: ROLE_SHIFT prop:rec_yds Mark Andrews
+- 0ea29cfc0e7324dc: ROLE_SHIFT prop:pass_att Cam Ward
+- 1acb6ea01b55d0b9: ROLE_SHIFT prop:rec George Pickens
+- d99cc50d33e9fb48: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- 61fac2b20e7c8e64: ROLE_SHIFT prop:rec Theo Johnson
+- 0df300ac37e95809: ROLE_SHIFT prop:rush_att Saquon Barkley
+- e96ea41d1b403ad7: ROLE_SHIFT prop:rec Justin Jefferson
+- a7ecfddff290d4da: ROLE_SHIFT prop:rec Tai Felton
+- 7d1862ce535b8420: ROLE_SHIFT prop:pass_cmp Fernando Mendoza
+- e7a6cee11f46bdb1: ROLE_SHIFT prop:pass_yds Fernando Mendoza
+- 8ffe0ef656ad2e63: ROLE_SHIFT prop:rush_att Fernando Mendoza
+- 726649f5ec842724: ROLE_SHIFT prop:rush_att Jonah Coleman
+- dd2692d82477f5e1: ROLE_SHIFT prop:rush_yds Jonah Coleman
+- 74819b364c642906: ROLE_SHIFT prop:rush_att Kyle Monangai
+- aaefa81dfc26cb89: ROLE_SHIFT prop:rush_att Travis Etienne Jr.
+- f1617bfe6ea303a6: ROLE_SHIFT prop:rush_att Emmett Johnson
+- 20eed2ebef66c0ea: ROLE_SHIFT prop:pass_att Cam Ward
+- 4e4524f9c9bd7d54: ROLE_SHIFT prop:rec Myles Price
+- 6025fbf09f602cf7: ROLE_SHIFT prop:rec Tai Felton
+- 2020711cf311906a: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- 5e77f2e2005f9075: ROLE_SHIFT prop:rec Jaylen Warren
+- 2dc59a62cbcfdc3f: ROLE_SHIFT prop:rush_yds Saquon Barkley
+- 1c7ec517709661ab: ROLE_SHIFT prop:pass_yds Fernando Mendoza
+- 29a80507d4c2930c: ROLE_SHIFT prop:rush_att Ashton Jeanty
+- 60f91e7d09bfbdee: ROLE_SHIFT prop:rush_att Jonah Coleman
+- 71dedb4fc8462a7c: ROLE_SHIFT prop:rush_yds Jonah Coleman
+- 70068549ffe4bf99: ROLE_SHIFT prop:pass_att Cam Ward
+- 6dd345ac265559ae: ROLE_SHIFT prop:pass_cmp Fernando Mendoza
+- 69b5f31139351532: ROLE_SHIFT prop:pass_yds Fernando Mendoza
+- 0c193338cd737499: ROLE_SHIFT prop:rush_att Jonah Coleman
+- 49e14f1751df92f2: ROLE_SHIFT prop:rush_att Emmett Johnson
+- a1b4cb73d8c054a3: ROLE_SHIFT prop:rec Justin Jefferson
+- 66d8d4921254ce06: ROLE_SHIFT prop:rec Tai Felton
+- 15fcb06397771036: ROLE_SHIFT prop:rush_att Saquon Barkley
+- eaab7232939a934f: ROLE_SHIFT prop:rush_yds Baker Mayfield
+- 9c214e8f67ba755a: ROLE_SHIFT prop:rush_att D'Andre Swift
+- 8f837c23e8b2923a: ROLE_SHIFT prop:rush_att Travis Etienne Jr.
+- fafb8a9920d75192: ROLE_SHIFT prop:rush_att Emmett Johnson
+- 3f15b1b74fb614fb: ROLE_SHIFT prop:rush_yds Emmett Johnson
+- 06ac9e421ef5a0a6: ROLE_SHIFT prop:rec Kenny Gainwell
+- e41bcef0ff1f2eb0: ROLE_SHIFT prop:rush_yds Baker Mayfield
+- 059a116aa7c125c6: ROLE_SHIFT prop:pass_att Cam Ward
+- 22d8074ec4b494b9: ROLE_SHIFT prop:pass_att Fernando Mendoza
+- 934779b24b293cf9: ROLE_SHIFT prop:pass_yds Fernando Mendoza
+- 92416d5d92db9843: ROLE_SHIFT prop:rush_yds Jonah Coleman
+- 9313b7b74df4f05b: ROLE_SHIFT prop:rush_att D'Andre Swift
+- 8b958aa16d6fee7d: ROLE_SHIFT prop:rush_att Emmett Johnson
+- 5ea64f92629d216e: ROLE_SHIFT prop:rush_yds Emmett Johnson
+- 2c00a306142586b7: ROLE_SHIFT prop:rec Amon-Ra St. Brown
+- e60cfa587682f812: ROLE_SHIFT prop:pass_att Cam Ward
+- 1572d8af1218789c: ROLE_SHIFT prop:rec Justin Jefferson
+- ffe558892183a04b: ROLE_SHIFT prop:rec Tai Felton
+- 37a5f36c049004fa: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- 9593deb84aff81f3: ROLE_SHIFT prop:rec Parker Washington
+- ed60a0f0bd009126: ROLE_SHIFT prop:rush_att Saquon Barkley
+- 04ad67bf239f6c67: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- b8a5773d40567997: ROLE_SHIFT prop:rush_yds J.J. McCarthy
+- 99a128f0bfbb8b8b: ROLE_SHIFT prop:pass_att Fernando Mendoza
+- 6201fcb257946c09: ROLE_SHIFT prop:pass_yds Fernando Mendoza
+- ed4df7910c91e16b: ROLE_SHIFT prop:rush_att Jonah Coleman
+- 0fcdd8b488420198: ROLE_SHIFT prop:rush_att Emmett Johnson
+- 18b7e6eaff198e89: ROLE_SHIFT prop:rush_yds Baker Mayfield
+- 5c37f78fae02b124: ROLE_SHIFT prop:pass_att Cam Ward
+- 072d1bbf22845c3b: ROLE_SHIFT prop:rec_yds Tai Felton
+- 25bb618bbf53af76: ROLE_SHIFT prop:rec Justin Jefferson
+- 87d3bf5c72051b8d: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- c6b120f1fca6ff44: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- ee49d79577ccb09e: ROLE_SHIFT prop:pass_att Fernando Mendoza
+- 9be800d085d11e5f: ROLE_SHIFT prop:rush_att Jonah Coleman
+- 2faee21689bffa33: ROLE_SHIFT prop:rush_yds Jonah Coleman
+- 1b9626f371bffeab: ROLE_SHIFT prop:rush_att D'Andre Swift
+- 4b2411cd3bbc8cd5: ROLE_SHIFT prop:rush_att Emmett Johnson
+- f821ce22e7e475c7: ROLE_SHIFT prop:rush_yds Baker Mayfield
+- 5ee47834d557a6ce: ROLE_SHIFT prop:rec Mark Andrews
+- 032939217826f57e: ROLE_SHIFT prop:rec_yds Tre Harris
+- 9a526cf47ce38f1c: ROLE_SHIFT prop:pass_att Cam Ward
+- 926c339cae2f0cee: ROLE_SHIFT prop:rec Tai Felton
+- 54093030113ef730: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- 4ab4c478d0abf109: ROLE_SHIFT prop:pass_yds Fernando Mendoza
+- 8a6a57866ad9380a: ROLE_SHIFT prop:rush_att Jonah Coleman
+- c45b9cafa7b18fd0: ROLE_SHIFT prop:rush_att Emmett Johnson
+- 9ff7c16b64637501: ROLE_SHIFT prop:rec Kenny Gainwell
+- ccacb18d0f8cfb6e: ROLE_SHIFT prop:pass_att Cam Ward
+- f9b2dbd2b7edeaa9: ROLE_SHIFT prop:rec_yds George Pickens
+- d7a08e2027d5675d: ROLE_SHIFT prop:rec Carnell Tate
+- fcfd6a1309716621: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- 9f51ce5d3573c94f: ROLE_SHIFT prop:rec Parker Washington
+- cc4631456b571b9f: ROLE_SHIFT prop:rush_att Emmett Johnson
+- 31bc7dc47a37faa7: ROLE_SHIFT prop:pass_att Cam Ward
+- e32e7a87f67e89a8: ROLE_SHIFT prop:rec George Pickens
+- b3aef4b202f1d675: ROLE_SHIFT prop:rush_att Saquon Barkley
+- e6ab54d4af06ecf2: ROLE_SHIFT prop:pass_att Fernando Mendoza
+- 00a5421cbe0df35d: ROLE_SHIFT prop:pass_cmp Fernando Mendoza
+- d5a5f6e125e177ae: ROLE_SHIFT prop:pass_yds Fernando Mendoza
+- 7d184b35683d6aa6: ROLE_SHIFT prop:rec_yds Evan Engram
+- e6559ac3abe383fb: ROLE_SHIFT prop:rec_yds Jack Bech
+- 17c6dd1885cc70e0: ROLE_SHIFT prop:rec Evan Engram
+- c3a64e30db6370d3: ROLE_SHIFT prop:rec Jack Bech
+- 5f43f644afdd0a0a: ROLE_SHIFT prop:rec Jonah Coleman
+- a2082a61cce77de7: ROLE_SHIFT prop:rec Marvin Mims Jr.
+- 4b64e0b28c30d673: ROLE_SHIFT prop:rush_att Ashton Jeanty
+- 2824c4ea6ba17cf4: ROLE_SHIFT prop:rush_att Fernando Mendoza
+- b2c46e44ca47e4a4: ROLE_SHIFT prop:rush_att Jonah Coleman
+- 79d45bf0d107abcb: ROLE_SHIFT prop:rush_att Mike Washington Jr.
+- 36d92657d0b2d75d: ROLE_SHIFT prop:rush_yds Jonah Coleman
+- 34903a9fee3c2d2f: ROLE_SHIFT prop:rush_yds Mike Washington Jr.
+- e5c0b8794c2d7a34: ROLE_SHIFT prop:rec_yds Charlie Kolar
+- 6556fec4eaa3507b: ROLE_SHIFT prop:rec_yds Keaton Mitchell
+- b7e1b8eb56f6faaa: ROLE_SHIFT prop:rec_yds Omarion Hampton
+- b5336cfc38a3ab36: ROLE_SHIFT prop:rec_yds Tre Harris
+- ec773378549ba900: ROLE_SHIFT prop:rec Braelon Allen
+- db0a1a1e74db0c91: ROLE_SHIFT prop:rec Charlie Kolar
+- 2e4cedd7d6a4c4c5: ROLE_SHIFT prop:rec Keaton Mitchell
+- 5ece51d6dfe3d48c: ROLE_SHIFT prop:rec Ladd McConkey
+- 58acbe23f9aaed56: ROLE_SHIFT prop:rec Omarion Hampton
+- 21dcefa03ff6129c: ROLE_SHIFT prop:rec Quentin Johnston
+- 0de61498ba0ab13c: ROLE_SHIFT prop:rec Tre Harris
+- 1999840de536a5cc: ROLE_SHIFT prop:rush_yds Geno Smith
+- beaa500eae29e482: ROLE_SHIFT prop:rush_yds Justin Herbert
+- 2821f5a45dfc3de7: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- e08e6abd87135665: ROLE_SHIFT prop:pass_cmp J.J. McCarthy
+- dd562511078fc2d6: ROLE_SHIFT prop:rec_yds Brenton Strange
+- 5c00bb311868f598: ROLE_SHIFT prop:rec_yds Brian Thomas Jr
+- d4500612f68322a0: ROLE_SHIFT prop:rec_yds Isaiah Likely
+- 7fac3926b41c2677: ROLE_SHIFT prop:rec_yds Josh Cameron
+- daa0a4d610f79863: ROLE_SHIFT prop:rec_yds Theo Johnson
+- 508cf23d9a2a8e4d: ROLE_SHIFT prop:rec_yds Travis Hunter
+- b287ce3a6c5a1601: ROLE_SHIFT prop:rec Brenton Strange
+- ff4d14d03dda2976: ROLE_SHIFT prop:rec Brian Thomas Jr
+- d38e2e3149f63355: ROLE_SHIFT prop:rec Cam Skattebo
+- 410b118cc2c3be16: ROLE_SHIFT prop:rec Isaiah Likely
+- 58ee2bc9b21fb472: ROLE_SHIFT prop:rec Josh Cameron
+- b71777b2aedca047: ROLE_SHIFT prop:rec Malik Nabers
+- b90884a6e7c90292: ROLE_SHIFT prop:rec Parker Washington
+- 267e7d645e726111: ROLE_SHIFT prop:rec Theo Johnson
+- fbcbdff68d31d618: ROLE_SHIFT prop:rec Travis Hunter
+- 102ef823c865fcd0: ROLE_SHIFT prop:rush_yds Devin Singletary
+- 48e6299ae0f39062: ROLE_SHIFT prop:rush_yds J.J. McCarthy
+- 38c14abad74954b5: ROLE_SHIFT prop:pass_yds Fernando Mendoza
+- 0c1e4b84e33875b1: ROLE_SHIFT prop:rush_att Jonah Coleman
+- 000e12bb8f759354: ROLE_SHIFT prop:rec Justin Jefferson
+- 2699971d7886c9e1: ROLE_SHIFT prop:rec Tai Felton
+- 54cc0ce6d9b47f6b: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- 71fe7626aca996d0: ROLE_SHIFT prop:rec Parker Washington
+- 88ebf3baf1a05192: ROLE_SHIFT prop:pass_yds Fernando Mendoza
+- 177fc29c161c0f4a: ROLE_SHIFT prop:rush_att Jonah Coleman
+- e618cca97b53b426: ROLE_SHIFT prop:pass_att J.J. McCarthy
+- be12676748760044: ROLE_SHIFT prop:rec_yds Aaron Jones
+- 847f8d1a068d770b: ROLE_SHIFT prop:rec_yds George Kittle
+- b5e7010e562d3aa5: ROLE_SHIFT prop:rec_yds Jauan Jennings
+- 1d339d062f3cc58d: ROLE_SHIFT prop:rec_yds Justin Jefferson
+- 2c147092b78e0601: ROLE_SHIFT prop:rec_yds Tai Felton
+- adb12935ca25c75c: ROLE_SHIFT prop:rec Aaron Jones
+- 338f946cce49bc5c: ROLE_SHIFT prop:rec Christian McCaffrey
+- 36317c8018f87cbd: ROLE_SHIFT prop:rec George Kittle
+- 2144e0778ea1015f: ROLE_SHIFT prop:rec Jauan Jennings
+- 8e16247026ef1bc3: ROLE_SHIFT prop:rec Jordan Watkins
+- c7df5ba60dececcd: ROLE_SHIFT prop:rec Justin Jefferson
+- 21c10a468b07d84c: ROLE_SHIFT prop:rec Myles Price
+- 8070c7f5c3c51221: ROLE_SHIFT prop:rec Tai Felton
+- 81d39dd6172f5c78: ROLE_SHIFT prop:rush_att Kaelon Black
+- f74fd34a726d2e2c: ROLE_SHIFT prop:rec_yds Justin Jefferson
+- 9d340d356ad843c8: ROLE_SHIFT prop:rec Justin Jefferson
+- b2073e055da4adbd: ROLE_SHIFT prop:rec_yds Tai Felton
 
-Total flagged: 108
+Total flagged: 660
