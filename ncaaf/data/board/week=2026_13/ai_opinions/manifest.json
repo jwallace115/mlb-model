@@ -227,5 +227,70 @@
     "a82769fe54a0f8c714667b8720b67449": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261123T213404Z.parquet",
+  "sha256": "30a5497edccdedc36f89d2a73dfe8dd24308fa92bf66771979afd59618814b9c",
+  "logged_utc": "2026-11-23T21:34:04.190327+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-25T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261123T213006Z.parquet",
+   "inputs_digest": "{\"4814277a6e26955eb1df064fed7a3bcb\": \"18a298b0285067fa\"}",
+   "components": {
+    "4814277a6e26955eb1df064fed7a3bcb": {
+     "pinnacle_h2h": [
+      [
+       "Eastern Michigan Eagles",
+       0,
+       -218
+      ],
+      [
+       "Kent State Golden Flashes",
+       0,
+       184
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Eastern Michigan Eagles",
+       -5.5,
+       -110
+      ],
+      [
+       "Kent State Golden Flashes",
+       5.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -106
+      ],
+      [
+       "Under",
+       46.5,
+       -112
+      ]
+     ],
+     "kalshi_snap": "snap_20261123T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "4814277a6e26955eb1df064fed7a3bcb": "line_move: pinnacle totals Over 45.5\u219246.5; line_move: pinnacle totals Under 45.5\u219246.5"
+   }
+  }
  }
 ]
