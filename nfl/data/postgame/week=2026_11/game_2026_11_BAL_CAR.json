@@ -1,0 +1,114 @@
+{
+  "game_id": "2026_11_BAL_CAR",
+  "week": 11,
+  "home": "CAR",
+  "away": "BAL",
+  "final_score": {
+    "home": 35,
+    "away": 33
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 35,
+        "away": 33
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 35,
+        "away": 33
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 69,
+      "dropbacks": 33,
+      "rush_attempts": 36,
+      "pass_rate": 0.4782608695652174,
+      "run_rate": 0.5217391304347826,
+      "pass_oe": -3.3072723623584297
+    },
+    "away": {
+      "plays": 61,
+      "dropbacks": 39,
+      "rush_attempts": 22,
+      "pass_rate": 0.639344262295082,
+      "run_rate": 0.360655737704918,
+      "pass_oe": 3.9981388587218065
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 1,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 2,
+      "total": 3
+    }
+  },
+  "non_offensive_tds": 1,
+  "red_zone": {
+    "home": {
+      "trips": 7,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Hill",
+      "team": "BAL",
+      "quarter": 1,
+      "play_id": 741,
+      "desc": "(4:50) (Shotgun) 11-J.Brissett pass short right to 43-J.Hill to CAR 24 for 9 yards (33-T.Dodson; 95-D.Brown). CAR-33-T.Dodson was injured during the play."
+    },
+    {
+      "player": "R.Fitzgerald",
+      "team": "CAR",
+      "quarter": 2,
+      "play_id": 1825,
+      "desc": "10-R.Fitzgerald extra point is GOOD, Center-44-J.Jansen, Holder-6-S.Martin. CAR-67-C.Bullock was injured during the play. PENALTY on BAL-97-E.Burke, Unnecessary Roughness, 1 yard, enforced at BAL 15 -"
+    },
+    {
+      "player": "R.Bateman",
+      "team": "BAL",
+      "quarter": 3,
+      "play_id": 3136,
+      "desc": "(4:58) (Shotgun) 11-J.Brissett pass incomplete short left to 7-R.Bateman (26-C.Smith-Wade). BAL-7-R.Bateman was injured during the play."
+    },
+    {
+      "player": "J.Coker",
+      "team": "CAR",
+      "quarter": 4,
+      "play_id": 4194,
+      "desc": "(3:27) (Shotgun) 9-B.Young pass short left to 18-J.Coker to BAL 41 for no gain (65-D.Olajiga). BAL-97-E.Burke was injured during the play."
+    },
+    {
+      "player": "J.Coker",
+      "team": "CAR",
+      "quarter": 4,
+      "play_id": 4269,
+      "desc": "(1:58) (Shotgun) 73-S.Forsythe reported in as eligible. 9-B.Young pass short middle to 18-J.Coker to BAL 19 for 6 yards (2-N.Wiggins; 0-R.Smith). CAR-18-J.Coker was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

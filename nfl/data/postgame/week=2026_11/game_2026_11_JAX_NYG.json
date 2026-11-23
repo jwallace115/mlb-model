@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_11_JAX_NYG",
+  "week": 11,
+  "home": "NYG",
+  "away": "JAX",
+  "final_score": {
+    "home": 23,
+    "away": 18
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 18
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 23,
+        "away": 18
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 65,
+      "dropbacks": 40,
+      "rush_attempts": 25,
+      "pass_rate": 0.6153846153846154,
+      "run_rate": 0.3846153846153846,
+      "pass_oe": 11.153071979755786
+    },
+    "away": {
+      "plays": 69,
+      "dropbacks": 51,
+      "rush_attempts": 18,
+      "pass_rate": 0.7391304347826086,
+      "run_rate": 0.26086956521739135,
+      "pass_oe": 5.99216354744775
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 2,
+      "fumbles_lost": 0,
+      "total": 2
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 6,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "B.Tuten",
+      "team": "JAX",
+      "quarter": 4,
+      "play_id": 3543,
+      "desc": "(13:03) (Shotgun) 16-T.Lawrence pass short middle to 33-B.Tuten to NYG 12 for 1 yard (22-A.Phillips). JAX-72-W.Little was injured during the play."
+    },
+    {
+      "player": "J.Cameron",
+      "team": "JAX",
+      "quarter": 4,
+      "play_id": 4255,
+      "desc": "(7:50) (No Huddle, Shotgun) 16-T.Lawrence pass short middle to 19-J.Cameron to NYG 44 for 16 yards (24-A.Washington; 8-J.Holland). NYG-5-K.Thibodeaux was injured during the play."
+    },
+    {
+      "player": "B.Tuten",
+      "team": "JAX",
+      "quarter": 4,
+      "play_id": 4550,
+      "desc": "(5:47) (Shotgun) 33-B.Tuten right guard to JAX 40 for 8 yards (22-A.Phillips). JAX-33-B.Tuten was injured during the play."
+    },
+    {
+      "player": "C.Rodriguez",
+      "team": "JAX",
+      "quarter": 4,
+      "play_id": 4709,
+      "desc": "(4:28) (No Huddle, Shotgun) 16-T.Lawrence pass short middle to 24-C.Rodriguez to NYG 8 for 13 yards (41-M.McFadden). NYG-41-M.McFadden was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

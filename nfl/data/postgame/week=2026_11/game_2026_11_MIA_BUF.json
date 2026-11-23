@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_11_MIA_BUF",
+  "week": 11,
+  "home": "BUF",
+  "away": "MIA",
+  "final_score": {
+    "home": 26,
+    "away": 9
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 175,
+      "plays_leading_14": 175,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 26,
+        "away": 9
+      },
+      "garbage_time_plays": 14
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 175,
+      "plays_trailing_14": 175,
+      "halftime_score": {
+        "home": 26,
+        "away": 9
+      },
+      "garbage_time_plays": 14
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 76,
+      "dropbacks": 49,
+      "rush_attempts": 27,
+      "pass_rate": 0.6447368421052632,
+      "run_rate": 0.35526315789473684,
+      "pass_oe": 10.277582910389473
+    },
+    "away": {
+      "plays": 55,
+      "dropbacks": 35,
+      "rush_attempts": 20,
+      "pass_rate": 0.6363636363636364,
+      "run_rate": 0.36363636363636365,
+      "pass_oe": -6.35737327107212
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 2,
+      "fumbles_lost": 0,
+      "total": 2
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 1,
+      "touchdowns": 0
+    }
+  },
+  "injuries": [
+    {
+      "player": "K.Latu",
+      "team": "BUF",
+      "quarter": 2,
+      "play_id": 1905,
+      "desc": "(1:45) (Shotgun) 17-J.Allen pass short middle intended for 83-K.Latu INTERCEPTED by 10-J.Rodriguez (44-C.Robinson) at BUF 48. 10-J.Rodriguez to BUF 22 for 26 yards (26-T.Johnson). BUF-2-D.Moore was in"
+    },
+    {
+      "player": "M.Washington",
+      "team": "MIA",
+      "quarter": 2,
+      "play_id": 1935,
+      "desc": "(1:33) 6-M.Washington up the middle to BUF 26 for -4 yards (90-D.Carter). MIA-71-J.Savaiinaea was injured during the play."
+    },
+    {
+      "player": "C.Bell",
+      "team": "MIA",
+      "quarter": 2,
+      "play_id": 2230,
+      "desc": "(:18) (Shotgun) 14-K.McCord pass deep middle intended for 18-C.Bell INTERCEPTED by 3-D.Hamlin (55-M.Hoecht) at BUF 47. 3-D.Hamlin to MIA 40 for 13 yards (0-O.Gordon). The Replay Official reviewed the "
+    }
+  ],
+  "ftn": "not covered"
+}

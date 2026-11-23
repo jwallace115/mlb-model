@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_11_TEN_DAL",
+  "week": 11,
+  "home": "DAL",
+  "away": "TEN",
+  "final_score": {
+    "home": 51,
+    "away": 30
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 178,
+      "plays_leading_14": 178,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 51,
+        "away": 30
+      },
+      "garbage_time_plays": 46
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 178,
+      "plays_trailing_14": 178,
+      "halftime_score": {
+        "home": 51,
+        "away": 30
+      },
+      "garbage_time_plays": 46
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 64,
+      "dropbacks": 34,
+      "rush_attempts": 30,
+      "pass_rate": 0.53125,
+      "run_rate": 0.46875,
+      "pass_oe": 9.52911904406926
+    },
+    "away": {
+      "plays": 63,
+      "dropbacks": 35,
+      "rush_attempts": 28,
+      "pass_rate": 0.5555555555555556,
+      "run_rate": 0.4444444444444444,
+      "pass_oe": -14.347666902328605
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 7,
+      "touchdowns": 6
+    },
+    "away": {
+      "trips": 6,
+      "touchdowns": 2
+    }
+  },
+  "injuries": [
+    {
+      "player": "T.Pollard",
+      "team": "TEN",
+      "quarter": 2,
+      "play_id": 1367,
+      "desc": "(12:55) (Shotgun) 20-T.Pollard right tackle to DAL 40 for 8 yards (53-D.Winters). DAL-53-D.Winters was injured during the play."
+    },
+    {
+      "player": "C.Lamb",
+      "team": "DAL",
+      "quarter": 2,
+      "play_id": 1760,
+      "desc": "(5:58) 4-D.Prescott pass short left to 88-C.Lamb to TEN 14 for 6 yards (18-C.Flott). TEN-18-C.Flott was injured during the play."
+    },
+    {
+      "player": "E.Ayomanor",
+      "team": "TEN",
+      "quarter": 4,
+      "play_id": 3820,
+      "desc": "(9:31) (No Huddle, Shotgun) 1-C.Ward pass short left to 5-E.Ayomanor to DAL 40 for 11 yards (2-C.Durant). DAL-2-C.Durant was injured during the play. Penalty on DAL-13-C.Downs, Defensive Holding, decl"
+    }
+  ],
+  "ftn": "not covered"
+}

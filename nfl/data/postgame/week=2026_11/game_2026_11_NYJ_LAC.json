@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_11_NYJ_LAC",
+  "week": 11,
+  "home": "LAC",
+  "away": "NYJ",
+  "final_score": {
+    "home": 24,
+    "away": 27
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 24,
+        "away": 27
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 24,
+        "away": 27
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 57,
+      "dropbacks": 27,
+      "rush_attempts": 30,
+      "pass_rate": 0.47368421052631576,
+      "run_rate": 0.5263157894736843,
+      "pass_oe": -13.969871774315834
+    },
+    "away": {
+      "plays": 59,
+      "dropbacks": 22,
+      "rush_attempts": 37,
+      "pass_rate": 0.3728813559322034,
+      "run_rate": 0.6271186440677966,
+      "pass_oe": -8.40400056913495
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 3,
+      "touchdowns": 3
+    },
+    "away": {
+      "trips": 5,
+      "touchdowns": 3
+    }
+  },
+  "injuries": [
+    {
+      "player": "K.Mitchell",
+      "team": "LAC",
+      "quarter": 1,
+      "play_id": 414,
+      "desc": "(7:21) (Shotgun) 10-J.Herbert pass short right to 34-K.Mitchell to NYJ 35 for 6 yards (1-A.Thomas). LAC-34-K.Mitchell was injured during the play."
+    },
+    {
+      "player": "B.Allen",
+      "team": "NYJ",
+      "quarter": 2,
+      "play_id": 1375,
+      "desc": "(6:48) 7-G.Smith pass short middle to 0-B.Allen to LAC 28 for 9 yards (58-M.Wax). LAC-90-A.Mesidor was injured during the play."
+    },
+    {
+      "player": "B.Allen",
+      "team": "NYJ",
+      "quarter": 3,
+      "play_id": 2451,
+      "desc": "(6:11) (Shotgun) 0-B.Allen up the middle to LAC 17 for 9 yards (2-E.Molden; 33-D.Leonard). LAC-94-D.Tomlinson was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}

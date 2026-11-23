@@ -1,0 +1,100 @@
+{
+  "game_id": "2026_11_PIT_PHI",
+  "week": 11,
+  "home": "PHI",
+  "away": "PIT",
+  "final_score": {
+    "home": 19,
+    "away": 16
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 19,
+        "away": 16
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 19,
+        "away": 16
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 50,
+      "dropbacks": 24,
+      "rush_attempts": 26,
+      "pass_rate": 0.48,
+      "run_rate": 0.52,
+      "pass_oe": -10.625625591652065
+    },
+    "away": {
+      "plays": 69,
+      "dropbacks": 49,
+      "rush_attempts": 20,
+      "pass_rate": 0.7101449275362319,
+      "run_rate": 0.28985507246376807,
+      "pass_oe": 6.2857689362176705
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 1,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 2,
+      "touchdowns": 0
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Warren",
+      "team": "PIT",
+      "quarter": 2,
+      "play_id": 1306,
+      "desc": "(8:19) (No Huddle, Shotgun) 8-A.Rodgers pass short left to 30-J.Warren to PIT 27 for no gain (11-J.Campbell). PHI-11-J.Campbell was injured during the play."
+    },
+    {
+      "player": "A.Rodgers",
+      "team": "PIT",
+      "quarter": 4,
+      "play_id": 3192,
+      "desc": "(10:25) 8-A.Rodgers sacked at PIT 22 for -9 yards (96-G.Hall). PHI-31-J.Jones was injured during the play."
+    },
+    {
+      "player": "M.Hurleman",
+      "team": "PIT",
+      "quarter": 4,
+      "play_id": 3806,
+      "desc": "(2:10) (Shotgun) 8-A.Rodgers pass incomplete deep right to 84-M.Hurleman (31-J.Jones). PHI-95-T.Robinson was injured during the play. PHI-31-J.Jones was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}
