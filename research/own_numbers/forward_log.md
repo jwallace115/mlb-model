@@ -77,3 +77,17 @@ Games: 13  |  Confident: 6
 | LV@DEN | away | +2.5 | -10.0 | -115 | -7.5 |
 | CIN@WAS | home | +0.2 | 6.0 | -105 | +6.2 |
 
+
+## Week 12 (2026) -- PRIMARY
+Run: 2026-11-23T17:19:45Z  |  Manifest SHA: da59272230201888...
+Games: 16  |  Confident: 6
+
+| Game | Side | Our # | HR Quote | HR Price | Gap |
+|------|------|--------|----------|----------|-----|
+| PHI@DAL | away | +2.9 | -8.5 | -110.0 | -5.6 |
+| NO@CIN | away | +5.1 | -10.0 | -110.0 | -4.9 |
+| BAL@HOU | away | +0.9 | -6.5 | -110.0 | -5.6 |
+| NYG@IND | home | +1.2 | 6.5 | -105.0 | +7.7 |
+| TEN@JAX | away | +8.2 | -14.0 | -115.0 | -5.8 |
+| WAS@ARI | home | +1.4 | 7.0 | -110.0 | +8.4 |
+
