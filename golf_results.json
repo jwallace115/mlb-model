@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-23T11:03:37.744294",
+  "generated_at": "2026-11-23T12:01:33.242236",
   "sport": "golf",
   "event_name": "The RSM Classic",
   "event_id": 493,
@@ -589,21 +589,13 @@
       "clv": -13.5
     },
     "top_20": {
-      "n": 5945,
-      "hit_rate": 38.6,
-      "roi": 12.2,
-      "clv": -8.5
+      "n": 6029,
+      "hit_rate": 38.7,
+      "roi": 11.2,
+      "clv": -8.6
     }
   },
   "recent_results": [
-    {
-      "event_name": "Genesis Scottish Open",
-      "event_id": 541,
-      "year": 2026,
-      "n_candidates": 935,
-      "hit_rate": 44.8,
-      "roi": 30.9
-    },
     {
       "event_name": "Bank of Utah Championship",
       "event_id": 554,
@@ -635,6 +627,14 @@
       "n_candidates": 750,
       "hit_rate": 53.1,
       "roi": -9.3
+    },
+    {
+      "event_name": "Austin Championship",
+      "event_id": 558,
+      "year": 2026,
+      "n_candidates": 84,
+      "hit_rate": 45.2,
+      "roi": -56.3
     }
   ],
   "matchup_candidates": [
