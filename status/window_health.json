@@ -30,16 +30,6 @@
   "freeze_file": null
  },
  {
-  "sport": "ncaaf",
-  "window": "event",
-  "started_utc": "2026-11-23T22:19:04.653131+00:00",
-  "finished_utc": "2026-11-23T22:19:04.653131+00:00",
-  "result": "no_triggers",
-  "step": "window_watch",
-  "message": "",
-  "freeze_file": null
- },
- {
   "sport": "nfl",
   "window": "prekick",
   "started_utc": "2026-11-23T22:27:22.073864+00:00",
@@ -50,13 +40,23 @@
   "freeze_file": null
  },
  {
+  "sport": "ncaaf",
+  "window": "event",
+  "started_utc": "2026-11-23T22:49:05.098466+00:00",
+  "finished_utc": "2026-11-23T22:49:05.098466+00:00",
+  "result": "no_triggers",
+  "step": "window_watch",
+  "message": "",
+  "freeze_file": null
+ },
+ {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-23T22:28:41.768382+00:00",
-  "finished_utc": "2026-11-23T22:28:41.768382+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-23T22:49:17.807129+00:00",
+  "finished_utc": "2026-11-23T22:49:17.807129+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['anchor_prekick']",
-  "freeze_file": "ai_opinions_20261123T221704Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]
