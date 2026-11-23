@@ -16457,5 +16457,145 @@
     "60e1d27b083a335b722c2c852ea85612": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261123T150203Z.parquet",
+  "sha256": "d0fd8cb1ce6ff3d21c34f71d7883d72da555f349e5b50c65e0f6b07bfafcf38f",
+  "logged_utc": "2026-11-23T15:02:03.325996+00:00",
+  "rows": 70,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.957,
+  "revised_rows": 70,
+  "oldest_source_age_min": 1933.9,
+  "first_kickoff_utc": "2026-11-24T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261123T150011Z.parquet",
+   "inputs_digest": "{\"3a60ed1d20004aa4d4772b2c1a2272e7\": \"d3afe7b8b8075c9b\"}",
+   "components": {
+    "3a60ed1d20004aa4d4772b2c1a2272e7": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -300
+      ],
+      [
+       "Washington Commanders",
+       0,
+       240
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cincinnati Bengals",
+       -6.0,
+       -115
+      ],
+      [
+       "Washington Commanders",
+       6.0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       55.0,
+       -110
+      ],
+      [
+       "Under",
+       55.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -294
+      ],
+      [
+       "Washington Commanders",
+       0,
+       253
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bengals",
+       -6.5,
+       101
+      ],
+      [
+       "Washington Commanders",
+       6.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.0,
+       103
+      ],
+      [
+       "Under",
+       55.0,
+       -116
+      ]
+     ],
+     "props_ts": "2026-11-22T06:48:07.521333+00:00",
+     "inj_Washington Commanders": "f3d96026f2fddf26",
+     "inj_Cincinnati Bengals": "cc8275ff7aa0d59c",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "2027 NFL mock draft: Reid's midseason first-round ",
+      "Back at practice again, Bengals QB Burrow optimist",
+      "Bengals offense will be biggest test yet for Comma",
+      "Bengals, Reds pay tribute to Fiona the hippo after",
+      "Can the Bengals succeed in the postseason with a p",
+      "Can the Commanders win in the red zone?",
+      "Commanders confident in Jayden Daniels",
+      "Commanders' defense preparing for high-flying Beng",
+      "How active NFL players continue to redefine all-ti",
+      "How will the Commanders blitz fare against Joe Bur",
+      "Inside Commanders DC Daronte Jones' unusual coachi",
+      "Inside the gymnastics lore of Bengals star Ja'Marr",
+      "Is Burrow's illness any cause for concern?",
+      "Joe Burrow, Bengals gearing up for MNF",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 latest intel, buzz questions, news, fa",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL offseason free agent and trade acquisitions th",
+      "Sam Hartman's next drive: 'The Bachelor' questions",
+      "Sources: Brandon Aiyuk contacted Jayden Daniels to",
+      "Washington Commanders unveil 'Beer Spear' ahead of",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Why Amarius Mims is an underrated key to Bengals' ",
+      "Why Stephen A. thinks 'special' Joe Burrow is the ",
+      "Will Ben Sinnott repeat his performance?"
+     ],
+     "kalshi_snap": "snap_20261123T1435Z.parquet"
+    }
+   },
+   "triggers": {
+    "3a60ed1d20004aa4d4772b2c1a2272e7": "anchor_morning"
+   }
+  }
  }
 ]

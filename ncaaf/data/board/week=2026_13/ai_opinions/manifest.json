@@ -114,5 +114,118 @@
     "a82769fe54a0f8c714667b8720b67449": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261123T150404Z.parquet",
+  "sha256": "509996383e8947c434a8bc817cb037812c3acd1193d50bc2bfe0d68a441c1c8d",
+  "logged_utc": "2026-11-23T15:04:04.678378+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 4,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-25T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261123T150011Z.parquet",
+   "inputs_digest": "{\"4814277a6e26955eb1df064fed7a3bcb\": \"f3e7191e3e799cc8\", \"a82769fe54a0f8c714667b8720b67449\": \"087372cbc1a964b0\"}",
+   "components": {
+    "4814277a6e26955eb1df064fed7a3bcb": {
+     "pinnacle_h2h": [
+      [
+       "Eastern Michigan Eagles",
+       0,
+       -215
+      ],
+      [
+       "Kent State Golden Flashes",
+       0,
+       182
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Eastern Michigan Eagles",
+       -5.5,
+       -109
+      ],
+      [
+       "Kent State Golden Flashes",
+       5.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -109
+      ],
+      [
+       "Under",
+       45.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Western Michigan builds big lead early, holds off "
+     ],
+     "kalshi_snap": "snap_20261123T1507Z.parquet"
+    },
+    "a82769fe54a0f8c714667b8720b67449": {
+     "pinnacle_h2h": [
+      [
+       "Miami (OH) RedHawks",
+       0,
+       226
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -275
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami (OH) RedHawks",
+       7.0,
+       -114
+      ],
+      [
+       "Western Michigan Broncos",
+       -7.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -108
+      ],
+      [
+       "Under",
+       45.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Inside the complexities of clock management in col",
+      "Western Michigan builds big lead early, holds off ",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261123T1507Z.parquet"
+    }
+   },
+   "triggers": {
+    "4814277a6e26955eb1df064fed7a3bcb": "anchor_morning",
+    "a82769fe54a0f8c714667b8720b67449": "anchor_morning"
+   }
+  }
  }
 ]
