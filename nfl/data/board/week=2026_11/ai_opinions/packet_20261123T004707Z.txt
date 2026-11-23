@@ -1,0 +1,72 @@
+packet built 2026-11-23T00:47Z | snap snap_20261123T003008Z.parquet | props pull 2026-11-23T00:33 | kalshi snap_20261123T0035Z.parquet | injuries injuries_20261123T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: anchor_close
+######## Minnesota Vikings @ San Francisco 49ers  kick 11-23T01:20Z
+  HR ML: 49ers -220 / Vikings +180 (no-vig home 0.658) | Pinnacle no-vig home 0.653
+  HR spread: 49ers -4.5 -110 / Vikings +4.5 -110 | Pinnacle 49ers -3.5 (-116) | HR open -3.0 (20261117)
+  HR total: 45 O-110/U-110 | Pinnacle 45.0 O-104/U-108 | HR open 46.5
+  Kalshi ML [('San Francisco wins', 0.65, 2193302), ('Minnesota wins', 0.34, 4878152)] | spread [('San Francisco wins by over 4.5 points?', 0.48, 769894), ('San Francisco wins by over 5.5 points?', 0.46, 55221)] | total [('Full Game: over 44.5 points scored?', 0.52, 34072), ('Full Game: over 45.5 points scored?', 0.49, 2271709)]
+  -- Minnesota Vikings injuries (20261123T0030)
+     Out  S  Jay Ward: Ward (knee) is inactive for Sunday night's game against the 49ers.
+     Out  CB Isaiah Rodgers: Rodgers (quadriceps) is inactive for Sunday night's matchup against the 49ers.
+     Out  QB Max Brosmer: Brosmer (coach's decision) is inactive but operating as the Vikings' emergency third QB on Sunday night versus the 49ers.
+     Out  QB Kyler Murray: inactive
+     Out  WR Jordan Addison: inactive
+     Acti TE Gavin Bartholomew: Bartholomew should revert to a backup role with T.J. Hockenson returning from a wrist injury for Sunday's game against the 49ers, Craig Peters of the 
+     Acti WR Jeshaun Jones: Jones (shoulder) does not have an injury designation for Sunday's game against the 49ers in Mexico City.
+     Acti TE T.J. Hockenson: Hockenson (wrist) doesn't have an injury designation for Sunday night's game against the 49ers.
+     Inju LB Bo Richter: The Vikings placed Richter (foot) on injured reserve Wednesday.
+     Acti WR Jauan Jennings: Jennings (calf) practiced in full Wednesday.
+     Acti WR Myles Price: Price is set for an increase in offensive workload with Jordan Addison (thumb) sidelined, Kevin Seifert of ESPN.com reports.
+     Acti WR Tai Felton: Felton is on track to operate in a more prominent role in Week 11 versus the 49ers, Kevin Seifert of ESPN.com reports.
+     Acti RB Aaron Jones Sr.: Jones carried the ball 11 times for 47 yards and a touchdown and caught his only target for eight yards in Sunday's 30-10 win over the Packers.
+     Acti RB Jordan Mason: Mason carried the ball 16 times for 59 yards and failed to catch his only target in Sunday's 30-10 win over the Packers.
+     Acti QB Kirk Cousins: Cousins completed 21 of 31 passes for 207 yards and two touchdowns with one interception in Sunday's 30-10 win over the Packers. He added 11 rushing y
+     Acti WR Justin Jefferson: Jefferson caught nine of 13 targets for 74 yards in Sunday's 30-10 win over the Packers.
+     Acti QB Carson Wentz: Wentz (ankle) doesn't have an injury designation for Sunday's game at Green Bay, but Kirk Cousins will be Minnesota's starting quarterback.
+     Acti RB DeeJay Dallas: Dallas caught his only target for a two-yard gain in Monday's Week 9 loss to the Bills.
+     news 11-22T11:32 Best bets for Vikings-49ers: Tips, analysis and our top prop plays
+     news 11-22T16:12 Kirk Cousins on pace to make history as 1st QB to play 18 regular-season games
+     news 11-22T17:13 NFL Week 11 arrivals: CeeDee Lamb leads the way ahead of Titans-Cowboys
+     news 11-22T21:03 NFL Week 11 arrivals: Broncos LB Alex Singleton honors Tom Jackson with jersey
+     news 11-22T21:20 Week 11 NFL highlights: Best plays, moments, touchdowns, more
+  -- San Francisco 49ers injuries (20261123T0030)
+     Out  WR Demarcus Robinson: inactive
+     Out  QB Kurtis Rourke: inactive
+     Out  DE Khalid Kareem: inactive
+     Out  OT Enrique Cruz Jr.: inactive
+     Out  LB Dre Greenlaw: inactive
+     Acti QB Mac Jones: 
+     Acti RB Jordan James: 
+     Acti WR Mike Evans: Evans (Achilles) is listed as active Sunday against the Vikings in Mexico City, Matt Barrows of The Athletic reports.
+     Inju CB Nate Hobbs: Hobbs (groin) has been downgraded to out for Sunday night's game against the Vikings.
+     Out  RB Isaac Guerendo: Guerendo (pectoral) was working off to the side during practice Thursday, Nick Wagoner of ESPN.com reports.
+     Inju WR Christian Kirk: Kirk announced Wednesday via his personal Instagram account that he recently underwent meniscus surgery.
+     Inju WR De'Zhaun Stribling: Stribling (ankle) was doing some work on the side at Wednesday's practice, Nick Wagoner of ESPN.com reports.
+     Out  WR Brandon Aiyuk: Aiyuk's agent, Drew Rosenhaus, said Tuesday that the receiver is "100 percent healthy" and fully recovered from his November 2024 right knee surgery a
+     Acti WR Jacob Cowing: Cowing did not draw any targets during Sunday's 46-40 win at Dallas.
+     Acti WR Jordan Watkins: Watkins caught two passes for 49 yards on three targets in Sunday's 46-40 win over the Cowboys.
+     Acti WR Keenan Allen: Allen brought in five of seven targets for 61 yards in the 49ers' 46-40 win over the Cowboys on Sunday.
+     news 11-21T11:57 In Mexico City, 49ers' Fred Warner can represent his heritage and boost DPOY case
+     news 11-22T11:32 Best bets for Vikings-49ers: Tips, analysis and our top prop plays
+     news 11-22T17:13 NFL Week 11 arrivals: CeeDee Lamb leads the way ahead of Titans-Cowboys
+     news 11-22T21:03 NFL Week 11 arrivals: Broncos LB Alex Singleton honors Tom Jackson with jersey
+     news 11-22T21:20 Week 11 NFL highlights: Best plays, moments, touchdowns, more
+  -- props (pull 2026-11-23T00:33)
+     * Aaron Jones: atd 0.5 (+185), recyd 9.5 (-120/-110), rec 1.5 (-175/+130), ruatt 8.5 (-110/-120), ruyd 31.5 (-115/-115)
+     * Brock Purdy: atd 0.5 (+450), paatt 30.5 (-115/-115), cmp 20.5 (+100/-130), int 0.5 (-120/-110), patd 1.5 (-120/-110), payd 241.5 (-115/-115), ruyd 16.5 (-115/-115)
+     * Christian McCaffrey: atd 0.5 (-170), recyd 33.5 (-115/-115), rec 3.5 (-145/+115), ruatt 13.5 (+100/-130), ruyd 52.5 (-115/-115)
+     * Deebo Samuel: atd 0.5 (+325), recyd 26.5 (-115/-115), rec 2.5 (-115/-115), ruyd 7.5 (-115/-115)
+     * George Kittle: atd 0.5 (+175), recyd 48.5 (-115/-115), rec 4.5 (+110/-145)
+     * Jauan Jennings: atd 0.5 (+450), recyd 19.5 (-115/-115), rec 2.5 (+115/-150)
+     * Jordan Mason: atd 0.5 (+240), recyd 3.5 (-115/-115), rec 0.5 (-220/+155), ruatt 11.5 (-110/-120), ruyd 39.5 (-115/-115)
+     * Jordan Watkins: atd 0.5 (+650), recyd 7.5 (-120/-110), rec 0.5 (-125/-105)
+     * Justin Jefferson: atd 0.5 (+125), recyd 86.5 (-115/-115), rec 7.5 (+100/-135)
+     * Kaelon Black: atd 0.5 (+325), ruatt 7.5 (-120/-110), ruyd 29.5 (-120/-110)
+     * Keenan Allen: atd 0.5 (+300), recyd 26.5 (-115/-115), rec 2.5 (-125/-105)
+     * Kirk Cousins: atd 0.5 (+1100), paatt 35.5 (-110/-120), cmp 22.5 (+100/-130), int 0.5 (-165/+125), patd 1.5 (+115/-155), payd 233.5 (-115/-115), ruyd 0.5 (-130/+100)
+     * Mike Evans: atd 0.5 (+195), recyd 48.5 (-115/-115), rec 3.5 (-125/-105)
+     * Myles Price: atd 0.5 (+600), recyd 8.5 (-110/-120), rec 1.5 (+160/-225)
+     * T.J. Hockenson: atd 0.5 (+220), recyd 45.5 (-115/-115), rec 4.5 (-145/+110)
+     * Tai Felton: atd 0.5 (+650), recyd 13.5 (-120/-110), rec 1.5 (+110/-145)

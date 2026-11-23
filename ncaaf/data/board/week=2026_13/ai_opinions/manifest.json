@@ -1,0 +1,118 @@
+[
+ {
+  "file": "ai_opinions_20261123T003404Z.parquet",
+  "sha256": "c04882d6ec30ce114df10e29304be31d57c61f057d87fb575c07cbd1e7de5b8a",
+  "logged_utc": "2026-11-23T00:34:04.646200+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-25T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261123T003008Z.parquet",
+   "inputs_digest": "{\"4814277a6e26955eb1df064fed7a3bcb\": \"4d7a90afcc4073eb\", \"a82769fe54a0f8c714667b8720b67449\": \"d6b26d8b8fdd5f8b\"}",
+   "components": {
+    "4814277a6e26955eb1df064fed7a3bcb": {
+     "pinnacle_h2h": [
+      [
+       "Eastern Michigan Eagles",
+       0,
+       -228
+      ],
+      [
+       "Kent State Golden Flashes",
+       0,
+       192
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Eastern Michigan Eagles",
+       -5.5,
+       -117
+      ],
+      [
+       "Kent State Golden Flashes",
+       5.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -110
+      ],
+      [
+       "Under",
+       45.5,
+       -110
+      ]
+     ],
+     "news": [
+      "Jones' 2TDs help lead Miami (Ohio) to dominant 20-",
+      "Take a 360-degree look at college football's iconi",
+      "Western Michigan builds big lead early, holds off "
+     ],
+     "kalshi_snap": "snap_20261123T0007Z.parquet"
+    },
+    "a82769fe54a0f8c714667b8720b67449": {
+     "pinnacle_h2h": [
+      [
+       "Miami (OH) RedHawks",
+       0,
+       257
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -318
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami (OH) RedHawks",
+       7.5,
+       -108
+      ],
+      [
+       "Western Michigan Broncos",
+       -7.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -111
+      ],
+      [
+       "Under",
+       45.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Inside the complexities of clock management in col",
+      "Jones' 2TDs help lead Miami (Ohio) to dominant 20-",
+      "Western Michigan builds big lead early, holds off ",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261123T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "4814277a6e26955eb1df064fed7a3bcb": "anchor_morning",
+    "a82769fe54a0f8c714667b8720b67449": "anchor_morning"
+   }
+  }
+ }
+]

@@ -1,12 +1,17 @@
 {
- "started_utc": "2026-11-23T00:17:03.052561+00:00",
- "finished_utc": "2026-11-23T00:19:01.388374+00:00",
+ "started_utc": "2026-11-23T00:32:03.954280+00:00",
+ "finished_utc": "2026-11-23T00:44:11.739014+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "60e1d27b083a335b722c2c852ea85612",
+   "text": "injury_change: inj_San Francisco 49ers; injury_change: inj_Minnesota Vikings"
+  }
+ ],
+ "games_read": 1,
+ "frozen_file": "ai_opinions_20261123T003203Z.parquet",
+ "spend_usd": 34.5256,
+ "result": "COMPLETE"
 }
