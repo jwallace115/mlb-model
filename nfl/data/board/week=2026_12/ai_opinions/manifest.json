@@ -126,5 +126,134 @@
     "5b612899d6dcdf998107f2c6c6e49a58": "new_props: pull 2026-11-24T02:00:11.306037+00:00"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261124T073204Z.parquet",
+  "sha256": "25d69daf3b06df4c0691d3b79b03b8a788558929c98fcec5a23dba524b581a87",
+  "logged_utc": "2026-11-24T07:32:04.172275+00:00",
+  "rows": 26,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.962,
+  "revised_rows": 25,
+  "oldest_source_age_min": 1814.1,
+  "first_kickoff_utc": "2026-11-26T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261124T053005Z.parquet",
+   "inputs_digest": "{\"5b612899d6dcdf998107f2c6c6e49a58\": \"ef8660c5fbde5327\"}",
+   "components": {
+    "5b612899d6dcdf998107f2c6c6e49a58": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Green Bay Packers",
+       0,
+       115
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -135
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Green Bay Packers",
+       2.0,
+       -110
+      ],
+      [
+       "Los Angeles Rams",
+       -2.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       44.0,
+       -110
+      ],
+      [
+       "Under",
+       44.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Green Bay Packers",
+       0,
+       112
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -126
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Green Bay Packers",
+       2.5,
+       -114
+      ],
+      [
+       "Los Angeles Rams",
+       -2.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       102
+      ],
+      [
+       "Under",
+       44.5,
+       -117
+      ]
+     ],
+     "props_ts": "2026-11-24T07:33:08.519623+00:00",
+     "inj_Los Angeles Rams": "fca4ee46d6d38dd5",
+     "inj_Green Bay Packers": "7c3128b371fd3bfd",
+     "news": [
+      "Adam Schefter: Micah Parsons could make season deb",
+      "How active NFL players continue to redefine all-ti",
+      "Micah Parsons cleared to return for the Packers",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL players with most at stake over rest of 2026: ",
+      "Rams TE Terrance Ferguson needs season-ending ankl",
+      "Rams WR Puka Nacua to serve 3-game suspension whil",
+      "Rams' Puka Nacua has MCL surgery, likely done for ",
+      "Rapoport: Rams expect Puka to be out for season af",
+      "Schefter confirms Puka Nacua to serve 3-game suspe",
+      "Sources: Packers' Micah Parsons cleared to make se",
+      "Sources: Rams' Puka Nacua out 4-5 months after kne",
+      "Yates on Nacua's suspension timing: It 'smells fis"
+     ],
+     "kalshi_snap": "snap_20261124T0535Z.parquet"
+    }
+   },
+   "triggers": {
+    "5b612899d6dcdf998107f2c6c6e49a58": "new_props: pull 2026-11-24T07:33:08.519623+00:00; injury_change: inj_Los Angeles Rams; injury_change: inj_Green Bay Packers; new_news: 1 availability items"
+   }
+  }
  }
 ]
