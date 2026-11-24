@@ -42,21 +42,21 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-24T21:22:48.513329+00:00",
-  "finished_utc": "2026-11-24T21:22:48.513329+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-24T21:47:04.638793+00:00",
+  "finished_utc": "2026-11-24T21:47:04.638793+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['injury_change: inj_Los Angeles Rams; injury_change: inj_Green Bay Packers', 'injury_change: inj_Detroit Lions; injury_change: inj_Chicago Bears']",
-  "freeze_file": "ai_opinions_20261124T211705Z.parquet"
+  "message": "",
+  "freeze_file": null
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-24T21:23:18.970093+00:00",
-  "finished_utc": "2026-11-24T21:23:18.970093+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-24T21:59:40.878314+00:00",
+  "finished_utc": "2026-11-24T21:59:40.878314+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['anchor_prekick', 'anchor_prekick']",
-  "freeze_file": "ai_opinions_20261124T210404Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]
