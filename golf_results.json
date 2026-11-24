@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-24T11:02:49.787403",
+  "generated_at": "2026-11-24T13:01:07.027700",
   "sport": "golf",
   "event_name": "The RSM Classic",
   "event_id": 493,
   "is_major": false,
-  "last_updated": "2026-11-24T11:00:23.773485",
+  "last_updated": "2026-11-24T13:00:12.724403",
   "n_candidates": 41,
   "n_leans": 11,
   "plays": [
@@ -825,56 +825,13 @@
   "g13_avoids": [],
   "g13_status": "LIVE_SHADOW",
   "g14_signals": [],
-  "g14_win_watchlist": [
-    {
-      "player_name": "James, Ben",
-      "dg_win_prob": 4.2,
-      "adj_win_prob": 4.1,
-      "win_edge": 4.1
-    },
-    {
-      "player_name": "Ghim, Doug",
-      "dg_win_prob": 3.9,
-      "adj_win_prob": 3.6,
-      "win_edge": 3.6
-    },
-    {
-      "player_name": "Smith, Jordan",
-      "dg_win_prob": 3.1,
-      "adj_win_prob": 3.1,
-      "win_edge": 3.0
-    },
-    {
-      "player_name": "Brennan, Michael",
-      "dg_win_prob": 3.0,
-      "adj_win_prob": 3.7,
-      "win_edge": 3.6
-    },
-    {
-      "player_name": "Mitchell, Keith",
-      "dg_win_prob": 3.0,
-      "adj_win_prob": 2.7,
-      "win_edge": 2.7
-    },
-    {
-      "player_name": "McNealy, Maverick",
-      "dg_win_prob": 2.3,
-      "adj_win_prob": 3.0,
-      "win_edge": 2.9
-    },
-    {
-      "player_name": "Bradley, Keegan",
-      "dg_win_prob": 1.6,
-      "adj_win_prob": 2.3,
-      "win_edge": 2.3
-    }
-  ],
+  "g14_win_watchlist": [],
   "g14_field_type": "WEAK",
   "g14_kill_switch": false,
   "g14_status": "LIVE_SHADOW",
   "g15_signals": [],
   "g15_elite_density_bucket": "HIGH",
-  "g15_kill_switch": true,
+  "g15_kill_switch": false,
   "g15_status": "LIVE_SHADOW",
   "model_info": {
     "model": "DG logistic + G13 wave + G14 tail + G15 elite density",
