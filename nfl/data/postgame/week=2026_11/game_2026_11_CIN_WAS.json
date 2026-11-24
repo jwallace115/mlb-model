@@ -1,0 +1,93 @@
+{
+  "game_id": "2026_11_CIN_WAS",
+  "week": 11,
+  "home": "WAS",
+  "away": "CIN",
+  "final_score": {
+    "home": 22,
+    "away": 20
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 22,
+        "away": 20
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 22,
+        "away": 20
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 64,
+      "dropbacks": 38,
+      "rush_attempts": 26,
+      "pass_rate": 0.59375,
+      "run_rate": 0.40625,
+      "pass_oe": -1.913955830263369
+    },
+    "away": {
+      "plays": 57,
+      "dropbacks": 43,
+      "rush_attempts": 14,
+      "pass_rate": 0.7543859649122807,
+      "run_rate": 0.24561403508771928,
+      "pass_oe": 18.29207777454142
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    },
+    "away": {
+      "interceptions": 0,
+      "fumbles_lost": 0,
+      "total": 0
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 1
+    },
+    "away": {
+      "trips": 3,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "A.Ekeler",
+      "team": "WAS",
+      "quarter": 2,
+      "play_id": 1798,
+      "desc": "(1:03) (No Huddle, Shotgun) 30-A.Ekeler right guard to CIN 38 for 3 yards (99-M.Murphy). CIN-6-B.Cook was injured during the play."
+    },
+    {
+      "player": "J.Chase",
+      "team": "CIN",
+      "quarter": 4,
+      "play_id": 3909,
+      "desc": "(1:39) (Shotgun) 9-J.Burrow pass incomplete short left to 1-J.Chase. WAS-29-R.Douglas was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}
