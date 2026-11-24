@@ -400,5 +400,113 @@
     "a82769fe54a0f8c714667b8720b67449": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261124T210404Z.parquet",
+  "sha256": "d7262642da93dfc67e12dddedaf3e41fc6218602cf8343d4d457509d2d1906c7",
+  "logged_utc": "2026-11-24T21:04:04.586893+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-25T00:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261124T210010Z.parquet",
+   "inputs_digest": "{\"4814277a6e26955eb1df064fed7a3bcb\": \"be5a5696e05ab6b3\", \"a82769fe54a0f8c714667b8720b67449\": \"c07d603a82069aa6\"}",
+   "components": {
+    "4814277a6e26955eb1df064fed7a3bcb": {
+     "pinnacle_h2h": [
+      [
+       "Eastern Michigan Eagles",
+       0,
+       -222
+      ],
+      [
+       "Kent State Golden Flashes",
+       0,
+       196
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Eastern Michigan Eagles",
+       -5.5,
+       -114
+      ],
+      [
+       "Kent State Golden Flashes",
+       5.5,
+       102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -104
+      ],
+      [
+       "Under",
+       46.5,
+       -112
+      ]
+     ],
+     "kalshi_snap": "snap_20261124T2107Z.parquet"
+    },
+    "a82769fe54a0f8c714667b8720b67449": {
+     "pinnacle_h2h": [
+      [
+       "Miami (OH) RedHawks",
+       0,
+       190
+      ],
+      [
+       "Western Michigan Broncos",
+       0,
+       -215
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami (OH) RedHawks",
+       5.5,
+       -109
+      ],
+      [
+       "Western Michigan Broncos",
+       -5.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -104
+      ],
+      [
+       "Under",
+       45.5,
+       -113
+      ]
+     ],
+     "news": [
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261124T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "4814277a6e26955eb1df064fed7a3bcb": "anchor_prekick",
+    "a82769fe54a0f8c714667b8720b67449": "anchor_prekick"
+   }
+  }
  }
 ]
