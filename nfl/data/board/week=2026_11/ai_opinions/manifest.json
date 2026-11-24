@@ -16877,5 +16877,147 @@
     "3a60ed1d20004aa4d4772b2c1a2272e7": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261124T003203Z.parquet",
+  "sha256": "19ed4d41cc89a60f26ccd6f9a81ebafe74718295908aa12903e0d29e1625eb17",
+  "logged_utc": "2026-11-24T00:32:03.351849+00:00",
+  "rows": 81,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.926,
+  "revised_rows": 61,
+  "oldest_source_age_min": 13.9,
+  "first_kickoff_utc": "2026-11-24T01:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261124T003007Z.parquet",
+   "inputs_digest": "{\"3a60ed1d20004aa4d4772b2c1a2272e7\": \"6130464e2fe5426b\"}",
+   "components": {
+    "3a60ed1d20004aa4d4772b2c1a2272e7": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -300
+      ],
+      [
+       "Washington Commanders",
+       0,
+       250
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cincinnati Bengals",
+       -7.0,
+       -105
+      ],
+      [
+       "Washington Commanders",
+       7.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       54.0,
+       -115
+      ],
+      [
+       "Under",
+       54.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -290
+      ],
+      [
+       "Washington Commanders",
+       0,
+       250
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bengals",
+       -6.5,
+       -104
+      ],
+      [
+       "Washington Commanders",
+       6.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -102
+      ],
+      [
+       "Under",
+       54.0,
+       -110
+      ]
+     ],
+     "props_ts": "2026-11-24T00:33:10.518174+00:00",
+     "inj_Washington Commanders": "f4b0316e9d65db79",
+     "inj_Cincinnati Bengals": "93c1d59ca7b429ca",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Back at practice again, Bengals QB Burrow optimist",
+      "Bengals offense will be biggest test yet for Comma",
+      "Bengals, Reds pay tribute to Fiona the hippo after",
+      "Bengals-Commanders odds, best bets: Tips, analysis",
+      "Can the Bengals succeed in the postseason with a p",
+      "Can the Commanders win in the red zone?",
+      "Commanders RB Jacory Croskey-Merritt activated fro",
+      "Commanders confident in Jayden Daniels",
+      "Commanders' defense preparing for high-flying Beng",
+      "How active NFL players continue to redefine all-ti",
+      "How will the Commanders blitz fare against Joe Bur",
+      "Inside Commanders DC Daronte Jones' unusual coachi",
+      "Inside the gymnastics lore of Bengals star Ja'Marr",
+      "Is Burrow's illness any cause for concern?",
+      "Joe Burrow, Bengals gearing up for MNF",
+      "Midseason reports on every NFL team's offensive co",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL offseason free agent and trade acquisitions th",
+      "Sam Hartman's next drive: 'The Bachelor' questions",
+      "Washington Commanders unveil 'Beer Spear' ahead of",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "What's next for Brandon Aiyuk after release by 49e",
+      "Why Amarius Mims is an underrated key to Bengals' ",
+      "Why Stephen A. thinks 'special' Joe Burrow is the ",
+      "Will Ben Sinnott repeat his performance?"
+     ],
+     "kalshi_snap": "snap_20261124T0005Z.parquet"
+    }
+   },
+   "triggers": {
+    "3a60ed1d20004aa4d4772b2c1a2272e7": "anchor_close"
+   }
+  }
  }
 ]
