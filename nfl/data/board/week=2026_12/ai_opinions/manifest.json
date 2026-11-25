@@ -884,5 +884,380 @@
     "9b825e6518156008da499be041975fdd": "injury_change: inj_Detroit Lions; injury_change: inj_Chicago Bears"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261125T003205Z.parquet",
+  "sha256": "1998eb583be74ad78f382daf10c650ac6ecaa7538bfc3927a64d74b997b2d3d0",
+  "logged_utc": "2026-11-25T00:32:05.499791+00:00",
+  "rows": 187,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.925,
+  "revised_rows": 87,
+  "oldest_source_age_min": 2819.0,
+  "first_kickoff_utc": "2026-11-26T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261125T003010Z.parquet",
+   "inputs_digest": "{\"5b612899d6dcdf998107f2c6c6e49a58\": \"417335775260aedd\", \"9b825e6518156008da499be041975fdd\": \"dc8ba652e37117f6\", \"ffaa06af56a7137d4b078c5c46c0b730\": \"582799d49ef55bc3\"}",
+   "components": {
+    "5b612899d6dcdf998107f2c6c6e49a58": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Green Bay Packers",
+       0,
+       115
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -135
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Green Bay Packers",
+       2.5,
+       -110
+      ],
+      [
+       "Los Angeles Rams",
+       -2.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       44.0,
+       -110
+      ],
+      [
+       "Under",
+       44.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Green Bay Packers",
+       0,
+       119
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -134
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Green Bay Packers",
+       2.5,
+       -108
+      ],
+      [
+       "Los Angeles Rams",
+       -2.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       105
+      ],
+      [
+       "Under",
+       44.5,
+       -120
+      ]
+     ],
+     "props_ts": "2026-11-24T18:18:05.690399+00:00",
+     "inj_Los Angeles Rams": "457d2932b6b7c780",
+     "inj_Green Bay Packers": "9a5982ecbc0a9f4b",
+     "news": [
+      "Adam Schefter: Micah Parsons could make season deb",
+      "How active NFL players continue to redefine all-ti",
+      "How will Micah Parsons' return impact the Packers?",
+      "Micah Parsons cleared to return for the Packers",
+      "Myles Garrett, Micah Parsons ready for spotlight w",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL players with most at stake over rest of 2026: ",
+      "Packers' Micah Parsons activated, expected to make",
+      "Packers' game vs. Rams could have major playoff im",
+      "Rams TE Terrance Ferguson needs season-ending ankl",
+      "Rams' Puka Nacua has MCL surgery, likely done for ",
+      "Rapoport: Rams expect Puka to be out for season af",
+      "Seven things Solak thinks for NFL Week 12: Takes o",
+      "Sources: Packers' Micah Parsons cleared to make se",
+      "Sources: Rams' Puka Nacua out 4-5 months after kne",
+      "Super Bowl LXI odds: All 32 teams' odds to win the"
+     ],
+     "kalshi_snap": "snap_20261125T0035Z.parquet"
+    },
+    "9b825e6518156008da499be041975fdd": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -135
+      ],
+      [
+       "Detroit Lions",
+       0,
+       115
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Chicago Bears",
+       -2.5,
+       -110
+      ],
+      [
+       "Detroit Lions",
+       2.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       55.5,
+       -110
+      ],
+      [
+       "Under",
+       55.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -128
+      ],
+      [
+       "Detroit Lions",
+       0,
+       114
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Chicago Bears",
+       -2.5,
+       -102
+      ],
+      [
+       "Detroit Lions",
+       2.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -105
+      ],
+      [
+       "Under",
+       55.5,
+       -109
+      ]
+     ],
+     "props_ts": "2026-11-24T14:00:13.113230+00:00",
+     "inj_Detroit Lions": "7f27f61de3ada17f",
+     "inj_Chicago Bears": "3acde18574fc6598",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bears rule out CB Kyler Gordon; RB Kyle Monangai c",
+      "Bears' Jeffery Simmons says knee injury a non-issu",
+      "Bears' Johnson has no plan to forgo Swift's role i",
+      "Despite 5th straight win, Bears offense not 'satis",
+      "Fantasy football last-minute pickups: Flournoy, Ay",
+      "How active NFL players continue to redefine all-ti",
+      "Jared Goff throws 2 TDs, Jahmyr Gibbs runs for 2 m",
+      "Jeffery Simmons expects to play through knee injur",
+      "Jeffery Simmons gets 3 sacks as the Chicago Bears ",
+      "Jeffery Simmons making an impact on Bears defense",
+      "Jeffery Simmons matches career high with 3 sacks i",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Thanksgiving games: Traditions, best moments, ",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL players with most at stake over rest of 2026: ",
+      "New Orleans Saints vs. Chicago Bears: Game Highlig",
+      "Seven things Solak thinks for NFL Week 12: Takes o",
+      "Stephen A.: Bears-Lions a big-time game",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tampa Bay Buccaneers vs. Detroit Lions: Game Highl",
+      "Top NFL plays from Week 11",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Week 11 betting preview: Analysis, best bets, TD p",
+      "Who are the winningest NFL coaches of all time?"
+     ],
+     "kalshi_snap": "snap_20261125T0035Z.parquet"
+    },
+    "ffaa06af56a7137d4b078c5c46c0b730": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       -475
+      ],
+      [
+       "Philadelphia Eagles",
+       0,
+       350
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Dallas Cowboys",
+       -8.5,
+       -110
+      ],
+      [
+       "Philadelphia Eagles",
+       8.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       -421
+      ],
+      [
+       "Philadelphia Eagles",
+       0,
+       337
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Dallas Cowboys",
+       -8.5,
+       -106
+      ],
+      [
+       "Philadelphia Eagles",
+       8.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -116
+      ],
+      [
+       "Under",
+       47.5,
+       101
+      ]
+     ],
+     "props_ts": "2026-11-24T14:00:13.113230+00:00",
+     "inj_Dallas Cowboys": "c2f3bc3f6b35c768",
+     "inj_Philadelphia Eagles": "df6acbfb18da6fb6",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bills' Grand Theft Auto VI-themed jab at Dolphins ",
+      "Commanders' Jayden Daniels-themed post aimed at Be",
+      "Cowboys look to get back on track",
+      "Cowboys need to break a year-long trend to make th",
+      "Cowboys' Mike Pettine feels for DC Christian Parke",
+      "Dak Prescott accounts for 5 TDs as the Cowboys rol",
+      "Dak Prescott continues hot streak, salutes Cowboys",
+      "Eagles heading into SNF with a promising roster",
+      "Eagles snap 7-game losing streak and keep Steelers",
+      "Eagles snap 7-game slide with win over Steelers",
+      "Eagles' Riq Woolen benched after missed tackles vs",
+      "Edge Jonathan Greenard loves to makes plays, despi",
+      "How active NFL players continue to redefine all-ti",
+      "How far can Jayden Daniels take the Commanders thi",
+      "I Scored a Touchdown: Emmitt Smith Super Bowl XXVI",
+      "Judging overreactions to NFL Week 11: Joe Brady's ",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Thanksgiving games: Traditions, best moments, ",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL players with most at stake over rest of 2026: ",
+      "Pittsburgh Steelers vs. Philadelphia Eagles: Game ",
+      "Police investigate man's death after alleged alter",
+      "Steelers' DK Metcalf denies trying to poke Eagles'",
+      "Steelers' DK Metcalf ejected for trying to poke Ea",
+      "Steelers' Metcalf denies trying to poke DeJean in ",
+      "Stephen A. not feeling too enthusiastic about Cowb",
+      "Stephen A. rolls his eyes at Michael Irvin's Cowbo",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tennessee Titans vs. Dallas Cowboys: Game Highligh",
+      "The Steelers last won in Philadelphia in 1965. Can",
+      "Top NFL plays from Week 11",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Who are the winningest NFL coaches of all time?",
+      "Why the Cowboys needed their win on Sunday",
+      "With Titans, Eagles up next, it's now or never for"
+     ],
+     "kalshi_snap": "snap_20261125T0035Z.parquet"
+    }
+   },
+   "triggers": {
+    "5b612899d6dcdf998107f2c6c6e49a58": "injury_change: inj_Los Angeles Rams; injury_change: inj_Green Bay Packers; new_news: 1 availability items",
+    "9b825e6518156008da499be041975fdd": "injury_change: inj_Detroit Lions; injury_change: inj_Chicago Bears",
+    "ffaa06af56a7137d4b078c5c46c0b730": "anchor_morning"
+   }
+  }
  }
 ]
