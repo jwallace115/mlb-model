@@ -461,3 +461,4 @@
 {"utc": "20261125T0030Z", "feed": "espn_depth", "sha256": "b0c306c6ea2a262684e058b4a4212ea166866cd04f2d1e22797bafd2ddcb3cb4", "status": "written"}
 {"utc": "20261125T0630Z", "feed": "espn_depth", "sha256": "bb791bb134d6927287a6d9e954f2ed1d95df582a125f9cd19a9a2cc8471f9e3f", "status": "written"}
 {"utc": "20261125T0901Z", "feed": "nflverse_depth", "file": "depth_charts.parquet", "sha256": "5523eb56abbe666b99c0819845b562aa9c401ab11b14af50f1781729e4e79469", "max_dt": "2026-11-25T07:01:54+00:00", "rows": 4715, "status": "delta"}
+{"utc": "20261125T1230Z", "feed": "espn_depth", "sha256": "8f9b3ecc36984eaf468c12e1cc8b877c3f1e500d2bd69e14ee01fab461875477", "status": "written"}
