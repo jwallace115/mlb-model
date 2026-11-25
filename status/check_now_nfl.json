@@ -1,12 +1,29 @@
 {
- "started_utc": "2026-11-25T06:47:03.491678+00:00",
- "finished_utc": "2026-11-25T06:47:03.894431+00:00",
+ "started_utc": "2026-11-25T07:17:04.005609+00:00",
+ "finished_utc": "2026-11-25T07:20:41.725455+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "5b612899d6dcdf998107f2c6c6e49a58",
+   "text": "injury_change: inj_Los Angeles Rams; injury_change: inj_Green Bay Packers"
+  },
+  {
+   "game": "9b825e6518156008da499be041975fdd",
+   "text": "injury_change: inj_Detroit Lions; injury_change: inj_Chicago Bears"
+  },
+  {
+   "game": "ffaa06af56a7137d4b078c5c46c0b730",
+   "text": "injury_change: inj_Dallas Cowboys; injury_change: inj_Philadelphia Eagles"
+  },
+  {
+   "game": "f36f518585aec40e8cb40e071c0844aa",
+   "text": "injury_change: inj_Buffalo Bills; injury_change: inj_Kansas City Chiefs"
+  }
+ ],
+ "games_read": 4,
+ "frozen_file": "ai_opinions_20261125T071704Z.parquet",
+ "spend_usd": 35.5994,
+ "result": "COMPLETE"
 }
