@@ -4275,5 +4275,161 @@
     "f36f518585aec40e8cb40e071c0844aa": "injury_change: inj_Kansas City Chiefs"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261125T204703Z.parquet",
+  "sha256": "331ada6412ac9df6d4b7668833bb5406aa4a8f3b3813a4beb57e798cbae5ebc4",
+  "logged_utc": "2026-11-25T20:47:03.637075+00:00",
+  "rows": 31,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.903,
+  "revised_rows": 0,
+  "oldest_source_age_min": 3417.3,
+  "first_kickoff_utc": "2026-11-27T20:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261125T203007Z.parquet",
+   "inputs_digest": "{\"44a3bcf5bd002583ddef2207a92dd977\": \"6f11d2075cdcf871\"}",
+   "components": {
+    "44a3bcf5bd002583ddef2207a92dd977": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -200
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       165
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Denver Broncos",
+       -3.5,
+       -110
+      ],
+      [
+       "Pittsburgh Steelers",
+       3.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       36.5,
+       -110
+      ],
+      [
+       "Under",
+       36.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -198
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       172
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Denver Broncos",
+       -3.5,
+       -109
+      ],
+      [
+       "Pittsburgh Steelers",
+       3.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       36.0,
+       -118
+      ],
+      [
+       "Under",
+       36.0,
+       103
+      ]
+     ],
+     "props_ts": "2026-11-25T14:00:11.878459+00:00",
+     "inj_Pittsburgh Steelers": "3021b41902f1b08b",
+     "inj_Denver Broncos": "b302b0b2021bb93f",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Aaron Rodgers' 2026 NFL season: Tracking records, ",
+      "Bills' Grand Theft Auto VI-themed jab at Dolphins ",
+      "Broncos coach Sean Payton awards game ball to Tom ",
+      "Broncos looking to put pressure on Mendoza",
+      "Broncos' Sean Payton: J.K. Dobbins suspended one g",
+      "Brooke Pryor: No indication from Steelers that Rod",
+      "Can play-action be the answer for the Steelers' of",
+      "Commanders' Jayden Daniels-themed post aimed at Be",
+      "DK Metcalf ejected in Steelers' loss to Eagles",
+      "Eagles snap 7-game losing streak and keep Steelers",
+      "How Steelers' wide receiver corps gets big boost i",
+      "How active NFL players continue to redefine all-ti",
+      "How upsets in the 2026 NFL season have upended sur",
+      "Ja'Quan McMillian hoping long-term future is in De",
+      "Jonah Coleman powers Broncos past Raiders 38-24 as",
+      "Jordan Rodgers: Benching Aaron Rodgers won't fix t",
+      "Mendoza throws 3 TDs, but Raiders fall to Broncos ",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL players with most at stake over rest of 2026: ",
+      "Pittsburgh Steelers vs. Philadelphia Eagles: Game ",
+      "Pro Football Hall of Fame voters trim Class of 202",
+      "Remembering Broncos legend Tom Jackson",
+      "Rex Ryan: DK Metcalf is a shell of himself",
+      "Sean Payton: We'll have depth at RB in wake of J.K",
+      "Sources: Aaron Rodgers excused from Steelers facil",
+      "Steelers activate WR Roman Wilson off IR for Eagle",
+      "Steelers bench struggling QB Aaron Rodgers, to sta",
+      "Steelers' DK Metcalf denies trying to poke Eagles'",
+      "Steelers' DK Metcalf ejected for trying to poke Ea",
+      "Steelers' Metcalf denies trying to poke DeJean in ",
+      "Stephen A. rips Steelers' decision to bench Aaron ",
+      "Tom Brady tops list of athletes who became owners",
+      "Tom Jackson, Broncos star LB and Hall of Fame broa",
+      "Top NFL plays from Week 11",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "What Aaron Rodgers' benching means for Steelers, h",
+      "Why Tom Jackson was such a special person"
+     ],
+     "kalshi_snap": "snap_20261125T2035Z.parquet"
+    }
+   },
+   "triggers": {
+    "44a3bcf5bd002583ddef2207a92dd977": "anchor_morning"
+   }
+  }
  }
 ]
