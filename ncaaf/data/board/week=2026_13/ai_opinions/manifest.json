@@ -792,5 +792,302 @@
     "b39108d2cfcd62d29954aee80bbf7b51": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261125T181905Z.parquet",
+  "sha256": "d70fd9549bede25cd555a4b2287c3d7e22dcbb17e7d70144d0fb05a54bfdab77",
+  "logged_utc": "2026-11-25T18:19:05.051520+00:00",
+  "rows": 15,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 5,
+  "no_view_share": 0.8,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-27T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261125T180010Z.parquet",
+   "inputs_digest": "{\"e0b30f1dada22d4a2565ce663bc0741a\": \"d76526acbfd94bc8\", \"8fc8552ec633bb09ca2bcb9b15cb6896\": \"a2f0d65a16528ad4\", \"5b00e6b226dce4274d819d5d1818e703\": \"0b3160eaf8cea9a0\", \"58cd1284193cd30679325c8494f546e6\": \"d089697906993d0a\", \"1f0a9e7f76830b196133518ae01bb113\": \"a0165dc7cf519625\"}",
+   "components": {
+    "e0b30f1dada22d4a2565ce663bc0741a": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       251
+      ],
+      [
+       "Buffalo Bulls",
+       0,
+       -300
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       7.0,
+       101
+      ],
+      [
+       "Buffalo Bulls",
+       -7.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.0,
+       -110
+      ],
+      [
+       "Under",
+       48.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261125T1807Z.parquet"
+    },
+    "8fc8552ec633bb09ca2bcb9b15cb6896": {
+     "pinnacle_h2h": [
+      [
+       "Iowa Hawkeyes",
+       0,
+       -203
+      ],
+      [
+       "Nebraska Cornhuskers",
+       0,
+       176
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa Hawkeyes",
+       -5.0,
+       -103
+      ],
+      [
+       "Nebraska Cornhuskers",
+       5.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.0,
+       -117
+      ],
+      [
+       "Under",
+       40.0,
+       100
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 12 poll reaction: What's ",
+      "Best bets for Rivalry Week: Breaking down Michigan",
+      "Best bets for rivalry week: Breaking down Michigan",
+      "Betting buzz: Big Ten's odds of National Champion ",
+      "Betting buzz: Big Ten's odds of national champion ",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "College football takeaways: Lasting impressions fr",
+      "Drew Stevens goes viral with hilarious postgame pr",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "Iowa Hawkeyes vs. Illinois Fighting Illini: Full H",
+      "Nebraska ends 31-game losing streak against AP Top",
+      "Nebraska snaps AP Top 25 losing skid, upsets Ohio ",
+      "Nebraska's Matt Rhule ends his drought against ran",
+      "Nebraska's jab at Ohio State's 'THE' leads top Wee",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "No. 13 Iowa shuts out Illinois in the second half,",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Preseason No. 1 Ohio State suffers fourth loss, wi",
+      "Ryan Day after Ohio State loss: 'There's a lot of ",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "Which teams have the best odds to make the College",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261125T1807Z.parquet"
+    },
+    "5b00e6b226dce4274d819d5d1818e703": {
+     "pinnacle_h2h": [
+      [
+       "Mississippi State Bulldogs",
+       0,
+       665
+      ],
+      [
+       "Ole Miss Rebels",
+       0,
+       -977
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Mississippi State Bulldogs",
+       19.0,
+       -108
+      ],
+      [
+       "Ole Miss Rebels",
+       -19.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -110
+      ],
+      [
+       "Under",
+       56.0,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "AP college football Week 12 poll reaction: What's ",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Puckett throws 2 TD passes and Mississippi State b",
+      "Saturday Stud: Week 12's top touchdowns are must-s",
+      "Tennessee Tech Golden Eagles vs. Mississippi State",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Trinidad Chambliss makes SEC history in Ole Miss' ",
+      "Trinidad Chambliss throws for 5 TDs and No. 25 Mis",
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a",
+      "Wofford Terriers vs. Ole Miss Rebels: Full Highlig"
+     ],
+     "kalshi_snap": "snap_20261125T1807Z.parquet"
+    },
+    "58cd1284193cd30679325c8494f546e6": {
+     "pinnacle_h2h": [
+      [
+       "Ohio Bobcats",
+       0,
+       136
+      ],
+      [
+       "Toledo Rockets",
+       0,
+       -154
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ohio Bobcats",
+       3.0,
+       -105
+      ],
+      [
+       "Toledo Rockets",
+       -3.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -102
+      ],
+      [
+       "Under",
+       45.5,
+       -114
+      ]
+     ],
+     "news": [
+      "Bowling Green Falcons vs. Toledo Rockets: Full Hig",
+      "Nebraska's jab at Ohio State's 'THE' leads top Wee",
+      "Richter throws TD pass to Dabbs, Griffith kicks 4 ",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261125T1807Z.parquet"
+    },
+    "1f0a9e7f76830b196133518ae01bb113": {
+     "pinnacle_h2h": [
+      [
+       "Tulsa Golden Hurricane",
+       0,
+       -105
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -107
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Tulsa Golden Hurricane",
+       1.5,
+       -118
+      ],
+      [
+       "UTSA Roadrunners",
+       -1.5,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.5,
+       -102
+      ],
+      [
+       "Under",
+       58.5,
+       -115
+      ]
+     ],
+     "news": [
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "Charlotte 49ers vs. Tulsa Golden Hurricane: Full H",
+      "Hayes throws 4 TD passes, Singleton catches 3 of t",
+      "UTSA Roadrunners vs. UAB Blazers: Full Highlights",
+      "UTSA holds off UAB 19-17 to maintain top spot in A",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261125T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "e0b30f1dada22d4a2565ce663bc0741a": "anchor_morning",
+    "8fc8552ec633bb09ca2bcb9b15cb6896": "anchor_morning",
+    "5b00e6b226dce4274d819d5d1818e703": "anchor_morning",
+    "58cd1284193cd30679325c8494f546e6": "anchor_morning",
+    "1f0a9e7f76830b196133518ae01bb113": "anchor_morning"
+   }
+  }
  }
 ]
