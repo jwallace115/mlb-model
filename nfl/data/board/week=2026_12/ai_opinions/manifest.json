@@ -1259,5 +1259,149 @@
     "ffaa06af56a7137d4b078c5c46c0b730": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261125T014703Z.parquet",
+  "sha256": "200602a69cf84ead4cb2300b7b367773f1d9aac9c2723e511ee06aa6ae79dc1e",
+  "logged_utc": "2026-11-25T01:47:03.890438+00:00",
+  "rows": 35,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.886,
+  "revised_rows": 0,
+  "oldest_source_age_min": 2819.0,
+  "first_kickoff_utc": "2026-11-27T01:20:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261125T013005Z.parquet",
+   "inputs_digest": "{\"f36f518585aec40e8cb40e071c0844aa\": \"49d1ce6583da6fa7\"}",
+   "components": {
+    "f36f518585aec40e8cb40e071c0844aa": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Buffalo Bills",
+       0,
+       -155
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       130
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Buffalo Bills",
+       -2.5,
+       -115
+      ],
+      [
+       "Kansas City Chiefs",
+       2.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.5,
+       -110
+      ],
+      [
+       "Under",
+       47.5,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Buffalo Bills",
+       0,
+       -146
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       129
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Buffalo Bills",
+       -2.5,
+       -116
+      ],
+      [
+       "Kansas City Chiefs",
+       2.5,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -101
+      ],
+      [
+       "Under",
+       47.5,
+       -113
+      ]
+     ],
+     "props_ts": "2026-11-24T14:00:13.113230+00:00",
+     "inj_Buffalo Bills": "96dbb0f270b45cb9",
+     "inj_Kansas City Chiefs": "c67f2734ed30ba79",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Adam Schefter: Cardinals fire defensive coordinato",
+      "Arizona Cardinals vs. Kansas City Chiefs: Game Hig",
+      "Bills TE Dalton Kincaid doubtful to play vs. Dolph",
+      "Bills' Grand Theft Auto VI-themed jab at Dolphins ",
+      "Bills' defense feasts in 26-9 win over injury-depl",
+      "Chiefs' Kenneth Walker III, two linemen out vs. Ca",
+      "Commanders' Jayden Daniels-themed post aimed at Be",
+      "How Travis Kelce made Chiefs and NFL history in wi",
+      "How active NFL players continue to redefine all-ti",
+      "Is the Bills defense historically good?",
+      "Joe Brady not satisfied with 9-1 Bills, says team ",
+      "Josh Downs prepares for second game as a Chief",
+      "Judging overreactions to NFL Week 11: Joe Brady's ",
+      "Kansas City Chiefs tight end Travis Kelce's top mo",
+      "Mahomes throws 3 TD passes, Kelce catches 2 of the",
+      "Miami Dolphins vs. Buffalo Bills Game Highlights",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: C.J. Stroud leads the way ah",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 predictions: Upsets, fantasy sleepers,",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL offseason free agent and trade acquisitions th",
+      "NFL players with most at stake over rest of 2026: ",
+      "Seven things Solak thinks for NFL Week 12: Takes o",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Travis Kelce pads Hall of Fame r\u00e9sum\u00e9 with two fir",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Week 11 betting preview: Analysis, best bets, TD p",
+      "Who are the winningest NFL coaches of all time?"
+     ],
+     "kalshi_snap": "snap_20261125T0135Z.parquet"
+    }
+   },
+   "triggers": {
+    "f36f518585aec40e8cb40e071c0844aa": "anchor_morning"
+   }
+  }
  }
 ]
