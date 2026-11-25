@@ -4431,5 +4431,141 @@
     "44a3bcf5bd002583ddef2207a92dd977": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261125T220204Z.parquet",
+  "sha256": "8b02a264a607ce1c8d38c2908c7257c8b53f44f731dd3e6bc0eec69a2d4fa740",
+  "logged_utc": "2026-11-25T22:02:04.171239+00:00",
+  "rows": 78,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.962,
+  "revised_rows": 66,
+  "oldest_source_age_min": 148.9,
+  "first_kickoff_utc": "2026-11-26T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261125T220012Z.parquet",
+   "inputs_digest": "{\"5b612899d6dcdf998107f2c6c6e49a58\": \"d5a427230246edd4\"}",
+   "components": {
+    "5b612899d6dcdf998107f2c6c6e49a58": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Green Bay Packers",
+       0,
+       120
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -140
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Green Bay Packers",
+       2.5,
+       -110
+      ],
+      [
+       "Los Angeles Rams",
+       -2.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       43.0,
+       -110
+      ],
+      [
+       "Under",
+       43.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Green Bay Packers",
+       0,
+       126
+      ],
+      [
+       "Los Angeles Rams",
+       0,
+       -140
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Green Bay Packers",
+       2.5,
+       100
+      ],
+      [
+       "Los Angeles Rams",
+       -2.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.5,
+       -101
+      ],
+      [
+       "Under",
+       43.5,
+       -111
+      ]
+     ],
+     "props_ts": "2026-11-25T14:00:11.878459+00:00",
+     "inj_Los Angeles Rams": "6b7e73acf1e096e2",
+     "inj_Green Bay Packers": "3eb9d3c5f9935175",
+     "news": [
+      "2026 NFL Thanksgiving preview: Picks, predictions,",
+      "Adam Schefter: Micah Parsons could make season deb",
+      "Has Puka Nacua played his final snaps in a Rams un",
+      "How active NFL players continue to redefine all-ti",
+      "How upsets in the 2026 NFL season have upended sur",
+      "How will Micah Parsons' return impact the Packers?",
+      "How will Packers use Micah Parsons in return from ",
+      "Micah Parsons cleared to return for the Packers",
+      "Myles Garrett, Micah Parsons ready for spotlight w",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11 betting odds: Lines and totals for eve",
+      "NFL Week 11 preview: Picks, predictions, schedule,",
+      "NFL Week 11 uniforms: Texans debut Rivalries look,",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL players with most at stake over rest of 2026: ",
+      "Packers' Micah Parsons activated, expected to make",
+      "Packers' game vs. Rams could have major playoff im",
+      "Rams TE Terrance Ferguson needs season-ending ankl",
+      "Rams' Puka Nacua has MCL surgery, likely done for ",
+      "Seven things Solak thinks for NFL Week 12: Takes o",
+      "Sources: Packers' Micah Parsons cleared to make se",
+      "Sources: Rams' Puka Nacua out 4-5 months after kne",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "What are the Rams' expectations on offense?"
+     ],
+     "kalshi_snap": "snap_20261125T2135Z.parquet"
+    }
+   },
+   "triggers": {
+    "5b612899d6dcdf998107f2c6c6e49a58": "anchor_prekick"
+   }
+  }
  }
 ]
