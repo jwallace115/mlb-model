@@ -40,23 +40,23 @@
   "freeze_file": null
  },
  {
-  "sport": "ncaaf",
+  "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-25T04:19:03.817633+00:00",
-  "finished_utc": "2026-11-25T04:19:03.817633+00:00",
+  "started_utc": "2026-11-25T04:47:04.158395+00:00",
+  "finished_utc": "2026-11-25T04:47:04.158395+00:00",
   "result": "no_triggers",
   "step": "window_watch",
   "message": "",
   "freeze_file": null
  },
  {
-  "sport": "nfl",
+  "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-25T04:23:54.064280+00:00",
-  "finished_utc": "2026-11-25T04:23:54.064280+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-25T04:49:04.233422+00:00",
+  "finished_utc": "2026-11-25T04:49:04.233422+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle spreads Detroit Lions 2.0\u21921.0; line_move: pinnacle spreads Chicago Bears -2.0\u2192-1.0']",
-  "freeze_file": "ai_opinions_20261125T041703Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]
