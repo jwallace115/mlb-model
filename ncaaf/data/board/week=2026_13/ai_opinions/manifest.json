@@ -5041,5 +5041,187 @@
     "ab91c66dfce2e452eb546cde1cf61879": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261126T214904Z.parquet",
+  "sha256": "2042ed5fb15c2b71263fcb6e951356004ae5bf1a555d500200645c7f49acd56b",
+  "logged_utc": "2026-11-26T21:49:04.971304+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.444,
+  "revised_rows": 0,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-28T21:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261126T213005Z.parquet",
+   "inputs_digest": "{\"7e42ee2b96752d8e1bc6fab8c0ad998f\": \"9198b8a931aa0385\", \"0ebe196ce469f86aba61ded8de5fe9a8\": \"8cf311893a79431f\", \"f77049eaeb5b3c0945c4bc2790dda6e6\": \"a5e8adb37a370772\"}",
+   "components": {
+    "7e42ee2b96752d8e1bc6fab8c0ad998f": {
+     "pinnacle_h2h": [
+      [
+       "North Texas Mean Green",
+       0,
+       -149
+      ],
+      [
+       "UAB Blazers",
+       0,
+       132
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Texas Mean Green",
+       -3.0,
+       -108
+      ],
+      [
+       "UAB Blazers",
+       3.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -111
+      ],
+      [
+       "Under",
+       45.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Johnson throws 2 of his 4 TD passes to Roberts, Tu",
+      "North Texas Mean Green vs. Tulane Green Wave: Full",
+      "Take a 360-degree look at college football's iconi",
+      "UTSA Roadrunners vs. UAB Blazers: Full Highlights",
+      "UTSA holds off UAB 19-17 to maintain top spot in A",
+      "Who are the winningest college football coaches of"
+     ],
+     "kalshi_snap": "snap_20261126T2107Z.parquet"
+    },
+    "0ebe196ce469f86aba61ded8de5fe9a8": {
+     "pinnacle_h2h": [
+      [
+       "Michigan State Spartans",
+       0,
+       -137
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       121
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan State Spartans",
+       -3.0,
+       102
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       3.0,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       101
+      ],
+      [
+       "Under",
+       47.0,
+       -118
+      ]
+     ],
+     "news": [
+      "College football takeaways: Lasting impressions fr",
+      "Emotional Greg Schiano authors 'special' win, Rutg",
+      "Raymond's heads-up pitch helps Rutgers beat Penn S",
+      "Raymond's lateral helps Rutgers beat Penn State 25",
+      "Take a 360-degree look at college football's iconi",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261126T2107Z.parquet"
+    },
+    "f77049eaeb5b3c0945c4bc2790dda6e6": {
+     "pinnacle_h2h": [
+      [
+       "Missouri Tigers",
+       0,
+       -125
+      ],
+      [
+       "Oklahoma Sooners",
+       0,
+       111
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Missouri Tigers",
+       -1.5,
+       -115
+      ],
+      [
+       "Oklahoma Sooners",
+       1.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -105
+      ],
+      [
+       "Under",
+       41.5,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "AP college football Week 12 poll reaction: What's ",
+      "Austin Simmons throws 4 TD passes, leading Missour",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "Mateer accounts for 4 touchdowns, Oklahoma smother",
+      "Missouri knocks off No. 16 Kentucky at home",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Take a 360-degree look at college football's iconi",
+      "Texas A&M Aggies vs. Oklahoma Sooners: Full Highli",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Venables on how Mateer shows up as a role model fo",
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261126T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "7e42ee2b96752d8e1bc6fab8c0ad998f": "anchor_morning",
+    "0ebe196ce469f86aba61ded8de5fe9a8": "anchor_morning",
+    "f77049eaeb5b3c0945c4bc2790dda6e6": "anchor_morning"
+   }
+  }
  }
 ]
