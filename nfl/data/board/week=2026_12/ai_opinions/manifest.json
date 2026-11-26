@@ -7451,5 +7451,148 @@
     "44a3bcf5bd002583ddef2207a92dd977": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261126T171704Z.parquet",
+  "sha256": "f208275be0512a9e6905e55ce1c56a19e6fddbed6bd330cf63e4dcbee125ffb3",
+  "logged_utc": "2026-11-26T17:17:04.196934+00:00",
+  "rows": 78,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.936,
+  "revised_rows": 69,
+  "oldest_source_age_min": 73.8,
+  "first_kickoff_utc": "2026-11-26T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261126T170006Z.parquet",
+   "inputs_digest": "{\"9b825e6518156008da499be041975fdd\": \"9d3ee39ff147177f\"}",
+   "components": {
+    "9b825e6518156008da499be041975fdd": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -115
+      ],
+      [
+       "Detroit Lions",
+       0,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Chicago Bears",
+       -1.0,
+       -110
+      ],
+      [
+       "Detroit Lions",
+       1.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       55.5,
+       -115
+      ],
+      [
+       "Under",
+       55.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -108
+      ],
+      [
+       "Detroit Lions",
+       0,
+       -102
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Chicago Bears",
+       -1.0,
+       100
+      ],
+      [
+       "Detroit Lions",
+       1.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -102
+      ],
+      [
+       "Under",
+       56.5,
+       -110
+      ]
+     ],
+     "props_ts": "2026-11-26T14:00:10.389177+00:00",
+     "inj_Detroit Lions": "5f724ee4f853f87e",
+     "inj_Chicago Bears": "b3b98537b2ae9c0e",
+     "news": [
+      "2026 NFL Thanksgiving preview: Picks, predictions,",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bears rule out Gordon for second straight game due",
+      "Bears' Johnson has no plan to forgo Swift's role i",
+      "Bears' Johnson has no plan to stop using Swift in ",
+      "Best bets and top prop plays for Bears-Lions, Eagl",
+      "Caleb Williams' plan for facing Detroit on Thanksg",
+      "Despite 5th straight win, Bears offense not 'satis",
+      "How Jeffery Simmons changed the Bears' defensive i",
+      "How active NFL players continue to redefine all-ti",
+      "Jared Goff throws 2 TDs, Jahmyr Gibbs runs for 2 m",
+      "Jeffery Simmons gets 3 sacks as the Chicago Bears ",
+      "Jeffery Simmons matches career high with 3 sacks i",
+      "Lions and Bears kick off NFL's Thanksgiving Day tr",
+      "Longtime Lions owner Martha Firestone Ford dies at",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Thanksgiving games: Traditions, best moments, ",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "NFL players with most at stake over rest of 2026: ",
+      "New Orleans Saints vs. Chicago Bears: Game Highlig",
+      "Seven things Solak thinks for NFL Week 12: Takes o",
+      "Stephen A.: Bears-Lions a big-time game",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tampa Bay Buccaneers vs. Detroit Lions: Game Highl",
+      "Top NFL plays from Week 11",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Week 11 betting preview: Analysis, best bets, TD p",
+      "Who are the winningest NFL coaches of all time?"
+     ],
+     "kalshi_snap": "snap_20261126T1705Z.parquet"
+    }
+   },
+   "triggers": {
+    "9b825e6518156008da499be041975fdd": "anchor_close"
+   }
+  }
  }
 ]
