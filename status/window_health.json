@@ -42,21 +42,21 @@
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-26T18:47:31.857867+00:00",
-  "finished_utc": "2026-11-26T18:47:31.857867+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-26T19:18:52.498269+00:00",
+  "finished_utc": "2026-11-26T19:18:52.498269+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['anchor_prekick', 'injury_change: inj_Pittsburgh Steelers; injury_change: inj_Denver Broncos']",
-  "freeze_file": "ai_opinions_20261126T183205Z.parquet"
+  "message": "",
+  "freeze_file": null
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-26T18:52:40.321368+00:00",
-  "finished_utc": "2026-11-26T18:52:40.321368+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-26T19:19:04.187258+00:00",
+  "finished_utc": "2026-11-26T19:19:04.187258+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle spreads Nebraska Cornhuskers 5.0\u21924.0; line_move: pinnacle spreads Iowa Hawkeyes -5.0\u2192-4.0', 'line_move: pinnacle spreads UTSA Roadrunners -1.5\u21921.0; line_move: pinnacle spreads Tu",
-  "freeze_file": "ai_opinions_20261126T181904Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]

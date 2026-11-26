@@ -1,45 +1,12 @@
 {
- "started_utc": "2026-11-26T18:19:04.762908+00:00",
- "finished_utc": "2026-11-26T18:52:40.343964+00:00",
+ "started_utc": "2026-11-26T19:19:03.848471+00:00",
+ "finished_utc": "2026-11-26T19:19:04.248121+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "8fc8552ec633bb09ca2bcb9b15cb6896",
-   "text": "line_move: pinnacle spreads Nebraska Cornhuskers 5.0\u21924.0; line_move: pinnacle spreads Iowa Hawkeyes -5.0\u2192-4.0"
-  },
-  {
-   "game": "1f0a9e7f76830b196133518ae01bb113",
-   "text": "line_move: pinnacle spreads UTSA Roadrunners -1.5\u21921.0; line_move: pinnacle spreads Tulsa Golden Hurricane 1.5\u2192-1.0"
-  },
-  {
-   "game": "591a88cc16d9c5830bef16d7f522bc8a",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "c8b7cbe64e2914e579ab55c34db57da2",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "2981442fcc9375220d0f7959bcd9c084",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "1dc37c1023af4b0f098c76640445ae2e",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "b59311f602e67a25e81604f9b895a8b1",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "a89bafbbfbc300c0005e20bfb7acfb90",
-   "text": "anchor_morning"
-  }
- ],
- "games_read": 8,
- "frozen_file": "ai_opinions_20261126T181904Z.parquet",
- "spend_usd": 38.0936,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
