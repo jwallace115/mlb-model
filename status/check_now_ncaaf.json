@@ -1,17 +1,12 @@
 {
- "started_utc": "2026-11-26T14:34:03.880522+00:00",
- "finished_utc": "2026-11-26T14:53:20.766963+00:00",
+ "started_utc": "2026-11-26T15:49:12.706269+00:00",
+ "finished_utc": "2026-11-26T15:49:14.620392+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "5fc40a6a68f1652a38d2844a90358df2",
-   "text": "line_move: pinnacle spreads North Dakota State Bison -9.0\u2192-7.5; line_move: pinnacle spreads San Jose State Spartans 9.0\u21927.5"
-  }
- ],
- "games_read": 1,
- "frozen_file": "ai_opinions_20261126T143403Z.parquet",
- "spend_usd": 37.3509,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
