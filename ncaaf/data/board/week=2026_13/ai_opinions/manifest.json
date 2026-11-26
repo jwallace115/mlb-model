@@ -1710,5 +1710,157 @@
     "4c69ecf41bb2d36dfeedeae23acc5b86": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261126T014903Z.parquet",
+  "sha256": "f538e44ffdcc2664ae21d1a953cd8a079ed5c12eb73dffda6bdcf39e47c7f497",
+  "logged_utc": "2026-11-26T01:49:03.503577+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-27T20:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261126T013005Z.parquet",
+   "inputs_digest": "{\"a750f21dccb9df459196adc8dcf5ffe4\": \"9f0c985a24b53f63\", \"4c69ecf41bb2d36dfeedeae23acc5b86\": \"c2977731ea5788ac\"}",
+   "components": {
+    "a750f21dccb9df459196adc8dcf5ffe4": {
+     "pinnacle_h2h": [
+      [
+       "Memphis Tigers",
+       0,
+       -885
+      ],
+      [
+       "Temple Owls",
+       0,
+       616
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Memphis Tigers",
+       -18.0,
+       -106
+      ],
+      [
+       "Temple Owls",
+       18.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       66.5,
+       -104
+      ],
+      [
+       "Under",
+       66.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Memphis Tigers vs. Navy Midshipmen: Full Highlight",
+      "Memphis' Charles Huff says he's not candidate for ",
+      "Navy scores with 15 seconds left, knocks off No. 2",
+      "No Big Ten football teams in AP top 5 for first ti"
+     ],
+     "kalshi_snap": "snap_20261126T0007Z.parquet"
+    },
+    "4c69ecf41bb2d36dfeedeae23acc5b86": {
+     "pinnacle_h2h": [
+      [
+       "Texas A&M Aggies",
+       0,
+       351
+      ],
+      [
+       "Texas Longhorns",
+       0,
+       -442
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Texas A&M Aggies",
+       10.5,
+       -106
+      ],
+      [
+       "Texas Longhorns",
+       -10.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.5,
+       -111
+      ],
+      [
+       "Under",
+       40.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "AP college football Week 12 poll reaction: What's ",
+      "Arch Manning accounts for 3 TDs, and No. 8 Texas b",
+      "Arkansas Razorbacks vs. Texas Longhorns: Full High",
+      "Attorney: Trev Alberts told he won't be next AD at",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "College Football Playoff top 12 projection after W",
+      "Desmond Howard: CFP committee finally arranged the",
+      "Dissecting playoff predictor and College Football ",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "Mateer accounts for 4 touchdowns, Oklahoma smother",
+      "Nebraska's jab at Ohio State's 'THE' leads top Wee",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Predicting the College Football Playoff: Who's mos",
+      "Saturday Spin: Manning's return to Texas, Stockton",
+      "Sources: Texas A&M expected to bench Marcel Reed, ",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Steve Sarkisian details the Texas anticipating Tex",
+      "Steve Sarkisian highlights Texas' maturity, reflec",
+      "Texas A&M Aggies vs. Oklahoma Sooners: Full Highli",
+      "Texas A&M benches Marcel Reed vs. Sooners, starts ",
+      "Texas A&M names John Thornton interim athletic dir",
+      "Texas eyes the SEC title game, but a desperate Tex",
+      "Tiering the CFP favorites: Who's actually built to",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Trev Alberts 'shocked' to be told he won't be Mich",
+      "Trev Alberts told he won't be Michigan AD after ag",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What SEC Championship contender issues could UGA f",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Which teams have the best odds to make the College",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261126T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "a750f21dccb9df459196adc8dcf5ffe4": "line_move: pinnacle spreads Memphis Tigers -17.0\u2192-18.0; line_move: pinnacle spreads Temple Owls 17.0\u219218.0",
+    "4c69ecf41bb2d36dfeedeae23acc5b86": "line_move: pinnacle spreads Texas Longhorns -12.0\u2192-10.5; line_move: pinnacle spreads Texas A&M Aggies 12.0\u219210.5"
+   }
+  }
  }
 ]
