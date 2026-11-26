@@ -3886,5 +3886,408 @@
     "a89bafbbfbc300c0005e20bfb7acfb90": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261126T193403Z.parquet",
+  "sha256": "ff8b2040241240de42b19a57a9b711d51c5ea2ad7971299e099cb56dc7ebc509",
+  "logged_utc": "2026-11-26T19:34:03.492378+00:00",
+  "rows": 24,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 8,
+  "no_view_share": 0.625,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-28T19:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261126T193005Z.parquet",
+   "inputs_digest": "{\"559227d3ba70769111dd09490258af44\": \"d7caeebf4639caa1\", \"7ce20f289047e13b13c4a6517b10a4c2\": \"46fd09e95ae4ce8a\", \"e82b8ac931ff74f03744aa4ae6072a51\": \"d8f89caa94ac5761\", \"6530923d9380b559b3c0b49b4f770e5f\": \"d260aca9f7e0cc76\", \"c424e58ad3ce3e391a33c0495aa52690\": \"7c58447684fc0a13\", \"61a2b3c7f905b33b86e1ea178a885325\": \"f03eb7e562e80228\", \"a0fe49c990d1497e1cb34eb9c2b73ef1\": \"2e99c8935ecfb38f\", \"200466f41d944b2706e404635298ebf6\": \"ed63b7e73d30787b\"}",
+   "components": {
+    "559227d3ba70769111dd09490258af44": {
+     "pinnacle_h2h": [
+      [
+       "Army Black Knights",
+       0,
+       -209
+      ],
+      [
+       "Rice Owls",
+       0,
+       181
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Army Black Knights",
+       -6.0,
+       -101
+      ],
+      [
+       "Rice Owls",
+       6.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -102
+      ],
+      [
+       "Under",
+       47.5,
+       -115
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Take a 360-degree look at college football's iconi",
+      "Week 13 Game Day Kickoff: Nothing compares to the "
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "7ce20f289047e13b13c4a6517b10a4c2": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       590
+      ],
+      [
+       "James Madison Dukes",
+       0,
+       -837
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       17.0,
+       -104
+      ],
+      [
+       "James Madison Dukes",
+       -17.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -110
+      ],
+      [
+       "Under",
+       54.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Coastal Carolina Chanticleers vs. Louisiana Ragin'",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Winfield has 3 TD passes, runs for another score i"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "e82b8ac931ff74f03744aa4ae6072a51": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       -126
+      ],
+      [
+       "UCF Knights",
+       0,
+       112
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       -2.5,
+       -107
+      ],
+      [
+       "UCF Knights",
+       2.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -110
+      ],
+      [
+       "Under",
+       49.5,
+       -106
+      ]
+     ],
+     "news": [
+      "Colorado's Deion Sanders shrugs off hot-seat chatt",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "6530923d9380b559b3c0b49b4f770e5f": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       -450
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       356
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       -11.0,
+       -111
+      ],
+      [
+       "Sam Houston State Bearkats",
+       11.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -104
+      ],
+      [
+       "Under",
+       41.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Florida International Panthers vs. Kennesaw State ",
+      "Varnes, Woods fuel Kennesaw State offense in 35-24"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "c424e58ad3ce3e391a33c0495aa52690": {
+     "pinnacle_h2h": [
+      [
+       "Georgia State Panthers",
+       0,
+       176
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -203
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia State Panthers",
+       5.5,
+       -111
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       -5.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -105
+      ],
+      [
+       "Under",
+       56.0,
+       -112
+      ]
+     ],
+     "news": [
+      "Del Rio-Wilson leads Marshall rally in 28-27 win o",
+      "Georgia State Panthers vs. Marshall Thundering Her",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "61a2b3c7f905b33b86e1ea178a885325": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       -180
+      ],
+      [
+       "Kansas State Wildcats",
+       0,
+       158
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       -3.5,
+       -110
+      ],
+      [
+       "Kansas State Wildcats",
+       3.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -103
+      ],
+      [
+       "Under",
+       53.0,
+       -113
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "Aiden Flora, nation's leading rusher, re-signs wit",
+      "Gio Richardson hauls in go-ahead TD to seal Arizon",
+      "Noah Fifita rallies No. 19 Arizona through the rai",
+      "Take a 360-degree look at college football's iconi",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "a0fe49c990d1497e1cb34eb9c2b73ef1": {
+     "pinnacle_h2h": [
+      [
+       "Liberty Flames",
+       0,
+       -886
+      ],
+      [
+       "Missouri State Bears",
+       0,
+       617
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Liberty Flames",
+       -17.5,
+       -111
+      ],
+      [
+       "Missouri State Bears",
+       17.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -110
+      ],
+      [
+       "Under",
+       53.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "Creel has 3 total TDs in 4th quarter, Jacksonville",
+      "Missouri State Bears vs. Jacksonville State Gameco",
+      "NCAA sanctions Liberty over tampering with two pla",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "No. 22 Liberty beats Western Kentucky 45-14 for it",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Western Kentucky Hilltoppers vs. Liberty Flames: F",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Which teams have the best odds to make the College",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "200466f41d944b2706e404635298ebf6": {
+     "pinnacle_h2h": [
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -154
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       136
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Middle Tennessee Blue Raiders",
+       -3.0,
+       -111
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -106
+      ],
+      [
+       "Under",
+       51.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Brown's 75-yard rushing TD helps Middle Tennessee ",
+      "Delaware Blue Hens vs. New Mexico State Aggies: Fu",
+      "Middle Tennessee Blue Raiders vs. Sam Houston Bear",
+      "Minicucci throws for 5 TDs, breaks Delaware's care",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "559227d3ba70769111dd09490258af44": "anchor_morning",
+    "7ce20f289047e13b13c4a6517b10a4c2": "anchor_morning",
+    "e82b8ac931ff74f03744aa4ae6072a51": "anchor_morning",
+    "6530923d9380b559b3c0b49b4f770e5f": "anchor_morning",
+    "c424e58ad3ce3e391a33c0495aa52690": "anchor_morning",
+    "61a2b3c7f905b33b86e1ea178a885325": "anchor_morning",
+    "a0fe49c990d1497e1cb34eb9c2b73ef1": "anchor_morning",
+    "200466f41d944b2706e404635298ebf6": "anchor_morning"
+   }
+  }
  }
 ]
