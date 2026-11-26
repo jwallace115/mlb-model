@@ -8478,5 +8478,26 @@
     "f36f518585aec40e8cb40e071c0844aa": "line_move: hardrockbet_fl totals Under 45.0\u219246.0; line_move: hardrockbet_fl totals Over 45.0\u219246.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261126T223647Z.parquet",
+  "sha256": "9e8d4a23c17a81a3616ef2ef1a0c43af521a5c4302b44228d59a4d56c13c6a91",
+  "logged_utc": "2026-11-26T22:36:47.956353+00:00",
+  "rows": 77,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "reader_v3b",
+  "pilot": false,
+  "window": "prekick",
+  "games": 1,
+  "no_view_share": 0.351,
+  "revised_rows": 0,
+  "oldest_source_age_min": 36.5,
+  "first_kickoff_utc": "2026-11-27T01:20:00Z",
+  "reader_sha256": "a413d38af2157fcb8a04c1d71cbc17a791cdadaa375e6ec3da56b1e616ba6bfd",
+  "inputs": {
+   "props": "data_2026_11.parquet",
+   "lines": "snap_20261126T220019Z.parquet"
+  }
  }
 ]
