@@ -3447,5 +3447,444 @@
     "57d6254e2054bb1e269219b1ef8b6ab7": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261126T181904Z.parquet",
+  "sha256": "581eba31df570a5c8fcfb12e85d1fe90a95ef5ac10f0da218852dd26281b3fa0",
+  "logged_utc": "2026-11-26T18:19:04.762908+00:00",
+  "rows": 24,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 8,
+  "no_view_share": 0.5,
+  "revised_rows": 6,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-27T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261126T180008Z.parquet",
+   "inputs_digest": "{\"8fc8552ec633bb09ca2bcb9b15cb6896\": \"2a52a9b53c136398\", \"1f0a9e7f76830b196133518ae01bb113\": \"41987bc473c994c9\", \"591a88cc16d9c5830bef16d7f522bc8a\": \"649d7956cfe40223\", \"c8b7cbe64e2914e579ab55c34db57da2\": \"7be952e58b40dc9a\", \"2981442fcc9375220d0f7959bcd9c084\": \"a0790771b2296f69\", \"1dc37c1023af4b0f098c76640445ae2e\": \"568278b8465b9bf3\", \"b59311f602e67a25e81604f9b895a8b1\": \"9fc6d72c43674070\", \"a89bafbbfbc300c0005e20bfb7acfb90\": \"1f334566078babc5\"}",
+   "components": {
+    "8fc8552ec633bb09ca2bcb9b15cb6896": {
+     "pinnacle_h2h": [
+      [
+       "Iowa Hawkeyes",
+       0,
+       -192
+      ],
+      [
+       "Nebraska Cornhuskers",
+       0,
+       168
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa Hawkeyes",
+       -4.0,
+       -107
+      ],
+      [
+       "Nebraska Cornhuskers",
+       4.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.0,
+       -104
+      ],
+      [
+       "Under",
+       41.0,
+       -113
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 12 poll reaction: What's ",
+      "Best bets for Rivalry Week: Breaking down Michigan",
+      "Best bets for rivalry week: Breaking down Michigan",
+      "Betting buzz: Big Ten's odds of National Champion ",
+      "Betting buzz: Big Ten's odds of national champion ",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "College football takeaways: Lasting impressions fr",
+      "Drew Stevens goes viral with hilarious postgame pr",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "Nebraska ends 31-game losing streak against AP Top",
+      "Nebraska's jab at Ohio State's 'THE' leads top Wee",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "No. 13 Iowa shuts out Illinois in the second half,",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Preseason No. 1 Ohio State suffers fourth loss, wi",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "Which teams have the best odds to make the College",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "1f0a9e7f76830b196133518ae01bb113": {
+     "pinnacle_h2h": [
+      [
+       "Tulsa Golden Hurricane",
+       0,
+       -108
+      ],
+      [
+       "UTSA Roadrunners",
+       0,
+       -104
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Tulsa Golden Hurricane",
+       -1.0,
+       -103
+      ],
+      [
+       "UTSA Roadrunners",
+       1.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -107
+      ],
+      [
+       "Under",
+       57.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "Hayes throws 4 TD passes, Singleton catches 3 of t",
+      "UTSA Roadrunners vs. UAB Blazers: Full Highlights",
+      "UTSA holds off UAB 19-17 to maintain top spot in A",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "591a88cc16d9c5830bef16d7f522bc8a": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       121
+      ],
+      [
+       "Northwestern Wildcats",
+       0,
+       -137
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       2.5,
+       -101
+      ],
+      [
+       "Northwestern Wildcats",
+       -2.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -108
+      ],
+      [
+       "Under",
+       50.0,
+       -108
+      ]
+     ],
+     "news": [
+      "AP college football Week 12 poll reaction: What's ",
+      "Last-second field goal gives Minnesota 20-17 win o",
+      "No. 13 Iowa shuts out Illinois in the second half,",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "c8b7cbe64e2914e579ab55c34db57da2": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas Razorbacks",
+       0,
+       473
+      ],
+      [
+       "LSU Tigers",
+       0,
+       -634
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas Razorbacks",
+       14.5,
+       -112
+      ],
+      [
+       "LSU Tigers",
+       -14.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -115
+      ],
+      [
+       "Under",
+       49.0,
+       -102
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "AP college football Week 12 poll reaction: What's ",
+      "Arch Manning accounts for 3 TDs, and No. 8 Texas b",
+      "Arkansas Razorbacks vs. Texas Longhorns: Full High",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "Evaulating strength of Tennessee's defense in win ",
+      "Faizon Brandon runs for 2 fourth-quarter TDs, No. ",
+      "Judge denies SEC's request for TRO against LSU in ",
+      "LSU Tigers vs. Tennessee Volunteers: Game Highligh",
+      "LSU asks judge to throw out SEC's 'unwarranted' su",
+      "LSU's Lane Kiffin apologizes for using profanity d",
+      "Lane Kiffin stresses importance of finishing stron",
+      "SEC to consider termination of LSU's membership at",
+      "Take a 360-degree look at college football's iconi",
+      "Tennessee fined by SEC after fans throw golf balls",
+      "Thamel: There needs to be a 'pound of flesh' that ",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What qualities make the perfect coach? We're borro",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "2981442fcc9375220d0f7959bcd9c084": {
+     "pinnacle_h2h": [
+      [
+       "East Carolina Pirates",
+       0,
+       -114
+      ],
+      [
+       "Florida Atlantic Owls",
+       0,
+       102
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "East Carolina Pirates",
+       -1.0,
+       -109
+      ],
+      [
+       "Florida Atlantic Owls",
+       1.0,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       57.5,
+       -114
+      ],
+      [
+       "Under",
+       57.5,
+       -102
+      ]
+     ],
+     "news": [
+      "South Florida Bulls vs. Florida Atlantic Owls: Ful",
+      "Veltkamp throws 4 more TDs in Florida Atlantic's 3"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "1dc37c1023af4b0f098c76640445ae2e": {
+     "pinnacle_h2h": [
+      [
+       "Kennesaw State Owls",
+       0,
+       -160
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       0,
+       141
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kennesaw State Owls",
+       -3.0,
+       -114
+      ],
+      [
+       "Western Kentucky Hilltoppers",
+       3.0,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -106
+      ],
+      [
+       "Under",
+       54.0,
+       -110
+      ]
+     ],
+     "news": [
+      "Florida International Panthers vs. Kennesaw State ",
+      "No. 22 Liberty beats Western Kentucky 45-14 for it",
+      "Varnes, Woods fuel Kennesaw State offense in 35-24",
+      "Western Kentucky Hilltoppers vs. Liberty Flames: F",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "b59311f602e67a25e81604f9b895a8b1": {
+     "pinnacle_h2h": [
+      [
+       "Marshall Thundering Herd",
+       0,
+       -208
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       181
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Marshall Thundering Herd",
+       -5.0,
+       -110
+      ],
+      [
+       "UL Monroe Warhawks",
+       5.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -112
+      ],
+      [
+       "Under",
+       51.0,
+       -104
+      ]
+     ],
+     "news": [
+      "Aaron Clark blocks a PAT in overtime and Appalachi",
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Del Rio-Wilson leads Marshall rally in 28-27 win o",
+      "Georgia State Panthers vs. Marshall Thundering Her",
+      "UL Monroe Warhawks vs. Appalachian State Mountaine"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    },
+    "a89bafbbfbc300c0005e20bfb7acfb90": {
+     "pinnacle_h2h": [
+      [
+       "Old Dominion Monarchs",
+       0,
+       -227
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       195
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Old Dominion Monarchs",
+       -6.0,
+       -108
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       6.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -105
+      ],
+      [
+       "Under",
+       51.0,
+       -111
+      ]
+     ],
+     "news": [
+      "Old Dominion Monarchs vs. UConn Huskies: Full High",
+      "Osborne throws and runs for scores, UConn bowl eli"
+     ],
+     "kalshi_snap": "snap_20261126T1807Z.parquet"
+    }
+   },
+   "triggers": {
+    "8fc8552ec633bb09ca2bcb9b15cb6896": "line_move: pinnacle spreads Nebraska Cornhuskers 5.0\u21924.0; line_move: pinnacle spreads Iowa Hawkeyes -5.0\u2192-4.0",
+    "1f0a9e7f76830b196133518ae01bb113": "line_move: pinnacle spreads UTSA Roadrunners -1.5\u21921.0; line_move: pinnacle spreads Tulsa Golden Hurricane 1.5\u2192-1.0",
+    "591a88cc16d9c5830bef16d7f522bc8a": "anchor_morning",
+    "c8b7cbe64e2914e579ab55c34db57da2": "anchor_morning",
+    "2981442fcc9375220d0f7959bcd9c084": "anchor_morning",
+    "1dc37c1023af4b0f098c76640445ae2e": "anchor_morning",
+    "b59311f602e67a25e81604f9b895a8b1": "anchor_morning",
+    "a89bafbbfbc300c0005e20bfb7acfb90": "anchor_morning"
+   }
+  }
  }
 ]

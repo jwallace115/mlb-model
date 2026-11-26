@@ -1,12 +1,21 @@
 {
- "started_utc": "2026-11-26T18:02:03.782425+00:00",
- "finished_utc": "2026-11-26T18:03:51.141927+00:00",
+ "started_utc": "2026-11-26T18:32:05.306297+00:00",
+ "finished_utc": "2026-11-26T18:47:32.325008+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "ffaa06af56a7137d4b078c5c46c0b730",
+   "text": "anchor_prekick"
+  },
+  {
+   "game": "44a3bcf5bd002583ddef2207a92dd977",
+   "text": "injury_change: inj_Pittsburgh Steelers; injury_change: inj_Denver Broncos"
+  }
+ ],
+ "games_read": 2,
+ "frozen_file": "ai_opinions_20261126T183205Z.parquet",
+ "spend_usd": 38.0504,
+ "result": "COMPLETE"
 }
