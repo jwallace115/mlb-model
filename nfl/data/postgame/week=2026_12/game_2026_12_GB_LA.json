@@ -1,0 +1,107 @@
+{
+  "game_id": "2026_12_GB_LA",
+  "week": 12,
+  "home": "LA",
+  "away": "GB",
+  "final_score": {
+    "home": 26,
+    "away": 13
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 167,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 26,
+        "away": 13
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 167,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 26,
+        "away": 13
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 71,
+      "dropbacks": 24,
+      "rush_attempts": 47,
+      "pass_rate": 0.3380281690140845,
+      "run_rate": 0.6619718309859155,
+      "pass_oe": -14.853489590187868
+    },
+    "away": {
+      "plays": 44,
+      "dropbacks": 30,
+      "rush_attempts": 14,
+      "pass_rate": 0.6818181818181818,
+      "run_rate": 0.31818181818181823,
+      "pass_oe": 5.339708989081175
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 2,
+      "fumbles_lost": 1,
+      "total": 3
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 4,
+      "touchdowns": 2
+    },
+    "away": {
+      "trips": 1,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "S.Williams",
+      "team": "GB",
+      "quarter": 2,
+      "play_id": 1688,
+      "desc": "(4:45) 83-S.Williams left tackle to GB 45 for 13 yards (90-T.Davis). GB-70-K.Zeitler was injured during the play."
+    },
+    {
+      "player": "J.Love",
+      "team": "GB",
+      "quarter": 2,
+      "play_id": 1849,
+      "desc": "(2:00) (Shotgun) 10-J.Love pass incomplete short right to 9-C.Watson (5-K.Kinchens). GB-9-C.Watson was injured during the play. Penalty on LA-5-K.Kinchens, Disqualification, offsetting, enforced at LA"
+    },
+    {
+      "player": "B.Corum",
+      "team": "LA",
+      "quarter": 4,
+      "play_id": 3004,
+      "desc": "(15:00) 68-D.Quessenberry reported in as eligible. 24-B.Corum left guard to 50 for 4 yards (7-J.Bullard; 58-I.McDuffie). LA-71-W.McClendon was injured during the play."
+    },
+    {
+      "player": "B.Corum",
+      "team": "LA",
+      "quarter": 4,
+      "play_id": 3036,
+      "desc": "(14:39) (Shotgun) 24-B.Corum up the middle to GB 44 for 6 yards (95-D.Wyatt). LA-66-B.Murray was injured during the play. GB-95-D.Wyatt was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}
