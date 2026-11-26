@@ -5223,5 +5223,95 @@
     "f77049eaeb5b3c0945c4bc2790dda6e6": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261126T221903Z.parquet",
+  "sha256": "b8ccab98b878ad56565ec5a45a4faa6eef4db1db9912a51091c9ee68f704f13c",
+  "logged_utc": "2026-11-26T22:19:03.688373+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 18.7,
+  "first_kickoff_utc": "2026-11-27T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261126T220019Z.parquet",
+   "inputs_digest": "{\"b39108d2cfcd62d29954aee80bbf7b51\": \"4c443537c151a9ce\"}",
+   "components": {
+    "b39108d2cfcd62d29954aee80bbf7b51": {
+     "pinnacle_h2h": [
+      [
+       "TCU Horned Frogs",
+       0,
+       467
+      ],
+      [
+       "Texas Tech Red Raiders",
+       0,
+       -592
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "TCU Horned Frogs",
+       14.0,
+       -108
+      ],
+      [
+       "Texas Tech Red Raiders",
+       -14.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -112
+      ],
+      [
+       "Under",
+       46.5,
+       -104
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "AP college football Week 12 poll reaction: What's ",
+      "College Football Playoff top 12 projection after W",
+      "Dampier throws 2 long TD passes as No. 2 Utah beat",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "No. 11 Texas Tech moves closer to another Big 12 t",
+      "No. 9 Texas Tech wants more than 10-win seasons wi",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Predicting the College Football Playoff: Who's mos",
+      "TCU fires coach Sonny Dykes; expected to be owed m",
+      "Texas Tech Red Raiders vs. Baylor Bears: Full High",
+      "The oldest grudge in football",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Utah outlasts TCU to remain undefeated",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "Which teams have the best odds to make the College",
+      "Who are the candidates and what are the priorities",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261126T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "b39108d2cfcd62d29954aee80bbf7b51": "anchor_prekick"
+   }
+  }
  }
 ]
