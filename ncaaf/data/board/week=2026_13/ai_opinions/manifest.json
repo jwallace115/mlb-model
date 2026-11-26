@@ -1862,5 +1862,99 @@
     "4c69ecf41bb2d36dfeedeae23acc5b86": "line_move: pinnacle spreads Texas Longhorns -12.0\u2192-10.5; line_move: pinnacle spreads Texas A&M Aggies 12.0\u219210.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261126T024904Z.parquet",
+  "sha256": "f55f8156286a224584857aa596f2ec56d0780a0ed3b8e379dcf6b58fc9c67a32",
+  "logged_utc": "2026-11-26T02:49:04.006932+00:00",
+  "rows": 2,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-28T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261126T023008Z.parquet",
+   "inputs_digest": "{\"bee4ea7a231be77b1ee52ddf3755592f\": \"2c855dd12d1b29f8\"}",
+   "components": {
+    "bee4ea7a231be77b1ee52ddf3755592f": {
+     "pinnacle_h2h": [
+      [
+       "Utah Utes",
+       0,
+       -2200
+      ],
+      [
+       "West Virginia Mountaineers",
+       0,
+       1207
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Utah Utes",
+       -26.0,
+       -108
+      ],
+      [
+       "West Virginia Mountaineers",
+       26.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       67.0,
+       -109
+      ],
+      [
+       "Under",
+       67.0,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "AP college football Week 12 poll reaction: What's ",
+      "Best bets for Rivalry Week: Breaking down Michigan",
+      "Best bets for rivalry week: Breaking down Michigan",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "College Football Playoff top 12 projection after W",
+      "Dampier throws 2 long TD passes as No. 2 Utah beat",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "Jonathan Dimas kicks 23-yard field goal to send No",
+      "Keisean Henderson leads Houston to win after QB Co",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "No. 2 Utah seeks to wrap up unbeaten regular seaso",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Predicting the College Football Playoff: Who's mos",
+      "Sources: Houston QB Conner Weigman out; Henderson ",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Utah extends longest active winning streak in FBS,",
+      "Utah outlasts TCU to remain undefeated",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Which teams have the best odds to make the College",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261126T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "bee4ea7a231be77b1ee52ddf3755592f": "anchor_morning"
+   }
+  }
  }
 ]
