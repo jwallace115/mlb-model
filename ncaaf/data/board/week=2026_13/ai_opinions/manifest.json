@@ -1956,5 +1956,77 @@
     "bee4ea7a231be77b1ee52ddf3755592f": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261126T143403Z.parquet",
+  "sha256": "5870400a76e62b3727ff52d5949374fa8b91d851673e198a2bd8a10534f8fda7",
+  "logged_utc": "2026-11-26T14:34:03.880522+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-27T20:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261126T143007Z.parquet",
+   "inputs_digest": "{\"5fc40a6a68f1652a38d2844a90358df2\": \"0b9ea568332be222\"}",
+   "components": {
+    "5fc40a6a68f1652a38d2844a90358df2": {
+     "pinnacle_h2h": [
+      [
+       "North Dakota State Bison",
+       0,
+       -334
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       276
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Dakota State Bison",
+       -7.5,
+       -107
+      ],
+      [
+       "San Jose State Spartans",
+       7.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.0,
+       -107
+      ],
+      [
+       "Under",
+       40.0,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "Nathan Hayes throws his third passing TD for North",
+      "Nathan Hayes tosses 4 TD passes and North Dakota S",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261126T1207Z.parquet"
+    }
+   },
+   "triggers": {
+    "5fc40a6a68f1652a38d2844a90358df2": "line_move: pinnacle spreads North Dakota State Bison -9.0\u2192-7.5; line_move: pinnacle spreads San Jose State Spartans 9.0\u21927.5"
+   }
+  }
  }
 ]

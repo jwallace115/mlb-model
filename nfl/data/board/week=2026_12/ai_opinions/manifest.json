@@ -6409,5 +6409,526 @@
     "44a3bcf5bd002583ddef2207a92dd977": "injury_change: inj_Pittsburgh Steelers; injury_change: inj_Denver Broncos"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261126T144704Z.parquet",
+  "sha256": "96a06d023b28acb7ba002603ba675adfc7a88f94baaf5ff21ba4174ef48a9aa3",
+  "logged_utc": "2026-11-26T14:47:04.952974+00:00",
+  "rows": 308,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.948,
+  "revised_rows": 273,
+  "oldest_source_age_min": 46.9,
+  "first_kickoff_utc": "2026-11-26T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=12/data_2026_12.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261126T143007Z.parquet",
+   "inputs_digest": "{\"9b825e6518156008da499be041975fdd\": \"8197c01a802fb6cc\", \"ffaa06af56a7137d4b078c5c46c0b730\": \"8b59a60d5e065275\", \"f36f518585aec40e8cb40e071c0844aa\": \"12ebbff4e4ff2fd5\", \"44a3bcf5bd002583ddef2207a92dd977\": \"9f6be1b2147cef0f\"}",
+   "components": {
+    "9b825e6518156008da499be041975fdd": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -120
+      ],
+      [
+       "Detroit Lions",
+       0,
+       100
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Chicago Bears",
+       -1.0,
+       -110
+      ],
+      [
+       "Detroit Lions",
+       1.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       56.0,
+       -110
+      ],
+      [
+       "Under",
+       56.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Chicago Bears",
+       0,
+       -111
+      ],
+      [
+       "Detroit Lions",
+       0,
+       101
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Chicago Bears",
+       -1.0,
+       -103
+      ],
+      [
+       "Detroit Lions",
+       1.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -102
+      ],
+      [
+       "Under",
+       56.5,
+       -110
+      ]
+     ],
+     "props_ts": "2026-11-26T14:00:10.389177+00:00",
+     "inj_Detroit Lions": "5f724ee4f853f87e",
+     "inj_Chicago Bears": "b3b98537b2ae9c0e",
+     "news": [
+      "2026 NFL Thanksgiving preview: Picks, predictions,",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bears rule out Gordon for second straight game due",
+      "Bears' Johnson has no plan to forgo Swift's role i",
+      "Bears' Johnson has no plan to stop using Swift in ",
+      "Best bets and top prop plays for Bears-Lions, Eagl",
+      "Caleb Williams' plan for facing Detroit on Thanksg",
+      "Despite 5th straight win, Bears offense not 'satis",
+      "How Jeffery Simmons changed the Bears' defensive i",
+      "How active NFL players continue to redefine all-ti",
+      "Jared Goff throws 2 TDs, Jahmyr Gibbs runs for 2 m",
+      "Jeffery Simmons gets 3 sacks as the Chicago Bears ",
+      "Jeffery Simmons matches career high with 3 sacks i",
+      "Lions and Bears kick off NFL's Thanksgiving Day tr",
+      "Longtime Lions owner Martha Firestone Ford dies at",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Thanksgiving games: Traditions, best moments, ",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "NFL players with most at stake over rest of 2026: ",
+      "New Orleans Saints vs. Chicago Bears: Game Highlig",
+      "Seven things Solak thinks for NFL Week 12: Takes o",
+      "Stephen A.: Bears-Lions a big-time game",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tampa Bay Buccaneers vs. Detroit Lions: Game Highl",
+      "Top NFL plays from Week 11",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Week 11 betting preview: Analysis, best bets, TD p",
+      "Who are the winningest NFL coaches of all time?"
+     ],
+     "kalshi_snap": "snap_20261126T1435Z.parquet"
+    },
+    "ffaa06af56a7137d4b078c5c46c0b730": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       -475
+      ],
+      [
+       "Philadelphia Eagles",
+       0,
+       350
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Dallas Cowboys",
+       -8.5,
+       -110
+      ],
+      [
+       "Philadelphia Eagles",
+       8.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       49.0,
+       -110
+      ],
+      [
+       "Under",
+       49.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Dallas Cowboys",
+       0,
+       -433
+      ],
+      [
+       "Philadelphia Eagles",
+       0,
+       357
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Dallas Cowboys",
+       -8.5,
+       -110
+      ],
+      [
+       "Philadelphia Eagles",
+       8.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -108
+      ],
+      [
+       "Under",
+       49.5,
+       -104
+      ]
+     ],
+     "props_ts": "2026-11-26T14:00:10.389177+00:00",
+     "inj_Dallas Cowboys": "f0f776a812687a6a",
+     "inj_Philadelphia Eagles": "41e41b4e47e2cf32",
+     "news": [
+      "2026 NFL Thanksgiving preview: Picks, predictions,",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Best bets and top prop plays for Bears-Lions, Eagl",
+      "Bills' Grand Theft Auto VI-themed jab at Dolphins ",
+      "Commanders' Jayden Daniels-themed post aimed at Be",
+      "Cowboys face another chance to build momentum",
+      "Cowboys need to break a year-long trend to make th",
+      "Cowboys really need back-to-back wins this time wi",
+      "Dak Prescott accounts for 5 TDs as the Cowboys rol",
+      "Dak Prescott continues hot streak, salutes Cowboys",
+      "Eagles snap 7-game losing streak and keep Steelers",
+      "Eagles snap 7-game slide with win over Steelers",
+      "Eagles' Riq Woolen benched after missed tackles vs",
+      "From practice squad to prime time: A look at Milto",
+      "How active NFL players continue to redefine all-ti",
+      "How far can Jayden Daniels take the Commanders thi",
+      "How upsets in the 2026 NFL season have upended sur",
+      "I Scored a Touchdown: Emmitt Smith Super Bowl XXVI",
+      "Judging overreactions to NFL Week 11: Joe Brady's ",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Thanksgiving games: Traditions, best moments, ",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "NFL players with most at stake over rest of 2026: ",
+      "NFL survivor power rankings: Why this is the week ",
+      "Pittsburgh Steelers vs. Philadelphia Eagles: Game ",
+      "Steelers' DK Metcalf denies trying to poke Eagles'",
+      "Steelers' DK Metcalf ejected for trying to poke Ea",
+      "Steelers' Metcalf denies trying to poke DeJean in ",
+      "Stephen A. not feeling too enthusiastic about Cowb",
+      "Stephen A. rolls his eyes at Michael Irvin's Cowbo",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tennessee Titans vs. Dallas Cowboys: Game Highligh",
+      "Top NFL plays from Week 11",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Who are the winningest NFL coaches of all time?",
+      "Why the Cowboys needed their win on Sunday"
+     ],
+     "kalshi_snap": "snap_20261126T1435Z.parquet"
+    },
+    "f36f518585aec40e8cb40e071c0844aa": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Buffalo Bills",
+       0,
+       -160
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       135
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Buffalo Bills",
+       -3.0,
+       -105
+      ],
+      [
+       "Kansas City Chiefs",
+       3.0,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       46.0,
+       -110
+      ],
+      [
+       "Under",
+       46.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Buffalo Bills",
+       0,
+       -160
+      ],
+      [
+       "Kansas City Chiefs",
+       0,
+       144
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Buffalo Bills",
+       -2.5,
+       -127
+      ],
+      [
+       "Kansas City Chiefs",
+       2.5,
+       115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -106
+      ],
+      [
+       "Under",
+       46.0,
+       -106
+      ]
+     ],
+     "props_ts": "2026-11-26T14:00:10.389177+00:00",
+     "inj_Buffalo Bills": "08aff054c44843a3",
+     "inj_Kansas City Chiefs": "fb2db6bf4dd65f72",
+     "news": [
+      "2026 NFL Thanksgiving preview: Picks, predictions,",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Adam Schefter: Cardinals fire defensive coordinato",
+      "Allen and Mahomes renew their thrilling rivalry as",
+      "Arizona Cardinals vs. Kansas City Chiefs: Game Hig",
+      "Best bets and top prop plays for Bears-Lions, Eagl",
+      "Bills TE Kincaid, CB Benford among 5 starters who ",
+      "Bills' Grand Theft Auto VI-themed jab at Dolphins ",
+      "Bills' defense feasts in 26-9 win over injury-depl",
+      "Chiefs rule RB Kenneth Walker III (groin) out for ",
+      "Commanders' Jayden Daniels-themed post aimed at Be",
+      "How Travis Kelce made Chiefs and NFL history in wi",
+      "How active NFL players continue to redefine all-ti",
+      "How are Bills prepping for Chiefs?",
+      "Is the Bills defense historically good?",
+      "Joe Brady not satisfied with 9-1 Bills, says team ",
+      "Judging overreactions to NFL Week 11: Joe Brady's ",
+      "Kansas City Chiefs tight end Travis Kelce's top mo",
+      "Mahomes throws 3 TD passes, Kelce catches 2 of the",
+      "Miami Dolphins vs. Buffalo Bills Game Highlights",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "NFL players with most at stake over rest of 2026: ",
+      "Seven things Solak thinks for NFL Week 12: Takes o",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Travis Kelce pads Hall of Fame r\u00e9sum\u00e9 with two fir",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Week 11 betting preview: Analysis, best bets, TD p",
+      "Who are the winningest NFL coaches of all time?",
+      "Why Stephen A. is taking Josh Allen over Patrick M",
+      "Why the Chiefs and Bills can give thanks to 2017 t"
+     ],
+     "kalshi_snap": "snap_20261126T1435Z.parquet"
+    },
+    "44a3bcf5bd002583ddef2207a92dd977": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -220
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       185
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Denver Broncos",
+       -3.5,
+       -115
+      ],
+      [
+       "Pittsburgh Steelers",
+       3.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       36.5,
+       -115
+      ],
+      [
+       "Under",
+       36.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -212
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       184
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Denver Broncos",
+       -4.0,
+       -110
+      ],
+      [
+       "Pittsburgh Steelers",
+       4.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       36.5,
+       -114
+      ],
+      [
+       "Under",
+       36.5,
+       100
+      ]
+     ],
+     "props_ts": "2026-11-26T14:00:10.389177+00:00",
+     "inj_Pittsburgh Steelers": "f4cbd216c8a6271c",
+     "inj_Denver Broncos": "7058b7d6d2250048",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Aaron Rodgers' 2026 NFL season: Tracking records, ",
+      "Aaron Rodgers' comments on 'The Pat McAfee Show' d",
+      "Aaron Rodgers: 'Ship has sailed' on returning to t",
+      "Bills' Grand Theft Auto VI-themed jab at Dolphins ",
+      "Broncos coach Sean Payton awards game ball to Tom ",
+      "Broncos' Sean Payton: J.K. Dobbins suspended one g",
+      "Brooke Pryor: No indication from Steelers that Rod",
+      "Commanders' Jayden Daniels-themed post aimed at Be",
+      "DK Metcalf ejected in Steelers' loss to Eagles",
+      "Eagles snap 7-game losing streak and keep Steelers",
+      "How active NFL players continue to redefine all-ti",
+      "How upsets in the 2026 NFL season have upended sur",
+      "Ja'Quan McMillian hoping long-term future is in De",
+      "Jonah Coleman powers Broncos past Raiders 38-24 as",
+      "Jordan Rodgers: Benching Aaron Rodgers won't fix t",
+      "Mendoza throws 3 TDs, but Raiders fall to Broncos ",
+      "Mike McCarthy defends himself amid accusations fro",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: CeeDee Lamb leads the way ah",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "NFL players with most at stake over rest of 2026: ",
+      "Pittsburgh Steelers vs. Philadelphia Eagles: Game ",
+      "Pro Football Hall of Fame voters trim Class of 202",
+      "Remembering Broncos legend Tom Jackson",
+      "Rex Ryan: DK Metcalf is a shell of himself",
+      "Rodgers accuses McCarthy of 'snoring' during meeti",
+      "Sean Payton: We'll have depth at RB in wake of J.K",
+      "Sources corroborate Aaron Rodgers' allegations abo",
+      "Sources: Aaron Rodgers excused from Steelers facil",
+      "Sources: Mike McCarthy has Steelers' full support ",
+      "Steelers activate WR Roman Wilson off IR for Eagle",
+      "Steelers bench struggling QB Aaron Rodgers, to sta",
+      "Steelers cut Rodgers after QB rips McCarthy in sco",
+      "Steelers players try to keep focus on Broncos amid",
+      "Steelers' DK Metcalf denies trying to poke Eagles'",
+      "Steelers' DK Metcalf ejected for trying to poke Ea",
+      "Steelers' Metcalf denies trying to poke DeJean in ",
+      "Stephen A. rips Steelers' decision to bench Aaron ",
+      "The key for the Broncos defense vs. Mason Rudolph",
+      "Tom Jackson, Broncos star LB and Hall of Fame broa",
+      "Top NFL plays from Week 11",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "What Aaron Rodgers' benching means for Steelers, h",
+      "What's next for Aaron Rodgers, Mike McCarthy, Stee",
+      "Why Tom Jackson was such a special person"
+     ],
+     "kalshi_snap": "snap_20261126T1435Z.parquet"
+    }
+   },
+   "triggers": {
+    "9b825e6518156008da499be041975fdd": "line_move: pinnacle totals Under 55.5\u219256.5; line_move: pinnacle totals Over 55.5\u219256.5; new_props: pull 2026-11-26T14:00:10.389177+00:00",
+    "ffaa06af56a7137d4b078c5c46c0b730": "line_move: hardrockbet_fl totals Under 48.0\u219249.0; line_move: hardrockbet_fl totals Over 48.0\u219249.0; line_move: pinnacle totals Under 48.5\u219249.5; line_move: pinnacle totals Over 48.5\u219249.5; new_props: pull 2026-11-26T14:00:10.389177+00:00",
+    "f36f518585aec40e8cb40e071c0844aa": "new_props: pull 2026-11-26T14:00:10.389177+00:00",
+    "44a3bcf5bd002583ddef2207a92dd977": "new_props: pull 2026-11-26T14:00:10.389177+00:00"
+   }
+  }
  }
 ]

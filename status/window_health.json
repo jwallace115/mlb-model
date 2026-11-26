@@ -31,32 +31,32 @@
  },
  {
   "sport": "nfl",
-  "window": "prekick",
-  "started_utc": "2026-11-25T22:09:14.964098+00:00",
-  "finished_utc": "2026-11-25T22:09:14.964098+00:00",
-  "result": "STOP",
-  "step": "reader_v3",
-  "message": "exit -9",
-  "freeze_file": null
- },
- {
-  "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-26T14:17:03.705877+00:00",
-  "finished_utc": "2026-11-26T14:17:03.705877+00:00",
-  "result": "no_triggers",
+  "started_utc": "2026-11-26T14:52:39.802368+00:00",
+  "finished_utc": "2026-11-26T14:52:39.802368+00:00",
+  "result": "COMPLETE",
   "step": "window_watch",
-  "message": "",
-  "freeze_file": null
+  "message": "['line_move: pinnacle totals Under 55.5\u219256.5; line_move: pinnacle totals Over 55.5\u219256.5; new_props: pull 2026-11-26T14:00:10.389177+00:00', 'line_move: hardrockbet_fl totals Under 48.0\u219249.0; line_move",
+  "freeze_file": "ai_opinions_20261126T144704Z.parquet"
  },
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-26T14:19:04.013541+00:00",
-  "finished_utc": "2026-11-26T14:19:04.013541+00:00",
-  "result": "no_triggers",
+  "started_utc": "2026-11-26T14:53:19.584845+00:00",
+  "finished_utc": "2026-11-26T14:53:19.584845+00:00",
+  "result": "COMPLETE",
   "step": "window_watch",
-  "message": "",
+  "message": "['line_move: pinnacle spreads North Dakota State Bison -9.0\u2192-7.5; line_move: pinnacle spreads San Jose State Spartans 9.0\u21927.5']",
+  "freeze_file": "ai_opinions_20261126T143403Z.parquet"
+ },
+ {
+  "sport": "nfl",
+  "window": "prekick",
+  "started_utc": "2026-11-26T14:53:50.509444+00:00",
+  "finished_utc": "2026-11-26T14:53:50.509444+00:00",
+  "result": "STOP",
+  "step": "reader_v3",
+  "message": "exit -9",
   "freeze_file": null
  }
 ]
