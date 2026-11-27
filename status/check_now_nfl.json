@@ -1,17 +1,21 @@
 {
- "started_utc": "2026-11-27T00:17:03.981734+00:00",
- "finished_utc": "2026-11-27T00:29:38.534001+00:00",
+ "started_utc": "2026-11-27T00:32:06.610992+00:00",
+ "finished_utc": "2026-11-27T00:44:49.049322+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
  "triggers": [
   {
+   "game": "f36f518585aec40e8cb40e071c0844aa",
+   "text": "injury_change: inj_Buffalo Bills; injury_change: inj_Kansas City Chiefs"
+  },
+  {
    "game": "44a3bcf5bd002583ddef2207a92dd977",
-   "text": "new_news: 1 availability items"
+   "text": "injury_change: inj_Pittsburgh Steelers; injury_change: inj_Denver Broncos"
   }
  ],
- "games_read": 1,
- "frozen_file": "ai_opinions_20261127T001703Z.parquet",
- "spend_usd": 38.5842,
+ "games_read": 2,
+ "frozen_file": "ai_opinions_20261127T003206Z.parquet",
+ "spend_usd": 38.7,
  "result": "COMPLETE"
 }

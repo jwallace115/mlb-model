@@ -5523,5 +5523,228 @@
     "6f8b860fa7f8ce3ef4dd841450840e5f": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T001904Z.parquet",
+  "sha256": "f892d1932531cdceba5465481685c0307562311c373af23a9c1ffee348b070c1",
+  "logged_utc": "2026-11-27T00:19:04.969675+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-27T01:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T000010Z.parquet",
+   "inputs_digest": "{\"b39108d2cfcd62d29954aee80bbf7b51\": \"3c12493bbf12242f\", \"7f3768e75aa0ea31e6a30cff6cf631be\": \"673a4b091eab6900\", \"0a1027a4edb364b492a3fee67086e8bc\": \"70c9c58dbbc72aeb\"}",
+   "components": {
+    "b39108d2cfcd62d29954aee80bbf7b51": {
+     "pinnacle_h2h": [
+      [
+       "TCU Horned Frogs",
+       0,
+       459
+      ],
+      [
+       "Texas Tech Red Raiders",
+       0,
+       -581
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "TCU Horned Frogs",
+       13.5,
+       -101
+      ],
+      [
+       "Texas Tech Red Raiders",
+       -13.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -113
+      ],
+      [
+       "Under",
+       46.5,
+       -104
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "AP college football Week 12 poll reaction: What's ",
+      "College Football Playoff top 12 projection after W",
+      "Dampier throws 2 long TD passes as No. 2 Utah beat",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "No. 9 Texas Tech wants more than 10-win seasons wi",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Predicting the College Football Playoff: Who's mos",
+      "TCU fires coach Sonny Dykes; expected to be owed m",
+      "The oldest grudge in football",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Utah outlasts TCU to remain undefeated",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "Who are the candidates and what are the priorities",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "7f3768e75aa0ea31e6a30cff6cf631be": {
+     "pinnacle_h2h": [
+      [
+       "Indiana Hoosiers",
+       0,
+       -1969
+      ],
+      [
+       "Purdue Boilermakers",
+       0,
+       1116
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Indiana Hoosiers",
+       -23.5,
+       -105
+      ],
+      [
+       "Purdue Boilermakers",
+       23.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -114
+      ],
+      [
+       "Under",
+       52.5,
+       -103
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 12 poll reaction: What's ",
+      "Are Indiana's CFP hopes over after six-spot 'freef",
+      "Betting buzz: Big Ten's odds of national champion ",
+      "College Football Playoff top 12 projection after W",
+      "College football betting: Should you still bet on ",
+      "How far could Indiana fall in CFP rankings after W",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "Indiana not yet naming starting QB for game vs. Pu",
+      "Indiana's CFP hopes take hit after OT loss at Wash",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "No. 12 Indiana ignoring the title talk and playoff",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Predicting the College Football Playoff: Who's mos",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "0a1027a4edb364b492a3fee67086e8bc": {
+     "pinnacle_h2h": [
+      [
+       "Tennessee Volunteers",
+       0,
+       -538
+      ],
+      [
+       "Vanderbilt Commodores",
+       0,
+       414
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Tennessee Volunteers",
+       -13.5,
+       -110
+      ],
+      [
+       "Vanderbilt Commodores",
+       13.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -108
+      ],
+      [
+       "Under",
+       43.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "AP college football Week 12 poll reaction: What's ",
+      "College Football Playoff top 12 projection after W",
+      "College football takeaways: Lasting impressions fr",
+      "David Sanders Jr. on how Tennessee gets creative w",
+      "Dissecting playoff predictor and College Football ",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "Josh Heupel highlights creativity behind Tennessee",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "No. 7 Tennessee looks for win over Vanderbilt to h",
+      "No. 9 Vols topple LSU, make CFP case with 'differe",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Predicting the College Football Playoff: Who's mos",
+      "Saturday Stud: Week 12's top touchdowns are must-s",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Tennessee fined by SEC after fans throw golf balls",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What SEC Championship contender issues could UGA f",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What is the SEC Now crew thankful for?",
+      "Which SEC Championship matchup would be most excit",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "b39108d2cfcd62d29954aee80bbf7b51": "anchor_close",
+    "7f3768e75aa0ea31e6a30cff6cf631be": "anchor_morning",
+    "0a1027a4edb364b492a3fee67086e8bc": "anchor_morning"
+   }
+  }
  }
 ]

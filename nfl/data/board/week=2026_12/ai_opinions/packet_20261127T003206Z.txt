@@ -1,0 +1,147 @@
+packet built 2026-11-27T00:32Z | snap snap_20261127T003011Z.parquet | props pull 2026-11-27T00:17 | kalshi snap_20261127T0035Z.parquet | injuries injuries_20261127T0030Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: injury_change: inj_Buffalo Bills; injury_change: inj_Kansas City Chiefs
+######## Kansas City Chiefs @ Buffalo Bills  kick 11-27T01:20Z
+  HR ML: Bills -175 / Chiefs +145 (no-vig home 0.609) | Pinnacle no-vig home 0.603
+  HR spread: Bills -3 -110 / Chiefs +3 -110 | Pinnacle Bills -3.0 (-102) | HR open -3.0 (20261124)
+  HR total: 46 O-110/U-110 | Pinnacle 46.0 O-110/U-102 | HR open 48.5
+  Kalshi ML [('Kansas City wins', 0.4, 3826721), ('Buffalo wins', 0.6, 2501734)] | spread [('Buffalo wins by over 2.5 points?', 0.55, 1107047), ('Buffalo wins by over 3.5 points?', 0.45, 600426)] | total [('Full Game: over 47.5 points scored?', 0.46, 1785335), ('Full Game: over 44.5 points scored?', 0.56, 220456)]
+  -- Kansas City Chiefs injuries (20261127T0030)
+     Out  QB Garrett Nussmeier: Nussmeier (coach's decision) is inactive but will serve as the Chiefs' emergency third quarterback against the Bills on Thursday.
+     Acti TE Noah Gray: Gray (ribs) is active for Thursday's game against the Bills.
+     Out  OT Diego Pounds: inactive
+     Out  CB Melvin Smith Jr.: inactive
+     Out  RB Kenneth Walker III: inactive
+     Out  DT Marcus Harris: inactive
+     Acti TE John FitzPatrick: The Chiefs elevated FitzPatrick from the practice squad to the active roster ahead of Thursday's game against the Bills, Aaron Wilson of KPRC 2 Housto
+     Acti RB Nate Carter: The Chiefs elevated Carter from the practice squad to the active roster ahead of Thursday's game against the Bills, Aaron Wilson of KPRC 2 Houston rep
+     Out  DT Omarr Norman-Lott: Norman-Lott (knee) has been ruled out ahead of Thursday night's game against the Bills.
+     Out  OT Jaylon Moore: Moore (ankle) has been ruled out ahead of Thursday night's game against the Bills.
+     Acti RB Emmett Johnson: With Kenneth Walker (groin) ruled out for Thursday night's game against the Bills,  Johnson is once again set to lead the Chiefs' backfield.
+     Inju FB Ben VanSumeren: The Chiefs placed VanSumeren (knee) on the reserve/injured list Tuesday.
+     Acti WR Cyrus Allen: Allen caught two of four targets for 41 yards during Sunday's 34-7 win over the Cardinals.
+     Acti RB Jaydn Ott: Ott logged five rushing attempts for 12 yards and logged one tackle on kick coverage in the Chiefs' 34-7 win over the Cardinals on Sunday.
+     Acti WR Xavier Worthy: Worthy caught two of four targets for 38 yards and a touchdown during Sunday's 34-7 win over the Cardinals.
+     Acti WR Josh Downs: Downs brought in four of five targets for 59 yards in the Chiefs' 34-7 win over the Cardinals on Sunday.
+     Acti WR Rashee Rice: Rice secured all six targets for 53 yards in the Chiefs' 34-7 win over the Cardinals on Sunday.
+     Acti TE Travis Kelce: Kelce brought in six of seven targets for 74 yards and two touchdowns in the Chiefs' 34-7 win over the Cardinals on Sunday.
+     Acti QB Patrick Mahomes: Mahomes completed 27 of 39 passes for 324 yards with three touchdowns and no interceptions in the Chiefs' 34-7 win over the Cardinals on Sunday.
+     news 11-26T11:00 Why the Chiefs and Bills can give thanks to 2017 trade that landed Mahomes in KC
+     news 11-26T13:08 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 11-26T16:11 Why Stephen A. is backing the Bills to beat the Chiefs
+     news 11-26T16:52 NFL Week 12 arrivals: Jeffery Simmons leads arrivals ahead of Bears-Lions
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+  -- Buffalo Bills injuries (20261127T0030)
+     Acti TE Dalton Kincaid: Kincaid (thumb/ankle) is listed as active for Thursday night's game against the Chiefs.
+     Out  CB Christian Benford: Benford (groin) is inactive for Thursday's game against the Chiefs.
+     Out  S  Jalon Kilgore: inactive
+     Out  OT Jude Bowry: inactive
+     Out  DE Mike Danna: inactive
+     Out  DT Greg Gaines: inactive
+     Out  WR Skyler Bell: inactive
+     Acti WR Tyrell Shavers: Shavers failed to bring in either of his two targets and logged one tackle on kick coverage in the Bills' 26-9 win over the Dolphins on Sunday.
+     Acti RB Ty Johnson: Johnson rushed once for two yards and caught seven of his eight targets for 55 yards in the Bills' 26-9 win over the Dolphins on Sunday.
+     Acti TE Keleki Latu: Latu recorded a 30-yard reception on four targets in Sunday's 26-9 win over the Dolphins.
+     Acti WR Keon Coleman: Coleman caught two of four targets for 17 yards during Sunday's 26-9 win over Miami.
+     Acti RB Ray Davis: Davis rushed one time for three yards and caught a six-yard pass on two targets in Sunday's 26-9 win over the Dolphins.
+     Acti TE Dawson Knox: Knox caught two of three targets for 31 yards in Sunday's 26-9 win over the Dolphins.
+     Acti WR Khalil Shakir: Shakir caught five of nine targets for 101 yards while rushing twice for two yards in Sunday's 26-9 win over the Dolphins.
+     Acti WR DJ Moore: Moore caught eight of 10 targets for 91 yards and a touchdown in Sunday's 26-9 win over the Dolphins.
+     Acti RB James Cook III: Cook rushed 22 times for 89 yards and a touchdown while catching two of three targets for three yards in Sunday's 26-9 win over the Dolphins.
+     news 11-26T11:00 Why the Chiefs and Bills can give thanks to 2017 trade that landed Mahomes in KC
+     news 11-26T13:08 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 11-26T16:11 Why Stephen A. is backing the Bills to beat the Chiefs
+     news 11-26T16:52 NFL Week 12 arrivals: Jeffery Simmons leads arrivals ahead of Bears-Lions
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+  -- props (pull 2026-11-26T23:45)
+     * Cyrus Allen: atd 0.5 (+850), recyd 11.5 (-115/-115), rec 0.5 (-225/+160)
+     * DJ Moore: atd 0.5 (+260), recyd 49.5 (-120/-110), rec 3.5 (-140/+110)
+     * Dalton Kincaid: atd 0.5 (+300), recyd 34.5 (-115/-115), rec 3.5 (+130/-175)
+     * Dawson Knox: atd 0.5 (+475), recyd 12.5 (-120/-110), rec 1.5 (-105/-125)
+     * Emmett Johnson: atd 0.5 (-170), recyd 31.5 (-115/-115), rec 3.5 (-140/+110), ruatt 19.5 (-125/-105), ruyd 81.5 (-120/-110)
+     * James Cook: atd 0.5 (-115), recyd 7.5 (-120/-110), rec 1.5 (+125/-160), ruatt 20.5 (-110/-120), ruyd 89.5 (-115/-115)
+     * Jaydn Ott: atd 0.5 (+1200), ruyd 5.5 (-105/-125)
+     * Josh Allen: atd 0.5 (-140), paatt 29.5 (-115/-115), cmp 18.5 (-125/-105), int 0.5 (-120/-110), patd 1.5 (+125/-165), payd 216.5 (-115/-115), ruatt 7.5 (-130/+100), ruyd 39.5 (-115/-115)
+     * Josh Downs: atd 0.5 (+325), recyd 36.5 (-115/-115), rec 3.5 (+125/-165)
+     * Keon Coleman: atd 0.5 (+425), recyd 21.5 (-115/-115), rec 1.5 (-175/+130)
+     * Khalil Shakir: atd 0.5 (+300), recyd 37.5 (-115/-115), rec 3.5 (-115/-115)
+     * Patrick Mahomes: atd 0.5 (+500), paatt 32.5 (-125/-105), cmp 20.5 (-125/-105), int 0.5 (+105/-135), patd 1.5 (+115/-150), payd 230.5 (-115/-115), ruatt 2.5 (-150/+115), ruyd 13.5 (-115/-115)
+     * Rashee Rice: atd 0.5 (+250), recyd 45.5 (-115/-115), rec 4.5 (+100/-130)
+     * Ray Davis: atd 0.5 (+1100), ruyd 3.5 (-110/-120)
+     * Travis Kelce: atd 0.5 (+240), recyd 45.5 (-115/-115), rec 4.5 (+125/-165)
+     * Ty Johnson: atd 0.5 (+600), recyd 16.5 (-115/-115), rec 2.5 (+120/-160), ruyd 0.5 (-120/-110)
+     * Xavier Worthy: atd 0.5 (+475), recyd 20.5 (-120/-110), rec 2.5 (+120/-155)
+
+  WHAT CHANGED: injury_change: inj_Pittsburgh Steelers; injury_change: inj_Denver Broncos
+######## Denver Broncos @ Pittsburgh Steelers  kick 11-27T20:00Z
+  HR ML: Steelers +200 / Broncos -250 (no-vig home 0.318) | Pinnacle no-vig home 0.326
+  HR spread: Steelers +5 -110 / Broncos -5 -110 | Pinnacle Steelers 4.5 (+101) | HR open 2.5 (20261124)
+  HR total: 36.5 O-115/U-105 | Pinnacle 36.5 O-110/U-104 | HR open 38.0
+  Kalshi ML [('Pittsburgh wins', 0.33, 265656), ('Denver wins', 0.68, 1829357)] | spread [('Denver wins by over 4.5 points?', 0.51, 429716), ('Denver wins by over 5.5 points?', 0.48, 191416)] | total [('Full Game: over 37.5 points scored?', 0.47, 10560), ('Full Game: over 38.5 points scored?', 0.45, 1661)]
+  -- Denver Broncos injuries (20261127T0030)
+     Acti RB Cody Schrader: The Broncos signed Schrader off the practice squad to the active roster Thursday, Aric DiLalla of the team's official site reports.
+     Ques RB Tyler Badie: The Broncos activated Badie (thumb) from injured reserve Thursday, Aric DiLalla of the team's official site reports.
+     Inju TE Caleb Lohner: Lohner (foot) has been ruled out for Friday's game against the Steelers.
+     Inju DE Sai'vion Jones: Jones (hamstring) has been ruled out for Friday's game against the Steelers, Aric DiLalla of the Broncos' official site reports.
+     Out  S  Taylor Rapp: Rapp (quadriceps) has been ruled out for Friday's game against the Steelers, Zac Stevens of TheDNVR.com reports.
+     Susp RB J.K. Dobbins: The Broncos placed Dobbins on the reserve/suspended list Wednesday, Zac Stevens of TheDNVR.com reports.
+     Inju LB Jonah Elliss: Elliss (ankle) did not participate in Tuesday's practice and is unlikely to be designated to return from injured reserve ahead of Friday's game agains
+     Acti WR Troy Franklin: Franklin did not record a catch in Sunday's 38-24 win over the Raiders.
+     Acti TE Adam Trautman: Trautman caught his only target for a one-yard touchdown during Sunday's 38-24 win versus the Raiders.
+     Acti WR Marvin Mims Jr.: Mims caught one of two targets for 36 yards and also added an 11-yard rush and 22 yards as a punt returner during Sunday's 38-24 win over the Raiders.
+     Acti TE Nate Adkins: Adkins recorded a three-yard reception on two targets in Sunday's 38-24 win over the Raiders.
+     Acti TE Dallen Bentley: 
+     Acti WR Pat Bryant: Bryant caught three passes for 32 yards on four targets in Sunday's 38-24 win over the Raiders.
+     Acti WR Courtland Sutton: Sutton didn't corral either of his two targets during Sunday's 38-24 victory versus the Raiders.
+     Acti TE Evan Engram: Engram caught six of eight targets for 74 yards in Sunday's 38-24 win over the Raiders.
+     Acti QB Bo Nix: Nix completed 19 of 35 passes for 225 yards, one touchdown and one interception and notched six carries for five yards during Sunday's 38-24 victory a
+     Acti WR Jaylen Waddle: Waddle secured three of six targets for 61 yards during Sunday's 38-24 win versus the Raiders.
+     Acti RB Jonah Coleman: Coleman reeled off 111 yards and three touchdowns on 24 carries and hauled in four of five targets for 18 yards during Sunday's 38-24 win against the 
+     news 11-26T13:08 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 11-26T16:11 The Steelers are turning to Mason Rudolph to salvage their season. It's not the first time
+     news 11-26T16:52 NFL Week 12 arrivals: Jeffery Simmons leads arrivals ahead of Bears-Lions
+     news 11-26T19:55 Betting Broncos-Steelers: How will Pittsburgh respond to stunning events?
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+  -- Pittsburgh Steelers injuries (20261127T0030)
+     Out  LB Alex Highsmith: Highsmith (ankle) has been ruled out for Friday's game against the Broncos, Teresa Varley of the Steelers' official site reports.
+     Inju WR Ben Skowronek: The Steelers placed Skowronek (calf) on injured reserve Thursday, Teresa Varley of the team's official site reports.
+     Acti WR Max Hurleman: The Steelers signed Hurleman off the practice squad to the active roster Thursday, Teresa Varley of the team's official site reports.
+     Acti WR Michael Pittman Jr.: Pittman (foot), who was activated from IR on Thursday, doesn't carry an injury designation for Friday's game against the Broncos, Mike DeFabo of The A
+     Acti QB Mason Rudolph: Rudolph will start Friday's game against the Broncos and could remain atop the depth chart for the rest of the season with the Steelers waiving Aaron 
+     Ques LB Cole Holcomb: questionable
+     Inju G  Gennings Dunker: Dunker (knee) logged a full practice Tuesday.
+     Acti WR Roman Wilson: Wilson caught three of six targets for 43 yards in Sunday's 19-16 loss to the Eagles.
+     Acti WR Germie Bernard: Bernard caught six passes for 40 yards on 10 targets in Sunday's 19-16 loss to the Eagles.
+     Acti WR DK Metcalf: Metcalf won't receive a suspension after he was ejected from Sunday's 19-16 loss to the Eagles, but the NFL is still reviewing discipline for the rece
+     Acti QB Drew Allar: 
+     Acti RB Eli Heidenreich: 
+     Acti TE Darnell Washington: Washington caught all three targets for 22 yards in Sunday's 19-16 loss to the Eagles.
+     Acti TE Pat Freiermuth: Freiermuth caught all five of his targets for 39 yards during Sunday's 19-16 loss to the Eagles.
+     Acti RB Rico Dowdle: Dowdle rushed five times for 15 yards and caught four of five targets for 19 yards in Sunday's 19-16 loss to the Eagles.
+     Acti RB Jaylen Warren: Warren rushed nine times for 28 yards and caught two of three targets for one yard in Sunday's 19-16 loss to the Eagles.
+     Acti WR Kaden Wetjen: Wetjen (coach's decision) is inactive for Sunday's game against the Eagles.
+     news 11-26T19:55 Betting Broncos-Steelers: How will Pittsburgh respond to stunning events?
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+     news 11-26T22:36 Steelers activate Michael Pittman Jr. off IR, sign Max Hurleman to active roster
+     news 11-26T22:37 Steelers owner Art Rooney II 'disappointed' in Rodgers outcome, backs McCarthy
+     news 11-26T23:30 Aaron Rodgers officially a free agent after clearing waivers
+  -- props (pull 2026-11-27T00:17)
+     * Adam Trautman: atd 0.5 (+1600), recyd 4.5 (-115/-115), rec 0.5 (-175/+130)
+     * Bo Nix: atd 0.5 (+475), paatt 31.5 (-125/-105), cmp 20.5 (-105/-125), int 0.5 (+110/-140), patd 1.5 (+155/-210), payd 202.5 (-115/-115), ruatt 3.5 (-135/+105), ruyd 10.5 (-110/-120)
+     * Courtland Sutton: atd 0.5 (+350), recyd 26.5 (-115/-115), rec 2.5 (-140/+105)
+     * DK Metcalf: atd 0.5 (+375), recyd 27.5 (-115/-115), rec 2.5 (-130/+100)
+     * Darnell Washington: atd 0.5 (+475), recyd 16.5 (-115/-115), rec 1.5 (-150/+115)
+     * Evan Engram: atd 0.5 (+500), recyd 22.5 (-115/-115), rec 2.5 (-105/-125)
+     * Germie Bernard: atd 0.5 (+500), recyd 22.5 (-115/-115), rec 2.5 (-155/+125)
+     * Jaylen Waddle: atd 0.5 (+300), recyd 42.5 (-115/-115), rec 3.5 (-145/+110)
+     * Jaylen Warren: atd 0.5 (+180), recyd 18.5 (-115/-115), rec 2.5 (-115/-115), ruatt 14.5 (-120/-110), ruyd 64.5 (-115/-115)
+     * Jonah Coleman: atd 0.5 (-140), recyd 21.5 (-115/-115), rec 3.5 (+105/-135), ruatt 19.5 (-110/-120), ruyd 74.5 (-115/-115)
+     * Marvin Mims Jr.: atd 0.5 (+650), recyd 8.5 (-120/-110), rec 1.5 (+150/-200)
+     * Mason Rudolph: atd 0.5 (+2000), paatt 29.5 (-125/-105), cmp 17.5 (-130/+100), int 0.5 (-195/+140), patd 0.5 (-190/+140), payd 175.5 (-115/-115), ruyd 6.5 (-110/-120)
+     * Michael Pittman Jr.: atd 0.5 (+750), recyd 10.5 (-115/-115), rec 1.5 (+110/-145)
+     * Pat Bryant: atd 0.5 (+450), recyd 27.5 (-115/-115), rec 2.5 (-105/-125)
+     * Pat Freiermuth: atd 0.5 (+500), recyd 21.5 (-115/-115), rec 2.5 (+110/-140)
+     * Rico Dowdle: atd 0.5 (+350), recyd 8.5 (-115/-115), rec 1.5 (-155/+120), ruatt 8.5 (+100/-130), ruyd 31.5 (-115/-115)
+     * Roman Wilson: atd 0.5 (+600), recyd 12.5 (-115/-115), rec 1.5 (+100/-130)
+     * Troy Franklin: atd 0.5 (+1200), recyd 4.5 (-115/-115), rec 0.5 (-150/+115)
