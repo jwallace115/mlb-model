@@ -11271,5 +11271,149 @@
     "45d4d87e236a38e2feb11f57820ff03f": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T214903Z.parquet",
+  "sha256": "b40a379419f9b7c9c08412cae9325b828c43f8bc2cea3b483eb8fb43ed62c3bb",
+  "logged_utc": "2026-11-27T21:49:03.627940+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-28T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T213009Z.parquet",
+   "inputs_digest": "{\"e6a3c909a8cfc7b2c666252e246418c7\": \"523020f149c1931c\", \"4c69ecf41bb2d36dfeedeae23acc5b86\": \"0d9881d793ba047b\"}",
+   "components": {
+    "e6a3c909a8cfc7b2c666252e246418c7": {
+     "pinnacle_h2h": [
+      [
+       "Minnesota Golden Gophers",
+       0,
+       285
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       -335
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Minnesota Golden Gophers",
+       9.0,
+       -103
+      ],
+      [
+       "Wisconsin Badgers",
+       -9.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.5,
+       -109
+      ],
+      [
+       "Under",
+       37.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261127T2137Z.parquet"
+    },
+    "4c69ecf41bb2d36dfeedeae23acc5b86": {
+     "pinnacle_h2h": [
+      [
+       "Texas A&M Aggies",
+       0,
+       364
+      ],
+      [
+       "Texas Longhorns",
+       0,
+       -442
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Texas A&M Aggies",
+       10.5,
+       -102
+      ],
+      [
+       "Texas Longhorns",
+       -10.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -110
+      ],
+      [
+       "Under",
+       41.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 12 poll reaction: What's ",
+      "Attorney: Trev Alberts told he won't be next AD at",
+      "Desmond Howard: CFP committee finally arranged the",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "How every 2027 five-star college football prospect",
+      "How much margin for error does Texas have?",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Steve Sarkisian details the Texas anticipating Tex",
+      "Take a 360-degree look at college football's iconi",
+      "Texas A&M names John Thornton interim athletic dir",
+      "Texas eyes the SEC title game, but a desperate Tex",
+      "Tiering the CFP favorites: Who's actually built to",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Trev Alberts 'shocked' to be told he won't be Mich",
+      "Trev Alberts told he won't be Michigan AD after ag",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What SEC Championship contender issues could UGA f",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What rivalries have the biggest stakes? Connelly l",
+      "What the world looked like the last time Texas A&M",
+      "Which teams have the best odds to make the College",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T2137Z.parquet"
+    }
+   },
+   "triggers": {
+    "e6a3c909a8cfc7b2c666252e246418c7": "anchor_prekick",
+    "4c69ecf41bb2d36dfeedeae23acc5b86": "anchor_prekick"
+   }
+  }
  }
 ]
