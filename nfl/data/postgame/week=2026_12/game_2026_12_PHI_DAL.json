@@ -1,0 +1,128 @@
+{
+  "game_id": "2026_12_PHI_DAL",
+  "week": 12,
+  "home": "DAL",
+  "away": "PHI",
+  "final_score": {
+    "home": 38,
+    "away": 39
+  },
+  "script": {
+    "home": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 38,
+        "away": 39
+      },
+      "garbage_time_plays": 0
+    },
+    "away": {
+      "plays_leading_7": 0,
+      "plays_leading_14": 0,
+      "plays_trailing_7": 0,
+      "plays_trailing_14": 0,
+      "halftime_score": {
+        "home": 38,
+        "away": 39
+      },
+      "garbage_time_plays": 0
+    },
+    "overtime": false
+  },
+  "volume": {
+    "home": {
+      "plays": 68,
+      "dropbacks": 31,
+      "rush_attempts": 37,
+      "pass_rate": 0.45588235294117646,
+      "run_rate": 0.5441176470588236,
+      "pass_oe": -1.1881783024057166
+    },
+    "away": {
+      "plays": 56,
+      "dropbacks": 38,
+      "rush_attempts": 18,
+      "pass_rate": 0.6785714285714286,
+      "run_rate": 0.3214285714285714,
+      "pass_oe": 2.222237762595926
+    }
+  },
+  "turnovers": {
+    "home": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    },
+    "away": {
+      "interceptions": 1,
+      "fumbles_lost": 0,
+      "total": 1
+    }
+  },
+  "non_offensive_tds": 0,
+  "red_zone": {
+    "home": {
+      "trips": 5,
+      "touchdowns": 4
+    },
+    "away": {
+      "trips": 4,
+      "touchdowns": 1
+    }
+  },
+  "injuries": [
+    {
+      "player": "J.Williams",
+      "team": "DAL",
+      "quarter": 1,
+      "play_id": 155,
+      "desc": "(13:41) (Shotgun) 4-D.Prescott pass short right to 33-J.Williams to PHI 48 for 5 yards (33-C.DeJean). PHI-33-C.DeJean was injured during the play."
+    },
+    {
+      "player": "D.Goedert",
+      "team": "PHI",
+      "quarter": 1,
+      "play_id": 482,
+      "desc": "(8:05) (Shotgun) 14-J.Milton pass short left to 88-D.Goedert pushed ob at PHI 17 for 9 yards (25-J.Porter). DAL-25-J.Porter was injured during the play."
+    },
+    {
+      "player": "M.Lemon",
+      "team": "PHI",
+      "quarter": 3,
+      "play_id": 3078,
+      "desc": "(1:00) (Shotgun) 14-J.Milton pass short right to 9-M.Lemon to DAL 45 for 11 yards (0-D.Overshown). FUMBLES (0-D.Overshown), ball out of bounds at DAL 41. DAL-92-Q.Williams was injured during the play."
+    },
+    {
+      "player": "J.Corbin",
+      "team": "DAL",
+      "quarter": 4,
+      "play_id": 3239,
+      "desc": "(15:00) 36-J.Corbin right tackle to DAL 35 for 4 yards (94-B.Young). PHI-96-G.Hall was injured during the play."
+    },
+    {
+      "player": "D.Smith",
+      "team": "PHI",
+      "quarter": 4,
+      "play_id": 3931,
+      "desc": "(7:37) (Shotgun) 14-J.Milton pass incomplete deep left to 6-D.Smith (24-M.Hooker). PHI-6-D.Smith was injured during the play."
+    },
+    {
+      "player": "J.Milton",
+      "team": "PHI",
+      "quarter": 4,
+      "play_id": 4004,
+      "desc": "(7:30) (Shotgun) 14-J.Milton sacked at PHI 46 for -5 yards (0-D.Overshown). DAL-92-Q.Williams was injured during the play."
+    },
+    {
+      "player": "D.Cooper",
+      "team": "PHI",
+      "quarter": 4,
+      "play_id": 4566,
+      "desc": "(:50) (Shotgun) 14-J.Milton pass incomplete deep left to 80-D.Cooper. DAL-34-J.Thompson was injured during the play."
+    }
+  ],
+  "ftn": "not covered"
+}
