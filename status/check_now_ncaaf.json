@@ -1,25 +1,41 @@
 {
- "started_utc": "2026-11-27T00:49:05.875479+00:00",
- "finished_utc": "2026-11-27T01:20:39.071751+00:00",
+ "started_utc": "2026-11-27T01:34:03.234649+00:00",
+ "finished_utc": "2026-11-27T01:50:20.200148+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
  "triggers": [
   {
-   "game": "5f74ef6944e660a91381ecf388633c69",
-   "text": "anchor_morning"
+   "game": "5b00e6b226dce4274d819d5d1818e703",
+   "text": "line_move: pinnacle spreads Ole Miss Rebels -19.0\u2192-17.0; line_move: pinnacle spreads Mississippi State Bulldogs 19.0\u219217.0"
   },
   {
-   "game": "a61934112cd5b5c35c2887f1365af5ec",
-   "text": "anchor_morning"
+   "game": "e6a3c909a8cfc7b2c666252e246418c7",
+   "text": "line_move: pinnacle spreads Minnesota Golden Gophers 7.5\u21929.0; line_move: pinnacle spreads Wisconsin Badgers -7.5\u2192-9.0"
   },
   {
-   "game": "6474599b7377102869153e25af140533",
-   "text": "anchor_morning"
+   "game": "735be3d0a18e8d57cc515971a6735c7d",
+   "text": "line_move: pinnacle totals Under 54.5\u219253.5; line_move: pinnacle totals Over 54.5\u219253.5"
+  },
+  {
+   "game": "7da02c5fd7efe20c2f61f665def9cbef",
+   "text": "line_move: pinnacle totals Under 42.0\u219243.0; line_move: pinnacle totals Over 42.0\u219243.0"
+  },
+  {
+   "game": "b34efc2b710eb260f25df93e02c86a0e",
+   "text": "line_move: pinnacle totals Under 43.0\u219242.0; line_move: pinnacle totals Over 43.0\u219242.0"
+  },
+  {
+   "game": "eb0172d64d648f5f0697ee382c039564",
+   "text": "line_move: pinnacle spreads Northern Illinois Huskies -4.0\u2192-5.0; line_move: pinnacle spreads UTEP Miners 4.0\u21925.0"
+  },
+  {
+   "game": "20a5e90b65e1fec4a7be4a08260234a4",
+   "text": "line_move: pinnacle totals Under 43.0\u219244.0; line_move: pinnacle totals Over 43.0\u219244.0"
   }
  ],
- "games_read": 3,
- "frozen_file": "ai_opinions_20261127T004905Z.parquet",
- "spend_usd": 38.7848,
+ "games_read": 7,
+ "frozen_file": "ai_opinions_20261127T013403Z.parquet",
+ "spend_usd": 38.8743,
  "result": "COMPLETE"
 }

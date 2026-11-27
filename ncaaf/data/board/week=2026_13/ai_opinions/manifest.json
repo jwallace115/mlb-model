@@ -5948,5 +5948,374 @@
     "6474599b7377102869153e25af140533": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T013403Z.parquet",
+  "sha256": "68e58f549340c7ca9dbbe0211cfb9286f47fe3de00d118b34162182a0ce14158",
+  "logged_utc": "2026-11-27T01:34:03.234649+00:00",
+  "rows": 21,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 7,
+  "no_view_share": 0.524,
+  "revised_rows": 20,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-27T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T013006Z.parquet",
+   "inputs_digest": "{\"5b00e6b226dce4274d819d5d1818e703\": \"ef5e868527891ea3\", \"e6a3c909a8cfc7b2c666252e246418c7\": \"e8ba8da126ebe5f7\", \"735be3d0a18e8d57cc515971a6735c7d\": \"9e23adbcbdf8edea\", \"7da02c5fd7efe20c2f61f665def9cbef\": \"7c42b6367aec1399\", \"b34efc2b710eb260f25df93e02c86a0e\": \"dfa037736c644859\", \"eb0172d64d648f5f0697ee382c039564\": \"99f86fe043e1f462\", \"20a5e90b65e1fec4a7be4a08260234a4\": \"01e6864f85b88063\"}",
+   "components": {
+    "5b00e6b226dce4274d819d5d1818e703": {
+     "pinnacle_h2h": [
+      [
+       "Mississippi State Bulldogs",
+       0,
+       629
+      ],
+      [
+       "Ole Miss Rebels",
+       0,
+       -909
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Mississippi State Bulldogs",
+       17.0,
+       101
+      ],
+      [
+       "Ole Miss Rebels",
+       -17.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -109
+      ],
+      [
+       "Under",
+       56.0,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "AP college football Week 12 poll reaction: What's ",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Saturday Stud: Week 12's top touchdowns are must-s",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "e6a3c909a8cfc7b2c666252e246418c7": {
+     "pinnacle_h2h": [
+      [
+       "Minnesota Golden Gophers",
+       0,
+       277
+      ],
+      [
+       "Wisconsin Badgers",
+       0,
+       -336
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Minnesota Golden Gophers",
+       9.0,
+       -105
+      ],
+      [
+       "Wisconsin Badgers",
+       -9.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.5,
+       -110
+      ],
+      [
+       "Under",
+       37.5,
+       -106
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "735be3d0a18e8d57cc515971a6735c7d": {
+     "pinnacle_h2h": [
+      [
+       "Kentucky Wildcats",
+       0,
+       126
+      ],
+      [
+       "Louisville Cardinals",
+       0,
+       -142
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kentucky Wildcats",
+       3.0,
+       -112
+      ],
+      [
+       "Louisville Cardinals",
+       -3.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -109
+      ],
+      [
+       "Under",
+       53.5,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "AP college football Week 12 poll reaction: What's ",
+      "Analyzing the weight of the Louisville vs. UK Week",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "Dissecting playoff predictor and College Football ",
+      "Lincoln Kienholz throws 5 TD passes and No. 21 Lou",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What is the SEC Now crew thankful for?",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a",
+      "Will Stein emphasizes UK's standard, previews 'mos"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "7da02c5fd7efe20c2f61f665def9cbef": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       195
+      ],
+      [
+       "South Carolina Gamecocks",
+       0,
+       -227
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       6.5,
+       -114
+      ],
+      [
+       "South Carolina Gamecocks",
+       -6.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -106
+      ],
+      [
+       "Under",
+       43.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "Gamecock's Shane Beamer previews challenge with AC",
+      "Georgia clinches SEC title game berth with win at ",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What is the SEC Now crew thankful for?",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "b34efc2b710eb260f25df93e02c86a0e": {
+     "pinnacle_h2h": [
+      [
+       "Bowling Green Falcons",
+       0,
+       -156
+      ],
+      [
+       "UMass Minutemen",
+       0,
+       138
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Bowling Green Falcons",
+       -3.0,
+       -113
+      ],
+      [
+       "UMass Minutemen",
+       3.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.0,
+       -109
+      ],
+      [
+       "Under",
+       42.0,
+       -107
+      ]
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "eb0172d64d648f5f0697ee382c039564": {
+     "pinnacle_h2h": [
+      [
+       "Northern Illinois Huskies",
+       0,
+       -195
+      ],
+      [
+       "UTEP Miners",
+       0,
+       170
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Northern Illinois Huskies",
+       -5.0,
+       -101
+      ],
+      [
+       "UTEP Miners",
+       5.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -118
+      ],
+      [
+       "Under",
+       49.5,
+       101
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Why UTEP-NIU is 2026's most unglamorous Game of th"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "20a5e90b65e1fec4a7be4a08260234a4": {
+     "pinnacle_h2h": [
+      [
+       "South Florida Bulls",
+       0,
+       -245
+      ],
+      [
+       "Tulane Green Wave",
+       0,
+       210
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "South Florida Bulls",
+       -6.5,
+       -105
+      ],
+      [
+       "Tulane Green Wave",
+       6.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.0,
+       -108
+      ],
+      [
+       "Under",
+       44.0,
+       -108
+      ]
+     ],
+     "news": [
+      "South Florida Bulls vs. Florida Atlantic Owls: Ful",
+      "Veltkamp throws 4 more TDs in Florida Atlantic's 3"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "5b00e6b226dce4274d819d5d1818e703": "line_move: pinnacle spreads Ole Miss Rebels -19.0\u2192-17.0; line_move: pinnacle spreads Mississippi State Bulldogs 19.0\u219217.0",
+    "e6a3c909a8cfc7b2c666252e246418c7": "line_move: pinnacle spreads Minnesota Golden Gophers 7.5\u21929.0; line_move: pinnacle spreads Wisconsin Badgers -7.5\u2192-9.0",
+    "735be3d0a18e8d57cc515971a6735c7d": "line_move: pinnacle totals Under 54.5\u219253.5; line_move: pinnacle totals Over 54.5\u219253.5",
+    "7da02c5fd7efe20c2f61f665def9cbef": "line_move: pinnacle totals Under 42.0\u219243.0; line_move: pinnacle totals Over 42.0\u219243.0",
+    "b34efc2b710eb260f25df93e02c86a0e": "line_move: pinnacle totals Under 43.0\u219242.0; line_move: pinnacle totals Over 43.0\u219242.0",
+    "eb0172d64d648f5f0697ee382c039564": "line_move: pinnacle spreads Northern Illinois Huskies -4.0\u2192-5.0; line_move: pinnacle spreads UTEP Miners 4.0\u21925.0",
+    "20a5e90b65e1fec4a7be4a08260234a4": "line_move: pinnacle totals Under 43.0\u219244.0; line_move: pinnacle totals Over 43.0\u219244.0"
+   }
+  }
  }
 ]
