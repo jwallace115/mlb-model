@@ -6543,5 +6543,76 @@
     "8e7c8bc1e0c6b7514f811010faaec76d": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T034903Z.parquet",
+  "sha256": "1ab43d0c10b3a5639f0e71f8be610200c476a79022bd3ccb57cb1e08731de1c1",
+  "logged_utc": "2026-11-27T03:49:03.456461+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-29T03:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T033005Z.parquet",
+   "inputs_digest": "{\"59c0c40d83de9865c9f8da6344349353\": \"8b2b0bc3a820b6f7\"}",
+   "components": {
+    "59c0c40d83de9865c9f8da6344349353": {
+     "pinnacle_h2h": [
+      [
+       "Fresno State Bulldogs",
+       0,
+       -152
+      ],
+      [
+       "Oregon State Beavers",
+       0,
+       135
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Fresno State Bulldogs",
+       -3.0,
+       -111
+      ],
+      [
+       "Oregon State Beavers",
+       3.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.0,
+       -111
+      ],
+      [
+       "Under",
+       58.0,
+       -105
+      ]
+     ],
+     "news": [
+      "Jake Reichle runs for 3 TDs as Oregon State rallie",
+      "Pac-12 reveals unique flex schedule for season's f",
+      "Take a 360-degree look at college football's iconi",
+      "Utah State Aggies vs. Oregon State Beavers: Full H"
+     ],
+     "kalshi_snap": "snap_20261127T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "59c0c40d83de9865c9f8da6344349353": "anchor_morning"
+   }
+  }
  }
 ]
