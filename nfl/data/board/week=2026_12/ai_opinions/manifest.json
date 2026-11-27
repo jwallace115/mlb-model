@@ -9835,5 +9835,725 @@
     "44a3bcf5bd002583ddef2207a92dd977": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T201703Z.parquet",
+  "sha256": "cafd40fe310224b41d511fbdc9c3af0049906ccb05fb9a46d9c1139e77aeca64",
+  "logged_utc": "2026-11-27T20:17:03.595548+00:00",
+  "rows": 18,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 6,
+  "no_view_share": 0.833,
+  "revised_rows": 0,
+  "oldest_source_age_min": 16.9,
+  "first_kickoff_utc": "2026-11-29T18:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261127T200011Z.parquet",
+   "inputs_digest": "{\"6a05021bdb6bab24b9bb381ffff10f0c\": \"96eef82f87d94141\", \"60d0c074801985c1062795362a24200e\": \"e1f2225632761bcc\", \"f7d3ae7a8fe2438cef7d7d7bc67e31db\": \"de0c5eb7a2b4c18e\", \"e9da808e36e1b7475698a57465ad4519\": \"4a7d544dc4406ae3\", \"81a8fee5b649a3ad5ad59e9528f2f376\": \"1e01d56f7dc7e51e\", \"5ea0e3ea5944b0ad5169f21c0787b331\": \"2ce8c04df834725e\"}",
+   "components": {
+    "6a05021bdb6bab24b9bb381ffff10f0c": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Atlanta Falcons",
+       0,
+       275
+      ],
+      [
+       "Minnesota Vikings",
+       0,
+       -350
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Atlanta Falcons",
+       7.0,
+       -110
+      ],
+      [
+       "Minnesota Vikings",
+       -7.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       41.0,
+       -110
+      ],
+      [
+       "Under",
+       41.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Atlanta Falcons",
+       0,
+       265
+      ],
+      [
+       "Minnesota Vikings",
+       0,
+       -319
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Atlanta Falcons",
+       7.0,
+       -110
+      ],
+      [
+       "Minnesota Vikings",
+       -7.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -107
+      ],
+      [
+       "Under",
+       41.5,
+       -107
+      ]
+     ],
+     "props_ts": "2026-11-27T14:00:12.204525+00:00",
+     "inj_Minnesota Vikings": "5e80c4d6b29d7722",
+     "inj_Atlanta Falcons": "fde7a19e9bb43698",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "49ers blow out Vikings 35-10 in Mexico City\u00a0",
+      "49ers make bold statement with blowout win over Vi",
+      "49ers' Brock Purdy beats Vikings blitz, hears 'MVP",
+      "Brock Purdy carves up the Vikings' D with 3 TD pas",
+      "Can Vikings' offense win when the defense doesn't ",
+      "Falcons 'aware' of insinuations Pearce still tryin",
+      "How active NFL players continue to redefine all-ti",
+      "How can the Falcons utilize Bijan Robinson?",
+      "How the 49ers unlocked the Vikings' defense",
+      "Kirk Cousins makes his home debut in his second ac",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 arrivals: CeeDee Lamb leads arrivals a",
+      "NFL Week 12 arrivals: Chris Jones leads arrivals a",
+      "NFL Week 12 arrivals: Jeffery Simmons leads arriva",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL Week 12 preview: Picks, predictions, schedule,",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "NFL players with most at stake over rest of 2026: ",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL's international plan: More games, new TV deal ",
+      "Pro Football Hall of Fame voters trim Class of 202",
+      "Return to Vikes sparks fiery Cousins",
+      "Seven things Solak thinks for NFL Week 12: Takes o",
+      "Stephen A.: The 49ers ramrodded the Vikings",
+      "Vikings' Cousins says fiery demeanor part of leade",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Week 11 betting preview: Analysis, best bets, TD p"
+     ],
+     "kalshi_snap": "snap_20261127T2005Z.parquet"
+    },
+    "60d0c074801985c1062795362a24200e": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       250
+      ],
+      [
+       "Houston Texans",
+       0,
+       -325
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Baltimore Ravens",
+       6.5,
+       -110
+      ],
+      [
+       "Houston Texans",
+       -6.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       47.0,
+       -115
+      ],
+      [
+       "Under",
+       47.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Baltimore Ravens",
+       0,
+       251
+      ],
+      [
+       "Houston Texans",
+       0,
+       -300
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baltimore Ravens",
+       6.5,
+       -103
+      ],
+      [
+       "Houston Texans",
+       -6.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -106
+      ],
+      [
+       "Under",
+       47.5,
+       -108
+      ]
+     ],
+     "props_ts": "2026-11-27T14:00:12.204525+00:00",
+     "inj_Houston Texans": "6c294a2349ed3c78",
+     "inj_Baltimore Ravens": "b0a33600eed9de9f",
+     "news": [
+      "'Locked into the moment,' Bryce Young rallies firs",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Are trust issues to blame for the Ravens loss?",
+      "Baltimore Ravens vs. Carolina Panthers: Game Highl",
+      "Bills' Grand Theft Auto VI-themed jab at Dolphins ",
+      "Bryce Young, Chuba Hubbard help Panthers add to NF",
+      "Chuba Hubbard makes the difference again in anothe",
+      "Commanders' Jayden Daniels-themed post aimed at Be",
+      "Fantasy buzz: Week 11's leading fantasy scorers th",
+      "How active NFL players continue to redefine all-ti",
+      "How upsets in the 2026 NFL season have upended sur",
+      "Jesse Minter: I take responsibility for latest Rav",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 arrivals: CeeDee Lamb leads arrivals a",
+      "NFL Week 12 arrivals: Chris Jones leads arrivals a",
+      "NFL Week 12 arrivals: Jeffery Simmons leads arriva",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "NFL players with most at stake over rest of 2026: ",
+      "NFL survivor power rankings: Why this is the week ",
+      "RB Derrick Henry in concussion protocol but Ravens",
+      "Ravens cut punt returner LaJohntay Wester after hi",
+      "Ravens make some lineup changes",
+      "Ryans says Texans are focused on winning each week",
+      "Struggling Ravens noncommittal on whether Humphrey",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Texans remain alive in the playoff race",
+      "Top NFL plays from Week 11",
+      "Turnovers, penalties, time management: Ravens are ",
+      "Week 11 NFL highlights: Best plays, moments, touch"
+     ],
+     "kalshi_snap": "snap_20261127T2005Z.parquet"
+    },
+    "f7d3ae7a8fe2438cef7d7d7bc67e31db": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -600
+      ],
+      [
+       "New Orleans Saints",
+       0,
+       425
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Cincinnati Bengals",
+       -9.5,
+       -115
+      ],
+      [
+       "New Orleans Saints",
+       9.5,
+       -105
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       49.0,
+       -115
+      ],
+      [
+       "Under",
+       49.0,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Cincinnati Bengals",
+       0,
+       -570
+      ],
+      [
+       "New Orleans Saints",
+       0,
+       433
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Cincinnati Bengals",
+       -10.5,
+       102
+      ],
+      [
+       "New Orleans Saints",
+       10.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -101
+      ],
+      [
+       "Under",
+       49.0,
+       -114
+      ]
+     ],
+     "props_ts": "2026-11-27T14:00:12.204525+00:00",
+     "inj_Cincinnati Bengals": "01cedd73c086de04",
+     "inj_New Orleans Saints": "76330b7a5f6e488a",
+     "news": [
+      "2026 NFL awards tracker: Odds for MVP, Rookie of t",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bengals look to get back on track when they host t",
+      "Bengals-Commanders odds, best bets: Tips, analysis",
+      "Commanders building momentum, halt Bengals' 5-game",
+      "Commanders storm back, stun Bengals 22-20 on MNF",
+      "Commanders' Jayden Daniels-themed post aimed at Be",
+      "How active NFL players continue to redefine all-ti",
+      "How the Commanders slowed down the Bengals' offens",
+      "Inside the gymnastics lore of Bengals star Ja'Marr",
+      "Jayden Daniels rallies Commanders in final seconds",
+      "Jeffery Simmons gets 3 sacks as the Chicago Bears ",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 arrivals: CeeDee Lamb leads arrivals a",
+      "NFL Week 12 arrivals: Chris Jones leads arrivals a",
+      "NFL Week 12 arrivals: Jeffery Simmons leads arriva",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL Week 12 preview: Picks, predictions, schedule,",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "NFL players with most at stake over rest of 2026: ",
+      "NFL survivor power rankings: Why this is the week ",
+      "New Orleans Saints vs. Chicago Bears: Game Highlig",
+      "Nobody roots harder for Zac Taylor than his Specia",
+      "Saints fall to 3-7 after another loss",
+      "Top NFL plays from Week 11",
+      "Tyler Shough voices confidence in Saints, Kellen M",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Why Stephen A. isn't counting out the Bengals afte",
+      "Will the Saints OL be at full strength for Sunday?"
+     ],
+     "kalshi_snap": "snap_20261127T2005Z.parquet"
+    },
+    "e9da808e36e1b7475698a57465ad4519": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Indianapolis Colts",
+       0,
+       230
+      ],
+      [
+       "New York Giants",
+       0,
+       -300
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Indianapolis Colts",
+       6.0,
+       -110
+      ],
+      [
+       "New York Giants",
+       -6.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       42.0,
+       -110
+      ],
+      [
+       "Under",
+       42.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Indianapolis Colts",
+       0,
+       225
+      ],
+      [
+       "New York Giants",
+       0,
+       -266
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Indianapolis Colts",
+       6.5,
+       -125
+      ],
+      [
+       "New York Giants",
+       -6.5,
+       111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.0,
+       -104
+      ],
+      [
+       "Under",
+       42.0,
+       -110
+      ]
+     ],
+     "props_ts": "2026-11-27T14:00:12.204525+00:00",
+     "inj_Indianapolis Colts": "999bb8f8a60cc2b2",
+     "inj_New York Giants": "1e03941b085f98c9",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Colts' Alec Pierce: 'Definitely a chance' to retur",
+      "Did Jags mismanage the fourth quarter in loss to G",
+      "Fantasy buzz: Week 11's leading fantasy scorers th",
+      "Giants have plenty to be thankful for this Thanksg",
+      "Giants intercept Trevor Lawrence twice and hold on",
+      "Giants' Greg Newsome out 'multiple weeks' with ank",
+      "How active NFL players continue to redefine all-ti",
+      "How far can Jayden Daniels take the Commanders thi",
+      "How upsets in the 2026 NFL season have upended sur",
+      "Jacksonville Jaguars vs. New York Giants: Game Hig",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 arrivals: CeeDee Lamb leads arrivals a",
+      "NFL Week 12 arrivals: Chris Jones leads arrivals a",
+      "NFL Week 12 arrivals: Jeffery Simmons leads arriva",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL Week 12 preview: Picks, predictions, schedule,",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "NFL players with most at stake over rest of 2026: ",
+      "NFL says no-TD call for WR Parker Washington in Ja",
+      "NFL survivor power rankings: Why this is the week ",
+      "QB Anthony Richardson hopes to follow J.J. McCarth",
+      "RB Cam Skattebo backflips again after pledging to ",
+      "Seven things Solak thinks for NFL Week 12: Takes o",
+      "Sources: Giants DC Dennard Wilson interviews for H",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Who are the winningest NFL coaches of all time?",
+      "Why Stephen A. considers the Giants as legit threa",
+      "Why the Giants know they are for real after win ov"
+     ],
+     "kalshi_snap": "snap_20261127T2005Z.parquet"
+    },
+    "81a8fee5b649a3ad5ad59e9528f2f376": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Jacksonville Jaguars",
+       0,
+       -1100
+      ],
+      [
+       "Tennessee Titans",
+       0,
+       700
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Jacksonville Jaguars",
+       -14.5,
+       -105
+      ],
+      [
+       "Tennessee Titans",
+       14.5,
+       -115
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       49.0,
+       -110
+      ],
+      [
+       "Under",
+       49.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Jacksonville Jaguars",
+       0,
+       -996
+      ],
+      [
+       "Tennessee Titans",
+       0,
+       675
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Jacksonville Jaguars",
+       -14.5,
+       111
+      ],
+      [
+       "Tennessee Titans",
+       14.5,
+       -125
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       -101
+      ],
+      [
+       "Under",
+       48.5,
+       -113
+      ]
+     ],
+     "props_ts": "2026-11-27T14:00:12.204525+00:00",
+     "inj_Jacksonville Jaguars": "4aabf0057537b967",
+     "inj_Tennessee Titans": "2bc4ed3659f696e0",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Bills' Grand Theft Auto VI-themed jab at Dolphins ",
+      "Commanders' Jayden Daniels-themed post aimed at Be",
+      "Dak Prescott accounts for 5 TDs as the Cowboys rol",
+      "Did Jags mismanage the fourth quarter in loss to G",
+      "Frustrated Robert Saleh calls Titans' effort 'disg",
+      "Giants intercept Trevor Lawrence twice and hold on",
+      "How active NFL players continue to redefine all-ti",
+      "Jacksonville Jaguars vs. New York Giants: Game Hig",
+      "Jaguars WR Parker Washington (shoulder) is 'week-t",
+      "Jaguars are simplifying the operation in hopes of ",
+      "Making sense of the Jaguars going for two, then ki",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 arrivals: CeeDee Lamb leads arrivals a",
+      "NFL Week 12 arrivals: Chris Jones leads arrivals a",
+      "NFL Week 12 arrivals: Jeffery Simmons leads arriva",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL Week 12 preview: Picks, predictions, schedule,",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "NFL says no-TD call for WR Parker Washington in Ja",
+      "NFL survivor power rankings: Why this is the week ",
+      "NFL's international plan: More games, new TV deal ",
+      "Red zone struggles cost Jaguars in Week 11",
+      "Super Bowl LXI odds: All 32 teams' odds to win the",
+      "Tennessee Titans vs. Dallas Cowboys: Game Highligh",
+      "Titans defense crumbles against the Cowboys",
+      "Titans need to simplify the defense",
+      "Top NFL plays from Week 11",
+      "Tracking Jaguars CB/WR Travis Hunter's 2026 season",
+      "Trevor Lawrence, Liam Coen share the blame for the",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "What will Jaguars do with Parker Washington out we",
+      "Will the Jaguars' home winning streak continue?"
+     ],
+     "kalshi_snap": "snap_20261127T2005Z.parquet"
+    },
+    "5ea0e3ea5944b0ad5169f21c0787b331": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       200
+      ],
+      [
+       "New York Jets",
+       0,
+       -250
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Miami Dolphins",
+       5.0,
+       -110
+      ],
+      [
+       "New York Jets",
+       -5.0,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       40.0,
+       -110
+      ],
+      [
+       "Under",
+       40.0,
+       -110
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Miami Dolphins",
+       0,
+       203
+      ],
+      [
+       "New York Jets",
+       0,
+       -237
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Miami Dolphins",
+       5.0,
+       101
+      ],
+      [
+       "New York Jets",
+       -5.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       40.0,
+       -108
+      ],
+      [
+       "Under",
+       40.0,
+       -106
+      ]
+     ],
+     "props_ts": "2026-11-27T14:00:12.204525+00:00",
+     "inj_Miami Dolphins": "5100a8dc8bcacdbd",
+     "inj_New York Jets": "8c96e06f55040d38",
+     "news": [
+      "2027 NFL draft order projections for Round 1, chan",
+      "Another year of Geno Smith? Jets pleased with the ",
+      "Bills' Grand Theft Auto VI-themed jab at Dolphins ",
+      "Bills' defense feasts in 26-9 win over injury-depl",
+      "Commanders' Jayden Daniels-themed post aimed at Be",
+      "Dolphins playing host to Jets, as the NFL's younge",
+      "How active NFL players continue to redefine all-ti",
+      "Jets score on first 5 drives and edge Chargers 27-",
+      "Jets snap 5-game losing streak",
+      "Jets still feeling effects of loss to Dolphins",
+      "Miami Dolphins vs. Buffalo Bills Game Highlights",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 arrivals: CeeDee Lamb leads arrivals a",
+      "NFL Week 12 arrivals: Chris Jones leads arrivals a",
+      "NFL Week 12 arrivals: Jeffery Simmons leads arriva",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL Week 12 preview: Picks, predictions, schedule,",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "New York Jets vs. Los Angeles Chargers: Game Highl",
+      "The Aaron Rodgers-Steelers marriage was always bou",
+      "The positives and negatives from Miami's loss to B",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "Who are the winningest NFL coaches of all time?"
+     ],
+     "kalshi_snap": "snap_20261127T2005Z.parquet"
+    }
+   },
+   "triggers": {
+    "6a05021bdb6bab24b9bb381ffff10f0c": "horizon_entry: kick in 46h, no prior read",
+    "60d0c074801985c1062795362a24200e": "horizon_entry: kick in 46h, no prior read",
+    "f7d3ae7a8fe2438cef7d7d7bc67e31db": "horizon_entry: kick in 46h, no prior read",
+    "e9da808e36e1b7475698a57465ad4519": "horizon_entry: kick in 46h, no prior read",
+    "81a8fee5b649a3ad5ad59e9528f2f376": "horizon_entry: kick in 46h, no prior read",
+    "5ea0e3ea5944b0ad5169f21c0787b331": "horizon_entry: kick in 46h, no prior read"
+   }
+  }
  }
 ]
