@@ -11197,5 +11197,79 @@
     "5fc40a6a68f1652a38d2844a90358df2": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T204903Z.parquet",
+  "sha256": "db52659d85d39dadd7158109770f229d58ff600183b1f659fa6a867923b024f0",
+  "logged_utc": "2026-11-27T20:49:03.697464+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 1,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-27T21:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T203010Z.parquet",
+   "inputs_digest": "{\"45d4d87e236a38e2feb11f57820ff03f\": \"b614d50d61871b6d\"}",
+   "components": {
+    "45d4d87e236a38e2feb11f57820ff03f": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       247
+      ],
+      [
+       "New Mexico Lobos",
+       0,
+       -285
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       7.5,
+       -111
+      ],
+      [
+       "New Mexico Lobos",
+       -7.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -109
+      ],
+      [
+       "Under",
+       42.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What rivalries have the biggest stakes? Connelly l",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261127T2037Z.parquet"
+    }
+   },
+   "triggers": {
+    "45d4d87e236a38e2feb11f57820ff03f": "anchor_close"
+   }
+  }
  }
 ]

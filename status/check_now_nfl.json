@@ -1,37 +1,12 @@
 {
- "started_utc": "2026-11-27T20:17:03.595548+00:00",
- "finished_utc": "2026-11-27T20:30:01.020928+00:00",
+ "started_utc": "2026-11-27T20:47:03.806950+00:00",
+ "finished_utc": "2026-11-27T20:47:04.378927+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "6a05021bdb6bab24b9bb381ffff10f0c",
-   "text": "horizon_entry: kick in 46h, no prior read"
-  },
-  {
-   "game": "60d0c074801985c1062795362a24200e",
-   "text": "horizon_entry: kick in 46h, no prior read"
-  },
-  {
-   "game": "f7d3ae7a8fe2438cef7d7d7bc67e31db",
-   "text": "horizon_entry: kick in 46h, no prior read"
-  },
-  {
-   "game": "e9da808e36e1b7475698a57465ad4519",
-   "text": "horizon_entry: kick in 46h, no prior read"
-  },
-  {
-   "game": "81a8fee5b649a3ad5ad59e9528f2f376",
-   "text": "horizon_entry: kick in 46h, no prior read"
-  },
-  {
-   "game": "5ea0e3ea5944b0ad5169f21c0787b331",
-   "text": "horizon_entry: kick in 46h, no prior read"
-  }
- ],
- "games_read": 6,
- "frozen_file": "ai_opinions_20261127T201703Z.parquet",
- "spend_usd": 40.3276,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
