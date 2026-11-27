@@ -1,0 +1,228 @@
+packet built 2026-11-27T23:17Z | snap snap_20261127T230005Z.parquet | props pull none | kalshi snap_20261127T2305Z.parquet | injuries injuries_20261127T1830Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: line_move: pinnacle spreads Indianapolis Colts 6.5→5.5; line_move: pinnacle spreads New York Giants -6.5→-5.5
+######## New York Giants @ Indianapolis Colts  kick 11-29T18:00Z
+  HR ML: Colts +225 / Giants -300 (no-vig home 0.291) | Pinnacle no-vig home 0.304
+  HR spread: Colts +5.5 -110 / Giants -5.5 -110 | Pinnacle Colts 5.5 (-110) | HR open 6.5 (20261124)
+  HR total: 42 O-110/U-110 | Pinnacle 42.0 O-104/U-110 | HR open 41.5
+  Kalshi ML [('New York G wins', 0.71, 74098), ('Indianapolis wins', 0.29, 64690)] | spread [('New York G wins by over 5.5 points?', 0.51, 19386), ('New York G wins by over 6.5 points?', 0.46, 36408)] | total [('Full Game: over 41.5 points scored?', 0.51, 6618), ('Full Game: over 42.5 points scored?', 0.47, 211)]
+  -- New York Giants injuries (20261127T1830)
+     Ques LB Abdul Carter: Carter (calf/illness) did not participate in Thursday's practice, Pat Leonard of the New York Daily News reports.
+     Ques TE Isaiah Likely: Likely (groin) was listed as limited on Thursday's practice report, Dan Salomone of the Giants' official site reports.
+     Ques CB Dru Phillips: Phillips (illness) did not participate in Wednesday's practice, Dan Salomone of the Giants' official site reports.
+     Ques LB Arvell Reese: Reese (back) was a limited participant in Wednesday's practice, Dan Salomone of the Giants' official site reports.
+     Ques DT Shelby Harris: questionable
+     Acti TE Chris Manhertz: Mahertz secured his lone target for a 14-yard reception in Sunday's 23-18 win over the Jaguars.
+     Inju CB Greg Newsome II: The Giants placed Newsome (ankle) on injured reserve Tuesday, Dan Salomone of the team's official site reports.
+     Acti RB Devin Singletary: Singletary finished with one carry for five yards and one catch for five yards in Sunday's 23-18 win over the Jaguars.
+     Acti WR Darnell Mooney: Mooney did not catch any of his five targets during Sunday's 23-18 win versus the Jaguars.
+     Acti TE Theo Johnson: Johnson caught his only target for 15 yards during Sunday's 23-18 win versus the Jaguars.
+     Acti WR Malachi Fields: Fields caught two of his five targets for 25 yards in the Giants' 23-15 win over the Jaguars on Sunday.
+     Acti TE Thomas Fidone II: 
+     Acti RB Greg Desrosiers Jr.: 
+     Acti QB J.J. McCarthy: McCarthy completed 18 of 38 passes for 173 yards with a touchdown and no interceptions and rushed seven times for 33 yards in the Giants' 23-18 win ov
+     Acti RB Cam Skattebo: Skattebo rushed 14 times for 34 yards and brought in three of seven targets for 14 yards in the Giants' 23-18 win over the Jaguars on Sunday. He also 
+     Acti WR Malik Nabers: Nabers brought in seven of 12 targets for 55 yards and a touchdown in the Giants' 23-18 win over the Jaguars on Sunday.
+     news 11-26T02:37 Giants have plenty to be thankful for this Thanksgiving
+     news 11-26T16:52 NFL Week 12 arrivals: Jeffery Simmons leads arrivals ahead of Bears-Lions
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+     news 11-27T00:25 NFL Week 12 arrivals: Chris Jones leads arrivals ahead of Chiefs-Bills
+     news 11-27T11:00 2027 NFL draft order projections for Round 1, chances for top pick, more
+  -- Indianapolis Colts injuries (20261127T1830)
+     Acti TE Drew Ogletree: Ogletree (knee) was a full participant in Thursday's practice.
+     Inju LB Caden Curry: Curry underwent surgery to repair a ligament tear in his wrist earlier this week and will be sidelined for the rest of the 2026 season, Jake Arthur of
+     Inju CB Cam Taylor-Britt: The Colts designated Taylor-Britt (groin) to return from injured reserve Wednesday, Abby Halpin of the team's official site reports.
+     Ques CB Charvarius Ward: Ward (knee) was a limited participant in Wednesday's practice.
+     Inju WR Alec Pierce: When addressing the press Wednesday, Pierce (heel) noted that the offseason procedure he underwent this past March was done because he was dealing wit
+     Acti RB Jonathan Taylor: Taylor will be joined in the backfield in Sunday's game against the Giants by Anthony Richardson, who was named the Colts' new starting quarterback af
+     Acti QB Shane Buechele: The Colts signed Buechele off the Bills' practice squad Tuesday.
+     Ques DT Jerry Tillery: questionable
+     Ques OT Jalen Travis: questionable
+     Ques TE Will Mallory: questionable
+     Acti RB DJ Giddens: Giddens will likely move up to the No. 2 RB role for the Colts in the short term, as Seth McGowan is expected to miss time due to a hamstring injury, 
+     Out  RB Seth McGowan: Colts head coach Shane Steichen said that McGowan will miss some time after injuring his hamstring in Thursday's 26-3 loss to the Texans, Stephen Hold
+     Acti TE Pharaoh Brown: Brown went without a target while playing eight of the Colts' 50 offensive snaps in Thursday's 26-3 loss to the Texans.
+     Acti QB Riley Leonard: 
+     Acti WR Quez Watkins: Watkins caught one of his three targets for 26 yards during the Colts' 26-3 loss to the Texans on Thursday night.
+     Acti WR Ashton Dulin: Dulin caught two of his four targets for 30 yards and assisted on two tackles on kick coverage during the Colts' 26-3 loss to the Texans on Thursday n
+     Acti WR Deion Burks: Burks was targeted three times for zero catches, had one kick return for 10 yards and made one tackle on kick coverage during the Colts' 26-3 loss to 
+     news 11-25T23:33 QB Anthony Richardson hopes to follow J.J. McCarthy's lead when he starts for Colts against Giants
+     news 11-25T23:58 NFL Week 12 arrivals: Aaron Donald leads arrivals ahead of Rams-Packers
+     news 11-26T16:52 NFL Week 12 arrivals: Jeffery Simmons leads arrivals ahead of Bears-Lions
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+     news 11-27T00:25 NFL Week 12 arrivals: Chris Jones leads arrivals ahead of Chiefs-Bills
+  -- props (pull none)
+
+  WHAT CHANGED: anchor_morning
+######## New England Patriots @ Los Angeles Chargers  kick 11-29T21:05Z
+  HR ML: Chargers +125 / Patriots -150 (no-vig home 0.426) | Pinnacle no-vig home 0.42
+  HR spread: Chargers +2.5 +100 / Patriots -2.5 -120 | Pinnacle Chargers 2.5 (+101) | HR open -1.0 (20261124)
+  HR total: 35.5 O-110/U-110 | Pinnacle 35.5 O+101/U-116 | HR open 35.5
+  Kalshi ML [('New England wins', 0.57, 263330), ('Los Angeles C wins', 0.41, 92461)] | spread [('New England wins by over 2.5 points?', 0.53, 398885), ('New England wins by over 3.5 points?', 0.42, 754)] | total [('Full Game: over 36.5 points scored?', 0.45, 10898), ('Full Game: over 37.5 points scored?', 0.41, 1891)]
+  -- New England Patriots injuries (20261127T1830)
+     Inju WR Romeo Doubs: Head coach Mike Vrabel said Friday that Doubs (shoulder) likely won't play in Sunday's game against the Chargers, Evan Lazar of the Patriots' official
+     Out  CB Carlton Davis III: out
+     Out  WR A.J. Brown: Brown (hamstring) has been ruled out for Sunday's game against the Chargers, Doug Kyed of the Boston Herald reports.
+     Acti RB Rhamondre Stevenson: Stevenson was not listed on the Patriots' practice report Wednesday.
+     Ques OL Walter Rouse: Rouse (concussion) did not practice Wednesday.
+     Ques FB Reggie Gilliam: questionable
+     Acti QB Tommy DeVito: Patriots head coach Mike Vrabel said Monday that DeVito is the team's starting quarterback, Mike Reiss of ESPN.com reports. "We're excited about that.
+     Inju G  Alijah Vera-Tucker: The Patriots designated Vera-Tucker (hamstring) for return from injured reserve Monday.
+     Out  QB Drake Maye: For now, Maye -- who suffered a fractured right fibula during a Week 10 loss to the Lions -- remains on the Patriots' 53-man roster rather than injure
+     Acti WR Kyle Williams: Williams failed to haul in his lone target during the Patriots' 35-10 loss to the Lions on Sunday in Munich.
+     Acti RB Lan Larison: Larison turned his lone carry into two yards and caught two of three targets for 15 yards and a touchdown during the Patriots' 35-10 loss to the Lions
+     Acti WR Efton Chism III: Chism did not catch his only target during the Patriots' 35-10 loss against the Lions in Munich in Week 10.
+     Acti TE Eli Raridon: Raridon caught his only target for six yards in Sunday's loss to the Lions in Munich.
+     Acti QB Behren Morton: 
+     Acti WR DeMario Douglas: Douglas caught one of three passes for four yards during the Patriots' 35-10 loss to the Lions on Sunday in Munich.
+     Acti TE Hunter Henry: Henry caught two of three passes for 22 yards during the Patriots' 35-10 loss to the Lions on Sunday in Munich.
+     Acti WR Mack Hollins: Hollins caught five of six targets for 48 yards in Sunday's 35-10 loss to the Lions in Munich.
+     Acti RB Corey Kiner: Kiner carried the ball 10 times for 25 yards in Sunday's 35-10 loss to Detroit.
+     Ques DE Dre'Mont Jones: Jones (cramps) is questionable to return to Sunday's game against the Lions in Munich.
+     news 11-26T00:38 Patriots-Chargers shaping up to be battle of backup QBs for 2 of AFC's biggest disappointments
+     news 11-26T16:52 NFL Week 12 arrivals: Jeffery Simmons leads arrivals ahead of Bears-Lions
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+     news 11-27T00:25 NFL Week 12 arrivals: Chris Jones leads arrivals ahead of Chiefs-Bills
+     news 11-27T11:00 2027 NFL draft order projections for Round 1, chances for top pick, more
+  -- Los Angeles Chargers injuries (20261127T1830)
+     Ques TE David Njoku: Njoku (shoulder) was listed as a non-participant in Thursday's practice.
+     Ques QB Justin Herbert: Herbert (concussion) was officially deemed a non-participant in Thursday's practice.
+     Inju CB Deane Leonard: The Chargers placed Leonard (groin) on injured reserve Thursday.
+     Acti QB Jake Browning: The Chargers signed Browning to their active roster Thursday.
+     Ques LB Akheem Mesidor: Mesidor (ankle) did not participate in Wednesday's practice.
+     Ques LB Tuli Tuipulotu: Tuipulotu (ankle) did not participate in Wednesday's practice.
+     Ques WR Brenen Thompson: Thompson (hamstring) did not participate in Wednesday's practice.
+     Ques DT Dalvin Tomlinson: Tomlinson (knee) did not participate in Wednesday's practice.
+     Ques CB Tarheeb Still: Still (ankle) did not participate in Wednesday's practice.
+     Ques LB Daiyan Henley: Henley (knee) did not participate in Wednesday's practice.
+     Ques RB Keaton Mitchell: Mitchell (knee) did not practice Wednesday.
+     Acti TE Oronde Gadsden: Gadsden went without a target while taking the field for 23 of the Chargers' 60 snaps on offense in Sunday's 27-24 loss to the Jets.
+     Ques S  Kendall Williamson: questionable
+     Acti TE Charlie Kolar: Kolar brought in his lone target for eight yards during the Chargers' 27-24 loss to the Jets on Sunday.
+     Acti WR Quentin Johnston: Johnston caught one of two targets for nine yards in Sunday's 27-24 loss to the Jets. He added one yard on one rushing attempt.
+     Acti RB Kimani Vidal: Vidal carried the ball seven times for 36 yards and caught both his targets for 18 yards in Sunday's 27-24 loss to the Jets.
+     Acti WR Tre' Harris: Harris caught both his targets for 28 yards in Sunday's 27-24 loss to the Jets.
+     Acti WR Ladd McConkey: McConkey caught five of eight targets for 37 yards and two touchdowns in Sunday's 27-24 loss to the Jets.
+     Acti RB Omarion Hampton: Hampton carried the ball 14 times for 89 yards and caught his only target for four yards in Sunday's 27-24 loss to the Jets.
+     news 11-26T00:38 Patriots-Chargers shaping up to be battle of backup QBs for 2 of AFC's biggest disappointments
+     news 11-26T16:52 NFL Week 12 arrivals: Jeffery Simmons leads arrivals ahead of Bears-Lions
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+     news 11-27T00:25 NFL Week 12 arrivals: Chris Jones leads arrivals ahead of Chiefs-Bills
+     news 11-27T11:00 2027 NFL draft order projections for Round 1, chances for top pick, more
+  -- props (pull none)
+
+  WHAT CHANGED: anchor_morning
+######## Washington Commanders @ Arizona Cardinals  kick 11-29T21:25Z
+  HR ML: Cardinals +275 / Commanders -350 (no-vig home 0.255) | Pinnacle no-vig home 0.264
+  HR spread: Cardinals +7 -115 / Commanders -7 -105 | Pinnacle Cardinals 6.5 (-104) | HR open 7.0 (20261124)
+  HR total: 41.5 O-110/U-110 | Pinnacle 41.5 O-105/U-109 | HR open 40.5
+  Kalshi ML [('Washington wins', 0.74, 28767), ('Arizona wins', 0.26, 78066)] | spread [('Washington wins by over 7.5 points?', 0.43, 9219), ('Washington wins by over 6.5 points?', 0.52, 29140)] | total [('Full Game: over 41.5 points scored?', 0.52, 18326), ('Full Game: over 42.5 points scored?', 0.46, 305095)]
+  -- Washington Commanders injuries (20261127T1830)
+     Acti WR Stefon Diggs: Diggs (personal) was removed from the Commanders' injury report Thursday.
+     Ques WR Treylon Burks: Burks (foot) was listed as limited on Thursday's injury report.
+     Ques CB Amik Robertson: Robertson (ankle) did not participate in Wednesday's practice.
+     Ques DE Charles Omenihu: questionable
+     Acti TE John Bates: Bates didn't garner a target during Monday night's 22-20 win over the Bengals.
+     Acti TE Ben Sinnott: Sinnott played played 33 snaps (24 on offense, nine on special teams) but didn't show up in the box score otherwise during the Commanders' 22-20 win o
+     Acti WR Van Jefferson: Jefferson failed to haul in his lone target during the Commanders' 22-20 win over the Bengals on Monday.
+     Acti RB Austin Ekeler: Ekeler turned seven carries into 41 yards and caught two of three targets for three yards during the Commanders' 22-20 win over the Bengals on Monday.
+     Acti RB Rachaad White: White turned two kickoff returns into 48 yards during Monday's 22-20 win over the Bengals.
+     Acti QB Athan Kaliakmanis: 
+     Acti RB Robert Henry Jr.: 
+     Acti TE Chig Okonkwo: Okonkwo brought in four of five targets for 66 yards in the Commanders' 22-20 win over the Bengals on Monday night.
+     Acti WR Antonio Williams: Williams brought in nine of 11 targets for 122 yards in the Commanders' 22-20 win over the Bengals on Monday night.
+     Acti RB Jacory Croskey-Merritt: Croskey-Merritt rushed 13 times for 54 yards and a touchdown and brought in two of three targets for 23 yards in the Commanders' 22-20 win over the Be
+     Acti QB Jayden Daniels: Daniels completed 23 of 35 passes for 289 yards with no touchdowns or interceptions and added six carries for 55 yards in the Commanders' 22-20 win ov
+     Inju OT Laremy Tunsil: Tunsil (triceps) is progressing well in his recovery but is not expected to return by the end of the 2026 regular season, Tashan Reed of The Washingto
+     Acti TE Colson Yankoff: Yankoff (knee) was a full participant at practice Thursday.
+     Acti WR Luke McCaffrey: McCaffrey returned two punts for 13 yards and three kickoffs for 58 yards in Thursday's 24-21 win over the Giants.
+     news 11-26T06:39 Jayden Daniels confident in reunion with Brandon Aiyuk
+     news 11-26T16:52 NFL Week 12 arrivals: Jeffery Simmons leads arrivals ahead of Bears-Lions
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+     news 11-27T00:25 NFL Week 12 arrivals: Chris Jones leads arrivals ahead of Chiefs-Bills
+     news 11-27T11:00 2027 NFL draft order projections for Round 1, chances for top pick, more
+  -- Arizona Cardinals injuries (20261127T1830)
+     Inju RB Jeremiyah Love: Head coach Mike LaFleur said Friday that he has no update on Love (ankle), who is eligible to come off injured reserve following Sunday's game against
+     Out  G  Jon Gaines II: out
+     Acti QB Josh Johnson: Coach Mike LaFleur has ruled out Carson Beck (back) for Sunday's game against the Commanders, which sets the stage for Johnson to start the contest, D
+     Out  QB Carson Beck: Beck (back) will not play Sunday against the Commanders, coach Mike LaFleur said Friday, Josh Weinfuss of ESPN.com reports.
+     Ques LB Karson Sharar: questionable
+     Ques TE Hunter Long: questionable
+     Acti QB Kedon Slovis: Slovis was claimed off waivers by the Cardinals on Wednesday, Josh Weinfuss of ESPN reports.
+     Acti WR Devin Duvernay: Duvernay logged 81 kickoff-return yards in the Cardinals' 34-7 loss to the Chiefs on Sunday.
+     Acti WR Reggie Virgil: Virgil wasn't targeted in Sunday's 34-7 loss to the Chiefs.
+     Acti TE Elijah Higgins: Higgins caught his lone target for four yards during the Cardinals' 34-7 loss to the Chiefs on Sunday.
+     Acti WR Simi Fehoko: Fehoko caught one of five targets for a two-yard touchdown in Sunday's 34-7 loss to the Chiefs.
+     Acti WR Zay Jones: Jones reverted to the Cardinals' practice squad Monday, per the NFL's transaction log.
+     Acti WR Harrison Wallace III: Wallace finished Sunday's loss to Kansas City with four catches for 57 yards on seven targets.
+     Acti TE Teagan Quitoriano: Quitoriano played all 13 of his snaps on special teams in Sunday's 34-7 loss to the Chiefs.
+     Acti RB Bam Knight: Knight carried the ball seven times for 35 yards and caught his only target for 10 yards in Sunday's 34-7 loss to Kansas City.
+     Acti RB Tyler Allgeier: Allgeier carried the ball seven times for 23 yards in Sunday's 34-7 loss to Kansas City.
+     Acti TE Trey McBride: McBride caught nine of 14 targets for 54 yards in Sunday's 34-7 loss to Kansas City. He added four yards on his only carry.
+     Ques LB Cody Simon: Simon (calf) is questionable to return to Sunday's game against the Chiefs.
+     news 11-26T00:58 Commanders try to continue momentum while Cardinals work to end 11-game home losing streak
+     news 11-26T16:52 NFL Week 12 arrivals: Jeffery Simmons leads arrivals ahead of Bears-Lions
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+     news 11-27T00:25 NFL Week 12 arrivals: Chris Jones leads arrivals ahead of Chiefs-Bills
+     news 11-27T11:00 2027 NFL draft order projections for Round 1, chances for top pick, more
+  -- props (pull none)
+
+  WHAT CHANGED: anchor_morning
+######## Seattle Seahawks @ San Francisco 49ers  kick 11-29T21:25Z
+  HR ML: 49ers -105 / Seahawks -115 (no-vig home 0.489) | Pinnacle no-vig home 0.487
+  HR spread: 49ers +1 -115 / Seahawks -1 -105 | Pinnacle 49ers 1.0 (-105) | HR open -3.0 (20261124)
+  HR total: 42.5 O-110/U-110 | Pinnacle 42.0 O-116/U+101 | HR open 46.5
+  Kalshi ML [('San Francisco wins', 0.48, 841942), ('Seattle wins', 0.52, 2305808)] | spread [('Seattle wins by over 1.5 points?', 0.49, 96513), ('Seattle wins by over 2.5 points?', 0.45, 5926)] | total [('Full Game: over 43.5 points scored?', 0.46, 10040), ('Full Game: over 44.5 points scored?', 0.42, 316641)]
+  -- Seattle Seahawks injuries (20261127T1830)
+     Ques G  Anthony Bradford: Bradford (knee) was estimated as a limited participant in Seattle's practice estimate Thursday, Bob Condotta of The Seattle Times reports.
+     Ques QB Drew Lock: Lock (elbow) was a limited participant in Thursday's practice, Bob Condotta of The Seattle Times reports.
+     Ques LB Uchenna Nwosu: questionable
+     Ques LB Patrick O'Connell: questionable
+     Acti TE Nick Kallerup: 
+     Ques WR Jaxon Smith-Njigba: Smith-Njigba (ankle) was listed as limited on Thursday's injury report, Bob Condotta of The Seattle Times reports.
+     Ques LB Ernest Jones IV: Jones (knee) was a limited participant in Wednesday's practice, John Boyle of the Seahawks' official site reports.
+     Out  G  Quenton Nelson: Head coach Mike Macdonald told reporters Wednesday that Nelson (knee) will not play against the 49ers on Sunday, Brady Henderson of ESPN.com reports.
+     Out  OT Abraham Lucas: Lucas (ankle) has been ruled out for Sunday's game against the 49ers, Brady Henderson of ESPN.com reports.
+     Ques LB DeMarcus Lawrence: questionable
+     Ques QB Jalen Milroe: questionable
+     Acti QB Sam Darnold: Darnold (quadriceps) practiced fully Wednesday, John Boyle of the Seahawks' official site reports.
+     Ques DT Leonard Williams: questionable
+     Inju RB George Holani: The Seahawks placed Holani (knee) on injured reserve Monday, John Boyle of the team's official site reports.
+     Acti WR Cooper Kupp: Kupp hauled in his lone target for a 34-yard touchdown during the Seahawks' 21-13 win over the Raiders on Sunday.
+     Acti WR Tory Horton: Horton failed to garner a target during Sunday's 21-13 win over the Raiders.
+     Acti TE AJ Barner: Barner caught all three targets for 19 yards in Sunday's 21-13 win over the Raiders.
+     Acti WR Rashid Shaheed: Shaheed caught one pass for eight yards on two targets in Sunday's 21-13 win over the Raiders.
+     Acti RB Jadarian Price: Price posted nine carries for 36 yards and one touchdown and gathered in his only target for eight yards during Sunday's 21-13 victory at Las Vegas.
+     Acti RB Zach Charbonnet: Charbonnet churned out 94 yards on 20 carries during Sunday's 21-13 win in Las Vegas.
+     Ques DT Jarran Reed: Reed is doubtful to return to Sunday's game against Las Vegas due to a toe injury.
+     news 11-26T16:52 NFL Week 12 arrivals: Jeffery Simmons leads arrivals ahead of Bears-Lions
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+     news 11-27T00:25 NFL Week 12 arrivals: Chris Jones leads arrivals ahead of Chiefs-Bills
+     news 11-27T11:00 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 11-27T12:02 Why the Seahawks are turning back to quarterback Sam Darnold vs. the 49ers
+  -- San Francisco 49ers injuries (20261127T1830)
+     Ques WR Jordan Watkins: Watkins (groin) was estimated as a 'DNP' on Thursday's injury report, Matt Maiocco of NBC Sports Bay Area reports.
+     Ques WR Mike Evans: Evans (Achilles) was listed as limited on Thursday's practice report, Matt Maiocco of NBC Sports Bay Area reports.
+     Ques QB Brock Purdy: Purdy (ankle) was listed as a non-participant on Thursday's injury report, Eric Branch of the San Francisco Chronicle reports.
+     Inju OT Austen Pleasants: The 49ers designated Pleasants (knee) to return from injured reserve Wednesday, Matt Maiocco of NBC Sports Bay Area reports.
+     Inju OT Colton McKivitz: McKivitz (ankle) was placed on the 49ers' injured reserve list Wednesday.
+     Ques CB Deommodore Lenoir: Lenoir (foot) was a limited participant in Wednesday's practice.
+     Ques LB Dre Greenlaw: Greenlaw (neck) was a limited participant in Wednesday's practice.
+     Ques OT Carver Willis: questionable
+     Ques CB Upton Stout: questionable
+     Ques S  Siran Neal: questionable
+     Inju DT Sam Okuayinonu: Okuayinonu (foot) was spotted walking without a limp in the 49ers' locker room Wednesday, David Lombardi of SFStandard.com reports.
+     Inju WR De'Zhaun Stribling: San Francisco head coach Kyle Shanahan said Wednesday that Stribling (ankle) is likely at least "a couple weeks away" from returning to practice, Harr
+     Acti TE Brayden Willis: Willis went without a target while logging nine snaps on offense and 21 on special teams in Sunday's 35-10 win over the Vikings in Mexico City.
+     Acti TE Luke Farrell: Farrell turned his lone target into a seven-yard reception in Sunday's 35-10 win over the Vikings in Mexico City.
+     Acti WR Jacob Cowing: Cowing returned one punt for no gain during San Francisco's win over the Vikings on Sunday.
+     Acti RB Jordan James: James rushed twice for seven yards during Sunday night's 35-10 win over the Vikings.
+     Acti QB Kurtis Rourke: 
+     Acti WR Keenan Allen: Allen totaled three catches (on four targets) for 38 yards during Sunday's 35-10 victory against the Vikings in Mexico City.
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+     news 11-27T00:25 NFL Week 12 arrivals: Chris Jones leads arrivals ahead of Chiefs-Bills
+     news 11-27T00:28 49ers turn to Vederian Lowe after Colton McKivitz injury
+     news 11-27T11:00 2027 NFL draft order projections for Round 1, chances for top pick, more
+     news 11-27T11:00 Can the 49ers lock up the NFC West after exceeding preseason expectations?
+  -- props (pull none)
