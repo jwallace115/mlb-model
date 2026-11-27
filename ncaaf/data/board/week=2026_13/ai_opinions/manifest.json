@@ -5746,5 +5746,207 @@
     "0a1027a4edb364b492a3fee67086e8bc": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T004905Z.parquet",
+  "sha256": "b4fb4d745c8b1f61d8bf02df9cf6ed567b84a2d87aa62ea645d081344b89da72",
+  "logged_utc": "2026-11-27T00:49:05.875479+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-29T00:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T003011Z.parquet",
+   "inputs_digest": "{\"5f74ef6944e660a91381ecf388633c69\": \"fbe5898e1046e1ca\", \"a61934112cd5b5c35c2887f1365af5ec\": \"17a1b4587674f291\", \"6474599b7377102869153e25af140533\": \"428503367a923795\"}",
+   "components": {
+    "5f74ef6944e660a91381ecf388633c69": {
+     "pinnacle_h2h": [
+      [
+       "Alabama Crimson Tide",
+       0,
+       -749
+      ],
+      [
+       "Auburn Tigers",
+       0,
+       540
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Alabama Crimson Tide",
+       -15.0,
+       -107
+      ],
+      [
+       "Auburn Tigers",
+       15.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -108
+      ],
+      [
+       "Under",
+       49.5,
+       -108
+      ]
+     ],
+     "news": [
+      "2026 college football SP+ rankings for all 138 FBS",
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "AP college football Week 12 poll reaction: What's ",
+      "Alabama's Kalen DeBoer expects QB Keelon Russell t",
+      "Alex Golesh expresses consistency in preparing for",
+      "CFB: Week 13 ABC Tripleheader",
+      "College Football Playoff top 12 projection after W",
+      "Dissecting playoff predictor and College Football ",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "Kalen DeBoer on Iron Bowl: 'Arguably the greatest ",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Predicting the College Football Playoff: Who's mos",
+      "Resurgent Auburn tries to end a 6-game skid agains",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Tiering the CFP favorites: Who's actually built to",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What SEC Championship contender issues could UGA f",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "a61934112cd5b5c35c2887f1365af5ec": {
+     "pinnacle_h2h": [
+      [
+       "California Golden Bears",
+       0,
+       293
+      ],
+      [
+       "Pittsburgh Panthers",
+       0,
+       -359
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "California Golden Bears",
+       9.5,
+       -107
+      ],
+      [
+       "Pittsburgh Panthers",
+       -9.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.5,
+       -105
+      ],
+      [
+       "Under",
+       47.5,
+       -111
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "Ford scores twice as Stanford controls Cal 44-26 t",
+      "Lincoln Kienholz throws 5 TD passes and No. 21 Lou",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "6474599b7377102869153e25af140533": {
+     "pinnacle_h2h": [
+      [
+       "Oregon Ducks",
+       0,
+       -581
+      ],
+      [
+       "Washington Huskies",
+       0,
+       440
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Oregon Ducks",
+       -14.0,
+       101
+      ],
+      [
+       "Washington Huskies",
+       14.0,
+       -116
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.5,
+       -114
+      ],
+      [
+       "Under",
+       50.5,
+       -102
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "Betting buzz: Big Ten's odds of national champion ",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "Indiana's CFP hopes take hit after OT loss at Wash",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Take a 360-degree look at college football's iconi",
+      "Tiering the CFP favorites: Who's actually built to",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "5f74ef6944e660a91381ecf388633c69": "anchor_morning",
+    "a61934112cd5b5c35c2887f1365af5ec": "anchor_morning",
+    "6474599b7377102869153e25af140533": "anchor_morning"
+   }
+  }
  }
 ]
