@@ -10643,5 +10643,74 @@
     "1f0a9e7f76830b196133518ae01bb113": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T171905Z.parquet",
+  "sha256": "2a6c09b13a9db4501243068c6e45bd984ca6bb06d9ac90c600dd2724b23451c2",
+  "logged_utc": "2026-11-27T17:19:05.183604+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 1.0,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-27T20:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T170011Z.parquet",
+   "inputs_digest": "{\"a72c11afb95ca2c2eb057c7f2a8e376b\": \"ff2b873aa2cec7a9\"}",
+   "components": {
+    "a72c11afb95ca2c2eb057c7f2a8e376b": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       137
+      ],
+      [
+       "South Alabama Jaguars",
+       0,
+       -153
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       3.0,
+       -104
+      ],
+      [
+       "South Alabama Jaguars",
+       -3.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -115
+      ],
+      [
+       "Under",
+       56.5,
+       -101
+      ]
+     ],
+     "news": [
+      "Best bets for Rivalry Week: Breaking down Michigan",
+      "Best bets for rivalry week: Breaking down Michigan"
+     ],
+     "kalshi_snap": "snap_20261127T1737Z.parquet"
+    }
+   },
+   "triggers": {
+    "a72c11afb95ca2c2eb057c7f2a8e376b": "anchor_prekick"
+   }
+  }
  }
 ]
