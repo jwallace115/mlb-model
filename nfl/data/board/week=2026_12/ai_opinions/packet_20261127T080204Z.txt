@@ -1,0 +1,76 @@
+packet built 2026-11-27T08:02Z | snap snap_20261127T053005Z.parquet | props pull 2026-11-27T06:47 | kalshi snap_20261127T0535Z.parquet | injuries injuries_20261127T0630Z.json.gz
+Lines are quoted from the first side; first = home/Over, second = away/Under.
+
+  WHAT CHANGED: new_props: pull 2026-11-27T08:02:59.662948+00:00; injury_change: inj_Pittsburgh Steelers; injury_change: inj_Denver Broncos
+######## Denver Broncos @ Pittsburgh Steelers  kick 11-27T20:00Z
+  HR ML: Steelers +195 / Broncos -240 (no-vig home 0.324) | Pinnacle no-vig home 0.341
+  HR spread: Steelers +5 -110 / Broncos -5 -110 | Pinnacle Steelers 4.5 (-102) | HR open 2.5 (20261124)
+  HR total: 36.5 O-115/U-105 | Pinnacle 37.0 O-110/U-104 | HR open 38.0
+  Kalshi ML [('Pittsburgh wins', 0.33, 409056), ('Denver wins', 0.68, 2279410)] | spread [('Denver wins by over 4.5 points?', 0.51, 828623), ('Denver wins by over 5.5 points?', 0.48, 517745)] | total [('Full Game: over 37.5 points scored?', 0.47, 30257), ('Full Game: over 38.5 points scored?', 0.45, 2805)]
+  -- Denver Broncos injuries (20261127T0630)
+     Inju DE Sai'vion Jones: The Broncos placed Jones (hamstring) on injured reserve Thursday.
+     Acti RB Cody Schrader: The Broncos signed Schrader off the practice squad to the active roster Thursday, Aric DiLalla of the team's official site reports.
+     Inju TE Caleb Lohner: Lohner (foot) has been ruled out for Friday's game against the Steelers.
+     Ques RB Tyler Badie: Badie (thumb) is listed as questionable for Friday's game against the Steelers.
+     Out  S  Taylor Rapp: Rapp (quadriceps) has been ruled out for Friday's game against the Steelers, Zac Stevens of TheDNVR.com reports.
+     Susp RB J.K. Dobbins: The Broncos placed Dobbins on the reserve/suspended list Wednesday, Zac Stevens of TheDNVR.com reports.
+     Inju LB Jonah Elliss: Elliss (ankle) did not participate in Tuesday's practice and is unlikely to be designated to return from injured reserve ahead of Friday's game agains
+     Acti WR Troy Franklin: Franklin did not record a catch in Sunday's 38-24 win over the Raiders.
+     Acti TE Adam Trautman: Trautman caught his only target for a one-yard touchdown during Sunday's 38-24 win versus the Raiders.
+     Acti WR Marvin Mims Jr.: Mims caught one of two targets for 36 yards and also added an 11-yard rush and 22 yards as a punt returner during Sunday's 38-24 win over the Raiders.
+     Acti TE Nate Adkins: Adkins recorded a three-yard reception on two targets in Sunday's 38-24 win over the Raiders.
+     Acti TE Dallen Bentley: 
+     Acti WR Pat Bryant: Bryant caught three passes for 32 yards on four targets in Sunday's 38-24 win over the Raiders.
+     Acti WR Courtland Sutton: Sutton didn't corral either of his two targets during Sunday's 38-24 victory versus the Raiders.
+     Acti TE Evan Engram: Engram caught six of eight targets for 74 yards in Sunday's 38-24 win over the Raiders.
+     Acti QB Bo Nix: Nix completed 19 of 35 passes for 225 yards, one touchdown and one interception and notched six carries for five yards during Sunday's 38-24 victory a
+     Acti WR Jaylen Waddle: Waddle secured three of six targets for 61 yards during Sunday's 38-24 win versus the Raiders.
+     Acti RB Jonah Coleman: Coleman reeled off 111 yards and three touchdowns on 24 carries and hauled in four of five targets for 18 yards during Sunday's 38-24 win against the 
+     news 11-26T16:11 The Steelers are turning to Mason Rudolph to salvage their season. It's not the first time
+     news 11-26T16:52 NFL Week 12 arrivals: Jeffery Simmons leads arrivals ahead of Bears-Lions
+     news 11-26T19:55 Betting Broncos-Steelers: How will Pittsburgh respond to stunning events?
+     news 11-26T20:21 NFL Week 12 arrivals: CeeDee Lamb leads arrivals ahead of Eagles-Cowboys
+     news 11-27T00:25 NFL Week 12 arrivals: Chris Jones leads arrivals ahead of Chiefs-Bills
+  -- Pittsburgh Steelers injuries (20261127T0630)
+     Ques LB Cole Holcomb: Holcomb (heel) is questionable for Pittsburgh's matchup versus the Broncos on Friday.
+     Inju G  Gennings Dunker: Dunker (knee) has been ruled out for Pittsburgh's matchup versus the Broncos on Friday,
+     Out  LB Alex Highsmith: Highsmith (ankle) has been ruled out for Friday's game against the Broncos, Teresa Varley of the Steelers' official site reports.
+     Inju WR Ben Skowronek: The Steelers placed Skowronek (calf) on injured reserve Thursday, Teresa Varley of the team's official site reports.
+     Acti WR Max Hurleman: The Steelers signed Hurleman off the practice squad to the active roster Thursday, Teresa Varley of the team's official site reports.
+     Acti WR Michael Pittman Jr.: Pittman (foot), who was activated from IR on Thursday, doesn't carry an injury designation for Friday's game against the Broncos, Mike DeFabo of The A
+     Acti QB Mason Rudolph: Rudolph will start Friday's game against the Broncos and could remain atop the depth chart for the rest of the season with the Steelers waiving Aaron 
+     Acti WR Roman Wilson: Wilson caught three of six targets for 43 yards in Sunday's 19-16 loss to the Eagles.
+     Acti WR Germie Bernard: Bernard caught six passes for 40 yards on 10 targets in Sunday's 19-16 loss to the Eagles.
+     Acti WR DK Metcalf: Metcalf won't receive a suspension after he was ejected from Sunday's 19-16 loss to the Eagles, but the NFL is still reviewing discipline for the rece
+     Acti QB Drew Allar: 
+     Acti RB Eli Heidenreich: 
+     Acti TE Darnell Washington: Washington caught all three targets for 22 yards in Sunday's 19-16 loss to the Eagles.
+     Acti TE Pat Freiermuth: Freiermuth caught all five of his targets for 39 yards during Sunday's 19-16 loss to the Eagles.
+     Acti RB Rico Dowdle: Dowdle rushed five times for 15 yards and caught four of five targets for 19 yards in Sunday's 19-16 loss to the Eagles.
+     Acti RB Jaylen Warren: Warren rushed nine times for 28 yards and caught two of three targets for one yard in Sunday's 19-16 loss to the Eagles.
+     Acti WR Kaden Wetjen: Wetjen (coach's decision) is inactive for Sunday's game against the Eagles.
+     news 11-26T23:30 Aaron Rodgers officially a free agent after clearing waivers
+     news 11-27T00:25 NFL Week 12 arrivals: Chris Jones leads arrivals ahead of Chiefs-Bills
+     news 11-27T02:49 Steelers owner Art Rooney II 'disappointed' in Rodgers outcome, backs McCarthy
+     news 11-27T03:10 The Aaron Rodgers-Steelers marriage was always bound to end this way
+     news 11-27T05:02 Tomlin upset by Rodgers' bitter exit, calls situation 'a dumpster fire'
+  -- props (pull 2026-11-27T06:47)
+     * Adam Trautman: atd 0.5 (+1600), recyd 4.5 (-115/-115), rec 0.5 (-180/+130)
+     * Bo Nix: atd 0.5 (+500), paatt 31.5 (-125/-105), cmp 20.5 (-105/-125), int 0.5 (+110/-140), patd 1.5 (+155/-210), payd 204.5 (-115/-115), ruatt 3.5 (-135/+105), ruyd 10.5 (-110/-120)
+     * Courtland Sutton: atd 0.5 (+350), recyd 26.5 (-120/-110), rec 2.5 (-140/+105)
+     * DK Metcalf: atd 0.5 (+375), recyd 27.5 (-115/-115), rec 2.5 (-125/-105)
+     * Darnell Washington: atd 0.5 (+475), recyd 16.5 (-115/-115), rec 1.5 (-150/+115)
+     * Evan Engram: atd 0.5 (+500), recyd 23.5 (-110/-120), rec 2.5 (-105/-125)
+     * Germie Bernard: atd 0.5 (+500), recyd 23.5 (-115/-115), rec 2.5 (-155/+120)
+     * Jaylen Waddle: atd 0.5 (+300), recyd 43.5 (-115/-115), rec 3.5 (-140/+110)
+     * Jaylen Warren: atd 0.5 (+180), recyd 18.5 (-115/-115), rec 2.5 (-115/-115), ruatt 14.5 (-115/-115), ruyd 62.5 (-115/-115)
+     * Jonah Coleman: atd 0.5 (-140), recyd 21.5 (-120/-110), rec 3.5 (+100/-130), ruatt 19.5 (-110/-120), ruyd 73.5 (-115/-115)
+     * Marvin Mims Jr.: atd 0.5 (+700), recyd 8.5 (-120/-110), rec 1.5 (+150/-200)
+     * Mason Rudolph: atd 0.5 (+2000), paatt 29.5 (-120/-110), cmp 17.5 (-125/-105), int 0.5 (-185/+140), patd 0.5 (-190/+140), payd 178.5 (-115/-115), ruyd 6.5 (-110/-120)
+     * Michael Pittman Jr.: atd 0.5 (+750), recyd 10.5 (-115/-115), rec 1.5 (+115/-150)
+     * Pat Bryant: atd 0.5 (+450), recyd 27.5 (-115/-115), rec 2.5 (-105/-125)
+     * Pat Freiermuth: atd 0.5 (+525), recyd 21.5 (-115/-115), rec 2.5 (+110/-145)
+     * Rico Dowdle: atd 0.5 (+350), recyd 8.5 (-115/-115), rec 1.5 (-150/+115), ruatt 7.5 (-130/+100), ruyd 31.5 (-115/-115)
+     * Roman Wilson: atd 0.5 (+600), recyd 12.5 (-115/-115), rec 1.5 (+100/-130)
+     * Troy Franklin: atd 0.5 (+1200), recyd 4.5 (-110/-120), rec 0.5 (-155/+120)
+     * Tyler Badie: atd 0.5 (+900), ruyd 4.5 (-115/-115)
