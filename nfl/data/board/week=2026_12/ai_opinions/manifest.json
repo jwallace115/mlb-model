@@ -9481,5 +9481,182 @@
    "props": "data_2026_12.parquet",
    "lines": "snap_20261127T163010Z.parquet"
   }
+ },
+ {
+  "file": "ai_opinions_20261127T183205Z.parquet",
+  "sha256": "845790bb167010c0243125e8886354a7387c303454090181a87941fee05eb4c6",
+  "logged_utc": "2026-11-27T18:32:05.265862+00:00",
+  "rows": 83,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.964,
+  "revised_rows": 68,
+  "oldest_source_age_min": 28.2,
+  "first_kickoff_utc": "2026-11-27T20:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "props_file": "/root/mlb-model/data/odds_archive/nfl/props/season=2026/month=11/data_2026_11_mac.parquet",
+   "lines_file": "/root/mlb-model/data/odds_archive/nfl/line_history/season=2026/snap_20261127T183009Z.parquet",
+   "inputs_digest": "{\"44a3bcf5bd002583ddef2207a92dd977\": \"b945419cfdfbb17d\"}",
+   "components": {
+    "44a3bcf5bd002583ddef2207a92dd977": {
+     "hardrockbet_fl_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -260
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       200
+      ]
+     ],
+     "hardrockbet_fl_spreads": [
+      [
+       "Denver Broncos",
+       -4.5,
+       -110
+      ],
+      [
+       "Pittsburgh Steelers",
+       4.5,
+       -110
+      ]
+     ],
+     "hardrockbet_fl_totals": [
+      [
+       "Over",
+       36.5,
+       -115
+      ],
+      [
+       "Under",
+       36.5,
+       -105
+      ]
+     ],
+     "pinnacle_h2h": [
+      [
+       "Denver Broncos",
+       0,
+       -242
+      ],
+      [
+       "Pittsburgh Steelers",
+       0,
+       212
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Denver Broncos",
+       -4.5,
+       -108
+      ],
+      [
+       "Pittsburgh Steelers",
+       4.5,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       37.0,
+       -109
+      ],
+      [
+       "Under",
+       37.0,
+       -103
+      ]
+     ],
+     "props_ts": "2026-11-27T18:34:00.264621+00:00",
+     "inj_Pittsburgh Steelers": "156076108c75d717",
+     "inj_Denver Broncos": "cdddf3a068255afd",
+     "news": [
+      "'He's got to go!' Stephen A. implores Steelers to ",
+      "2027 NFL draft order projections for Round 1, chan",
+      "Aaron Rodgers officially a free agent after cleari",
+      "Aaron Rodgers' 2026 NFL season: Tracking records, ",
+      "Aaron Rodgers' comments on 'The Pat McAfee Show' d",
+      "Aaron Rodgers: 'Ship has sailed' on returning to t",
+      "Adam Schefter breaks down 'unprecedented' Aaron Ro",
+      "Best friends Pat Surtain II, Jaylen Waddle ecstati",
+      "Betting Broncos-Steelers: How will Pittsburgh resp",
+      "Bills' Grand Theft Auto VI-themed jab at Dolphins ",
+      "Broncos coach Sean Payton awards game ball to Tom ",
+      "Broncos' Sean Payton: J.K. Dobbins suspended one g",
+      "Brooke Pryor: No indication from Steelers that Rod",
+      "Commanders' Jayden Daniels-themed post aimed at Be",
+      "DK Metcalf ejected in Steelers' loss to Eagles",
+      "Does Mike McCarthy still have players' backing in ",
+      "Eagles snap 7-game losing streak and keep Steelers",
+      "How active NFL players continue to redefine all-ti",
+      "How upsets in the 2026 NFL season have upended sur",
+      "Ja'Quan McMillian hoping long-term future is in De",
+      "Jonah Coleman powers Broncos past Raiders 38-24 as",
+      "Jordan Rodgers: Benching Aaron Rodgers won't fix t",
+      "Mendoza throws 3 TDs, but Raiders fall to Broncos ",
+      "Mike McCarthy defends himself amid accusations fro",
+      "NFL Power Rankings: Stacking all 32 teams for Week",
+      "NFL Week 11 arrivals: Broncos LB Alex Singleton ho",
+      "NFL Week 11 arrivals: George Kittle rocks luchador",
+      "NFL Week 11 arrivals: Tee Higgins pays homage to F",
+      "NFL Week 11: Big takeaways, questions and fantasy ",
+      "NFL Week 12 arrivals: Aaron Donald leads arrivals ",
+      "NFL Week 12 arrivals: CeeDee Lamb leads arrivals a",
+      "NFL Week 12 arrivals: Chris Jones leads arrivals a",
+      "NFL Week 12 arrivals: Jeffery Simmons leads arriva",
+      "NFL Week 12 betting odds: Lines and totals for eve",
+      "NFL Week 12 latest intel, buzz questions, news, fa",
+      "NFL Week 12 preview: Picks, predictions, schedule,",
+      "NFL Week 12 uniforms: Rams debut alternates, Cowbo",
+      "NFL players with most at stake over rest of 2026: ",
+      "Pittsburgh Steelers vs. Philadelphia Eagles: Game ",
+      "Pro Football Hall of Fame voters trim Class of 202",
+      "Remembering Broncos legend Tom Jackson",
+      "Rex Ryan: DK Metcalf is a shell of himself",
+      "Rodgers accuses McCarthy of 'snoring' during meeti",
+      "Schrager wonders if Aaron Rodgers will ever regret",
+      "Sean Payton: We'll have depth at RB in wake of J.K",
+      "Sources corroborate Aaron Rodgers' allegations abo",
+      "Sources corroborate Aaron Rodgers' allegations on ",
+      "Sources: Aaron Rodgers excused from Steelers facil",
+      "Sources: Mike McCarthy has Steelers' full support ",
+      "Steelers activate Michael Pittman Jr. off IR, sign",
+      "Steelers bench struggling QB Aaron Rodgers, to sta",
+      "Steelers cut Rodgers after QB rips McCarthy in sco",
+      "Steelers owner Art Rooney II 'disappointed' in Rod",
+      "Steelers players try to keep focus on Broncos amid",
+      "Steelers' DK Metcalf denies trying to poke Eagles'",
+      "Steelers' DK Metcalf ejected for trying to poke Ea",
+      "Steelers' Metcalf denies trying to poke DeJean in ",
+      "Stephen A. passionately defends Aaron Rodgers over",
+      "Stephen A. rips Steelers' decision to bench Aaron ",
+      "The Aaron Rodgers-Steelers marriage was always bou",
+      "The Steelers are turning to Mason Rudolph to salva",
+      "The key for the Broncos defense vs. Mason Rudolph",
+      "Tom Jackson, Broncos star LB and Hall of Fame broa",
+      "Tomlin upset by Rodgers' bitter exit, calls situat",
+      "Top NFL plays from Week 11",
+      "Week 11 NFL highlights: Best plays, moments, touch",
+      "What Aaron Rodgers' benching means for Steelers, h",
+      "What's next for Aaron Rodgers, Mike McCarthy, Stee",
+      "Why Donte Whitner sides with Aaron Rodgers over 'e",
+      "Why Tom Jackson was such a special person"
+     ],
+     "kalshi_snap": "snap_20261127T1835Z.parquet"
+    }
+   },
+   "triggers": {
+    "44a3bcf5bd002583ddef2207a92dd977": "injury_change: inj_Pittsburgh Steelers; injury_change: inj_Denver Broncos"
+   }
+  }
  }
 ]

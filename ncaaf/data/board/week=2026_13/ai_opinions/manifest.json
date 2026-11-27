@@ -10712,5 +10712,250 @@
     "a72c11afb95ca2c2eb057c7f2a8e376b": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T181903Z.parquet",
+  "sha256": "9f91e7f076c3283104609f556fcf814c0ba996a6c9bbf49b3bc3a69edfe06290",
+  "logged_utc": "2026-11-27T18:19:03.936380+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.778,
+  "revised_rows": 7,
+  "oldest_source_age_min": 18.8,
+  "first_kickoff_utc": "2026-11-27T20:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T180015Z.parquet",
+   "inputs_digest": "{\"6a08fbc3f2fce16533f36dccc4dce347\": \"7b7d634954cf47cf\", \"a750f21dccb9df459196adc8dcf5ffe4\": \"93cd725fbb11155a\", \"5fc40a6a68f1652a38d2844a90358df2\": \"50572d748b163d3f\"}",
+   "components": {
+    "6a08fbc3f2fce16533f36dccc4dce347": {
+     "pinnacle_h2h": [
+      [
+       "Florida Gators",
+       0,
+       -237
+      ],
+      [
+       "Florida State Seminoles",
+       0,
+       208
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Gators",
+       -6.5,
+       -107
+      ],
+      [
+       "Florida State Seminoles",
+       6.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -107
+      ],
+      [
+       "Under",
+       54.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "Georgia defensive coordinator Glenn Schumann agree",
+      "How every 2027 five-star college football prospect",
+      "No. 20 Florida shuts down WR Vernell Brown for sea",
+      "Sources: Georgia defensive coordinator Glenn Schum",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What rivalries have the biggest stakes? Connelly l",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T1837Z.parquet"
+    },
+    "a750f21dccb9df459196adc8dcf5ffe4": {
+     "pinnacle_h2h": [
+      [
+       "Memphis Tigers",
+       0,
+       -931
+      ],
+      [
+       "Temple Owls",
+       0,
+       678
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Memphis Tigers",
+       -19.5,
+       -102
+      ],
+      [
+       "Temple Owls",
+       19.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       66.5,
+       100
+      ],
+      [
+       "Under",
+       66.5,
+       -117
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Memphis' Charles Huff says he's not candidate for ",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261127T1837Z.parquet"
+    },
+    "5fc40a6a68f1652a38d2844a90358df2": {
+     "pinnacle_h2h": [
+      [
+       "North Dakota State Bison",
+       0,
+       -348
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       295
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Dakota State Bison",
+       -7.5,
+       -116
+      ],
+      [
+       "San Jose State Spartans",
+       7.5,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.0,
+       -114
+      ],
+      [
+       "Under",
+       41.0,
+       -102
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "Take a 360-degree look at college football's iconi",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261127T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "6a08fbc3f2fce16533f36dccc4dce347": "anchor_prekick",
+    "a750f21dccb9df459196adc8dcf5ffe4": "anchor_prekick",
+    "5fc40a6a68f1652a38d2844a90358df2": "anchor_prekick"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261127T184903Z.parquet",
+  "sha256": "cd220cfb63e9fee7b6c622f245f8050926b148650305d9b7326efc753a602287",
+  "logged_utc": "2026-11-27T18:49:03.038218+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-27T21:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T183009Z.parquet",
+   "inputs_digest": "{\"45d4d87e236a38e2feb11f57820ff03f\": \"c7809555cf939713\"}",
+   "components": {
+    "45d4d87e236a38e2feb11f57820ff03f": {
+     "pinnacle_h2h": [
+      [
+       "Air Force Falcons",
+       0,
+       243
+      ],
+      [
+       "New Mexico Lobos",
+       0,
+       -281
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Air Force Falcons",
+       7.0,
+       102
+      ],
+      [
+       "New Mexico Lobos",
+       -7.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       42.5,
+       -109
+      ],
+      [
+       "Under",
+       42.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What rivalries have the biggest stakes? Connelly l",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261127T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "45d4d87e236a38e2feb11f57820ff03f": "anchor_prekick"
+   }
+  }
  }
 ]
