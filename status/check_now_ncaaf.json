@@ -1,25 +1,12 @@
 {
- "started_utc": "2026-11-27T05:04:04.067240+00:00",
- "finished_utc": "2026-11-27T05:21:39.634927+00:00",
+ "started_utc": "2026-11-27T05:49:03.756352+00:00",
+ "finished_utc": "2026-11-27T05:49:04.130188+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "e0b30f1dada22d4a2565ce663bc0741a",
-   "text": "line_move: pinnacle totals Under 48.0\u219249.0; line_move: pinnacle totals Over 48.0\u219249.0"
-  },
-  {
-   "game": "7677bcc8f40717d8275f5fe3b5f5fb0e",
-   "text": "line_move: pinnacle spreads BYU Cougars -14.5\u2192-15.5; line_move: pinnacle spreads Cincinnati Bearcats 14.5\u219215.5"
-  },
-  {
-   "game": "bf095bfbd7595f50c6a6062add4655f6",
-   "text": "horizon_entry: kick in 47h, no prior read"
-  }
- ],
- "games_read": 3,
- "frozen_file": "ai_opinions_20261127T050404Z.parquet",
- "spend_usd": 39.0047,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
