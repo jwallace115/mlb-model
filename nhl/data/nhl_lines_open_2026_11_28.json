@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "26c93a0fb3baf8842c064fe3aad7082d",
+    "game_date": "2026-11-28",
+    "sport": "NHL",
+    "home_team": "New York Islanders",
+    "away_team": "Winnipeg Jets",
+    "commence_time": "2026-11-28T00:30:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -102,
+    "under_price": -120,
+    "book": "fanduel",
+    "capture_timestamp": "2026-11-27T06:05:03.400222+00:00"
+  },
+  {
+    "game_id": "3553bd967a739912ede178eb373433b8",
+    "game_date": "2026-11-28",
+    "sport": "NHL",
+    "home_team": "Buffalo Sabres",
+    "away_team": "Pittsburgh Penguins",
+    "commence_time": "2026-11-28T01:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -112,
+    "under_price": -108,
+    "book": "fanduel",
+    "capture_timestamp": "2026-11-27T06:05:03.400222+00:00"
+  },
+  {
+    "game_id": "6be85c97118cc429ba24770044f011cd",
+    "game_date": "2026-11-28",
+    "sport": "NHL",
+    "home_team": "Edmonton Oilers",
+    "away_team": "Seattle Kraken",
+    "commence_time": "2026-11-28T01:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -102,
+    "under_price": -120,
+    "book": "fanduel",
+    "capture_timestamp": "2026-11-27T06:05:03.400222+00:00"
+  }
+]
