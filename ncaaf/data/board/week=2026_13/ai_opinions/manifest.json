@@ -6317,5 +6317,231 @@
     "20a5e90b65e1fec4a7be4a08260234a4": "line_move: pinnacle totals Under 43.0\u219244.0; line_move: pinnacle totals Over 43.0\u219244.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T024903Z.parquet",
+  "sha256": "9c12529ef10445adf2ede2e78f54e2e1f12eedb7975872af4fa2c2c85ddde8b0",
+  "logged_utc": "2026-11-27T02:49:03.082364+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.583,
+  "revised_rows": 0,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-29T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T023005Z.parquet",
+   "inputs_digest": "{\"f825e4c4d512e1c0a6db6ac7d8bc0326\": \"a6083075f9b4fa47\", \"a2ecd43208cb856c8d882906463fdbec\": \"726adb27fde93603\", \"3ed1c65f3b2b8392d0ca7c806c559898\": \"3b756f407f3834e4\", \"8e7c8bc1e0c6b7514f811010faaec76d\": \"6cd7b89c0c29ed6a\"}",
+   "components": {
+    "f825e4c4d512e1c0a6db6ac7d8bc0326": {
+     "pinnacle_h2h": [
+      [
+       "Arizona State Sun Devils",
+       0,
+       259
+      ],
+      [
+       "Arizona Wildcats",
+       0,
+       -310
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona State Sun Devils",
+       7.5,
+       -102
+      ],
+      [
+       "Arizona Wildcats",
+       -7.5,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -104
+      ],
+      [
+       "Under",
+       54.0,
+       -112
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "Noah Fifita rallies No. 19 Arizona through the rai",
+      "Oklahoma State Cowboys vs. Arizona State Sun Devil",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Sam Keltner kicks 35-yard field goal in overtime, ",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "a2ecd43208cb856c8d882906463fdbec": {
+     "pinnacle_h2h": [
+      [
+       "Nevada Wolf Pack",
+       0,
+       187
+      ],
+      [
+       "UNLV Rebels",
+       0,
+       -216
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Nevada Wolf Pack",
+       5.5,
+       -108
+      ],
+      [
+       "UNLV Rebels",
+       -5.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       44.5,
+       -106
+      ],
+      [
+       "Under",
+       44.5,
+       -111
+      ]
+     ],
+     "news": [
+      "AJ Bianco, Jacob Fernandez lead Nevada to 16-8 vic",
+      "Jackson Arnold has TD pass, TD run to help UNLV ho",
+      "Take a 360-degree look at college football's iconi",
+      "UNLV Rebels vs. San Jos\u00e9 State Spartans: Full High",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "3ed1c65f3b2b8392d0ca7c806c559898": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       166
+      ],
+      [
+       "Houston Cougars",
+       0,
+       -190
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       5.0,
+       -111
+      ],
+      [
+       "Houston Cougars",
+       -5.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -107
+      ],
+      [
+       "Under",
+       55.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026 college football coaching carousel: Tracking ",
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 12 poll reaction: What's ",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    },
+    "8e7c8bc1e0c6b7514f811010faaec76d": {
+     "pinnacle_h2h": [
+      [
+       "Texas State Bobcats",
+       0,
+       -278
+      ],
+      [
+       "Utah State Aggies",
+       0,
+       235
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Texas State Bobcats",
+       -7.0,
+       -110
+      ],
+      [
+       "Utah State Aggies",
+       7.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -105
+      ],
+      [
+       "Under",
+       52.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Brad Jackson has hand in 4 TDs to lead Texas State",
+      "Jake Reichle runs for 3 TDs as Oregon State rallie",
+      "Pac-12 reveals unique flex schedule for season's f",
+      "Utah State Aggies vs. Oregon State Beavers: Full H"
+     ],
+     "kalshi_snap": "snap_20261127T0007Z.parquet"
+    }
+   },
+   "triggers": {
+    "f825e4c4d512e1c0a6db6ac7d8bc0326": "anchor_morning",
+    "a2ecd43208cb856c8d882906463fdbec": "anchor_morning",
+    "3ed1c65f3b2b8392d0ca7c806c559898": "anchor_morning",
+    "8e7c8bc1e0c6b7514f811010faaec76d": "anchor_morning"
+   }
+  }
  }
 ]
