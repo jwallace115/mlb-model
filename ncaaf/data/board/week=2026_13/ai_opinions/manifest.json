@@ -10957,5 +10957,245 @@
     "45d4d87e236a38e2feb11f57820ff03f": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T191903Z.parquet",
+  "sha256": "6f65f39ad228d403e1afe8b50c81bc477053fb718fe0052c0644d9587a0ac32e",
+  "logged_utc": "2026-11-27T19:19:03.941432+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 3,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-27T20:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T190009Z.parquet",
+   "inputs_digest": "{\"a72c11afb95ca2c2eb057c7f2a8e376b\": \"4eff0121ee4e5af0\"}",
+   "components": {
+    "a72c11afb95ca2c2eb057c7f2a8e376b": {
+     "pinnacle_h2h": [
+      [
+       "Appalachian State Mountaineers",
+       0,
+       136
+      ],
+      [
+       "South Alabama Jaguars",
+       0,
+       -151
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Appalachian State Mountaineers",
+       3.0,
+       -105
+      ],
+      [
+       "South Alabama Jaguars",
+       -3.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.5,
+       -115
+      ],
+      [
+       "Under",
+       56.5,
+       -101
+      ]
+     ],
+     "news": [
+      "Best bets for Rivalry Week: Breaking down Michigan",
+      "Best bets for rivalry week: Breaking down Michigan"
+     ],
+     "kalshi_snap": "snap_20261127T1937Z.parquet"
+    }
+   },
+   "triggers": {
+    "a72c11afb95ca2c2eb057c7f2a8e376b": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261127T194903Z.parquet",
+  "sha256": "7b0484cd35ccca5afdefbb2243b2e5874f843e127c856a99778a10109273eaaf",
+  "logged_utc": "2026-11-27T19:49:03.927161+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.778,
+  "revised_rows": 8,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-27T20:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T193010Z.parquet",
+   "inputs_digest": "{\"6a08fbc3f2fce16533f36dccc4dce347\": \"53b42dd0b88e64a0\", \"a750f21dccb9df459196adc8dcf5ffe4\": \"27928f669cd9e3a9\", \"5fc40a6a68f1652a38d2844a90358df2\": \"92e80bbde2e2b763\"}",
+   "components": {
+    "6a08fbc3f2fce16533f36dccc4dce347": {
+     "pinnacle_h2h": [
+      [
+       "Florida Gators",
+       0,
+       -237
+      ],
+      [
+       "Florida State Seminoles",
+       0,
+       208
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida Gators",
+       -6.5,
+       -107
+      ],
+      [
+       "Florida State Seminoles",
+       6.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -107
+      ],
+      [
+       "Under",
+       54.5,
+       -109
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "Georgia defensive coordinator Glenn Schumann agree",
+      "How every 2027 five-star college football prospect",
+      "No. 20 Florida shuts down WR Vernell Brown for sea",
+      "Sources: Georgia defensive coordinator Glenn Schum",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What rivalries have the biggest stakes? Connelly l",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T1937Z.parquet"
+    },
+    "a750f21dccb9df459196adc8dcf5ffe4": {
+     "pinnacle_h2h": [
+      [
+       "Memphis Tigers",
+       0,
+       -931
+      ],
+      [
+       "Temple Owls",
+       0,
+       678
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Memphis Tigers",
+       -19.5,
+       -102
+      ],
+      [
+       "Temple Owls",
+       19.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       66.5,
+       100
+      ],
+      [
+       "Under",
+       66.5,
+       -117
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Memphis' Charles Huff says he's not candidate for ",
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261127T1937Z.parquet"
+    },
+    "5fc40a6a68f1652a38d2844a90358df2": {
+     "pinnacle_h2h": [
+      [
+       "North Dakota State Bison",
+       0,
+       -362
+      ],
+      [
+       "San Jose State Spartans",
+       0,
+       305
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Dakota State Bison",
+       -9.5,
+       -107
+      ],
+      [
+       "San Jose State Spartans",
+       9.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.0,
+       -115
+      ],
+      [
+       "Under",
+       41.0,
+       -101
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "Take a 360-degree look at college football's iconi",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261127T1937Z.parquet"
+    }
+   },
+   "triggers": {
+    "6a08fbc3f2fce16533f36dccc4dce347": "anchor_close",
+    "a750f21dccb9df459196adc8dcf5ffe4": "anchor_close",
+    "5fc40a6a68f1652a38d2844a90358df2": "anchor_close"
+   }
+  }
  }
 ]
