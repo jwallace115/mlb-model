@@ -6614,5 +6614,177 @@
     "59c0c40d83de9865c9f8da6344349353": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261127T050404Z.parquet",
+  "sha256": "e11ca21e8bf2053f134dda36106dc004d3b24aa67729eba153c198c74de37a0a",
+  "logged_utc": "2026-11-27T05:04:04.067240+00:00",
+  "rows": 9,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 3,
+  "no_view_share": 0.556,
+  "revised_rows": 6,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-27T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261127T050004Z.parquet",
+   "inputs_digest": "{\"e0b30f1dada22d4a2565ce663bc0741a\": \"d1c7cd8e4f36c99c\", \"7677bcc8f40717d8275f5fe3b5f5fb0e\": \"71f7e608e9e84bed\", \"bf095bfbd7595f50c6a6062add4655f6\": \"93411cf5ada788ba\"}",
+   "components": {
+    "e0b30f1dada22d4a2565ce663bc0741a": {
+     "pinnacle_h2h": [
+      [
+       "Akron Zips",
+       0,
+       246
+      ],
+      [
+       "Buffalo Bulls",
+       0,
+       -294
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Akron Zips",
+       7.5,
+       -115
+      ],
+      [
+       "Buffalo Bulls",
+       -7.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -107
+      ],
+      [
+       "Under",
+       49.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Take a 360-degree look at college football's iconi",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261127T0307Z.parquet"
+    },
+    "7677bcc8f40717d8275f5fe3b5f5fb0e": {
+     "pinnacle_h2h": [
+      [
+       "BYU Cougars",
+       0,
+       -713
+      ],
+      [
+       "Cincinnati Bearcats",
+       0,
+       519
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "BYU Cougars",
+       -15.5,
+       -110
+      ],
+      [
+       "Cincinnati Bearcats",
+       15.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       56.0,
+       -109
+      ],
+      [
+       "Under",
+       56.0,
+       -107
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "AP college football Week 12 poll reaction: What's ",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "College Football Playoff top 12 projection after W",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Predicting the College Football Playoff: Who's mos",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261127T0307Z.parquet"
+    },
+    "bf095bfbd7595f50c6a6062add4655f6": {
+     "pinnacle_h2h": [
+      [
+       "Hawaii Rainbow Warriors",
+       0,
+       -552
+      ],
+      [
+       "Sacramento State Hornets",
+       0,
+       422
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Hawaii Rainbow Warriors",
+       -13.5,
+       -109
+      ],
+      [
+       "Sacramento State Hornets",
+       13.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       39.0,
+       -116
+      ],
+      [
+       "Under",
+       39.0,
+       -101
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Week 13 Game Day Kickoff: Nothing compares to the "
+     ],
+     "kalshi_snap": "snap_20261127T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "e0b30f1dada22d4a2565ce663bc0741a": "line_move: pinnacle totals Under 48.0\u219249.0; line_move: pinnacle totals Over 48.0\u219249.0",
+    "7677bcc8f40717d8275f5fe3b5f5fb0e": "line_move: pinnacle spreads BYU Cougars -14.5\u2192-15.5; line_move: pinnacle spreads Cincinnati Bearcats 14.5\u219215.5",
+    "bf095bfbd7595f50c6a6062add4655f6": "horizon_entry: kick in 47h, no prior read"
+   }
+  }
  }
 ]
