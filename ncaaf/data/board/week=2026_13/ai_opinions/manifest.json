@@ -5313,5 +5313,215 @@
     "b39108d2cfcd62d29954aee80bbf7b51": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261126T230406Z.parquet",
+  "sha256": "3b07be6f4fce03a8c87d7a2590f98ed4fd7e94d80e911c7cd1559daaceff5d3b",
+  "logged_utc": "2026-11-26T23:04:06.181735+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 0,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-28T23:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261126T230008Z.parquet",
+   "inputs_digest": "{\"fc256824e407a09580ec73661749dc2e\": \"8ce035c7038f8ea5\"}",
+   "components": {
+    "fc256824e407a09580ec73661749dc2e": {
+     "pinnacle_h2h": [
+      [
+       "Boise State Broncos",
+       0,
+       -1507
+      ],
+      [
+       "Colorado State Rams",
+       0,
+       920
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boise State Broncos",
+       -21.0,
+       -111
+      ],
+      [
+       "Colorado State Rams",
+       21.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       77.0,
+       -101
+      ],
+      [
+       "Under",
+       77.0,
+       -116
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "AP college football Week 12 poll reaction: What's ",
+      "Boise State's 4th-down gamble backfires as upset l",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "College Football Playoff top 12 projection after W",
+      "Cooper DiLeva kicks a field goal as time expires, ",
+      "Fresno State holds off a late rally to beat Colora",
+      "No Big Ten football teams in AP top 5 for first ti",
+      "Pac-12 reveals unique flex schedule for season's f",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Predicting the College Football Playoff: Who's mos",
+      "Rayshon Luke finds the end zone again for second F",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Which teams have the best odds to make the College",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261126T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "fc256824e407a09580ec73661749dc2e": "anchor_morning"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261126T234903Z.parquet",
+  "sha256": "22a3cb1b834cacd06c0210e7290a10a27b8ee396aaaebbec1b18f0c0a99d040c",
+  "logged_utc": "2026-11-26T23:49:03.126874+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.833,
+  "revised_rows": 0,
+  "oldest_source_age_min": 18.8,
+  "first_kickoff_utc": "2026-11-28T23:15:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261126T233012Z.parquet",
+   "inputs_digest": "{\"2e180a350fe1c67db1b12cf36a1c1324\": \"2a9435bf464b6f23\", \"6f8b860fa7f8ce3ef4dd841450840e5f\": \"b40de21dec9abd7c\"}",
+   "components": {
+    "2e180a350fe1c67db1b12cf36a1c1324": {
+     "pinnacle_h2h": [
+      [
+       "Kansas Jayhawks",
+       0,
+       189
+      ],
+      [
+       "Oklahoma State Cowboys",
+       0,
+       -219
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kansas Jayhawks",
+       6.5,
+       -115
+      ],
+      [
+       "Oklahoma State Cowboys",
+       -6.5,
+       101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       65.0,
+       -109
+      ],
+      [
+       "Under",
+       65.0,
+       -107
+      ]
+     ],
+     "news": [
+      "2027 NFL draft questions, latest intel, risers, CF",
+      "AP college football Week 12 poll reaction: What's ",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "Oklahoma State Cowboys vs. Arizona State Sun Devil",
+      "Sam Keltner kicks 35-yard field goal in overtime, ",
+      "Sources: Oklahoma State extends Morris with new 6-",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261126T2107Z.parquet"
+    },
+    "6f8b860fa7f8ce3ef4dd841450840e5f": {
+     "pinnacle_h2h": [
+      [
+       "San Diego State Aztecs",
+       0,
+       124
+      ],
+      [
+       "Washington State Cougars",
+       0,
+       -140
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "San Diego State Aztecs",
+       3.0,
+       -113
+      ],
+      [
+       "Washington State Cougars",
+       -3.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -118
+      ],
+      [
+       "Under",
+       46.0,
+       101
+      ]
+     ],
+     "news": [
+      "Boise State's 4th-down gamble backfires as upset l",
+      "Brad Jackson has hand in 4 TDs to lead Texas State",
+      "Chaos takes over the Big Ten: UCLA, Indiana and Oh",
+      "Cooper DiLeva kicks a field goal as time expires, ",
+      "Pac-12 reveals unique flex schedule for season's f"
+     ],
+     "kalshi_snap": "snap_20261126T2107Z.parquet"
+    }
+   },
+   "triggers": {
+    "2e180a350fe1c67db1b12cf36a1c1324": "anchor_morning",
+    "6f8b860fa7f8ce3ef4dd841450840e5f": "anchor_morning"
+   }
+  }
  }
 ]
