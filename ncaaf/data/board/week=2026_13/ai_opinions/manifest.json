@@ -12459,5 +12459,115 @@
     "f670302d6ba6369545091e20bac24107": "line_move: pinnacle totals Under 53.5\u219254.5; line_move: pinnacle totals Over 53.5\u219254.5"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261128T053403Z.parquet",
+  "sha256": "f9810f7f121de2beaa19e833b6e12422be4fa9a7d568c6bdbf12d7b93481b244",
+  "logged_utc": "2026-11-28T05:34:03.904280+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.667,
+  "revised_rows": 5,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-28T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261128T053005Z.parquet",
+   "inputs_digest": "{\"2c9b4d03409441b9f41fed25a4801d2b\": \"f643822d9e4554af\", \"2981442fcc9375220d0f7959bcd9c084\": \"c205eec96e4a63a8\"}",
+   "components": {
+    "2c9b4d03409441b9f41fed25a4801d2b": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Southern Eagles",
+       0,
+       -117
+      ],
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       104
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Southern Eagles",
+       -1.5,
+       -107
+      ],
+      [
+       "Louisiana Tech Bulldogs",
+       1.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -109
+      ],
+      [
+       "Under",
+       52.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What rivalries have the biggest stakes? Connelly l"
+     ],
+     "kalshi_snap": "snap_20261128T0537Z.parquet"
+    },
+    "2981442fcc9375220d0f7959bcd9c084": {
+     "pinnacle_h2h": [
+      [
+       "East Carolina Pirates",
+       0,
+       -116
+      ],
+      [
+       "Florida Atlantic Owls",
+       0,
+       103
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "East Carolina Pirates",
+       -1.0,
+       -110
+      ],
+      [
+       "Florida Atlantic Owls",
+       1.0,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       58.5,
+       -106
+      ],
+      [
+       "Under",
+       58.5,
+       -110
+      ]
+     ],
+     "kalshi_snap": "snap_20261128T0537Z.parquet"
+    }
+   },
+   "triggers": {
+    "2c9b4d03409441b9f41fed25a4801d2b": "line_move: pinnacle totals Over 53.5\u219252.5; line_move: pinnacle totals Under 53.5\u219252.5",
+    "2981442fcc9375220d0f7959bcd9c084": "line_move: pinnacle totals Over 57.5\u219258.5; line_move: pinnacle totals Under 57.5\u219258.5"
+   }
+  }
  }
 ]
