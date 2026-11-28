@@ -12250,5 +12250,127 @@
     "3ed1c65f3b2b8392d0ca7c806c559898": "line_move: pinnacle spreads Baylor Bears 5.0\u21924.0; line_move: pinnacle spreads Houston Cougars -5.0\u2192-4.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261128T031903Z.parquet",
+  "sha256": "a52a1cfc4feed96fce9231b849c1040cc526ec0f8cbb991e8f594b834527fc7e",
+  "logged_utc": "2026-11-28T03:19:03.604915+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.5,
+  "revised_rows": 5,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-28T19:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261128T030008Z.parquet",
+   "inputs_digest": "{\"559227d3ba70769111dd09490258af44\": \"a1dbfb00c3ec0d49\", \"f6a2121d820ed6135db2f9ea131c3115\": \"4d85d4f434d08beb\"}",
+   "components": {
+    "559227d3ba70769111dd09490258af44": {
+     "pinnacle_h2h": [
+      [
+       "Army Black Knights",
+       0,
+       -196
+      ],
+      [
+       "Rice Owls",
+       0,
+       170
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Army Black Knights",
+       -5.0,
+       -105
+      ],
+      [
+       "Rice Owls",
+       5.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.5,
+       -107
+      ],
+      [
+       "Under",
+       46.5,
+       -109
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Take a 360-degree look at college football's iconi",
+      "Week 13 Game Day Kickoff: Nothing compares to the "
+     ],
+     "kalshi_snap": "snap_20261128T0307Z.parquet"
+    },
+    "f6a2121d820ed6135db2f9ea131c3115": {
+     "pinnacle_h2h": [
+      [
+       "Virginia Cavaliers",
+       0,
+       129
+      ],
+      [
+       "Virginia Tech Hokies",
+       0,
+       -146
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Virginia Cavaliers",
+       3.0,
+       -108
+      ],
+      [
+       "Virginia Tech Hokies",
+       -3.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -111
+      ],
+      [
+       "Under",
+       50.0,
+       -105
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "Best bets for Rivalry Week: Breaking down Michigan",
+      "Best bets for rivalry week: Breaking down Michigan",
+      "Miami tops Virginia Tech to clinch spot in ACC tit",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What rivalries have the biggest stakes? Connelly l",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T0307Z.parquet"
+    }
+   },
+   "triggers": {
+    "559227d3ba70769111dd09490258af44": "line_move: pinnacle totals Over 47.5\u219246.5; line_move: pinnacle totals Under 47.5\u219246.5",
+    "f6a2121d820ed6135db2f9ea131c3115": "line_move: pinnacle totals Over 51.0\u219250.0; line_move: pinnacle totals Under 51.0\u219250.0"
+   }
+  }
  }
 ]
