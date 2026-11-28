@@ -11726,5 +11726,529 @@
     "bee4ea7a231be77b1ee52ddf3755592f": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261128T021903Z.parquet",
+  "sha256": "70c8a34969f3641582c5925117f31b727730b24e26bae7988a0f9f811a50e599",
+  "logged_utc": "2026-11-28T02:19:03.149413+00:00",
+  "rows": 30,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 10,
+  "no_view_share": 0.633,
+  "revised_rows": 21,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-28T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261128T020008Z.parquet",
+   "inputs_digest": "{\"f670302d6ba6369545091e20bac24107\": \"deb7646b4281cc9c\", \"2c9b4d03409441b9f41fed25a4801d2b\": \"da54484960d1c890\", \"591a88cc16d9c5830bef16d7f522bc8a\": \"a4fd846bb4cc0e44\", \"b59311f602e67a25e81604f9b895a8b1\": \"15c4631aa89b56db\", \"a89bafbbfbc300c0005e20bfb7acfb90\": \"8b38d858e7b264d7\", \"e82b8ac931ff74f03744aa4ae6072a51\": \"3b1689a3a0412ef0\", \"ab91c66dfce2e452eb546cde1cf61879\": \"ec843083dfa15788\", \"0ebe196ce469f86aba61ded8de5fe9a8\": \"1dd2593b2acc8891\", \"f825e4c4d512e1c0a6db6ac7d8bc0326\": \"2922876e16baa707\", \"3ed1c65f3b2b8392d0ca7c806c559898\": \"af828dac14ef0612\"}",
+   "components": {
+    "f670302d6ba6369545091e20bac24107": {
+     "pinnacle_h2h": [
+      [
+       "Boston College Eagles",
+       0,
+       1395
+      ],
+      [
+       "Miami Hurricanes",
+       0,
+       -2712
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boston College Eagles",
+       24.0,
+       -105
+      ],
+      [
+       "Miami Hurricanes",
+       -24.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -115
+      ],
+      [
+       "Under",
+       53.5,
+       -102
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 12 poll reaction: What's ",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "How every 2027 five-star college football prospect",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "Miami looking to finish 9-0, Boston College lookin",
+      "Miami tops Virginia Tech to clinch spot in ACC tit",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Take a 360-degree look at college football's iconi",
+      "Tiering the CFP favorites: Who's actually built to",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Top DE D.J. Jacobs commits to Miami hours after pu",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "Which teams have the best odds to make the College",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261128T0237Z.parquet"
+    },
+    "2c9b4d03409441b9f41fed25a4801d2b": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Southern Eagles",
+       0,
+       -118
+      ],
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       105
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Southern Eagles",
+       -1.5,
+       -107
+      ],
+      [
+       "Louisiana Tech Bulldogs",
+       1.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -104
+      ],
+      [
+       "Under",
+       53.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What rivalries have the biggest stakes? Connelly l"
+     ],
+     "kalshi_snap": "snap_20261128T0237Z.parquet"
+    },
+    "591a88cc16d9c5830bef16d7f522bc8a": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       134
+      ],
+      [
+       "Northwestern Wildcats",
+       0,
+       -152
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       3.0,
+       -104
+      ],
+      [
+       "Northwestern Wildcats",
+       -3.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -109
+      ],
+      [
+       "Under",
+       49.0,
+       -107
+      ]
+     ],
+     "news": [
+      "AP college football Week 12 poll reaction: What's ",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T0237Z.parquet"
+    },
+    "b59311f602e67a25e81604f9b895a8b1": {
+     "pinnacle_h2h": [
+      [
+       "Marshall Thundering Herd",
+       0,
+       -233
+      ],
+      [
+       "UL Monroe Warhawks",
+       0,
+       200
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Marshall Thundering Herd",
+       -6.0,
+       -112
+      ],
+      [
+       "UL Monroe Warhawks",
+       6.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.0,
+       -114
+      ],
+      [
+       "Under",
+       51.0,
+       -102
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L"
+     ],
+     "kalshi_snap": "snap_20261128T0237Z.parquet"
+    },
+    "a89bafbbfbc300c0005e20bfb7acfb90": {
+     "pinnacle_h2h": [
+      [
+       "Old Dominion Monarchs",
+       0,
+       -213
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       0,
+       184
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Old Dominion Monarchs",
+       -6.0,
+       -101
+      ],
+      [
+       "Southern Mississippi Golden Eagles",
+       6.0,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.5,
+       -102
+      ],
+      [
+       "Under",
+       49.5,
+       -115
+      ]
+     ],
+     "kalshi_snap": "snap_20261128T0237Z.parquet"
+    },
+    "e82b8ac931ff74f03744aa4ae6072a51": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       -124
+      ],
+      [
+       "UCF Knights",
+       0,
+       110
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       -2.5,
+       -106
+      ],
+      [
+       "UCF Knights",
+       2.5,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       48.5,
+       101
+      ],
+      [
+       "Under",
+       48.5,
+       -118
+      ]
+     ],
+     "news": [
+      "Colorado's Deion Sanders shrugs off hot-seat chatt",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T0237Z.parquet"
+    },
+    "ab91c66dfce2e452eb546cde1cf61879": {
+     "pinnacle_h2h": [
+      [
+       "UCLA Bruins",
+       0,
+       172
+      ],
+      [
+       "USC Trojans",
+       0,
+       -198
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "UCLA Bruins",
+       5.5,
+       -111
+      ],
+      [
+       "USC Trojans",
+       -5.5,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.5,
+       -115
+      ],
+      [
+       "Under",
+       45.5,
+       -101
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "AP college football Week 12 poll reaction: What's ",
+      "Betting buzz: Big Ten's odds of national champion ",
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "College football Week 13: USC-UCLA tops schedule w",
+      "College football takeaways: Lasting impressions fr",
+      "How every 2027 five-star college football prospect",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "One-loss UCLA\u2019s Big Ten title bid meets USC in a r",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Stephen A. and Finebaum caution Lincoln Riley on w",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "UCLA QB Dieffenbach not ruled out for Saturday's g",
+      "USC band won't perform at UCLA football game after",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "What rivalries have the biggest stakes? Connelly l",
+      "Which teams have the best odds to make the College",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261128T0237Z.parquet"
+    },
+    "0ebe196ce469f86aba61ded8de5fe9a8": {
+     "pinnacle_h2h": [
+      [
+       "Michigan State Spartans",
+       0,
+       -136
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       121
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan State Spartans",
+       -3.0,
+       102
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       3.0,
+       -117
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -110
+      ],
+      [
+       "Under",
+       46.0,
+       -106
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "College football takeaways: Lasting impressions fr",
+      "Take a 360-degree look at college football's iconi",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T0237Z.parquet"
+    },
+    "f825e4c4d512e1c0a6db6ac7d8bc0326": {
+     "pinnacle_h2h": [
+      [
+       "Arizona State Sun Devils",
+       0,
+       274
+      ],
+      [
+       "Arizona Wildcats",
+       0,
+       -332
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arizona State Sun Devils",
+       9.5,
+       -110
+      ],
+      [
+       "Arizona Wildcats",
+       -9.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.0,
+       -101
+      ],
+      [
+       "Under",
+       54.0,
+       -116
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261128T0237Z.parquet"
+    },
+    "3ed1c65f3b2b8392d0ca7c806c559898": {
+     "pinnacle_h2h": [
+      [
+       "Baylor Bears",
+       0,
+       148
+      ],
+      [
+       "Houston Cougars",
+       0,
+       -168
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Baylor Bears",
+       4.0,
+       -114
+      ],
+      [
+       "Houston Cougars",
+       -4.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -112
+      ],
+      [
+       "Under",
+       55.5,
+       -104
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "AP college football Week 12 poll reaction: What's ",
+      "Houston, rivalry color rushes lead top uniforms of",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261128T0237Z.parquet"
+    }
+   },
+   "triggers": {
+    "f670302d6ba6369545091e20bac24107": "line_move: pinnacle spreads Miami Hurricanes -25.5\u2192-24.0; line_move: pinnacle spreads Boston College Eagles 25.5\u219224.0",
+    "2c9b4d03409441b9f41fed25a4801d2b": "line_move: pinnacle spreads Georgia Southern Eagles -2.5\u2192-1.5; line_move: pinnacle spreads Louisiana Tech Bulldogs 2.5\u21921.5",
+    "591a88cc16d9c5830bef16d7f522bc8a": "line_move: pinnacle totals Over 50.0\u219249.0; line_move: pinnacle totals Under 50.0\u219249.0",
+    "b59311f602e67a25e81604f9b895a8b1": "line_move: pinnacle spreads Marshall Thundering Herd -5.0\u2192-6.0; line_move: pinnacle spreads UL Monroe Warhawks 5.0\u21926.0",
+    "a89bafbbfbc300c0005e20bfb7acfb90": "line_move: pinnacle totals Over 50.5\u219249.5; line_move: pinnacle totals Under 50.5\u219249.5",
+    "e82b8ac931ff74f03744aa4ae6072a51": "line_move: pinnacle totals Over 49.5\u219248.5; line_move: pinnacle totals Under 49.5\u219248.5",
+    "ab91c66dfce2e452eb546cde1cf61879": "line_move: pinnacle spreads USC Trojans -6.5\u2192-5.5; line_move: pinnacle spreads UCLA Bruins 6.5\u21925.5; ml_move: pinnacle novig 0.322\u21920.356",
+    "0ebe196ce469f86aba61ded8de5fe9a8": "line_move: pinnacle totals Over 47.0\u219246.0; line_move: pinnacle totals Under 47.0\u219246.0",
+    "f825e4c4d512e1c0a6db6ac7d8bc0326": "line_move: pinnacle spreads Arizona Wildcats -7.5\u2192-9.5; line_move: pinnacle spreads Arizona State Sun Devils 7.5\u21929.5",
+    "3ed1c65f3b2b8392d0ca7c806c559898": "line_move: pinnacle spreads Baylor Bears 5.0\u21924.0; line_move: pinnacle spreads Houston Cougars -5.0\u2192-4.0"
+   }
+  }
  }
 ]
