@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "1ef1f5b9c8c88c584772f64a0d9a9435",
+    "game_date": "2026-11-29",
+    "sport": "NBA",
+    "home_team": "Chicago Bulls",
+    "away_team": "Indiana Pacers",
+    "commence_time": "2026-11-29T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 234.0,
+    "over_price": -116,
+    "under_price": 101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-28T06:05:02.533036+00:00"
+  },
+  {
+    "game_id": "638cefeed67cdd691e1686e024981563",
+    "game_date": "2026-11-29",
+    "sport": "NBA",
+    "home_team": "Milwaukee Bucks",
+    "away_team": "Oklahoma City Thunder",
+    "commence_time": "2026-11-29T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 228.5,
+    "over_price": -116,
+    "under_price": 101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-28T06:05:02.533036+00:00"
+  },
+  {
+    "game_id": "c4b53c6aebbd7b81fd821526ad9503e8",
+    "game_date": "2026-11-29",
+    "sport": "NBA",
+    "home_team": "Houston Rockets",
+    "away_team": "Philadelphia 76ers",
+    "commence_time": "2026-11-29T01:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 220.5,
+    "over_price": -101,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-11-28T06:05:02.533036+00:00"
+  }
+]
