@@ -17720,5 +17720,487 @@
     "ab91c66dfce2e452eb546cde1cf61879": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261128T181905Z.parquet",
+  "sha256": "013222c6a45e777028678d53a96841488a17d5aae331b7bfb4df5073044e5b1d",
+  "logged_utc": "2026-11-28T18:19:05.306988+00:00",
+  "rows": 33,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 11,
+  "no_view_share": 0.667,
+  "revised_rows": 32,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-28T19:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261128T180010Z.parquet",
+   "inputs_digest": "{\"559227d3ba70769111dd09490258af44\": \"030bfc1666959c27\", \"7ce20f289047e13b13c4a6517b10a4c2\": \"97c1122c1bfbd390\", \"e82b8ac931ff74f03744aa4ae6072a51\": \"67af8f52ce082a14\", \"6530923d9380b559b3c0b49b4f770e5f\": \"58673170227aa4e0\", \"c424e58ad3ce3e391a33c0495aa52690\": \"5a760c0af3113f40\", \"61a2b3c7f905b33b86e1ea178a885325\": \"2b79a883df665f44\", \"a0fe49c990d1497e1cb34eb9c2b73ef1\": \"3ea03ff49f0611c1\", \"200466f41d944b2706e404635298ebf6\": \"cd14b95889ad1b04\", \"7e42ee2b96752d8e1bc6fab8c0ad998f\": \"2e13b161767f0e43\", \"0ebe196ce469f86aba61ded8de5fe9a8\": \"75fe2c010f6fa473\", \"f77049eaeb5b3c0945c4bc2790dda6e6\": \"220142569a544d23\"}",
+   "components": {
+    "559227d3ba70769111dd09490258af44": {
+     "pinnacle_h2h": [
+      [
+       "Army Black Knights",
+       0,
+       -188
+      ],
+      [
+       "Rice Owls",
+       0,
+       168
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Army Black Knights",
+       -5.0,
+       -102
+      ],
+      [
+       "Rice Owls",
+       5.0,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -114
+      ],
+      [
+       "Under",
+       45.0,
+       -102
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Take a 360-degree look at college football's iconi",
+      "Week 13 Game Day Kickoff: Nothing compares to the "
+     ],
+     "kalshi_snap": "snap_20261128T1837Z.parquet"
+    },
+    "7ce20f289047e13b13c4a6517b10a4c2": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       615
+      ],
+      [
+       "James Madison Dukes",
+       0,
+       -826
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       17.0,
+       -101
+      ],
+      [
+       "James Madison Dukes",
+       -17.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -109
+      ],
+      [
+       "Under",
+       54.5,
+       -107
+      ]
+     ],
+     "kalshi_snap": "snap_20261128T1837Z.parquet"
+    },
+    "e82b8ac931ff74f03744aa4ae6072a51": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       -122
+      ],
+      [
+       "UCF Knights",
+       0,
+       111
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       -2.5,
+       -105
+      ],
+      [
+       "UCF Knights",
+       2.5,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       101
+      ],
+      [
+       "Under",
+       47.0,
+       -118
+      ]
+     ],
+     "news": [
+      "Colorado's Deion Sanders shrugs off hot-seat chatt",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1837Z.parquet"
+    },
+    "6530923d9380b559b3c0b49b4f770e5f": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       -459
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       375
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       -11.0,
+       -115
+      ],
+      [
+       "Sam Houston State Bearkats",
+       11.0,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -104
+      ],
+      [
+       "Under",
+       41.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Houston, rivalry color rushes lead top uniforms of"
+     ],
+     "kalshi_snap": "snap_20261128T1837Z.parquet"
+    },
+    "c424e58ad3ce3e391a33c0495aa52690": {
+     "pinnacle_h2h": [
+      [
+       "Georgia State Panthers",
+       0,
+       158
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -177
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia State Panthers",
+       4.5,
+       -112
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       -4.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -111
+      ],
+      [
+       "Under",
+       54.5,
+       -105
+      ]
+     ],
+     "kalshi_snap": "snap_20261128T1837Z.parquet"
+    },
+    "61a2b3c7f905b33b86e1ea178a885325": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       -223
+      ],
+      [
+       "Kansas State Wildcats",
+       0,
+       197
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       -6.0,
+       -106
+      ],
+      [
+       "Kansas State Wildcats",
+       6.0,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -105
+      ],
+      [
+       "Under",
+       51.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Aiden Flora, nation's leading rusher, re-signs wit",
+      "Take a 360-degree look at college football's iconi",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1837Z.parquet"
+    },
+    "a0fe49c990d1497e1cb34eb9c2b73ef1": {
+     "pinnacle_h2h": [
+      [
+       "Liberty Flames",
+       0,
+       -873
+      ],
+      [
+       "Missouri State Bears",
+       0,
+       644
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Liberty Flames",
+       -18.5,
+       100
+      ],
+      [
+       "Missouri State Bears",
+       18.5,
+       -113
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -109
+      ],
+      [
+       "Under",
+       53.0,
+       -107
+      ]
+     ],
+     "news": [
+      "Houston, rivalry color rushes lead top uniforms of",
+      "NCAA sanctions Liberty over tampering with two pla",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Which teams have the best odds to make the College",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1837Z.parquet"
+    },
+    "200466f41d944b2706e404635298ebf6": {
+     "pinnacle_h2h": [
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -152
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       137
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Middle Tennessee Blue Raiders",
+       -3.0,
+       -109
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -103
+      ],
+      [
+       "Under",
+       51.5,
+       -113
+      ]
+     ],
+     "news": [
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261128T1837Z.parquet"
+    },
+    "7e42ee2b96752d8e1bc6fab8c0ad998f": {
+     "pinnacle_h2h": [
+      [
+       "North Texas Mean Green",
+       0,
+       -126
+      ],
+      [
+       "UAB Blazers",
+       0,
+       114
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "North Texas Mean Green",
+       -2.5,
+       -106
+      ],
+      [
+       "UAB Blazers",
+       2.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       101
+      ],
+      [
+       "Under",
+       45.0,
+       -118
+      ]
+     ],
+     "news": [
+      "Take a 360-degree look at college football's iconi",
+      "Who are the winningest college football coaches of"
+     ],
+     "kalshi_snap": "snap_20261128T1837Z.parquet"
+    },
+    "0ebe196ce469f86aba61ded8de5fe9a8": {
+     "pinnacle_h2h": [
+      [
+       "Michigan State Spartans",
+       0,
+       -122
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       0,
+       110
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan State Spartans",
+       -2.5,
+       -102
+      ],
+      [
+       "Rutgers Scarlet Knights",
+       2.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       46.0,
+       -106
+      ],
+      [
+       "Under",
+       46.0,
+       -110
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Take a 360-degree look at college football's iconi",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1837Z.parquet"
+    },
+    "f77049eaeb5b3c0945c4bc2790dda6e6": {
+     "news": [
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Venables on how Mateer shows up as a role model fo",
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261128T1837Z.parquet"
+    }
+   },
+   "triggers": {
+    "559227d3ba70769111dd09490258af44": "anchor_close",
+    "7ce20f289047e13b13c4a6517b10a4c2": "anchor_close",
+    "e82b8ac931ff74f03744aa4ae6072a51": "anchor_close",
+    "6530923d9380b559b3c0b49b4f770e5f": "anchor_close",
+    "c424e58ad3ce3e391a33c0495aa52690": "anchor_close",
+    "61a2b3c7f905b33b86e1ea178a885325": "anchor_close",
+    "a0fe49c990d1497e1cb34eb9c2b73ef1": "anchor_close",
+    "200466f41d944b2706e404635298ebf6": "anchor_close",
+    "7e42ee2b96752d8e1bc6fab8c0ad998f": "anchor_prekick",
+    "0ebe196ce469f86aba61ded8de5fe9a8": "anchor_prekick",
+    "f77049eaeb5b3c0945c4bc2790dda6e6": "anchor_prekick"
+   }
+  }
  }
 ]

@@ -1,53 +1,57 @@
 {
- "started_utc": "2026-11-28T17:49:03.781218+00:00",
- "finished_utc": "2026-11-28T18:05:02.342799+00:00",
+ "started_utc": "2026-11-28T18:19:05.306988+00:00",
+ "finished_utc": "2026-11-28T18:56:19.401149+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
  "triggers": [
   {
-   "game": "7677bcc8f40717d8275f5fe3b5f5fb0e",
+   "game": "559227d3ba70769111dd09490258af44",
+   "text": "anchor_close"
+  },
+  {
+   "game": "7ce20f289047e13b13c4a6517b10a4c2",
+   "text": "anchor_close"
+  },
+  {
+   "game": "e82b8ac931ff74f03744aa4ae6072a51",
+   "text": "anchor_close"
+  },
+  {
+   "game": "6530923d9380b559b3c0b49b4f770e5f",
+   "text": "anchor_close"
+  },
+  {
+   "game": "c424e58ad3ce3e391a33c0495aa52690",
+   "text": "anchor_close"
+  },
+  {
+   "game": "61a2b3c7f905b33b86e1ea178a885325",
+   "text": "anchor_close"
+  },
+  {
+   "game": "a0fe49c990d1497e1cb34eb9c2b73ef1",
+   "text": "anchor_close"
+  },
+  {
+   "game": "200466f41d944b2706e404635298ebf6",
+   "text": "anchor_close"
+  },
+  {
+   "game": "7e42ee2b96752d8e1bc6fab8c0ad998f",
    "text": "anchor_prekick"
   },
   {
-   "game": "b34efc2b710eb260f25df93e02c86a0e",
+   "game": "0ebe196ce469f86aba61ded8de5fe9a8",
    "text": "anchor_prekick"
   },
   {
-   "game": "be399d75e553dc20697cf8f734b0f233",
-   "text": "anchor_prekick"
-  },
-  {
-   "game": "4a15b4432ef52d1717887e5badfdc0e3",
-   "text": "anchor_prekick"
-  },
-  {
-   "game": "483beae9e865229fff02f961536b181e",
-   "text": "anchor_prekick"
-  },
-  {
-   "game": "a57feac04a5d9404de66cd40c004fa51",
-   "text": "anchor_prekick"
-  },
-  {
-   "game": "eb0172d64d648f5f0697ee382c039564",
-   "text": "anchor_prekick"
-  },
-  {
-   "game": "e55fde0bfbebc4cfd4ccc010b0e858b4",
-   "text": "anchor_prekick"
-  },
-  {
-   "game": "20a5e90b65e1fec4a7be4a08260234a4",
-   "text": "anchor_prekick"
-  },
-  {
-   "game": "ab91c66dfce2e452eb546cde1cf61879",
+   "game": "f77049eaeb5b3c0945c4bc2790dda6e6",
    "text": "anchor_prekick"
   }
  ],
- "games_read": 10,
- "frozen_file": "ai_opinions_20261128T174903Z.parquet",
- "spend_usd": 42.805,
+ "games_read": 11,
+ "frozen_file": "ai_opinions_20261128T181905Z.parquet",
+ "spend_usd": 43.3104,
  "result": "COMPLETE"
 }
