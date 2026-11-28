@@ -11642,5 +11642,89 @@
     "4c69ecf41bb2d36dfeedeae23acc5b86": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261128T011903Z.parquet",
+  "sha256": "115a513f5e257cab9be993d406ec4e5a6e6147a7f79fb5a052a0c9d64c6de022",
+  "logged_utc": "2026-11-28T01:19:03.272211+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 2,
+  "oldest_source_age_min": 19.0,
+  "first_kickoff_utc": "2026-11-28T02:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261128T010005Z.parquet",
+   "inputs_digest": "{\"bee4ea7a231be77b1ee52ddf3755592f\": \"5fe99e7d8245a57e\"}",
+   "components": {
+    "bee4ea7a231be77b1ee52ddf3755592f": {
+     "pinnacle_h2h": [
+      [
+       "Utah Utes",
+       0,
+       -1991
+      ],
+      [
+       "West Virginia Mountaineers",
+       0,
+       1224
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Utah Utes",
+       -25.0,
+       -111
+      ],
+      [
+       "West Virginia Mountaineers",
+       25.0,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       65.5,
+       100
+      ],
+      [
+       "Under",
+       65.5,
+       -117
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "AP college football Week 12 poll reaction: What's ",
+      "Best bets for Rivalry Week: Breaking down Michigan",
+      "Best bets for rivalry week: Breaking down Michigan",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "No. 2 Utah seeks to wrap up unbeaten regular seaso",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Which teams have the best odds to make the College",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261128T0107Z.parquet"
+    }
+   },
+   "triggers": {
+    "bee4ea7a231be77b1ee52ddf3755592f": "anchor_close"
+   }
+  }
  }
 ]
