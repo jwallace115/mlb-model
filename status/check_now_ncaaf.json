@@ -1,12 +1,49 @@
 {
- "started_utc": "2026-11-28T13:49:03.255623+00:00",
- "finished_utc": "2026-11-28T13:49:03.657188+00:00",
+ "started_utc": "2026-11-28T14:04:03.281501+00:00",
+ "finished_utc": "2026-11-28T14:18:57.639201+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [],
- "games_read": 0,
- "frozen_file": null,
- "spend_usd": null,
- "result": "no_triggers"
+ "triggers": [
+  {
+   "game": "c074c1d28d172e0eb521dbb9d530462f",
+   "text": "anchor_prekick"
+  },
+  {
+   "game": "f670302d6ba6369545091e20bac24107",
+   "text": "anchor_prekick"
+  },
+  {
+   "game": "bdf272babe96ca5f2c4ad03eea790eb2",
+   "text": "anchor_prekick"
+  },
+  {
+   "game": "2c9b4d03409441b9f41fed25a4801d2b",
+   "text": "anchor_prekick"
+  },
+  {
+   "game": "735be3d0a18e8d57cc515971a6735c7d",
+   "text": "anchor_prekick"
+  },
+  {
+   "game": "426658869d8f93e891cad97029725975",
+   "text": "anchor_prekick"
+  },
+  {
+   "game": "a35f041e96e693eba5737ef05a57c4db",
+   "text": "anchor_prekick"
+  },
+  {
+   "game": "c58a68d46da0d0748169156702f9b4d5",
+   "text": "anchor_prekick"
+  },
+  {
+   "game": "57d6254e2054bb1e269219b1ef8b6ab7",
+   "text": "anchor_prekick"
+  }
+ ],
+ "games_read": 9,
+ "frozen_file": "ai_opinions_20261128T140403Z.parquet",
+ "spend_usd": 41.3463,
+ "result": "COMPLETE"
 }
