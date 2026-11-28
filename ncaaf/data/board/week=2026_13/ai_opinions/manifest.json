@@ -12372,5 +12372,92 @@
     "f6a2121d820ed6135db2f9ea131c3115": "line_move: pinnacle totals Over 51.0\u219250.0; line_move: pinnacle totals Under 51.0\u219250.0"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261128T043403Z.parquet",
+  "sha256": "5e94f7f6a718fa0b0daf0cefa1d920b0e338f82c930dd045cc70a7aec1d945d6",
+  "logged_utc": "2026-11-28T04:34:03.167942+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.333,
+  "revised_rows": 3,
+  "oldest_source_age_min": 4.0,
+  "first_kickoff_utc": "2026-11-28T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261128T043004Z.parquet",
+   "inputs_digest": "{\"f670302d6ba6369545091e20bac24107\": \"36f315a6dd900213\"}",
+   "components": {
+    "f670302d6ba6369545091e20bac24107": {
+     "pinnacle_h2h": [
+      [
+       "Boston College Eagles",
+       0,
+       1412
+      ],
+      [
+       "Miami Hurricanes",
+       0,
+       -2762
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boston College Eagles",
+       24.0,
+       -102
+      ],
+      [
+       "Miami Hurricanes",
+       -24.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -111
+      ],
+      [
+       "Under",
+       54.5,
+       -105
+      ]
+     ],
+     "news": [
+      "2026-27 Week 12 College Football Playoff, bowl pro",
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 12 poll reaction: What's ",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "How every 2027 five-star college football prospect",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "Miami looking to finish 9-0, Boston College lookin",
+      "Miami tops Virginia Tech to clinch spot in ACC tit",
+      "Power Rankings: Chaos shifts top 25 in Week 12",
+      "Take a 360-degree look at college football's iconi",
+      "Tiering the CFP favorites: Who's actually built to",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Top DE D.J. Jacobs commits to Miami hours after pu",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "Which teams have the best odds to make the College",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261128T0437Z.parquet"
+    }
+   },
+   "triggers": {
+    "f670302d6ba6369545091e20bac24107": "line_move: pinnacle totals Under 53.5\u219254.5; line_move: pinnacle totals Over 53.5\u219254.5"
+   }
+  }
  }
 ]
