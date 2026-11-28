@@ -16209,5 +16209,577 @@
     "200466f41d944b2706e404635298ebf6": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261128T161904Z.parquet",
+  "sha256": "d5108e43fe32982dc40d4538db7cb137354252cdbee0276a690483608d24ee2c",
+  "logged_utc": "2026-11-28T16:19:04.975964+00:00",
+  "rows": 27,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 9,
+  "no_view_share": 0.63,
+  "revised_rows": 25,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-28T17:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261128T160009Z.parquet",
+   "inputs_digest": "{\"c074c1d28d172e0eb521dbb9d530462f\": \"9e867d993da2df38\", \"f670302d6ba6369545091e20bac24107\": \"8c4e85f4234003dc\", \"bdf272babe96ca5f2c4ad03eea790eb2\": \"047f8d284583c3e4\", \"2c9b4d03409441b9f41fed25a4801d2b\": \"8abfa7f9b7f499db\", \"735be3d0a18e8d57cc515971a6735c7d\": \"3cbee6e0deec2537\", \"426658869d8f93e891cad97029725975\": \"05ef1b7de9244582\", \"a35f041e96e693eba5737ef05a57c4db\": \"b52014415d6d6455\", \"c58a68d46da0d0748169156702f9b4d5\": \"66e57087a4514d66\", \"57d6254e2054bb1e269219b1ef8b6ab7\": \"8aa1d5f24e498188\"}",
+   "components": {
+    "c074c1d28d172e0eb521dbb9d530462f": {
+     "pinnacle_h2h": [
+      [
+       "Ball State Cardinals",
+       0,
+       149
+      ],
+      [
+       "Central Michigan Chippewas",
+       0,
+       -166
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Ball State Cardinals",
+       3.5,
+       -112
+      ],
+      [
+       "Central Michigan Chippewas",
+       -3.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -101
+      ],
+      [
+       "Under",
+       50.0,
+       -116
+      ]
+     ],
+     "news": [
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261128T1637Z.parquet"
+    },
+    "f670302d6ba6369545091e20bac24107": {
+     "pinnacle_h2h": [
+      [
+       "Boston College Eagles",
+       0,
+       1562
+      ],
+      [
+       "Miami Hurricanes",
+       0,
+       -2770
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Boston College Eagles",
+       24.0,
+       102
+      ],
+      [
+       "Miami Hurricanes",
+       -24.0,
+       -115
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -106
+      ],
+      [
+       "Under",
+       55.5,
+       -110
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 12 poll reaction: What's ",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "How every 2027 five-star college football prospect",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "Miami looking to finish 9-0, Boston College lookin",
+      "Miami tops Virginia Tech to clinch spot in ACC tit",
+      "Take a 360-degree look at college football's iconi",
+      "Tiering the CFP favorites: Who's actually built to",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Top DE D.J. Jacobs commits to Miami hours after pu",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "Which teams have the best odds to make the College",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261128T1637Z.parquet"
+    },
+    "bdf272babe96ca5f2c4ad03eea790eb2": {
+     "pinnacle_h2h": [
+      [
+       "Charlotte 49ers",
+       0,
+       568
+      ],
+      [
+       "Navy Midshipmen",
+       0,
+       -749
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Charlotte 49ers",
+       16.5,
+       -108
+      ],
+      [
+       "Navy Midshipmen",
+       -16.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -104
+      ],
+      [
+       "Under",
+       52.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "Take a 360-degree look at college football's iconi",
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261128T1637Z.parquet"
+    },
+    "2c9b4d03409441b9f41fed25a4801d2b": {
+     "pinnacle_h2h": [
+      [
+       "Georgia Southern Eagles",
+       0,
+       -111
+      ],
+      [
+       "Louisiana Tech Bulldogs",
+       0,
+       101
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia Southern Eagles",
+       -1.5,
+       -102
+      ],
+      [
+       "Louisiana Tech Bulldogs",
+       1.5,
+       -110
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.5,
+       -109
+      ],
+      [
+       "Under",
+       52.5,
+       -107
+      ]
+     ],
+     "news": [
+      "Week 12 Anger Index: Indiana dropped how many spot",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What rivalries have the biggest stakes? Connelly l"
+     ],
+     "kalshi_snap": "snap_20261128T1637Z.parquet"
+    },
+    "735be3d0a18e8d57cc515971a6735c7d": {
+     "pinnacle_h2h": [
+      [
+       "Kentucky Wildcats",
+       0,
+       128
+      ],
+      [
+       "Louisville Cardinals",
+       0,
+       -142
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Kentucky Wildcats",
+       3.0,
+       -110
+      ],
+      [
+       "Louisville Cardinals",
+       -3.0,
+       -102
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -105
+      ],
+      [
+       "Under",
+       53.5,
+       -111
+      ]
+     ],
+     "news": [
+      "AP college football Week 12 poll reaction: What's ",
+      "Analyzing the weight of the Louisville vs. UK Week",
+      "Future Headlines: Stein downs alma mater, Sellers ",
+      "Houston, rivalry color rushes lead top uniforms of",
+      "Lauren Sisler highlights what's at stake in the Go",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What is the SEC Now crew thankful for?",
+      "What rivalries have the biggest stakes? Connelly l",
+      "Which teams have the best odds to make the College",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a",
+      "Will Stein emphasizes UK's standard, previews 'mos"
+     ],
+     "kalshi_snap": "snap_20261128T1637Z.parquet"
+    },
+    "426658869d8f93e891cad97029725975": {
+     "pinnacle_h2h": [
+      [
+       "Michigan Wolverines",
+       0,
+       337
+      ],
+      [
+       "Ohio State Buckeyes",
+       0,
+       -405
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Michigan Wolverines",
+       10.0,
+       -101
+      ],
+      [
+       "Ohio State Buckeyes",
+       -10.0,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       36.5,
+       -114
+      ],
+      [
+       "Under",
+       36.5,
+       -102
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "A timeline of Michigan athletics since 2017",
+      "AP college football Week 12 poll reaction: What's ",
+      "Attorney: Trev Alberts told he won't be next AD at",
+      "Best bets for Rivalry Week: Breaking down Michigan",
+      "Best bets for rivalry week: Breaking down Michigan",
+      "Betting buzz: Big Ten's odds of national champion ",
+      "D.J. Jacobs decommits from Ohio State, sources say",
+      "Finebaum declares Michigan 'a total clown show' af",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "How every 2027 five-star college football prospect",
+      "In a rivalry built on titles, Michigan-Ohio State ",
+      "Sources: Manuel to remain Michigan AD until new hi",
+      "Sources: Michigan QB Bryce Underwood expected to s",
+      "Take a 360-degree look at college football's iconi",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Top DE D.J. Jacobs commits to Miami hours after pu",
+      "Trev Alberts 'shocked' to be told he won't be Mich",
+      "Trev Alberts told he won't be Michigan AD after ag",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What rivalries have the biggest stakes? Connelly l",
+      "What went wrong for Michigan and Ohio State in 202",
+      "Which teams have the best odds to make the College",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261128T1637Z.parquet"
+    },
+    "a35f041e96e693eba5737ef05a57c4db": {
+     "pinnacle_h2h": [
+      [
+       "NC State Wolfpack",
+       0,
+       187
+      ],
+      [
+       "North Carolina Tar Heels",
+       0,
+       -211
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "NC State Wolfpack",
+       5.5,
+       -103
+      ],
+      [
+       "North Carolina Tar Heels",
+       -5.5,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -107
+      ],
+      [
+       "Under",
+       53.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What rivalries have the biggest stakes? Connelly l",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1637Z.parquet"
+    },
+    "c58a68d46da0d0748169156702f9b4d5": {
+     "pinnacle_h2h": [
+      [
+       "Notre Dame Fighting Irish",
+       0,
+       -2651
+      ],
+      [
+       "Syracuse Orange",
+       0,
+       1513
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Notre Dame Fighting Irish",
+       -25.0,
+       -103
+      ],
+      [
+       "Syracuse Orange",
+       25.0,
+       -109
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.5,
+       -104
+      ],
+      [
+       "Under",
+       53.5,
+       -112
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 12 poll reaction: What's ",
+      "Best bets for Rivalry Week: Breaking down Michigan",
+      "Best bets for rivalry week: Breaking down Michigan",
+      "CFB: Week 13 ABC Tripleheader",
+      "Five-star OT Lincoln Fa'alafi commits to Notre Dam",
+      "Indiana falls from 12-team field in 4th CFP rankin",
+      "No. 3 Notre Dame aims to solidify College Football",
+      "Notre Dame starting safety Luke Talich done for se",
+      "Stephen A.: Indiana doesn't belong in 12-team CFP",
+      "Tiering the CFP favorites: Who's actually built to",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "What qualities make the perfect coach? We're borro",
+      "Which teams have the best odds to make the College",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor",
+      "Who's on the move? CFP committee's fourth top 25 a"
+     ],
+     "kalshi_snap": "snap_20261128T1637Z.parquet"
+    },
+    "57d6254e2054bb1e269219b1ef8b6ab7": {
+     "pinnacle_h2h": [
+      [
+       "UConn Huskies",
+       0,
+       -158
+      ],
+      [
+       "Wyoming Cowboys",
+       0,
+       142
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "UConn Huskies",
+       -3.5,
+       102
+      ],
+      [
+       "Wyoming Cowboys",
+       3.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       100
+      ],
+      [
+       "Under",
+       45.0,
+       -117
+      ]
+     ],
+     "news": [
+      "Take a 360-degree look at college football's iconi",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Wyoming's Jay Sawvel gets self-imposed 1-game ban "
+     ],
+     "kalshi_snap": "snap_20261128T1637Z.parquet"
+    }
+   },
+   "triggers": {
+    "c074c1d28d172e0eb521dbb9d530462f": "anchor_close",
+    "f670302d6ba6369545091e20bac24107": "anchor_close",
+    "bdf272babe96ca5f2c4ad03eea790eb2": "anchor_close",
+    "2c9b4d03409441b9f41fed25a4801d2b": "anchor_close",
+    "735be3d0a18e8d57cc515971a6735c7d": "anchor_close",
+    "426658869d8f93e891cad97029725975": "anchor_close",
+    "a35f041e96e693eba5737ef05a57c4db": "anchor_close",
+    "c58a68d46da0d0748169156702f9b4d5": "anchor_close",
+    "57d6254e2054bb1e269219b1ef8b6ab7": "anchor_close"
+   }
+  }
+ },
+ {
+  "file": "ai_opinions_20261128T164903Z.parquet",
+  "sha256": "be81ee7c147ff2abc3bd1a55102e139b8c3de5020c90c02498b1fae0b4f205d4",
+  "logged_utc": "2026-11-28T16:49:03.607250+00:00",
+  "rows": 3,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 1,
+  "no_view_share": 0.667,
+  "revised_rows": 1,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-28T17:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261128T163010Z.parquet",
+   "inputs_digest": "{\"591a88cc16d9c5830bef16d7f522bc8a\": \"d71f7bcff77c3c1c\"}",
+   "components": {
+    "591a88cc16d9c5830bef16d7f522bc8a": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       165
+      ],
+      [
+       "Northwestern Wildcats",
+       0,
+       -185
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       4.5,
+       -101
+      ],
+      [
+       "Northwestern Wildcats",
+       -4.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -103
+      ],
+      [
+       "Under",
+       49.0,
+       -113
+      ]
+     ],
+     "news": [
+      "AP college football Week 12 poll reaction: What's ",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1637Z.parquet"
+    }
+   },
+   "triggers": {
+    "591a88cc16d9c5830bef16d7f522bc8a": "anchor_close"
+   }
+  }
  }
 ]
