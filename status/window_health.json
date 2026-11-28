@@ -42,21 +42,21 @@
  {
   "sport": "ncaaf",
   "window": "event",
-  "started_utc": "2026-11-27T23:20:51.684253+00:00",
-  "finished_utc": "2026-11-27T23:20:51.684253+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-27T23:42:58.274012+00:00",
+  "finished_utc": "2026-11-27T23:42:58.274012+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['anchor_prekick']",
-  "freeze_file": "ai_opinions_20261127T230403Z.parquet"
+  "message": "",
+  "freeze_file": null
  },
  {
   "sport": "nfl",
   "window": "event",
-  "started_utc": "2026-11-27T23:26:19.253307+00:00",
-  "finished_utc": "2026-11-27T23:26:19.253307+00:00",
-  "result": "COMPLETE",
+  "started_utc": "2026-11-27T23:47:03.747932+00:00",
+  "finished_utc": "2026-11-27T23:47:03.747932+00:00",
+  "result": "no_triggers",
   "step": "window_watch",
-  "message": "['line_move: pinnacle spreads Indianapolis Colts 6.5\u21925.5; line_move: pinnacle spreads New York Giants -6.5\u2192-5.5', 'anchor_morning', 'anchor_morning', 'anchor_morning']",
-  "freeze_file": "ai_opinions_20261127T231704Z.parquet"
+  "message": "",
+  "freeze_file": null
  }
 ]

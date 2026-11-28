@@ -1,29 +1,12 @@
 {
- "started_utc": "2026-11-27T23:17:04.201634+00:00",
- "finished_utc": "2026-11-27T23:26:19.430119+00:00",
+ "started_utc": "2026-11-27T23:47:03.440514+00:00",
+ "finished_utc": "2026-11-27T23:47:03.804523+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
- "triggers": [
-  {
-   "game": "e9da808e36e1b7475698a57465ad4519",
-   "text": "line_move: pinnacle spreads Indianapolis Colts 6.5\u21925.5; line_move: pinnacle spreads New York Giants -6.5\u2192-5.5"
-  },
-  {
-   "game": "c64ceba13ede564e8658693e3171e7f9",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "69a1dbe9de3d3212c3a7a55be5d204ab",
-   "text": "anchor_morning"
-  },
-  {
-   "game": "d68dced0b26726890b9c79bd19a5ffe5",
-   "text": "anchor_morning"
-  }
- ],
- "games_read": 4,
- "frozen_file": "ai_opinions_20261127T231704Z.parquet",
- "spend_usd": 40.4598,
- "result": "COMPLETE"
+ "triggers": [],
+ "games_read": 0,
+ "frozen_file": null,
+ "spend_usd": null,
+ "result": "no_triggers"
 }
