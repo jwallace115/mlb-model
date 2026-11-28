@@ -15824,5 +15824,390 @@
     "bf095bfbd7595f50c6a6062add4655f6": "anchor_morning"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261128T160403Z.parquet",
+  "sha256": "de04de37fb33314b54c45cfe814e58e33ec8f27a051e05fe17fd290d0cb99760",
+  "logged_utc": "2026-11-28T16:04:03.818605+00:00",
+  "rows": 24,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 8,
+  "no_view_share": 0.75,
+  "revised_rows": 21,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-28T19:00:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261128T160009Z.parquet",
+   "inputs_digest": "{\"559227d3ba70769111dd09490258af44\": \"9b1f4d3300f07af4\", \"7ce20f289047e13b13c4a6517b10a4c2\": \"f0f0db4a624e7821\", \"e82b8ac931ff74f03744aa4ae6072a51\": \"27e69fe005f54b98\", \"6530923d9380b559b3c0b49b4f770e5f\": \"97f98fa15112d7af\", \"c424e58ad3ce3e391a33c0495aa52690\": \"a9347654c91603b2\", \"61a2b3c7f905b33b86e1ea178a885325\": \"ebf3efbcbedc0173\", \"a0fe49c990d1497e1cb34eb9c2b73ef1\": \"243f19a22ceefb7f\", \"200466f41d944b2706e404635298ebf6\": \"4192fa51064303f7\"}",
+   "components": {
+    "559227d3ba70769111dd09490258af44": {
+     "pinnacle_h2h": [
+      [
+       "Army Black Knights",
+       0,
+       -185
+      ],
+      [
+       "Rice Owls",
+       0,
+       165
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Army Black Knights",
+       -5.0,
+       101
+      ],
+      [
+       "Rice Owls",
+       5.0,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       45.0,
+       -110
+      ],
+      [
+       "Under",
+       45.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Bottom 10 after Week 12: How the Bruins put the 'L",
+      "Take a 360-degree look at college football's iconi",
+      "Week 13 Game Day Kickoff: Nothing compares to the "
+     ],
+     "kalshi_snap": "snap_20261128T1607Z.parquet"
+    },
+    "7ce20f289047e13b13c4a6517b10a4c2": {
+     "pinnacle_h2h": [
+      [
+       "Coastal Carolina Chanticleers",
+       0,
+       617
+      ],
+      [
+       "James Madison Dukes",
+       0,
+       -828
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Coastal Carolina Chanticleers",
+       17.0,
+       -101
+      ],
+      [
+       "James Madison Dukes",
+       -17.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       54.5,
+       -110
+      ],
+      [
+       "Under",
+       54.5,
+       -106
+      ]
+     ],
+     "news": [
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261128T1607Z.parquet"
+    },
+    "e82b8ac931ff74f03744aa4ae6072a51": {
+     "pinnacle_h2h": [
+      [
+       "Colorado Buffaloes",
+       0,
+       -124
+      ],
+      [
+       "UCF Knights",
+       0,
+       112
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Colorado Buffaloes",
+       -2.5,
+       -107
+      ],
+      [
+       "UCF Knights",
+       2.5,
+       -105
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       100
+      ],
+      [
+       "Under",
+       47.0,
+       -117
+      ]
+     ],
+     "news": [
+      "Colorado's Deion Sanders shrugs off hot-seat chatt",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1607Z.parquet"
+    },
+    "6530923d9380b559b3c0b49b4f770e5f": {
+     "pinnacle_h2h": [
+      [
+       "Florida International Panthers",
+       0,
+       -459
+      ],
+      [
+       "Sam Houston State Bearkats",
+       0,
+       375
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Florida International Panthers",
+       -11.0,
+       -115
+      ],
+      [
+       "Sam Houston State Bearkats",
+       11.0,
+       103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       41.5,
+       -104
+      ],
+      [
+       "Under",
+       41.5,
+       -112
+      ]
+     ],
+     "news": [
+      "Houston, rivalry color rushes lead top uniforms of"
+     ],
+     "kalshi_snap": "snap_20261128T1607Z.parquet"
+    },
+    "c424e58ad3ce3e391a33c0495aa52690": {
+     "pinnacle_h2h": [
+      [
+       "Georgia State Panthers",
+       0,
+       173
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       0,
+       -194
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Georgia State Panthers",
+       5.5,
+       -112
+      ],
+      [
+       "Louisiana Ragin Cajuns",
+       -5.5,
+       100
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       55.5,
+       -105
+      ],
+      [
+       "Under",
+       55.5,
+       -111
+      ]
+     ],
+     "news": [
+      "What Week 12's unexpected results mean for Rivalry"
+     ],
+     "kalshi_snap": "snap_20261128T1607Z.parquet"
+    },
+    "61a2b3c7f905b33b86e1ea178a885325": {
+     "pinnacle_h2h": [
+      [
+       "Iowa State Cyclones",
+       0,
+       -200
+      ],
+      [
+       "Kansas State Wildcats",
+       0,
+       178
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Iowa State Cyclones",
+       -5.0,
+       -104
+      ],
+      [
+       "Kansas State Wildcats",
+       5.0,
+       -108
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       52.0,
+       -107
+      ],
+      [
+       "Under",
+       52.0,
+       -109
+      ]
+     ],
+     "news": [
+      "Aiden Flora, nation's leading rusher, re-signs wit",
+      "Take a 360-degree look at college football's iconi",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1607Z.parquet"
+    },
+    "a0fe49c990d1497e1cb34eb9c2b73ef1": {
+     "pinnacle_h2h": [
+      [
+       "Liberty Flames",
+       0,
+       -906
+      ],
+      [
+       "Missouri State Bears",
+       0,
+       663
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Liberty Flames",
+       -18.5,
+       -106
+      ],
+      [
+       "Missouri State Bears",
+       18.5,
+       -106
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       53.0,
+       -110
+      ],
+      [
+       "Under",
+       53.0,
+       -106
+      ]
+     ],
+     "news": [
+      "Houston, rivalry color rushes lead top uniforms of",
+      "NCAA sanctions Liberty over tampering with two pla",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What Week 12's unexpected results mean for Rivalry",
+      "Which teams have the best odds to make the College",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1607Z.parquet"
+    },
+    "200466f41d944b2706e404635298ebf6": {
+     "pinnacle_h2h": [
+      [
+       "Middle Tennessee Blue Raiders",
+       0,
+       -153
+      ],
+      [
+       "New Mexico State Aggies",
+       0,
+       137
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Middle Tennessee Blue Raiders",
+       -3.0,
+       -109
+      ],
+      [
+       "New Mexico State Aggies",
+       3.0,
+       -103
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       51.5,
+       -106
+      ],
+      [
+       "Under",
+       51.5,
+       -111
+      ]
+     ],
+     "news": [
+      "Take a 360-degree look at college football's iconi"
+     ],
+     "kalshi_snap": "snap_20261128T1607Z.parquet"
+    }
+   },
+   "triggers": {
+    "559227d3ba70769111dd09490258af44": "anchor_prekick",
+    "7ce20f289047e13b13c4a6517b10a4c2": "anchor_prekick",
+    "e82b8ac931ff74f03744aa4ae6072a51": "anchor_prekick",
+    "6530923d9380b559b3c0b49b4f770e5f": "anchor_prekick",
+    "c424e58ad3ce3e391a33c0495aa52690": "anchor_prekick",
+    "61a2b3c7f905b33b86e1ea178a885325": "anchor_prekick",
+    "a0fe49c990d1497e1cb34eb9c2b73ef1": "anchor_prekick",
+    "200466f41d944b2706e404635298ebf6": "anchor_prekick"
+   }
+  }
  }
 ]
