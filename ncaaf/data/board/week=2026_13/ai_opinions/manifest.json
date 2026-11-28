@@ -13070,5 +13070,134 @@
     "57d6254e2054bb1e269219b1ef8b6ab7": "anchor_prekick"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261128T144903Z.parquet",
+  "sha256": "cd0b694261f4be0795916600ef613a92de5d0af215d3ad55f66e73e24945cea8",
+  "logged_utc": "2026-11-28T14:49:03.272774+00:00",
+  "rows": 6,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 2,
+  "no_view_share": 0.833,
+  "revised_rows": 5,
+  "oldest_source_age_min": 18.9,
+  "first_kickoff_utc": "2026-11-28T17:30:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261128T143010Z.parquet",
+   "inputs_digest": "{\"591a88cc16d9c5830bef16d7f522bc8a\": \"93d4c7a556ce1153\", \"c8b7cbe64e2914e579ab55c34db57da2\": \"c860322d2fc59b74\"}",
+   "components": {
+    "591a88cc16d9c5830bef16d7f522bc8a": {
+     "pinnacle_h2h": [
+      [
+       "Illinois Fighting Illini",
+       0,
+       165
+      ],
+      [
+       "Northwestern Wildcats",
+       0,
+       -185
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Illinois Fighting Illini",
+       4.5,
+       -101
+      ],
+      [
+       "Northwestern Wildcats",
+       -4.5,
+       -111
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       49.0,
+       -105
+      ],
+      [
+       "Under",
+       49.0,
+       -111
+      ]
+     ],
+     "news": [
+      "AP college football Week 12 poll reaction: What's ",
+      "Take a 360-degree look at college football's iconi",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1437Z.parquet"
+    },
+    "c8b7cbe64e2914e579ab55c34db57da2": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas Razorbacks",
+       0,
+       492
+      ],
+      [
+       "LSU Tigers",
+       0,
+       -630
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas Razorbacks",
+       14.5,
+       -108
+      ],
+      [
+       "LSU Tigers",
+       -14.5,
+       -104
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -108
+      ],
+      [
+       "Under",
+       50.0,
+       -108
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 12 poll reaction: What's ",
+      "Arkansas' David Oke helps feed the Fayetteville co",
+      "Judge denies SEC's request for TRO against LSU in ",
+      "LSU asks judge to throw out SEC's 'unwarranted' su",
+      "LSU's Lane Kiffin apologizes for using profanity d",
+      "Lane Kiffin stresses importance of finishing stron",
+      "SEC to consider termination of LSU's membership at",
+      "Take a 360-degree look at college football's iconi",
+      "Thamel: There needs to be a 'pound of flesh' that ",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What qualities make the perfect coach? We're borro",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1437Z.parquet"
+    }
+   },
+   "triggers": {
+    "591a88cc16d9c5830bef16d7f522bc8a": "anchor_prekick",
+    "c8b7cbe64e2914e579ab55c34db57da2": "anchor_prekick"
+   }
+  }
  }
 ]
