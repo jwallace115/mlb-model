@@ -1,49 +1,29 @@
 {
- "started_utc": "2026-11-28T16:19:04.975964+00:00",
- "finished_utc": "2026-11-28T16:42:12.572688+00:00",
+ "started_utc": "2026-11-28T17:04:03.600376+00:00",
+ "finished_utc": "2026-11-28T17:18:29.524633+00:00",
  "mode": "auto",
  "requested_by": "cron",
  "games_checked": 0,
  "triggers": [
   {
-   "game": "c074c1d28d172e0eb521dbb9d530462f",
+   "game": "c8b7cbe64e2914e579ab55c34db57da2",
    "text": "anchor_close"
   },
   {
-   "game": "f670302d6ba6369545091e20bac24107",
-   "text": "anchor_close"
+   "game": "5f57756fa0d07d889a7a6727b6f5da2d",
+   "text": "anchor_prekick"
   },
   {
-   "game": "bdf272babe96ca5f2c4ad03eea790eb2",
-   "text": "anchor_close"
+   "game": "7da02c5fd7efe20c2f61f665def9cbef",
+   "text": "anchor_prekick"
   },
   {
-   "game": "2c9b4d03409441b9f41fed25a4801d2b",
-   "text": "anchor_close"
-  },
-  {
-   "game": "735be3d0a18e8d57cc515971a6735c7d",
-   "text": "anchor_close"
-  },
-  {
-   "game": "426658869d8f93e891cad97029725975",
-   "text": "anchor_close"
-  },
-  {
-   "game": "a35f041e96e693eba5737ef05a57c4db",
-   "text": "anchor_close"
-  },
-  {
-   "game": "c58a68d46da0d0748169156702f9b4d5",
-   "text": "anchor_close"
-  },
-  {
-   "game": "57d6254e2054bb1e269219b1ef8b6ab7",
-   "text": "anchor_close"
+   "game": "f6a2121d820ed6135db2f9ea131c3115",
+   "text": "anchor_prekick"
   }
  ],
- "games_read": 9,
- "frozen_file": "ai_opinions_20261128T161904Z.parquet",
- "spend_usd": 42.5926,
+ "games_read": 4,
+ "frozen_file": "ai_opinions_20261128T170403Z.parquet",
+ "spend_usd": 42.6456,
  "result": "COMPLETE"
 }

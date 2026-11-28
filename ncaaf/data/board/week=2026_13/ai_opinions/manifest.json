@@ -16781,5 +16781,233 @@
     "591a88cc16d9c5830bef16d7f522bc8a": "anchor_close"
    }
   }
+ },
+ {
+  "file": "ai_opinions_20261128T170403Z.parquet",
+  "sha256": "ca188247ddd9c8263b393b9df823ffc074864fe7850cfe6ed9204d108540d503",
+  "logged_utc": "2026-11-28T17:04:03.600376+00:00",
+  "rows": 12,
+  "sport": "ncaaf",
+  "book": "hardrockbet",
+  "reader_model": "ai_reader_v1b/claude-sonnet-5-5",
+  "pilot": false,
+  "window": "event",
+  "games": 4,
+  "no_view_share": 0.833,
+  "revised_rows": 11,
+  "oldest_source_age_min": 3.9,
+  "first_kickoff_utc": "2026-11-28T17:45:00Z",
+  "reader_sha256": "91944d5fa63a1aa0dbae343415995505b107a20206394c41630d44b344bdc114",
+  "inputs": {
+   "lines_file": "/root/mlb-model/data/odds_archive/ncaaf/line_history/season=2026/snap_20261128T170008Z.parquet",
+   "inputs_digest": "{\"c8b7cbe64e2914e579ab55c34db57da2\": \"a2131fefbff0f5e5\", \"5f57756fa0d07d889a7a6727b6f5da2d\": \"f9bf0b8f4cea4090\", \"7da02c5fd7efe20c2f61f665def9cbef\": \"b2b171b858c250bf\", \"f6a2121d820ed6135db2f9ea131c3115\": \"eb8a57f227640960\"}",
+   "components": {
+    "c8b7cbe64e2914e579ab55c34db57da2": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas Razorbacks",
+       0,
+       486
+      ],
+      [
+       "LSU Tigers",
+       0,
+       -621
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas Razorbacks",
+       14.5,
+       -111
+      ],
+      [
+       "LSU Tigers",
+       -14.5,
+       -101
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -110
+      ],
+      [
+       "Under",
+       50.0,
+       -106
+      ]
+     ],
+     "news": [
+      "2027 College Football Playoff National Championshi",
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "AP college football Week 12 poll reaction: What's ",
+      "Arkansas' David Oke helps feed the Fayetteville co",
+      "Judge denies SEC's request for TRO against LSU in ",
+      "LSU asks judge to throw out SEC's 'unwarranted' su",
+      "LSU's Lane Kiffin apologizes for using profanity d",
+      "Lane Kiffin stresses importance of finishing stron",
+      "SEC to consider termination of LSU's membership at",
+      "Take a 360-degree look at college football's iconi",
+      "Thamel: There needs to be a 'pound of flesh' that ",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What qualities make the perfect coach? We're borro",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1707Z.parquet"
+    },
+    "5f57756fa0d07d889a7a6727b6f5da2d": {
+     "pinnacle_h2h": [
+      [
+       "Arkansas State Red Wolves",
+       0,
+       -175
+      ],
+      [
+       "Troy Trojans",
+       0,
+       156
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Arkansas State Red Wolves",
+       -4.0,
+       100
+      ],
+      [
+       "Troy Trojans",
+       4.0,
+       -112
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       47.0,
+       -111
+      ],
+      [
+       "Under",
+       47.0,
+       -105
+      ]
+     ],
+     "kalshi_snap": "snap_20261128T1707Z.parquet"
+    },
+    "7da02c5fd7efe20c2f61f665def9cbef": {
+     "pinnacle_h2h": [
+      [
+       "Clemson Tigers",
+       0,
+       229
+      ],
+      [
+       "South Carolina Gamecocks",
+       0,
+       -263
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Clemson Tigers",
+       7.0,
+       -105
+      ],
+      [
+       "South Carolina Gamecocks",
+       -7.0,
+       -107
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       43.0,
+       -105
+      ],
+      [
+       "Under",
+       43.0,
+       -111
+      ]
+     ],
+     "news": [
+      "2027 NFL draft Big Board rankings: Mel Kiper's top",
+      "Future Headlines: Stein downs alma mater, Sellers ",
+      "Gamecock's Shane Beamer previews challenge with AC",
+      "Heisman race for Week 12: Wake Forest's Gio Lopez ",
+      "How every 2027 five-star college football prospect",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What is the SEC Now crew thankful for?",
+      "What rivalries have the biggest stakes? Connelly l",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1707Z.parquet"
+    },
+    "f6a2121d820ed6135db2f9ea131c3115": {
+     "pinnacle_h2h": [
+      [
+       "Virginia Cavaliers",
+       0,
+       121
+      ],
+      [
+       "Virginia Tech Hokies",
+       0,
+       -134
+      ]
+     ],
+     "pinnacle_spreads": [
+      [
+       "Virginia Cavaliers",
+       2.5,
+       102
+      ],
+      [
+       "Virginia Tech Hokies",
+       -2.5,
+       -114
+      ]
+     ],
+     "pinnacle_totals": [
+      [
+       "Over",
+       50.0,
+       -112
+      ],
+      [
+       "Under",
+       50.0,
+       -104
+      ]
+     ],
+     "news": [
+      "Best bets for Rivalry Week: Breaking down Michigan",
+      "Best bets for rivalry week: Breaking down Michigan",
+      "Miami tops Virginia Tech to clinch spot in ACC tit",
+      "Top 25 betting lines: USC favored at UCLA, Texas d",
+      "Week 13 Game Day Kickoff: Nothing compares to the ",
+      "What rivalries have the biggest stakes? Connelly l",
+      "Who are the winningest college football coaches of",
+      "Who's on the College Football Playoff bubble after",
+      "Who's on the College Football Playoff bubble befor"
+     ],
+     "kalshi_snap": "snap_20261128T1707Z.parquet"
+    }
+   },
+   "triggers": {
+    "c8b7cbe64e2914e579ab55c34db57da2": "anchor_close",
+    "5f57756fa0d07d889a7a6727b6f5da2d": "anchor_prekick",
+    "7da02c5fd7efe20c2f61f665def9cbef": "anchor_prekick",
+    "f6a2121d820ed6135db2f9ea131c3115": "anchor_prekick"
+   }
+  }
  }
 ]
