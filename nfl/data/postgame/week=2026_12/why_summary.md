@@ -1,11 +1,12 @@
 # WHY Summary — Week 12
 
-Generated: 2026-11-27T12:35:59.846052+00:00
+Generated: 2026-11-28T12:47:33.994537+00:00
 
 
 ## Graded rows
 
 - ai_nfl / moneyline / L: 1
+- ai_nfl / moneyline / W: 1
 - ai_nfl / prop:int / L: 3
 - ai_nfl / prop:int / W: 5
 - ai_nfl / prop:pass_att / L: 22
@@ -25,17 +26,17 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 - ai_nfl / prop:rush_yds / W: 12
 - ai_nfl / spread / L: 5
 - ai_nfl / spread / P: 3
-- ai_nfl / spread / W: 4
+- ai_nfl / spread / W: 8
 - ai_nfl / total / L: 10
-- ai_nfl / total / W: 22
+- ai_nfl / total / W: 29
 
 ## why_code_auto (losses)
 
 - SCRIPT: 52
 - EFFICIENCY: 41
-- ROLE_SHIFT: 34
+- ROLE_SHIFT: 28
+- SHARE_OTHER: 10
 - NOISE: 6
-- SHARE_OTHER: 4
 - TURNOVERS: 1
 - UNDEFINED: 1
 - UNRESOLVED: 1
@@ -43,19 +44,21 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 ## why_code_auto (wins)
 
 - SCRIPT: 69
-- ROLE_SHIFT: 29
-- TURNOVERS: 25
+- TURNOVERS: 36
+- ROLE_SHIFT: 24
 - EFFICIENCY: 22
 - UNDEFINED: 7
+- SHARE_OTHER: 5
+- NOISE: 1
 
 ## Thesis verdicts
 
-- thesis_source=freeze: 305 rows
+- thesis_source=freeze: 317 rows
 - thesis_source=nan: 0 rows
 
 ## Freeze-join accounting
 
-- Freeze-sourced thesis: 305
+- Freeze-sourced thesis: 317
 - Tag-map thesis: 0
 - No thesis: 0
 
@@ -71,7 +74,7 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 ## FLAGGED FOR THE TUESDAY READ
 
 
-### Top 20 picks (276 rows)
+### Top 20 picks (285 rows)
 
 - fe131f7afaf62a4a: total None → W
 - a652c0b3f012e4a9: prop:pass_att Jordan Love → W
@@ -220,9 +223,11 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 - c733e4c4478822ba: prop:pass_att Dak Prescott → W
 - 1ada84a3127a68e6: prop:pass_cmp Joe Milton → L
 - bc98e34f01d41fdd: prop:pass_yds Joe Milton → L
+- b81460bea91d7401: total None → W
 - d7c4809c03bf0230: prop:pass_att Matthew Stafford → W
 - 1768cf7f73057b0a: prop:pass_yds Jordan Love → W
 - 7958c56411b381bd: prop:rush_att Kaleb Johnson → L
+- 166ad57b271c934f: total None → W
 - 95f05aa7abd2cb09: prop:pass_att Matthew Stafford → W
 - 698951b8752fe281: prop:pass_yds Jordan Love → W
 - 3863b84fbe6d410b: prop:pass_yds Matthew Stafford → W
@@ -271,6 +276,7 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 - 52e01963eb16265a: prop:pass_yds Joe Milton → L
 - d9ea4ba1b7122ff2: prop:rush_att Saquon Barkley → L
 - 29f54abcd0a8c75d: prop:rush_yds Joe Milton → W
+- d0e42d569164544a: total None → W
 - 937c9bb62ed9709f: prop:int Jared Goff → L
 - fcc0bfede5f95b5d: prop:pass_td Jared Goff → W
 - 1d58a665af21cea9: prop:rec Amon-Ra St. Brown → W
@@ -283,6 +289,7 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 - 4223b2376bed803b: prop:pass_cmp Joe Milton → L
 - 1eb280cd3c3bc078: prop:rush_att Javonte Williams → W
 - ce9d14bad1a167d2: total None → L
+- 953be4a76fb04f02: spread None → W
 - f564c8d0c55f2169: prop:pass_att Caleb Williams → L
 - f294ac89340f2997: prop:pass_att Jared Goff → L
 - 1506f350830e660a: prop:pass_yds Caleb Williams → L
@@ -302,6 +309,7 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 - 4fe93539fadab107: prop:pass_yds Caleb Williams → L
 - 4d14f6cb253d0040: prop:pass_yds Jared Goff → L
 - 285ece0e6fd75b81: prop:rush_att Jahmyr Gibbs → W
+- 625bc4c1ea4b4701: spread None → W
 - c0124fa7daee4084: prop:pass_cmp Patrick Mahomes → L
 - 22ea0058de5f9a0f: total None → L
 - 81625de726c5d37b: prop:pass_att Dak Prescott → W
@@ -340,6 +348,7 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 - 0fd51beff022ed68: prop:rec Rashee Rice → W
 - 97675dfddb2f0022: prop:rec Ty Johnson → W
 - 2984175dc5118377: prop:rec Xavier Worthy → W
+- 6f54006d9b8f1d9b: spread None → W
 - e208248faf6a5cd0: prop:pass_att Josh Allen → W
 - e0482b2dfd3acb8c: prop:pass_att Patrick Mahomes → L
 - 3391b237402b1cea: prop:rush_att James Cook → W
@@ -349,6 +358,9 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 - b93a05a6ddff427b: prop:rush_att James Cook → W
 - 675c2ef7e4a0e3cb: prop:rush_att Josh Allen → L
 - 1c4f9706d91fb8cb: total None → W
+- d1e6003b71bafcbe: total None → W
+- 7f38f08c06d6a5a8: total None → W
+- 5b8dfe2ca6e6f583: total None → W
 
 ### 10 largest-|ln(A/L)| losses (10 rows)
 
@@ -363,24 +375,20 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 - 09888e5070c50ecf: prop:rec Rashee Rice A=2.0 L=4.5 |ln|=0.811
 - be2d43e7c6506c66: prop:rec Rashee Rice A=2.0 L=4.5 |ln|=0.811
 
-### AVAILABILITY / ROLE_SHIFT (63 rows)
+### AVAILABILITY / ROLE_SHIFT (52 rows)
 
 - 17d326ddf301e648: ROLE_SHIFT prop:rec Konata Mumpfield
 - d31d17ed0972fde8: ROLE_SHIFT prop:rush_att Kaleb Johnson
-- a6e0b79e25ef7048: ROLE_SHIFT prop:rec_yds Sam LaPorta
 - 439bdee44a909671: ROLE_SHIFT prop:rec_yds Konata Mumpfield
 - 54e6b95446822391: ROLE_SHIFT prop:rec Konata Mumpfield
 - 8dc5181ab1b69e2d: ROLE_SHIFT prop:rush_att Kaleb Johnson
-- b336dc9a1a6d6525: ROLE_SHIFT prop:rush_att D'Andre Swift
 - dc65c5a85b9339fc: ROLE_SHIFT prop:rush_yds Joe Milton
 - 1685f4b0569d20f3: ROLE_SHIFT prop:rec Khalil Shakir
 - 956946aeb254412e: ROLE_SHIFT prop:rec Konata Mumpfield
 - 50eff99ec1f6c73f: ROLE_SHIFT prop:rec_yds Dalton Kincaid
 - 1907ba2564ee22de: ROLE_SHIFT prop:rec Travis Kelce
-- 3a4ed52e59b14062: ROLE_SHIFT prop:rush_att Jahmyr Gibbs
 - 564716612a8b455c: ROLE_SHIFT prop:rec Konata Mumpfield
 - 117a334c51af5fae: ROLE_SHIFT prop:rush_att Kaleb Johnson
-- 46e9d4ce5a3ca419: ROLE_SHIFT prop:rush_att D'Andre Swift
 - e66d2cf10b3d07ed: ROLE_SHIFT prop:rec Khalil Shakir
 - 27f8721b14551e27: ROLE_SHIFT prop:rush_yds Joe Milton
 - 807894108c707801: ROLE_SHIFT prop:rec_yds Christian Watson
@@ -388,18 +396,14 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 - 27d78fd417b66403: ROLE_SHIFT prop:rec_yds Christian Watson
 - c873cf85248b5cd7: ROLE_SHIFT prop:rec_yds Matthew Golden
 - d8e87c9bee264303: ROLE_SHIFT prop:rec_yds Konata Mumpfield
-- 5fbb5462226c0e01: ROLE_SHIFT prop:rush_att D'Andre Swift
-- ac544ba7e7a4abc0: ROLE_SHIFT prop:rush_att Jahmyr Gibbs
 - 728be2a8cea3b53b: ROLE_SHIFT prop:rec Khalil Shakir
 - b31a3eef30264f9c: ROLE_SHIFT prop:rush_att Saquon Barkley
 - f396ffbb56cd57f7: ROLE_SHIFT prop:rec Travis Kelce
 - 90059ec0c381a37c: ROLE_SHIFT prop:rec Konata Mumpfield
-- 6793b6c4302bea8c: ROLE_SHIFT prop:rush_att D'Andre Swift
 - 6d5a8724e49bba0b: ROLE_SHIFT prop:rush_att Emmett Johnson
 - eda084d0d643fbb2: ROLE_SHIFT prop:rush_yds Emmett Johnson
 - 7958c56411b381bd: ROLE_SHIFT prop:rush_att Kaleb Johnson
 - 020eda96eb8d193e: ROLE_SHIFT prop:rush_att Kaleb Johnson
-- d15564edae1be9b3: ROLE_SHIFT prop:pass_att Jared Goff
 - 3f69c3396b259a01: ROLE_SHIFT prop:rush_yds Joe Milton
 - c1bc826d52adfea3: ROLE_SHIFT prop:rec Khalil Shakir
 - 3f4426ab174a3da3: ROLE_SHIFT prop:rec Travis Kelce
@@ -409,12 +413,9 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 - 3aa66748f48e6a88: ROLE_SHIFT prop:rush_att Emmett Johnson
 - d9ea4ba1b7122ff2: ROLE_SHIFT prop:rush_att Saquon Barkley
 - 29f54abcd0a8c75d: ROLE_SHIFT prop:rush_yds Joe Milton
-- 9472d9d9c6d525d9: ROLE_SHIFT prop:rush_att Jahmyr Gibbs
 - 6ffea31b88abf90e: ROLE_SHIFT prop:rush_att Emmett Johnson
-- f294ac89340f2997: ROLE_SHIFT prop:pass_att Jared Goff
 - f6978f26aa8584a9: ROLE_SHIFT prop:rush_att Emmett Johnson
 - 788100d8d24e35c6: ROLE_SHIFT prop:rush_yds Emmett Johnson
-- 285ece0e6fd75b81: ROLE_SHIFT prop:rush_att Jahmyr Gibbs
 - 88e09bf313336da6: ROLE_SHIFT prop:rush_att Saquon Barkley
 - de213edad12d377c: ROLE_SHIFT prop:rush_att Emmett Johnson
 - f2902558c03fb2ec: ROLE_SHIFT prop:rush_yds Emmett Johnson
@@ -429,4 +430,4 @@ Generated: 2026-11-27T12:35:59.846052+00:00
 - 01f3c1a60cacd2a4: ROLE_SHIFT prop:rush_yds Emmett Johnson
 - db56452928e3c241: ROLE_SHIFT prop:rush_att Emmett Johnson
 
-Total flagged: 349
+Total flagged: 347
